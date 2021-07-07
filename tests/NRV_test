@@ -1,0 +1,103 @@
+#! /usr/bin/env python3
+# coding: utf-8
+import argparse
+import os
+import sys
+import traceback
+import subprocess
+import re
+import shutil
+import mph
+
+
+unit_test_folder = './unitary_tests/'
+all_tests = sorted(os.listdir(unit_test_folder), reverse=True)
+all_tests.reverse()
+unit_test_results = './unitary_tests/figures/'
+
+
+## ARGUMENT PARSER ##
+parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
+parser.add_argument('-d','--dependances',action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
+parser.add_argument('-t','--unitary_tests',action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
+parser.add_argument('-s','--syntax',action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
+
+if __name__ == "__main__":
+    # Parsing arguments
+    args = parser.parse_args()
+
+    if args.DEP_TEST:
+        ###############################
+        ## test neurnon installation ##
+        ###############################
+        print('Testing NEURON installation')
+        try:
+            import neuron
+        except Error:
+            print('--- Please install neuron (https://www.neuron.yale.edu/neuron/)')
+        else:
+            version = neuron.__version__
+            v_number = int(version[0])*10+int(version[2])
+            if v_number<77:
+                print('--- Critical Warning: consider update your neuron version to 7.7 or more recent, following tests may fail')
+            else:
+                print('--- Neuron version up to date for NRV')
+        ##############################
+        ## test comsol installation ##
+        ##############################
+        print('Testing COMSOL acces...')
+        try:
+            import mph
+            client = mph.start()
+            client.close()
+        except Exception as e:
+            err_message = str(e)
+            if 'License error:' in err_message:
+                print('No comsol licence found or accessible, please get a valid access or disable COMSOL in NRV to prevent errors')
+            else:
+                print('Error launching COMSOL: ' + err_message)
+        else:
+            print('--- found access to a COMSOL server')
+
+    if args.UNIT_TEST or (not args.DEP_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST):
+        ###################################
+        ## clean the test/figures folder ##
+        ###################################
+        if os.path.exists(unit_test_results):
+            shutil.rmtree(unit_test_results)
+        if not os.path.exists(unit_test_results):
+            os.makedirs(unit_test_results)
+
+        ################
+        ## TEST NRV 2 ##
+        ################
+        nrv_cmd = 'nrv2calm '
+        if sys.platform == 'darwin':
+            python_cmd = 'python3 '
+        else:
+            python_cmd = 'python3 '
+
+        success_flag = True
+        test_nb = 0
+        failed_test = []
+
+        for test in all_tests:
+            if '.py' in test:
+                test_nb += 1
+                print(test)
+                #test_out = os.system(python_cmd+unit_test_folder+test)
+                test_out = os.system(nrv_cmd+unit_test_folder+test)
+                if test_out != 0:
+                    success_flag = False
+                    failed_test.append(test)
+
+        if success_flag == True:
+            print('--- All tests passed without errors, check that all tests are true')
+        else:
+            print('--- Bugs in NRV2, please consider reported errors before simulations')
+            print('--- list of failed tests : ',failed_test)
+
+    if args.SYNTAX_TEST:
+        print('Applying pylint to nrv package')
+        test_out = os.system('pylint nrv --disable=C > ./code_review/nrv_lint.txt')
+        print('--- result saved in ./code_review/')
