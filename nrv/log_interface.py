@@ -63,7 +63,7 @@ def rise_warning(*args, abort=False):
     if abort:
         sys.exit(0)
 
-def pass_info(*args):
+def pass_info(verbose=True, *args):
     """
     Pass an info to the log and to the prompt for the master process (process ID 0) in case of
     parallel computing.
@@ -78,7 +78,8 @@ def pass_info(*args):
         message += str(arg)
     if MCH.is_alone():
         logging.info('NRV INFO: '+ message)
-        print('NRV INFO: '+ message)
+        if verbose:
+            print('NRV INFO: '+ message)
     else:
         logging.info('NRV INFO: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))
 
