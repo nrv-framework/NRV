@@ -19,6 +19,29 @@ faulthandler.enable()
 #############################
 ## miscellaneous functions ##
 #############################
+def distance_point2point(x_1,y_1,x_2=0,y_2=0):
+    '''
+    Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
+
+    Parameters
+    ----------
+    x_1 : float
+        first point x coordinate,
+    y_1 : float
+        firstpoint y coordinate,
+    x_2 : float
+        second point x coordinate, by default 0
+    y_2 : float
+        second point y coordinate, , by default 0
+
+    Returns
+    --------
+    d : float
+        distance between the point and the orthogonal projection of (x_p,y_p) on it
+    '''
+    d = ((x_1 -x_2)**2 + (y_1-y_2)**2)**0.5
+    return d
+
 def distance_point2line(x_p,y_p,a,b):
     '''
     Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
@@ -75,7 +98,7 @@ def load_simulation_from_json(filename):
             if key in int_iterables:
                 results[key] = np.asarray(value,dtype=np.int16)
             else:
-                if isinstance(value,str):
+                if isinstance(value[0],str):
                     results[key] = value
                 else:
                     results[key] = np.asarray(value,dtype=np.float32)
@@ -86,7 +109,7 @@ def load_simulation_from_json(filename):
 ##############################################
 ## HANDLE THE SIMULATION RESULT DICTIONNARY ##
 ##############################################
-def remove_key(my_dict, key):
+def remove_key(my_dict, key, verbose=True):
     """
     Remove an item from a dictionary, usefull before saving files, as some results maybe heavy and are potentially useless after some steps of postprocessing.
 
@@ -102,7 +125,7 @@ def remove_key(my_dict, key):
     #        del my_dict[k]
     #else:
     del my_dict[key]
-    pass_info('removed the following key from results: ', key)
+    pass_info(verbose, 'removed the following key from results: ', key)
 
 def remove_non_NoR_zones(my_dict, key):
     """
@@ -462,57 +485,57 @@ def speed(my_dict,position_key=None,t_start=0,t_stop=0,x_start=0,x_stop=0):
     return speed
 
 def block(my_dict,position_key=None,t_start=0,t_stop=0):
-    """
-    check if an axon is blocked or not. The simulation has to include the test spike. This function will look for the test spike initiation and check the propagation
+	"""
+	check if an axon is blocked or not. The simulation has to include the test spike. This function will look for the test spike initiation and check the propagation
 
-    Parameters
-    ----------
-    my_dict     : dictionary
-        dictionary where the quantity should be rasterized
-    key         : str
-        name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-    t_start     : float
-        time at which the test spikes can occur, in ms. By default 0
-    t_stop      : float
-        maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
+	Parameters
+	----------
+	my_dict 	: dictionary
+		dictionary where the quantity should be rasterized
+	key 		: str
+		name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
+	t_start		: float
+		time at which the test spikes can occur, in ms. By default 0
+	t_stop		: float
+		maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
 
-    Returns
-    -------
-    flag    : bool or None
-        True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
-    """
-    blocked_spike_positionlist=[]
-    if t_stop == 0:
-        t_stop = my_dict['tstop']
-    if t_start==0:
-        if 'intra_stim_starts' in my_dict and my_dict['intra_stim_starts']!=[]:
-                t_start=my_dict['intra_stim_starts'][0]
-    if position_key == None:
-        if 'V_mem_filtered_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_filtered_raster'
-        elif 'V_mem_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_raster'
-        else:
-            # there is no rasterized voltage, nothing to find
-            return False
-    sup_time_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
-    inf_time_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
-    good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
-    good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes_time]
-    blocked_spike_positionlist = my_dict[good_key_prefix+'_x_position'][good_indexes_time]
-    if blocked_spike_positionlist==[]:
-        return None
-    if 'intra_stim_positions' in my_dict:
-        if my_dict['intra_stim_positions']<my_dict['extracellular_electrode_x']:
-            if max(blocked_spike_positionlist)<9./10*my_dict['L']:
-                return True
-            else:
-                return False
-        else:
-            if min(blocked_spike_positionlist)>1./10*my_dict['L']:
-                return True
-            else:
-                return False
+	Returns
+	-------
+	flag 	: bool or None
+		True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
+	"""
+	blocked_spike_positionlist=[]
+	if t_stop == 0:
+		t_stop = my_dict['tstop']
+	if t_start==0:
+		if 'intra_stim_starts' in my_dict and my_dict['intra_stim_starts']!=[]:
+				t_start=my_dict['intra_stim_starts'][0]
+	if position_key == None:
+		if 'V_mem_filtered_raster_position' in my_dict:
+			good_key_prefix = 'V_mem_filtered_raster'
+		elif 'V_mem_raster_position' in my_dict:
+			good_key_prefix = 'V_mem_raster'
+		else:
+			# there is no rasterized voltage, nothing to find
+			return False
+	sup_time_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
+	inf_time_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
+	good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
+	good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes_time]
+	blocked_spike_positionlist = my_dict[good_key_prefix+'_x_position'][good_indexes_time]
+	if blocked_spike_positionlist==[]:
+		return None
+	if 'intra_stim_positions' in my_dict:
+		if my_dict['intra_stim_positions']<my_dict['extracellular_electrode_x']:
+			if max(blocked_spike_positionlist)<9./10*my_dict['L']:
+				return True
+			else:
+				return False
+		else:
+			if min(blocked_spike_positionlist)>1./10*my_dict['L']:
+				return True
+			else:
+				return False
 
 @jit(nopython=True,fastmath=True)
 def count_spike(onset_position):
@@ -529,6 +552,188 @@ def count_spike(onset_position):
                 if onset_position[i]==onset_position[i+1]:
                     spike_number=spike_number+1
     return spike_number
+
+
+
+def check_test_AP(results_sim):
+    '''
+    Check if a test AP is correctely triggered during an axon simulation and if so return the\
+    tigger time
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    test_AP     : float or None
+        time in ms of the first test AP during the simulation. None if no test AP found
+    '''
+    if type(results_sim) == str:
+        results_sim = load_simulation_from_json(results_sim)
+
+    if "intra_stim_starts" not in results_sim:
+        return None
+    else:
+        mask = False
+        dt = results_sim['dt']
+        test_AP = results_sim["intra_stim_starts"]
+        if is_iterable(test_AP):
+            test_AP = test_AP[0]
+        i_first_pos = np.where(results_sim['V_mem_raster_position']==0)
+        for i in i_first_pos[0]:
+            if results_sim['V_mem_raster_time'][i] >= test_AP-0.001 and\
+                results_sim['V_mem_raster_time'][i] <= test_AP+0.1:
+                mask = True
+        if not mask:
+            test_AP = None
+        return(test_AP)
+
+
+def detect_start_extrastim(results_sim, threshold=None):
+    '''
+    Returns the starting time of extracellular stimulation from axon simulation results
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+    threshold       : float
+        Current threshold (uA) to consider the stimulation started, if None take the time of second point of the\
+        stimulation, by default None
+
+    Returns
+    -------
+    t_start     : list or float or None
+        list of stimulation starting time in ms, float if only one stimulation and None if no stimulation
+    '''
+    if type(results_sim) == str:
+        results_sim = load_simulation_from_json(results_sim)
+
+    t_start = []
+    if "extracellular_stimuli" in results_sim:
+        for i in range(len(results_sim['extracellular_stimuli'])):
+            s = results_sim['extracellular_stimuli'][i]
+            t = results_sim['extracellular_stimuli_t'][i]
+            if threshold is None:
+                t_start += [t[1]]
+            else:
+                for i in reversed(range(len(s))):
+                    if abs(s[i])>threshold:
+                        t_start += [t[i]]
+    if len(t_start)==0:
+        t_start = None
+    elif len(t_start)==1:
+        t_start=t_start[0]
+    return t_start
+
+
+def extra_stim_properties(results_sim):
+    """
+    Return elect caracteristics (blocked, Onset response, ...)
+
+    Parameters
+    ----------
+    results_sim       : dict or str
+        simulation results dictionary or path and name of the file containing it
+    Returns
+    -------
+    electrode       : dict
+        dictonry containing the position (x, y, z), the stimulation start (ms) and maximum value (uA)
+        for each electrodes
+    """
+    if type(results_sim) == str:
+        results_sim = load_simulation_from_json(results_sim)
+
+    electrode = {}
+    if len(results_sim['extracellular_electrode_y'])>=1:
+        electrode['x'] = results_sim['extracellular_electrode_x']
+        electrode['y'] = results_sim['extracellular_electrode_y']
+        electrode['z'] = results_sim['extracellular_electrode_z']
+        electrode['start'] = detect_start_extrastim(results_sim)
+        electrode['max amplitude'] = [max(s) for s in results_sim['extracellular_stimuli']]
+
+
+
+    return electrode
+
+
+def axon_state(results_sim, save=False, saving_file="axon_state.json"):
+    """
+    Return axon caracteristics (blocked, Onset response, ...) from axon simulation results
+
+    Parameters
+    ----------
+    results_sim       : dict or str
+        simulation results dictionary or path and name of the saving file
+    save        : bool
+        if True save result in json file
+    saving_file : str
+        if save is True path and name of the saving file
+
+    Returns
+    -------
+    axon_state       : dict
+        dictionary containing axon caracteristics
+    """
+    if type(results_sim) == str:
+        results_sim = load_simulation_from_json(results_sim)
+
+    ID = results_sim['ID']
+
+    # Axon parameter
+    parameters = {}
+    parameters['diameter'] = results_sim['diameter']
+
+    if results_sim['myelinated']:
+        parameters['node'] = len(results_sim['x_nodes'])
+
+    if len(results_sim['extracellular_electrode_y'])==1:
+        parameters['distance electrod'] = distance_point2line(results_sim['y'], results_sim['z'],\
+            results_sim['extracellular_electrode_y'][0], results_sim['extracellular_electrode_z'][0])
+        if results_sim['myelinated']:
+            x_elec = results_sim['extracellular_electrode_x'][0]
+            elec_node = np.argmin(abs(results_sim['x_nodes'] - x_elec))
+            elec_ali = (results_sim['x_nodes'][elec_node] - x_elec) /\
+                (results_sim['x_nodes'][1] - results_sim['x_nodes'][0])
+            parameters['electrod node'] = elec_node
+            parameters['electrod alignment'] = elec_ali
+
+    # Check Block
+    test_AP = check_test_AP(results_sim)
+    if test_AP is None:
+        block_state = None
+    else:
+        block_state = block(results_sim, t_start=test_AP-0.001, t_stop=test_AP+1) # Gerer le delay
+
+    # Check Onset Response
+
+    onset_state = False
+    t_start_stim = detect_start_extrastim(results_sim)
+
+    pos = results_sim['V_mem_raster_position']
+    i_first_pos = np.where(pos==0)
+    i_last_pos = np.where(pos==max(pos))
+
+    # Count Onset response
+    N_AP = (len(i_first_pos[0]) + len(i_last_pos[0]))/2
+    if test_AP is not None:
+        if block_state:
+            N_AP -= 0.5
+        else:
+            N_AP -= 1
+
+    if N_AP > 0:
+        onset_state = True
+
+
+    axon_state = {'ID':ID, 'parameters':parameters, 'block_state':block_state,\
+        'onset_state':onset_state, 'onset number':N_AP}
+    if save:
+        save_axon_results_as_json(axon_state, saving_file)
+
+    return axon_state
 
 #############################
 ## VISUALIZATION FUNCTIONS ##

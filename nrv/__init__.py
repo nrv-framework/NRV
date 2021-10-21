@@ -17,6 +17,7 @@ from .FEM import *
 from .fascicle_generator import *
 from .MCore import Mcore_handler
 from .CL_postprocessing import *
+from .FL_postprocessing import *
 from .CL_simulations import *
 from .extracellular import *
 from .axons import *
