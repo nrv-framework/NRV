@@ -22,6 +22,8 @@ from .CL_postprocessing import *
 from .extracellular import *
 from .log_interface import rise_error, rise_warning, pass_info
 
+
+
 # verbosity level
 verbose = True
 
@@ -727,7 +729,9 @@ class fascicle():
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
         Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
-        Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return results (possibly too large in memory and complex with parallel computing), but instead creates a folder and store fascicle configuration and all axons results.
+        Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
+        results (possibly too large in memory and complex with parallel computing), but instead 
+        creates a folder and store fascicle configuration and all axons results.
         On the fly post processing is possible by specifying an additional script.
 
         Parameters
@@ -743,7 +747,8 @@ class fascicle():
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
         save_V_mem          : bool
-            if true, all membrane voltages values are stored in results whe basic postprocessing is applied. Can be heavy ! False by default
+            if true, all membrane voltages values are stored in results whe basic postprocessing is
+            applied. Can be heavy ! False by default
         save_path           : str
             name of the folder to store results of the fascicle simulation.
         Unmyelinated_model  : str
@@ -753,13 +758,19 @@ class fascicle():
         Myelinated_model    : str
             model for myelinated fibers, by default 'MRG'
         Adelta_limit        : float
-            limit diameter between A-delta models (thin myelinated) and myelinated models for axons. Overwritte the fascicle limit, if unnecessary, specify None. None by default
+            limit diameter between A-delta models (thin myelinated) and myelinated models for
+            axons. Overwritte the fascicle limit, if unnecessary, specify None. None by default
         PostProc_Filtering  : float, list, array, np.array
-            value or iterable values for basic post proc filtering. If None specified, no filtering is performed
+            value or iterable values for basic post proc filtering. If None specified, no filtering
+            is performed
         postproc_script     : str
-            path to a postprocessing file. If specified, the basic post processing is not performed, and all postprocessing have to be handled by user. The specified script can access global and local variables, use with caution
+            path to a postprocessing file. If specified, the basic post processing is not
+            performed, and all postprocessing have to be handled by user. The specified script
+            can access global and local variables. Can also be key word ('Vmem' or 'scarter') 
+            to use script saved in OTF_PP folder, use with caution
         """
         ##########
+
         if postproc_script is not None:
             import nrv # not ideal at all but gives direct acces to nrv in the postprocessing script
         if Adelta_limit != self.Adelta_limit and Adelta_limit is not None:
@@ -993,6 +1004,8 @@ class fascicle():
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions, record_particles=record_particles)
                 del axon
                 ## postprocessing and data reduction
+                dir_OTF_PP = os.path.dirname(__file__) + '/OTF_PP/'
+
                 if postproc_script is None:
                     # If no specific postproc. file, then basic operations only are performed (rasterize, destroyV_mem values enventually)
                     if PostProc_Filtering is not None:
@@ -1000,6 +1013,14 @@ class fascicle():
                     rasterize(sim_results, 'V_mem')
                     if not(save_V_mem) and record_V_mem:
                         remove_key(sim_results, 'V_mem', verbose=True)
+                elif postproc_script.lower() == 'vmem':
+                    with open(dir_OTF_PP+'OTF_PP_Vmem.py') as f:
+                        code = compile(f.read(), dir_OTF_PP+'OTF_PP_Vmem.py', 'exec')
+                        exec(code, globals(), locals())
+                elif postproc_script.lower() == 'scater' or postproc_script.lower() == 'raster':
+                    with open(dir_OTF_PP+'OTF_PP_scater.py') as f:
+                        code = compile(f.read(), dir_OTF_PP+'OTF_PP_scater.py', 'exec')
+                        exec(code, globals(), locals())
                 else:
                     #execfile(postproc_script,globals(),locals())
                     with open(postproc_script) as f:
