@@ -499,4 +499,4 @@ class stimulus():
         """
         slope = (ampstart-ampmax)/(tstart-tstop)
         bounds = (min(ampstart, ampmax),max(ampstart, ampmax))
-        self.stim_ramp(slope, tstart, duration, dt, bounds, printslope)
+        self.ramp(slope, tstart, duration, dt, bounds, printslope)

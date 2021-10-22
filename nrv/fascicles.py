@@ -156,6 +156,33 @@ class fascicle():
         self.z_vertices = z_c + (D/2)*np.sin(theta)
         self.A = np.pi * (D/2)**2
 
+    def fit_circular_contour(self, y_c=0, z_c=0, Delta=0.1, N_vertices=100):
+        """
+        Define a circular countour to the fascicle
+
+        Parameters
+        ----------
+        y_c         : float
+            y coordinate of the circular contour center, in um
+        z_c         : float
+            z coordinate of the circular contour center, in um
+        D           : float
+            distance between farest axon and contour, in um
+        N_vertices  : int
+            Number of vertice in the compute the contour
+        """
+        N_axons = len(self.axons_diameter)
+        D = 2 * Delta
+
+        if N_axons == 0:
+            pass_info('No axon to fit fascicul diameter set to '+str(D)+'um')
+        else:
+            for axon in range(N_axons):
+                dist_max = self.axons_diameter[axon]/2 + ((y_c - self.axons_y[axon])**2 +\
+                    (z_c - self.axons_z[axon])**2)**0.5
+                D = max(D, 2*(dist_max+Delta))
+        self.define_circular_contour(D, y_c=y_c, z_c=z_c, N_vertices=N_vertices)
+
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
         Define ellipsoidal contour
@@ -253,7 +280,7 @@ class fascicle():
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z)
         self.N = MCH.master_broadcasts_array_to_all(N)
 
-    def fill_with_population(self, axons_diameter, axons_type, ppop_fname=None, FVF=0.55):
+    def fill_with_population(self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55):
         """
         Fill a geometricaly defined contour with an already generated axon population
 
@@ -281,7 +308,7 @@ class fascicle():
                 save_axon_population(ppop_fname, axons_diameter, axons_type, comment=None)
             pass_info('Axon Packing is starting')
             axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(axons_diameter,\
-                Delta=0.1, y_gc=self.y_grav_center, z_gc=self.z_grav_center, max_iter=20000,\
+                Delta=Delta, y_gc=self.y_grav_center, z_gc=self.z_grav_center, max_iter=20000,\
                 monitor=False)
             # check for remaining collisions and delete problematic axons
             axons_diameter, axons_type, axons_y, axons_z = delete_collisions(axons_diameter,\
@@ -521,6 +548,56 @@ class fascicle():
                 for electrode in self.extra_stim.electrodes:
                     axes.scatter(electrode.y, electrode.z, color='gold')
 
+    def plot_x(self, fig, axes, myel_color='r', unmyel_color='b', Myelinated_model='MRG'):
+        """
+        plot the fascicle's axons along Xline (longitudinal)
+
+        Parameters
+        ----------
+        fig     : matplotlib.figure
+            figure to display the fascicle
+        axes    : matplotlib.axes
+            axes of the figure to display the fascicle
+        myel_color      : str
+            matplotlib color string applied to the myelinated axons. Red by default
+        unmyel_color    : str
+            matplotlib color string applied to the myelinated axons. Blue by default
+        Myelinated_model : str
+            model use for myelinated axon (use to calulated node position)
+        """
+        if MCH.do_master_only_work():
+            if self.L is None or self.NoR_relative_position != []:
+                drange = [min(self.axons_diameter.flatten()),max(self.axons_diameter.flatten())]
+                polysize = np.poly1d(np.polyfit(drange, [0.5,5], 1))
+                for k in range(self.N):
+                    relative_pos = self.NoR_relative_position[k]
+                    d = round(self.axons_diameter.flatten()[k],2)
+                    if self.axons_type.flatten()[k] == 0.0:
+                        color = unmyel_color
+                        size = polysize(d)
+                        axes.plot([0,self.L],np.ones(2)+k-1,color=color, lw=size)
+                    else:
+                        color = myel_color
+                        size = polysize(d)
+                        axon = myelinated(0, 0, d, self.L, model=Myelinated_model,\
+                            node_shift=self.NoR_relative_position[k])
+                        x_nodes = axon.x_nodes
+                        node_number = len(x_nodes)
+                        del axon
+                        axes.plot([0,self.L],np.ones(2)+k-1,color=color, lw=size)
+                        axes.scatter(x_nodes,np.ones(node_number)+k-1,marker='x',color=color)
+
+                ## plot electrode(s) if existings
+                if self.extra_stim is not None:
+                    for electrode in self.extra_stim.electrodes:
+                        axes.plot(electrode.x*np.ones(2), [0,self.N-1], color='gold')
+                axes.set_xlabel('x (um)')
+                axes.set_ylabel('axon ID')
+                axes.set_yticks(np.arange(self.N))
+                axes.set_xlim(0,self.L)
+                plt.tight_layout()
+
+
     ## save/load methods
     def save_fascicle_configuration(self, fname):
         """
@@ -582,7 +659,7 @@ class fascicle():
 
         Input:
         ------
-            stimulation     : stimulation object, see Extracellular.stimulation help for more details
+            stimulation  : stimulation object, see Extracellular.stimulation help for more details
         """
         if is_extra_stim(stimulation):
             self.extra_stim = stimulation
@@ -597,7 +674,8 @@ class fascicle():
         Parameters
         ----------
         position    : float
-            relative position over the fascicle. Note that all thin myelinated and myelinated will be stimulated in the nearest node of Ranvier around the clamp specified position
+            relative position over the fascicle. Note that all thin myelinated and myelinated
+            will be stimulated in the nearest node of Ranvier around the clamp specified position
         t_start     : float
             starting time, in ms
         duration    : float
@@ -622,8 +700,30 @@ class fascicle():
         # also generated for unmyelinated but the meaningless value won't be used
         self.NoR_relative_position = np.random.uniform(low=0.0, high=1.0, size=len(self.axons_diameter))
 
+    def generate_ligned_NoR_position(self, x=0):
+        """
+        Generates Node of Ranvier shifts to aligned a node of each axon to x postition.
+
+        Parameters
+        ----------
+        x    : float
+            x axsis value (um) on which node are lined, by default 0
+        """
+        # also generated for unmyelinated but the meaningless value won't be used
+        self.NoR_relative_position = []
+
+        for i in range(self.N):
+            if self.axons_type.flatten()[i] == 0.0:
+                self.NoR_relative_position += [0.0]
+            else:
+                d = round(self.axons_diameter.flatten()[i], 2)
+                node_length = get_MRG_parameters(d)[5]
+                self.NoR_relative_position += [(x - 0.5)% node_length / node_length]
+                # -0.5 to be at the node of Ranvier center as a node is 1um long
+
+
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_particles=False, save_V_mem=False, save_path='',\
+        record_particles=False, save_V_mem=False, save_path='', verbose=True,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
         Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
@@ -899,7 +999,7 @@ class fascicle():
                         filter_freq(sim_results, 'V_mem', PostProc_Filtering)
                     rasterize(sim_results, 'V_mem')
                     if not(save_V_mem) and record_V_mem:
-                        remove_key(sim_results, 'V_mem')
+                        remove_key(sim_results, 'V_mem', verbose=True)
                 else:
                     #execfile(postproc_script,globals(),locals())
                     with open(postproc_script) as f:
