@@ -98,7 +98,9 @@ def load_simulation_from_json(filename):
             if key in int_iterables:
                 results[key] = np.asarray(value,dtype=np.int16)
             else:
-                if isinstance(value[0],str):
+                if len(value) == 0:
+                    results[key] = []
+                elif isinstance(value[0],str):
                     results[key] = value
                 else:
                     results[key] = np.asarray(value,dtype=np.float32)
