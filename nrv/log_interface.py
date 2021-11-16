@@ -14,7 +14,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 logging.basicConfig(filename=dir_path+'/log/NRV.log', level=logging.INFO, format=\
     '%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
-def rise_error(*args, out=1):
+def rise_error(*args, out=1, **kwargs):
     """
     Rises and error to the log and to the prompt for the master process (process ID 0) in case of
     parallel computing. This function exit the programm.
@@ -31,7 +31,8 @@ def rise_error(*args, out=1):
         message += str(arg)
     if MCH.is_alone():
         logging.error(message)
-        print('NRV ERROR: '+ message)
+        if 'verbose' in kwargs and kwargs['verbose']:
+            print('NRV ERROR: '+ message)
     else:
         logging.error('NRV ERROR: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if out == 0:
@@ -39,7 +40,7 @@ def rise_error(*args, out=1):
     sys.exit(out)
 
 
-def rise_warning(*args, abort=False):
+def rise_warning(*args, abort=False, **kwargs):
     """
     Rises a warning to the log and to the prompt for the master process (process ID 0) in case of
     parallel computing. This function can exit the programm.
@@ -57,13 +58,14 @@ def rise_warning(*args, abort=False):
         message += str(arg)
     if MCH.is_alone():
         logging.warning('NRV WARNING: '+ message)
-        print('NRV WARNING: '+ message)
+        if 'verbose' in kwargs and kwargs['verbose']:
+            print('NRV WARNING: '+ message)
     else:
         logging.warning('NRV WARNING: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if abort:
         sys.exit(0)
 
-def pass_info(verbose=True, *args):
+def pass_info(*args, **kwargs):
     """
     Pass an info to the log and to the prompt for the master process (process ID 0) in case of
     parallel computing.
@@ -78,7 +80,7 @@ def pass_info(verbose=True, *args):
         message += str(arg)
     if MCH.is_alone():
         logging.info('NRV INFO: '+ message)
-        if verbose:
+        if 'verbose' in kwargs and kwargs['verbose']:
             print('NRV INFO: '+ message)
     else:
         logging.info('NRV INFO: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))

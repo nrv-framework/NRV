@@ -12,7 +12,6 @@ from scipy import signal
 from numba import jit
 from .file_handler import json_dump, json_load, is_iterable
 from .log_interface import rise_error, rise_warning, pass_info
-
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
@@ -127,7 +126,7 @@ def remove_key(my_dict, key, verbose=True):
     #        del my_dict[k]
     #else:
     del my_dict[key]
-    pass_info(verbose, 'removed the following key from results: ', key)
+    pass_info('removed the following key from results: ', key, verbose=verbose)
 
 def remove_non_NoR_zones(my_dict, key):
     """
