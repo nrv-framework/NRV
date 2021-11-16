@@ -42,7 +42,7 @@ def distance_point2point(x_1,y_1,x_2=0,y_2=0):
     return d
 
 def distance_point2line(x_p,y_p,a,b):
-    '''pythp
+    '''
     Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
 
     Parameters
