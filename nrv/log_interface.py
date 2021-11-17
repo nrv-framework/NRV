@@ -26,12 +26,16 @@ def rise_error(*args, out=1, **kwargs):
     out     : int
         programm exit value, must be strictly positive. By default equal to 1
     """
+    verbose = True
+    if 'verbose' in kwargs:
+        verbose = kwargs['verbose']
+
     message = ''
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
         logging.error(message)
-        if 'verbose' in kwargs and kwargs['verbose']:
+        if verbose:
             print('NRV ERROR: '+ message)
     else:
         logging.error('NRV ERROR: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
@@ -53,12 +57,15 @@ def rise_warning(*args, abort=False, **kwargs):
         if true, the programm exits with the value O (no error) and further computation are avoided,
         by default set to False.
     """
+    verbose = True
+    if 'verbose' in kwargs:
+        verbose = kwargs['verbose']
     message = ''
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
         logging.warning('NRV WARNING: '+ message)
-        if 'verbose' in kwargs and kwargs['verbose']:
+        if verbose:
             print('NRV WARNING: '+ message)
     else:
         logging.warning('NRV WARNING: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
@@ -75,12 +82,16 @@ def pass_info(*args, **kwargs):
     *args   :
         anything to pass as info
     """
+
+    verbose = True
+    if 'verbose' in kwargs:
+        verbose = kwargs['verbose']
     message = ''
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
         logging.info('NRV INFO: '+ message)
-        if 'verbose' in kwargs and kwargs['verbose']:
+        if verbose:
             print('NRV INFO: '+ message)
     else:
         logging.info('NRV INFO: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))
