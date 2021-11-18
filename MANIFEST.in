@@ -6,3 +6,4 @@ include nrv/OTF_PP/*
 include nrv/pops/*
 include nrv/ppops/*
 include nrv/stats/*
+include nrv/materials/*
