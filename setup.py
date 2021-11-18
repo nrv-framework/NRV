@@ -1,5 +1,5 @@
 from setuptools import setup
-from glob
+import glob
 
 data_files = []
 directories = glob.glob('data/subfolder?/subfolder??/')
