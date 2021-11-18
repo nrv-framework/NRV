@@ -2,11 +2,11 @@ from setuptools import setup
 import glob
 
 data_files = []
-directories = glob.glob('data/subfolder?/subfolder??/')
+directories = glob.glob('nrv/')
 for directory in directories:
     files = glob.glob(directory+'*')
-    print(files)
     data_files.append((directory, files))
+
 
 setup(
    name='nrv',
@@ -14,7 +14,7 @@ setup(
    description='Neuron Virtualizer',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
-    data_files = [('', ['nrv/log/NRV.log'])],
+    #data_files = [('nrv', glob('nrv/**/*', recursive=True))], # includes sub-folders - recursive
 
 
    #install_requires=['bar', 'greek'], #external packages as dependencies
