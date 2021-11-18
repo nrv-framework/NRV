@@ -1,0 +1,8 @@
+include nrv/geom/*
+include nrv/comsol_templates/*
+include nrv/log/*
+include nrv/mods/*
+include nrv/OTF_PP/*
+include nrv/pops/*
+include nrv/ppops/*
+include nrv/stats/*
