@@ -6,6 +6,8 @@ setup(
    description='Neuron Virtualizer',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
+   setup_requires=['log'],
+   include_package_data=True,
    #install_requires=['bar', 'greek'], #external packages as dependencies
    #scripts=[
 #        'scripts/cool',
