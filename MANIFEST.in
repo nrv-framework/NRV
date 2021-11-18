@@ -7,3 +7,5 @@ include nrv/pops/*
 include nrv/ppops/*
 include nrv/stats/*
 include nrv/materials/*
+include nrv/nrv.ini
+include nrn/nrv2calm/*
