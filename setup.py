@@ -14,6 +14,7 @@ setup(
    description='Neuron Virtualizer',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
+   data_files = data_files,
     #data_files = [('nrv', glob('nrv/**/*', recursive=True))], # includes sub-folders - recursive
 
 
