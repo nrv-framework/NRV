@@ -10,6 +10,7 @@ __copyright__       = 'Florian Kolbl'
 __license__         = 'CeCILL'
 
 # Public interface
+from .compileMods import *
 from .materials import *
 from .electrodes import *
 from .stimulus import *
@@ -26,3 +27,4 @@ from .myelinated import *
 from .thin_myelinated import *
 from .fascicles import *
 from .nerves import *
+
