@@ -1,6 +1,13 @@
 from setuptools import setup
 from glob import glob
 
+data_files = []
+directories = glob.glob('data/subfolder?/subfolder??/')
+for directory in directories:
+    files = glob.glob(directory+'*')
+    print(files)
+    data_files.append((directory, files))
+
 setup(
    name='nrv',
    version='0.0.1',
