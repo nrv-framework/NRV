@@ -1,12 +1,4 @@
 from setuptools import setup
-import glob
-
-data_files = []
-directories = glob.glob('nrv/')
-for directory in directories:
-    files = glob.glob(directory+'*')
-    data_files.append((directory, files))
-
 
 setup(
    name='nrv',
@@ -14,7 +6,7 @@ setup(
    description='Neuron Virtualizer',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
-   data_files = data_files,
+   include_package_data = True,
     #data_files = [('nrv', glob('nrv/**/*', recursive=True))], # includes sub-folders - recursive
 
 
