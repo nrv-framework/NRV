@@ -7,7 +7,7 @@ setup(
    description='Neuron Virtualizer',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
-    data_files = [('nrv', glob('nested_source_dir/**/*', recursive=True))], # includes sub-folders - recursive
+    data_files = [('nrv', glob('source_dir/*', recursive=True))], # includes sub-folders - recursive
 
 
    #install_requires=['bar', 'greek'], #external packages as dependencies
