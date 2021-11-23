@@ -76,7 +76,9 @@ def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 6
         # simulate axon activity
         results = axon1.simulate(t_sim=5)
         del axon1
-        pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
+        if verbose:
+            pass_info('removed the following key from results: ', key, verbose=verbose)
+
         # post-process results
         rasterize(results,'V_mem')
         delta_amp=np.abs(current_amp-previous_amp)
