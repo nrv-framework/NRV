@@ -60,8 +60,42 @@ def rm_file(file_path, verbose=True):
         pass information when file is deleted 
     """
     os.remove(file_path)
-    if verbose:
-        pass_info('folowing file removed :' + file_path)
+    pass_info('folowing file removed :' + file_path, verbose=verbose)
+
+def rm_sim_dir(dir_path, verbose=True):
+    """
+    Delete directory
+    Warning: use with caution deleted files cannot be recovered
+
+    Parameters
+    ----------
+    file_path : str
+        path and name of the file to remove
+    verbose     : str
+        pass information when file is deleted 
+    """
+    if os.path.exists(dir_path):
+
+        # checking whether the folder is empty or not
+        if len(os.listdir(dir_path)) == 0:
+            # removing the file using the os.remove() method
+            os.rmdir(dir_path)
+            pass_info('folowing folder removed :' + dir_path, verbose=verbose)
+        else:
+            # messaging saying folder not empty
+            if os.path.exists(dir_path+"00_Fascicle_config.json",):
+                rm_file(dir_path+"00_Fascicle_config.json", verbose)
+
+            for file in ls_axons_results(dir_path):
+                rm_file(dir_path+file, verbose)
+            if len(os.listdir(dir_path)) == 0:
+                os.rmdir(dir_path)
+                pass_info('folowing folder removed :' + dir_path, verbose=verbose)
+            else:
+                pass_info( "Folder contains files or folders which cannot be deleted", verbose=verbose)
+    else:
+        # file not found message
+        pass_info("Folder not found in the directory", verbose=verbose)
 
 
 
@@ -69,11 +103,8 @@ def rm_file(file_path, verbose=True):
 ##### Result processing #####
 #############################
 
-
-
-
 def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", delete_files=False,
-    verbose=False):
+    verbose=True):
     """
     Return each axon caracteristics (blocked, Onset response, ...)
 
