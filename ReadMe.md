@@ -19,3 +19,6 @@ Third party softwares (NEURON and COMSOL) have to be installed before NRV instal
 for the third party softwares, please visit:
 [NEURON]: http://www.neuron.yale.edu/neuron
 [COMSOL]: https://www.comsol.com
+
+#Todo :
+Update CL_simulation with nseg parameter everywhere
