@@ -20,5 +20,5 @@ for the third party softwares, please visit:
 [NEURON]: http://www.neuron.yale.edu/neuron
 [COMSOL]: https://www.comsol.com
 
-#Todo :
+# Todo
 Update CL_simulation with nseg parameter everywhere
