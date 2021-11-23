@@ -213,7 +213,8 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
     current_amp=amp_max
     Niter = 1
     while (delta_amp>amplitude_tol):
-        pass_info('Iteration number '+str(Niter)+', testing block current amplitude '+str(current_amp)+' uA')
+        if verbose:
+            pass_info('Iteration number '+str(Niter)+', testing block current amplitude '+str(current_amp)+' uA')
         # create axon
         if model in unmyelinated_models:
             if Nseg_per_sec:
@@ -244,7 +245,8 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
         # simulate axon activity
         results = axon1.simulate(t_sim=25)
         del axon1
-        pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
+        if verbose:
+            pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
         # post-process results
         rasterize(results,'V_mem')
         delta_amp=np.abs(current_amp-previous_amp)
