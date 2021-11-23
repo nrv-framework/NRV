@@ -21,7 +21,7 @@ unmyelinated_models=['HH','Rattay_Aberham','Sundt','Tigerholm','Schild_94','Schi
 myelinated_models=['MRG','gaines_motor','gaines_sensory']
 thin_myelinated_models=['extended_Gaines','RGK']
 
-def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 60e-3,t_inter = 40e-3,cath_an_ratio = 5,position_elec=0.5,model='MRG',amp_max=2000,amp_min=0,amp_tol=15,verbose=False,f_dlambda = 100,nseg = 0,dt=0.005):
+def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 60e-3,t_inter = 40e-3,cath_an_ratio = 5,position_elec=0.5,model='MRG',amp_max=2000,amp_min=0,amp_tol=15,verbose=True,f_dlambda =100,dt=0.005,Nseg_per_sec=None): #f_dlambda=100
     amplitude_max_th=amp_max
     amplitude_min_th=amp_min
     amplitude_tol=amp_tol
@@ -36,16 +36,25 @@ def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 6
     current_amp=amp_max
     Niter = 1
     while (delta_amp>amplitude_tol):
-        pass_info('Iteration number '+str(Niter)+', testing firing current amplitude '+str(current_amp)+' uA',verbose = verbose)
+        pass_info('Iteration number '+str(Niter)+', testing firing current amplitude '+str(current_amp)+' uA')
         # create axon
         if model in unmyelinated_models:
-            axon1 = unmyelinated(y,z,diameter,L,dt=dt,freq=f_dlambda,model=model,Nseg_per_sec=nseg)
+            if Nseg_per_sec:
+                axon1 = unmyelinated(y,z,diameter,L,dt=dt,model=model,Nseg_per_sec=Nseg_per_sec) #freq=f_dlambda
+            else:
+                axon1 = unmyelinated(y,z,diameter,L,dt=dt,freq=f_dlambda,model=model)
         elif model in myelinated_models:
-            axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model,Nseg_per_sec=nseg)
+            if Nseg_per_sec:
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,model=model,Nseg_per_sec=Nseg_per_sec) #freq=f_dlambda
+            else:
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
         elif model in thin_myelinated_models:
-            axon1 = thin_myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model,Nseg_per_sec=nseg)
+            axon1 = thin_myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
         else:
-            axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model,Nseg_per_sec=nseg)
+            if Nseg_per_sec:
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,model=model,Nseg_per_sec=Nseg_per_sec) #freq=f_dlambda
+            else: 
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
         # extra-cellular stimulation
         x_elec = L*position_elec
         y_elec = dist_elec
@@ -67,7 +76,7 @@ def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 6
         # simulate axon activity
         results = axon1.simulate(t_sim=5)
         del axon1
-        pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s',verbose = verbose)
+        pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
         # post-process results
         rasterize(results,'V_mem')
         delta_amp=np.abs(current_amp-previous_amp)
@@ -75,16 +84,18 @@ def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 6
         # test simulation results, update dichotomy
         if (len(results['V_mem_raster_position'])>0):
             if (current_amp==amp_min):
-                rise_warning("Minimum Stimulation Current is too High!",verbose = verbose)
+                rise_warning("Minimum Stimulation Current is too High!")
                 break
-            pass_info("... Spike triggered",verbose = verbose)
+            if (verbose):
+                pass_info("... Spike triggered")
             amplitude_max_th=previous_amp
             current_amp=(delta_amp/2)+amplitude_min_th
         else:
             if (current_amp==amp_max):
                 rise_warning("Maximum Stimulation Current is too Low!")
                 break
-            pass_info("... Spike not triggered",verbose = verbose)
+            if (verbose):
+                pass_info("... Spike not triggered")
             current_amp=amplitude_max_th-delta_amp/2
             amplitude_min_th=previous_amp
 
@@ -178,7 +189,7 @@ def para_firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_tim
     current_amp = MCH.master_broadcasts_array_to_all(current_amp)
     return current_amp, Niter
 
-def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.5,model='MRG',amp_max=2000,amp_min=0,amp_tol=15,verbose=True,f_dlambda = 100,dt=0.005):
+def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.5,model='MRG',amp_max=2000,amp_min=0,amp_tol=15,Nseg_per_sec=None,verbose=True,f_dlambda = 100,dt=0.005):
     amplitude_max_th=amp_max
     amplitude_min_th=amp_min
     amplitude_tol=amp_tol
@@ -202,9 +213,15 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
         pass_info('Iteration number '+str(Niter)+', testing block current amplitude '+str(current_amp)+' uA')
         # create axon
         if model in unmyelinated_models:
-            axon1 = unmyelinated(y,z,diameter,L,dt=dt,freq=f_dlambda,model=model)
+            if Nseg_per_sec:
+                axon1 = unmyelinated(y,z,diameter,L,dt=dt,Nseg_per_sec=Nseg_per_sec,model=model)
+            else:
+                axon1 = unmyelinated(y,z,diameter,L,dt=dt,freq=f_dlambda,model=model)
         elif model in myelinated_models:
-            axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
+            if Nseg_per_sec:
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,Nseg_per_sec=Nseg_per_sec,model=model)
+            else:
+                axon1 = myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
         elif model in thin_myelinated_models:
             axon1 = thin_myelinated(y,z,diameter,L,rec='nodes',dt=dt,freq=f_dlambda,model=model)
         else:
@@ -230,7 +247,7 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
         delta_amp=np.abs(current_amp-previous_amp)
         previous_amp=current_amp
         # test simulation results, update dichotomy
-        if block(results) == False:
+        if block(results,t_start=t_start) == False:
             if (current_amp == amp_max):
                 rise_warning("Maximum Stimulation Current is too Low!")
                 break
