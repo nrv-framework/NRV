@@ -36,6 +36,9 @@ if not MCH.is_alone():
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
+OTF_PP_path = os.path.dirname(os.path.realpath(__file__))+'/OTF_PP/'
+OTF_PP_library = os.listdir(OTF_PP_path)
+
 #####################
 ## Fasscicle class ##
 #####################
@@ -828,7 +831,6 @@ class fascicle():
                                 d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
                                 threshold=self.threshold)
                         else:
-                            #print(self.axons_diameter[k])
                             axon = myelinated(self.axons_y[k], self.axons_z[k],\
                                 round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
                                 node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
@@ -937,7 +939,6 @@ class fascicle():
                             d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
                             threshold=self.threshold)
                     else:
-                        #print(self.axons_diameter[k])
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
@@ -1004,7 +1005,6 @@ class fascicle():
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions, record_particles=record_particles)
                 del axon
                 ## postprocessing and data reduction
-                dir_OTF_PP = os.path.dirname(__file__) + '/OTF_PP/'
 
                 if postproc_script is None:
                     # If no specific postproc. file, then basic operations only are performed (rasterize, destroyV_mem values enventually)
@@ -1012,14 +1012,15 @@ class fascicle():
                         filter_freq(sim_results, 'V_mem', PostProc_Filtering)
                     rasterize(sim_results, 'V_mem')
                     if not(save_V_mem) and record_V_mem:
-                        remove_key(sim_results, 'V_mem', verbose=True)
-                elif postproc_script.lower() == 'vmem':
-                    with open(dir_OTF_PP+'OTF_PP_Vmem.py') as f:
-                        code = compile(f.read(), dir_OTF_PP+'OTF_PP_Vmem.py', 'exec')
+                        remove_key(sim_results, 'V_mem', verbose=verbose)
+                elif postproc_script in OTF_PP_library:
+                    with open(OTF_PP_path+postproc_script) as f:
+                        code = compile(f.read(), OTF_PP_path+postproc_script, 'exec')
                         exec(code, globals(), locals())
-                elif postproc_script.lower() == 'scater' or postproc_script.lower() == 'raster':
-                    with open(dir_OTF_PP+'OTF_PP_scater.py') as f:
-                        code = compile(f.read(), dir_OTF_PP+'OTF_PP_scater.py', 'exec')
+                elif postproc_script+'.py' in OTF_PP_library:
+                    postproc_script += '.py'
+                    with open(OTF_PP_path+postproc_script) as f:
+                        code = compile(f.read(), OTF_PP_path+postproc_script, 'exec')
                         exec(code, globals(), locals())
                 else:
                     #execfile(postproc_script,globals(),locals())
