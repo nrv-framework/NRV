@@ -578,7 +578,6 @@ def check_test_AP(results_sim):
         return None
     else:
         mask = False
-        dt = results_sim['dt']
         test_AP = results_sim["intra_stim_starts"]
         if is_iterable(test_AP):
             test_AP = test_AP[0]
@@ -648,7 +647,8 @@ def extra_stim_properties(results_sim):
         results_sim = load_simulation_from_json(results_sim)
 
     electrode = {}
-    if len(results_sim['extracellular_electrode_y'])>=1:
+
+    if 'extracellular_electrode_y' in results_sim:
         electrode['x'] = results_sim['extracellular_electrode_x']
         electrode['y'] = results_sim['extracellular_electrode_y']
         electrode['z'] = results_sim['extracellular_electrode_z']
@@ -685,12 +685,15 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
 
     # Axon parameter
     parameters = {}
-    parameters['diameter'] = results_sim['diameter']
 
-    if results_sim['myelinated']:
+    if 'diameter' in results_sim:
+        parameters['diameter'] = results_sim['diameter']
+
+    if 'myelinated' in results_sim and results_sim['myelinated']:
         parameters['node'] = len(results_sim['x_nodes'])
 
-    if len(results_sim['extracellular_electrode_y'])==1:
+    if 'extracellular_electrode_y' in results_sim and \
+        len(results_sim['extracellular_electrode_y']) == 1:
         parameters['distance electrod'] = distance_point2line(results_sim['y'], results_sim['z'],\
             results_sim['extracellular_electrode_y'][0], results_sim['extracellular_electrode_z'][0])
         if results_sim['myelinated']:
@@ -706,6 +709,8 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
     if test_AP is None:
         block_state = None
     else:
+        if 'extracellular_electrode_x' not in results_sim:
+            results_sim['extracellular_electrode_x'] = 0
         block_state = block(results_sim, t_start=test_AP-0.001, t_stop=test_AP+1) # Gerer le delay
 
     # Check Onset Response
