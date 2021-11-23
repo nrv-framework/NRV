@@ -1,5 +1,5 @@
 """
-NRV-Fascicular Level postprocessing
+NRV-Cellular Level postprocessing
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
@@ -103,8 +103,8 @@ def rm_sim_dir(dir_path, verbose=True):
 ##### Result processing #####
 #############################
 
-def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", delete_files=False,
-    extra_stim=True):
+def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", delete_files=False
+    verbose=True):
     """
     Return each axon caracteristics (blocked, Onset response, ...)
 
