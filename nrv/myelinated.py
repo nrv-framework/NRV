@@ -8,16 +8,6 @@ import numpy as np
 from .axons import *
 from .log_interface import rise_error, rise_warning, pass_info
 
-MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
-MRG_g = np.asarray([0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791])
-MRG_axonD = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
-MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
-MRG_paraD1 = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
-MRG_paraD2 = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
-MRG_deltax = np.asarray([100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500])
-MRG_paralength2 = np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60])
-MRG_nl = np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150])
-
 def get_MRG_parameters(diameter):
     """
     Compute the MRG parameters
@@ -41,7 +31,15 @@ def get_MRG_parameters(diameter):
     paralength2 : float
     nl          : float
     """
-
+    MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
+    MRG_g = np.asarray([0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791])
+    MRG_axonD = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
+    MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
+    MRG_paraD1 = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
+    MRG_paraD2 = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
+    MRG_deltax = np.asarray([100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500])
+    MRG_paralength2 = np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60])
+    MRG_nl = np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150])
     if diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
         g = MRG_g[index]
@@ -96,11 +94,13 @@ def get_length_from_nodes(diameter, nodes):
     length      : float
         lenth of the axon with the correct number of nodes in um
     """
+    MRG_fiberD = np.asarray([5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
+    MRG_deltax = np.asarray([500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500])
     if diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
         deltax = MRG_deltax[index]
     else:
-        deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
+        deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 3))
         deltax = deltax_poly(diameter)
     return float(math.ceil(deltax*(nodes-1)))
 
@@ -232,8 +232,7 @@ class myelinated(axon):
             'STIN', 'FLUT', 'MYSA']
         # basic MRG starts with the node, if needed, adapt the sequence
         self.node_shift = node_shift
-
-        if self.node_shift == 0 or self.node_shift == 1:
+        if self.node_shift == 0:
             # no Rotation
             self.this_ax_sequence = self.MRG_Sequence
             self.first_section_size = self.nodelength
@@ -241,61 +240,61 @@ class myelinated(axon):
         elif self.node_shift < (self.paralength1)/self.deltax:
             # rotation of less than 1 MYSA
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 1)
-            self.first_section_size = (self.node_shift*self.deltax)
+            self.first_section_size = self.paralength1 - (self.node_shift*self.deltax)
 
         elif self.node_shift < (self.paralength1 + self.paralength2)/self.deltax:
             # rotation of 1 MYSA and less than one FLUT
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 2)
-            self.first_section_size = (self.node_shift*self.deltax - \
+            self.first_section_size = self.paralength2 - (self.node_shift*self.deltax - \
                 self.paralength1)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 + \
             self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 3)
-            self.first_section_size = (self.node_shift*self.deltax -\
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax -\
                 self.paralength1 - self.paralength2)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 +\
             2*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 1 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 4)
-            self.first_section_size = (self.node_shift*self.deltax -\
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax -\
                 self.paralength1 - self.paralength2 - self.interlength)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 + \
             3*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 2 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 5)
-            self.first_section_size = (self.node_shift*self.deltax -\
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax -\
                 self.paralength1 - self.paralength2 - 2*self.interlength)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 +\
             4*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 3 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 6)
-            self.first_section_size = (self.node_shift*self.deltax -\
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax -\
                 self.paralength1 - self.paralength2 - 3*self.interlength)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 + \
             5*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 4 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 7)
-            self.first_section_size = (self.node_shift*self.deltax - \
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
                 self.paralength1 - self.paralength2 - 4*self.interlength)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 + \
             6*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 5 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 8)
-            self.first_section_size = (self.node_shift*self.deltax -\
+            self.first_section_size = self.interlength - (self.node_shift*self.deltax -\
                 self.paralength1 - self.paralength2 - 5*self.interlength)
 
         elif self.node_shift < (self.paralength1 + 2*self.paralength2 + \
             6*self.interlength)/self.deltax:
             # rotation of 1 MYSA, 1 FLUT, 6 STIN and less than a FLUT
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 9)
-            self.first_section_size =(self.node_shift*self.deltax - \
+            self.first_section_size = self.paralength2 - (self.node_shift*self.deltax - \
                 self.paralength1 - self.paralength2 - 6*self.interlength)
 
         elif self.node_shift < (self.paralength1 + self.paralength2 + \
@@ -576,7 +575,21 @@ class myelinated(axon):
         """
         Set the number of segments automatically acording initialization. For internal use only.
         """
-        if self.Nseg_per_sec != 0:
+        if type(self.Nseg_per_sec) is dict:
+            for n in self.node:
+                n.nseg = self.Nseg_per_sec['node']
+            for m in self.MYSA:
+                m.nseg = self.Nseg_per_sec['MYSA']
+            for f in self.FLUT:
+                f.nseg = self.Nseg_per_sec['FLUT']
+            for s in self.STIN:
+                s.nseg = self.Nseg_per_sec['STIN']
+            self.node_Nseg = self.axonnodes * self.Nseg_per_sec['node']
+            self.MYSA_Nseg = self.paranodes1 * self.Nseg_per_sec['MYSA']
+            self.FLUT_Nseg = self.paranodes2 * self.Nseg_per_sec['FLUT']
+            self.STIN_Nseg = self.axoninter * self.Nseg_per_sec['STIN']
+
+        elif self.Nseg_per_sec != 0:
             # all sections will have a fixed number of segment chosen by user
             for n in self.node:
                 n.nseg = self.Nseg_per_sec
