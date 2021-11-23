@@ -15,8 +15,6 @@ from .log_interface import rise_error, rise_warning, pass_info
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
-
-
 #############################
 ## miscellaneous functions ##
 #############################
@@ -44,7 +42,7 @@ def distance_point2point(x_1,y_1,x_2=0,y_2=0):
     return d
 
 def distance_point2line(x_p,y_p,a,b):
-    '''pythp
+    '''
     Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
 
     Parameters
@@ -128,8 +126,7 @@ def remove_key(my_dict, key, verbose=True):
     #        del my_dict[k]
     #else:
     del my_dict[key]
-    if verbose:
-        pass_info('removed the following key from results: ', key, verbose=verbose)
+    pass_info('removed the following key from results: ', key, verbose=verbose)
 
 def remove_non_NoR_zones(my_dict, key):
     """
