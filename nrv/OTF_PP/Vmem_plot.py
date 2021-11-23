@@ -11,7 +11,7 @@ title = 'Axon '+str(k)+', myelination is '+str(sim_results['myelinated'])+', '+s
 plt.title(title)
 plt.xlim(0,sim_results['tstop'])
 plt.tight_layout()
-fig_name = './unitary_tests/figures/Fascicle_'+str(self.ID)+'/Vmem_axon_'+str(k)+'.pdf'
+fig_name = folder_name + '/Vmem_axon_'+str(k)+'.pdf'
 plt.savefig(fig_name)
 plt.close()
 
