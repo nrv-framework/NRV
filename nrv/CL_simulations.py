@@ -36,7 +36,8 @@ def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 6
     current_amp=amp_max
     Niter = 1
     while (delta_amp>amplitude_tol):
-        pass_info('Iteration number '+str(Niter)+', testing firing current amplitude '+str(current_amp)+' uA')
+        if verbose:
+            pass_info('Iteration number '+str(Niter)+', testing firing current amplitude '+str(current_amp)+' uA')
         # create axon
         if model in unmyelinated_models:
             if Nseg_per_sec:
