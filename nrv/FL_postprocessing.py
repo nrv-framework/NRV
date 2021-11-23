@@ -103,7 +103,7 @@ def rm_sim_dir(dir_path, verbose=True):
 ##### Result processing #####
 #############################
 
-def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", delete_files=False
+def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", delete_files=False,
     verbose=True):
     """
     Return each axon caracteristics (blocked, Onset response, ...)
