@@ -14,5 +14,5 @@ setup(
     'License :: CeCILL',
     'Operating System :: OS Independent',
     install_requires=['mph', 'numpy','scipy','faulthandler','math','matplotlib','pylab','numba','json','ezdxf','icecream'], #external packages as dependencies
-    python_requires = >=3.6
+    python_requires = '>=3.6'
 )
