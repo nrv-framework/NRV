@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-   name='NrV',
+   name='nrv',
    version='0.0.1',
    description='NeuRon Virtualizer',
    long_description = 'file: README.md',
