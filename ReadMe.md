@@ -7,6 +7,10 @@ NRV has been optimized for large population of axons, from generating correct po
 
 NRV is developped in the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University.
 
+# Installation
+
+use pip for installation : 'pip install nrv'
+
 # Requirements
 
 Third party softwares (NEURON and COMSOL) have to be installed before NRV installation. NRV has been developped for python 3. Recommended packages:
@@ -19,6 +23,3 @@ Third party softwares (NEURON and COMSOL) have to be installed before NRV instal
 for the third party softwares, please visit:
 [NEURON]: http://www.neuron.yale.edu/neuron
 [COMSOL]: https://www.comsol.com
-
-# Todo
-Update CL_simulation with nseg parameter everywhere
