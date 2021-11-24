@@ -202,7 +202,7 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
     # test spike
     t_start = 20
     duration = 0.1
-    amplitude = 10
+    amplitude = 15
     # extra cellular
     extra_material = load_material(material)
     block_start=3 #ms
