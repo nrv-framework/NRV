@@ -3,16 +3,16 @@ from setuptools import setup
 setup(
    name='nrv',
    version='0.0.1',
-   description='Neuron Virtualizer',
+   description='NeuRon Virtualizer',
+   long_description = file: README.md
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
    include_package_data = True,
-    #data_files = [('nrv', glob('nrv/**/*', recursive=True))], # includes sub-folders - recursive
-
-
-   #install_requires=['bar', 'greek'], #external packages as dependencies
-   #scripts=[
-#        'scripts/cool',
-#            'scripts/skype',
-#           ]
+   url = https://github.com/fkolbl/NRV
+   classifiers =
+    Programming Language :: Python :: 3
+    License :: CeCILL
+    Operating System :: OS Independent
+    install_requires=['mph', 'numpy','scipy','faulthandler','math','matplotlib','pylab','numba','json','ezdxf','icecream'], #external packages as dependencies
+    python_requires = >=3.6
 )
