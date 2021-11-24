@@ -1,7 +1,7 @@
 # Meta information: PyPI and Pip
 
 [project]
-name = 'NrV'
+name = 'nrv-py'
 authors = [{name='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey'}]
 license = {file='License.txt'}
 keywords = ['neuronal simulation', 'computer simulation', 'neurosciences',
