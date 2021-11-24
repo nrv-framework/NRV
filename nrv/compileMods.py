@@ -15,8 +15,7 @@ def NeuronCompile():
     path2_mods = dir_path + '/mods'
     os.system('cd ' +path2_mods+  '&& nrnivmodl')
 
-if (os.path.exists(path2compiled_mods)):
-    print('Mods files are compiled')
-else :
+if not (os.path.exists(path2compiled_mods)):
+    print('Mods files are not compiled, executing nrnivmodl...')
     NeuronCompile()
-
+    print('Compilation done')
