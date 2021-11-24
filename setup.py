@@ -11,7 +11,6 @@ setup(
    url = 'https://github.com/fkolbl/NRV',
    classifiers =[
     'Programming Language :: Python :: 3',
-    'License :: CeCILL',
     'Operating System :: OS Independent'
      ],
     install_requires=['mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream'], #external packages as dependencies
