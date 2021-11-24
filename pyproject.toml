@@ -22,7 +22,7 @@ classifiers = [
     'License ::  CeCILL']
 readme = 'pypi.md'
 requires-python = '>=3.6'
-dependencies = ['mph', 'numpy','scipy','faulthandler','math','matplotlib','pylab','numba','json','ezdxf','icecream']
+dependencies = ['mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream']
 dynamic = ['version', 'description']
 
 [project.urls]
