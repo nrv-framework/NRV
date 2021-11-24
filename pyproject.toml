@@ -1,0 +1,30 @@
+# Meta information: PyPI and Pip
+
+[project]
+name = 'nrv'
+authors = [{name='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey'}]
+license = {file='License.txt'}
+keywords = ['neuronal simulation', 'computer simulation', 'neurosciences',
+            'multiphysics', 'Neuron', 'Comsol']
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX :: Linux',
+    'Operating System :: MacOS :: MacOS X',
+    'Topic :: Scientific/Engineering :: Neuroscience',
+    'Intended Audience :: Science/Research',
+    'Natural Language :: English',
+    'License ::  CeCILL']
+readme = 'pypi.md'
+requires-python = '>=3.6'
+dependencies = ['mph', 'numpy','scipy','faulthandler','math','matplotlib','pylab','numba','json','ezdxf','icecream']
+dynamic = ['version', 'description']
+
+[project.urls]
+Documentation = 'https://nrv.readthedocs.io'
+Source = 'https://github.com/fkolbl/NRV'
