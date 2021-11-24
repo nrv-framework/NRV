@@ -11,7 +11,7 @@ NRV is developped in the CELL research group at the Laboratory ETIS (UMR CNRS 80
 
 use pip for installation : 
 ```
-pip install nrv
+pip install NrV
 ```
 
 # Requirements
