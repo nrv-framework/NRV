@@ -4,11 +4,11 @@ setup(
    name='nrv',
    version='0.0.1',
    description='NeuRon Virtualizer',
-   long_description = file: README.md
+   long_description = 'file: README.md',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
    packages=['nrv'],  #same as name
    include_package_data = True,
-   url = 'https://github.com/fkolbl/NRV'
+   url = 'https://github.com/fkolbl/NRV',
    classifiers =
     Programming Language :: Python :: 3
     License :: CeCILL
