@@ -20,11 +20,19 @@ nrv.rise_warning('ver=False', verbose=False)
 nrv.rise_warning('ver=None')
 nrv.rise_warning(True)
 
-nrv.rise_warning(False, verbose=True)
+nrv.rise_warning('ver=True', verbose=True)
 
 #errors
 
-
-
-
-nrv.rise_error(False, verbose=True)
+try:
+    nrv.rise_error('ver=True', verbose=True)
+except:
+    print("error 1")
+try:
+    nrv.rise_error('ver=False', verbose=False)
+except:
+    print("error 2")
+try:
+    nrv.rise_error('ver=None')
+except:
+    print("error 3")
