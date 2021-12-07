@@ -259,7 +259,7 @@ def blocking_threshold(diameter,L,material,dist_elec,block_freq,position_elec=0.
         delta_amp=np.abs(current_amp-previous_amp)
         previous_amp=current_amp
         # test simulation results, update dichotomy
-        if block(results) == False:
+        if block(results, t_start=t_start) == False:
             if (current_amp == amp_max):
                 rise_warning("Maximum Stimulation Current is too Low!",verbose=verbose)
                 return -1
