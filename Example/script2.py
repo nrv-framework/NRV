@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 ## Axon def
 y = 0
 z = 0
-d = 1
-L = 5000
-model = "HH" # Rattay_Aberham if not precised
+d = 10
+L = nrv.get_length_from_nodes(d,21)
+model = "MRG" 
 
-axon1 = nrv.unmyelinated(y, z, d, L, model=model)
+axon1 = nrv.myelinated(y, z, d, L, model=model)
 
 ## test pulse
 t_start = 1
@@ -17,7 +17,8 @@ amplitude = 5
 axon1.insert_I_Clamp(0, t_start, duration, amplitude)
 
 ## Simulation
-t_sim = 20
+
+t_sim = 5
 results = axon1.simulate(t_sim=t_sim)
 del axon1
 
@@ -28,7 +29,7 @@ plt.xlabel('time (ms)')
 plt.ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
-plt.savefig('figures/01_Color_Map.png')
+plt.savefig('figures/02_Color_Map.png')
 
 # Raster plot
 nrv.rasterize(results,'V_mem')
@@ -38,5 +39,5 @@ plt.xlabel('time (ms)')
 plt.ylabel('position along the axon($\mu m$)')
 plt.xlim(0,t_sim)
 plt.ylim(0,results['L'])
-plt.savefig('figures/01_Raster_Plot.png')
+plt.savefig('figures/02_Raster_Plot.png')
 plt.show()
