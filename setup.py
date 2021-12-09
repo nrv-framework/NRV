@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='nrv-py',
-   version='0.0.1',
+   version='0.0.2',
    description='NeuRon Virtualizer',
    long_description = 'file: README.md',
    author='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey',
