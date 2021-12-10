@@ -24,6 +24,7 @@ del axon1
 
 ## Processing
 # Color Map
+plt.figure()
 map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')
 plt.xlabel('time (ms)')
 plt.ylabel('position (µm)')

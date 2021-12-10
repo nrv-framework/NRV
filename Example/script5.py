@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 unmyelinated_diameters = np.linspace(0.1,1,5)
-myelinated_diameters = np.linspace(6,14,8)
+myelinated_diameters = np.linspace(4,14,8)
 
 unmyelinated_threshold = []
 myelinated_threshold = []
@@ -18,6 +18,8 @@ for d in unmyelinated_diameters:
 
 plt.figure()
 plt.plot(unmyelinated_diameters, unmyelinated_threshold,  'o-', label='unmyelinated')
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('firing thershold ($\mu A$)')
 plt.legend()
 plt.grid()
 plt.savefig('figures/05_unmyelinated_threshold.png')
@@ -33,6 +35,8 @@ for d in myelinated_diameters:
 
 plt.figure()
 plt.plot(myelinated_diameters, myelinated_threshold, 'o-r', label='myelinated')
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('firing thershold ($\mu A$)')
 plt.legend()
 plt.grid()
 plt.savefig('figures/05_myelinated_threshold.png')
@@ -40,6 +44,8 @@ plt.savefig('figures/05_myelinated_threshold.png')
 plt.figure()
 plt.plot(unmyelinated_diameters, unmyelinated_threshold,  'o-', label='unmyelinated')
 plt.plot(myelinated_diameters, myelinated_threshold, 'o-', label='myelinated')
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('firing thershold ($\mu A$)')
 plt.legend()
 plt.grid()
 plt.savefig('figures/05_threshold.png')
@@ -47,6 +53,8 @@ plt.savefig('figures/05_threshold.png')
 plt.figure()
 plt.plot(unmyelinated_diameters, unmyelinated_threshold, 'o-', label='unmyelinated')
 plt.plot(myelinated_diameters, myelinated_threshold, 'o-', label='myelinated')
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('firing thershold ($\mu A$)')
 plt.legend()
 plt.xscale('log')
 plt.yscale('log')

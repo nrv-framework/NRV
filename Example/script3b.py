@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 unmyelinated_diameters = np.linspace(0.1,1,10)
-myelinated_diameters = np.linspace(6,14,16)
+myelinated_diameters = np.linspace(4,14,16)
 
 unmyelinated_speed = []
 myelinated_speed = []
@@ -35,6 +35,8 @@ plt.figure()
 plt.plot(unmyelinated_diameters, unmyelinated_speed,  'o-', label='unmyelinated')
 plt.legend()
 plt.grid()
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('speed ($m.s^{-1}$)')
 plt.savefig('figures/03_unmyelinatedspeed.png')
 print(unmyelinated_speed)
 
@@ -67,6 +69,8 @@ plt.figure()
 plt.plot(myelinated_diameters, myelinated_speed, 'o-', label='myelinated')
 plt.legend()
 plt.grid()
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('speed ($m.s^{-1}$)')
 plt.savefig('figures/03_myelinatedspeed.png')
 print(unmyelinated_speed)
 print(myelinated_speed)
@@ -77,6 +81,8 @@ plt.plot(unmyelinated_diameters, unmyelinated_speed,  'o-', label='unmyelinated'
 plt.plot(myelinated_diameters, myelinated_speed, 'o-', label='myelinated')
 plt.legend()
 plt.grid()
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('speed ($m.s^{-1}$)')
 plt.savefig('figures/03_speed.png')
 
 plt.figure()
@@ -86,4 +92,6 @@ plt.legend()
 plt.xscale('log')
 plt.yscale('log')
 plt.grid()
+plt.xlabel('diameter ($\mu m$)')
+plt.ylabel('speed ($m.s^{-1}$)')
 plt.savefig('figures/03_speed_log.png')

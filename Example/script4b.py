@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # axon def
 y = 0						# axon y position, in [um]
 z = 0						# axon z position, in [um]
-d = 10
+d = 10						# axon diameter position, in [um]
 L = nrv.get_length_from_nodes(d,21) 	# axon length, along x axis, in [um]
 axon1 = nrv.unmyelinated(y,z,d,L)
 
