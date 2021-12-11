@@ -51,16 +51,18 @@ for t in range(len(results['V_mem'][0])):
     Vspike_t = 0
     for k in range(3,len(results['V_mem'])-1):
         x = results['x_rec'][k]
-        dist = ((x_elec - x)**2 + (y_elec - y)**2)**0.5
-        surface = np.pi * (d/2) ** 2
-        Imem = results['I_mem'][k][t] * surface
-        Vspike_t += Imem/(4*np.pi*dist)
+
+        dist = (((x_elec - x)**2 + (y_elec - y)**2)**0.5)*1e3 #[mm]
+        surface = np.pi * (d*1e4/2) ** 2                      #[cm2]
+        Imem = results['I_mem'][k][t] * surface               #[mA]
+
+        Vspike_t += Imem/(4*np.pi*dist)                 #[mV]
     Vspike += [Vspike_t]
 
 
 plt.figure()
 plt.plot(results['t'], Vspike)
 plt.xlabel('simulation time ($ms$)')
-plt.ylabel('electrod voltage($\mu V$)')
+plt.ylabel('electrod voltage($mV$)')
 plt.savefig('figures/06_Velectrod.png')
 plt.show()
