@@ -8,7 +8,7 @@ y = 0
 z = 0
 d = 1
 L = 5000
-model = "HH" # Rattay_Aberham if not precised
+model = "Rattay_Aberham" # Rattay_Aberham if not precised
 
 axon1 = nrv.unmyelinated(y, z, d, L, model=model)
 
@@ -34,27 +34,33 @@ imid = len(results['V_mem'])//2
 plt.figure()
 for i in range(len(results['V_mem'])):
     plt.plot(results['t'],results['I_mem'][i],color='k')
+plt.xlabel('simulation time ($ms$)')
+plt.ylabel('axonal voltage($mV$)')
 plt.savefig('figures/06_Imem_axon.png')
 plt.figure()
 
 for i in range(len(results['V_mem'])):
     plt.plot(results['t'],results['V_mem'][i],color='k')
+plt.xlabel('simulation time ($ms$)')
+plt.ylabel('axonal current ($mA/cm^2$)')
 plt.savefig('figures/06_Vmem_axon.png')
 
 
 Vspike = []
 for t in range(len(results['V_mem'][0])):
-    Ispike_t = 0
+    Vspike_t = 0
     for k in range(3,len(results['V_mem'])-1):
         x = results['x_rec'][k]
         dist = ((x_elec - x)**2 + (y_elec - y)**2)**0.5
-        Imem = results['I_mem'][k][t]
-        Ispike_t += Imem/(4*np.pi*dist)
-    Vspike += [Ispike_t]
+        surface = np.pi * (d/2) ** 2
+        Imem = results['I_mem'][k][t] * surface
+        Vspike_t += Imem/(4*np.pi*dist)
+    Vspike += [Vspike_t]
 
 
 plt.figure()
 plt.plot(results['t'], Vspike)
 plt.xlabel('simulation time ($ms$)')
 plt.ylabel('electrod voltage($\mu V$)')
+plt.savefig('figures/06_Velectrod.png')
 plt.show()

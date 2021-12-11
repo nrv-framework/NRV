@@ -2,8 +2,8 @@ import nrv
 import matplotlib.pyplot as plt
 import numpy as np
 
-unmyelinated_diameters = np.linspace(0.1,1,10)
-myelinated_diameters = np.linspace(4,14,16)
+unmyelinated_diameters = np.linspace(0.5,1,10)
+myelinated_diameters = np.linspace(6,16,16)
 
 unmyelinated_speed = []
 myelinated_speed = []
@@ -20,7 +20,7 @@ for d in unmyelinated_diameters:
     ## test pulse
     t_start = 1
     duration = 0.1
-    amplitude = 5
+    amplitude = 3
     axon1.insert_I_Clamp(0, t_start, duration, amplitude)
 
     ## Simulation
