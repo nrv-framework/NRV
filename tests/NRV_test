@@ -49,7 +49,7 @@ if __name__ == "__main__":
         try:
             import mph
             client = mph.start()
-            client.close()
+            client.disconnect()
         except Exception as e:
             err_message = str(e)
             if 'License error:' in err_message:
