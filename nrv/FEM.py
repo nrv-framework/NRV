@@ -219,7 +219,7 @@ class COMSOL_model(FEM_model):
         """
         COMSOL_expressions = ['at3('+str(x[k])+'[um], '+str(y)+'[um], '+str(z)+'[um], V)' \
             for k in range(len(x))]
-        Voltage = self.model.evaluate(COMSOL_expressions,dataset=self.model.datasets()[0])*V
+        Voltage = self.model.evaluate(COMSOL_expressions)*V
         return np.asarray(Voltage)
 
     def export(self, path=''):
