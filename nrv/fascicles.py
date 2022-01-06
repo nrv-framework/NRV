@@ -726,9 +726,57 @@ class fascicle():
                 self.NoR_relative_position += [(x - 0.5)% node_length / node_length]
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
 
+    def get_electrodes_footprints_on_axons(self,save=False, filename="electrodes_footprint.ftpt",\
+        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG'):
+        """
+        get electrodes footprints on each axon segment
+
+        Parameters
+        ----------
+        save        :bool
+            if true save result in a .ftpt file
+        filename    :str
+            saving file name and path
+
+        Returns
+        -------
+        footprint
+        """
+        footprints = {}
+        for k in range(len(self.axons_diameter)):
+            if self.axons_type[k]==0:
+                axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
+                    round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
+                    dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
+                    v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
+                    threshold=self.threshold)
+            else:
+                ## if myelinated, test the axons_diameter[k],
+                ## if less than Adelta_limit -> A-delta model, else Myelinated
+                if self.axons_diameter[k] < self.Adelta_limit:
+                    axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
+                        round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
+                        node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
+                        freq=self.freq, freq_min=self.freq_min,\
+                        mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
+                        d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+                        threshold=self.threshold)
+                else:
+                    axon = myelinated(self.axons_y[k], self.axons_z[k],\
+                        round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                        node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
+                        freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
+                        alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
+                        ID=k, threshold=self.threshold)
+            axon.attach_extracellular_stimulation(self.extra_stim)
+            footprints[k] = axon.get_electrodes_footprints_on_axon(save=save,filename=filename)
+        if save:
+            json_dump(footprints, filename)
+        return footprints
+
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_particles=False, save_V_mem=False, save_path='', verbose=True,\
+        record_particles=False, footprints=None, save_V_mem=False, save_path='', verbose=True,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
         Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
@@ -892,8 +940,13 @@ class fascicle():
                                 # APPLY INTRA CELLULAR STIMULATION
                                 axon.insert_I_Clamp(position, t_start, duration, amplitude)
                     ## perform simulation
+                    if footprints is None:
+                        axon_ftpt = None
+                    else:
+                        axon_ftpt = footprints[k]
                     sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
-                        record_I_mem=record_I_mem, record_I_ions=record_I_ions, record_particles=record_particles)
+                        record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
+                        record_particles=record_particles, footprints=axon_ftpt)
                     del axon
                     ## postprocessing and data reduction
                     if postproc_script is None:
@@ -1001,8 +1054,13 @@ class fascicle():
                             # APPLY INTRA CELLULAR STIMULATION
                             axon.insert_I_Clamp(position, t_start, duration, amplitude)
                 ## perform simulation
+                if footprints is None:
+                    axon_ftpt = None
+                else:
+                    axon_ftpt = footprints[k]
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
-                    record_I_mem=record_I_mem, record_I_ions=record_I_ions, record_particles=record_particles)
+                    record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
+                    record_particles=record_particles, footprints=axon_ftpt)
                 del axon
                 ## postprocessing and data reduction
 
