@@ -379,6 +379,27 @@ class FEM_stimulation(extracellular_context):
                 self.setup_FEM()
             self.model.solve()
 
+    def set_electrodes_footprints(self, footprints):
+        """
+        set the footprints for all electrodes from existing array
+
+        Parameters
+        ----------
+        x           : np.array
+            x position at which to compute the field, in um
+        y           : float
+            y position at which to compute the field, in um
+        z           : float
+            z position at which to compute the field, in um
+        ID          : int
+            ID of the axon
+        """
+        i=0
+        if len(footprints) == len(self.electrodes):
+            for electrode in self.electrodes:
+                electrode.set_footprint(footprints[i])
+                i+=1
+
     def compute_electrodes_footprints(self, x, y, z, ID):
         """
         Compute the footprints for all electrodes
