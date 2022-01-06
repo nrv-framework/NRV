@@ -46,6 +46,7 @@ class electrode():
         self.ID = ID
         self.footprint = np.asarray([])
 
+
     def get_ID_number(self):
         """
         get the ID of a electrode
@@ -62,11 +63,33 @@ class electrode():
         set the identification number of an electrode
 
         Parameters
-        ------
+        ----------
         ID  : int
             electrode identification number
         """
         self.ID = ID
+
+    def get_footptint(self):
+        """
+        get the footprint of a electrode
+
+        Returns
+        -------
+        footprint : np.array
+            identification number of the electrode
+        """
+        return self.footprint
+
+    def set_footprint(self, footprint):
+        """
+        set the footprint of a electrode
+
+        Parameters
+        ----------
+        footprint : np.array
+            identification number of the electrode
+        """
+        self.footprint = footprint
 
     def compute_field(self, I):
         """ Compute the external field using the Point source approximation
@@ -162,6 +185,7 @@ class FEM_electrode(electrode):
             Voltage response at 1mA
         """
         self.footprint = np.asarray(V_1mA)
+
 
 class LIFE_electrode(FEM_electrode):
     """
