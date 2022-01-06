@@ -14,6 +14,7 @@ import numpy as np
 from .extracellular import *
 from .electrodes import *
 from .log_interface import rise_error, rise_warning, pass_info
+from .file_handler import json_dump
 import neuron
 
 # Handling verbosity
@@ -288,8 +289,34 @@ class axon():
         if is_extra_stim(stim):
             self.extra_stim = stim
 
+    def get_electrodes_footprints_on_axon(self,save=False, filename="electrodes_footprint.ftpt"):
+        """
+        get electrodes footprints on each axon segment
+
+        Parameters
+        ----------
+        save        :bool
+            if true save result in a .ftpt file
+        filename    :str
+            saving file name and path
+
+        Returns
+        -------
+        footprint
+        """
+        footprints = {}
+        x, y, z = self.__get_allseg_positions()
+        self.extra_stim.synchronise_stimuli()
+        self.extra_stim.compute_electrodes_footprints(x, y, z, self.ID)
+        for i in range(len(self.extra_stim.electrodes)):
+            elec = self.extra_stim.electrodes[i]
+            footprints[i] = elec.footprint
+        if save:
+            json_dump(footprints, filename)
+        return footprints
+
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False, \
-        record_particles=False):
+        record_particles=False, footprints=None):
         """
         Simulates the axon using neuron framework
 
@@ -440,7 +467,16 @@ class axon():
                 # prepare extracellular stimulation
                 x, y, z = self.__get_allseg_positions()
                 self.extra_stim.synchronise_stimuli()
-                self.extra_stim.compute_electrodes_footprints(x, y, z, self.ID)
+                if footprints is None:
+                    self.extra_stim.compute_electrodes_footprints(x, y, z, self.ID)
+                else:
+                    self.extra_stim.set_electrodes_footprints(footprints)
+                '''
+                elec = self.extra_stim.electrodes[0]
+                print(elec.footprint)
+                print(np.shape(elec.footprint))
+                exit()
+                '''
                 # compute the minimum time between stimuli changes, checks it's not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
                 if Delta_T_min < self.dt:
