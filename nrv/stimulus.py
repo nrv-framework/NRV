@@ -1,12 +1,14 @@
 """
 NRV-Stimulus
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
 import os
 import numpy as np
 from .log_interface import rise_error, rise_warning, pass_info
+from .file_handler import *
+
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -109,6 +111,49 @@ class stimulus():
         super(stimulus, self).__init__()
         self.s = np.array([s_init])
         self.t = np.array([0])
+
+    ## Save and Load mehtods
+
+    def save_stimulus(self, save=False, fname = 'stimulus.json'):
+        """
+        Return stimulus as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'stimulus.json'
+
+        Returns
+        -------
+        stim_dic : dict
+            dictionary containing all information
+        """
+        stim_dic = {}
+        stim_dic['t'] = self.t
+        stim_dic['s'] = self.s
+        if save:
+            json_dump(stim_dic, fname)
+        return stim_dic
+
+
+    def load_stimulus(self, data):
+        """
+        Load all stimulus properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing stimulus information
+        """
+        if type(data) == str:
+            stim_dic = json_load(data)
+        else: 
+            stim_dic = data
+
+        self.t = stim_dic['t']
+        self.s = stim_dic['s']
 
     ############################
     ## basic handling methods ##

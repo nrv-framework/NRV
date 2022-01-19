@@ -1,6 +1,6 @@
 """
 NRV-fascicles
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
@@ -105,6 +105,7 @@ class fascicle():
         self.Adelta_limit = Adelta_limit
         # extra-cellular stimulation
         self.extra_stim = None
+        self.footprints = {}
         # intra-cellular stimulation
         self.N_intra = 0
         self.intra_stim_position = []
@@ -279,10 +280,10 @@ class fascicle():
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter)
-        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type)
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y)
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z)
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
+        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
+        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
         self.N = MCH.master_broadcasts_array_to_all(N)
 
     def fill_with_population(self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55):
@@ -340,10 +341,10 @@ class fascicle():
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter)
-        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type)
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y)
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z)
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
+        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
+        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
         self.N = MCH.master_broadcasts_array_to_all(N)
 
     def fill_with_placed_population(self, axons_diameter, axons_type, axons_y, axons_z,\
@@ -397,10 +398,10 @@ class fascicle():
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter)
-        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type)
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y)
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z)
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
+        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
+        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
         self.N = MCH.master_broadcasts_array_to_all(N)
 
     ## move methods
@@ -506,6 +507,7 @@ class fascicle():
         if len(colapse)>0:
             pass_info('From Fascicle level: Electrode/Axons overlap, '+str(len(colapse))+' axons will be removed from the fascicle')
         self.N -= len(colapse)
+        print(self.N, "axons remaining")
         self.axons_diameter = self.axons_diameter[mask]
         self.axons_type = self.axons_type[mask]
         self.axons_y = self.axons_y[mask]
@@ -543,15 +545,19 @@ class fascicle():
                 else:
                     circles.append(plt.Circle((self.axons_y[k], self.axons_z[k]),\
                         self.axons_diameter[k]/2, color=unmyel_color, fill=True))
+            if self.extra_stim is not None:
+                for electrode in self.extra_stim.electrodes:
+                    if electrode.type == "LIFE":
+                        circles.append(plt.Circle((electrode.y_c, electrode.z_c),\
+                        electrode.D/2, color='gold', fill=True))
+                    else:
+                        axes.scatter(electrode.y, electrode.z, color='gold')
             for circle in circles:
                 axes.add_patch(circle)
             if num:
                 for k in range(self.N):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
-            ## plot electrode(s) if existings
-            if self.extra_stim is not None:
-                for electrode in self.extra_stim.electrodes:
-                    axes.scatter(electrode.y, electrode.z, color='gold')
+
 
     def plot_x(self, fig, axes, myel_color='r', unmyel_color='b', Myelinated_model='MRG'):
         """
@@ -604,7 +610,7 @@ class fascicle():
 
 
     ## save/load methods
-    def save_fascicle_configuration(self, fname):
+    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
         """
         Save a fascicle in a json file
 
@@ -629,10 +635,23 @@ class fascicle():
             fascicle_config['axons_y'] = self.axons_y
             fascicle_config['axons_z'] = self.axons_z
             fascicle_config['NoR_relative_position'] = self.NoR_relative_position
+
+            if intracel_context:
+                fascicle_config['L'] = self.L
+                fascicle_config['N_intra'] = self.N_intra
+                fascicle_config['intra_stim_position'] = self.intra_stim_position
+                fascicle_config['intra_stim_t_start'] = self.intra_stim_t_start
+                fascicle_config['intra_stim_duration'] = self.intra_stim_duration
+                fascicle_config['intra_stim_amplitude'] = self.intra_stim_amplitude
+                fascicle_config['intra_stim_ON'] = self.intra_stim_ON
+            if extracel_context:
+                fascicle_config['L'] = self.L
+                fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
+                fascicle_config['footprints'] = self.footprints
             # save the dictionnary as a json file
             json_dump(fascicle_config, fname)
 
-    def load_fascicle_configuration(self, fname):
+    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
         """
         Load a fascicle configuration from a json file
 
@@ -656,6 +675,24 @@ class fascicle():
         self.axons_y = np.asarray(results['axons_y']).flatten()
         self.axons_z = np.asarray(results['axons_z']).flatten()
         self.NoR_relative_position = np.asarray(results['NoR_relative_position']).flatten()
+        if intracel_context:
+            self.L = results['L']
+            self.N_intra = results['N_intra']
+            self.intra_stim_position = results['intra_stim_position']
+            self.intra_stim_t_start = results['intra_stim_t_start']
+            self.intra_stim_duration = results['intra_stim_duration']
+            self.intra_stim_amplitude = results['intra_stim_amplitude']
+            self.intra_stim_ON = results['intra_stim_ON']
+        if extracel_context:
+            self.L = results['L']
+            self.extra_stim = load_any_extracel_context(results['extra_stim'])
+            self.footprints = {}
+            for axon, ftp in results['footprints'].items():
+                dic = {}
+                for dim, ftpx in ftp.items():
+                    dic[int(dim)] = ftpx
+                self.footprints[int(axon)] = dic
+
 
     ## STIMULATION METHODS
     def attach_extracellular_stimulation(self, stimulation):
@@ -671,6 +708,19 @@ class fascicle():
         # remove everlaping axons
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
+
+    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+        """
+        Change the stimulus of the ID_elec electrods
+        
+        Input:
+        ------
+            ID_elec  : int
+
+        """
+        self.extra_stim.stimuli[ID_elec] = stimulus
+        self.extra_stim.synchronised = False
+
 
     def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
         """
@@ -742,37 +792,40 @@ class fascicle():
         -------
         footprint
         """
-        footprints = {}
-        for k in range(len(self.axons_diameter)):
-            if self.axons_type[k]==0:
-                axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
-                    round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
-                    dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                    v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
-                    threshold=self.threshold)
-            else:
-                ## if myelinated, test the axons_diameter[k],
-                ## if less than Adelta_limit -> A-delta model, else Myelinated
-                if self.axons_diameter[k] < self.Adelta_limit:
-                    axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
-                        node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                        freq=self.freq, freq_min=self.freq_min,\
-                        mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
-                        d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+        if MCH.do_master_only_work():
+            footprints = {}
+            for k in range(len(self.axons_diameter)):
+                if self.axons_type[k]==0:
+                    axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
+                        round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
+                        dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
+                        v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
                         threshold=self.threshold)
                 else:
-                    axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
-                        node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                        freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                        alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
-                        ID=k, threshold=self.threshold)
-            axon.attach_extracellular_stimulation(self.extra_stim)
-            footprints[k] = axon.get_electrodes_footprints_on_axon(save=save,filename=filename)
-        if save:
-            json_dump(footprints, filename)
-        return footprints
+                    ## if myelinated, test the axons_diameter[k],
+                    ## if less than Adelta_limit -> A-delta model, else Myelinated
+                    if self.axons_diameter[k] < self.Adelta_limit:
+                        axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
+                            round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
+                            node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
+                            freq=self.freq, freq_min=self.freq_min,\
+                            mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
+                            d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+                            threshold=self.threshold)
+                    else:
+                        axon = myelinated(self.axons_y[k], self.axons_z[k],\
+                            round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                            node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
+                            freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
+                            alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
+                            ID=k, threshold=self.threshold)
+                axon.attach_extracellular_stimulation(self.extra_stim)
+                footprints[k] = axon.get_electrodes_footprints_on_axon(save=save,filename=filename)
+            if save:
+                json_dump(footprints, filename)
+
+            self.footprints = footprints
+            return footprints
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
@@ -1058,6 +1111,7 @@ class fascicle():
                     axon_ftpt = None
                 else:
                     axon_ftpt = footprints[k]
+
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
                     record_particles=record_particles, footprints=axon_ftpt)

@@ -1,11 +1,12 @@
 """
 NRV-electrodes
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
 import numpy as np
 from .log_interface import rise_error, rise_warning, pass_info
+from .file_handler import *
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -28,6 +29,35 @@ def is_analytical_electrode(elec):
     """
     return not issubclass(type(elec), FEM_electrode)
 
+def load_any_electrode(data):
+    """
+    return any kind of electrod context properties from a dictionary or a json file
+
+    Parameters
+    ----------
+    data    : str or dict
+        json file path or dictionary containing extracel_context information
+    """
+    if type(data) == str:
+        elec_dic = json_load(data)
+    else: 
+        elec_dic = data
+
+    if data["type"] is None:
+        elec = electrode()
+    elif data["type"] == "point source":
+        elec = point_source_electrode(0,0,0)
+    elif data["type"] == "FEM":
+        elec = FEM_electrode("")
+    elif data["type"] == "LIFE":
+        elec = LIFE_electrode("",0,0,0,0,0)
+    else:
+        rise_error("Electrode type not recognizede")
+
+    elec.load_electrode(elec_dic)
+    return elec
+
+
 class electrode():
     """
     Objet for generic electrode description. Each electrode has an ID and a position.
@@ -45,6 +75,51 @@ class electrode():
         super(electrode, self).__init__()
         self.ID = ID
         self.footprint = np.asarray([])
+        self.type = None
+
+    ## Save and Load mehtods
+
+    def save_electrode(self, save=False, fname='electrode.json'):
+        """
+        Return electrode as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'electrode.json'
+
+        Returns
+        -------
+        elec_dic : dict
+            dictionary containing all information
+        """
+        elec_dic = {}
+        elec_dic['ID'] = self.ID
+        elec_dic['footprint'] = self.footprint
+        elec_dic['type'] = self.type
+        if save:
+            json_dump(elec_dic, fname)
+        return elec_dic
+
+    def load_electrode(self, data):
+        """
+        Load all electrode properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing electrode information
+        """
+        if type(data) == str:
+            elec_dic = json_load(data)
+        else: 
+            elec_dic = data
+
+        self.ID = elec_dic['ID']
+        self.footprint = elec_dic['footprint']
+        self.type = elec_dic['type']
 
 
     def get_ID_number(self):
@@ -129,11 +204,58 @@ class point_source_electrode(electrode):
         ID  : int
             electrode identification number, set to 0 by default
         """
-        super().__init__()
+        super().__init__(ID)
         self.x = x
         self.y = y
         self.z = z
-        self.ID = ID
+
+        self.type = "point source"
+
+    ## Save and Load mehtods
+
+    def save_electrode(self, save=False, fname='electrode.json'):
+        """
+        Return electrode as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'electrode.json'
+
+        Returns
+        -------
+        elec_dic : dict
+            dictionary containing all information
+        """
+        elec_dic = super().save_electrode()
+        elec_dic['x'] = self.x
+        elec_dic['y'] = self.y
+        elec_dic['z'] = self.z
+        if save:
+            json_dump(elec_dic, fname)
+        return elec_dic
+
+
+    def load_electrode(self, data):
+        """
+        Load all electrode properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing electrode information
+        """
+        if type(data) == str:
+            elec_dic = json_load(data)
+        else: 
+            elec_dic = data
+        super().load_electrode(data)
+        self.x = elec_dic['x']
+        self.y = elec_dic['y']
+        self.z = elec_dic['z']
+
 
     def compute_footprint(self, x, y, z, mat):
         """
@@ -166,14 +288,55 @@ class FEM_electrode(electrode):
     """
     Electrode located in Finite Element Model in Comsol
     """
-    def __init__(self, label, ID):
+    def __init__(self, label, ID=0):
         """
         Instrantiation of a FEM electrode
         """
-        super().__init__()
+        super().__init__(ID)
         self.label = label
         self.ID = ID
         self.footprint = np.asarray([])
+        self.type = "FEM"
+
+    ## Save and Load mehtods
+
+    def save_electrode(self, save=False, fname='electrode.json'):
+        """
+        Return electrode as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'electrode.json'
+
+        Returns
+        -------
+        elec_dic : dict
+            dictionary containing all information
+        """
+        elec_dic = super().save_electrode()
+        elec_dic['label'] = self.label
+        if save:
+            json_dump(elec_dic, fname)
+        return elec_dic
+
+    def load_electrode(self, data):
+        """
+        Load all electrode properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing electrode information
+        """
+        if type(data) == str:
+            elec_dic = json_load(data)
+        else: 
+            elec_dic = data
+        super().load_electrode(data)
+        self.label = elec_dic['label']
 
     def set_footprint(self, V_1mA):
         """
@@ -216,6 +379,57 @@ class LIFE_electrode(FEM_electrode):
         self.x_shift = x_shift
         self.y_c = y_c
         self.z_c = z_c
+        self.type = "LIFE"
+
+    ## Save and Load mehtods
+
+    def save_electrode(self, save=False, fname='electrode.json'):
+        """
+        Return electrode as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'electrode.json'
+
+        Returns
+        -------
+        elec_dic : dict
+            dictionary containing all information
+        """
+        elec_dic = super().save_electrode()
+        elec_dic['D'] = self.D
+        elec_dic['length'] = self.length
+        elec_dic['x_shift'] = self.x_shift
+        elec_dic['y_c'] = self.y_c
+        elec_dic['z_c'] = self.z_c
+        if save:
+            json_dump(elec_dic, fname)
+        return elec_dic
+
+
+    def load_electrode(self, data):
+        """
+        Load all electrode properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing electrode information
+        """
+        if type(data) == str:
+            elec_dic = json_load(data)
+        else: 
+            elec_dic = data
+        super().load_electrode(data)
+        self.D = elec_dic['D']
+        self.length = elec_dic['length']
+        self.x_shift = elec_dic['x_shift']
+        self.y_c = elec_dic['y_c']
+        self.z_c = elec_dic['z_c']
+
 
     def parameter_model(self,model):
         """

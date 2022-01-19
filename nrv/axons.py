@@ -1,6 +1,6 @@
 """
 NRV-axons
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
@@ -306,7 +306,7 @@ class axon():
         """
         footprints = {}
         x, y, z = self.__get_allseg_positions()
-        self.extra_stim.synchronise_stimuli()
+        #self.extra_stim.synchronise_stimuli()
         self.extra_stim.compute_electrodes_footprints(x, y, z, self.ID)
         for i in range(len(self.extra_stim.electrodes)):
             elec = self.extra_stim.electrodes[i]
