@@ -44,7 +44,7 @@ fascicle_1.set_ID(73)
 fascicle_1.attach_extracellular_stimulation(test_stim)
 
 #Footprint saving
-fascicle_1.get_electrodes_footprints_on_axons(save=True, filename="./unitary_tests/figures/072_electrodes_footprints_on_axon.ftpts")
+footprints = fascicle_1.get_electrodes_footprints_on_axons(save=True, filename="./unitary_tests/figures/073_electrodes_footprints_on_axon.ftpts")
 
 # simulation
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='Raster_plot', verbose=False)
+#fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='Raster_plot', verbose=True, footprints=footprints)
