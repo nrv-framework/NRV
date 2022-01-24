@@ -162,7 +162,8 @@ class electrode():
         Parameters
         ----------
         footprint : np.array
-            identification number of the electrode
+            array contaning the electrod linear footprint (electrode response at 1mA)
+            on several space points
         """
         self.footprint = footprint
 

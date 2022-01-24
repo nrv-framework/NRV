@@ -604,14 +604,8 @@ class FEM_stimulation(extracellular_context):
 
         Parameters
         ----------
-        x           : np.array
-            x position at which to compute the field, in um
-        y           : float
-            y position at which to compute the field, in um
-        z           : float
-            z position at which to compute the field, in um
-        ID          : int
-            ID of the axon
+        footprints  : list of array like
+            list footprint for each electode of the extracellular context
         """
         i=0
         if len(footprints) == len(self.electrodes):

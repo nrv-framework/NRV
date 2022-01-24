@@ -302,7 +302,9 @@ class axon():
 
         Returns
         -------
-        footprint
+        footprints   :dict
+        Dictionnary composed of extracellular footprint array, the keys are int value
+        of the corresponding electrode ID
         """
         footprints = {}
         x, y, z = self.__get_allseg_positions()
@@ -334,7 +336,10 @@ class axon():
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
-
+        footprints           :dict
+        Dictionnary composed of extracellular footprint array, the keys are int value
+        of the corresponding electrode ID, if None, footprints calculated during the simulation,
+        set to None by default
         Returns
         -------
         axon_sim    : dictionnary

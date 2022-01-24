@@ -618,6 +618,10 @@ class fascicle():
         ----------
         fname : str
             name of the file to save the fascicle
+        extracel_context: bool
+            if True, add the extracellular context to the saving
+        intracel_context: bool
+            if True, add the intracellular context to the saving
         """
         if MCH.do_master_only_work():
             # copy everything into a dictionnary
@@ -657,8 +661,12 @@ class fascicle():
 
         Parameters
         ----------
-        fname : str
+        fname           : str
             path to the json file describing a fascicle
+        extracel_context: bool
+            if True, load the extracellular context as well
+        intracel_context: bool
+            if True, load the intracellular context as well
         """
         results = json_load(fname)
         self.ID = results['ID']
@@ -779,7 +787,7 @@ class fascicle():
     def get_electrodes_footprints_on_axons(self,save=False, filename="electrodes_footprint.ftpt",\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG'):
         """
-        get electrodes footprints on each axon segment
+        get electrodes footprints on each segment of each axon
 
         Parameters
         ----------
@@ -787,10 +795,17 @@ class fascicle():
             if true save result in a .ftpt file
         filename    :str
             saving file name and path
-
+        Unmyelinated_model  : str
+            model for unmyelinated fibers, by default 'Rattay_Aberham'
+        Adelta_model        : str
+            model for A-delta thin myelinated fibers, by default'extended_Gaines'
+        Myelinated_model    : str
+            model for myelinated fibers, by default 'MRG'
         Returns
         -------
-        footprint
+        footprints   : dict
+            Dictionnary composed of axon footprint dictionary, the keys are int value
+            of the corresponding axon ID
         """
         if MCH.do_master_only_work():
             footprints = {}
@@ -850,6 +865,10 @@ class fascicle():
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
+        footprints          : dict or string
+            Dictionnary composed of axon footprint dictionary, the keys are int value
+            of the corresponding axon ID. if type is bool, fascicle footprints attribute is used
+            if None, footprins calculated during the simulation, by default None
         save_V_mem          : bool
             if true, all membrane voltages values are stored in results whe basic postprocessing is
             applied. Can be heavy ! False by default
@@ -1109,6 +1128,8 @@ class fascicle():
                 ## perform simulation
                 if footprints is None:
                     axon_ftpt = None
+                elif type(footprints) == bool:
+                    axon_ftpt = self.footprints
                 else:
                     axon_ftpt = footprints[k]
 
