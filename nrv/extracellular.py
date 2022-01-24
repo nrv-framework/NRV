@@ -312,8 +312,7 @@ class stimulation(extracellular_context):
         else: 
             context_dic = data
         super().load_extracel_context(data)
-
-        self.external_material.load_material(context_dic['material'])
+        self.material.load_material(context_dic['material'])
 
         if C_model:
             if MCH.do_master_only_work():
