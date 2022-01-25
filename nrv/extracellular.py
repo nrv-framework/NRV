@@ -1,6 +1,6 @@
 """
 NRV-extracellular contexts
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
@@ -8,6 +8,7 @@ import numpy as np
 from .electrodes import *
 from .stimulus import *
 from .materials import *
+from .file_handler import *
 from .FEM import *
 from .MCore import *
 from .log_interface import rise_error, rise_warning, pass_info
@@ -35,6 +36,32 @@ def is_FEM_extra_stim(test_stim):
     """
     return isinstance(test_stim, FEM_stimulation)
 
+def load_any_extracel_context(data):
+    """
+    return any kind of extracellular context properties from a dictionary or a json file
+
+    Parameters
+    ----------
+    data    : str or dict
+        json file path or dictionary containing extracel_context information
+    """
+    if type(data) == str:
+        context_dic = json_load(data)
+    else: 
+        context_dic = data
+
+    if data["type"] is None:
+        extracel = extracellular_context()
+    elif data["type"] == "stimulation":
+        extracel = stimulation("")
+    elif data["type"] == "FEM_stim":
+        extracel = FEM_stimulation(data['model_fname'],comsol=False)
+    else:
+        rise_error("extra cellular context type not recognizede")
+
+    extracel.load_extracel_context(context_dic)
+    return extracel
+
 class extracellular_context:
     """
     extracellular_context is a class to handle the computation of the extracellular voltage field induced by the electrical stimulation.
@@ -51,6 +78,82 @@ class extracellular_context:
         self.synchronised = False
         self.synchronised_stimuli = []
         self.global_time_serie = []
+        self.type = None
+
+    ## Save and Load mehtods
+
+    def save_extracel_context(self, save=False, fname='extracel_context.json'):
+        """
+        Return extracellular context as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'extracel_context.json'
+
+        Returns
+        -------
+        context_dic : dict
+            dictionary containing all information
+        """
+        context_dic = {}
+        context_dic['electrodes'] = {}
+        context_dic['stimuli'] = {}
+        context_dic['synchronised_stimuli'] = {}
+        context_dic['synchronised'] = self.synchronised
+        context_dic['global_time_serie'] = self.global_time_serie
+        context_dic['type'] = self.type
+        for i in range(len(self.electrodes)):
+            elec = self.electrodes[i]
+            context_dic['electrodes'][i] = elec.save_electrode()
+        for i in range(len(self.stimuli)):
+            stim = self.stimuli[i]
+            context_dic['stimuli'][i] = stim.save_stimulus()
+        for i in range(len(self.synchronised_stimuli)):
+            stim = self.synchronised_stimuli[i]
+            context_dic['synchronised_stimuli'][i] = stim.save_stimulus()
+        if save:
+            json_dump(context_dic, fname)
+        return context_dic
+
+    def load_extracel_context(self, data='extracel_context.json'):
+        """
+        Load all extracellular context properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing extracel_context information
+        """
+        if type(data) == str:
+            context_dic = json_load(data)
+        else: 
+            context_dic = data
+        self.electrodes = []
+        self.stimuli = []
+        self.synchronised_stimuli = []
+        self.synchronised = context_dic['synchronised'] 
+        self.global_time_serie = context_dic['global_time_serie']
+        self.type = context_dic['type']
+        for i in range(len(context_dic['electrodes'])):
+            elec = load_any_electrode(context_dic['electrodes'][str(i)])
+            self.electrodes += [elec]
+            del elec
+
+        for i in range(len(context_dic['stimuli'])):
+            stim = stimulus()
+            stim.load_stimulus(context_dic['stimuli'][str(i)])
+            self.stimuli += [stim]
+            del stim
+
+        for i in range(len(context_dic['synchronised_stimuli'])):
+            stim = stimulus()
+            stim.load_stimulus(context_dic['synchronised_stimuli'][str(i)])
+            self.synchronised_stimuli += [stim]
+            del stim
+
 
     def is_empty(self):
         """
@@ -99,7 +202,7 @@ class extracellular_context:
         Synchronise all stimuli before simulation. Copies of the stimuli are created with the global number of samples
         from merging all stimuli time samples. Original stimuli are not affected.
         """
-        if not self.is_empty():
+        if not (self.synchronised or self.is_empty()):
             if len(self.electrodes) == 1:
                 self.synchronised_stimuli.append(self.stimuli[0])
             elif len(self.electrodes) == 2:
@@ -169,6 +272,56 @@ class stimulation(extracellular_context):
         """
         super().__init__()
         self.material = material
+        self.type = "stimulation"
+
+    ## Save and Load mehtods
+
+    def save_extracel_context(self, save=False, fname='extracel_context.json'):
+        """
+        Return extracellular context as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'extracel_context.json'
+
+        Returns
+        -------
+        context_dic : dict
+            dictionary containing all information
+        """
+        context_dic = super().save_extracel_context()
+        context_dic['material'] = self.material.save_material()
+        if save:
+            json_dump(context_dic, fname)
+        return context_dic
+
+    def load_extracel_context(self, data, C_model=False):
+        """
+        Load all extracellular context properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing extracel_context information
+        """
+        if type(data) == str:
+            context_dic = json_load(data)
+        else: 
+            context_dic = data
+        super().load_extracel_context(data)
+        self.material.load_material(context_dic['material'])
+
+        if C_model:
+            if MCH.do_master_only_work():
+                self.model = COMSOL_model(self.model_fname)
+            else:
+                # check that COMSOL is not turned OFF in order to continue
+                if not COMSOL_Status:
+                    rise_warning('Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off', abort=True)
+
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -217,7 +370,7 @@ class FEM_stimulation(extracellular_context):
     - a list of corresponding current stimuli
     """
     def __init__(self, model_fname, endo_mat='endoneurium_ranck',\
-        peri_mat='perineurium', epi_mat='epineurium', ext_mat='saline'):
+        peri_mat='perineurium', epi_mat='epineurium', ext_mat='saline',comsol=True):
         """
         Implement a FEM_based_stimulation object.
 
@@ -243,17 +396,82 @@ class FEM_stimulation(extracellular_context):
         self.perineurium = load_material(peri_mat)
         self.epineurium = load_material(epi_mat)
         self.external_material = load_material(ext_mat)
+        self.type ="FEM_stim"
+        self.comsol=comsol
         ## load model
         if MCH.do_master_only_work():
-            self.model = COMSOL_model(self.model_fname)
+            if comsol:
+                self.model = COMSOL_model(self.model_fname)
         else:
             # check that COMSOL is not turned OFF in order to continue
             if not COMSOL_Status:
                 rise_warning('Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off', abort=True)
 
     def __del__(self):
-        if MCH.do_master_only_work() and COMSOL_Status: #added for safe del in case of COMSOL status turned OFF
+        if MCH.do_master_only_work() and COMSOL_Status and self.comsol: #added for safe del in case of COMSOL status turned OFF
             self.model.close()
+
+    ## Save and Load mehtods
+
+    def save_extracel_context(self, save=False, fname='extracel_context.json'):
+        """
+        Return extracellular context as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'extracel_context.json'
+
+        Returns
+        -------
+        context_dic : dict
+            dictionary containing all information
+        """
+        context_dic = super().save_extracel_context()
+        context_dic['endoneurium'] = self.endoneurium.save_material()
+        context_dic['perineurium'] = self.perineurium.save_material()
+        context_dic['epineurium'] = self.epineurium.save_material()
+        context_dic['external_material'] = self.external_material.save_material()
+        context_dic['electrodes_label'] = self.electrodes_label
+        context_dic['model_fname'] = self.model_fname
+        context_dic['setup'] = self.setup
+        if save:
+            json_dump(context_dic, fname)
+        return context_dic
+
+    def load_extracel_context(self, data, C_model=False):
+        """
+        Load all extracellular context properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing extracel_context information
+        """
+        if type(data) == str:
+            context_dic = json_load(data)
+        else: 
+            context_dic = data
+        super().load_extracel_context(data)
+
+        self.electrodes_label = context_dic['electrodes_label']
+        self.model_fname = context_dic['model_fname']
+        self.setup = context_dic['setup']
+
+        self.endoneurium.load_material(context_dic['endoneurium'])
+        self.perineurium.load_material(context_dic['perineurium'])
+        self.epineurium.load_material(context_dic['epineurium'])
+        self.external_material.load_material(context_dic['external_material'])
+
+        if C_model:
+            if MCH.do_master_only_work():
+                self.model = COMSOL_model(self.model_fname)
+            else:
+                # check that COMSOL is not turned OFF in order to continue
+                if not COMSOL_Status:
+                    rise_warning('Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off', abort=True)
 
     def reshape_outerBox(self, Outer_D):
         """
@@ -378,6 +596,23 @@ class FEM_stimulation(extracellular_context):
             if not self.setup:
                 self.setup_FEM()
             self.model.solve()
+
+    def set_electrodes_footprints(self, footprints):
+        """
+        set the footprints for all electrodes from existing array
+
+        Parameters
+        ----------
+        footprints  : list of array like
+            list footprint for each electode of the extracellular context
+        """
+        i=0
+        if len(footprints) == len(self.electrodes):
+            for electrode in self.electrodes:
+                electrode.set_footprint(footprints[i])
+                i+=1
+        else:
+            rise_error("Footprint number different than electrode number")
 
     def compute_electrodes_footprints(self, x, y, z, ID):
         """
