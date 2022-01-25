@@ -298,7 +298,7 @@ class stimulation(extracellular_context):
             json_dump(context_dic, fname)
         return context_dic
 
-    def load_extracel_context(self, data, C_model=False):
+    def load_extracel_context(self, data):
         """
         Load all extracellular context properties from a dictionary or a json file
 
@@ -313,15 +313,6 @@ class stimulation(extracellular_context):
             context_dic = data
         super().load_extracel_context(data)
         self.material.load_material(context_dic['material'])
-
-        if C_model:
-            if MCH.do_master_only_work():
-                self.model = COMSOL_model(self.model_fname)
-            else:
-                # check that COMSOL is not turned OFF in order to continue
-                if not COMSOL_Status:
-                    rise_warning('Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off', abort=True)
-
 
     def add_electrode(self, electrode, stimulus):
         """
