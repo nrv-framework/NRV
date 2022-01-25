@@ -18,7 +18,7 @@ import time
 import sys
 
 unmyelinated_models=['HH','Rattay_Aberham','Sundt','Tigerholm','Schild_94','Schild_97']
-myelinated_models=['MRG','gaines_motor','gaines_sensory']
+myelinated_models=['MRG','Gaines_motor','Gaines_sensory']
 thin_myelinated_models=['extended_Gaines','RGK']
 
 def firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_time = 60e-3,t_inter = 40e-3,cath_an_ratio = 5,position_elec=0.5,model='MRG',amp_max=2000,amp_min=0,amp_tol=15,verbose=True,f_dlambda =100,dt=0.005,Nseg_per_sec=None): #f_dlambda=100
