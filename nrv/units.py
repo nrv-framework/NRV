@@ -31,10 +31,10 @@ day = 24 * hour
 #####################
 ## length prefixes ##
 #####################
-mm = 1e3 * um
-cm = 1e1 * mm
-dm = 1e1 * cm
-m = 1e1 * dm
+mm = 1e-3 * um
+cm = 1e-4 * mm
+dm = 1e-5 * cm
+m = 1e-6 * dm
 
 ######################
 ## current prefixes ##
@@ -48,4 +48,4 @@ A = 1e3 * mA
 ###########################
 kS = 1e3 * S
 mS = 1e-3 * S
-uS = 1e-3 * mS
+uS = 1e-6 * S
