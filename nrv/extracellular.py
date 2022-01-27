@@ -50,17 +50,18 @@ def load_any_extracel_context(data):
     else: 
         context_dic = data
 
-    if data["type"] is None:
+    if context_dic["type"] is None:
         extracel = extracellular_context()
-    elif data["type"] == "stimulation":
+    elif context_dic["type"] == "stimulation":
         extracel = stimulation("")
-    elif data["type"] == "FEM_stim":
+    elif context_dic["type"] == "FEM_stim":
         extracel = FEM_stimulation(data['model_fname'],comsol=False)
     else:
         rise_error("extra cellular context type not recognizede")
 
     extracel.load_extracel_context(context_dic)
     return extracel
+
 
 class extracellular_context:
     """

@@ -140,6 +140,7 @@ def rotate_list(l, n):
     """
     return l[-n:] + l[:-n]
 
+
 #############################
 ## Generic class for axons ##
 #############################
@@ -221,10 +222,129 @@ class axon():
         self.intra_voltage_stim_position = None
         self.intra_voltage_stim_stimulus = None
         self.extra_stim = None
+        self.footprints = {}
 
     def __del__(self):
         for section in neuron.h.allsec():
             section = None
+
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False):
+        """
+        Return axon as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'axon.json'
+
+        Returns
+        -------
+        ax_dic : dict
+            dictionary containing all information
+        """
+        ax_dic = {}
+
+        ax_dic['x'] = self.x
+        ax_dic['y'] = self.y
+        ax_dic['z'] = self.z
+        ax_dic['d'] = self.d
+        ax_dic['L'] = self.L
+        ax_dic['dt'] = self.dt
+        ax_dic['Nseg_per_sec'] = self.Nseg_per_sec
+        ax_dic['freq'] = self.freq
+        ax_dic['freq_min'] = self.freq_min
+        ax_dic['mesh_shape'] = self.mesh_shape
+        ax_dic['alpha_max'] = self.alpha_max
+        ax_dic['d_lambda'] = self.d_lambda
+        ax_dic['v_init'] = self.v_init
+        ax_dic['T'] = self.T
+        ax_dic['ID'] = self.ID
+        ax_dic['threshold'] = self.threshold
+        ax_dic['model'] = self.model
+        ax_dic['t_sim'] = self.t_sim
+        ax_dic['sim_time'] = self.sim_time
+        ax_dic['timeVector'] = self.timeVector
+        ax_dic['t_len'] = self.t_len
+
+        ax_dic['created'] = self.created
+        ax_dic['Nsec'] = self.Nsec
+        ax_dic['Nseg'] = self.Nseg
+        ax_dic['myelinated'] = self.myelinated
+
+        if intracel_context:
+            ax_dic['intra_current_stim'] = self.intra_current_stim
+            ax_dic['intra_current_stim_positions'] = self.intra_current_stim_positions
+            ax_dic['intra_current_stim_starts'] = self.intra_current_stim_starts
+            ax_dic['intra_current_stim_durations'] = self.intra_current_stim_durations
+            ax_dic['intra_current_stim_amplitudes'] = self.intra_current_stim_amplitudes
+            ax_dic['intra_voltage_stim'] = self.intra_voltage_stim
+            ax_dic['intra_voltage_stim_position'] = self.intra_voltage_stim_position
+            ax_dic['intra_voltage_stim_stimulus'] = self.intra_voltage_stim_stimulus
+        if extracel_context:
+            ax_dic['extra_stim'] = self.extra_stim.save_extracel_context()
+            ax_dic['footprints'] = self.footprints
+        if save:
+            json_dump(ax_dic, fname)
+        return ax_dic
+
+    def load_axon(self, data, extracel_context=False, intracel_context=False):
+        """
+        Load all axon properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing axon information
+        """
+        if type(data) == str:
+            ax_dic = json_load(data)
+        else: 
+            ax_dic = data
+
+        self.x = ax_dic['x']
+        self.y = ax_dic['y']
+        self.z = ax_dic['z']
+        self.d = ax_dic['d']
+        self.L = ax_dic['L']
+        self.dt = ax_dic['dt']
+        self.Nseg_per_sec = ax_dic['Nseg_per_sec']
+        self.freq = ax_dic['freq']
+        self.freq_min = ax_dic['freq_min']
+        self.mesh_shape = ax_dic['mesh_shape']
+        self.alpha_max = ax_dic['alpha_max']
+        self.d_lambda = ax_dic['d_lambda']
+        self.v_init = ax_dic['v_init']
+        self.T = ax_dic['T']
+        self.ID = ax_dic['ID']
+        self.threshold = ax_dic['threshold']
+        self.model = ax_dic['model']
+        self.t_sim = ax_dic['t_sim']
+        self.sim_time = ax_dic['sim_time']
+        self.timeVector = ax_dic['timeVector']
+        self.t_len = ax_dic['t_len']
+
+        self.created = ax_dic['created']
+        self.Nsec = ax_dic['Nsec']
+        self.Nseg = ax_dic['Nseg']
+        self.myelinated = ax_dic['myelinated']
+
+        if intracel_context:
+            self.intra_current_stim = ax_dic['intra_current_stim']
+            self.intra_current_stim_positions = ax_dic['intra_current_stim_positions']
+            self.intra_current_stim_starts = ax_dic['intra_current_stim_starts']
+            self.intra_current_stim_durations = ax_dic['intra_current_stim_durations']
+            self.intra_current_stim_amplitudes = ax_dic['intra_current_stim_amplitudes']
+            self.intra_voltage_stim = ax_dic['intra_voltage_stim']
+            self.intra_voltage_stim_position = ax_dic['intra_voltage_stim_position']
+            self.intra_voltage_stim_stimulus = ax_dic['intra_voltage_stim_stimulus']
+        if extracel_context:
+            self.extra_stim = load_any_extracel_context(ax_dic['extra_stim'])
+            self.footprints = {}
+            for elec, ftpx in ax_dic['footprints'].items():
+                self.footprints[int(elec)] = ftpx
+
 
     def __define_shape(self):
         """
@@ -289,6 +409,21 @@ class axon():
         if is_extra_stim(stim):
             self.extra_stim = stim
 
+    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+        """
+        Change the stimulus of the ID_elec electrods
+        
+        Input:
+        ------
+            ID_elec  : int
+                ID of the elecrtrod which require to be changed
+            stimulus : stimulus
+                New stimulus values
+
+        """
+        self.extra_stim.stimuli[ID_elec] = stimulus
+        self.extra_stim.synchronised = False
+
     def get_electrodes_footprints_on_axon(self,save=False, filename="electrodes_footprint.ftpt"):
         """
         get electrodes footprints on each axon segment
@@ -315,6 +450,7 @@ class axon():
             footprints[i] = elec.footprint
         if save:
             json_dump(footprints, filename)
+        self.footprints = footprints
         return footprints
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False, \
@@ -482,6 +618,7 @@ class axon():
                 print(np.shape(elec.footprint))
                 exit()
                 '''
+
                 # compute the minimum time between stimuli changes, checks it's not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
                 if Delta_T_min < self.dt:

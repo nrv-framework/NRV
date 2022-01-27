@@ -1,6 +1,6 @@
 """
 NRV-myelinated
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import math
@@ -173,15 +173,24 @@ class myelinated(axon):
         super().__init__(y, z, d, L, dt=dt, Nseg_per_sec=Nseg_per_sec,\
             freq=freq, freq_min=freq_min, mesh_shape=mesh_shape, alpha_max=alpha_max, \
             d_lambda=d_lambda, v_init=v_init, T=T, ID=ID, threshold=threshold)
+
         self.myelinated = True
         self.thin = False
         self.rec = rec
+        self.node_shift = node_shift
+
         if model in myelinated_models:
             self.model = model
         else:
             self.model = 'MRG'
-        ## Handling v_init
-        if v_init is None:
+
+        self.__compute_axon_parameters()
+
+    def __compute_axon_parameters(self):
+        """
+        generate axon from parameters set by user
+        """
+        if self.v_init is None:
             # model driven
             if self.model == 'Gaines_sensory':
                 self.v_init = -79.3565
@@ -191,14 +200,12 @@ class myelinated(axon):
                 self.v_init = -80
         else:
             # user driven
-            self.v_init = v_init
+            self.v_init = self.v_init
         ## Handling temperature
-        if T is None:
+        if self.T is None:
             # model driven
             self.T = 37
-        else:
-            # user driven
-            self.T = T
+
         ############################################
         ## PARMETERS FOR THE COMPARTIMENTAL MODEL ##
         ############################################
@@ -231,7 +238,6 @@ class myelinated(axon):
         self.MRG_Sequence = ['node', 'MYSA', 'FLUT', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN',\
             'STIN', 'FLUT', 'MYSA']
         # basic MRG starts with the node, if needed, adapt the sequence
-        self.node_shift = node_shift
 
         if self.node_shift == 0 or self.node_shift == 1:
             # no Rotation
@@ -435,6 +441,62 @@ class myelinated(axon):
         # get nodes positions
         self.__get_seg_positions()
         self.__get_rec_positions()
+
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False):
+        """
+        Return axon as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'axon.json'
+
+        Returns
+        -------
+        ax_dic : dict
+            dictionary containing all information
+        """
+        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context)
+
+        ax_dic['myelinated'] = self.myelinated
+        ax_dic['thin'] = self.thin
+        ax_dic['rec'] = self.rec
+        ax_dic['node_shift'] = self.node_shift
+        ax_dic['model'] = self.model
+
+        if save:
+            json_dump(ax_dic, fname)
+        return ax_dic
+
+    def load_axon(self, data, extracel_context=False, intracel_context=False):
+        """
+        Load all axon properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing axon information
+        """
+        if type(data) == str:
+            ax_dic = json_load(data)
+        else: 
+            ax_dic = data
+        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context)
+
+        self.myelinated = ax_dic['myelinated']
+        self.thin = ax_dic['thin']
+        self.rec = ax_dic['rec']
+        self.node_shift = ax_dic['node_shift']
+
+        if ax_dic['model'] in myelinated_models:
+            self.model = ax_dic['model']
+        else:
+            self.model = 'MRG'
+        self.__compute_axon_parameters()
+
+
 
     def __set_model(self, model):
         """

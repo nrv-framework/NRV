@@ -43,13 +43,13 @@ def load_any_electrode(data):
     else: 
         elec_dic = data
 
-    if data["type"] is None:
+    if elec_dic["type"] is None:
         elec = electrode()
-    elif data["type"] == "point source":
+    elif elec_dic["type"] == "point source":
         elec = point_source_electrode(0,0,0)
-    elif data["type"] == "FEM":
+    elif elec_dic["type"] == "FEM":
         elec = FEM_electrode("")
-    elif data["type"] == "LIFE":
+    elif elec_dic["type"] == "LIFE":
         elec = LIFE_electrode("",0,0,0,0,0)
     else:
         rise_error("Electrode type not recognizede")
