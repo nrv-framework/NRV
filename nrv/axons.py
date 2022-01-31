@@ -15,6 +15,7 @@ from .extracellular import *
 from .electrodes import *
 from .log_interface import rise_error, rise_warning, pass_info
 from .file_handler import json_dump
+from .recording import *
 import neuron
 
 # Handling verbosity
@@ -223,6 +224,9 @@ class axon():
         self.intra_voltage_stim_stimulus = None
         self.extra_stim = None
         self.footprints = {}
+        ## recording mechanism
+        self.record = False
+        self.recorder = None
 
     def __del__(self):
         for section in neuron.h.allsec():
@@ -453,6 +457,25 @@ class axon():
         self.footprints = footprints
         return footprints
 
+    def attach_extracellular_recorder(self, rec):
+        """
+        attach an extracellular recorder to the axon
+
+        Parameters
+        ----------
+        rec     : recorder object
+            see Recording.recorder help for more details
+        """
+        if is_recorder(rec):
+            self.record = True
+            self.recorder = rec
+
+    def shut_recorder_down(self):
+        """
+        Shuts down the recorder locally
+        """
+        self.record = False
+
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False, \
         record_particles=False, footprints=None):
         """
@@ -576,7 +599,7 @@ class axon():
         self.__set_time_recorder()
         if record_V_mem:
             self.set_membrane_voltage_recorders()
-        if record_I_mem:
+        if record_I_mem or self.record:
             self.set_membrane_current_recorders()
         if record_I_ions:
             self.set_ionic_current_recorders()
@@ -675,7 +698,8 @@ class axon():
             ###########################################
             ###########################################
             self.sim_time = time.time() - start_time
-            # simulation done, store results
+            # simulation done,
+            # store results
             axon_sim['Simulation_state'] = 'Successful'
             axon_sim['sim_time'] = self.sim_time
             axon_sim['t'] = self.__get_time_vector()
@@ -684,7 +708,7 @@ class axon():
                 axon_sim['node_index'] = self.node_index
             if record_V_mem:
                 axon_sim['V_mem'] = self.get_membrane_voltage()
-            if record_I_mem:
+            if record_I_mem or self.record:
                 axon_sim['I_mem'] = self.get_membrane_current()
             if record_I_ions:
                 if not self.myelinated:
@@ -825,6 +849,15 @@ class axon():
                     axon_sim['O2_nav16'] = O2_nav16_ax
                     axon_sim['I1_nav16'] = I1_nav16_ax
                     axon_sim['I2_nav16'] = I2_nav16_ax
+            # check for extracellular potential Recording, initialize, compute footprint and get potential
+            if self.record:
+                # init the potential, if already done by another axon nothing should be performed
+                self.recorder.init_recordings(len(axon_sim['t']))
+                # compute footprints
+                self.recorder.compute_footprints(axon_sim['x_rec'], self.y, self.z, self.d, self.ID)
+                # compute extra-cellular potential and add it to already computed ones
+                self.recorder.add_axon_contribution(axon_sim['I_mem'], self.ID)
+
         except KeyboardInterrupt:
             rise_error('\n Caught KeyboardInterrupt, simulation stoped by user, \
                 stopping process...')
