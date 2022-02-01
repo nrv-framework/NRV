@@ -9,6 +9,8 @@ from .materials import *
 from .units import *
 from .log_interface import rise_error, rise_warning, pass_info
 
+import matplotlib.pyplot as plt
+
 def is_recording_point(point):
     """
     Check if the specified object is a recording point
@@ -52,12 +54,12 @@ class recording_point():
         self.z = z
         self.method = method
         # footprints
-        self.footprints = dict()    #
+        self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon's ID
         self.recording = None
 
     def get_ID(self):
         """
-        get the ID of a recordin point
+        get the ID of a recording point
 
         Returns
         -------
@@ -67,14 +69,78 @@ class recording_point():
         return self.ID
 
     def get_method(self):
+        """
+        get the method for a recording point
+
+        Returns
+        -------
+        method : str
+            name of the method, either 'PSA' for point source approximation or 'LSA' for line Source Approximation
+        """
         return self.method
 
     def set_method(self,method):
+        """
+        Set the approximation to compute the extracellular potential
+
+        Parameters
+        ----------
+        method : str
+            name of the method, either 'PSA' for point source approximation or 'LSA' for line Source Approximation
+        """
         self.method = method
 
-    def compute_PSA_isotropic_footprint(self, x_axon, y_axon, z_axon, D, ID, sigma):
+    def compute_PSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma):
+        """
+        Compute the footprint for Point Source approximation an isotropic material
+
+        Parameters
+        ----------
+        x_axon  : array
+            array of the positions of the axon along the x-axis at which there is a current source, in [um]
+        y_axon  : float
+            y-axis position of the axon, in [um]
+        z-axon  : float
+            z-axis position of the axon, in [um]
+        d       : float
+            diameter of the axon, in [um]
+        ID      : int
+            axon ID number
+        sigma   : float
+            conductivity of the isotropic extracellular material, in [S.m]
+        """
         electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)*m)**2 + ((self.y - y_axon)*m)**2+ ((self.z - z_axon)*m)**2)**0.5
-        surface = np.pi * (D*cm) * (np.gradient(x_axon)*cm)
+        surface = np.pi * (d*cm) * (np.gradient(x_axon)*cm)
+        self.footprints[str(ID)] = np.divide(surface,electrical_distance)
+
+    def compute_PSA_anisotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma_xx, sigma_yy, sigma_zz):
+        """
+        Compute the footprint for Point Source approximation an anisotropic material
+
+        Parameters
+        ----------
+        x_axon      : array
+            array of the positions of the axon along the x-axis at which there is a current source, in [um]
+        y_axon      : float
+            y-axis position of the axon, in [um]
+        z-axon      : float
+            z-axis position of the axon, in [um]
+        d           : float
+            diameter of the axon, in [um]
+        ID          : int
+            axon ID number
+        sigma_xx    : float
+            conductivity of the isotropic extracellular material alog the x-axis, in [S.m]
+        sigma_yy    : float
+            conductivity of the isotropic extracellular material alog the y-axis, in [S.m]
+        sigma_zz    : float
+            conductivity of the isotropic extracellular material alog the z-axis, in [S.m]
+        """
+        sx = sigma_yy * sigma_zz
+        sy = sigma_xx * sigma_zz
+        sz = sigma_xx * sigma_yy
+        electrical_distance = 4*np.pi*((sx*(self.x - x_axon)*m)**2 + (sy*(self.y - y_axon)*m)**2+ (sz*(self.z - z_axon)*m)**2)**0.5
+        surface = np.pi * (d*cm) * (np.gradient(x_axon)*cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
     def init_recording(self, N_points):
@@ -105,12 +171,20 @@ class recording_point():
         self.recording = np.zeros(N_points)
 
     def add_axon_contribution(self, I_membrane, ID):
-        print('... compute')
-        print(np.shape(I_membrane))
-        print(len(self.footprints[str(ID)]))
-        print(len(self.recording))
-        #print(np.shape(I_membrane*np.transpose(self.footprints[str(ID)])))
-        #self.recording +=
+        """
+        Adds the and axon extracellular potential to the recording computed as the matrix product of
+        I_membrane computed from neuron with the footprint computed below and stored in the object
+        for a specific axons ID.
+
+        Parameters
+        ----------
+        I_membrane  : array
+            membrane current as a matrix over times (columns) and position (lines)
+            in mA/cm2
+        ID          : int
+            axon ID as footprint are stored in a dictionnary with their ID as key
+        """
+        self.recording += np.matmul(np.transpose(I_membrane),self.footprints[str(ID)])
 
 class recorder():
     """
@@ -196,25 +270,69 @@ class recorder():
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
-    def compute_footprints(self, x_axon, y_axon, z_axon, D, ID):
+    def compute_footprints(self, x_axon, y_axon, z_axon, d, ID):
+        """
+        compute all footprints for a given axon on all recording points of the recorder
+
+        Parameters
+        ----------
+        x_axon      : array
+            array of the positions of the axon along the x-axis at which there is a current source, in [um]
+        y_axon      : float
+            y-axis position of the axon, in [um]
+        z-axon      : float
+            z-axis position of the axon, in [um]
+        d           : float
+            diameter of the axon, in [um]
+        ID          : int
+            axon ID number
+        """
         if not self.is_empty():
-            print('computing footprints')
             for point in self.recording_points:
-                print('... new footprint')
-                point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, D, ID, self.sigma)
+                if self.isotropic:
+                    point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                else:
+                    point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
 
     def init_recordings(self, N_points):
+        """
+        Initializes the recorded extracellular potential for all recodgin points. If a potential already exists,
+        nothing will be performed
+
+        Parameters
+        ----------
+        N_points : int
+            length of the extracellular potential vector along temporal dimension
+        """
         if not self.is_empty():
             for point in self.recording_points:
                 point.init_recording(N_points)
 
     def reset_recordings(self, N_points):
+        """
+        Sets the recorded extracellular potential to zero whatever the conditions for all recording points
+
+        Parameters
+        ----------
+        N_points : int
+            length of the extracellular potential vector along temporal dimension
+        """
         if not self.is_empty():
             for point in self.recording_points:
                 point.reset_recording(N_points)
 
     def add_axon_contribution(self, I_membrane, ID):
+        """
+        Add one axon contribution to the extracellular potential of all recording points.
+
+        Parameters
+        ----------
+        I_membrane  : array
+            membrane current as a matrix over times (columns) and position (lines)
+            in mA/cm2
+        ID          : int
+            axon ID as footprint are stored in a dictionnary with their ID as key
+        """
         if not self.is_empty():
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
-
