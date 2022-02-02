@@ -109,8 +109,8 @@ class recording_point():
         sigma   : float
             conductivity of the isotropic extracellular material, in [S.m]
         """
-        electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)*m)**2 + ((self.y - y_axon)*m)**2+ ((self.z - z_axon)*m)**2)**0.5
-        surface = np.pi * (d*cm) * (np.gradient(x_axon)*cm)
+        electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2+ ((self.z - z_axon)/m)**2)**0.5
+        surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
     def compute_PSA_anisotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma_xx, sigma_yy, sigma_zz):
@@ -139,8 +139,8 @@ class recording_point():
         sx = sigma_yy * sigma_zz
         sy = sigma_xx * sigma_zz
         sz = sigma_xx * sigma_yy
-        electrical_distance = 4*np.pi*((sx*(self.x - x_axon)*m)**2 + (sy*(self.y - y_axon)*m)**2+ (sz*(self.z - z_axon)*m)**2)**0.5
-        surface = np.pi * (d*cm) * (np.gradient(x_axon)*cm)
+        electrical_distance = 4*np.pi*((sx*(self.x - x_axon)/m)**2 + (sy*(self.y - y_axon)/m)**2+ (sz*(self.z - z_axon)/m)**2)**0.5
+        surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
     def init_recording(self, N_points):
