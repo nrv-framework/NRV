@@ -1,12 +1,19 @@
 import nrv
+import matplotlib.pyplot as plt
 
 DIR = './unitary_tests/'
-source_file = DIR + 'figures/76_fascicle_1.json'
+source_file = DIR + 'sources/77_fascicle_1.json'
+figfile = DIR + 'figures/77_A.png'
 
 ## Fascicle declaration
 fascicle_1 = nrv.fascicle()
 fascicle_1.load_fascicle_configuration(source_file,extracel_context=True)
-fascicle_1.set_ID(75)
+fascicle_1.set_ID(77)
+
+fig, ax = plt.subplots(figsize=(6,6))
+fascicle_1.plot(fig, ax, num=True)
+plt.savefig(figfile)
+
 
 
 ## stimulus def

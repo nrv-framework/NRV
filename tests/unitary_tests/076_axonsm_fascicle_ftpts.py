@@ -73,7 +73,7 @@ fascicle_1.attach_extracellular_stimulation(test_stim)
 t3 = time.time()
 print('Extracel context generated in '+str(t3 - t2)+' s')
 #Footprint saving
-footprints = fascicle_1.get_electrodes_footprints_on_axons(save=True, filename="./unitary_tests/figures/073_electrodes_footprints_on_axon.ftpts")
+footprints = fascicle_1.get_electrodes_footprints_on_axons()
 
 t4 = time.time()
 print('Electrod footprint generated in '+str(t4 - t3)+' s')

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # axon def
 
-axon1 = nrv.load_any_axon('./unitary_tests/figures/78_axon.json', extracel_context=True)
+axon1 = nrv.load_any_axon('./unitary_tests/sources/79_axon.json', extracel_context=True)
 
 # stimulus def
 start = 1
