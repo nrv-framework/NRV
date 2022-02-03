@@ -426,6 +426,7 @@ class axon():
 
         """
         self.extra_stim.stimuli[ID_elec] = stimulus
+        self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
 
     def get_electrodes_footprints_on_axon(self,save=False, filename="electrodes_footprint.ftpt"):
