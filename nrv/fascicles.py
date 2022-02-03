@@ -727,6 +727,7 @@ class fascicle():
 
         """
         self.extra_stim.stimuli[ID_elec] = stimulus
+        self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
 
 
