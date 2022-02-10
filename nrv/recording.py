@@ -8,8 +8,8 @@ import numpy as np
 from .materials import *
 from .units import *
 from .log_interface import rise_error, rise_warning, pass_info
-#from .myelinated import get_MRG_parameters
 import matplotlib.pyplot as plt
+
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
 def is_recording_point(point):
