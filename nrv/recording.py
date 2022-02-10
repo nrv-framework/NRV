@@ -8,9 +8,10 @@ import numpy as np
 from .materials import *
 from .units import *
 from .log_interface import rise_error, rise_warning, pass_info
-
+#from .myelinated import get_MRG_parameters
 import matplotlib.pyplot as plt
-
+MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
+MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
 def is_recording_point(point):
     """
     Check if the specified object is a recording point
@@ -22,6 +23,29 @@ def is_recorder(rec):
     Check if the specified object is a recorder
     """
     return isinstance(rec, recorder)
+
+def NodeD_interpol(diameter):
+    """
+    Compute the MRG Node diameters
+
+    Attributes
+    ----------
+    diameter    : float
+        diameter of the unmylinated axon to implement, in um
+    Returns
+    -------
+    nodeD       : float
+
+    """
+    if diameter in MRG_fiberD:
+        index = np.where(MRG_fiberD == diameter)[0]
+        nodeD = MRG_nodeD[index]
+    else:
+        # create fiting polynomyals
+        nodeD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nodeD, 3))    
+        nodeD = nodeD_poly(diameter)
+
+    return float(nodeD)
 
 class recording_point():
     """
@@ -143,6 +167,32 @@ class recording_point():
         surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
+    def compute_LSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma):
+        """
+        Compute the footprint for Linear Source approximation an isotropic material
+
+        Parameters
+        ----------
+        x_axon  : array
+            array of the positions of the axon along the x-axis at which there is a current source, in [um]
+        y_axon  : float
+            y-axis position of the axon, in [um]
+        z-axon  : float
+            z-axis position of the axon, in [um]
+        d       : float
+            diameter of the axon, in [um]
+        ID      : int
+            axon ID number
+        sigma   : float
+            conductivity of the isotropic extracellular material, in [S.m]
+        """
+        d_internode =np.gradient(x_axon)
+        dist = ((((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2)**0.5)
+        electrical_distance = (4*np.pi*(d_internode/m)*sigma)/np.log(abs((dist-(self.x-x_axon)/m)/((((d_internode+(self.x-x_axon))**2+(self.y-y_axon)**2)**0.5)/m-(d_internode+(self.x-x_axon))/m)))
+        surface = np.pi * (d/cm) * (d_internode/cm)
+        self.footprints[str(ID)] = np.divide(surface,electrical_distance)
+        
+
     def init_recording(self, N_points):
         """
         Initializes the recorded extracellular potential. if a recording already exists,
@@ -185,6 +235,7 @@ class recording_point():
             axon ID as footprint are stored in a dictionnary with their ID as key
         """
         self.recording += np.matmul(np.transpose(I_membrane),self.footprints[str(ID)])
+
 
 class recorder():
     """
@@ -270,7 +321,7 @@ class recorder():
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
-    def compute_footprints(self, x_axon, y_axon, z_axon, d, ID):
+    def compute_footprints(self, x_axon, y_axon, z_axon, d, ID,myelinated =False):
         """
         compute all footprints for a given axon on all recording points of the recorder
 
@@ -289,10 +340,19 @@ class recorder():
         """
         if not self.is_empty():
             for point in self.recording_points:
-                if self.isotropic:
-                    point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
-                else:
-                    point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
+                if myelinated:
+                    d=NodeD_interpol(d)
+                if point.method=='PSA':
+                    if self.isotropic:
+                        point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                    else:
+                        point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
+                if point.method=='LSA':
+                    if self.isotropic:
+                        point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                    else:
+                    	rise_warning('LSA not implemented for anisotropic material return isotropic by default')
+                    	point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
 
     def init_recordings(self, N_points):
         """
