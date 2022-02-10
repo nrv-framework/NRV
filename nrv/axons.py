@@ -855,8 +855,12 @@ class axon():
                 # init the potential, if already done by another axon nothing should be performed
                 self.recorder.init_recordings(len(axon_sim['t']))
                 # compute footprints
-                self.recorder.compute_footprints(axon_sim['x_rec'], self.y, self.z, self.d, self.ID)
-                # compute extra-cellular potential and add it to already computed ones
+                if self.myelinated==True:
+                    self.recorder.compute_footprints(axon_sim['x_nodes'], self.y, self.z, self.d, self.ID,self.myelinated)
+                    # compute extra-cellular potential and add it to already computed ones
+                else:
+                    self.recorder.compute_footprints(axon_sim['x_rec'], self.y, self.z, self.d, self.ID,self.myelinated)
+                    # compute extra-cellular potential and add it to already computed ones
                 self.recorder.add_axon_contribution(axon_sim['I_mem'], self.ID)
 
         except KeyboardInterrupt:
