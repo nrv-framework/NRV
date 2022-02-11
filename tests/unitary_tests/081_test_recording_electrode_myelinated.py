@@ -17,8 +17,8 @@ axon1.insert_I_Clamp(0.01, t_start, duration, amplitude)
 
 # test recording
 testrec = nrv.recorder('endoneurium_bhadra')
-testrec.set_recording_point(L/2, 100, 0,'LSA')
-testrec.set_recording_point(L/2, 100, 0)
+testrec.set_recording_point(axon1.x_nodes[10], 100, 0,'LSA')
+testrec.set_recording_point(axon1.x_nodes[10], 100, 0)
 
 
 
