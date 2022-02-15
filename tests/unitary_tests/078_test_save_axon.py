@@ -71,4 +71,4 @@ plt.xlim(0.9,2)
 plt.xlabel('time ($ms$)')
 plt.savefig('./unitary_tests/figures/78_A.png')
 
-plt.show()
+#plt.show()
