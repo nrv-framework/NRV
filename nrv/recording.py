@@ -114,7 +114,7 @@ class recording_point():
         """
         self.method = method
 
-    def compute_PSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma):
+    def compute_PSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma,myelinated=False):
         """
         Compute the footprint for Point Source approximation an isotropic material
 
@@ -133,8 +133,12 @@ class recording_point():
         sigma   : float
             conductivity of the isotropic extracellular material, in [S.m]
         """
+        if myelinated :
+            d=NodeD_interpol(d)
+            surface= np.pi * (d/cm)*(1/cm)
+        else:
+            surface = surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2+ ((self.z - z_axon)/m)**2)**0.5
-        surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
     def compute_PSA_anisotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma_xx, sigma_yy, sigma_zz):
@@ -163,11 +167,11 @@ class recording_point():
         sx = sigma_yy * sigma_zz
         sy = sigma_xx * sigma_zz
         sz = sigma_xx * sigma_yy
+
         electrical_distance = 4*np.pi*((sx*(self.x - x_axon)/m)**2 + (sy*(self.y - y_axon)/m)**2+ (sz*(self.z - z_axon)/m)**2)**0.5
-        surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
-    def compute_LSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma):
+    def compute_LSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma,myelinated=False):
         """
         Compute the footprint for Linear Source approximation an isotropic material
 
@@ -186,12 +190,18 @@ class recording_point():
         sigma   : float
             conductivity of the isotropic extracellular material, in [S.m]
         """
-        d_internode =np.gradient(x_axon)
+        if myelinated :
+            d=NodeD_interpol(d)
+            surface= np.pi * (d/cm)*(1/cm)
+            d_internode = np.gradient(x_axon)           
+        else:
+            surface = surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
+            d_internode = np.gradient(x_axon)
+
         dist = ((((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2)**0.5)
         electrical_distance = (4*np.pi*(d_internode/m)*sigma)/np.log(abs((dist-(self.x-x_axon)/m)/((((d_internode+(self.x-x_axon))**2+(self.y-y_axon)**2)**0.5)/m-(d_internode+(self.x-x_axon))/m)))
-        surface = np.pi * (d/cm) * (d_internode/cm)
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
-        
+
 
     def init_recording(self, N_points):
         """
@@ -308,6 +318,7 @@ class recorder():
             y position of the recording point, in um
         z       : float
             z position of the recording point, in um
+        Parameters
         method  : string
             electrical potential approximation method, can be 'PSA' (Point Source Approximation)
             or 'LSA' (Line Source Approximation).
@@ -341,19 +352,32 @@ class recorder():
         if not self.is_empty():
             for point in self.recording_points:
                 if myelinated:
-                    d=NodeD_interpol(d)
-                if point.method=='PSA':
-                    if self.isotropic:
-                        point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
-                    else:
-                        point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
-                if point.method=='LSA':
-                    if self.isotropic:
-                        point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
-                    else:
-                    	rise_warning('LSA not implemented for anisotropic material return isotropic by default')
-                    	point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
-
+                    if point.method=='PSA':
+                        if self.isotropic:
+                            print(d,myelinated)
+                            point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
+                        else:
+                            point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
+                    if point.method=='LSA':
+                        if self.isotropic:
+                            print(d)
+                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
+                        else:
+                        	rise_warning('LSA not implemented for anisotropic material return isotropic by default')
+                        	point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                else:
+                    surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
+                    if point.method=='PSA':
+                        if self.isotropic:
+                            point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                        else:
+                            point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
+                    if point.method=='LSA':
+                        if self.isotropic:
+                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                        else:
+                            rise_warning('LSA not implemented for anisotropic material return isotropic by default')
+                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
     def init_recordings(self, N_points):
         """
         Initializes the recorded extracellular potential for all recodgin points. If a potential already exists,
