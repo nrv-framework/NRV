@@ -137,7 +137,7 @@ class recording_point():
             d=NodeD_interpol(d)
             surface= np.pi * (d/cm)*(1/cm)
         else:
-            surface = surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
+            surface = np.pi * (d/cm) * (np.gradient(x_axon)/cm)
         electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2+ ((self.z - z_axon)/m)**2)**0.5
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
