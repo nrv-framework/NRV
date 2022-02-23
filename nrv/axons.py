@@ -636,12 +636,6 @@ class axon():
                     self.extra_stim.compute_electrodes_footprints(x, y, z, self.ID)
                 else:
                     self.extra_stim.set_electrodes_footprints(footprints)
-                '''
-                elec = self.extra_stim.electrodes[0]
-                print(elec.footprint)
-                print(np.shape(elec.footprint))
-                exit()
-                '''
 
                 # compute the minimum time between stimuli changes, checks it's not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
@@ -861,6 +855,7 @@ class axon():
                 else:
                     self.recorder.compute_footprints(axon_sim['x_rec'], self.y, self.z, self.d, self.ID,self.myelinated)
                     # compute extra-cellular potential and add it to already computed ones
+                self.recorder.set_time(axon_sim['t'])
                 self.recorder.add_axon_contribution(axon_sim['I_mem'], self.ID)
 
         except KeyboardInterrupt:
