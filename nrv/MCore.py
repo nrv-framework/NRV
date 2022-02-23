@@ -177,6 +177,38 @@ class Mcore_handler():
                 final_result = None
         return final_result
 
+    def sum_jobs(self, partial_result):
+        """
+        Gather, sum and broadcast array for conservative results.
+
+        Parameters
+        ----------
+        partial_result  : np.array
+            individual result from an instance
+
+        Returns
+        -------
+        result  : np.array
+            global array as the sum of all partial results from each core,
+            returned to all cores
+        """
+        if self.is_alone():
+            final_result = partial_result
+        else:
+            results = comm.gather(partial_result, root=0)
+            # gather and sum results
+            sumed_result = None
+            if self.is_master():
+                list_results = list(results)
+                sumed_result = list_results[0]
+                for result in list_results[1:]:
+                    sumed_result += result
+            # broadcast to all
+            final_result = self.master_broadcasts_array_to_all(sumed_result)
+        return final_result
+
+
+
     def send_data_to_master(self, data):
         """
         Send a dictionary of data directly to the master.
