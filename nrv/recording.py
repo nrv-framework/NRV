@@ -463,7 +463,7 @@ class recorder():
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
-    def gather_all_recodrings(self):
+    def gather_all_recordings(self):
         """
         Gather all recordings computed by each cores in case of parallel simulation (fascicle
         level), sum de result and propagate final extracellular potential to each core.
