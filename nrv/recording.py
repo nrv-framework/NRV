@@ -79,6 +79,7 @@ class recording_point():
         self.method = method
         # footprints
         self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon's ID
+        self.init = False
         self.recording = None
 
     def get_ID(self):
@@ -202,7 +203,6 @@ class recording_point():
         electrical_distance = (4*np.pi*(d_internode/m)*sigma)/np.log(abs((dist-(self.x-x_axon)/m)/((((d_internode+(self.x-x_axon))**2+(self.y-y_axon)**2)**0.5)/m-(d_internode+(self.x-x_axon))/m)))
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
-
     def init_recording(self, N_points):
         """
         Initializes the recorded extracellular potential. if a recording already exists,
@@ -213,8 +213,9 @@ class recording_point():
         N_points : int
             length of the extracellular potential vector along temporal dimension
         """
-        if self.recording == None:
+        if not self.init:
             self.recording = np.zeros(N_points)
+            self.init = True
         else:
             if len(self.recording)!=N_points:
                 rise_error('Trying to compute an extracellular potential of a wrong temporal size')
@@ -259,6 +260,8 @@ class recorder():
         """
         self.material = None
         self.is_isotropic = True
+        self.t = None
+        self.t_init = False
         # if no material specified, sigma is 1S/m, else everything is loaded from signal
         if material == None:
             self.sigma = 1
@@ -293,6 +296,18 @@ class recorder():
         -------
         """
         return self.recording_points == []
+
+    def set_time(self, t_vector):
+        """
+        set the time vector of a recorder
+
+        t_vector : array
+            array of recording times, in ms
+        """
+        if not self.t_init:
+            self.t = t_vector
+            self.t_init = True
+
 
     def add_recording_point(self, point):
         """
@@ -332,6 +347,34 @@ class recorder():
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
+    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx = 10, dy = 10, method='PSA'):
+        """
+        Generate equaly spaced recording points in the z plane
+
+        Parameters
+        ----------
+        x_min   : float
+            minimal x postion for recording points, in um
+        x_max   : float
+            maximal x postion for recording points, in um
+        y_min   : float
+            minimal y postion for recording points, in um
+        y_max   : float
+            maximal y postion for recording points, in um
+        z       : float
+            fixed z position for recording points
+        dx      : float
+            distance between recording points on the x coordinate, in um
+        dy      : float
+            distance between recording points on the y coordinate, in um
+        method  : string
+            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
+            or 'LSA' (Line Source Approximation).
+            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using 'PSA'
+        """
+        pass
+
     def compute_footprints(self, x_axon, y_axon, z_axon, d, ID,myelinated =False):
         """
         compute all footprints for a given axon on all recording points of the recorder
@@ -354,13 +397,11 @@ class recorder():
                 if myelinated:
                     if point.method=='PSA':
                         if self.isotropic:
-                            print(d,myelinated)
                             point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
                         else:
                             point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
                     if point.method=='LSA':
                         if self.isotropic:
-                            print(d)
                             point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
                         else:
                         	rise_warning('LSA not implemented for anisotropic material return isotropic by default')
@@ -378,6 +419,7 @@ class recorder():
                         else:
                             rise_warning('LSA not implemented for anisotropic material return isotropic by default')
                             point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+
     def init_recordings(self, N_points):
         """
         Initializes the recorded extracellular potential for all recodgin points. If a potential already exists,
@@ -420,3 +462,4 @@ class recorder():
         if not self.is_empty():
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
+
