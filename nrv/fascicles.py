@@ -21,6 +21,7 @@ from .file_handler import *
 from .CL_postprocessing import *
 from .extracellular import *
 from .log_interface import rise_error, rise_warning, pass_info
+from .recording import *
 
 
 
@@ -113,6 +114,9 @@ class fascicle():
         self.intra_stim_duration = []
         self.intra_stim_amplitude = []
         self.intra_stim_ON = []
+        ## recording mechanism
+        self.record = False
+        self.recorder = None
 
     def set_ID(self, ID):
         """
@@ -756,6 +760,26 @@ class fascicle():
         self.intra_stim_ON.append(ax_list)
         self.N_intra += 1
 
+    ## RECORDING MECHANIMS
+    def attach_extracellular_recorder(self, rec):
+        """
+        attach an extracellular recorder to the axon
+
+        Parameters
+        ----------
+        rec     : recorder object
+            see Recording.recorder help for more details
+        """
+        if is_recorder(rec):
+            self.record = True
+            self.recorder = rec
+
+    def shut_recorder_down(self):
+        """
+        Shuts down the recorder locally
+        """
+        self.record = False
+
     ## SIMULATION HANDLING
     def generate_random_NoR_position(self):
         """
@@ -960,6 +984,9 @@ class fascicle():
                                 ID=k, threshold=self.threshold)
                     ## add extracellular stimulation
                     axon.attach_extracellular_stimulation(self.extra_stim)
+                    ## add recording mechanism
+                    if self.record:
+                        axon.attach_extracellular_recorder(self.recorder)
                     # add intracellular stim
                     if self.N_intra > 0:
                         for j in range(self.N_intra):
@@ -1036,6 +1063,7 @@ class fascicle():
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
                     save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                    # enlever tab et mettre ici la recuperation des potentiels extra en parallele
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
         else:
             ## split the job between Cores/Computation nodes
@@ -1074,6 +1102,9 @@ class fascicle():
                 ## add extracellular stimulation
                 if self.extra_stim is not None:
                     axon.attach_extracellular_stimulation(self.extra_stim)
+                ## add recording mechanism
+                if self.record:
+                    axon.attach_extracellular_recorder(self.recorder)
                 ## add intracellular stim
                 if self.N_intra > 0:
                     for j in range(self.N_intra):
@@ -1164,5 +1195,6 @@ class fascicle():
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
                 save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                # enlever tab et mettre ici la recuperation des potentiels extra en parallele
             if MCH.is_alone() and verbose:
                 print('... Simulation done')
