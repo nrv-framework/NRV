@@ -612,7 +612,6 @@ class fascicle():
                 axes.set_xlim(0,self.L)
                 plt.tight_layout()
 
-
     ## save/load methods
     def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
         """
@@ -977,7 +976,7 @@ class fascicle():
                                 threshold=self.threshold)
                         else:
                             axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                                round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                                 node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
                                 freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                                 alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
@@ -1063,7 +1062,9 @@ class fascicle():
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
                     save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
-                    # enlever tab et mettre ici la recuperation des potentiels extra en parallele
+                # sum up all recorded extracellular potential if applicable
+                if self.record:
+                    self.recorder.gather_all_recodrings()
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
         else:
             ## split the job between Cores/Computation nodes
@@ -1094,7 +1095,7 @@ class fascicle():
                             threshold=self.threshold)
                     else:
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                            round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                            round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
                             freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                             alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
@@ -1195,6 +1196,8 @@ class fascicle():
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
                 save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
-                # enlever tab et mettre ici la recuperation des potentiels extra en parallele
+            # sum up all recorded extracellular potential if applicable
+            if self.record:
+                self.recorder.gather_all_recodrings()
             if MCH.is_alone() and verbose:
                 print('... Simulation done')
