@@ -8,7 +8,7 @@ import numpy as np
 from .materials import *
 from .units import *
 from .log_interface import rise_error, rise_warning, pass_info
-import matplotlib.pyplot as plt
+from .MCore import *
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
@@ -463,3 +463,11 @@ class recorder():
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
+    def gather_all_recodrings(self):
+        """
+        Gather all recordings computed by each cores in case of parallel simulation (fascicle
+        level), sum de result and propagate final extracellular potential to each core.
+        """
+        if not self.is_empty():
+            for point in self.recording_points:
+                point.recording = MCH.sum_jobs(point.recording)
