@@ -24,7 +24,7 @@ testrec.set_recording_point(3*L/4, 0, 100)
 
 
 axon1.attach_extracellular_recorder(testrec)
-results = axon1.simulate(t_sim=20)
+results = axon1.simulate(t_sim=12)
 
 plt.figure()
 for rec in testrec.recording_points:
@@ -33,7 +33,7 @@ plt.savefig('./unitary_tests/figures/080_A.png')
 
 plt.figure()
 for rec in testrec.recording_points:
-	plt.plot(results['t'],rec.recording)
+	plt.plot(testrec.t,rec.recording)
 plt.savefig('./unitary_tests/figures/080_B.png')
 
 plt.figure()
