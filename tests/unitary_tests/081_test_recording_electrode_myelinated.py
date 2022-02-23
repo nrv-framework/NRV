@@ -23,17 +23,17 @@ testrec.set_recording_point(axon1.x_nodes[10], 100, 0)
 
 
 axon1.attach_extracellular_recorder(testrec)
-results = axon1.simulate(t_sim=20)
+results = axon1.simulate(t_sim=3)
 
 plt.figure()
 for rec in testrec.recording_points:
 	plt.plot(results['x_rec'], rec.footprints['0'])
-plt.savefig('./unitary_tests/figures/080_A.png')
+plt.savefig('./unitary_tests/figures/081_A.png')
 
 plt.figure()
 for rec in testrec.recording_points:
-	plt.plot(results['t'],rec.recording)
-plt.savefig('./unitary_tests/figures/080_B.png')
+	plt.plot(testrec.t,rec.recording)
+plt.savefig('./unitary_tests/figures/081_B.png')
 
 plt.figure()
 map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')
@@ -41,6 +41,6 @@ plt.xlabel('time (ms)')
 plt.ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage')
-plt.savefig('./unitary_tests/figures/080_C.png')
+plt.savefig('./unitary_tests/figures/081_C.png')
 
-plt.show()
+#plt.show()
