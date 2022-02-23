@@ -1064,7 +1064,7 @@ class fascicle():
                     save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
                 # sum up all recorded extracellular potential if applicable
                 if self.record:
-                    self.recorder.gather_all_recodrings()
+                    self.recorder.gather_all_recordings()
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
         else:
             ## split the job between Cores/Computation nodes
@@ -1198,6 +1198,6 @@ class fascicle():
                 save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
             # sum up all recorded extracellular potential if applicable
             if self.record:
-                self.recorder.gather_all_recodrings()
+                self.recorder.gather_all_recordings()
             if MCH.is_alone() and verbose:
                 print('... Simulation done')
