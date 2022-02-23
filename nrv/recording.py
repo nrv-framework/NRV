@@ -347,7 +347,7 @@ class recorder():
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
-    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx = 10, dy = 10, method='PSA'):
+    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx=10, dy=10, method='PSA'):
         """
         Generate equaly spaced recording points in the z plane
 
@@ -373,7 +373,102 @@ class recorder():
             set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
             will automatically be performed using 'PSA'
         """
-        pass
+        if np.abs(x_max - x_min) < dx:
+            dx = np.abs(x_max - x_min)/10
+            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+        if np.abs(y_max - y_min) < dy:
+            dy = np.abs(y_max - y_min)/10
+            rise_warning('dy too large, changed automatically to '+str(dy)+' um')
+        x_positions = np.arange(x_min, x_max, dx)
+        y_positions = np.arange(y_min, y_max, dy)
+        for x in x_positions:
+            for y in y_positions:
+                self.set_recording_point(x, y, z, method=method)
+
+    def set_recording_yplane(x_min, x_max, y, z_min, z_max, dx=10, dz=10, method='PSA'):
+        """
+        Generate equaly spaced recording points in the y plane
+
+        Parameters
+        ----------
+        x_min   : float
+            minimal x postion for recording points, in um
+        x_max   : float
+            maximal x postion for recording points, in um
+        y       : float
+            fixed y position for recording points
+        z_min   : float
+            minimal z postion for recording points, in um
+        z_max   : float
+            maximal z postion for recording points, in um
+        dx      : float
+            distance between recording points on the x coordinate, in um
+        dz      : float
+            distance between recording points on the z coordinate, in um
+        method  : string
+            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
+            or 'LSA' (Line Source Approximation).
+            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using 'PSA'
+        """
+        if np.abs(x_max - x_min) < dx:
+            dx = np.abs(x_max - x_min)/10
+            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+        if np.abs(z_max - z_min) < dz:
+            dz = np.abs(z_max - z_min)/10
+            rise_warning('dz too large, changed automatically to '+str(dz)+' um')
+        x_positions = np.arange(x_min, x_max, dx)
+        z_positions = np.arange(z_min, z_max, dz)
+        for x in x_positions:
+            for z in z_positions:
+                self.set_recording_point(x, y, z, method=method)
+
+    def set_recording_volume(x_min, x_max, y_min, ymax, z_min, z_max, dx= 10, dy=10, dz=10, method='PSA'):
+        """
+        Generate equaly spaced recording points in the y plane
+
+        Parameters
+        ----------
+        x_min   : float
+            minimal x postion for recording points, in um
+        x_max   : float
+            maximal x postion for recording points, in um
+        y_min   : float
+            minimal y postion for recording points, in um
+        y_max   : float
+            maximal y postion for recording points, in um
+        z_min   : float
+            minimal z postion for recording points, in um
+        z_max   : float
+            maximal z postion for recording points, in um
+        dx      : float
+            distance between recording points on the x coordinate, in um
+        dy      : float
+            distance between recording points on the y coordinate, in um
+        dz      : float
+            distance between recording points on the z coordinate, in um
+        method  : string
+            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
+            or 'LSA' (Line Source Approximation).
+            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using 'PSA'
+        """
+        if np.abs(x_max - x_min) < dx:
+            dx = np.abs(x_max - x_min)/10
+            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+        if np.abs(y_max - y_min) < dy:
+            dy = np.abs(y_max - y_min)/10
+            rise_warning('dy too large, changed automatically to '+str(dy)+' um')
+        if np.abs(z_max - z_min) < dz:
+            dz = np.abs(z_max - z_min)/10
+            rise_warning('dz too large, changed automatically to '+str(dz)+' um')
+        x_positions = np.arange(x_min, x_max, dx)
+        y_positions = np.arange(y_min, y_max, dy)
+        z_positions = np.arange(z_min, z_max, dz)
+        for x in x_positions:
+            for y in y_positions:
+                for z in z_positions:
+                    self.set_recording_point(x, y, z, method=method)
 
     def compute_footprints(self, x_axon, y_axon, z_axon, d, ID,myelinated =False):
         """
