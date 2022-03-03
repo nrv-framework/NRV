@@ -5,6 +5,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import faulthandler
 import os
+import json
 from .log_interface import rise_error, rise_warning, pass_info
 
 # enable faulthandler to ease 'segmentation faults' debug
@@ -17,6 +18,23 @@ material_library = os.listdir(dir_path+'/materials/')
 ###############
 ## Functions ##
 ###############
+
+def is_mat(mat):
+    """
+    check if an object is a material, return True if yes, else False
+
+    Parameters
+    ----------
+    mat : object
+        object to test
+
+    Returns
+    -------
+    bool
+        True it the type is a material object
+    """
+    return isinstance(mat, material)
+
 def get_mat_file_as_dict(fname):
     """
     Open .mat material librairy file and return all lines as a dictionnary

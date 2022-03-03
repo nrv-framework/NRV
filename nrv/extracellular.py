@@ -50,17 +50,18 @@ def load_any_extracel_context(data):
     else: 
         context_dic = data
 
-    if data["type"] is None:
+    if context_dic["type"] is None:
         extracel = extracellular_context()
-    elif data["type"] == "stimulation":
-        extracel = stimulation("")
-    elif data["type"] == "FEM_stim":
+    elif context_dic["type"] == "stimulation":
+        extracel = stimulation()
+    elif context_dic["type"] == "FEM_stim":
         extracel = FEM_stimulation(data['model_fname'],comsol=False)
     else:
         rise_error("extra cellular context type not recognizede")
 
     extracel.load_extracel_context(context_dic)
     return extracel
+
 
 class extracellular_context:
     """
@@ -261,17 +262,20 @@ class stimulation(extracellular_context):
     - a list of corresponding current stimuli
     This class inherits from extracellular_context.
     """
-    def __init__(self, material):
+    def __init__(self, material='endoneurium_ranck'):
         """
         Implement a stimulation object.
 
         Parameters
         ----------
-        material    : material object
+        material    : str or material object
             extracellular medium see Material.py or material object help for further details
         """
         super().__init__()
-        self.material = material
+        if is_mat(material):
+            self.material = material
+        else:
+            self.material = load_material(material)
         self.type = "stimulation"
 
     ## Save and Load mehtods
@@ -383,10 +387,24 @@ class FEM_stimulation(extracellular_context):
         self.model_fname = model_fname
         self.setup = False
         ## get material properties and add to model
-        self.endoneurium = load_material(endo_mat)
-        self.perineurium = load_material(peri_mat)
-        self.epineurium = load_material(epi_mat)
-        self.external_material = load_material(ext_mat)
+
+        if is_mat(endo_mat):
+            self.endoneurium = endo_mat
+        else:
+            self.endoneurium = load_material(endo_mat)
+        if is_mat(peri_mat):
+            self.perineurium = peri_mat
+        else:
+            self.perineurium = load_material(peri_mat)
+        if is_mat(epi_mat):
+            self.epineurium = epi_mat
+        else:
+            self.epineurium = load_material(epi_mat)
+        if is_mat(ext_mat):
+            self.external_material = ext_mat
+        else:
+            self.external_material = load_material(ext_mat)
+
         self.type ="FEM_stim"
         self.comsol=comsol
         ## load model

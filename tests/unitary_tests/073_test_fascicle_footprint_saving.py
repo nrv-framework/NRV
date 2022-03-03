@@ -48,5 +48,5 @@ footprints = fascicle_1.get_electrodes_footprints_on_axons(save=True, filename="
 
 # simulation
 
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='Raster_plot', verbose=True, footprints=footprints)
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='Raster_plot', verbose=False, loaded_footprints=footprints)
 

@@ -21,6 +21,7 @@ from .file_handler import *
 from .CL_postprocessing import *
 from .extracellular import *
 from .log_interface import rise_error, rise_warning, pass_info
+from .recording import *
 
 
 
@@ -113,6 +114,9 @@ class fascicle():
         self.intra_stim_duration = []
         self.intra_stim_amplitude = []
         self.intra_stim_ON = []
+        ## recording mechanism
+        self.record = False
+        self.recorder = None
 
     def set_ID(self, ID):
         """
@@ -608,9 +612,8 @@ class fascicle():
                 axes.set_xlim(0,self.L)
                 plt.tight_layout()
 
-
     ## save/load methods
-    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
+    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Save a fascicle in a json file
 
@@ -652,10 +655,13 @@ class fascicle():
                 fascicle_config['L'] = self.L
                 fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
                 fascicle_config['footprints'] = self.footprints
+            if rec_context:
+                fascicle_config['record'] = self.record
+                fascicle_config['recorder'] = self.recorder.save_recorder()
             # save the dictionnary as a json file
             json_dump(fascicle_config, fname)
 
-    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
+    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Load a fascicle configuration from a json file
 
@@ -700,6 +706,9 @@ class fascicle():
                 for dim, ftpx in ftp.items():
                     dic[int(dim)] = ftpx
                 self.footprints[int(axon)] = dic
+        if rec_context:
+            self.record = results['record']
+            self.recorder.load_recorder(results['recorder'])
 
 
     ## STIMULATION METHODS
@@ -727,6 +736,7 @@ class fascicle():
 
         """
         self.extra_stim.stimuli[ID_elec] = stimulus
+        self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
 
 
@@ -754,6 +764,26 @@ class fascicle():
         self.intra_stim_amplitude.append(amplitude)
         self.intra_stim_ON.append(ax_list)
         self.N_intra += 1
+
+    ## RECORDING MECHANIMS
+    def attach_extracellular_recorder(self, rec):
+        """
+        attach an extracellular recorder to the axon
+
+        Parameters
+        ----------
+        rec     : recorder object
+            see Recording.recorder help for more details
+        """
+        if is_recorder(rec):
+            self.record = True
+            self.recorder = rec
+
+    def shut_recorder_down(self):
+        """
+        Shuts down the recorder locally
+        """
+        self.record = False
 
     ## SIMULATION HANDLING
     def generate_random_NoR_position(self):
@@ -844,7 +874,7 @@ class fascicle():
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_particles=False, footprints=None, save_V_mem=False, save_path='', verbose=True,\
+        record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=True,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
         Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
@@ -865,7 +895,7 @@ class fascicle():
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
-        footprints          : dict or string
+        loaded_footprints          : dict or bool
             Dictionnary composed of axon footprint dictionary, the keys are int value
             of the corresponding axon ID. if type is bool, fascicle footprints attribute is used
             if None, footprins calculated during the simulation, by default None
@@ -911,7 +941,7 @@ class fascicle():
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
-        if self.extra_stim is not None and not is_analytical_extra_stim(self.extra_stim) and not MCH.is_alone():
+        if self.extra_stim is not None and loaded_footprints == False and not is_analytical_extra_stim(self.extra_stim) and not MCH.is_alone():
             # master solves FEM model
             if MCH.do_master_only_work():
                 self.extra_stim.run_model()
@@ -952,13 +982,16 @@ class fascicle():
                                 threshold=self.threshold)
                         else:
                             axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                                round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                                 node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
                                 freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                                 alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
                                 ID=k, threshold=self.threshold)
                     ## add extracellular stimulation
                     axon.attach_extracellular_stimulation(self.extra_stim)
+                    ## add recording mechanism
+                    if self.record:
+                        axon.attach_extracellular_recorder(self.recorder)
                     # add intracellular stim
                     if self.N_intra > 0:
                         for j in range(self.N_intra):
@@ -1012,13 +1045,15 @@ class fascicle():
                                 # APPLY INTRA CELLULAR STIMULATION
                                 axon.insert_I_Clamp(position, t_start, duration, amplitude)
                     ## perform simulation
-                    if footprints is None:
-                        axon_ftpt = None
+                    if loaded_footprints==False:
+                        axon_ftpt = False
+                    elif loaded_footprints==True:
+                        axon_ftpt = self.footprints[k]
                     else:
-                        axon_ftpt = footprints[k]
+                        axon_ftpt = loaded_footprints[k]
                     sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                         record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                        record_particles=record_particles, footprints=axon_ftpt)
+                        record_particles=record_particles, loaded_footprints=axon_ftpt)
                     del axon
                     ## postprocessing and data reduction
                     if postproc_script is None:
@@ -1035,6 +1070,9 @@ class fascicle():
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
                     save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                # sum up all recorded extracellular potential if applicable
+                if self.record:
+                    self.recorder.gather_all_recordings()
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
         else:
             ## split the job between Cores/Computation nodes
@@ -1065,7 +1103,7 @@ class fascicle():
                             threshold=self.threshold)
                     else:
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                            round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
+                            round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
                             freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                             alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
@@ -1073,6 +1111,9 @@ class fascicle():
                 ## add extracellular stimulation
                 if self.extra_stim is not None:
                     axon.attach_extracellular_stimulation(self.extra_stim)
+                ## add recording mechanism
+                if self.record:
+                    axon.attach_extracellular_recorder(self.recorder)
                 ## add intracellular stim
                 if self.N_intra > 0:
                     for j in range(self.N_intra):
@@ -1126,16 +1167,16 @@ class fascicle():
                             # APPLY INTRA CELLULAR STIMULATION
                             axon.insert_I_Clamp(position, t_start, duration, amplitude)
                 ## perform simulation
-                if footprints is None:
-                    axon_ftpt = None
-                elif type(footprints) == bool:
-                    axon_ftpt = self.footprints
+                if loaded_footprints==False:
+                    axon_ftpt = False
+                elif loaded_footprints==True:
+                    axon_ftpt = self.footprints[k]
                 else:
-                    axon_ftpt = footprints[k]
+                    axon_ftpt = loaded_footprints[k]
 
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                    record_particles=record_particles, footprints=axon_ftpt)
+                    record_particles=record_particles, loaded_footprints=axon_ftpt)
                 del axon
                 ## postprocessing and data reduction
 
@@ -1163,5 +1204,8 @@ class fascicle():
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
                 save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+            # sum up all recorded extracellular potential if applicable
+            if self.record:
+                self.recorder.gather_all_recordings()
             if MCH.is_alone() and verbose:
                 print('... Simulation done')

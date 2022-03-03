@@ -7,8 +7,8 @@ z_elec = 0					# electrode y position, in [um]
 E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 
 # load material properties
-endoneurium = nrv.load_material('endoneurium_ranck')
-
+endoneurium = nrv.load_material("endoneurium_ranck")
+print(endoneurium.save_material())
 # stimulus def
 start = 1
 I_cathod = 50

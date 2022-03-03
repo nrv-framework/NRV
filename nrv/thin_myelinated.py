@@ -1,6 +1,6 @@
 """
 NRV-thin_myelinated
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import math
@@ -167,8 +167,17 @@ class thin_myelinated(axon):
         self.thin = True
         self.rec = rec
         self.model = model
+        self.md_based_v_init = md_based_v_init
+        self.node_shift = node_shift
+
+        self.__compute_axon_parameters()
+
+    def __compute_axon_parameters(self):
+        """
+        generate axon from parameters set by user
+        """
         ## Handling v_init
-        if v_init is None:
+        if self.v_init is None:
             # model driven
             if self.model == 'RGK':
                 self.v_init = -64.2
@@ -176,14 +185,12 @@ class thin_myelinated(axon):
                 self.v_init = -80
         else:
             # user driven
-            self.v_init = v_init
+            self.v_init = self.v_init
         ## Handling temperature
-        if T is None:
+        if self.T is None:
             # model driven
             self.T = 37
-        else:
-            # user driven
-            self.T = T
+
         ############################################
         ## PARMETERS FOR THE COMPARTIMENTAL MODEL ##
         ############################################
@@ -212,7 +219,6 @@ class thin_myelinated(axon):
         # thin myelinated double cable sequence sequence
         self.MRG_Sequence = ['node', 'MYSA', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN', 'MYSA']
         # basic MRG starts with the node, if needed, adapt the sequence
-        self.node_shift = node_shift
         if self.node_shift == 0:
             # no Rotation
             self.this_ax_sequence = self.MRG_Sequence
@@ -371,6 +377,76 @@ class thin_myelinated(axon):
         # get nodes positions
         self.__get_seg_positions()
         self.__get_rec_positions()
+
+
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Return axon as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'axon.json'
+
+        Returns
+        -------
+        ax_dic : dict
+            dictionary containing all information
+        """
+        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+
+
+        ax_dic['myelinated'] = self.myelinated
+        ax_dic['thin'] = self.thin
+        ax_dic['rec'] = self.rec
+        ax_dic['node_shift'] = self.node_shift
+        ax_dic['md_based_v_init'] = self.md_based_v_init
+        ax_dic['model'] = self.model
+
+        if save:
+            json_dump(ax_dic, fname)
+        return ax_dic
+
+    def load_axon(self, data, extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Load all axon properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing axon information
+        """
+        if type(data) == str:
+            ax_dic = json_load(data)
+        else: 
+            ax_dic = data
+        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+
+        self.myelinated = ax_dic['myelinated']
+        self.thin = ax_dic['thin']
+        self.rec = ax_dic['rec']
+        self.node_shift = ax_dic['node_shift']
+        self.md_based_v_init = ax_dic['md_based_v_init']
+        if ax_dic['model'] in myelinated_models:
+            self.model = ax_dic['model']
+        else:
+            self.model = 'Extended_Gaines'
+        self.__compute_axon_parameters()
+        if intracel_context:
+            for i in range(len(ax_dic['intra_current_stim_positions'])):
+                position = ax_dic['intra_current_stim_positions'][i]
+                stim_start = ax_dic['intra_current_stim_starts'][i]
+                duration = ax_dic['intra_current_stim_durations'][i]
+                amplitude = ax_dic['intra_current_stim_amplitudes'][i]
+                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
+            if ax_dic['intra_voltage_stim_stimulus'] is not None:
+                position = ax_dic['intra_voltage_stim_position'][0]
+                stim = stimulus()
+                stim.load_stimulus(ax_dic['intra_voltage_stim_stimulus'])
+                self.insert_V_Clamp(position/self.L, stim)
+
 
     def __set_model(self, model):
         """
@@ -626,7 +702,7 @@ class thin_myelinated(axon):
             amplitude of the pulse (nA)
         """
         # adapt position to the number of sections
-        index = round(position * (self.axonnodes - 1))
+        index = round((position * (self.axonnodes - 1)+0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
     def insert_V_Clamp_node(self, index, stimulus):
@@ -643,7 +719,7 @@ class thin_myelinated(axon):
         # add the stimulation to the axon
         self.intra_voltage_stim = neuron.h.VClamp(0.5, sec=self.node[index])
         # save the stimulation parameter for results
-        self.intra_current_stim_position = self.x_nodes[index]
+        self.intra_voltage_stim_position.append(self.x_nodes[index])
         # save the stimulus for later use
         self.intra_voltage_stim_stimulus = stimulus
         # set fake duration
@@ -661,8 +737,8 @@ class thin_myelinated(axon):
             stimulus for the clamp, see Stimulus.py for more information
         """
         # adapt position to the number of sections
-        index = round(position * (self.axonnodes - 1))
-        self.insert_I_Clamp_node(index, stimulus)
+        index = round((position * (self.axonnodes - 1)+0.5))
+        self.insert_V_Clamp_node(index, stimulus)
 
     ##############################
     ## Result recording methods ##

@@ -1,6 +1,6 @@
 """
 NRV-unmyelinated
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import math
@@ -77,13 +77,20 @@ class unmyelinated(axon):
             freq=freq, freq_min=freq_min, mesh_shape=mesh_shape, alpha_max=alpha_max, \
             d_lambda=d_lambda, v_init=v_init, T=T, ID=ID, threshold=threshold)
         self.Nsec = Nsec
+        self.Nrec = Nrec
         self.myelinated = False
         if model in unmyelinated_models:
             self.model = model
         else:
             self.model = 'Rattay_Aberham'
+        self.__compute_axon_parameters()
+
+    def __compute_axon_parameters(self):
+        """
+        generate axon from parameters set by user
+        """
         ## Handling v_init
-        if v_init is None:
+        if self.v_init is None:
             # model driven
             if self.model == 'HH':
                 self.v_init = -67.5
@@ -97,17 +104,15 @@ class unmyelinated(axon):
                 self.v_init = -70
         else:
             # user driven
-            self.v_init = v_init
+            self.v_init = self.v_init
         ## Handling temperature
-        if T is None:
+        if self.T is None:
             # model driven
             if self.model == 'HH':
                 self.T = 32 # original HH model, cold model, maximal temperature at which spike propagation is not altered
             else:
                 self.T = 37 # mamalian models
-        else:
-            # user driven
-            self.T = T
+
         # create and connect (if more than 1) sections
         self.unmyelinated_sections = [neuron.h.Section(name='U_axon[%d]' % i) for i in \
             range(self.Nsec)]
@@ -126,7 +131,71 @@ class unmyelinated(axon):
         self.__set_Nseg()
         # get nodes positions
         self.__get_seg_positions()
-        self.__get_rec_positions(Nrec)
+        self.__get_rec_positions(self.Nrec)
+
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Return axon as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'axon.json'
+
+        Returns
+        -------
+        ax_dic : dict
+            dictionary containing all information
+        """
+        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+
+        ax_dic['myelinated'] = self.myelinated
+        ax_dic['Nsec'] = self.Nsec
+        ax_dic['Nrec'] = self.Nrec
+        ax_dic['model'] = self.model
+
+        if save:
+            json_dump(ax_dic, fname)
+        return ax_dic
+
+    def load_axon(self, data, extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Load all axon properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing axon information
+        """
+        if type(data) == str:
+            ax_dic = json_load(data)
+        else: 
+            ax_dic = data
+        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+
+        self.myelinated = ax_dic['myelinated']
+        self.Nsec = ax_dic['Nsec']
+        self.Nrec = ax_dic['Nrec']
+
+        if ax_dic['model'] in unmyelinated_models:
+            self.model = ax_dic['model']
+        else:
+            self.model = 'Rattay_Aberham'
+        self.__compute_axon_parameters()
+        if intracel_context:
+            for i in range(len(ax_dic['intra_current_stim_positions'])):
+                position = ax_dic['intra_current_stim_positions'][i]
+                stim_start = ax_dic['intra_current_stim_starts'][i]
+                duration = ax_dic['intra_current_stim_durations'][i]
+                amplitude = ax_dic['intra_current_stim_amplitudes'][i]
+                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
+            if ax_dic['intra_voltage_stim_stimulus'] is not None:
+                position = ax_dic['intra_voltage_stim_position'][0]
+                stim = stimulus()
+                stim.load_stimulus(ax_dic['intra_voltage_stim_stimulus'])
+                self.insert_V_Clamp(position/self.L, stim)
 
     def __set_Nseg(self):
         """
