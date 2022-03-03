@@ -49,7 +49,7 @@ class fascicle():
     """
     def __init__(self, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0,\
         mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, T=None, ID=0, threshold=-40,\
-        Adelta_limit=6):
+        Adelta_limit=1):
         """
         Instrantation of a Fascicle
 
