@@ -674,7 +674,10 @@ class fascicle():
         intracel_context: bool
             if True, load the intracellular context as well
         """
-        results = json_load(fname)
+        if type(fname) == str:
+            results = json_load(fname)
+        else: 
+            results = fname
         self.ID = results['ID']
         self.type = results['type']
         self.y_grav_center = results['y_grav_center']
@@ -708,7 +711,9 @@ class fascicle():
                 self.footprints[int(axon)] = dic
         if rec_context:
             self.record = results['record']
+            self.recorder = recorder()
             self.recorder.load_recorder(results['recorder'])
+
 
 
     ## STIMULATION METHODS
