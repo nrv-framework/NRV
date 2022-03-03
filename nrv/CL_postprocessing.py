@@ -111,7 +111,7 @@ def load_simulation_from_json(filename):
 ##############################################
 ## HANDLE THE SIMULATION RESULT DICTIONNARY ##
 ##############################################
-def remove_key(my_dict, key, verbose=True):
+def remove_key(my_dict, key, verbose=False):
 	"""
 	Remove an item from a dictionary, usefull before saving files, as some results maybe heavy and are potentially useless after some steps of postprocessing.
 
