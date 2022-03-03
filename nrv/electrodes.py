@@ -165,7 +165,7 @@ class electrode():
             array contaning the electrod linear footprint (electrode response at 1mA)
             on several space points
         """
-        self.footprint = footprint
+        self.footprint = np.array(footprint)
 
     def compute_field(self, I):
         """ Compute the external field using the Point source approximation

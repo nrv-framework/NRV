@@ -254,6 +254,23 @@ class extracellular_context:
                 Vext = Vext + vext_elec
         return Vext
 
+    def set_electrodes_footprints(self, footprints):
+        """
+        set the footprints for all electrodes from existing array
+
+        Parameters
+        ----------
+        footprints  : list of array like
+            list footprint for each electode of the extracellular context
+        """
+        i=0
+        if len(footprints) == len(self.electrodes):
+            for electrode in self.electrodes:
+                electrode.set_footprint(footprints[i])
+                i+=1
+        else:
+            rise_error("Footprint number different than electrode number")
+
 class stimulation(extracellular_context):
     """
     Stimulation object are designed to connect all other objects requierd to analyticaly compute the external potential voltage for axons :
@@ -605,23 +622,6 @@ class FEM_stimulation(extracellular_context):
             if not self.setup:
                 self.setup_FEM()
             self.model.solve()
-
-    def set_electrodes_footprints(self, footprints):
-        """
-        set the footprints for all electrodes from existing array
-
-        Parameters
-        ----------
-        footprints  : list of array like
-            list footprint for each electode of the extracellular context
-        """
-        i=0
-        if len(footprints) == len(self.electrodes):
-            for electrode in self.electrodes:
-                electrode.set_footprint(footprints[i])
-                i+=1
-        else:
-            rise_error("Footprint number different than electrode number")
 
     def compute_electrodes_footprints(self, x, y, z, ID):
         """
