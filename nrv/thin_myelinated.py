@@ -265,7 +265,7 @@ class thin_myelinated(axon):
             self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
                 self.paralength - 5*self.interlength)
 
-        elif self.node_shift < (2*self.paralength + 6*self.interlength)/self.deltax:
+        else:
             # rotation of 1 MYSA, 6 STIN and less than a MYSA
             # WARNING FOR DEV : the unprobable case of a node cut in two halfs is not considered...
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 8)
