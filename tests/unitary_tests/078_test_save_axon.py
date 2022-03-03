@@ -55,11 +55,11 @@ extra_stim.add_electrode(elec_1, stim1)
 
 axon1.attach_extracellular_stimulation(extra_stim)
 
-footprints = axon1.get_electrodes_footprints_on_axon()
+axon1.get_electrodes_footprints_on_axon()
 
 axon1.save_axon(save=True, fname="./unitary_tests/figures/78_axon.json", extracel_context=True)
 # simulate the axon
-results = axon1.simulate(t_sim=5,footprints=footprints)
+results = axon1.simulate(t_sim=5,loaded_footprints=True)
 del axon1
 
 plt.figure()

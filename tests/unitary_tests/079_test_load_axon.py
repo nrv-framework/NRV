@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # axon def
 
-axon1 = nrv.load_any_axon('./unitary_tests/sources/79_axon.json', extracel_context=True)
+axon1, _ = nrv.load_any_axon('./unitary_tests/sources/79_axon.json', extracel_context=True)
 
 # stimulus def
 start = 1
@@ -17,11 +17,11 @@ stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
 
 axon1.change_stimulus_from_elecrode(0, stim1)
 
-footprints = axon1.footprints
+
 
 
 # simulate the axon
-results = axon1.simulate(t_sim=5,footprints=footprints)
+results = axon1.simulate(t_sim=5,loaded_footprints=True)
 del axon1
 
 
@@ -34,4 +34,4 @@ plt.xlim(0.9,2)
 plt.xlabel('time ($ms$)')
 plt.savefig('./unitary_tests/figures/79_A.png')
 
-plt.show()
+#plt.show()

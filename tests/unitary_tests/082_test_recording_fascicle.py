@@ -43,4 +43,4 @@ if nrv.MCH.do_master_only_work():
     plt.tight_layout()
     plt.savefig('./unitary_tests/figures/082.png')
 
-    plt.show()
+    #plt.show()
