@@ -7,6 +7,7 @@ import faulthandler
 import numpy as np
 from .materials import *
 from .units import *
+from .file_handler import *
 from .log_interface import rise_error, rise_warning, pass_info
 from .MCore import *
 
@@ -81,6 +82,59 @@ class recording_point():
         self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon's ID
         self.init = False
         self.recording = None
+
+    def save_recording_point(self, save=False, fname='recording_point.json'):
+        """
+        Return recording point as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'recording_point.json'
+
+        Returns
+        -------
+        recp_dic : dict
+            dictionary containing all information
+        """
+        recp_dic = {}
+        recp_dic['ID'] = self.ID
+        recp_dic['x'] = self.x
+        recp_dic['y'] = self.y
+        recp_dic['z'] = self.z
+        recp_dic['method'] = self.method
+        recp_dic['footprints'] = self.footprints
+        recp_dic['init'] = self.init
+        recp_dic['recording'] = self.recording
+        if save:
+            json_dump(recp_dic, fname)
+        return recp_dic
+
+
+    def load_recording_point(self, data):
+        """
+        Load all recording point properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing recording point information
+        """
+        if type(data) == str:
+            recp_dic = json_load(data)
+        else: 
+            recp_dic = data
+        self.ID = recp_dic['ID']
+        self.x = recp_dic['x']
+        self.y = recp_dic['y']
+        self.z = recp_dic['z']
+        self.method = recp_dic['method']
+        self.footprints = recp_dic['footprints']
+        self.init = recp_dic['init']
+        self.recording = recp_dic['recording']
+
 
     def get_ID(self):
         """
@@ -287,6 +341,73 @@ class recorder():
                 self.sigma_zz = temporary_material.sigma_zz
         # for internal use
         self.recording_points = []
+
+    def save_recorder(self, save=False, fname='recorder.json'):
+        """
+        Return recorder as dictionary and eventually save it as json file
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default 'recorder.json'
+
+        Returns
+        -------
+        rec_dic : dict
+            dictionary containing all information
+        """
+        rec_dic = {}
+        rec_dic['material'] = self.material
+        rec_dic['is_isotropic'] = self.is_isotropic
+        rec_dic['t'] = self.t
+        rec_dic['t_init'] = self.t_init
+        rec_dic['sigma'] = self.sigma
+        rec_dic['isotropic'] = self.isotropic
+        rec_dic['sigma_xx'] = self.sigma_xx
+        rec_dic['sigma_yy'] = self.sigma_yy
+        rec_dic['sigma_zz'] = self.sigma_zz
+        rec_dic['recording_points'] = {}
+        for i in range(len(self.recording_points)):
+            recp = self.recording_points[i]
+            rec_dic['recording_points'][i] =recp.save_recording_point()
+        if save:
+            json_dump(rec_dic, fname)
+        return rec_dic
+
+
+    def load_recorder(self, data):
+        """
+        Load all recorder properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing recording point information
+        """
+        if type(data) == str:
+            rec_dic = json_load(data)
+        else: 
+            rec_dic = data
+        self.material = rec_dic['material']
+        self.is_isotropic = rec_dic['is_isotropic']
+        self.t = rec_dic['t']
+        self.t_init = rec_dic['t_init']
+        self.sigma = rec_dic['sigma']
+        self.isotropic = rec_dic['isotropic']
+        self.sigma_xx = rec_dic['sigma_xx']
+        self.sigma_yy = rec_dic['sigma_yy']
+        self.sigma_zz = rec_dic['sigma_zz']
+
+        self.recording_points = []
+        for i in range(len(rec_dic['recording_points'])):
+            recp = recording_point(0,0,0)
+            recp.load_recording_point(rec_dic['recording_points'][str(i)])
+            self.recording_points += [recp]
+            rec_dic['recording_points'][i] =recp.save_recording_point()
+            del recp
+
 
     def is_empty(self):
         """
@@ -499,8 +620,8 @@ class recorder():
                         if self.isotropic:
                             point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
                         else:
-                        	rise_warning('LSA not implemented for anisotropic material return isotropic by default')
-                        	point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                            rise_warning('LSA not implemented for anisotropic material return isotropic by default')
+                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
                 else:
                     surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
                     if point.method=='PSA':

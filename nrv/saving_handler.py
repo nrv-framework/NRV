@@ -19,7 +19,7 @@ from .log_interface import rise_error, rise_warning, pass_info
 #########################  Loaders  ###########################
 ###############################################################
 
-def load_any_fascicle(data, extracel_context=False, intracel_context=False):
+def load_any_fascicle(data, extracel_context=False, intracel_context=False, rec_context=False):
     """
     generate any kind of fascicle from a dictionary or a json file
 
@@ -33,10 +33,17 @@ def load_any_fascicle(data, extracel_context=False, intracel_context=False):
     else: 
         fasc_dic = data
     fasc = fascicle()
-    fasc.load_axon(fasc_dic, extracel_context=extracel_context, intracel_context=intracel_context)
-    return fasc
+    fasc.load_fascicle_configuration(fasc_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    if extracel_context and rec_context:
+        return fasc , fasc.extra_stim, fasc.recorder
+    elif extracel_context:
+        return fasc , fasc.extra_stim
+    elif rec_context:
+        return fasc , fasc.recorder
+    else:
+        return fasc
 
-def load_any_axon(data, extracel_context=False, intracel_context=False):
+def load_any_axon(data, extracel_context=False, intracel_context=False, rec_context=False):
     """
     generate any kind of axon from a dictionary or a json file
 
@@ -60,7 +67,14 @@ def load_any_axon(data, extracel_context=False, intracel_context=False):
     else:
         ax = axon(0,0,1,10)
 
-    ax.load_axon(ax_dic, extracel_context=extracel_context, intracel_context=intracel_context)
-    return ax
+    ax.load_axon(ax_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    if extracel_context and rec_context:
+        return ax , ax.extra_stim, ax.recorder
+    elif extracel_context:
+        return ax , ax.extra_stim
+    elif rec_context:
+        return ax , ax.recorder
+    else:
+        return ax
 
 

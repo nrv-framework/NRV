@@ -49,7 +49,7 @@ class fascicle():
     """
     def __init__(self, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0,\
         mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, T=None, ID=0, threshold=-40,\
-        Adelta_limit=1):
+        Adelta_limit=6):
         """
         Instrantation of a Fascicle
 
@@ -73,7 +73,6 @@ class fascicle():
             membrane voltage threshold for spike detection (mV), by default -40mV
         Adelta_limit    : float
             limit diameter between A-delta models (thin myelinated) and myelinated models for axons
-            set by default to 1 to avoid using specific A-delta models since MRG values are available
         """
         super().__init__()
         self.ID = ID
@@ -614,7 +613,7 @@ class fascicle():
                 plt.tight_layout()
 
     ## save/load methods
-    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
+    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Save a fascicle in a json file
 
@@ -656,10 +655,13 @@ class fascicle():
                 fascicle_config['L'] = self.L
                 fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
                 fascicle_config['footprints'] = self.footprints
+            if rec_context:
+                fascicle_config['record'] = self.record
+                fascicle_config['recorder'] = self.recorder.save_recorder()
             # save the dictionnary as a json file
             json_dump(fascicle_config, fname)
 
-    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False):
+    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Load a fascicle configuration from a json file
 
@@ -704,6 +706,9 @@ class fascicle():
                 for dim, ftpx in ftp.items():
                     dic[int(dim)] = ftpx
                 self.footprints[int(axon)] = dic
+        if rec_context:
+            self.record = results['record']
+            self.recorder.load_recorder(results['recorder'])
 
 
     ## STIMULATION METHODS
@@ -869,7 +874,7 @@ class fascicle():
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_particles=False, footprints=None, save_V_mem=False, save_path='', verbose=True,\
+        record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=True,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
         Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
@@ -890,7 +895,7 @@ class fascicle():
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
-        footprints          : dict or string
+        loaded_footprints          : dict or bool
             Dictionnary composed of axon footprint dictionary, the keys are int value
             of the corresponding axon ID. if type is bool, fascicle footprints attribute is used
             if None, footprins calculated during the simulation, by default None
@@ -936,7 +941,7 @@ class fascicle():
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
-        if self.extra_stim is not None and not is_analytical_extra_stim(self.extra_stim) and not MCH.is_alone():
+        if self.extra_stim is not None and loaded_footprints == False and not is_analytical_extra_stim(self.extra_stim) and not MCH.is_alone():
             # master solves FEM model
             if MCH.do_master_only_work():
                 self.extra_stim.run_model()
@@ -1040,13 +1045,15 @@ class fascicle():
                                 # APPLY INTRA CELLULAR STIMULATION
                                 axon.insert_I_Clamp(position, t_start, duration, amplitude)
                     ## perform simulation
-                    if footprints is None:
-                        axon_ftpt = None
+                    if loaded_footprints==False:
+                        axon_ftpt = False
+                    elif loaded_footprints==True:
+                        axon_ftpt = self.footprints[k]
                     else:
-                        axon_ftpt = footprints[k]
+                        axon_ftpt = loaded_footprints[k]
                     sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                         record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                        record_particles=record_particles, footprints=axon_ftpt)
+                        record_particles=record_particles, loaded_footprints=axon_ftpt)
                     del axon
                     ## postprocessing and data reduction
                     if postproc_script is None:
@@ -1160,16 +1167,16 @@ class fascicle():
                             # APPLY INTRA CELLULAR STIMULATION
                             axon.insert_I_Clamp(position, t_start, duration, amplitude)
                 ## perform simulation
-                if footprints is None:
-                    axon_ftpt = None
-                elif type(footprints) == bool:
-                    axon_ftpt = self.footprints
+                if loaded_footprints==False:
+                    axon_ftpt = False
+                elif loaded_footprints==True:
+                    axon_ftpt = self.footprints[k]
                 else:
-                    axon_ftpt = footprints[k]
+                    axon_ftpt = loaded_footprints[k]
 
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                    record_particles=record_particles, footprints=axon_ftpt)
+                    record_particles=record_particles, loaded_footprints=axon_ftpt)
                 del axon
                 ## postprocessing and data reduction
 

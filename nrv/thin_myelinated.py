@@ -264,8 +264,9 @@ class thin_myelinated(axon):
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 7)
             self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
                 self.paralength - 5*self.interlength)
-        else:
-            # rotation of 2 MYSA, 6 STIN and less than a MYSA
+
+        elif self.node_shift < (2*self.paralength + 6*self.interlength)/self.deltax:
+            # rotation of 1 MYSA, 6 STIN and less than a MYSA
             # WARNING FOR DEV : the unprobable case of a node cut in two halfs is not considered...
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 8)
             self.first_section_size = self.deltax*(1-self.node_shift)
@@ -378,7 +379,7 @@ class thin_myelinated(axon):
         self.__get_rec_positions()
 
 
-    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False):
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
         """
         Return axon as dictionary and eventually save it as json file
 
@@ -394,7 +395,7 @@ class thin_myelinated(axon):
         ax_dic : dict
             dictionary containing all information
         """
-        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context)
+        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
 
 
         ax_dic['myelinated'] = self.myelinated
@@ -408,7 +409,7 @@ class thin_myelinated(axon):
             json_dump(ax_dic, fname)
         return ax_dic
 
-    def load_axon(self, data, extracel_context=False, intracel_context=False):
+    def load_axon(self, data, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Load all axon properties from a dictionary or a json file
 
@@ -421,7 +422,7 @@ class thin_myelinated(axon):
             ax_dic = json_load(data)
         else: 
             ax_dic = data
-        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context)
+        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
 
         self.myelinated = ax_dic['myelinated']
         self.thin = ax_dic['thin']
@@ -432,8 +433,19 @@ class thin_myelinated(axon):
             self.model = ax_dic['model']
         else:
             self.model = 'Extended_Gaines'
-
         self.__compute_axon_parameters()
+        if intracel_context:
+            for i in range(len(ax_dic['intra_current_stim_positions'])):
+                position = ax_dic['intra_current_stim_positions'][i]
+                stim_start = ax_dic['intra_current_stim_starts'][i]
+                duration = ax_dic['intra_current_stim_durations'][i]
+                amplitude = ax_dic['intra_current_stim_amplitudes'][i]
+                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
+            if ax_dic['intra_voltage_stim_stimulus'] is not None:
+                position = ax_dic['intra_voltage_stim_position'][0]
+                stim = stimulus()
+                stim.load_stimulus(ax_dic['intra_voltage_stim_stimulus'])
+                self.insert_V_Clamp(position/self.L, stim)
 
 
     def __set_model(self, model):
@@ -690,7 +702,7 @@ class thin_myelinated(axon):
             amplitude of the pulse (nA)
         """
         # adapt position to the number of sections
-        index = round(position * (self.axonnodes - 1))
+        index = round((position * (self.axonnodes - 1)+0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
     def insert_V_Clamp_node(self, index, stimulus):
@@ -707,7 +719,7 @@ class thin_myelinated(axon):
         # add the stimulation to the axon
         self.intra_voltage_stim = neuron.h.VClamp(0.5, sec=self.node[index])
         # save the stimulation parameter for results
-        self.intra_current_stim_position = self.x_nodes[index]
+        self.intra_voltage_stim_position.append(self.x_nodes[index])
         # save the stimulus for later use
         self.intra_voltage_stim_stimulus = stimulus
         # set fake duration
@@ -725,8 +737,8 @@ class thin_myelinated(axon):
             stimulus for the clamp, see Stimulus.py for more information
         """
         # adapt position to the number of sections
-        index = round(position * (self.axonnodes - 1))
-        self.insert_I_Clamp_node(index, stimulus)
+        index = round((position * (self.axonnodes - 1)+0.5))
+        self.insert_V_Clamp_node(index, stimulus)
 
     ##############################
     ## Result recording methods ##
