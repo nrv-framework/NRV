@@ -680,6 +680,9 @@ def handle_collisions(y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_r
             elif k == duplet[1]:
                 sum_y += y_axons[k] - y_axons[duplet[0]]
                 sum_z += z_axons[k] - z_axons[duplet[0]]
+        if sum_y == 0 and sum_z == 0:
+            sum_y = 1e-12
+            sum_z = 1e-12
         v_y[k] = v_rep * (sum_y / (np.sqrt(sum_y**2 + sum_z**2)))
         v_z[k] = v_rep * (sum_z / (np.sqrt(sum_y**2 + sum_z**2)))
     return v_y, v_z
