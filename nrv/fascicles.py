@@ -517,6 +517,33 @@ class fascicle():
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
 
+    def remove_unmyelinated_axons(self):
+        """
+        Remove all unmyelinated fibers from the fascicle
+        """
+        mask = self.axons_type.astype(bool)
+        self.axons_diameter = self.axons_diameter[mask]
+        self.axons_y = self.axons_y[mask]
+        self.axons_z = self.axons_z[mask]
+        self.axons_type = self.axons_type[mask]
+        self.N = len(self.axons_diameter)
+        if len(self.NoR_relative_position) != 0:
+            self.NoR_relative_position = self.NoR_relative_position[mask]
+
+    def remove_myelinated_axons(self):
+        """
+        Remove all myelinated fibers from the
+        """
+        mask = np.invert(self.axons_type.astype(bool))
+        self.axons_diameter = self.axons_diameter[mask]
+        self.axons_y = self.axons_y[mask]
+        self.axons_z = self.axons_z[mask]
+        self.axons_type = self.axons_type[mask]
+        self.N = len(self.axons_diameter)
+        if len(self.NoR_relative_position) != 0:
+            # almost useless but here for coherence
+            self.NoR_relative_position = self.NoR_relative_position[mask]
+
     ## representation methods
     def plot(self, fig, axes, contour_color='k', myel_color='r', unmyel_color='b', num=False):
         """
