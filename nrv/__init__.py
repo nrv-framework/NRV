@@ -29,3 +29,4 @@ from .fascicles import *
 from .nerves import *
 from .saving_handler import *
 from .recording import *
+from .CL_discretization import *

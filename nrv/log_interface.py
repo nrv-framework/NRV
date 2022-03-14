@@ -9,6 +9,17 @@ import sys
 from icecream import ic
 from .MCore import *
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 # logging config
 logging.basicConfig(filename=dir_path+'/log/NRV.log', level=logging.INFO, format=\
@@ -36,7 +47,7 @@ def rise_error(*args, out=1, **kwargs):
     if MCH.is_alone():
         logging.error(message)
         if verbose:
-            print('NRV ERROR: '+ message)
+            print(bcolors.FAIL + 'NRV ERROR: '+ message+ bcolors.ENDC)
     else:
         logging.error('NRV ERROR: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if out == 0:
@@ -66,7 +77,7 @@ def rise_warning(*args, abort=False, **kwargs):
     if MCH.is_alone():
         logging.warning('NRV WARNING: '+ message)
         if verbose:
-            print('NRV WARNING: '+ message)
+            print(bcolors.WARNING + 'NRV WARNING: '+ message+ bcolors.ENDC)
     else:
         logging.warning('NRV WARNING: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if abort:
