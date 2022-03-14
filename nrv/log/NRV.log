@@ -61,3 +61,155 @@
 03/13/2022 08:17:02 PM This is an error in red from NRV
 03/13/2022 08:17:11 PM NRV INFO: Suggested dt is 0.005ms
 03/13/2022 08:17:11 PM NRV INFO: Suggested nseg is 4 segments per section
+03/13/2022 08:30:42 PM NRV INFO: Iteration number 1, testing firing current amplitude 2000 uA
+03/13/2022 08:31:20 PM NRV INFO: Iteration number 1, testing firing current amplitude 2000 uA
+03/13/2022 08:32:41 PM NRV INFO: Iteration number 1, testing firing current amplitude 2000 uA
+03/13/2022 08:32:41 PM NRV INFO: ... Iteration simulation performed in 0.40901923179626465 s
+03/13/2022 08:32:42 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:42 PM NRV INFO: Iteration number 2, testing firing current amplitude 0 uA
+03/13/2022 08:32:43 PM NRV INFO: ... Iteration simulation performed in 0.41789698600769043 s
+03/13/2022 08:32:43 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:32:43 PM NRV INFO: Iteration number 3, testing firing current amplitude 1000.0 uA
+03/13/2022 08:32:43 PM NRV INFO: ... Iteration simulation performed in 0.3883941173553467 s
+03/13/2022 08:32:43 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:43 PM NRV INFO: Iteration number 4, testing firing current amplitude 500.0 uA
+03/13/2022 08:32:44 PM NRV INFO: ... Iteration simulation performed in 0.38918399810791016 s
+03/13/2022 08:32:44 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:44 PM NRV INFO: Iteration number 5, testing firing current amplitude 250.0 uA
+03/13/2022 08:32:44 PM NRV INFO: ... Iteration simulation performed in 0.39327216148376465 s
+03/13/2022 08:32:44 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:44 PM NRV INFO: Iteration number 6, testing firing current amplitude 125.0 uA
+03/13/2022 08:32:44 PM NRV INFO: ... Iteration simulation performed in 0.3916139602661133 s
+03/13/2022 08:32:44 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:44 PM NRV INFO: Iteration number 7, testing firing current amplitude 62.5 uA
+03/13/2022 08:32:45 PM NRV INFO: ... Iteration simulation performed in 0.39388394355773926 s
+03/13/2022 08:32:45 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:45 PM NRV INFO: Iteration number 8, testing firing current amplitude 31.25 uA
+03/13/2022 08:32:45 PM NRV INFO: ... Iteration simulation performed in 0.3900458812713623 s
+03/13/2022 08:32:45 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:45 PM NRV INFO: Iteration number 9, testing firing current amplitude 15.625 uA
+03/13/2022 08:32:46 PM NRV INFO: ... Iteration simulation performed in 0.38706421852111816 s
+03/13/2022 08:32:46 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:46 PM NRV INFO: Iteration number 10, testing firing current amplitude 7.8125 uA
+03/13/2022 08:32:46 PM NRV INFO: ... Iteration simulation performed in 0.38715386390686035 s
+03/13/2022 08:32:46 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:46 PM NRV INFO: Iteration number 11, testing firing current amplitude 3.90625 uA
+03/13/2022 08:32:46 PM NRV INFO: ... Iteration simulation performed in 0.3869161605834961 s
+03/13/2022 08:32:46 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:32:46 PM NRV INFO: Iteration number 12, testing firing current amplitude 5.859375 uA
+03/13/2022 08:32:47 PM NRV INFO: ... Iteration simulation performed in 0.3882169723510742 s
+03/13/2022 08:32:47 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:32:47 PM NRV INFO: Iteration number 13, testing firing current amplitude 6.8359375 uA
+03/13/2022 08:32:47 PM NRV INFO: ... Iteration simulation performed in 0.38999128341674805 s
+03/13/2022 08:32:47 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:32:47 PM NRV INFO: Iteration number 14, testing firing current amplitude 7.32421875 uA
+03/13/2022 08:32:48 PM NRV INFO: ... Iteration simulation performed in 0.39102911949157715 s
+03/13/2022 08:32:48 PM NRV INFO: ... Spike triggered
+03/13/2022 08:32:48 PM NRV INFO: Iteration number 15, testing firing current amplitude 7.080078125 uA
+03/13/2022 08:32:48 PM NRV INFO: ... Iteration simulation performed in 0.3890399932861328 s
+03/13/2022 08:32:48 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:19 PM NRV INFO: Iteration number 1, testing firing current amplitude 2000 uA
+03/13/2022 08:35:20 PM NRV INFO: ... Iteration simulation performed in 0.40671586990356445 s
+03/13/2022 08:35:20 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:20 PM NRV INFO: Iteration number 2, testing firing current amplitude 0 uA
+03/13/2022 08:35:21 PM NRV INFO: ... Iteration simulation performed in 0.4196510314941406 s
+03/13/2022 08:35:21 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:35:21 PM NRV INFO: Iteration number 3, testing firing current amplitude 1000.0 uA
+03/13/2022 08:35:21 PM NRV INFO: ... Iteration simulation performed in 0.3979911804199219 s
+03/13/2022 08:35:21 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:21 PM NRV INFO: Iteration number 4, testing firing current amplitude 500.0 uA
+03/13/2022 08:35:22 PM NRV INFO: ... Iteration simulation performed in 0.3898918628692627 s
+03/13/2022 08:35:22 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:22 PM NRV INFO: Iteration number 5, testing firing current amplitude 250.0 uA
+03/13/2022 08:35:22 PM NRV INFO: ... Iteration simulation performed in 0.395550012588501 s
+03/13/2022 08:35:22 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:22 PM NRV INFO: Iteration number 6, testing firing current amplitude 125.0 uA
+03/13/2022 08:35:22 PM NRV INFO: ... Iteration simulation performed in 0.40687108039855957 s
+03/13/2022 08:35:22 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:22 PM NRV INFO: Iteration number 7, testing firing current amplitude 62.5 uA
+03/13/2022 08:35:23 PM NRV INFO: ... Iteration simulation performed in 0.4048738479614258 s
+03/13/2022 08:35:23 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:23 PM NRV INFO: Iteration number 8, testing firing current amplitude 31.25 uA
+03/13/2022 08:35:23 PM NRV INFO: ... Iteration simulation performed in 0.3954579830169678 s
+03/13/2022 08:35:23 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:23 PM NRV INFO: Iteration number 9, testing firing current amplitude 15.625 uA
+03/13/2022 08:35:24 PM NRV INFO: ... Iteration simulation performed in 0.39517998695373535 s
+03/13/2022 08:35:24 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:24 PM NRV INFO: Iteration number 10, testing firing current amplitude 7.8125 uA
+03/13/2022 08:35:24 PM NRV INFO: ... Iteration simulation performed in 0.39356303215026855 s
+03/13/2022 08:35:24 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:24 PM NRV INFO: Iteration number 11, testing firing current amplitude 3.90625 uA
+03/13/2022 08:35:24 PM NRV INFO: ... Iteration simulation performed in 0.4084329605102539 s
+03/13/2022 08:35:24 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:35:24 PM NRV INFO: Iteration number 12, testing firing current amplitude 5.859375 uA
+03/13/2022 08:35:25 PM NRV INFO: ... Iteration simulation performed in 0.3888092041015625 s
+03/13/2022 08:35:25 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:35:25 PM NRV INFO: Iteration number 13, testing firing current amplitude 6.8359375 uA
+03/13/2022 08:35:25 PM NRV INFO: ... Iteration simulation performed in 0.39273619651794434 s
+03/13/2022 08:35:25 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:35:25 PM NRV INFO: Iteration number 14, testing firing current amplitude 7.32421875 uA
+03/13/2022 08:35:26 PM NRV INFO: ... Iteration simulation performed in 0.3892242908477783 s
+03/13/2022 08:35:26 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:26 PM NRV INFO: Iteration number 15, testing firing current amplitude 7.080078125 uA
+03/13/2022 08:35:26 PM NRV INFO: ... Iteration simulation performed in 0.4058418273925781 s
+03/13/2022 08:35:26 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:39 PM NRV INFO: Iteration number 1, testing firing current amplitude 2000 uA
+03/13/2022 08:35:43 PM NRV INFO: ... Iteration simulation performed in 3.9955451488494873 s
+03/13/2022 08:35:44 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:44 PM NRV INFO: Iteration number 2, testing firing current amplitude 0 uA
+03/13/2022 08:35:48 PM NRV INFO: ... Iteration simulation performed in 4.201192140579224 s
+03/13/2022 08:35:48 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:35:48 PM NRV INFO: Iteration number 3, testing firing current amplitude 1000.0 uA
+03/13/2022 08:35:52 PM NRV INFO: ... Iteration simulation performed in 3.9122538566589355 s
+03/13/2022 08:35:52 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:52 PM NRV INFO: Iteration number 4, testing firing current amplitude 500.0 uA
+03/13/2022 08:35:56 PM NRV INFO: ... Iteration simulation performed in 3.9102001190185547 s
+03/13/2022 08:35:56 PM NRV INFO: ... Spike triggered
+03/13/2022 08:35:56 PM NRV INFO: Iteration number 5, testing firing current amplitude 250.0 uA
+03/13/2022 08:36:00 PM NRV INFO: ... Iteration simulation performed in 3.9267807006835938 s
+03/13/2022 08:36:00 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:00 PM NRV INFO: Iteration number 6, testing firing current amplitude 125.0 uA
+03/13/2022 08:36:04 PM NRV INFO: ... Iteration simulation performed in 3.870779037475586 s
+03/13/2022 08:36:04 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:04 PM NRV INFO: Iteration number 7, testing firing current amplitude 62.5 uA
+03/13/2022 08:36:08 PM NRV INFO: ... Iteration simulation performed in 4.157574892044067 s
+03/13/2022 08:36:08 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:36:08 PM NRV INFO: Iteration number 8, testing firing current amplitude 93.75 uA
+03/13/2022 08:36:12 PM NRV INFO: ... Iteration simulation performed in 4.114506006240845 s
+03/13/2022 08:36:12 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:12 PM NRV INFO: Iteration number 9, testing firing current amplitude 78.125 uA
+03/13/2022 08:36:16 PM NRV INFO: ... Iteration simulation performed in 3.9335548877716064 s
+03/13/2022 08:36:16 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:16 PM NRV INFO: Iteration number 10, testing firing current amplitude 70.3125 uA
+03/13/2022 08:36:20 PM NRV INFO: ... Iteration simulation performed in 3.9171910285949707 s
+03/13/2022 08:36:20 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:20 PM NRV INFO: Iteration number 11, testing firing current amplitude 66.40625 uA
+03/13/2022 08:36:24 PM NRV INFO: ... Iteration simulation performed in 4.117433071136475 s
+03/13/2022 08:36:24 PM NRV INFO: ... Spike triggered
+03/13/2022 08:36:24 PM NRV INFO: Iteration number 12, testing firing current amplitude 64.453125 uA
+03/13/2022 08:36:29 PM NRV INFO: ... Iteration simulation performed in 4.38228702545166 s
+03/13/2022 08:36:29 PM NRV INFO: ... Spike not triggered
+03/13/2022 08:36:57 PM NRV INFO: Iteration number 1, testing block current amplitude 500 uA
+03/13/2022 08:37:33 PM NRV INFO: ... Iteration simulation performed in 35.26507616043091 s
+03/13/2022 08:37:33 PM NRV INFO: ... Spike blocked
+03/13/2022 08:37:33 PM NRV INFO: Iteration number 2, testing block current amplitude 0 uA
+03/13/2022 08:38:07 PM NRV INFO: ... Iteration simulation performed in 33.3834547996521 s
+03/13/2022 08:38:07 PM NRV INFO: ... Spike not blocked
+03/13/2022 08:38:07 PM NRV INFO: Iteration number 3, testing block current amplitude 250.0 uA
+03/13/2022 08:38:40 PM NRV INFO: ... Iteration simulation performed in 32.73643612861633 s
+03/13/2022 08:38:40 PM NRV INFO: ... Spike blocked
+03/13/2022 08:38:40 PM NRV INFO: Iteration number 4, testing block current amplitude 125.0 uA
+03/13/2022 08:39:13 PM NRV INFO: ... Iteration simulation performed in 33.197402000427246 s
+03/13/2022 08:39:13 PM NRV INFO: ... Spike not blocked
+03/13/2022 08:39:13 PM NRV INFO: Iteration number 5, testing block current amplitude 187.5 uA
+03/13/2022 08:39:46 PM NRV INFO: ... Iteration simulation performed in 32.86052107810974 s
+03/13/2022 08:39:46 PM NRV INFO: ... Spike blocked
+03/13/2022 08:39:46 PM NRV INFO: Iteration number 6, testing block current amplitude 156.25 uA
+03/13/2022 08:40:18 PM NRV INFO: ... Iteration simulation performed in 32.72752285003662 s
+03/13/2022 08:40:18 PM NRV INFO: ... Spike not blocked
+03/13/2022 08:40:18 PM NRV INFO: Iteration number 7, testing block current amplitude 171.875 uA
+03/13/2022 08:40:52 PM NRV INFO: ... Iteration simulation performed in 33.380993127822876 s
+03/13/2022 08:40:52 PM NRV INFO: ... Spike not blocked
+03/13/2022 08:40:52 PM NRV INFO: Iteration number 8, testing block current amplitude 179.6875 uA
+03/13/2022 08:41:25 PM NRV INFO: ... Iteration simulation performed in 32.66525602340698 s
+03/13/2022 08:41:25 PM NRV INFO: ... Spike not blocked

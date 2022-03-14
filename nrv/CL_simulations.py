@@ -438,10 +438,9 @@ def firing_threshold_from_axon(axon,cath_time= 100e-3,amp_max=2000,amp_tol=1,ver
 		#axon_th = copy.deepcopy(axon)
 		axon.dt = dt
 		axon.change_stimulus_from_elecrode(0, stim_1)
-		footprints = axon.footprints
 
 		# simulate axon activity
-		results = axon.simulate(t_sim=t_sim,footprints = footprints)
+		results = axon.simulate(t_sim=t_sim,loaded_footprints=True)
 		#del (axon)
 		if (verbose):
 			pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
@@ -976,10 +975,9 @@ def blocking_threshold_from_axon(axon,block_freq=10,amp_max=2000,amp_tol=1,dt=0.
 
 		axon.dt = dt
 		axon.change_stimulus_from_elecrode(0, stim_1)
-		footprints = axon.footprints
 
 		# simulate axon activity
-		results = axon.simulate(t_sim=t_sim,footprints = footprints)
+		results = axon.simulate(t_sim=t_sim,loaded_footprints=True)
 
 		if (verbose):
 			pass_info('... Iteration simulation performed in '+str(results['sim_time'])+' s')
