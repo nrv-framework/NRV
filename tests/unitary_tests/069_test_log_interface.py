@@ -2,37 +2,32 @@ import nrv
 
 
 #pass info
-nrv.pass_info('ver=True', verbose=True)
+nrv.pass_info('This is a friendly message from NRV',' (ver=True)', verbose=True)
 
-nrv.pass_info('ver=False', verbose=False)
-nrv.pass_info('ver=None')
-nrv.pass_info(True)
+nrv.pass_info('This is a friendly message from NRV',' (ver=False)', verbose=False)
+nrv.pass_info('This is a friendly message from NRV',' (ver=None)')
+nrv.pass_info(False)
 
-nrv.pass_info(False, verbose=True)
 
-my_dict = {'ID':12,'test':1}
-nrv.remove_key(my_dict, 'test', verbose=False)
-print(my_dict)
 #Warning
-nrv.rise_warning('ver=True', verbose=True)
+nrv.rise_warning('This is a warning in yellow from NRV',' (ver=True)', verbose=True)
 
-nrv.rise_warning('ver=False', verbose=False)
-nrv.rise_warning('ver=None')
-nrv.rise_warning(True)
+nrv.rise_warning('This is a warning in yellow from NRV',' (ver=False)', verbose=False)
+nrv.rise_warning('This is a warning in yellow from NRV',' (ver=None)')
+nrv.rise_warning(False)
 
-nrv.rise_warning('ver=True', verbose=True)
 
 #errors
 
 try:
-    nrv.rise_error('ver=True', verbose=True)
+    nrv.rise_error('This is an error in red from NRV', verbose=True)
 except:
-    print("error 1")
+    print("error 1 (ver=True)")
 try:
-    nrv.rise_error('ver=False', verbose=False)
+    nrv.rise_error('This is an error in red from NRV', verbose=False)
 except:
-    print("error 2")
+    print("error 2 (ver=False)")
 try:
-    nrv.rise_error('ver=None')
+    nrv.rise_error('This is an error in red from NRV')
 except:
-    print("error 3")
+    print("error 3(ver=None)")
