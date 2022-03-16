@@ -166,6 +166,31 @@ class fascicle():
         self.z_vertices = z_c + (D/2)*np.sin(theta)
         self.A = np.pi * (D/2)**2
 
+    def get_circular_contour(self):
+        """
+        Returns the properties of the fascicle contour considered as a circle (y and z center and diameter)
+
+        Returns
+        -------
+        D : float
+            diameter of the contour, in um. Set to 0 if not applicable
+        y : float
+            y position of the contour center, in um
+        z : float
+            z position of the contour center, in um
+        """
+        y = self.y_grav_center
+        z = self.z_grav_center
+        if self.y_vertices == np.array([]) and self.D is None:
+            D = 0
+        elif self.D is not None:
+            D = self.D
+        else:
+            y = (np.amax(self.y_vertices)-np.amin(self.y_vertices))/2
+            z = (np.amax(self.z_vertices)-np.amin(self.z_vertices))/2
+            D = np.abs(np.amax(self.y_vertices)-np.amin(self.y_vertices))
+        return D, y, z
+
     def fit_circular_contour(self, y_c=0, z_c=0, Delta=0.1, N_vertices=100):
         """
         Define a circular countour to the fascicle
@@ -847,7 +872,7 @@ class fascicle():
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
 
     def get_electrodes_footprints_on_axons(self,save=False, filename="electrodes_footprint.ftpt",\
-        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG'):
+        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG',myelinated_nseg_per_sec=3):
         """
         get electrodes footprints on each segment of each axon
 
@@ -863,6 +888,8 @@ class fascicle():
             model for A-delta thin myelinated fibers, by default'extended_Gaines'
         Myelinated_model    : str
             model for myelinated fibers, by default 'MRG'
+        myelinated_nseg_per_sec        : int
+            number of segment per section for myelinated axons
         Returns
         -------
         footprints   : dict
@@ -885,16 +912,13 @@ class fascicle():
                         axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                            freq=self.freq, freq_min=self.freq_min,\
-                            mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
-                            d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
                             threshold=self.threshold)
                     else:
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                            freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                            alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
+                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
                             ID=k, threshold=self.threshold)
                 axon.attach_extracellular_stimulation(self.extra_stim)
                 footprints[k] = axon.get_electrodes_footprints_on_axon(save=save,filename=filename)
@@ -907,8 +931,8 @@ class fascicle():
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
         record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=True,\
-        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',\
-        Myelinated_model='MRG', Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
+        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',Myelinated_model='MRG',\
+        myelinated_nseg_per_sec=3, Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead 
@@ -942,6 +966,8 @@ class fascicle():
             model for A-delta thin myelinated fibers, by default'extended_Gaines'
         Myelinated_model    : str
             model for myelinated fibers, by default 'MRG'
+        myelinated_seg_per_sec        : int
+            number of segment per section for myelinated axons
         Adelta_limit        : float
             limit diameter between A-delta models (thin myelinated) and myelinated models for
             axons. Overwritte the fascicle limit, if unnecessary, specify None. None by default
@@ -954,8 +980,6 @@ class fascicle():
             can access global and local variables. Can also be key word ('Vmem' or 'scarter') 
             to use script saved in OTF_PP folder, use with caution
         """
-        ##########
-
         if postproc_script is not None:
             import nrv # not ideal at all but gives direct acces to nrv in the postprocessing script
         if Adelta_limit != self.Adelta_limit and Adelta_limit is not None:
@@ -1008,16 +1032,13 @@ class fascicle():
                             axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
                                 round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
                                 node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                                freq=self.freq, freq_min=self.freq_min,\
-                                mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
-                                d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+                                Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
                                 threshold=self.threshold)
                         else:
                             axon = myelinated(self.axons_y[k], self.axons_z[k],\
                                 round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                                 node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                                freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                                alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
+                                Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
                                 ID=k, threshold=self.threshold)
                     ## add extracellular stimulation
                     axon.attach_extracellular_stimulation(self.extra_stim)
@@ -1129,16 +1150,13 @@ class fascicle():
                         axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                            freq=self.freq, freq_min=self.freq_min,\
-                            mesh_shape=self.mesh_shape, alpha_max=self.alpha_max,\
-                            d_lambda=self.d_lambda, v_init=None, T=self.T, ID=k,\
+                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
                             threshold=self.threshold)
                     else:
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                            freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                            alpha_max=self.alpha_max, d_lambda=self.d_lambda, v_init=None, T=self.T,\
+                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
                             ID=k, threshold=self.threshold)
                 ## add extracellular stimulation
                 if self.extra_stim is not None:
