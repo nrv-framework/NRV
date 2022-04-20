@@ -726,10 +726,8 @@ class fascicle():
                 fascicle_config['L'] = self.L
                 fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
                 fascicle_config['footprints'] = self.footprints
-                if 'myelinated_nseg_per_sec' in fascicle_config:
-                    fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
-                else:
-                    fascicle_config['myelinated_nseg_per_sec'] = 3
+                fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
+
             if rec_context:
                 fascicle_config['record'] = self.record
                 fascicle_config['recorder'] = self.recorder.save_recorder()
@@ -777,7 +775,10 @@ class fascicle():
             self.intra_stim_ON = results['intra_stim_ON']
         if extracel_context:
             self.L = results['L']
-            self.myelinated_nseg_per_sec = fascicle_config['myelinated_nseg_per_sec']
+            if 'myelinated_nseg_per_sec' in results:
+                self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
+            else:
+                self.myelinated_nseg_per_sec = 3
             self.extra_stim = load_any_extracel_context(results['extra_stim'])
             self.footprints = {}
             for axon, ftp in results['footprints'].items():
