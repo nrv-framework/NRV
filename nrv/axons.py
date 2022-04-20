@@ -664,7 +664,7 @@ class axon():
                             this may be unfortunate, consider to undersample your stimuli yourself,\
                             or chose a smaller dt')
                         #logging.warning('... dt is '+str(self.dt/Delta_T_min)+' times bigger \
-                        rise_warning('... dt is '+str(self.dt/Delta_T_min)+' times bigger \
+                        rise_warning('... dt is '+str(Delta_T_min/self.dt)+' times bigger \
                             than the stimulus minimum time step difference')
                 # loop on stimuli time serie
                 for i in range(1, len(self.extra_stim.global_time_serie)):
