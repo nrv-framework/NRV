@@ -1,4 +1,3 @@
-from pandas.core.construction import extract_array
 import nrv
 
 
@@ -14,7 +13,10 @@ extra_stim.load_extracel_context(data='./unitary_tests/sources/075_pointsources.
 
 extra_stim.save_extracel_context(save=True, fname='./unitary_tests/figures/075_pointsources.json')
 
-my_model = 'Nerve_1_Fascicle_1_LIFE'
-FEM_stim = nrv.FEM_stimulation(my_model)
-FEM_stim.load_extracel_context(data='./unitary_tests/sources/075_LIFE.json')
-FEM_stim.save_extracel_context(save=True, fname='./unitary_tests/figures/075_LIFE.json')
+if nrv.COMSOL_Status:
+    my_model = 'Nerve_1_Fascicle_1_LIFE'
+    FEM_stim = nrv.FEM_stimulation(my_model)
+    FEM_stim.load_extracel_context(data='./unitary_tests/sources/075_LIFE.json')
+    FEM_stim.save_extracel_context(save=True, fname='./unitary_tests/figures/075_LIFE.json')
+else:
+    nrv.pass_info('not connected to COMSOL, parts of the test have been skiped')
