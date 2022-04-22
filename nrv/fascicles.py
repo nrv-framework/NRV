@@ -107,6 +107,7 @@ class fascicle():
         # extra-cellular stimulation
         self.extra_stim = None
         self.footprints = {}
+        self.myelinated_nseg_per_sec = None
         # intra-cellular stimulation
         self.N_intra = 0
         self.intra_stim_position = []
@@ -569,6 +570,24 @@ class fascicle():
             # almost useless but here for coherence
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
+    def remove_axons_size_threshold(self, d, min=True):
+        """
+        Remove fibers with diameters below/above a threshold
+        """
+        if min:
+            mask = self.axons_diameter >= d
+        else:
+            mask = self.axons_diameter <= d
+
+        self.axons_diameter = self.axons_diameter[mask]
+        self.axons_y = self.axons_y[mask]
+        self.axons_z = self.axons_z[mask]
+        self.axons_type = self.axons_type[mask]
+        self.N = len(self.axons_diameter)
+        if len(self.NoR_relative_position) != 0:
+            # almost useless but here for coherence
+            self.NoR_relative_position = self.NoR_relative_position[mask]
+
     ## representation methods
     def plot(self, fig, axes, contour_color='k', myel_color='r', unmyel_color='b', num=False):
         """
@@ -707,6 +726,8 @@ class fascicle():
                 fascicle_config['L'] = self.L
                 fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
                 fascicle_config['footprints'] = self.footprints
+                fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
+
             if rec_context:
                 fascicle_config['record'] = self.record
                 fascicle_config['recorder'] = self.recorder.save_recorder()
@@ -754,6 +775,10 @@ class fascicle():
             self.intra_stim_ON = results['intra_stim_ON']
         if extracel_context:
             self.L = results['L']
+            if 'myelinated_nseg_per_sec' in results:
+                self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
+            else:
+                self.myelinated_nseg_per_sec = 3
             self.extra_stim = load_any_extracel_context(results['extra_stim'])
             self.footprints = {}
             for axon, ftp in results['footprints'].items():
@@ -926,6 +951,7 @@ class fascicle():
                 json_dump(footprints, filename)
 
             self.footprints = footprints
+            self.myelinated_nseg_per_sec = myelinated_nseg_per_sec
             return footprints
 
 
@@ -994,6 +1020,9 @@ class fascicle():
             self.save_fascicle_configuration(config_filename)
         else:
             pass
+        # impose myelinated_nseg_per_sec if footprint are loaded 
+        if loaded_footprints:
+            myelinated_nseg_per_sec = self.myelinated_nseg_per_sec
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####

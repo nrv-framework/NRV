@@ -645,7 +645,7 @@ class axon():
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
                 if Delta_T_min < self.dt:
                     ## WARNING: the stimulus is over sampled compared to the neuron dt:
-                    if self.dt/Delta_T_min < 1:             #HERE!! FOr dt test only
+                    if Delta_T_min/self.dt < 1:             #HERE!! FOr dt test only
                         # if the stimulus minimal change time is more than 10% of user specified dt, change it to avoid problem
                         # NOTE: print a warning as well as computation time will increase !
                         new_dt = self.dt/np.ceil(self.dt/Delta_T_min)
@@ -664,7 +664,7 @@ class axon():
                             this may be unfortunate, consider to undersample your stimuli yourself,\
                             or chose a smaller dt')
                         #logging.warning('... dt is '+str(self.dt/Delta_T_min)+' times bigger \
-                        rise_warning('... dt is '+str(self.dt/Delta_T_min)+' times bigger \
+                        rise_warning('... dt is '+str(Delta_T_min/self.dt)+' times bigger \
                             than the stimulus minimum time step difference')
                 # loop on stimuli time serie
                 for i in range(1, len(self.extra_stim.global_time_serie)):
