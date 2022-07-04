@@ -1,0 +1,5 @@
+name test
+source nrv
+sigma_xx 1
+sigma_yy 0.5
+sigma_zz 0.5
