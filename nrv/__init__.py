@@ -11,7 +11,8 @@ __license__         = 'CeCILL'
 
 # Public interface
 
-from .nmod.fascicle_generator import *
+
+from .backend import compileMods
 
 
 from .fmod.materials import *
