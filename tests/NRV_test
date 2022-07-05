@@ -19,10 +19,10 @@ unit_test_results = './unitary_tests/figures/'
 ## ARGUMENT PARSER ##
 parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
 parser.add_argument('-d','--dependances',action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
-parser.add_argument('-t','--unitary_tests',action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
+parser.add_argument('-u','--unitary_tests',action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s','--syntax',action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a','--all',action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
-
+parser.add_argument('-t', '--target', dest='TARGET', type=int, default=0, help="The number of games to simulate")
 
 if __name__ == "__main__":
     # Parsing arguments
@@ -61,8 +61,33 @@ if __name__ == "__main__":
                 print('Error launching COMSOL: ' + err_message)
         else:
             print('--- found access to a COMSOL server')
+            
+    if args.TARGET:
+        ###################################
+        ## clean the test/figures folder ##
+        ###################################
+        if os.path.exists(unit_test_results):
+            shutil.rmtree(unit_test_results)
+        if not os.path.exists(unit_test_results):
+            os.makedirs(unit_test_results)
+       
+        nrv_cmd = 'nrv2calm '
+        if sys.platform == 'darwin':
+            python_cmd = 'python3 '
+        else:
+            python_cmd = 'python3 '
+        
+        success_flag = True
+        test_nb = 0
+        failed_test = []
 
-    if args.UNIT_TEST or (not args.DEP_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST):
+        for test in all_tests:
+            if str(args.TARGET) in test:
+                test_out = os.system(nrv_cmd+unit_test_folder+test)
+                print(test_out)
+        
+    
+    if args.UNIT_TEST or (not args.DEP_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
         ###################################
         ## clean the test/figures folder ##
         ###################################
