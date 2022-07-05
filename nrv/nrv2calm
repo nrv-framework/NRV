@@ -48,7 +48,7 @@ machine_config = configparser.ConfigParser()
 if args.config != None:
 	config_fname = args.config
 else:
-	config_fname = os.environ["NRVPATH"]+'/_misc/NRV.ini'
+	config_fname = os.environ["NRVPATH"]+'/NRV.ini'
 machine_config.read(config_fname)
 
 
