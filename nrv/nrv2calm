@@ -1,0 +1,122 @@
+#! /usr/bin/env python3
+# coding: utf-8
+"""
+NRV2CALM
+NeuRon Virtualizer 2 Categorized Automatic Launcher Module 
+
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
+     (c) ETIS - University Cergy-Pontoise
+         CNRS
+
+command to automatically launch computation in parallel or not, taking into account properties of the machine
+properties stored in NRV2.conf
+"""
+
+# import packages
+import argparse
+import configparser
+import sys, os, platform
+import subprocess
+import time
+import re
+
+# test for possibility of parallel computing
+try :
+	import mpi4py.MPI as mpi
+	MCore_Flag = True
+except ImportError:
+	MCore_Flag = False
+
+###############################
+## Arg parser specifications ##
+###############################
+parser = argparse.ArgumentParser(description='NeuRon Virtualizer 2 Categorized Automatic Launcher Module')
+parser.add_argument('file',nargs = 1,help='NRV2 script to launch')
+parser.add_argument('-s','--comsol_server',action='store_true', dest='Start_Comsol',help='Start the COMSOL server befor computation')
+parser.add_argument('-c','--config',metavar='',help='spcify a configuration file')
+parser.add_argument('-C','--COMSOL',metavar='',help='number of cores for COMSOL computation')
+parser.add_argument('-n',metavar='',type=int,help='number of cores for NRV2 computation')
+parser.add_argument('-pp','--PostProc',metavar='',help='Post processing script')
+parser.add_argument('--noscript',action='store_true',dest='no_script',help='')
+parser.add_argument('-v','--verbose',action='store_true', dest='verbosity',help='Sets the verbosity')
+args = parser.parse_args()
+
+###############################
+## Configuration file parser ##
+###############################
+machine_config = configparser.ConfigParser()
+if args.config != None:
+	config_fname = args.config
+else:
+	config_fname = os.environ["NRVPATH"]+'/_misc/NRV.ini'
+machine_config.read(config_fname)
+
+
+if __name__ == "__main__":
+	# Parsing arguments
+	args = parser.parse_args()
+
+	# get OS/Hardware config
+	my_os = platform.system()
+	cpuCount = os.cpu_count()
+
+	# launch commands
+	PYTHON_EXEC = 'python3'
+	MPI_EXEC = 'mpirun -np'
+	
+	# Launch COMSOL Server
+	if args.Start_Comsol:
+		port = machine_config.get('COMSOL', 'COMSOL_PORT')
+		if args.verbosity:
+			print('Starting COMSOL Server on a separate terminal')
+		if my_os == 'Darwin':
+			import appscript
+			appscript.app('Terminal').do_script(machine_config.get('COMSOL', 'COMSOL_SERVER')+' -port '+machine_config.get('COMSOL', 'COMSOL_SERVER')+' -np '+machine_config.get('COMSOL', 'COMSOL_CPU'))
+		elif my_os == 'Linux':
+			subprocess.call(['gnome-terminal', '-x', machine_config.get('COMSOL', 'COMSOL_SERVER')+' -port '+port+' -np '+machine_config.get('COMSOL', 'COMSOL_CPU')])
+		else:
+			subprocess.call('start /wait ' + machine_config.get('COMSOL', 'COMSOL_SERVER')+' -port '+port+' -np '+machine_config.get('COMSOL', 'COMSOL_CPU'), shell=True)
+		# wait few seconds to let the server start
+		time.sleep(int(machine_config.get('COMSOL', 'TIME_COMSOL_SERVER_LAUNCH')))
+
+	if not args.no_script:
+		# parse the script to lauch to check if it is an axon simulation or a fascicle simulation
+		parallel_sim= False
+		parallel_parttern = ['import nrv.fascicles', 'from nrv.fascicles import', 'import nrv.nerves', 'from nrv.nerves import', 'nrv.fascicle', 'nrv.nerve', '#pragma parallel']
+		try:
+			code_file = open(args.file[0], 'r')
+			code_text = code_file.read()
+		except OSError:
+			sys.exit(args.file[0]+': Script file not found')
+		else:
+			#print(code_text)
+			for pattern in parallel_parttern:
+				if re.search(pattern, code_text):
+					parallel_sim = True
+			code_file.close()
+
+		# launch the script
+		if parallel_sim and MCore_Flag:
+			# Simulation at the Fascicle level and mpi4py installed: parallel computing
+			if args.n != None:
+				Ncore = args.n
+			else:
+				Ncore = int(machine_config.get('NRV', 'FASCICLE_CPU'))
+			if Ncore > cpuCount:
+				Ncore = cpuCount
+				if args.verbosity:
+					print('Warning: computation requested overloads CPU number of the machine, computation will be performed with '+str(Ncore)+' cores')
+			mpicmd = MPI_EXEC+' '+str(Ncore)+' '+PYTHON_EXEC+' '+args.file[0]
+			mpirun_out = os.system(mpicmd)
+			if mpirun_out != 0:
+				sys.exit(args.file[0]+': Computation failed')
+		else:
+			# basic python computation
+			computation_out = os.system(PYTHON_EXEC+' '+args.file[0])
+			if computation_out != 0:
+				sys.exit(args.file[0]+': Computation failed')
+
+	# Post processing
+	###### will be written later on 
+
+	sys.exit(0)
