@@ -75,7 +75,6 @@ class fascicle():
         Adelta_limit    : float
             limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
-        super().__init__()
         self.ID = ID
         self.type = None
         self.L = None
