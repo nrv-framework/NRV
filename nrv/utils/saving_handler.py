@@ -12,6 +12,7 @@ from ..fmod.extracellular import *
 from ..fmod.electrodes import *
 from ..fmod.materials import *
 from ..fmod.stimulus import *
+from ..backend.MCore import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 
 
@@ -28,6 +29,7 @@ def load_any_fascicle(data, extracel_context=False, intracel_context=False, rec_
     data    : str or dict
         json file path or dictionary containing fascicle information
     """
+    synchronize_processes()
     if type(data) == str:
         fasc_dic = json_load(data)
     else: 
