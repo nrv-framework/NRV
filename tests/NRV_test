@@ -76,15 +76,14 @@ if __name__ == "__main__":
             python_cmd = 'python3 '
         else:
             python_cmd = 'python3 '
-        
-        success_flag = True
-        test_nb = 0
-        failed_test = []
 
+        target_script_key = f"{args.TARGET:03}"
         for test in all_tests:
-            if str(args.TARGET) in test:
+            if str(target_script_key) in test:
+                print(test)
                 test_out = os.system(nrv_cmd+unit_test_folder+test)
-                print(test_out)
+                print('test exited with value ', test_out)
+                break
         
     
     if args.UNIT_TEST or (not args.DEP_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
