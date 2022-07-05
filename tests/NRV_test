@@ -18,17 +18,28 @@ unit_test_results = './unitary_tests/figures/'
 
 ## ARGUMENT PARSER ##
 parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
-parser.add_argument('-d','--dependances',action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
-parser.add_argument('-u','--unitary_tests',action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
-parser.add_argument('-s','--syntax',action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
-parser.add_argument('-a','--all',action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
+parser.add_argument('-d', '--dependances', action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
+parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
+parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
+parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
 parser.add_argument('-t', '--target', dest='TARGET', type=int, default=0, help="The number of games to simulate")
+parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
 
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
 
     exclude_test_keys = ['COMSOL']
+    nrv_cmd = 'nrv2calm '
+    if sys.platform == 'darwin':
+        python_cmd = 'python3 '
+    else:
+        python_cmd = 'python3 '
+        
+    launcher = nrv_cmd
+    if args.FORCE_PYTHON:
+        launcher = python_cmd
+        
     if args.DEP_TEST:
         ###############################
         ## test neurnon installation ##
@@ -81,7 +92,7 @@ if __name__ == "__main__":
         for test in all_tests:
             if str(target_script_key) in test:
                 print(test)
-                test_out = os.system(nrv_cmd+unit_test_folder+test)
+                test_out = os.system(launcher+unit_test_folder+test)
                 print('test exited with value ', test_out)
                 break
         
@@ -94,15 +105,6 @@ if __name__ == "__main__":
             shutil.rmtree(unit_test_results)
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
-
-        ################
-        ## TEST NRV 2 ##
-        ################
-        nrv_cmd = 'nrv2calm '
-        if sys.platform == 'darwin':
-            python_cmd = 'python3 '
-        else:
-            python_cmd = 'python3 '
 
         success_flag = True
         test_nb = 0
@@ -118,7 +120,7 @@ if __name__ == "__main__":
                 test_nb += 1
                 print(test)
                 #test_out = os.system(python_cmd+unit_test_folder+test)
-                test_out = os.system(nrv_cmd+unit_test_folder+test)
+                test_out = os.system(launcher+unit_test_folder+test)
                 if test_out != 0:
                     success_flag = False
                     failed_test.append(test)
