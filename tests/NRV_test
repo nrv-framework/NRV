@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 for test_key in exclude_test_keys:
                     if test_key in test:
                         launch_test = False
-            if '.py' in test and test_key:
+            if '.py' in test and launch_test:
                 test_nb += 1
                 print(test)
                 #test_out = os.system(python_cmd+unit_test_folder+test)
