@@ -276,3 +276,16 @@ class Mcore_handler():
 
 # public interface
 MCH = Mcore_handler(MCore_Flag)
+
+def synchronize_processes():
+    """
+    synchronize all processes, used to wait saving complete before loading
+
+    Returns
+    -------
+    bool
+        a flag set to True
+    """
+    if not MCH.is_alone():
+        sync_Flag = MCH.send_synchronization_flag()
+    return 0
