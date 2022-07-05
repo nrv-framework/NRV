@@ -18,20 +18,34 @@ class nerve:
 
     a nerve can be instrumented by adding couples of electrodes+stimulus
     """
-    def __init__(self, L, FEM=False):
+    def __init__(self, outershape, simulation_box, materials
+        dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0,\
+        mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, T=None, ID=0, threshold=-40,\
+        Adelta_limit=1**kwargs):
         """
         Instanciates an empty nerve.
 
         Parameters
         ----------
-        L : float
-            length of the nerve
-        FEM : bool
-            desccription of the extracellular physics with Finite Element Method if True, with analytical method if False.
-            Has consequences on electrodes type through possible instantiations of extracellular contexts, see extracellular.py for more details.
-
+        dt              : float
+            simulation time stem for Neuron (ms), by default 1us
+        Nseg_per_sec    : float
+            number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
+        freq            : float
+            frequency of the d-lambda rule (Hz), by default 100Hz
+        freq_min        : float
+            minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
+        v_init          : float
+            initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
+        T               : float
+            temperature (C), specify None for automatic model choice of temperature
+        ID              : int
+            axon ID, by default set to 0
+        threshold       : int
+            membrane voltage threshold for spike detection (mV), by default -40mV
+        Adelta_limit    : float
+            limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
-        super().__init__()
         self.L = L
         self.FEM = FEM
         ### empty attributes for later use
@@ -84,3 +98,8 @@ class nerve:
         Keep aware of what is really implemented, ensure configuration and simulation protocol is correctly designed.
         """
         raise NotImplementedError
+        # step 1: create FEM geometry, mesh and compute
+        
+        # step 2: simulate all fascicles
+        for fascicle in self.fascicles:
+            fascicle.simulate()
