@@ -21,11 +21,14 @@ parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test 
 parser.add_argument('-d','--dependances',action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
 parser.add_argument('-t','--unitary_tests',action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s','--syntax',action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
+parser.add_argument('-a','--all',action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
+
 
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
 
+    exclude_test_keys = ['COMSOL']
     if args.DEP_TEST:
         ###############################
         ## test neurnon installation ##
@@ -82,7 +85,11 @@ if __name__ == "__main__":
         failed_test = []
 
         for test in all_tests:
-            if '.py' in test:
+            launch_test = True
+            for test_key in exclude_test_keys:
+                if test_key in test:
+                    launch_test = False
+            if '.py' in test and test_key:
                 test_nb += 1
                 print(test)
                 #test_out = os.system(python_cmd+unit_test_folder+test)
