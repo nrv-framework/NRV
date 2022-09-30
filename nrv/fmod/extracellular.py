@@ -664,6 +664,7 @@ class FEM_stimulation(extracellular_context):
             self.stimuli = list(np.asarray(self.stimuli)[sorter])
             # set the footprints
             for k, electrode in enumerate(self.electrodes):
-                electrode.set_footprint(V[:, k])
+                self.electrodes[k].set_footprint(V)
+                #electrode.set_footprint(V[:, k])
         else:
             self.electrodes[0].set_footprint(V)
