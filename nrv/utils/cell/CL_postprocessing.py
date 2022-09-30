@@ -5,12 +5,13 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 """
 import faulthandler
 from collections.abc import Iterable
+import matplotlib.pyplot as plt
 import numpy as np
+from pylab import argmin,argmax
 from scipy import signal
 from numba import jit
-from ...backend.file_handler import json_dump, json_load, is_iterable
-from ...backend.log_interface import rise_error, rise_warning, pass_info
-
+from .file_handler import json_dump, json_load, is_iterable
+from .log_interface import rise_error, rise_warning, pass_info
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
@@ -512,6 +513,7 @@ def block(my_dict,position_key=None,t_start=0,t_stop=0):
     if t_start==0:
         if 'intra_stim_starts' in my_dict and my_dict['intra_stim_starts']!=[]:
                 t_start=my_dict['intra_stim_starts'][0]
+
     if position_key == None:
         if 'V_mem_filtered_raster_position' in my_dict:
             good_key_prefix = 'V_mem_filtered_raster'
@@ -525,7 +527,7 @@ def block(my_dict,position_key=None,t_start=0,t_stop=0):
     good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
     good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes_time]
     blocked_spike_positionlist = my_dict[good_key_prefix+'_x_position'][good_indexes_time]
-    if blocked_spike_positionlist==[]:
+    if len(blocked_spike_positionlist)==0:
         return None
     if 'intra_stim_positions' in my_dict:
         if my_dict['intra_stim_positions']<my_dict['extracellular_electrode_x']:
@@ -606,7 +608,6 @@ def check_test_AP(results_sim):
             test_AP = test_AP[0]
         i_first_pos = np.where(results_sim['V_mem_raster_x_position']==0) 
         for i in i_first_pos[0]:
-            print(i,results_sim['V_mem_raster_time'][i],test_AP)
             if results_sim['V_mem_raster_time'][i] >= test_AP-0.01 and\
                 results_sim['V_mem_raster_time'][i] <= test_AP+0.7:
                 mask = True
