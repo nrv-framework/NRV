@@ -18,10 +18,10 @@ class nerve:
 
     a nerve can be instrumented by adding couples of electrodes+stimulus
     """
-    def __init__(self, outershape, simulation_box, materials
-        dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0,\
-        mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, T=None, ID=0, threshold=-40,\
-        Adelta_limit=1**kwargs):
+    def __init__(self, outershape, simulation_box, materials,\
+            dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0,\
+            mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, T=None, ID=0, threshold=-40,\
+            Adelta_limit=1,**kwargs):
         """
         Instanciates an empty nerve.
 

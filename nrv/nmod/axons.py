@@ -483,7 +483,7 @@ class axon():
         self.record = False
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False, \
-        record_particles=False, loaded_footprints=False):
+        record_particles=False, record_g_mem = False, record_g_ions=False, loaded_footprints=False):
         """
         Simulates the axon using neuron framework
 
@@ -609,10 +609,13 @@ class axon():
             self.set_membrane_current_recorders()
         if record_I_ions:
             self.set_ionic_current_recorders()
+        if record_g_mem or record_g_ions:
+            self.set_conductance_recorders()
         if record_particles:
             self.set_particules_values_recorders()
             if hasattr(self, 'Markov_Nav_modeled_NoR'):
                 self.set_Nav_recorders()
+
 
         ## initialisation and parameters for neuron - KEEP THIS CODE JUST BEFORE SIMULATION
         neuron.h.tstop = t_sim
@@ -712,6 +715,33 @@ class axon():
                 axon_sim['V_mem'] = self.get_membrane_voltage()
             if record_I_mem or self.record:
                 axon_sim['I_mem'] = self.get_membrane_current()
+            if record_g_mem:
+                axon_sim['g_mem'] = self.get_membrane_conductance()
+            if record_g_ions:
+                if not self.myelinated:
+                    if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
+                        g_na_ax, g_k_ax, g_l_ax = self.get_ionic_conductance()
+                        axon_sim['g_na'] = g_na_ax
+                        axon_sim['g_k'] = g_k_ax
+                        axon_sim['g_l'] = g_l_ax
+                    else:
+                        rise_warning("g_ions recorder not implemented for '" +self.model+ "' model ")     
+                else:
+                    if self.model == 'MRG':
+                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax = self.get_ionic_conductance()
+                        axon_sim['g_na'] = g_na_ax
+                        axon_sim['g_nap'] = g_nap_ax
+                        axon_sim['g_k'] = g_k_ax
+                        axon_sim['g_l'] = g_l_ax
+                    elif self.model in ['Gaines_motor', 'Gaines_sensory']: #, 'Extended_Gaines']:
+                        g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax = self.get_ionic_conductance()
+                        axon_sim['g_na'] = g_na_ax
+                        axon_sim['g_nap'] = g_nap_ax
+                        axon_sim['g_k'] = g_k_ax
+                        axon_sim['g_kf'] = g_kf_ax
+                        axon_sim['g_l'] = g_l_ax
+                    else:
+                        rise_warning("g_ions recorder not implemented for '" +self.model+ "' model ") 
             if record_I_ions:
                 if not self.myelinated:
                     if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
