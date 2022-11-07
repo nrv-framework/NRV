@@ -108,4 +108,4 @@ ax2.legend()
 plt.xlim([0,5])
 plt.savefig('./unitary_tests/figures/93_C.png')
 
-plt.show()
+#plt.show()
