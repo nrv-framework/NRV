@@ -540,6 +540,8 @@ class axon():
             axon_sim['rec'] = self.rec
             axon_sim['x_nodes'] = self.x_nodes
             axon_sim['sequence'] = self.axon_path_type
+            axon_sim['index'] = self.axon_path_index
+            axon_sim['rec_pos_list'] = self.rec_position_list
         # saving intra-cellular stimulation parameters
         axon_sim['intra_stim_positions'] = self.intra_current_stim_positions
         axon_sim['intra_stim_starts'] = self.intra_current_stim_starts
@@ -728,18 +730,20 @@ class axon():
                         rise_warning("g_ions recorder not implemented for '" +self.model+ "' model ")     
                 else:
                     if self.model == 'MRG':
-                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax = self.get_ionic_conductance()
+                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax,g_i_ax = self.get_ionic_conductance()
                         axon_sim['g_na'] = g_na_ax
                         axon_sim['g_nap'] = g_nap_ax
                         axon_sim['g_k'] = g_k_ax
                         axon_sim['g_l'] = g_l_ax
+                        axon_sim['g_i'] = g_i_ax
                     elif self.model in ['Gaines_motor', 'Gaines_sensory']: #, 'Extended_Gaines']:
-                        g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax = self.get_ionic_conductance()
+                        g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax, g_q_ax = self.get_ionic_conductance()
                         axon_sim['g_na'] = g_na_ax
                         axon_sim['g_nap'] = g_nap_ax
                         axon_sim['g_k'] = g_k_ax
                         axon_sim['g_kf'] = g_kf_ax
                         axon_sim['g_l'] = g_l_ax
+                        axon_sim['g_q'] = g_q_ax
                     else:
                         rise_warning("g_ions recorder not implemented for '" +self.model+ "' model ") 
             if record_I_ions:
@@ -761,8 +765,19 @@ class axon():
                         axon_sim['I_nap'] = I_nap_ax
                         axon_sim['I_k'] = I_k_ax
                         axon_sim['I_l'] = I_l_ax
-                    elif self.model in ['Gaines_motor', 'Gaines_sensory', 'Extended_Gaines']:
-                        I_na_ax, I_nap_ax, I_k_ax, I_kf_ax, I_l_ax = self.get_ionic_current()
+                    elif self.model in ['Gaines_motor', 'Gaines_sensory']:
+                        I_na_ax, I_nap_ax, I_k_ax, I_kf_ax, I_q_ax, I_l_ax = self.get_ionic_current()
+                        print('iq('+str(len(I_q_ax))+', '+str(len(I_q_ax[0]))+') = ', I_q_ax)
+                        print('inap('+str(len(I_nap_ax))+', '+str(len(I_nap_ax[0]))+') = ', I_nap_ax)
+                        print('il('+str(len(I_l_ax))+', '+str(len(I_l_ax[0]))+') = ', I_l_ax)
+                        axon_sim['I_na'] = I_na_ax
+                        axon_sim['I_nap'] = I_nap_ax
+                        axon_sim['I_k'] = I_k_ax
+                        axon_sim['I_kf'] = I_kf_ax
+                        axon_sim['I_q'] = I_q_ax
+                        axon_sim['I_l'] = I_l_ax
+                    elif self.model in ['Extended_Gaines']:
+                        I_na_ax, I_nap_ax, I_k_ax, I_kf_ax,I_l_ax = self.get_ionic_current()
                         axon_sim['I_na'] = I_na_ax
                         axon_sim['I_nap'] = I_nap_ax
                         axon_sim['I_k'] = I_k_ax
@@ -842,12 +857,20 @@ class axon():
                         axon_sim['h_nas'] = h_nas_ax
                 else:
                     if self.model == 'MRG':
-                        m_ax, s_ax, h_ax, mp_ax = self.get_particles_values()
+                        m_ax, mp_ax, h_ax, s_ax = self.get_particles_values()
                         axon_sim['m'] = m_ax
-                        axon_sim['s'] = s_ax
-                        axon_sim['h'] = h_ax
                         axon_sim['mp'] = mp_ax
-                    elif self.model in ['Gaines_motor', 'Gaines_sensory', 'Extended_Gaines']:
+                        axon_sim['h'] = h_ax
+                        axon_sim['s'] = s_ax
+                    elif self.model in ['Gaines_motor', 'Gaines_sensory']:
+                        m_ax, mp_ax, h_ax, s_ax, n_ax, q_ax = self.get_particles_values()
+                        axon_sim['m'] = m_ax
+                        axon_sim['mp'] = mp_ax
+                        axon_sim['h'] = h_ax
+                        axon_sim['s'] = s_ax
+                        axon_sim['n'] = n_ax
+                        axon_sim['q'] = q_ax
+                    elif self.model in ['Extended_Gaines']:
                         m_ax, mp_ax, s_ax, h_ax, n_ax = self.get_particles_values()
                         axon_sim['m'] = m_ax
                         axon_sim['mp'] = mp_ax
