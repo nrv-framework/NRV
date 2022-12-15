@@ -16,7 +16,7 @@ z = 0
 d = 6
 L = nrv.get_length_from_nodes(d, 15)
 
-axon1 = nrv.myelinated(y,z,d,L,dt=0.0005 ,Nseg_per_sec=1,rec='nodes')
+axon1 = nrv.myelinated(y,z,d,L,dt=0.0005 ,Nseg_per_sec=1,rec='nodes', model='MRG')
 
 t_start = 2
 duration = 0.1
@@ -34,14 +34,13 @@ gnap_mrg = gnapbar_mrg*np.power(results['mp'],3)
 gks_mrg = gksbar_mrg*results['s']
 
 gm = gnaf_mrg + gnap_mrg + gks_mrg + gl_mrg  # en S.cm-2
-rm = 1/gm       
+rm = 1/gm 
 
 print(np.allclose(gnaf_mrg,results['g_na']))
 print(np.allclose(gnap_mrg,results['g_nap']))
 print(np.allclose(gks_mrg,results['g_k']))
 print(np.allclose(gm,results['g_mem']))
 
- 
 ##### Plots results
 mid_node = 5
 
