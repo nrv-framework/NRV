@@ -83,4 +83,4 @@ plt.grid()
 plt.tight_layout()
 plt.savefig('./unitary_tests/figures/92_B.png')
 
-plt.show()
+#plt.show()
