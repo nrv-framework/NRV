@@ -83,7 +83,7 @@ def save_axon_results_as_json(results,filename):
     """
     json_dump(results, filename)
 
-def load_simulation_from_json(filename):
+def load_simulation_from_json(filename):        
     """
     load results of individual axon simulation from a json. This function is specific to axons simulation as some identified results are automatically converted as numpy arrays.
 
@@ -104,10 +104,11 @@ def load_simulation_from_json(filename):
                     results[key] = []
                 elif isinstance(value[0],str):
                     results[key] = value
-                elif is_iterable(value[0]):
-                    results[key] = np.asarray(value, dtype=object)
                 else:
-                    results[key] = np.asarray(value,dtype=np.float32)
+                    if key in 'rec_pos_list':         
+                        results[key] = value
+                    else:
+                        results[key] = np.asarray(value,dtype=np.float32)
         else:
             results[key] = value
     return results
