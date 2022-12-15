@@ -588,7 +588,77 @@ class unmyelinated(axon):
             results = [i_na_ax, i_k_ax, i_ca_ax]
         return results
 
+    def set_conductance_recorders(self):
+        """
+        Prepare the membrane voltage recording. For internal use only.
+        """
+        if self.model == 'HH':
+            self.g_na_reclist = neuron.h.List()
+            self.g_k_reclist = neuron.h.List()
+            self.g_l_reclist = neuron.h.List()
+            for k in range(self.Nsec):
+                for pos in self.rec_position_list[k]:
+                    g_na_rec = neuron.h.Vector().record(\
+                        self.unmyelinated_sections[k](pos)._ref_gna_hh,\
+                        sec=self.unmyelinated_sections[k])
+                    g_k_rec = neuron.h.Vector().record(\
+                        self.unmyelinated_sections[k](pos)._ref_gk_hh,\
+                        sec=self.unmyelinated_sections[k])
+                    g_l_rec = neuron.h.Vector().record(\
+                       self.unmyelinated_sections[k](pos)._ref_gl_hh,\
+                       sec=self.unmyelinated_sections[k])
+                    self.g_na_reclist.append(g_na_rec)
+                    self.g_k_reclist.append(g_k_rec)
+                    self.g_l_reclist.append(g_l_rec)
+        elif self.model == 'Rattay_Aberham':
+            self.g_na_reclist = neuron.h.List()
+            self.g_k_reclist = neuron.h.List()
+            self.g_l_reclist = neuron.h.List()
+            for k in range(self.Nsec):
+                for pos in self.rec_position_list[k]:
+                    g_na_rec = neuron.h.Vector().record(\
+                        self.unmyelinated_sections[k](pos)._ref_gna_RattayAberham,\
+                        sec=self.unmyelinated_sections[k])
+                    g_k_rec = neuron.h.Vector().record(\
+                        self.unmyelinated_sections[k](pos)._ref_gk_RattayAberham,\
+                        sec=self.unmyelinated_sections[k])
+                    g_l_rec = neuron.h.Vector().record(\
+                       self.unmyelinated_sections[k](pos)._ref_gl_RattayAberham,\
+                       sec=self.unmyelinated_sections[k])
+                    self.g_na_reclist.append(g_na_rec)
+                    self.g_k_reclist.append(g_k_rec)
+                    self.g_l_reclist.append(g_l_rec)
+        else:
+            pass   
 
+    def get_membrane_conductance(self):
+        """
+        get the membrane voltage at the end of simulation. For internal use only.
+        """
+        g_mem_rec = []
+        if self.model in ['HH', 'Rattay_Aberham']:
+            g_mem_rec = np.zeros((self.Nrec, self.t_len))
+            for k in range(self.Nrec):
+                g_mem_rec[k, :] = np.asarray(self.g_na_reclist[k]) + np.asarray(self.g_k_reclist[k])\
+                    + np.asarray(self.g_l_reclist[k])
+        return g_mem_rec
+ 
+    def get_ionic_conductance(self):
+        """
+        get the membrane voltage at the end of simulation. For internal use only.
+        """
+        results = []
+        if self.model in ['HH', 'Rattay_Aberham']:
+            g_na_rec = np.zeros((self.Nrec, self.t_len))
+            g_k_rec = np.zeros((self.Nrec, self.t_len))
+            g_l_rec = np.zeros((self.Nrec, self.t_len))
+            for k in range(self.Nrec):
+                g_na_rec[k, :] = np.asarray(self.g_na_reclist[k])
+                g_k_rec[k, :] = np.asarray(self.g_k_reclist[k])
+                g_l_rec[k, :] = np.asarray(self.g_l_reclist[k])
+            results = [g_na_rec, g_k_rec, g_l_rec]
+        return results 
+        
     def set_particules_values_recorders(self):
         """
         Prepare the particule value recording. For internal use only.
@@ -889,3 +959,4 @@ class unmyelinated(axon):
                     c_kca_ax, n_kd_ax, x_kds_ax, y1_kds_ax, m_naf_ax, h_naf_ax, l_naf_ax,\
                     m_nas_ax, h_nas_ax]
         return results
+

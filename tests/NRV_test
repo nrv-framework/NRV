@@ -74,21 +74,24 @@ if __name__ == "__main__":
             print('--- found access to a COMSOL server')
             
     if args.TARGET:
+        target_script_key = f"{args.TARGET:03}"
+
         ###################################
         ## clean the test/figures folder ##
         ###################################
         if os.path.exists(unit_test_results):
-            shutil.rmtree(unit_test_results)
+            f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
+                '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+            for f in f_fig:
+                os.remove(f)
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
-       
         nrv_cmd = 'nrv2calm '
         if sys.platform == 'darwin':
             python_cmd = 'python3 '
         else:
             python_cmd = 'python3 '
 
-        target_script_key = f"{args.TARGET:03}"
         for test in all_tests:
             if str(target_script_key) in test:
                 print(test)

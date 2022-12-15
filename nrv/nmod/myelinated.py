@@ -891,16 +891,45 @@ class myelinated(axon):
     ##############################
     ## Result recording methods ##
     ##############################
-    def set_membrane_voltage_recorders(self):
+    def _set_recorders_with_key(self, reclist, key=None, single_mod=True, key_node=None,\
+        key_MYSA=None, key_FLUT=None, key_STIN=None):
         """
-        Prepare the membrane voltage recording. For internal use only.
+        To automate the methods set_recorder. For internal use only.
+        Parameters
+        ----------
+        reclist     : neuron.h.List
+            List in witch the reccorders should be saved
+        key         : str
+            Name of the key which should be recorded, if None result of the recording set to [0],
+            by default None
+        single_mod  : bool
+            if True key will be used for all the section, else specific key will be used in each
+            section, by default True
+        key_node    : str
+            Name of the key which should be recorded in node, if None result of the recording set
+            to [0], by default None
+        key_MYSA    : str
+            Name of the key which should be recorded in MYSA, if None result of the recording set
+            to [0], by default None
+        key_FLUT    : str
+            Name of the key which should be recorded in FLUT, if None result of the recording set
+            to [0], by default None
+        key_STIN    : str
+            Name of the key which should be recorded in STIN, if None result of the recording set
+            to [0], by default None
         """
-        self.vreclist = neuron.h.List()
+        if single_mod:
+            key_node, key_MYSA, key_FLUT, key_STIN = key, key, key, key
+
         if self.rec == 'nodes':
+
             # recording only on middle of all nodes
             for n in self.node:
-                vrec = neuron.h.Vector().record(n(0.5)._ref_v, sec=n)
-                self.vreclist.append(vrec)
+                if key_node is not None:
+                    rec = neuron.h.Vector().record(getattr(n(0.5), key_node), sec=n)
+                else:
+                    rec = neuron.h.Vector([0])
+                reclist.append(rec)
         else:
             # recording on all segments
             for k in range(len(self.axon_path_type)):
@@ -908,158 +937,174 @@ class myelinated(axon):
                 sec_index = self.axon_path_index[k]
                 for position in self.rec_position_list[k]:
                     if sec_type == 'node':
-                        vrec = neuron.h.Vector().record(self.node[sec_index](position)._ref_v, \
-                            sec=self.node[sec_index])
-                        self.vreclist.append(vrec)
+                        if key_node is not None:
+                            rec = neuron.h.Vector().record(getattr(self.node[sec_index](position), key_node),\
+                                sec=self.node[sec_index])
+                        else:
+                            rec = neuron.h.Vector([0])
+                        reclist.append(rec)
                     elif sec_type == 'MYSA':
-                        vrec = neuron.h.Vector().record(self.MYSA[sec_index](position)._ref_v, \
-                            sec=self.MYSA[sec_index])
-                        self.vreclist.append(vrec)
+                        if key_MYSA is not None:
+                            rec = neuron.h.Vector().record(getattr(self.MYSA[sec_index](position), key_MYSA), \
+                                sec=self.MYSA[sec_index])
+                        else:
+                            rec = neuron.h.Vector([0])                            
+                        reclist.append(rec)
                     elif sec_type == 'FLUT':
-                        vrec = neuron.h.Vector().record(self.FLUT[sec_index](position)._ref_v, \
-                            sec=self.FLUT[sec_index])
-                        self.vreclist.append(vrec)
+                        if key_FLUT is not None:
+                            rec = neuron.h.Vector().record(getattr(self.FLUT[sec_index](position), key_FLUT), \
+                                sec=self.FLUT[sec_index])
+                        else:
+                            rec = neuron.h.Vector([0]) 
+                        reclist.append(rec)
                     else: # should be STIN
-                        vrec = neuron.h.Vector().record(self.STIN[sec_index](position)._ref_v, \
-                            sec=self.STIN[sec_index])
-                        self.vreclist.append(vrec)
+                        if key_STIN is not None:
+                            rec = neuron.h.Vector().record(getattr(self.STIN[sec_index](position), key_STIN), \
+                                sec=self.STIN[sec_index])
+                        else:
+                            rec = neuron.h.Vector([0]) 
+                        reclist.append(rec)
+
+    def _get_recorders_from_list(self, reclist):
+        """
+        Convert reclist in np.array To automate methods set_recorder. For internal use only.
+        Parameters
+        ----------
+        reclist     : neuron.h.List
+            List in witch the reccorders are saved
+        
+        Returns
+        -------
+        val         : np.array
+            array of every recorded value for all rec point and time
+        """
+        if self.rec == 'nodes':
+            dim = (self.axonnodes, self.t_len)
+        else:
+            dim = (len(self.x_rec), self.t_len)
+
+        val = np.zeros(dim)
+        for k in range(dim[0]):
+            val[k, :] = np.asarray(reclist[k])
+        return val
+
+    def _get_var_from_mod(self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None):
+        """
+        return a column with value in every recording point of a constant from a mod. For internal use only.
+        """
+        if self.rec == 'nodes':
+            val = np.zeros((len(self.node),1))
+            if key_node is not None:
+                val[:,0] = getattr(self.node[0](0.5), key_node)[0]
+        else:
+            val = np.zeros((len(self.x_rec), 1))
+            i=-1
+            for k in range(len(self.axon_path_type)):
+                sec_type = self.axon_path_type[k]
+                sec_index = self.axon_path_index[k]
+                for position in self.rec_position_list[k]:
+                    i += 1
+                    if sec_type == 'node':
+                        if key_node is not None:
+                            val[i,0] = getattr(self.node[sec_index](position), key_node)[0]
+                    elif sec_type == 'MYSA':
+                        if key_MYSA is not None:
+                            val[i,0] = getattr(self.MYSA[sec_index](position), key_MYSA)[0]
+                    elif sec_type == 'FLUT':
+                        if key_FLUT is not None:
+                            val[i,0] = getattr(self.FLUT[sec_index](position), key_FLUT)[0]
+                    else: # should be STIN
+                        if key_STIN is not None:
+                            val[i,0] = getattr(self.STIN[sec_index](position), key_STIN)[0]
+        return val
+
+    def set_membrane_voltage_recorders(self):
+        """
+        Prepare the membrane voltage recording. For internal use only.
+        """
+        self.vreclist = neuron.h.List()
+        key = '_ref_v'
+        self._set_recorders_with_key(self.vreclist, key)
 
     def get_membrane_voltage(self):
         """
         get the membrane voltage at the end of simulation. For internal use only.
         """
-        if self.rec == 'nodes':
-            vax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                vax[k, :] = np.asarray(self.vreclist[k])
-        else:
-            vax = np.zeros((len(self.x_rec), self.t_len))
-            for k in range(len(self.x_rec)):
-                vax[k, :] = np.asarray(self.vreclist[k])
-        return vax
+        return self._get_recorders_from_list(self.vreclist)
 
     def set_membrane_current_recorders(self):
         """
         Prepare the membrane current recording. For internal use only.
         """
         self.ireclist = neuron.h.List()
-        if self.rec == 'nodes':
-            # recording only on middle of all nodes
-            for n in self.node:
-                irec = neuron.h.Vector().record(n(0.5)._ref_i_membrane, sec=n)
-                self.ireclist.append(irec)
-        else:
-            # recording on all segments
-            for k in range(len(self.axon_path_type)):
-                sec_type = self.axon_path_type[k]
-                sec_index = self.axon_path_index[k]
-                for position in self.rec_position_list[k]:
-                    if sec_type == 'node':
-                        irec = neuron.h.Vector().record(\
-                            self.node[sec_index](position)._ref_i_membrane,\
-                             sec=self.node[sec_index])
-                        self.ireclist.append(irec)
-                    elif sec_type == 'MYSA':
-                        irec = neuron.h.Vector().record(\
-                            self.MYSA[sec_index](position)._ref_i_membrane,\
-                            sec=self.MYSA[sec_index])
-                        self.ireclist.append(irec)
-                    elif sec_type == 'FLUT':
-                        irec = neuron.h.Vector().record(\
-                            self.FLUT[sec_index](position)._ref_i_membrane,\
-                            sec=self.FLUT[sec_index])
-                        self.ireclist.append(irec)
-                    else: # should be STIN
-                        irec = neuron.h.Vector().record(\
-                            self.STIN[sec_index](position)._ref_i_membrane,\
-                            sec=self.STIN[sec_index])
-                        self.ireclist.append(irec)
+        key = '_ref_i_membrane'
+        self._set_recorders_with_key(self.ireclist, key)
 
     def get_membrane_current(self):
         """
         get the membrane current at the end of simulation. For internal use only.
         """
-        if self.rec == 'nodes':
-            iax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                iax[k, :] = np.asarray(self.ireclist[k])
-        else:
-            iax = np.zeros((len(self.x_rec), self.t_len))
-            for k in range(len(self.x_rec)):
-                iax[k, :] = np.asarray(self.ireclist[k])
-        return iax
+        return self._get_recorders_from_list(self.ireclist)
+
 
     def set_ionic_current_recorders(self):
         """
         Prepare the ionic channels current recording. For internal use only.
         """
         if self.model == 'MRG':
-            self.axnode_ina_reclist = neuron.h.List()
-            self.axnode_inap_reclist = neuron.h.List()
-            self.axnode_ik_reclist = neuron.h.List()
-            self.axnode_il_reclist = neuron.h.List()
-            for n in self.node:
-                axnode_ina = neuron.h.Vector().record(n(0.5)._ref_ina_axnode, sec=n)
-                axnode_inap = neuron.h.Vector().record(n(0.5)._ref_inap_axnode, sec=n)
-                axnode_ik = neuron.h.Vector().record(n(0.5)._ref_ik_axnode, sec=n)
-                axnode_il = neuron.h.Vector().record(n(0.5)._ref_il_axnode, sec=n)
-                self.axnode_ina_reclist.append(axnode_ina)
-                self.axnode_inap_reclist.append(axnode_inap)
-                self.axnode_ik_reclist.append(axnode_ik)
-                self.axnode_il_reclist.append(axnode_il)
+            self.ina_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.ina_reclist, single_mod=False, key_node='_ref_ina_axnode')
+            self.inap_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.inap_reclist, single_mod=False, key_node='_ref_inap_axnode')
+            self.ik_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.ik_reclist, single_mod=False, key_node='_ref_ik_axnode')
+            self.il_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.il_reclist, single_mod=False, key_node='_ref_il_axnode')
         else: #should be Gaines, motor or sensory
-            self.gaines_ina_reclist = neuron.h.List()
-            self.gaines_inap_reclist = neuron.h.List()
-            self.gaines_ik_reclist = neuron.h.List()
-            self.gaines_ikf_reclist = neuron.h.List()
-            self.gaines_il_reclist = neuron.h.List()
-            for n in self.node:
-                if self. model == 'Gaines_motor':
-                    gaines_ina = neuron.h.Vector().record(n(0.5)._ref_ina_node_motor, sec=n)
-                    gaines_inap = neuron.h.Vector().record(n(0.5)._ref_inap_node_motor, sec=n)
-                    gaines_ik = neuron.h.Vector().record(n(0.5)._ref_ik_node_motor, sec=n)
-                    gaines_ikf = neuron.h.Vector().record(n(0.5)._ref_ikf_node_motor, sec=n)
-                    gaines_il = neuron.h.Vector().record(n(0.5)._ref_il_node_motor, sec=n)
-                else: # should be Gaines_sensory
-                    gaines_ina = neuron.h.Vector().record(n(0.5)._ref_ina_node_sensory, sec=n)
-                    gaines_inap = neuron.h.Vector().record(n(0.5)._ref_inap_node_sensory, sec=n)
-                    gaines_ik = neuron.h.Vector().record(n(0.5)._ref_ik_node_sensory, sec=n)
-                    gaines_ikf = neuron.h.Vector().record(n(0.5)._ref_ikf_node_sensory, sec=n)
-                    gaines_il = neuron.h.Vector().record(n(0.5)._ref_il_node_sensory, sec=n)
-                self.gaines_ina_reclist.append(gaines_ina)
-                self.gaines_inap_reclist.append(gaines_inap)
-                self.gaines_ik_reclist.append(gaines_ik)
-                self.gaines_ikf_reclist.append(gaines_ikf)
-                self.gaines_il_reclist.append(gaines_il)
+            if self. model == 'Gaines_motor':
+                key_mod = '_motor'
+            else: 
+                key_mod = '_sensory'
+            self.ina_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.ina_reclist, single_mod=False,\
+                key_node='_ref_ina_node'+key_mod)
+            
+            self.inap_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.inap_reclist, single_mod=False,\
+                key_node='_ref_inap_node'+key_mod)
+            
+            self.ik_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.ik_reclist, single_mod=False,\
+                key_node='_ref_ik_node'+key_mod, key_MYSA='_ref_ik_mysa'+key_mod,\
+                key_FLUT='_ref_ik_flut'+key_mod, key_STIN='_ref_ik_stin'+key_mod)
+                        
+            self.ikf_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.ikf_reclist, single_mod=False,\
+                key_node='_ref_ikf_node'+key_mod,key_MYSA='_ref_ikf_mysa'+key_mod,\
+                key_FLUT='_ref_ikf_flut'+key_mod, key_STIN='_ref_ikf_stin'+key_mod)
+            
+            self.iq_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.iq_reclist, single_mod=False,\
+                key_MYSA='_ref_iq_mysa'+key_mod, key_FLUT='_ref_iq_flut'+key_mod,\
+                key_STIN='_ref_iq_stin'+key_mod)
+            
+            self.il_reclist = neuron.h.List()
+            self._set_recorders_with_key(self.il_reclist, single_mod=False,\
+                key_node='_ref_il_node'+key_mod, key_MYSA='_ref_il_mysa'+key_mod,\
+                key_FLUT='_ref_il_flut'+key_mod, key_STIN='_ref_il_stin'+key_mod)
 
     def get_ionic_current(self):
         """
         get the ionic channels currents at the end of simulation. For internal use only.
         """
-        if self.model == 'MRG':
-            axnode_ina_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_inap_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_ik_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_il_ax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                axnode_ina_ax[k, :] = np.asarray(self.axnode_ina_reclist[k])
-                axnode_inap_ax[k, :] = np.asarray(self.axnode_inap_reclist[k])
-                axnode_ik_ax[k, :] = np.asarray(self.axnode_ik_reclist[k])
-                axnode_il_ax[k, :] = np.asarray(self.axnode_il_reclist[k])
-            results = [axnode_ina_ax, axnode_inap_ax, axnode_ik_ax, axnode_il_ax]
-        else:
-            gaines_ina_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_inap_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_ik_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_ikf_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_il_ax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                gaines_ina_ax[k, :] = np.asarray(self.gaines_ina_reclist[k])
-                gaines_inap_ax[k, :] = np.asarray(self.gaines_inap_reclist[k])
-                gaines_ik_ax[k, :] = np.asarray(self.gaines_ik_reclist[k])
-                gaines_ikf_ax[k, :] = np.asarray(self.gaines_ikf_reclist[k])
-                gaines_il_ax[k, :] = np.asarray(self.gaines_il_reclist[k])
-            results = [gaines_ina_ax, gaines_inap_ax, gaines_ik_ax, gaines_ikf_ax, gaines_il_ax]
+        results = []
+        results += [self._get_recorders_from_list(self.ina_reclist)]
+        results += [self._get_recorders_from_list(self.inap_reclist)]
+        results += [self._get_recorders_from_list(self.ik_reclist)]
+        if  self.model == 'Gaines_motor' or self.model == 'Gaines_sensory':
+            results += [self._get_recorders_from_list(self.ikf_reclist)]
+            results += [self._get_recorders_from_list(self.iq_reclist)]
+        results += [self._get_recorders_from_list(self.il_reclist)]
         return results
 
     def set_particules_values_recorders(self):
@@ -1067,74 +1112,126 @@ class myelinated(axon):
         Prepare the particules current recording. For internal use only.
         """
         if self.model == 'MRG':
-            self.axnode_mreclist = neuron.h.List()
-            self.axnode_sreclist = neuron.h.List()
-            self.axnode_hreclist = neuron.h.List()
-            self.axnode_mpreclist = neuron.h.List()
-            for n in self.node:
-                axonde_m = neuron.h.Vector().record(n(0.5)._ref_m_axnode, sec=n)
-                axonde_s = neuron.h.Vector().record(n(0.5)._ref_s_axnode, sec=n)
-                axonde_h = neuron.h.Vector().record(n(0.5)._ref_h_axnode, sec=n)
-                axonde_mp = neuron.h.Vector().record(n(0.5)._ref_mp_axnode, sec=n)
-                self.axnode_mreclist.append(axonde_m)
-                self.axnode_sreclist.append(axonde_s)
-                self.axnode_hreclist.append(axonde_h)
-                self.axnode_mpreclist.append(axonde_mp)
-        else:
-            self.gaines_mreclist = neuron.h.List()
-            self.gaines_mpreclist = neuron.h.List()
-            self.gaines_sreclist = neuron.h.List()
-            self.gaines_hreclist = neuron.h.List()
-            self.gaines_nreclist = neuron.h.List()
-            for n in self.node:
-                if self.model == 'Gaines_motor':
-                    gaines_m = neuron.h.Vector().record(n(0.5)._ref_m_node_motor, sec=n)
-                    gaines_mp = neuron.h.Vector().record(n(0.5)._ref_mp_node_motor, sec=n)
-                    gaines_s = neuron.h.Vector().record(n(0.5)._ref_s_node_motor, sec=n)
-                    gaines_h = neuron.h.Vector().record(n(0.5)._ref_h_node_motor, sec=n)
-                    gaines_n = neuron.h.Vector().record(n(0.5)._ref_n_node_motor, sec=n)
-                else:
-                    gaines_m = neuron.h.Vector().record(n(0.5)._ref_m_node_sensory, sec=n)
-                    gaines_mp = neuron.h.Vector().record(n(0.5)._ref_mp_node_sensory, sec=n)
-                    gaines_s = neuron.h.Vector().record(n(0.5)._ref_s_node_sensory, sec=n)
-                    gaines_h = neuron.h.Vector().record(n(0.5)._ref_h_node_sensory, sec=n)
-                    gaines_n = neuron.h.Vector().record(n(0.5)._ref_n_node_sensory, sec=n)
-                self.gaines_mreclist.append(gaines_m)
-                self.gaines_mpreclist.append(gaines_mp)
-                self.gaines_sreclist.append(gaines_s)
-                self.gaines_hreclist.append(gaines_h)
-                self.gaines_nreclist.append(gaines_n)
+            self.mreclist = neuron.h.List()
+            self._set_recorders_with_key(self.mreclist, single_mod=False, key_node='_ref_m_axnode')
+            self.mpreclist = neuron.h.List()
+            self._set_recorders_with_key(self.mpreclist, single_mod=False, key_node='_ref_mp_axnode')
+            self.hreclist = neuron.h.List()
+            self._set_recorders_with_key(self.hreclist, single_mod=False, key_node='_ref_h_axnode')
+            self.sreclist = neuron.h.List()
+            self._set_recorders_with_key(self.sreclist, single_mod=False, key_node='_ref_s_axnode')
+
+        else: #should be Gaines, motor or sensory
+            if self. model == 'Gaines_motor':
+                key_mod = '_motor'
+            else: 
+                key_mod = '_sensory'
+
+            self.mreclist = neuron.h.List()
+            self._set_recorders_with_key(self.mreclist, single_mod=False,\
+                key_node='_ref_m_node'+key_mod)
+
+            self.mpreclist = neuron.h.List()
+            self._set_recorders_with_key(self.mpreclist, single_mod=False,\
+                key_node='_ref_mp_node'+key_mod)
+
+            self.hreclist = neuron.h.List()
+            self._set_recorders_with_key(self.hreclist, single_mod=False,\
+                key_node='_ref_h_node'+key_mod)
+
+            self.sreclist = neuron.h.List()
+            self._set_recorders_with_key(self.sreclist, single_mod=False,\
+                key_node='_ref_s_node'+key_mod, key_MYSA='_ref_s_mysa'+key_mod,\
+                key_FLUT='_ref_s_flut'+key_mod, key_STIN='_ref_s_stin'+key_mod)
+
+            self.nreclist = neuron.h.List()
+            self._set_recorders_with_key(self.nreclist, single_mod=False,\
+                key_node='_ref_n_node'+key_mod, key_MYSA='_ref_n_mysa'+key_mod,\
+                key_FLUT='_ref_n_flut'+key_mod, key_STIN='_ref_n_stin'+key_mod)
+
+            self.qreclist = neuron.h.List()
+            self._set_recorders_with_key(self.qreclist, single_mod=False,\
+                key_MYSA='_ref_q_mysa'+key_mod, key_FLUT='_ref_q_flut'+key_mod,\
+                key_STIN='_ref_q_stin'+key_mod)
 
     def get_particles_values(self):
         """
         get the particules values at the end of simulation. For internal use only.
         """
+        results = []
+        results += [self._get_recorders_from_list(self.mreclist)]
+        results += [self._get_recorders_from_list(self.mpreclist)]
+        results += [self._get_recorders_from_list(self.hreclist)]
+        results += [self._get_recorders_from_list(self.sreclist)]
+        if  self.model == 'Gaines_motor' or self.model == 'Gaines_sensory':
+            results += [self._get_recorders_from_list(self.nreclist)]
+            results += [self._get_recorders_from_list(self.qreclist)]
+        return results
+    
+
+    def set_conductance_recorders(self):
+        """
+        Prepare the ionic channels conductance recording. For internal use only.
+        """
+        self.set_particules_values_recorders()
+
+
+
+    def get_ionic_conductance(self):
+        """
+        get the ionic channels conductance at the end of simulation. For internal use only.
+        """
         if self.model == 'MRG':
-            axnode_m_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_s_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_h_ax = np.zeros((self.axonnodes, self.t_len))
-            axnode_mp_ax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                axnode_m_ax[k, :] = np.asarray(self.axnode_mreclist[k])
-                axnode_s_ax[k, :] = np.asarray(self.axnode_sreclist[k])
-                axnode_h_ax[k, :] = np.asarray(self.axnode_hreclist[k])
-                axnode_mp_ax[k, :] = np.asarray(self.axnode_mpreclist[k])
-            results = [axnode_m_ax, axnode_s_ax, axnode_h_ax, axnode_mp_ax]
-        else:
-            gaines_m_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_mp_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_s_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_h_ax = np.zeros((self.axonnodes, self.t_len))
-            gaines_n_ax = np.zeros((self.axonnodes, self.t_len))
-            for k in range(self.axonnodes):
-                gaines_m_ax[k, :] = np.asarray(self.gaines_mreclist[k])
-                gaines_mp_ax[k, :] = np.asarray(self.gaines_mpreclist[k])
-                gaines_s_ax[k, :] = np.asarray(self.gaines_sreclist[k])
-                gaines_h_ax[k, :] = np.asarray(self.gaines_hreclist[k])
-                gaines_n_ax[k, :] = np.asarray(self.gaines_nreclist[k])
-            results = [gaines_m_ax, gaines_mp_ax, gaines_s_ax, gaines_h_ax, gaines_n_ax]
+            m_ax, mp_ax, h_ax, s_ax = self.get_particles_values()
+            gnabar = self._get_var_from_mod(key_node='_ref_gnabar_axnode')
+            gnapbar = self._get_var_from_mod(key_node='_ref_gnapbar_axnode')
+            gkbar = self._get_var_from_mod(key_node='_ref_gkbar_axnode')
+            glbar = self._get_var_from_mod(key_node='_ref_gl_axnode')
+            gibar = self._get_var_from_mod(key_MYSA='_ref_g_pas', key_FLUT='_ref_g_pas', key_STIN='_ref_g_pas')
+            g_na_ax = gnabar * m_ax**3 * h_ax
+            g_nap_ax = gnapbar * mp_ax**3
+            g_k_ax = gkbar * s_ax
+            g_l_ax = glbar * np.ones((len(glbar), self.t_len))
+            g_i_ax = gibar * np.ones((len(gibar), self.t_len))
+
+            results = [g_na_ax, g_nap_ax, g_k_ax, g_l_ax, g_i_ax]
+        else: #should be Gaines, motor or sensory
+            m_ax, mp_ax, h_ax, s_ax, n_ax, q_ax = self.get_particles_values()
+            
+            if self. model == 'Gaines_motor':
+                key_mod = '_motor'
+            else: 
+                key_mod = '_sensory'
+
+            gnabar = self._get_var_from_mod(key_node='_ref_gnabar_node'+key_mod)
+            gnapbar = self._get_var_from_mod(key_node='_ref_gnapbar_node'+key_mod)
+            gkbar = self._get_var_from_mod(key_node='_ref_gkbar_node'+key_mod,\
+                key_MYSA='_ref_gkbar_mysa'+key_mod, key_FLUT='_ref_gkbar_flut'+key_mod,\
+                key_STIN='_ref_gkbar_stin'+key_mod)
+            gkfbar = self._get_var_from_mod(key_node='_ref_gkf_node'+key_mod,\
+                key_MYSA='_ref_gkf_mysa'+key_mod, key_FLUT='_ref_gkf_flut'+key_mod,\
+                key_STIN='_ref_gkf_stin'+key_mod)
+            glbar = self._get_var_from_mod(key_node='_ref_gl_node'+key_mod,\
+                key_MYSA='_ref_gl_mysa'+key_mod, key_FLUT='_ref_gl_flut'+key_mod,\
+                key_STIN='_ref_gl_stin'+key_mod)
+            gqbar = self._get_var_from_mod(key_MYSA='_ref_gq_mysa'+key_mod,\
+                key_FLUT='_ref_gq_flut'+key_mod, key_STIN='_ref_gq_stin'+key_mod)
+
+            g_na_ax = gnabar * m_ax**3 * h_ax
+            g_nap_ax = gnapbar * mp_ax**3
+            g_k_ax = gkbar * s_ax
+            g_kf_ax = gkfbar * n_ax**3
+            g_l_ax = glbar * np.ones((len(glbar), self.t_len))
+            g_q_ax = gqbar * q_ax
+
+            results = [g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax, g_q_ax]            
         return results
 
+    def get_membrane_conductance(self):
+        """
+        get the total membrane conductance at the end of simulation. For internal use only.
+        """
+        return sum(self.get_ionic_conductance())
 
     def set_Nav_recorders(self):
         """

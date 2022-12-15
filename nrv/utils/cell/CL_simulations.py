@@ -3,25 +3,22 @@ NRV-Cellular Level simulations
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-from .axons import *
-from .unmyelinated import *
-from .myelinated import *
-from .extracellular import *
-from .electrodes import *
-from .materials import *
-from .stimulus import *
+
+from ...nmod.axons import *
+from ...nmod.unmyelinated import *
+from ...nmod.myelinated import *
+
+from ...fmod.extracellular import *
+from ...fmod.electrodes import *
+from ...fmod.materials import *
+from ...fmod.stimulus import *
+
+from ...backend.MCore import *
+from ...backend.log_interface import rise_error, rise_warning, pass_info
+
+from ..saving_handler import *
 from .CL_postprocessing import *
-from .MCore import *
-from .log_interface import rise_error, rise_warning, pass_info
 from .CL_discretization import *
-from .saving_handler import *
-import numpy as np
-import time
-import sys
-import time as t
-from typing import Iterable
-import os
-import copy
 
 unmyelinated_models=['HH','Rattay_Aberham','Sundt','Tigerholm','Schild_94','Schild_97']
 myelinated_models=['MRG','Gaines_motor','Gaines_sensory']
@@ -536,7 +533,7 @@ def para_firing_threshold(diameter,L,material,dist_elec,cath_first=True,cath_tim
 		start = 1
 		I_cathod = current_amp
 		I_anod = I_cathod/cath_an_ratio
-		stim_1.biphasic_pulse(start, I_cathod, cath_time, I_anod, t_inter,anod_first=anod_first)
+		stim_1.biphasic_pulse(start, I_cathod, cath_time, I_anod, t_inter,anod_first=(not cath_first))
 
 		stim_extra = stimulation(extra_material)
 		stim_extra.add_electrode(elec_1,stim_1)
