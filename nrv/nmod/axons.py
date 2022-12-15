@@ -730,7 +730,7 @@ class axon():
                         rise_warning("g_ions recorder not implemented for '" +self.model+ "' model ")     
                 else:
                     if self.model == 'MRG':
-                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax,g_i_ax = self.get_ionic_conductance()
+                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax, g_i_ax = self.get_ionic_conductance()
                         axon_sim['g_na'] = g_na_ax
                         axon_sim['g_nap'] = g_nap_ax
                         axon_sim['g_k'] = g_k_ax
@@ -767,9 +767,6 @@ class axon():
                         axon_sim['I_l'] = I_l_ax
                     elif self.model in ['Gaines_motor', 'Gaines_sensory']:
                         I_na_ax, I_nap_ax, I_k_ax, I_kf_ax, I_q_ax, I_l_ax = self.get_ionic_current()
-                        print('iq('+str(len(I_q_ax))+', '+str(len(I_q_ax[0]))+') = ', I_q_ax)
-                        print('inap('+str(len(I_nap_ax))+', '+str(len(I_nap_ax[0]))+') = ', I_nap_ax)
-                        print('il('+str(len(I_l_ax))+', '+str(len(I_l_ax[0]))+') = ', I_l_ax)
                         axon_sim['I_na'] = I_na_ax
                         axon_sim['I_nap'] = I_nap_ax
                         axon_sim['I_k'] = I_k_ax

@@ -1182,24 +1182,21 @@ class myelinated(axon):
         get the ionic channels conductance at the end of simulation. For internal use only.
         """
         if self.model == 'MRG':
-            m_ax, s_ax, h_ax, mp_ax = self.get_particles_values()
+            m_ax, mp_ax, h_ax, s_ax = self.get_particles_values()
             gnabar = self._get_var_from_mod(key_node='_ref_gnabar_axnode')
             gnapbar = self._get_var_from_mod(key_node='_ref_gnapbar_axnode')
             gkbar = self._get_var_from_mod(key_node='_ref_gkbar_axnode')
-            glbar = self._get_var_from_mod(key_node='_ref_gkbar_axnode')
+            glbar = self._get_var_from_mod(key_node='_ref_gl_axnode')
             gibar = self._get_var_from_mod(key_MYSA='_ref_g_pas', key_FLUT='_ref_g_pas', key_STIN='_ref_g_pas')
-
             g_na_ax = gnabar * m_ax**3 * h_ax
             g_nap_ax = gnapbar * mp_ax**3
             g_k_ax = gkbar * s_ax
             g_l_ax = glbar * np.ones((len(glbar), self.t_len))
             g_i_ax = gibar * np.ones((len(gibar), self.t_len))
 
-            print(np.shape(m_ax), np.shape(gnabar), np.shape(g_na_ax))
-
             results = [g_na_ax, g_nap_ax, g_k_ax, g_l_ax, g_i_ax]
         else: #should be Gaines, motor or sensory
-            m_ax, mp_ax, s_ax, h_ax, n_ax, q_ax = self.get_particles_values()
+            m_ax, mp_ax, h_ax, s_ax, n_ax, q_ax = self.get_particles_values()
             
             if self. model == 'Gaines_motor':
                 key_mod = '_motor'
