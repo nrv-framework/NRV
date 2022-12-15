@@ -10,8 +10,10 @@ import numpy as np
 from pylab import argmin,argmax
 from scipy import signal
 from numba import jit
-from .file_handler import json_dump, json_load, is_iterable
-from .log_interface import rise_error, rise_warning, pass_info
+from ...backend.file_handler import json_dump, json_load, is_iterable
+from ...backend.log_interface import rise_error, rise_warning, pass_info
+from ...nmod.myelinated import get_MRG_parameters
+from ..units import *
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
@@ -102,6 +104,8 @@ def load_simulation_from_json(filename):
                     results[key] = []
                 elif isinstance(value[0],str):
                     results[key] = value
+                elif is_iterable(value[0]):
+                    results[key] = np.asarray(value, dtype=object)
                 else:
                     results[key] = np.asarray(value,dtype=np.float32)
         else:
@@ -768,6 +772,75 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
         save_axon_results_as_json(axon_state, saving_file)
 
     return axon_state
+
+################################
+## Impedance Characterisation ##
+################################
+
+def get_membrane_capacitance(results_sim):
+    """
+
+    """
+    N = len(results_sim['x_rec'])
+    if not results_sim['myelinated']:
+        C = np.ones((N,1))                      # uF.cm-2
+    else:
+        d = results_sim['diameter']
+        g, axonD, nodeD, paraD1, paraD2, deltax, paralength2, nl = get_MRG_parameters(d)
+        C = np.zeros((N,1))
+        i=0
+        for k in range(len(results_sim['sequence'])):
+            sec_type = results_sim['sequence'][k]
+            for position in results_sim['rec_pos_list'][k]:
+                if sec_type == 'node':
+                    C[i,0] = 2                  # uF.cm-2
+                elif sec_type == 'MYSA':
+                    C[i,0] = (2 * paraD1 / d)   # uF.cm-2 
+                elif sec_type == 'FLUT':
+                    C[i,0] = (2 * paraD2 / d)   # uF.cm-2
+                elif sec_type == 'STIN':
+                    C[i,0] =(2 * axonD / d)     # uF.cm-2
+                i+=1
+    return C
+
+def get_myeline_caracteristics(results_sim):
+    """
+
+    """
+    N = len(results_sim['x_rec'])
+    if not results_sim['myelinated']:
+        Cmy = np.zeros((N,1)) # uF.cm-2
+        gmy = 1e10 *  np.ones((N,1)) 
+        rise_warning('Warning: no myieline for unmylinated fiber ')
+    else:
+        d = results_sim['diameter']
+        _, _, _, _, _, _, _, nl = get_MRG_parameters(d)
+        i=0
+        Cmy = np.zeros((N,1))
+        gmy = np.zeros((N,1))
+        for k in range(len(results_sim['sequence'])):
+            sec_type = results_sim['sequence'][k]
+            for position in results_sim['rec_pos_list'][k]:
+                if sec_type == 'node':
+                    gmy[i,0] = 1e10   # S.cm-2
+                else:
+                    Cmy[i,0] = 0.1/(nl*2)   # uF.cm-2
+                    gmy[i,0] = 0.001/(nl*2)  # S.cm-2
+                i+=1
+    return Cmy, gmy
+
+def membrane_cutoff_frequency(results_sim, C=None, myelin=False):
+    """
+
+    """
+    g_mem = results_sim['g_mem']
+    N = len(g_mem)
+    if C is None:
+        C = get_membrane_capacitance(results_sim)
+    fc = g_mem/(2*np.pi*C)
+    print(np.shape(g_mem), np.shape(C), np.shape(fc))
+    return fc
+
 
 #############################
 ## VISUALIZATION FUNCTIONS ##
