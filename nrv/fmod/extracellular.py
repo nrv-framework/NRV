@@ -8,7 +8,9 @@ import numpy as np
 from .electrodes import *
 from .stimulus import *
 from .materials import *
-from .FEM import *
+from .FEM.FEM import *
+from .FEM.COMSOL_model import *
+from .FEM.FENICS_model import *
 from ..backend.MCore import *
 from ..backend.file_handler import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
@@ -381,7 +383,7 @@ class FEM_stimulation(extracellular_context):
     - a list of electrode(s)
     - a list of corresponding current stimuli
     """
-    def __init__(self, model_fname, endo_mat='endoneurium_ranck',\
+    def __init__(self, model_fname='', endo_mat='endoneurium_ranck',\
         peri_mat='perineurium', epi_mat='epineurium', ext_mat='saline',comsol=True):
         """
         Implement a FEM_based_stimulation object.
@@ -424,10 +426,13 @@ class FEM_stimulation(extracellular_context):
 
         self.type ="FEM_stim"
         self.comsol=comsol
+        self.fenics = not comsol
         ## load model
         if MCH.do_master_only_work():
-            if comsol:
+            if self.comsol:
                 self.model = COMSOL_model(self.model_fname)
+            else:
+                self.model = FENICS_model()
         else:
             # check that COMSOL is not turned OFF in order to continue
             if not COMSOL_Status:
@@ -435,7 +440,7 @@ class FEM_stimulation(extracellular_context):
 
     def __del__(self):
         if MCH.do_master_only_work() and COMSOL_Status and self.comsol: #added for safe del in case of COMSOL status turned OFF
-            self.model.close()
+            del self.model
 
     ## Save and Load mehtods
 
