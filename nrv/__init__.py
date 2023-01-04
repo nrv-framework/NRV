@@ -18,9 +18,18 @@ from .backend import compileMods
 from .fmod.materials import *
 from .fmod.electrodes import *
 from .fmod.stimulus import *
-from .fmod.FEM import *
 from .fmod.extracellular import *
 from .fmod.recording import *
+from .fmod.FEM.FEM import *
+from .fmod.FEM.COMSOL_model import *
+from .fmod.FEM.FENICS_model import *
+######### May not be requiered at the end ###############
+from .fmod.FEM.mesh_creator.MshCreator import *
+from .fmod.FEM.mesh_creator.NerveMshCreator import *
+from .fmod.FEM.fenics_utils.FEMSimulation import *    
+from .fmod.FEM.fenics_utils.SimParameters import *
+from .fmod.FEM.fenics_utils.SimResult import *
+########################################################
 
 from .nmod.axons import *
 from .nmod.unmyelinated import *
@@ -29,7 +38,6 @@ from .nmod.thin_myelinated import *
 from .nmod.fascicles import *
 from .nmod.fascicle_generator import *
 from .nmod.nerves import *
-
 
 
 from .utils.saving_handler import *
