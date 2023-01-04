@@ -94,6 +94,16 @@ if __name__ == "__main__":
                 os.remove(f)
         if not os.path.exists(unit_test_figures):
             os.makedirs(unit_test_figures)
+        if os.path.exists(unit_test_results):
+            f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
+                '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+            for f in f_fig:
+                os.remove(f)
+        if not os.path.exists(unit_test_results):
+            os.makedirs(unit_test_results)
+            os.makedirs(unit_test_results+'mesh/')
+            os.makedirs(unit_test_results+'outputs/')
+
         nrv_cmd = 'nrv2calm '
         if sys.platform == 'darwin':
             python_cmd = 'python3 '
