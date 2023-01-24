@@ -66,7 +66,7 @@ sim1 = nrv.FEMSimulation(data=data)
 jstim = 20
 sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
 
-res1 = sim1.solve_and_save_sim(out_file,plot=False, overwrite=True)
+res1 = sim1.solve_and_save_sim(out_file)
 
 
 
@@ -94,7 +94,7 @@ data = param.save_SimParameters()
 sim2 = nrv.FEMSimulation(data=data)
 sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
 
-res2 = sim2.solve_and_save_sim("",save=False, overwrite=True)
+res2 = sim2.solve()
 
 t3 = time.time()
 print('FEM 2 solved in '+str(t3 - t2)+' s')
@@ -102,7 +102,7 @@ print('FEM 2 solved in '+str(t3 - t2)+' s')
 ## third FEM Simulation 
 sim3 = nrv.FEMSimulation(data=data)
 sim3.prepare_sim(jstim=jstim, _jstim=-jstim)
-res3 = sim3.solve_and_save_sim("",save=False, overwrite=True)
+res3 = sim3.solve()
 
 t4 = time.time()
 print('FEM 3 solved in '+str(t4 - t3)+' s')

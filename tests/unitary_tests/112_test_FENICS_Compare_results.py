@@ -64,7 +64,7 @@ jstim = 20
 sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
 
 
-sim1.solve_and_save_sim(out_file1,plot=False, overwrite=True)
+sim1.solve_and_save_sim(out_file1)
 
 t2 = time.time()
 print('FEM 1 solved in '+str(t2 - t1)+' s')
@@ -95,7 +95,7 @@ jstim = 20
 sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
 
 
-sim2.solve_and_save_sim(out_file2,plot=False, overwrite=True)
+sim2.solve_and_save_sim(out_file2)
 
 t3 = time.time()
 print('FEM 2 solved in '+str(t3 - t2)+' s')
@@ -111,8 +111,8 @@ u = fem.Function(sim1.V)
 u.interpolate(u_expr)
 
 
-with io.XDMFFile(sim1.mesh.comm, out_file, "w") as file:
-    file.write_mesh(sim1.mesh)
+with io.XDMFFile(sim1.domain.comm, out_file, "w") as file:
+    file.write_mesh(sim1.domain)
     file.write_function(u)
 
 

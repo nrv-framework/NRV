@@ -11,7 +11,7 @@ L=15000         #um
 Outer_D = 10    #mm
 Nerve_D = 5000 #um
 
-mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D)
+mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=5)
 
 mesh.reshape_fascicle(D=1700, y_c=700, z_c=0, ID=1)
 mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)
@@ -28,14 +28,13 @@ mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=-800, z_c=-100, length = 100
 mesh.add_electrode(elec_type="CUFF MEA", N=15, x_c=L/2, y_c=0, z_c=0, size = (1000, 500),\
     inactive=True, inactive_L=3000, inactive_th=500,res=50)
 
-mesh.compute_geo()
-mesh.compute_domains()
-mesh.compute_res()
 
+mesh.compute_mesh()
+#print(mesh.electrodes)
 
 mesh.save(mesh_file)
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
-print(mesh.electrodes)
+
 #mesh.visualize()
 

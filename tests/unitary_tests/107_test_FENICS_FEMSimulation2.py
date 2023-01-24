@@ -26,16 +26,16 @@ mesh.add_domains(volumes[2][1],101, dim=3, name=None)
 mesh.add_domains([volumes[1][1], volumes[3][1]],102, dim=3, name=None)
 
 faces, Fcom = mesh.get_faces(com=True)
-print(faces, Fcom)
+#print(faces, Fcom)
 In_mask = np.argwhere(np.array(Fcom)[:,0]==0).tolist()
 In_face = [faces[i[0]][1] for i in In_mask]
 Out_mask = np.argwhere(np.array(Fcom)[:,0]==L).tolist()
 Out_face = [faces[i[0]][1] for i in Out_mask]
-print(In_mask, Out_mask)
+#print(In_mask, Out_mask)
 
 mesh.add_domains(In_face, 11, dim=2, name=None)
 mesh.add_domains(Out_face,22, dim=2, name=None)
-print(In_face, Out_face)
+#print(In_face, Out_face)
 
 feild_IDs = []
 feild_IDs += [mesh.refine_entities(ent_ID=In_face, res_in=0.2, dim=2, res_out=10, IncludeBoundary=True)]
@@ -43,11 +43,12 @@ feild_IDs += [mesh.refine_entities(ent_ID=Out_face, res_in=0.2, dim=2, res_out=1
 feild_IDs += [mesh.refine_entities(ent_ID=volumes[1][1], res_in=0.2, dim=3, res_out=2, IncludeBoundary=True)]
 feild_IDs += [mesh.refine_entities(ent_ID=volumes[3][1], res_in=0.2, dim=3, res_out=2, IncludeBoundary=True)]
 
-print(feild_IDs)
+#print(feild_IDs)
 mesh.refine_min(feild_IDs=feild_IDs)
-
+mesh.generate()
 mesh.save(mesh_file)
 #print(mesh.get_obj())
+
 # mesh.visualize()
 # exit()
 del mesh
@@ -68,10 +69,10 @@ sim1 = nrv.FEMSimulation(data=data)
 
 jstim = 1
 sim1.prepare_sim(jstim=jstim)
-#sim1.assemble()
+
 t1 = time.time()
 print('start timer')
-sim1.solve_and_save_sim(out_file,plot=False, overwrite=False)
+sim1.solve_and_save_sim(out_file)
 
 t2 = time.time()
 print('solved in '+str(t2 - t1)+' s')

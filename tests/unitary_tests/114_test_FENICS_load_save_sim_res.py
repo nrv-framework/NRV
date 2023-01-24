@@ -61,7 +61,7 @@ sim1 = nrv.FEMSimulation(data=data)
 
 jstim = 20
 sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
-res1 = sim1.solve_and_save_sim("", save=False)
+res1 = sim1.solve()
 
 ## Check result savings
 res1.save_sim_result(out_file1)

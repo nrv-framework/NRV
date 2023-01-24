@@ -13,13 +13,13 @@ param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim')
 
 data = param.save_SimParameters()
 
-sim1 = nrv.FEMSimulation(data=data)
+sim1 = nrv.FEMSimulation(elem=('Lagrange', 2), data=data)
 
 
 jstim = 1
 sim1.prepare_sim(jstim=jstim)
 t1 = time.time()
-sim1.solve_and_save_sim(out_file,plot=False, overwrite=True)
+sim1.solve_and_save_sim(out_file)
 
 t2 = time.time()
 print('solved in '+str(t2 - t1)+' s')
