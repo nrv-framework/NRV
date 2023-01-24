@@ -23,8 +23,8 @@ parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TES
 parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
 parser.add_argument('-t', '--target', dest='TARGET', type=int, default=0, help="The number of games to simulate")
-parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TEST',help='Launch all and only FEniCS related tests')
-parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TEST',help='Launch all and only COMSOL related tests')
+parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TESTS',help='Launch all and only FEniCS related tests')
+parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TESTS',help='Launch all and only COMSOL related tests')
 parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
 
 
@@ -33,9 +33,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     exclude_test_keys = ['COMSOL', 'FENICS']
     included_test_keys = []
-    if args.FENICS_TEST:
+    if args.FENICS_TESTS:
         included_test_keys += ['FENICS']
-    if args.COMSOL_TEST:
+    if args.COMSOL_TESTS:
         included_test_keys += ['COMSOL']
 
     nrv_cmd = 'nrv2calm '
@@ -101,8 +101,11 @@ if __name__ == "__main__":
                 os.remove(f)
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
+        if not os.path.exists(unit_test_results+'json/'):
+            os.makedirs(unit_test_results+'json/')
             os.makedirs(unit_test_results+'mesh/')
             os.makedirs(unit_test_results+'outputs/')
+            
 
         nrv_cmd = 'nrv2calm '
         if sys.platform == 'darwin':
@@ -123,15 +126,22 @@ if __name__ == "__main__":
         ## clean the test/figures folder ##
         ###################################
         if os.path.exists(unit_test_figures):
+            pass
             shutil.rmtree(unit_test_figures)
         if not os.path.exists(unit_test_figures):
             os.makedirs(unit_test_figures)
 
         if os.path.exists(unit_test_results):
+            pass
             shutil.rmtree(unit_test_results)
-        if not os.path.exists(unit_test_results) and args.FENICS_TEST:
+        if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
+
+        if not os.path.exists(unit_test_results+'json/'):
+            os.makedirs(unit_test_results+'json/')
+        if not os.path.exists(unit_test_results+'mesh/') and (args.ALL_TESTS or args.FENICS_TESTS):
             os.makedirs(unit_test_results+'mesh/')
+        if not os.path.exists(unit_test_results+'outputs/') and (args.ALL_TESTS or args.FENICS_TESTS):
             os.makedirs(unit_test_results+'outputs/')
             
 
@@ -142,7 +152,7 @@ if __name__ == "__main__":
         for test in all_tests:
             launch_test = True
             if not args.ALL_TESTS:
-                if args.FENICS_TEST:
+                if args.FENICS_TESTS or args.COMSOL_TESTS:
                     for test_key in included_test_keys:
                         if not test_key in test:
                             launch_test = False
