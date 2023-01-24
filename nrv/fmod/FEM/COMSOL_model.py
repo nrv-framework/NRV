@@ -43,6 +43,7 @@ class COMSOL_model(FEM_model):
         """
         if COMSOL_Status:
             super().__init__(Ncore=Ncore)
+            self.type = 'COMSOL'
 
             self.model_path = fname
             f_in_librairy = str(fname) + '.mph'
@@ -67,9 +68,6 @@ class COMSOL_model(FEM_model):
             print('... loading the COMSOL model')
             self.model = self.client.load(self.fname)
             #self.client.caching(True)
-            # Flags
-            self.is_meshed = False
-            self.is_computed = False
             # source
             self.fname = fname
         else:

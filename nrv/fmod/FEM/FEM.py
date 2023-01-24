@@ -38,5 +38,9 @@ class FEM_model():
         Ncore   : int
             number of cores for computation. If None is specified, this number is taken from the NRV2.ini configuration file. Byu default set to None
         """
-        self.Ncore=Ncore
+        self.Ncore = Ncore
         self.type = 'FEM'
+
+        # Flags
+        self.is_meshed = False
+        self.is_computed = False

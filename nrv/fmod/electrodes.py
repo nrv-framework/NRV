@@ -118,7 +118,7 @@ class electrode():
             elec_dic = data
 
         self.ID = elec_dic['ID']
-        self.footprint = elec_dic['footprint']
+        self.footprint = np.asarray(elec_dic['footprint'])
         self.type = elec_dic['type']
 
 
@@ -432,17 +432,20 @@ class LIFE_electrode(FEM_electrode):
         self.z_c = elec_dic['z_c']
 
 
-    def parameter_model(self,model):
+    def parameter_model(self, model):
         """
         Parameter the model electrode with user specified dimensions
 
         Parameters
         ----------
         model : obj
-            FEM COMSOL simulation to parameter, se FEM or Extracellular for more details
+            FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
-        model.set_parameter(self.label+'_D', str(self.D)+'[um]')
-        model.set_parameter(self.label+'_Length', str(self.length)+'[um]')
-        model.set_parameter(self.label+'_y_c', str(self.y_c)+'[um]')
-        model.set_parameter(self.label+'_z_c', str(self.z_c)+'[um]')
-        model.set_parameter(self.label+'_x_offset', str(self.x_shift)+'[um]')
+        if model.type == 'COMSOL':
+            model.set_parameter(self.label+'_D', str(self.D)+'[um]')
+            model.set_parameter(self.label+'_Length', str(self.length)+'[um]')
+            model.set_parameter(self.label+'_y_c', str(self.y_c)+'[um]')
+            model.set_parameter(self.label+'_z_c', str(self.z_c)+'[um]')
+            model.set_parameter(self.label+'_x_offset', str(self.x_shift)+'[um]')
+        else:
+            model.add_electrode(elec_type=self.label, x_c=self.x_shift+(self.length/2), y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D)

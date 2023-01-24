@@ -1,6 +1,8 @@
 import json
 import numpy as np
+
 from ....backend.file_handler import json_load, json_dump, rmv_ext
+from ....backend.log_interface import rise_error, rise_warning, pass_info
 
 class SimParameters:
     def __init__(self, D=3, mesh_file="", data=None):
@@ -146,8 +148,10 @@ class SimParameters:
         add new domain or change if ID already exists
         Parameters
         ----------
-        mesh_domain   :str 
-            name of the new filename, will be save without the filename extension
+        mesh_domain     : int
+            Mesh ID of the boundary (should be 3D)
+        mat_file           : str
+            Material filename (see fmod.material.py)
         """
         IDdom= self.__update_ID_list('domains', mesh_domain)
         self.domains_list[IDdom] = {'mesh_domain': mesh_domain, 'mat_file':mat_file, 'mixed_domain':[mesh_domain]}
@@ -157,11 +161,23 @@ class SimParameters:
     
     def add_boundary(self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None):
         """
-        add new boundary or change if ID already exists
+        add new boundary or change if ID already exists 
         Parameters
         ----------
-        new_mesh_file   :str 
-            name of the new filename, will be save without the filename extension
+        mesh_domain     : int
+            Mesh ID of the boundary (should be 2D)
+        btype           : str {'Dirichlet', 'Neuman'}
+            Type of boundary condition either 'Dirichlet' to set the 
+        value           : float
+            set the condition to the value
+        variable        : str
+            name of a python variable from which the boundary value should be taken. 
+            NB: variable should be place as kwarg in prepare_sim see examples
+        mesh_domain_3D  : int
+            ID of the mesh of corresponding volume, by default 0
+            NB: Most of the time 0 except for LIFE electrode, must be set to the corresponding fascicle)
+        ID              : int
+            ID of the boundary condition
         """
         IDbound= self.__update_ID_list('bound', mesh_domain)
         if value is not None:

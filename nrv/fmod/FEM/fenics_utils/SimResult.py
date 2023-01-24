@@ -9,8 +9,13 @@ from dolfinx.io.utils import XDMFFile
 from dolfinx.geometry import (BoundingBoxTree, compute_collisions, compute_colliding_cells)
 import gmsh
 
+from ..mesh_creator.MshCreator import *
 
+
+from ....backend.MCore import *
 from ....backend.file_handler import json_load, json_dump, rmv_ext
+from ....backend.log_interface import rise_error, rise_warning, pass_info
+
 
 ###############
 ## Functions ##
@@ -21,7 +26,7 @@ def is_sim_res(result):
 
     Parameters
     ----------
-    stim : object
+    result : object
         object to test
 
     Returns
@@ -31,22 +36,57 @@ def is_sim_res(result):
     """
     return isinstance(result, SimResult)
 
-def mesh_from_meshfile(mesh_file):
+def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     overload of dolfinx.io.gmshio.read_from_msh with no verbose from gmsh
+        Parameters
+    ----------
+    mesh_file : str, 
+        Path and name of mesh file 
+        NB: extention is not required but must be a .msh file
+
+    Returns
+    -------
+    output  :  tuple(3)
+        (domain, cell_tag, facet_tag)
+
     """
-    mesh_file = rmv_ext(mesh_file) + ".msh"
-    gmsh.initialize()
-    gmsh.option.setNumber("General.Verbosity", 0)
-    gmsh.model.add("Mesh from file")
-    gmsh.merge(mesh_file)
-    output = model_to_mesh(gmsh.model, comm=MPI.COMM_WORLD, rank=0, gdim=3)
-    gmsh.finalize()
-    return output[0]
+    if isinstance(mesh, str):
+        mesh_file = rmv_ext(mesh) + ".msh"
+        gmsh.initialize()
+        gmsh.option.setNumber("General.Verbosity", 0)
+        gmsh.model.add("Mesh from file")
+        gmsh.merge(mesh_file)
+        output = model_to_mesh(gmsh.model, comm=comm, rank=rank, gdim=gdim)
+        gmsh.finalize()
+    elif is_MshCreator(mesh):
+        output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
+    else: 
+        rise_error('mesh should be either a filename or a MeshCreator')
+
+    return output
+
+
+def domain_from_meshfile(mesh_file):
+    """
+        return only the domain from mesh_file
+        Parameters
+    ----------
+    mesh_file : str
+        Path and name of mesh file 
+        NB: extention is not required but must be a .msh file
+
+    Returns
+    -------
+        output  :
+            domain of the mesh contain in the mesh_file
+    """
+    return read_gmsh(mesh_file)[0]
+
 
 
 def V_from_meshfile(mesh_file, elem=('Lagrange', 1)):
-    mesh = mesh_from_meshfile(mesh_file)
+    mesh = domain_from_meshfile(mesh_file)
     V = FunctionSpace(mesh, elem)
     return V
     
@@ -74,11 +114,18 @@ class SimResult:
             self.vout = vout
         self.comm = comm     
     
-    def save_sim_result(self, file, ftype=None):
+    def save_sim_result(self, file, ftype=None, overwrite=True):
         if ftype == 'xdmf':
             fname = rmv_ext(file) + '.xdmf'
             with XDMFFile(self.comm, fname, "w") as file:
-                file.write_mesh(mesh_from_meshfile(self.mesh_file))
+                if not overwrite:
+                        file.parameters.update(
+                            {
+                            "functions_share_mesh": True,
+                            "rewrite_function_mesh": False
+                            })
+                else:
+                    file.write_mesh(self.domain)
                 file.write_function(self.vout)
         else:
             fname = rmv_ext(file) + '.sres'
@@ -92,7 +139,7 @@ class SimResult:
         self.mesh_file = mdict['mesh_file'][0]
         self.elem = (mdict['element'][0].strip(), int(mdict['element'][1]))
         if self.domain is None:
-            self.domain = mesh_from_meshfile(self.mesh_file)
+            self.domain = domain_from_meshfile(self.mesh_file)
             self.V = FunctionSpace(self.domain, self.elem)
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict['vout']
@@ -107,7 +154,7 @@ class SimResult:
 
     def aline_V(self, res2):
         """
-        
+
         """
         if is_sim_res(res2):
             if self.mesh_file == res2.mesh_file:
@@ -120,21 +167,23 @@ class SimResult:
         else:
             print("Error: mesh function alinment must be done with SimResult")
 
-         
+
     def eval(self, X):
         """
         Eval the result field at X position
 
         """
         N = len(X)
+
         tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
         cells_candidates = compute_collisions(tree, X)
-        cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)        
+        cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         cells = [cells_colliding.links(i)[0] for i in range(N)]
-
-        return self.vout.eval(X, cells)
-
         
+        values = self.vout.eval(X, cells)[:,0]
+        return values
+
+    
 
     #####################
     ## special methods ##

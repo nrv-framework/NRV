@@ -383,7 +383,7 @@ class FEM_stimulation(extracellular_context):
     - a list of electrode(s)
     - a list of corresponding current stimuli
     """
-    def __init__(self, model_fname='', endo_mat='endoneurium_ranck',\
+    def __init__(self, model_fname=None, endo_mat='endoneurium_ranck',\
         peri_mat='perineurium', epi_mat='epineurium', ext_mat='saline',comsol=True):
         """
         Implement a FEM_based_stimulation object.
@@ -409,24 +409,33 @@ class FEM_stimulation(extracellular_context):
 
         if is_mat(endo_mat):
             self.endoneurium = endo_mat
+            self.endo_mat_file = None
         else:
             self.endoneurium = load_material(endo_mat)
+            self.endo_mat_file = endo_mat
         if is_mat(peri_mat):
             self.perineurium = peri_mat
+            self.peri_mat_file = None
         else:
             self.perineurium = load_material(peri_mat)
+            self.peri_mat_file = peri_mat
         if is_mat(epi_mat):
             self.epineurium = epi_mat
+            self.epi_mat_file = None
         else:
             self.epineurium = load_material(epi_mat)
+            self.epi_mat_file = epi_mat
         if is_mat(ext_mat):
             self.external_material = ext_mat
+            self.ext_mat_file = None
         else:
             self.external_material = load_material(ext_mat)
+            self.ext_mat_file = ext_mat
 
         self.type ="FEM_stim"
-        self.comsol=comsol
-        self.fenics = not comsol
+
+        self.comsol = comsol and not (model_fname is None)
+        self.fenics = not self.comsol
         ## load model
         if MCH.do_master_only_work():
             if self.comsol:
@@ -504,7 +513,7 @@ class FEM_stimulation(extracellular_context):
                 if not COMSOL_Status:
                     rise_warning('Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off', abort=True)
 
-    def reshape_outerBox(self, Outer_D):
+    def reshape_outerBox(self, Outer_D, res="default"):
         """
         Reshape the size of the FEM simulation outer box
 
@@ -513,10 +522,12 @@ class FEM_stimulation(extracellular_context):
         outer_D : float
             FEM simulation outer box diameter, in mm, WARNING, this is the only parameter in mm !
         """
-        if MCH.do_master_only_work():
-            self.model.set_parameter('Outer_D', str(Outer_D)+'[mm]')
-
-    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, Perineurium_thickness=5):
+        if self.comsol:
+            if MCH.do_master_only_work():
+                self.model.set_parameter('Outer_D', str(Outer_D)+'[mm]')
+        else:
+            self.model.reshape_outerBox(Outer_D, res=res)
+    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, Perineurium_thickness=5, res="default"):
         """
         Reshape the nerve of the FEM simulation
 
@@ -533,14 +544,17 @@ class FEM_stimulation(extracellular_context):
         Perineurium_thickness   :float
             Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
         """
-        if MCH.do_master_only_work():
-            self.model.set_parameter('Nerve_D', str(Nerve_D)+'[um]')
-            self.model.set_parameter('Length', str(Length)+'[um]')
-            self.model.set_parameter('Nerve_y_c', str(y_c)+'[um]')
-            self.model.set_parameter('Nerve_z_c', str(z_c)+'[um]')
-            self.model.set_parameter('Perineurium_thickness', str(Perineurium_thickness)+'[um]')
+        if self.comsol:
+            if MCH.do_master_only_work():
+                self.model.set_parameter('Nerve_D', str(Nerve_D)+'[um]')
+                self.model.set_parameter('Length', str(Length)+'[um]')
+                self.model.set_parameter('Nerve_y_c', str(y_c)+'[um]')
+                self.model.set_parameter('Nerve_z_c', str(z_c)+'[um]')
+                self.model.set_parameter('Perineurium_thickness', str(Perineurium_thickness)+'[um]')
+        else:
+            self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
 
-    def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None):
+    def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -555,15 +569,20 @@ class FEM_stimulation(extracellular_context):
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
         """
-        if MCH.do_master_only_work():
-            if ID is None:
-                self.model.set_parameter('Fascicle_D', str(Fascicle_D)+'[um]')
-                self.model.set_parameter('Fascicle_y_c', str(y_c)+'[um]')
-                self.model.set_parameter('Fascicle_z_c', str(z_c)+'[um]')
-            else:
-                self.model.set_parameter('Fascicle_'+'str(ID)'+'_D', str(Fascicle_D)+'[um]')
-                self.model.set_parameter('Fascicle_'+'str(ID)'+'_y_c', str(y_c)+'[um]')
-                self.model.set_parameter('Fascicle_'+'str(ID)'+'_z_c', str(z_c)+'[um]')
+
+        if self.comsol:
+            if MCH.do_master_only_work():
+                if ID is None:
+                    self.model.set_parameter('Fascicle_D', str(Fascicle_D)+'[um]')
+                    self.model.set_parameter('Fascicle_y_c', str(y_c)+'[um]')
+                    self.model.set_parameter('Fascicle_z_c', str(z_c)+'[um]')
+                else:
+                    self.model.set_parameter('Fascicle_'+'str(ID)'+'_D', str(Fascicle_D)+'[um]')
+                    self.model.set_parameter('Fascicle_'+'str(ID)'+'_y_c', str(y_c)+'[um]')
+                    self.model.set_parameter('Fascicle_'+'str(ID)'+'_z_c', str(z_c)+'[um]')
+        else:
+            self.model.reshape_fascicle(Fascicle_D=Fascicle_D, y_c=y_c, z_c=z_c, ID=ID,\
+                Perineurium_thickness=Perineurium_thickness, res=res)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -586,6 +605,8 @@ class FEM_stimulation(extracellular_context):
                 self.electrodes.append(electrode)
                 self.electrodes_label.append(electrode.label)
                 self.stimuli.append(stimulus)
+            if self.fenics:
+                electrode.parameter_model(self.model)
             self.synchronised = False
             self.setup = False
 
@@ -594,29 +615,34 @@ class FEM_stimulation(extracellular_context):
         Parameter a model with all added electrodes parameters, material parameters, build geometry and mesh
         """
         # parameter electrodes
-        for electrode in self.electrodes:
-           electrode.parameter_model(self.model)
-        # parameter materials
-        self.model.set_parameter('Outer_conductivity', str(self.external_material.sigma)+'[S/m]')
-        self.model.set_parameter('Epineurium_conductivity', str(self.epineurium.sigma)+'[S/m]')
-        self.model.set_parameter('Perineurium_conductivity', str(self.perineurium.sigma)+'[S/m]')
-        if self.endoneurium.is_isotropic():
-            self.model.set_parameter('Endoneurium_conductivity_xx', str(self.endoneurium.sigma)+\
-                '[S/m]')
-            self.model.set_parameter('Endoneurium_conductivity_yy', str(self.endoneurium.sigma)+\
-                '[S/m]')
-            self.model.set_parameter('Endoneurium_conductivity_zz', str(self.endoneurium.sigma)+\
-                '[S/m]')
+        if self.comsol:
+            for electrode in self.electrodes:
+                electrode.parameter_model(self.model)
+                # parameter materials
+                self.model.set_parameter('Outer_conductivity', str(self.external_material.sigma)+'[S/m]')
+                self.model.set_parameter('Epineurium_conductivity', str(self.epineurium.sigma)+'[S/m]')
+                self.model.set_parameter('Perineurium_conductivity', str(self.perineurium.sigma)+'[S/m]')
+                if self.endoneurium.is_isotropic():
+                    self.model.set_parameter('Endoneurium_conductivity_xx', str(self.endoneurium.sigma)+\
+                        '[S/m]')
+                    self.model.set_parameter('Endoneurium_conductivity_yy', str(self.endoneurium.sigma)+\
+                        '[S/m]')
+                    self.model.set_parameter('Endoneurium_conductivity_zz', str(self.endoneurium.sigma)+\
+                        '[S/m]')
+                else:
+                    self.model.set_parameter('Endoneurium_conductivity_xx', str(self.endoneurium.sigma_xx)\
+                        +'[S/m]')
+                    self.model.set_parameter('Endoneurium_conductivity_yy', str(self.endoneurium.sigma_yy)\
+                        +'[S/m]')
+                    self.model.set_parameter('Endoneurium_conductivity_zz', str(self.endoneurium.sigma_zz)\
+                        +'[S/m]')
+                ## create geometry and mesh
+                self.model.build_and_mesh()
         else:
-            self.model.set_parameter('Endoneurium_conductivity_xx', str(self.endoneurium.sigma_xx)\
-                +'[S/m]')
-            self.model.set_parameter('Endoneurium_conductivity_yy', str(self.endoneurium.sigma_yy)\
-                +'[S/m]')
-            self.model.set_parameter('Endoneurium_conductivity_zz', str(self.endoneurium.sigma_zz)\
-                +'[S/m]')
-        ## create geometry and mesh
-        self.model.build_and_mesh()
-        ## stor the setup state
+            self.model.build_and_mesh()
+            self.model.set_materials(Endoneurium_mat=self.endo_mat_file, Outer_mat=self.ext_mat_file,\
+                Perineurium_mat=self.peri_mat_file, Epineurium_mat=self.epi_mat_file)
+            self.model.setup_simulations()
         self.setup = True
 
     def run_model(self):
@@ -669,7 +695,7 @@ class FEM_stimulation(extracellular_context):
             self.stimuli = list(np.asarray(self.stimuli)[sorter])
             # set the footprints
             for k, electrode in enumerate(self.electrodes):
-                self.electrodes[k].set_footprint(V)
+                self.electrodes[k].set_footprint(V[:,k])
                 #electrode.set_footprint(V[:, k])
         else:
             self.electrodes[0].set_footprint(V)
