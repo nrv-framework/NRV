@@ -18,7 +18,7 @@ from.fenics_utils.SimResult import *
 
 # built in FENICS models
 dir_path = os.environ['NRVPATH'] + '/_misc'
-material_library = os.listdir(dir_path+'/fenics_templates/')
+#material_library = os.listdir(dir_path+'/fenics_templates/')
 
 ###############
 ## Constants ##
