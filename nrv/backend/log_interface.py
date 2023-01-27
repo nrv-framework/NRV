@@ -30,6 +30,7 @@ machine_config = configparser.ConfigParser()
 config_fname = dir_path + '/NRV.ini'
 machine_config.read(config_fname)
 LOG_Status = machine_config.get('LOG', 'LOG_STATUS') == 'True'
+VERBOSITY_LEVEL = int(machine_config.get('LOG', 'VERBOSITY_LEVEL'))
 
 def rise_error(*args, out=1, **kwargs):
     """
@@ -152,3 +153,9 @@ def prompt_debug(*args):
         anything to pass to icecrean
     """
     ic(*args)
+
+def set_nrv_verbosity(i):
+    """
+    set general verbosity level
+    """
+    VERBOSITY_LEVEL = i

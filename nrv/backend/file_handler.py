@@ -50,9 +50,10 @@ def rmv_ext(fname):
     fname   : str
         file name without extention
     '''
-    i = fname.rfind(".")
-    if i > 0:
-        fname = fname[:i]
+    if isinstance(fname, str):
+        i = fname.rfind(".")
+        if i > 0:
+            fname = fname[:i]
     return fname
 
 
