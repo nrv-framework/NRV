@@ -95,7 +95,6 @@ class fascicle():
         self.NoR_relative_position = np.array([])
         # Axons objects default parameters
         self.dt = dt
-        self.Nseg_per_sec = Nseg_per_sec
         self.freq = freq
         self.freq_min = freq_min
         self.mesh_shape = mesh_shape
@@ -107,7 +106,9 @@ class fascicle():
         # extra-cellular stimulation
         self.extra_stim = None
         self.footprints = {}
-        self.myelinated_nseg_per_sec = None
+        self.is_footprinted = False
+        self.myelinated_nseg_per_sec = 3
+        self.unmyelinated_nseg = 100
         # intra-cellular stimulation
         self.N_intra = 0
         self.intra_stim_position = []
@@ -118,6 +119,122 @@ class fascicle():
         ## recording mechanism
         self.record = False
         self.recorder = None
+        self.is_simulated = False
+
+
+    ## save/load methods
+    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Save a fascicle in a json file
+
+        Parameters
+        ----------
+        fname : str
+            name of the file to save the fascicle
+        extracel_context: bool
+            if True, add the extracellular context to the saving
+        intracel_context: bool
+            if True, add the intracellular context to the saving
+        """
+        if MCH.do_master_only_work():
+            # copy everything into a dictionnary
+            fascicle_config = {}
+            fascicle_config['ID'] = self.ID
+            fascicle_config['type'] = self.type
+            fascicle_config['y_grav_center'] = self.y_grav_center
+            fascicle_config['z_grav_center'] = self.z_grav_center
+            fascicle_config['N_vertices'] = self.N_vertices
+            fascicle_config['y_vertices'] = self.y_vertices
+            fascicle_config['z_vertices'] = self.z_vertices
+            fascicle_config['A'] = self.A
+            fascicle_config['axons_diameter'] = self.axons_diameter
+            fascicle_config['axons_type'] = self.axons_type
+            fascicle_config['axons_y'] = self.axons_y
+            fascicle_config['axons_z'] = self.axons_z
+            fascicle_config['NoR_relative_position'] = self.NoR_relative_position
+
+            if intracel_context:
+                fascicle_config['L'] = self.L
+                fascicle_config['N_intra'] = self.N_intra
+                fascicle_config['intra_stim_position'] = self.intra_stim_position
+                fascicle_config['intra_stim_t_start'] = self.intra_stim_t_start
+                fascicle_config['intra_stim_duration'] = self.intra_stim_duration
+                fascicle_config['intra_stim_amplitude'] = self.intra_stim_amplitude
+                fascicle_config['intra_stim_ON'] = self.intra_stim_ON
+            if extracel_context:
+                fascicle_config['L'] = self.L
+                fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
+                fascicle_config['footprints'] = self.footprints
+                fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
+                fascicle_config['unmyelinated_nseg_per_sec'] = self.unmyelinated_nseg_per_sec
+                fascicle_config['is_footprinted'] = self.is_footprinted
+
+            if rec_context:
+                fascicle_config['record'] = self.record
+                fascicle_config['recorder'] = self.recorder.save_recorder()
+            # save the dictionnary as a json file
+            json_dump(fascicle_config, fname)
+
+    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+        """
+        Load a fascicle configuration from a json file
+
+        Parameters
+        ----------
+        fname           : str
+            path to the json file describing a fascicle
+        extracel_context: bool
+            if True, load the extracellular context as well
+        intracel_context: bool
+            if True, load the intracellular context as well
+        """
+        if type(fname) == str:
+            results = json_load(fname)
+        else: 
+            results = fname
+        self.ID = results['ID']
+        self.type = results['type']
+        self.y_grav_center = results['y_grav_center']
+        self.z_grav_center = results['z_grav_center']
+        self.N_vertices = results['N_vertices']
+        self.y_vertices = np.asarray(results['y_vertices']).flatten()
+        self.z_vertices = np.asarray(results['z_vertices']).flatten()
+        self.A = results['A']
+        self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
+        self.N = len(self.axons_diameter)
+        self.axons_type = np.asarray(results['axons_type']).flatten()
+        self.axons_y = np.asarray(results['axons_y']).flatten()
+        self.axons_z = np.asarray(results['axons_z']).flatten()
+        self.NoR_relative_position = np.asarray(results['NoR_relative_position']).flatten()
+        if intracel_context:
+            self.L = results['L']
+            self.N_intra = results['N_intra']
+            self.intra_stim_position = results['intra_stim_position']
+            self.intra_stim_t_start = results['intra_stim_t_start']
+            self.intra_stim_duration = results['intra_stim_duration']
+            self.intra_stim_amplitude = results['intra_stim_amplitude']
+            self.intra_stim_ON = results['intra_stim_ON']
+        if extracel_context:
+            self.L = results['L']
+            self.is_footprinted = results['is_footprinted']
+            if 'myelinated_nseg_per_sec' in results:
+                self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
+            if 'unmyelinated_nseg_per_sec' in results:
+                self.unmyelinated_nseg_per_sec = results['unmyelinated_nseg_per_sec']
+            
+            self.extra_stim = load_any_extracel_context(results['extra_stim'])
+            self.footprints = {}
+            for axon, ftp in results['footprints'].items():
+                dic = {}
+                for dim, ftpx in ftp.items():
+                    dic[int(dim)] = ftpx
+                self.footprints[int(axon)] = dic
+            
+        if rec_context:
+            self.record = results['record']
+            self.recorder = recorder()
+            self.recorder.load_recorder(results['recorder'])
+
 
     def set_ID(self, ID):
         """
@@ -140,6 +257,7 @@ class fascicle():
             length of the fascicle in um
         """
         self.L = L
+        self.unmyelinated_nseg = self.L//25
 
     ## generate stereotypic Fascicle
     def define_circular_contour(self, D, y_c=0, z_c=0, N_vertices=100):
@@ -537,7 +655,7 @@ class fascicle():
         if len(colapse)>0:
             pass_info('From Fascicle level: Electrode/Axons overlap, '+str(len(colapse))+' axons will be removed from the fascicle')
         self.N -= len(colapse)
-        print(self.N, "axons remaining")
+        pass_info(self.N, "axons remaining")
         self.axons_diameter = self.axons_diameter[mask]
         self.axons_type = self.axons_type[mask]
         self.axons_y = self.axons_y[mask]
@@ -683,114 +801,6 @@ class fascicle():
                 axes.set_xlim(0,self.L)
                 plt.tight_layout()
 
-    ## save/load methods
-    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
-        """
-        Save a fascicle in a json file
-
-        Parameters
-        ----------
-        fname : str
-            name of the file to save the fascicle
-        extracel_context: bool
-            if True, add the extracellular context to the saving
-        intracel_context: bool
-            if True, add the intracellular context to the saving
-        """
-        if MCH.do_master_only_work():
-            # copy everything into a dictionnary
-            fascicle_config = {}
-            fascicle_config['ID'] = self.ID
-            fascicle_config['type'] = self.type
-            fascicle_config['y_grav_center'] = self.y_grav_center
-            fascicle_config['z_grav_center'] = self.z_grav_center
-            fascicle_config['N_vertices'] = self.N_vertices
-            fascicle_config['y_vertices'] = self.y_vertices
-            fascicle_config['z_vertices'] = self.z_vertices
-            fascicle_config['A'] = self.A
-            fascicle_config['axons_diameter'] = self.axons_diameter
-            fascicle_config['axons_type'] = self.axons_type
-            fascicle_config['axons_y'] = self.axons_y
-            fascicle_config['axons_z'] = self.axons_z
-            fascicle_config['NoR_relative_position'] = self.NoR_relative_position
-
-            if intracel_context:
-                fascicle_config['L'] = self.L
-                fascicle_config['N_intra'] = self.N_intra
-                fascicle_config['intra_stim_position'] = self.intra_stim_position
-                fascicle_config['intra_stim_t_start'] = self.intra_stim_t_start
-                fascicle_config['intra_stim_duration'] = self.intra_stim_duration
-                fascicle_config['intra_stim_amplitude'] = self.intra_stim_amplitude
-                fascicle_config['intra_stim_ON'] = self.intra_stim_ON
-            if extracel_context:
-                fascicle_config['L'] = self.L
-                fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
-                fascicle_config['footprints'] = self.footprints
-                fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
-
-            if rec_context:
-                fascicle_config['record'] = self.record
-                fascicle_config['recorder'] = self.recorder.save_recorder()
-            # save the dictionnary as a json file
-            json_dump(fascicle_config, fname)
-
-    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
-        """
-        Load a fascicle configuration from a json file
-
-        Parameters
-        ----------
-        fname           : str
-            path to the json file describing a fascicle
-        extracel_context: bool
-            if True, load the extracellular context as well
-        intracel_context: bool
-            if True, load the intracellular context as well
-        """
-        if type(fname) == str:
-            results = json_load(fname)
-        else: 
-            results = fname
-        self.ID = results['ID']
-        self.type = results['type']
-        self.y_grav_center = results['y_grav_center']
-        self.z_grav_center = results['z_grav_center']
-        self.N_vertices = results['N_vertices']
-        self.y_vertices = np.asarray(results['y_vertices']).flatten()
-        self.z_vertices = np.asarray(results['z_vertices']).flatten()
-        self.A = results['A']
-        self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
-        self.N = len(self.axons_diameter)
-        self.axons_type = np.asarray(results['axons_type']).flatten()
-        self.axons_y = np.asarray(results['axons_y']).flatten()
-        self.axons_z = np.asarray(results['axons_z']).flatten()
-        self.NoR_relative_position = np.asarray(results['NoR_relative_position']).flatten()
-        if intracel_context:
-            self.L = results['L']
-            self.N_intra = results['N_intra']
-            self.intra_stim_position = results['intra_stim_position']
-            self.intra_stim_t_start = results['intra_stim_t_start']
-            self.intra_stim_duration = results['intra_stim_duration']
-            self.intra_stim_amplitude = results['intra_stim_amplitude']
-            self.intra_stim_ON = results['intra_stim_ON']
-        if extracel_context:
-            self.L = results['L']
-            if 'myelinated_nseg_per_sec' in results:
-                self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
-            else:
-                self.myelinated_nseg_per_sec = 3
-            self.extra_stim = load_any_extracel_context(results['extra_stim'])
-            self.footprints = {}
-            for axon, ftp in results['footprints'].items():
-                dic = {}
-                for dim, ftpx in ftp.items():
-                    dic[int(dim)] = ftpx
-                self.footprints[int(axon)] = dic
-        if rec_context:
-            self.record = results['record']
-            self.recorder = recorder()
-            self.recorder.load_recorder(results['recorder'])
-
 
 
     ## STIMULATION METHODS
@@ -896,14 +906,15 @@ class fascicle():
                 self.NoR_relative_position += [(x - 0.5)% node_length / node_length]
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
 
-    def get_electrodes_footprints_on_axons(self,save=False, filename="electrodes_footprint.ftpt",\
-        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG',myelinated_nseg_per_sec=3):
+    def get_electrodes_footprints_on_axons(self, myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
+        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG',\
+        save_ftp_only=False, filename="electrodes_footprint.ftpt"):
         """
         get electrodes footprints on each segment of each axon
 
         Parameters
         ----------
-        save        :bool
+        save_ftp_only        :bool
             if true save result in a .ftpt file
         filename    :str
             saving file name and path
@@ -922,6 +933,9 @@ class fascicle():
             of the corresponding axon ID
         """
         if MCH.do_master_only_work():
+            if unmyelinated_nseg is not None:
+                self.unmyelinated_nseg = unmyelinated_nseg
+            self.extra_stim.run_model()
             footprints = {}
             for k in range(len(self.axons_diameter)):
                 if self.axons_type[k]==0:
@@ -929,7 +943,7 @@ class fascicle():
                         round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
                         dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                         v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
-                        threshold=self.threshold)
+                        threshold=self.threshold, Nseg_per_sec=self.unmyelinated_nseg)
                 else:
                     ## if myelinated, test the axons_diameter[k],
                     ## if less than Adelta_limit -> A-delta model, else Myelinated
@@ -946,19 +960,24 @@ class fascicle():
                             Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
                             ID=k, threshold=self.threshold)
                 axon.attach_extracellular_stimulation(self.extra_stim)
-                footprints[k] = axon.get_electrodes_footprints_on_axon(save=save,filename=filename)
-            if save:
+                footprints[k] = axon.get_electrodes_footprints_on_axon(save=save_ftp_only,filename=filename)
+            if save_ftp_only:
                 json_dump(footprints, filename)
 
             self.footprints = footprints
             self.myelinated_nseg_per_sec = myelinated_nseg_per_sec
+        else:
+            pass
+        sync_Flag = MCH.send_synchronization_flag()
+        if MCH.do_master_only_work():
+            self.is_footprinted = True
             return footprints
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=True,\
+        record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=False,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',Myelinated_model='MRG',\
-        myelinated_nseg_per_sec=3, Adelta_limit=None, PostProc_Filtering=None, postproc_script=None):
+        myelinated_nseg_per_sec=3, unmyelinated_nseg=None, Adelta_limit=None, PostProc_Filtering=None, postproc_script="default"):
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead 
@@ -1003,7 +1022,7 @@ class fascicle():
         postproc_script     : str
             path to a postprocessing file. If specified, the basic post processing is not
             performed, and all postprocessing have to be handled by user. The specified script
-            can access global and local variables. Can also be key word ('Vmem' or 'scarter') 
+            can access global and local variables. Can also be key word ('Vmem_plot' or 'scarter') 
             to use script saved in OTF_PP folder, use with caution
         """
         if postproc_script is not None:
@@ -1020,9 +1039,12 @@ class fascicle():
             self.save_fascicle_configuration(config_filename)
         else:
             pass
-        # impose myelinated_nseg_per_sec if footprint are loaded 
+        # impose myelinated_nseg_per_sec if footprint are loaded
+        loaded_footprints = loaded_footprints or self.is_footprinted
         if loaded_footprints:
             myelinated_nseg_per_sec = self.myelinated_nseg_per_sec
+        if unmyelinated_nseg is not None:
+            self.unmyelinated_nseg = unmyelinated_nseg
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
@@ -1053,7 +1075,7 @@ class fascicle():
                             round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
                             dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                             v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
-                            threshold=self.threshold)
+                            threshold=self.threshold, Nseg_per_sec=self.unmyelinated_nseg)
                     else:
                         ## if myelinated, test the axons_diameter[k],
                         ## if less than Adelta_limit -> A-delta model, else Myelinated
@@ -1138,17 +1160,13 @@ class fascicle():
                         record_particles=record_particles, loaded_footprints=axon_ftpt)
                     del axon
                     ## postprocessing and data reduction
-                    if postproc_script is None:
-                        # If no specific postproc. file, then basic operations only are performed (rasterize, destroyV_mem values enventually)
-                        if PostProc_Filtering is not None:
-                            filter_freq(sim_results, 'V_mem', PostProc_Filtering)
-                        rasterize(sim_results, 'V_mem')
-                        if not(save_V_mem) and record_V_mem:
-                            remove_key(sim_results, 'V_mem')
-                    else:
-                        with open(postproc_script) as f:
-                            code = compile(f.read(), postproc_script, 'exec')
-                            exec(code, globals(), locals())
+                    if postproc_script.lower() in OTF_PP_library:
+                        postproc_script = OTF_PP_path+postproc_script
+                    elif postproc_script.lower() + '.py' in OTF_PP_library:
+                        postproc_script = OTF_PP_path+postproc_script+'.py'
+                    with open(postproc_script) as f:
+                        code = compile(f.read(), postproc_script, 'exec')
+                        exec(code, globals(), locals())
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
                     save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
@@ -1258,33 +1276,19 @@ class fascicle():
                     record_particles=record_particles, loaded_footprints=axon_ftpt)
                 del axon
                 ## postprocessing and data reduction
-
-                if postproc_script is None:
-                    # If no specific postproc. file, then basic operations only are performed (rasterize, destroyV_mem values enventually)
-                    if PostProc_Filtering is not None:
-                        filter_freq(sim_results, 'V_mem', PostProc_Filtering)
-                    rasterize(sim_results, 'V_mem')
-                    if not(save_V_mem) and record_V_mem:
-                        remove_key(sim_results, 'V_mem', verbose=verbose)
-                elif postproc_script in OTF_PP_library:
-                    with open(OTF_PP_path+postproc_script) as f:
-                        code = compile(f.read(), OTF_PP_path+postproc_script, 'exec')
-                        exec(code, globals(), locals())
-                elif postproc_script+'.py' in OTF_PP_library:
-                    postproc_script += '.py'
-                    with open(OTF_PP_path+postproc_script) as f:
-                        code = compile(f.read(), OTF_PP_path+postproc_script, 'exec')
-                        exec(code, globals(), locals())
-                else:
-                    #execfile(postproc_script,globals(),locals())
-                    with open(postproc_script) as f:
-                        code = compile(f.read(), postproc_script, 'exec')
-                        exec(code, globals(), locals())
+                if postproc_script.lower() in OTF_PP_library:
+                    postproc_script = OTF_PP_path+postproc_script
+                elif postproc_script.lower() + '.py' in OTF_PP_library:
+                    postproc_script = OTF_PP_path+postproc_script+'.py'
+                with open(postproc_script) as f:
+                    code = compile(f.read(), postproc_script, 'exec')
+                    exec(code, globals(), locals())
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
                 save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
             # sum up all recorded extracellular potential if applicable
             if self.record:
                 self.recorder.gather_all_recordings()
-            if MCH.is_alone() and verbose:
-                print('... Simulation done')
+        if MCH.is_alone() and verbose:
+            pass_info('... Simulation done')
+        self.is_simulated = True
