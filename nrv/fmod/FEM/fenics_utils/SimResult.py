@@ -2,11 +2,12 @@ import numpy as np
 
 from mpi4py import MPI 
 import scipy
-from dolfinx import *
+#from dolfinx import *
 from dolfinx.fem import (FunctionSpace, Function, Expression)
 from dolfinx.io.gmshio import read_from_msh, model_to_mesh
 from dolfinx.io.utils import XDMFFile
 from dolfinx.geometry import (BoundingBoxTree, compute_collisions, compute_colliding_cells)
+from dolfinx.mesh import create_cell_partitioner, GhostMode
 import gmsh
 
 from ..mesh_creator.MshCreator import *
@@ -51,19 +52,20 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
         (domain, cell_tag, facet_tag)
 
     """
-    if isinstance(mesh, str):
-        mesh_file = rmv_ext(mesh) + ".msh"
-        gmsh.initialize()
-        gmsh.option.setNumber("General.Verbosity", 0)
-        gmsh.model.add("Mesh from file")
-        gmsh.merge(mesh_file)
-        output = model_to_mesh(gmsh.model, comm=comm, rank=rank, gdim=gdim)
-        gmsh.finalize()
-    elif is_MshCreator(mesh):
-        output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
-    else: 
-        rise_error('mesh should be either a filename or a MeshCreator')
 
+    if comm.rank == rank:
+        if isinstance(mesh, str):
+            mesh_file = rmv_ext(mesh) + ".msh"
+            gmsh.initialize()
+            gmsh.option.setNumber("General.Verbosity", 2)
+            gmsh.model.add("Mesh from file")
+            gmsh.merge(mesh_file)
+            output = model_to_mesh(gmsh.model, comm=comm, rank=rank, gdim=gdim)
+            gmsh.finalize()
+        elif is_MshCreator(mesh):
+            output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
+        else: 
+            rise_error('mesh should be either a filename or a MeshCreator')
     return output
 
 

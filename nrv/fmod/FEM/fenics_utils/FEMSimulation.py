@@ -2,20 +2,21 @@ import numpy as np
 import os
 from mpi4py import MPI 
 from petsc4py.PETSc import ScalarType
-from petsc4py import PETSc
+import time
+
 
 from dolfinx import *
 from dolfinx.fem import (FunctionSpace, Constant, locate_dofs_topological,\
     dirichletbc, Function)
 from dolfinx.fem.petsc import  LinearProblem
-from dolfinx.io.gmshio import read_from_msh
 from dolfinx.io.utils import XDMFFile
-from ufl import (TestFunction, TrialFunction, as_tensor, jump,\
-    grad, nabla_grad, inner, avg, dot, FiniteElement, MixedElement, Measure)
+from ufl import (TestFunction, TrialFunction, as_tensor,\
+    nabla_grad, inner, avg, FiniteElement, MixedElement, Measure)
 
 from ...materials import *
 from .SimParameters import *
 from .SimResult import *
+from ....utils.units import *
 
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 
@@ -31,8 +32,15 @@ ksp_type_list = ['cg', 'pipecg', 'chebyshev', 'groppcg', 'pipecgrr', 'cgne', 'fc
 pc_type_list = ['lu', 'ilu', 'gamg', 'jacobi', 'sor', 'eisenstat', 'icc', 'asm', 'gasm',\
     'bddc', 'ksp', 'composite', 'cholesky', 'none', 'shell']
 
+
+
+
 class FEMSimulation(SimParameters):
-    def __init__(self, D=3, mesh_file="", mesh=None, data=None, elem=None):
+    def __init__(self, D=3, mesh_file="", mesh=None, data=None, elem=None, \
+        ummesh=True, comm=MPI.COMM_SELF, rank=0):
+        """
+
+        """
         super().__init__(D=D, mesh_file=mesh_file, data=data)
         if elem is not None:
             self.elem = elem
@@ -54,6 +62,10 @@ class FEMSimulation(SimParameters):
         self.dS = None
         self.ds = None
         self.dx = None
+        if ummesh:
+            self.mat_unit = 'S/um'
+        else:
+            self.mat_unit = 'S/m'
 
         # Multimesh parmeters
         self.Nspace = 1
@@ -62,13 +74,20 @@ class FEMSimulation(SimParameters):
         self.a = None
         self.L = None
 
-        # Solver parameter
+        # Solver parameters
         self.petsc_opt = {"ksp_type":"cg", "pc_type":"ilu", "ksp_rtol":1e-4, "ksp_atol":1e-7, "ksp_max_it":1000}
         self.cg_problem = None
         self.u = None
         self.mixedvout = None
         self.vout = None
         self.result = SimResult()
+
+        # Mcore attributes
+        self.comm = comm
+        self.rank = rank
+
+        # Timmers
+        self.solving_timer = 0
 
         self.bcs = []
         # added for overzriting false option 
@@ -85,6 +104,7 @@ class FEMSimulation(SimParameters):
     #####################################################
 
     def prepare_sim(self, **kwargs):
+        t0 = time.time()
         if self.data_status :
             self.args = kwargs
             pass_info('Static/Quasi-Static electrical current problem')
@@ -92,7 +112,7 @@ class FEMSimulation(SimParameters):
                 rise_error('1D not implemented yet')
             else:
                 # RECOVERING THE GEOMETRY
-                self.domain, self.subdomains, self.boundaries = read_gmsh(self.mesh, comm=MPI.COMM_WORLD, gdim=3)
+                self.domain, self.subdomains, self.boundaries = read_gmsh(self.mesh, comm=self.comm, rank=self.rank, gdim=3)
                 # SPACE FOR INTEGRATION 
                 if self.inbound:
                     self.Nspace = self.Ninboundaries + 1
@@ -115,7 +135,7 @@ class FEMSimulation(SimParameters):
                 # defining the linear form L(u)
                 # NB1: in the case of the current-problem, the source term is nul
                 # NB2: all Neuman Conditions are specified in the linear form
-                pass_info('... preparing the linear form')
+                pass_info('FEN4NRV: preparing the linear form')
                 # Check if quicker without
                 if not self.inbound:
                     self.L = Constant(self.V, ScalarType(0.0))*self.u*self.dx
@@ -123,9 +143,9 @@ class FEMSimulation(SimParameters):
                     for i_space in range(self.Nspace): 
                         self.L = Constant(self.V, ScalarType(0.0))*self.u[i_space]*self.dx
                 self.__set_neuman_BC()
+            self.solving_timer += time.time() - t0
         else: 
             rise_warning("no parameters are set, Sim can not be prepared")
-
 
     def __set_dirichlet_BC(self):
         """
@@ -176,7 +196,7 @@ class FEMSimulation(SimParameters):
         """
         internal use only: set the bilinear form a(vout, u) from the parameters
         """
-        pass_info('... preparing the bilinear form')
+        pass_info('FEN4NRV: preparing the bilinear form')
         #for dom in self.domains_list:
         if not self.inbound:
             label_list = []
@@ -185,19 +205,9 @@ class FEMSimulation(SimParameters):
                 dom = self.domains_list[i_domain]
                 # Recovering the label and the path to the material file
                 label_list.append(dom["mesh_domain"])
-                mat_path = str(dom["mat_file"])
+                mat_path = dom["mat_pty"]
                 # Recovering the material properties for the domain
-                mat = load_material(mat_path)
-                if mat.is_isotropic():
-                    # isotropic material, sigma is a scalar
-                    local_sigma = Constant(self.V, ScalarType(mat.sigma))
-                else:
-                    # anisotropic material, sigma is a 2-order tensor
-                    local_sigma = as_tensor([\
-                        [mat.sigma_xx, 0, 0],\
-                        [0, mat.sigma_yy, 0],\
-                        [0, 0, mat.sigma_zz],\
-                        ])
+                local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
                 sigma_list.append(local_sigma)
                 if self.a is None:
                     self.a = inner(nabla_grad(self.mixedvout), sigma_list[0]*nabla_grad(self.u))*self.dx(label_list[0])
@@ -211,19 +221,9 @@ class FEMSimulation(SimParameters):
                     dom = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
                     # Recovering the label and the path to the material file
                     label_list.append(self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain))
-                    mat_path = str(self.mat_file_map[label_list[-1]])
+                    mat_path = self.mat_pty_map[label_list[-1]]
                     # Recovering the material properties for the domain
-                    mat = load_material(mat_path)
-                    if mat.is_isotropic():
-                        # isotropic material, sigma is a scalar
-                        local_sigma = Constant(self.V, ScalarType(mat.sigma))
-                    else:
-                        # anisotropic material, sigma is a 2-order tensor
-                        local_sigma = as_tensor([\
-                            [mat.sigma_xx, 0, 0],\
-                            [0, mat.sigma_yy, 0],\
-                            [0, 0, mat.sigma_zz],\
-                            ])
+                    local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
                     sigma_list.append(local_sigma)
                     if self.a is None:
                         self.a = inner(nabla_grad(self.mixedvout[i_space]), sigma_list[0]*nabla_grad(self.u[i_space]))*self.dx(i_domain)
@@ -237,40 +237,65 @@ class FEMSimulation(SimParameters):
         """
         i_space = 0
         for i_ibound in self.inboundaries_list:
-            mat_path = str(self.mat_file_map[i_ibound])
-            mat = load_material(mat_path)
-            if mat.is_isotropic():
-                # isotropic material, sigma is a scalar
-                local_sigma = Constant(self.V, ScalarType(mat.sigma))
-            else: 
-                rise_error("Internal boundary should be isotropic")
+            mat_path = str(self.mat_pty_map[i_ibound])
+            local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
             local_thickness = Constant(self.V, ScalarType(self.inboundaries_list[i_ibound]['thickness']))
             jmp_v = avg(self.mixedvout[i_space]) - avg(self.mixedvout[i_space+1])
             jmp_u = avg(self.u[i_space]) - avg(self.u[i_space+1])
             self.a  += local_sigma/local_thickness * jmp_u * jmp_v * self.dS(i_ibound)
             i_space += 1
 
-    def reset_LinearForm_sim(self, **kwargs):
-        self.args = kwargs
-        self.mixedvout = TrialFunction(self.V)
-        pass_info('... reseting the linear form')
-        self.L = Constant(self.V, ScalarType(Constant(0.0)))*self.u*self.dx
-        labelL_list = []
-        Neuman_list = []
-        for bound in self.boundaries_list:
-            condition = bound.getElementsByTagName('condition')
-            if condition[0].childNodes[0].nodeValue =='Neuman':
-                labelL_list.append(int(bound.getElementsByTagName('label')[0].childNodes[0].nodeValue))
-                value_list = bound.getElementsByTagName('value')
-                variable_list = bound.getElementsByTagName('variable')
-                if value_list:
-                    Neuman_list.append(Constant(self.V, ScalarType(value_list[0].childNodes[0].nodeValue)))
-                elif variable_list:
-                    Neuman_list.append(Constant(self.V, ScalarType(self.args[variable_list[0].childNodes[0].nodeValue])))
-                else:
-                    rise_error('A Neuman Boundary condition must be associated with a value or variable')
-                self.L = self.L + Neuman_list[-1]*self.u*self.ds(labelL_list[-1])
+    def __get_permitivity(self, X, unit='S/m'):
+        """
+        Extract permitivity from an object X and convert it in dolfinx 
+        constant or tensor
 
+        Parameters
+        ----------
+            X       : str, mat, float, list[3]
+            V       : dolfinx.fem.FunctionSpace
+                space on wich the constant should be define
+            unit    : 'S/m' or 'S/um'
+                unit into witch the permitivity should be converted, by default S/m
+
+        Returns
+        -------
+            sigma   :   dolfinx.fem.Constant or ufl.as_tensor
+                permitivity 
+        """
+        sigma = None
+        if unit == 'S/um':
+            UN = S/m
+        else:
+            UN = 1
+
+        if isinstance(X, str):
+            mat = load_material(X)
+        elif is_mat(X):
+            mat = X
+        elif isinstance(X, (float, int)):
+            sigma = Constant(self.V, ScalarType(X * UN))
+        elif np.iterable(X) and len(X)==3:
+                sigma = as_tensor([\
+                    [X[0] * UN, 0, 0],\
+                    [0, X[1] * UN, 0],\
+                    [0, 0, X[2] * UN],\
+                    ]) 
+        else:
+            rise_error(('get_permitivity: X should be either an str, mat, float, list[3]'))
+        
+        if sigma is None:
+            if mat.is_isotropic():
+                # isotropic material, sigma is a scalar
+                sigma = Constant(self.V, ScalarType(mat.sigma * UN))
+            else:
+                # anisotropic material, sigma is a 2-order tensor
+                sigma = as_tensor([\
+                    [mat.sigma_xx * UN, 0, 0],\
+                    [0, mat.sigma_yy * UN, 0],\
+                    [0, 0, mat.sigma_zz * UN],\
+                    ])
+        return sigma
 
     #####################################################
     ################# Solve the sytstem #################
@@ -319,7 +344,8 @@ class FEMSimulation(SimParameters):
 
 
     def solve(self):
-        pass_info('... solving electrical potential')
+        t0 = time.time()
+        pass_info('FEN4NRV: solving electrical potential')
         #rise_warning('The result will not be saved, be sure you use or save it later')
         self.cg_problem = LinearProblem(self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt)
         self.mixedvout = self.cg_problem.solve()
@@ -330,6 +356,9 @@ class FEMSimulation(SimParameters):
 
         # return simulation result
         self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=self.V, vout=self.vout, comm=self.domain.comm)
+        
+        self.solving_timer += time.time() - t0
+        pass_info('FEN4NRV: solved in ' + str(self.solving_timer) + ' s')
         return self.result
 
     def __merge_mixed_solutions(self):
@@ -362,6 +391,8 @@ class FEMSimulation(SimParameters):
             file.write_function(self.vout)
         return self.result
 
+    def get_timers(self):
+        return self.assembling_timer, self.solving_timer
 
     def visualize_mesh(self):
         os.system('gmsh '+ self.mesh_file +'.msh')

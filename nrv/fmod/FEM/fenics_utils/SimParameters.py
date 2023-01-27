@@ -25,8 +25,8 @@ class SimParameters:
         self.inboundariesID = []
         self.inboundaries_list = {}
 
-        # gather mat_file name for domain and internal layer
-        self.mat_file_map = {}
+        # gather mat_pty name for domain and internal layer
+        self.mat_pty_map = {}
 
         if data is not None:
             self.load_SimParameters(data)
@@ -61,7 +61,7 @@ class SimParameters:
         sp_dic['Ninboundaries'] = self.Ninboundaries
         sp_dic['inboundariesID'] = self.inboundariesID
         sp_dic['inboundaries'] = self.inboundaries_list
-        sp_dic['mat_file_map'] = self.mat_file_map
+        sp_dic['mat_pty_map'] = self.mat_pty_map
         if save:
             json_dump(sp_dic, fname)
         return sp_dic
@@ -92,7 +92,7 @@ class SimParameters:
         self.Ninboundaries = sp_dic['Ninboundaries']
         self.inboundariesID = sp_dic['inboundariesID']
         self.inboundaries_list = sp_dic['inboundaries']
-        self.mat_file_map = sp_dic['mat_file_map']
+        self.mat_pty_map = sp_dic['mat_pty_map']
 
 
 
@@ -143,20 +143,32 @@ class SimParameters:
             self.boundariesID = IDlist
         return IDlist[-1]
 
-    def add_domain(self, mesh_domain, mat_file, ID=None):
+    def add_domain(self, mesh_domain, mat_file=None, mat_perm=None, ID=None):
         """
         add new domain or change if ID already exists
         Parameters
         ----------
         mesh_domain     : int
-            Mesh ID of the boundary (should be 3D)
-        mat_file           : str
-            Material filename (see fmod.material.py)
+            Mesh ID of the domain (should be 3D)
+        mat_file        : str
+            Material filename (see fmod.material.py) if None use mat_perm,
+                by default None
+        mat_perm        : float or list[3]
+            Material permitivity, if float isotropic mat, if list[3] anisotropic mat
+                if None set to 1 (and mat_file is None), by default None
         """
-        IDdom= self.__update_ID_list('domains', mesh_domain)
-        self.domains_list[IDdom] = {'mesh_domain': mesh_domain, 'mat_file':mat_file, 'mixed_domain':[mesh_domain]}
+        if mat_file is not None:
+            mat_pty = mat_file
+        elif mat_perm is not None:
+            mat_pty = mat_perm
+        else:
+            mat_pty = 1
+            rise_warning('neither mat_file or mat_perm set, set to default permitivity 1 S/m')
 
-        self.mat_file_map[mesh_domain] = mat_file
+        IDdom= self.__update_ID_list('domains', mesh_domain)
+        self.domains_list[IDdom] = {'mesh_domain': mesh_domain, 'mat_pty':mat_pty, 'mixed_domain':[mesh_domain]}
+
+        self.mat_pty_map[mesh_domain] = mat_pty
         self.Ndomains = len(self.domainsID)
     
     def add_boundary(self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None):
@@ -190,18 +202,36 @@ class SimParameters:
             print("Warning: boundary not set, variable or boundary have to be precised")
         self.Nboundaries = len(self.boundariesID)
         
-    def add_inboundary(self, mesh_domain, mat_file, thickness, in_domains, ID=None):
+    def add_inboundary(self, mesh_domain, in_domains, thickness, mat_file=None, mat_perm=None, ID=None):
         """
         add new internal boundary or change if ID already exists
         Parameters
         ----------
-        new_mesh_file   :str 
-            name of the new filename, will be save without the filename extension
+        mesh_domain     : int
+            Mesh ID of the boundary (should be 2D)
+        in_domains       : float
+            Mesh ID of the domain inside the boundary (should be 3D)
+        thickness       : float
+            thicness of the internal boundary
+        mat_file        : str
+            Material filename (see fmod.material.py) if None use mat_perm,
+                by default None
+        mat_perm        : float or list[3]
+            Material permitivity, if float isotropic mat, if list[3] anisotropic mat
+                if None set to 1 (and mat_file is None), by default None
         """
+        if mat_file is not None:
+            mat_pty = mat_file
+        elif mat_perm is not None:
+            mat_pty = mat_perm
+        else:
+            mat_pty = 1
+            rise_warning('neither mat_file or mat_perm set, set to default permitivity 1 S/m')
+
         self.inbound = True
         IDibound= self.__update_ID_list('inbound', mesh_domain)
         self.inboundaries_list[IDibound] = {'mesh_domain': mesh_domain, 'in_domains':in_domains,\
-            'thickness' : thickness, 'mat_file':mat_file}
+            'thickness' : thickness, 'mat_pty':mat_pty}
         # Cumpute corresponding domain for mixed space
         for i in in_domains:
             for j in self.domains_list:
@@ -214,9 +244,8 @@ class SimParameters:
                 # Domain outside the boundary
                 else:
                     domain['mixed_domain'] += [mesh_domain] 
-        self.mat_file_map[mesh_domain] = mat_file           
+        self.mat_pty_map[mesh_domain] = mat_pty           
         self.Ninboundaries = len(self.inboundariesID)
-    
     
     def get_mixedspace_domain(self, i_space=None, i_domain=None):
         """
@@ -235,7 +264,7 @@ class SimParameters:
                     md = self.domains_list[i_domain]['mixed_domain'][i_space]
             return md
     
-    def get_mixedspace_mat_file(self, i_space=None, i_domain=None):
+    def get_mixedspace_mat_pty(self, i_space=None, i_domain=None):
         """
         
         """
@@ -244,14 +273,14 @@ class SimParameters:
             S = np.shape(md)
             if i_space is None:
                 if i_domain is None:
-                    mmf = [[self.mat_file_map[md[i][j]] for i in range(S[0])] for j in range(S[1])]
+                    mmf = [[self.mat_pty_map[md[i][j]] for i in range(S[0])] for j in range(S[1])]
                 else:
-                    mmf = [self.mat_file_map[md[i]] for i in range(S[0])]
+                    mmf = [self.mat_pty_map[md[i]] for i in range(S[0])]
             else:
                 if i_domain is None:
-                    mmf = [self.mat_file_map[md[i]] for i in range(S[0])]
+                    mmf = [self.mat_pty_map[md[i]] for i in range(S[0])]
                 else:
-                    mmf = self.mat_file_map[md]
+                    mmf = self.mat_pty_map[md]
             return mmf
 
     def get_space_of_domain(self, i_domain=None):

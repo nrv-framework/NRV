@@ -23,8 +23,6 @@ def is_NerveMshCreator(object):
 class NerveMshCreator(MshCreator):
     def __init__(self, Length=10000, Outer_D=5,  Nerve_D=4000, y_c=0, z_c=0, data=None, ver_level=2):
         super().__init__(D=3, ver_level=ver_level)
-        self.res = 1000
-
         self.L = Length
         self.y_c = y_c
         self.z_c = z_c
@@ -44,7 +42,11 @@ class NerveMshCreator(MshCreator):
         self.N_electrode = 0
         self.electrodes = {}
 
-        self.default_res = {"Outerbox" : self.Outer_D/5, "Nerve":self.Nerve_D/5, "Fascicle":100, "Axon":10, "Electrode":50} 
+        self.default_res = {"Outerbox" : self.Outer_D/5, "Outerbox_tresholded":False,\
+            "Nerve":self.Nerve_D/5, "Fascicle":500, "Axon":10, "Electrode":50} 
+        Ox = None
+        self.res = self.default_res['Outerbox']
+        self.alpha_Outerboxres = 0.05
 
         self.is_geo = False
         self.is_dom = False
@@ -85,7 +87,35 @@ class NerveMshCreator(MshCreator):
     #####################################   geometry definition  #######################################
     ####################################################################################################
 
-    def reshape_outerBox(self, Outer_D=None, res="default"):
+    def compute_geo(self):
+        """
+        Compute the mesh geometry
+
+        """
+        self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Outer_D/2)
+        if self.default_res["Outerbox_tresholded"]:
+            self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
+        self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D/2)
+        for i in self.fascicles:
+            fascicle = self.fascicles[i]
+            self.add_cylinder(0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["D"]/2)
+
+        for i in self.axons:
+            axon = self.axons[i]
+            self.add_cylinder(0, axon["y_c"], axon["z_c"], self.L, axon["D"]/2)
+        for i in self.electrodes:
+            electrode = self.electrodes[i]
+            if "CUFF MEA" in electrode["type"]:
+                self.add_CUFF_MEA(ID=i, **electrode["kwargs"])
+            elif "CUFF" in electrode["type"]:
+                self.add_CUFF(ID=i, **electrode["kwargs"])
+            elif "LIFE" in electrode["type"]:
+                self.add_LIFE(ID=i, **electrode["kwargs"])
+        
+        self.fragment()
+        self.is_geo = True
+
+    def reshape_outerBox(self, Outer_D=None, res="default", tresholded_res=None,):
         """
         Reshape the size of the FEM simulation outer box
 
@@ -96,14 +126,15 @@ class NerveMshCreator(MshCreator):
         """
         if Outer_D is not None:
             self.Outer_D = (Outer_D*mm)
-            if self.Outer_D < self.default_res["Outerbox"]/5 and res=="default":
-                res = self.Outer_D/5
         
+        if tresholded_res is not None:
+            self.default_res["Outerbox_tresholded"] = tresholded_res
+
         if not res=="default":
             self.default_res["Outerbox"]=res
-
-
-
+        
+        if self.default_res["Outerbox"] > self.Outer_D/3:
+            self.default_res["Outerbox"] = self.Outer_D/3
 
     def reshape_nerve(self, Nerve_D=None, Length=None, y_c=None, z_c=None, res="default"):
         """
@@ -125,15 +156,16 @@ class NerveMshCreator(MshCreator):
             self.L = Length
         if Nerve_D is not None:
             self.Nerve_D = Nerve_D
-            if self.Nerve_D < self.default_res["Nerve"]/5 and res=="default":
-                res = self.Nerve_D/5
         if y_c is not None:
             self.y_c = y_c
         if z_c is not None:
             self.z_c = z_c
 
         if not res=="default":
-            self.default_res["Nerve"]=res
+            self.default_res["Nerve"] = res
+        
+        if self.default_res["Nerve"] > self.Nerve_D/5:
+            self.default_res["Nerve"] = self.Nerve_D/5
 
     def reshape_fascicle(self, D, y_c=0, z_c=0, ID=None, res="default"):
         """
@@ -157,15 +189,12 @@ class NerveMshCreator(MshCreator):
                     ID += 1
             self.N_fascicle +=1
 
-
         if res == "default":
             res = self.default_res["Fascicle"]
-
         if D/5 < res:
             res = D/5
 
         self.fascicles[ID] = {"y_c":y_c, "z_c":z_c,"D":D, "res":res, "face":None, "volume":None}
-        
 
     def reshape_axon(self, D, y_c=0, z_c=0, ID=None, res="default"):
         """
@@ -191,7 +220,6 @@ class NerveMshCreator(MshCreator):
 
         if res == "default":
             res = self.default_res["Axon"]
-        
         if D/3 < res:
             res = D/3
 
@@ -212,6 +240,16 @@ class NerveMshCreator(MshCreator):
 
         if res == "default":
             res = self.default_res["Electrode"]
+        
+        if elec_type=="CUFF":
+            if "thickness" in kwargs:
+                thickness = kwargs["thickness"]
+            else:
+                thickness = 25
+            if thickness/3 < res:
+                res = thickness/3
+            self.reshape_outerBox(tresholded_res=True)
+
         if "LIFE" in elec_type:
             if "D" in kwargs:
                 D = kwargs["D"]
@@ -220,33 +258,7 @@ class NerveMshCreator(MshCreator):
             if D/3 < res:
                 res = D/3
 
-        self.electrodes[ID] = {"type":elec_type, "res":res, "kwargs":kwargs}   
-
-    
-    def compute_geo(self):
-        """
-        Compute the mesh geometry
-
-        """
-        self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Outer_D/2)
-        
-        self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D/2)
-        for i in self.fascicles:
-            fascicle = self.fascicles[i]
-            self.add_cylinder(0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["D"]/2)
-
-        for i in self.axons:
-            axon = self.axons[i]
-            self.add_cylinder(0, axon["y_c"], axon["z_c"], self.L, axon["D"]/2)
-        for i in self.electrodes:
-            electrode = self.electrodes[i]
-            if "CUFF MEA" in electrode["type"]:
-                self.add_Cuff_MEA(ID=i, **electrode["kwargs"])
-            elif "LIFE" in electrode["type"]:
-                self.add_LIFE(ID=i, **electrode["kwargs"])
-        
-        self.fragment()
-        self.is_geo = True
+        self.electrodes[ID] = {"type":elec_type, "res":res, "kwargs":kwargs}
 
 
     ####################################################################################################
@@ -255,16 +267,14 @@ class NerveMshCreator(MshCreator):
 
     def compute_domains(self):
         if not self.is_geo:
-            print("compute geometry before domain")
-            return None
+            rise_error("compute geometry before domain")
         else:
             self.__link_entity_domains(2)
             self.__link_entity_domains(3)
             self.compute_entity_domain()
             self.is_dom =True
 
-
-    def __is_outerbox(self, dx, dy, dz):
+    def __is_outerbox(self, dx, dy, dz, com, dim_key, include_lfacet=False, include_rfacet=False):
         """
         Internal use only: check if volume is the box
         INPUTS
@@ -277,7 +287,13 @@ class NerveMshCreator(MshCreator):
             length along z of the entity boundbox
         
         """
-        return np.allclose([dx, dy, dz], [self.L, self.Outer_D,self.Outer_D])
+        outer_ring_test = np.allclose([dx, dy, dz], [self.L, self.Outer_D,self.Outer_D])
+        if dim_key == "volume":
+            return outer_ring_test
+        
+        left_facet_test = np.allclose(com[0], [0]) and include_lfacet
+        rigth_facet_test = np.allclose(com[0], [self.L]) and include_rfacet
+        return outer_ring_test or left_facet_test or rigth_facet_test
 
     def __is_nerve(self, dx, dy, dz):
         """
@@ -366,7 +382,6 @@ class NerveMshCreator(MshCreator):
         # test good diameter
         size_test =  np.allclose([dx], [elec_kwargs["size"][0]])
         #print(ID, dx, dy, dz, com)
-
         com_test = np.isclose(com[0], elec_kwargs["x_c"])
         # test center of mass in axon
 
@@ -375,7 +390,31 @@ class NerveMshCreator(MshCreator):
         angle_test = np.isclose(tetas, self.electrodes[ID]["angles"]).any()
 
         return size_test and com_test and angle_test
+    
+    def __is_CUFF_electrode(self, ID, dx, dy, dz, com):
+        """
+        Internal use only: check if volume is electrode ID or face is external face of fascicle ID
+        INPUTS
+        ------
+        dx          : float
+            length along x of the entity boundbox
+        dy          : float
+            length along y of the entity boundbox
+        dz          : float
+            length along z of the entity boundbox
+        com         : tupple(float)
+            entity Center of Mass
+        """
 
+        elec_kwargs = self.electrodes[ID]["kwargs"]
+        if self.electrodes[ID]['type'] != 'CUFF':
+            return False
+        # test good diameter
+        Syz = self.Nerve_D + 2*elec_kwargs["thickness"]
+        size_test =  np.allclose([dx, dy, dz], [elec_kwargs["length"], Syz, Syz])
+        # test center of mass in CUFF
+        com_test = np.allclose(com,(elec_kwargs["x_c"],elec_kwargs["y_c"], elec_kwargs["z_c"]), rtol=1, atol= Syz/2)
+        return size_test and com_test
 
     def __is_LIFE_electrode(self, ID, dx, dy, dz, com):
         """
@@ -396,11 +435,9 @@ class NerveMshCreator(MshCreator):
         if self.electrodes[ID]['type'] != 'LIFE':
             return False
 
-        size_test =  np.allclose([dx], [elec_kwargs["length"]])
-
         # test good diameter
         size_test =  np.allclose([dx, dy, dz], [elec_kwargs["length"], elec_kwargs["D"],elec_kwargs["D"]])
-        # test center of mass in axon
+        # test center of mass in LIFE
         com_test = np.allclose(com,(elec_kwargs["x_c"],elec_kwargs["y_c"], elec_kwargs["z_c"]), rtol=1, atol= elec_kwargs["D"]/2)
         return size_test and com_test
 
@@ -431,7 +468,7 @@ class NerveMshCreator(MshCreator):
             bd_x = abs(ent_bd[i][3]-ent_bd[i][0])
             bd_y = abs(ent_bd[i][4]-ent_bd[i][1])
             bd_z = abs(ent_bd[i][5]-ent_bd[i][2])
-            if self.__is_outerbox(bd_x, bd_y, bd_z):
+            if self.__is_outerbox(bd_x, bd_y, bd_z,  ent_com[i], key):
                 self.Outer_entities[key] += [entities[i][1]]
 
             elif self.__is_nerve(bd_x, bd_y, bd_z):
@@ -446,6 +483,7 @@ class NerveMshCreator(MshCreator):
                     self.axons[j][key] = entities[i][1]
 
             for j in self.electrodes:
+                #print(self.electrodes[j])
                 r_c = ((ent_com[i][1]-self.y_c)**2 + (ent_com[i][2]-self.z_c)**2)**0.5
                 teta = phase(complex(ent_com[i][2] - self.z_c, ent_com[i][1] - self.y_c)) % (2*pi)
                 if self.__is_CUFF_MEA_electrode(j,bd_x, teta, ent_com[i]):
@@ -456,7 +494,7 @@ class NerveMshCreator(MshCreator):
                         #print(teta/(2*pi),ID_EA, ent_com[i], j)
                             self.electrodes[j][key][ID_EA] = entities[i][1]
                         else:
-                            print("Warning : two volumes can be same electrode only the first one is kept")
+                            rise_warning("two volumes can be same electrode only the first one is kept")
                     else:
                         if self.electrodes[j][key][ID_EA] is None:
                         #print(teta/(2*pi),ID_EA, ent_com[i], j)
@@ -464,9 +502,10 @@ class NerveMshCreator(MshCreator):
                         elif isinstance(self.electrodes[j][key][ID_EA], tuple):
                             if r_c > self.electrodes[j][key][ID_EA][1]:
                                 self.electrodes[j][key][ID_EA] = (entities[i][1], r_c)
+                elif self.__is_CUFF_electrode(j,bd_x, bd_y, bd_z, ent_com[i]):
+                    self.electrodes[j][key] = entities[i][1]
                 elif self.__is_LIFE_electrode(j,bd_x, bd_y, bd_z, ent_com[i]):
                     self.electrodes[j][key] = entities[i][1]
-
 
     def compute_entity_domain(self):
         """
@@ -493,10 +532,12 @@ class NerveMshCreator(MshCreator):
                 for ID_EA in range(self.electrodes[j]['kwargs']['N']):
                     self.add_domains(obj_IDs=self.electrodes[j]['face'][ID_EA][0],phys_ID=100+(2*(j+ID_EA)+1)%900,dim=2)                
                     self.add_domains(obj_IDs=self.electrodes[j]['volume'][ID_EA],phys_ID=100+(2*(j+ID_EA))%900,dim=3)
-            else:
-                self.add_domains(obj_IDs=self.electrodes[j]['face'],phys_ID=100+(2*j+1)%900,dim=2)                
-                #self.add_domains(obj_IDs=self.electrodes[j]['volume'],phys_ID=100+(2*j)%900,dim=3)
+            elif "CUFF" in self.electrodes[j]['type']:
+                self.add_domains(obj_IDs=self.electrodes[j]['face'],phys_ID=100+(2*j+1)%900,dim=2)
+                self.add_domains(obj_IDs=self.electrodes[j]['volume'],phys_ID=100+(2*j)%900,dim=3)
 
+            elif "LIFE" in self.electrodes[j]['type']:
+                self.add_domains(obj_IDs=self.electrodes[j]['face'],phys_ID=100+(2*j+1)%900,dim=2)                
 
 
     ####################################################################################################
@@ -505,13 +546,13 @@ class NerveMshCreator(MshCreator):
 
     def compute_res(self):
         if not self.is_dom and self.is_geo:
-            print("compute geometry before domain")
-            return None
+            rise_error("compute geometry before domain")
         else:
-            fields = []
+            self.res = self.default_res['Outerbox']
 
-            fields += [self.refine_entities(ent_ID=self.Outer_entities['volume'], res_in=self.default_res['Outerbox'], \
-                dim=3, res_out=None, IncludeBoundary=True)]
+            fields = []
+            fields += self.__refine_Outer_box(alpha=self.alpha_Outerboxres)
+            
             fields += [self.refine_entities(ent_ID=self.Nerve_entities['volume'], res_in=self.default_res['Nerve'], \
                 dim=3, res_out=None, IncludeBoundary=True)]
             for j in self.fascicles:
@@ -530,22 +571,107 @@ class NerveMshCreator(MshCreator):
                     for ID_EA in range(electrode['kwargs']['N']):
                         fields += [self.refine_entities(ent_ID=electrode['volume'][ID_EA], res_in=electrode['res'], \
                             dim=3, res_out=None, IncludeBoundary=True)]
-                elif "LIFE" in electrode['type']:
+                else:
                     fields += [self.refine_entities(ent_ID=electrode['volume'], res_in=electrode['res'], \
                             dim=3, res_out=None, IncludeBoundary=True)]
 
             self.refine_min(fields)
             self.is_refined = True
+        
+    def __refine_Outer_box(self, alpha=0.1):
+        """
+        """
+        if not self.default_res['Outerbox_tresholded']:
+            field = [self.refine_entities(ent_ID=self.Outer_entities['volume'], res_in=self.default_res['Outerbox'], \
+                dim=3, res_out=None, IncludeBoundary=True)]
+        else:
+            dmin = self.Nerve_D
+            dmax = dmin + alpha * self.Outer_D
+            field = [self.refine_threshold(ent_ID=self.Ox, dim=1, res_min=self.default_res['Nerve'], \
+                 res_max=self.default_res['Outerbox'],dist_min=self.Nerve_D ,dist_max=dmax)]
+        return field
 
-                
-            
+
+  
 
     ####################################################################################################
     ###################################   electrodes definition  #######################################
     ####################################################################################################
 
+    def add_LIFE(self, ID=None, x_c=0, y_c=0, z_c=0, length=1000, D=25):
+        """
+        Add LIFE electrode to the mesh
 
-    def add_Cuff_MEA(self, ID=None, N=4, x_c=0, y_c=0, z_c=0, size=None, thickness=100, inactive=True,\
+        Parameters
+        ----------
+        ID          :int
+            electrod ID, ,by defalt None
+        x_c         :float
+            x-position of the LIFE center in um, by default 0
+        y_c         :float
+            y-position of the LIFE center in um, by default 0
+        z_c         :float
+            z-position of the LIFE center in um, by default 0
+        length      :float
+            length of the LIFE electrod in um, by default 1000
+        D           :float
+            diameter of the LIFE electrod in um, by default 25
+
+        """
+
+        if ID is not None:
+            self.electrodes[ID]["volume"] = []
+            self.electrodes[ID]["face"] = []
+        x_active = (x_c-length/2)
+        y_active = y_c
+        z_active = z_c
+        self.add_cylinder(x_active, y_active,z_active,length,D/2)
+
+    def add_CUFF(self, ID=None, x_c=0, y_c=0, z_c=0, length=50, thickness=5, inactive=True,\
+        inactive_th=20, inactive_L=1000):
+        """
+        Add CUFF electrode to the mesh
+
+        Parameters
+        ----------
+        ID          :int
+            if not none and ID exist, change electrod ID,by defalt None
+        x_c         :float
+            x-position of the CUFF center in um, by default 0
+        y_c         :float
+            y-position of the CUFF center in um, by default 0
+        z_c         :float
+            z-position of the CUFF center in um, by default 0
+        length      :float
+            length of the CUFF electrod in um, by default 1000
+        D           :float
+            diameter of the CUFF electrod in um, by default 25        
+        """
+        if ID is not None:
+            self.electrodes[ID]["kwargs"]["length"] = length
+            self.electrodes[ID]["kwargs"]["thickness"] = thickness
+            self.electrodes[ID]["volume"] = []
+            self.electrodes[ID]["face"] = []
+
+        x_active = x_c-length/2
+        y_active = y_c
+        z_active = z_c
+        cyl_act = self.add_cylinder(x_active, y_active, z_active, length, self.Nerve_D/2+thickness)      
+        cyl_ner2 = self.add_cylinder(x_active, y_active, z_active, length, self.Nerve_D/2)
+        self.model.occ.cut([(3, cyl_act)],[(3, cyl_ner2)])
+
+        if inactive:            
+            x_inactive = x_c-inactive_L/2
+            y_inactive = y_c
+            z_inactive = z_c
+
+            cyl_ina = self.add_cylinder(x_inactive, y_inactive,z_inactive,inactive_L, self.Nerve_D/2 + inactive_th)
+            cyl_ner = self.add_cylinder(x_inactive, y_inactive,z_inactive,inactive_L, self.Nerve_D/2)
+            self.model.occ.cut([(3, cyl_ina)],[(3, cyl_ner), (3, cyl_act)])
+
+
+
+    def add_CUFF_MEA(self, ID=None, N=4, x_c=0, y_c=0, z_c=0, size=None, thickness=100, inactive=True,\
         inactive_th=None, inactive_L=None):
         """
         
@@ -595,24 +721,3 @@ class NerveMshCreator(MshCreator):
         
         cyl = self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D/2)
         self.model.occ.cut(bar_fus, [(3, cyl)])
-
-
-    def add_LIFE(self, ID=None, x_c=0, y_c=0, z_c=0, length=1000, D=25):
-        """
-        
-        """
-
-        if ID is not None:
-            self.electrodes[ID]["volume"] = []
-            self.electrodes[ID]["face"] = []
-
-        angles = []
-        bar_fus = []
-
-        x_active = (x_c-length/2)
-        y_active = y_c
-        z_active = z_c
-
-        LIFE = self.add_cylinder(x_active, y_active,z_active,length,D/2)
-
-

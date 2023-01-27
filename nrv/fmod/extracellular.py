@@ -522,11 +522,11 @@ class FEM_stimulation(extracellular_context):
         outer_D : float
             FEM simulation outer box diameter, in mm, WARNING, this is the only parameter in mm !
         """
-        if self.comsol:
-            if MCH.do_master_only_work():
+        if MCH.do_master_only_work():
+            if self.comsol:
                 self.model.set_parameter('Outer_D', str(Outer_D)+'[mm]')
-        else:
-            self.model.reshape_outerBox(Outer_D, res=res)
+            else:
+                self.model.reshape_outerBox(Outer_D, res=res)
     def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, Perineurium_thickness=5, res="default"):
         """
         Reshape the nerve of the FEM simulation
@@ -544,15 +544,16 @@ class FEM_stimulation(extracellular_context):
         Perineurium_thickness   :float
             Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
         """
-        if self.comsol:
-            if MCH.do_master_only_work():
+        if MCH.do_master_only_work():
+            if self.comsol:
+            
                 self.model.set_parameter('Nerve_D', str(Nerve_D)+'[um]')
                 self.model.set_parameter('Length', str(Length)+'[um]')
                 self.model.set_parameter('Nerve_y_c', str(y_c)+'[um]')
                 self.model.set_parameter('Nerve_z_c', str(z_c)+'[um]')
                 self.model.set_parameter('Perineurium_thickness', str(Perineurium_thickness)+'[um]')
-        else:
-            self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
+            else:
+                self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
 
     def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"):
         """
@@ -569,9 +570,8 @@ class FEM_stimulation(extracellular_context):
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
         """
-
-        if self.comsol:
-            if MCH.do_master_only_work():
+        if MCH.do_master_only_work():
+            if self.comsol:
                 if ID is None:
                     self.model.set_parameter('Fascicle_D', str(Fascicle_D)+'[um]')
                     self.model.set_parameter('Fascicle_y_c', str(y_c)+'[um]')
@@ -580,9 +580,9 @@ class FEM_stimulation(extracellular_context):
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_D', str(Fascicle_D)+'[um]')
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_y_c', str(y_c)+'[um]')
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_z_c', str(z_c)+'[um]')
-        else:
-            self.model.reshape_fascicle(Fascicle_D=Fascicle_D, y_c=y_c, z_c=z_c, ID=ID,\
-                Perineurium_thickness=Perineurium_thickness, res=res)
+            else:
+                self.model.reshape_fascicle(Fascicle_D=Fascicle_D, y_c=y_c, z_c=z_c, ID=ID,\
+                    Perineurium_thickness=Perineurium_thickness, res=res)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -605,7 +605,7 @@ class FEM_stimulation(extracellular_context):
                 self.electrodes.append(electrode)
                 self.electrodes_label.append(electrode.label)
                 self.stimuli.append(stimulus)
-            if self.fenics:
+            if self.fenics and MCH.do_master_only_work():
                 electrode.parameter_model(self.model)
             self.synchronised = False
             self.setup = False

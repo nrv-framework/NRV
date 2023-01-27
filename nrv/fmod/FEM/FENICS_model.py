@@ -5,6 +5,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 """
 
 import numpy as np
+import configparser
+import os
+
 from ...utils.units import V
 from ...backend.file_handler import rmv_ext
 from .FEM import *
@@ -34,7 +37,8 @@ class FENICS_model(FEM_model):
     """
     A class for FENICS Finite Element Models, inherits from FEM_model.
     """
-    def __init__(self, fname=None, Ncore=None, handle_server=False, elem=None):
+    def __init__(self, fname=None, Ncore=None, handle_server=False, elem=None, comm=MPI.COMM_SELF,\
+        rank=0):
         """
         Creates a instance of a FENICS Finite Element Model object.
 
@@ -82,6 +86,10 @@ class FENICS_model(FEM_model):
         self.sim = []
         self.sim_res = []
 
+        # Mcore attributes
+        self.comm = comm
+        self.rank = rank
+
         # Status
         self.mesh_file_status = not self.mesh_file is None
         self.is_sim_ready = False
@@ -108,7 +116,7 @@ class FENICS_model(FEM_model):
 
         elif self.is_meshed: 
             self.mesh_file = rmv_ext(fname)
-            self.mesh.save(fname +'msh')
+            self.mesh.save(fname)
 
     def clear(self):
         """
@@ -212,7 +220,7 @@ class FENICS_model(FEM_model):
             FEM simulation outer box diameter, in mm, WARNING, this is the only parameter in mm !
         """
         if not self.mesh_file_status:
-            self.mesh.reshape_outerBox(Outer_D, res)
+            self.mesh.reshape_outerBox(Outer_D = Outer_D, res = res)
             self._update_parameters()
 
     def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
@@ -234,7 +242,7 @@ class FENICS_model(FEM_model):
         """
         if not self.mesh_file_status:
             self.L = Length
-            self.mesh.reshape_nerve(Nerve_D, Length, y_c, z_c, res)
+            self.mesh.reshape_nerve(Nerve_D = Nerve_D, Length = Length, y_c = y_c, z_c = z_c, res = res)
             self._update_parameters()
 
     def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"):
@@ -274,12 +282,23 @@ class FENICS_model(FEM_model):
     ## setup simulation ##
     ########################
 
-    def setup_simulations(self):
+    def setup_simulations(self, comm=None, rank=None):
+        """
+        
+        """
+        if self.comm is not None:
+            self.comm = comm        
+        if self.rank is not None:
+            self.rank = rank
+
         if self.is_meshed and not self.is_sim_ready:
+            t0 = time.time()
             # For EIT change in for E in elec_patren:
             for E in range(self.N_electrode):
                 active_elec = self.electrodes[E] 
                 # SETTING DOMAINS
+                #del self.mesh
+                #sim = FEMSimulation(mesh_file=self.mesh_file, elem=self.elem, comm=self.comm, rank=self.rank)
                 sim = FEMSimulation(mesh_file=self.mesh_file,mesh=self.mesh, elem=self.elem)
                 # Outerbox domain
                 sim.add_domain(mesh_domain=0,mat_file=self.Outer_mat)
@@ -301,6 +320,7 @@ class FENICS_model(FEM_model):
                 sim.prepare_sim()
                 self.sim += [sim]
             self.is_sim_ready = True
+        self.preparing_timer += time.time() - t0
             
     
     def set_materials(self, Outer_mat=None, Epineurium_mat=None, Endoneurium_mat=None, Perineurium_mat=None):
@@ -339,7 +359,7 @@ class FENICS_model(FEM_model):
             if elec["type"] == "LIFE":
                 d_e = elec["kwargs"]['D']
                 l_e = elec["kwargs"]['length']
-                S = pi*(d_e)*(l_e/m)
+                S = pi*(d_e)*(l_e)
                 jstim = self.Istim / S
 
         return jstim
@@ -365,6 +385,7 @@ class FENICS_model(FEM_model):
         Build the geometry and perform meshing process
         """
         if not self.mesh_file_status:
+            t0 = time.time()
             self._update_parameters()
             if self.N_fascicle == 0:
                 self.reshape_fascicle(Fascicle_D=self.default_fascicle['D'], y_c=self.default_fascicle['y_c'], z_c=self.default_fascicle['z_c'], res=self.default_fascicle['res'])
@@ -373,18 +394,24 @@ class FENICS_model(FEM_model):
                     z_c=self.default_electrode['z_c'], length=self.default_electrode['length'], D=self.default_electrode['D'], res=self.default_electrode['res'])
             self._update_parameters()
             self.mesh.compute_mesh()
+            self.get_meshes()
             self.is_meshed = True
+            self.mesh.get_mesh_info(verbose=True)
+            self.meshing_timer += time.time() - t0
 
-    def solve(self):
+    def solve(self, comm=None, rank=None):
         """
         Solve the model
         """
         if not self.is_sim_ready:
             self.setup_simulations()
+        
+        t0 = time.time()
         # For EIT change in for E in elec_patren:
         for E in range(self.N_electrode):
-            self.sim_res +=[self.sim[E].solve()]
+            self.sim_res += [self.sim[E].solve()]
         self.is_computed = True
+        self.solving_timer += time.time() - t0
 
     ######################
     ## results handling ##
@@ -411,6 +438,7 @@ class FENICS_model(FEM_model):
             (line: electrode selection, column: potential)
         """
         if self.is_computed == True:
+            t0 = time.time()
             line = [[x_, y, z] for x_ in x]
             if self.N_electrode==1 or (E < self.N_electrode and E >= 0):
                 potentials =  self.sim_res[E].eval(line)*V
@@ -419,6 +447,7 @@ class FENICS_model(FEM_model):
                 for E in range(self.N_electrode):
                     potentials += [self.sim_res[E].eval(line)]
                 potentials = np.transpose(np.array(potentials)*V)
+            self.access_res_timer += time.time() - t0
             return potentials
                 
 

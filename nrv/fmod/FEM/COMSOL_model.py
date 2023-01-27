@@ -6,6 +6,10 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 
 import numpy as np
 import mph
+import configparser
+import os
+
+
 from ...utils.units import V
 from .FEM import *
 
@@ -42,6 +46,7 @@ class COMSOL_model(FEM_model):
             if True, the instantiation creates the server, else a external server is used. Usefull for multiple cells sharing the same model
         """
         if COMSOL_Status:
+            t0 = time.time()
             super().__init__(Ncore=Ncore)
             self.type = 'COMSOL'
 
@@ -70,6 +75,7 @@ class COMSOL_model(FEM_model):
             #self.client.caching(True)
             # source
             self.fname = fname
+            self.preparing_timer += time.time() - t0
         else:
             ## COMSOL TURNED OFF, no error, but only a warning and no computation (exit)
             rise_warning('Bad implementation, a COMSOL simulation is implemented while NRV2 has COMSOL status turned OFF, unterminated computation, early exit without error', abort=True)
@@ -158,11 +164,13 @@ class COMSOL_model(FEM_model):
         """
         Build the geometry and perform meshing process
         """
+        t0 = time.time()
         pass_info('... Building model geometry')
         self.model.build()
         pass_info('... Meshing geometry')
         self.model.mesh()
         self.is_meshed = True
+        self.meshing_timer += time.time() - t0
 
     def solve(self):
         """
@@ -171,8 +179,10 @@ class COMSOL_model(FEM_model):
         if not self.is_meshed:
             self.build_and_mesh()
         pass_info('... Solving model')
+        t0 = time.time()
         self.model.solve()
         self.is_computed = True
+        self.solving_timer += time.time() - t0
 
     ######################
     ## results handling ##
@@ -196,9 +206,11 @@ class COMSOL_model(FEM_model):
             All potential for all paramtric sweeps (all electrodes in NRV2 models)\
             (line: electrode selection, column: potential)
         """
+        t0 = time.time()
         COMSOL_expressions = ['at3('+str(x[k])+'[um], '+str(y)+'[um], '+str(z)+'[um], V)' \
             for k in range(len(x))]
         Voltage = self.model.evaluate(COMSOL_expressions)*V
+        self.access_res_timer += time.time() - t0
         return np.asarray(Voltage)
 
     def export(self, path=''):

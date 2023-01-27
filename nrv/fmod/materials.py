@@ -6,6 +6,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 import faulthandler
 import os
 from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.file_handler import json_dump, json_load
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -79,7 +80,7 @@ def load_material(f_material):
     elif 'sigma' in mat_file:
         mat_obj.set_isotropic_conductivity(mat_file['sigma'])
     else:
-        logging.warning('loading a material with 0 conductivity, \
+        rise_warning('loading a material with 0 conductivity, \
             this may induce further division by 0')
     return mat_obj
 
