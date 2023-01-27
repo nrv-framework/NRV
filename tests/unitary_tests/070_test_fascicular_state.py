@@ -55,7 +55,7 @@ fascicle_1.attach_extracellular_stimulation(extra_stim)
 fascicle_1.insert_I_Clamp(position, t_start, duration, amplitude)
 
 # simulation
-fascicle_1.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/',postproc_script=None, verbose=False)
+fascicle_1.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/', verbose=False)
 
 DIR = './unitary_tests/figures/Fascicle_'+str(ID)+'/'
 fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular_state.json")

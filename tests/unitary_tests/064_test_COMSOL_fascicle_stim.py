@@ -2,7 +2,7 @@ import nrv
 
 source_file = './unitary_tests/sources/56_fasc.json'
 my_model = 'Nerve_1_Fascicle_1_LIFE'
-
+Ntest = 64
 ###########################
 ## extracellular context ##
 ###########################
@@ -43,4 +43,4 @@ fascicle_1.set_ID(64)
 # extra cellular stimulation
 fascicle_1.attach_extracellular_stimulation(test_stim)
 # simulation
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='./unitary_tests/sources/64_OTF_PP_stim_extra.py')
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_excited')
