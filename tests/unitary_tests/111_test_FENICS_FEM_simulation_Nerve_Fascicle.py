@@ -33,8 +33,8 @@ if not is_mesh:
 
 
     mesh.save(mesh_file)
-    # mesh.visualize()
-    # exit()
+    #mesh.visualize()
+    #exit()
 
     t2 = time.time()
     print('mesh generated in '+str(t2 - t1)+' s')
@@ -58,8 +58,8 @@ param.add_domain(mesh_domain=106,mat_file="platinum")
 param.add_domain(mesh_domain=108,mat_file="platinum")
 
 param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0)
-param.add_boundary(mesh_domain=103, btype='Neuman', value=2*jstim)
-param.add_boundary(mesh_domain=107, btype='Neuman', value=jstim)
+param.add_boundary(mesh_domain=103, btype='Neuman', value=jstim)
+param.add_boundary(mesh_domain=107, btype='Neuman', value=-jstim)
 
 data = param.save_SimParameters()
 

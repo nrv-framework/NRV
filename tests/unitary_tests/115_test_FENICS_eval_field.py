@@ -46,7 +46,6 @@ feild_IDs += [mesh.refine_entities(ent_ID=volumes[1][1], res_in=0.2, dim=3, res_
 feild_IDs += [mesh.refine_entities(ent_ID=volumes[3][1], res_in=0.2, dim=3, res_out=2, IncludeBoundary=True)]
 
 mesh.refine_min(feild_IDs=feild_IDs)
-#mesh.generate()
 mesh.save(mesh_file)
 
 #mesh.visualize()
@@ -91,7 +90,7 @@ cells_colliding = geometry.compute_colliding_cells(mesh, cells_candidates, X)
 
 cells = [cells_colliding.links(i)[0] for i in range(N)]
 
-u_x1 = res1.vout.eval(X, cells)[:,0]
+u_x1 = res1.vout.eval(X, cells)
 u_x = res1.eval(X)
 
 print(np.allclose(u_x, u_x1))

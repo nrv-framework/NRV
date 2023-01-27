@@ -56,13 +56,11 @@ z = 0
 test_stim.compute_electrodes_footprints(x, y, z, ID=0)
 
 elec_1.save_electrode(save=True, fname="./unitary_tests/results/json/121_elec1fen.json")
-#elec_2.save_electrode(save=True, fname="./unitary_tests/results/json/121_elec2fen.json")
 
 print(np.shape(elec_1.footprint))
 
 #### plot fotprints
 plt.figure()
 plt.plot(x, elec_1.footprint,color='r')
-#plt.plot(x, elec_2.footprint,color='b')
 plt.savefig('./unitary_tests/figures/121_A.png')
 #plt.show()

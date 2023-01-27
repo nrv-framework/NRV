@@ -67,13 +67,13 @@ param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='_jstim
 data = param.save_SimParameters()
 
 mxd_dom = param.get_mixedspace_domain()
-mxd_mf = param.get_mixedspace_mat_file()
+mxd_mf = param.get_mixedspace_mat_pty()
 
 mxd_dom_0 = param.get_mixedspace_domain(0)
 mxd_dom_1 = param.get_mixedspace_domain(1)
 mxd_dom_02 = param.get_mixedspace_domain(0, 2)
-mxd_mf_02 = param.get_mixedspace_mat_file(0, 2)
-mxd_mf_1 = param.get_mixedspace_mat_file(1)
+mxd_mf_02 = param.get_mixedspace_mat_pty(0, 2)
+mxd_mf_1 = param.get_mixedspace_mat_pty(1)
 
 sod_2 = param.get_space_of_domain(2)
 sod_14 = param.get_space_of_domain(14)

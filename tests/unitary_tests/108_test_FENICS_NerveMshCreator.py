@@ -27,8 +27,10 @@ mesh.compute_mesh()
 #mesh.compute_geo()
 
 mesh.save(mesh_file)
-del mesh
+
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
+
+
 #mesh.visualize()
 
