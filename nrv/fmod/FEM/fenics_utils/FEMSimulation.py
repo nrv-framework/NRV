@@ -138,10 +138,10 @@ class FEMSimulation(SimParameters):
                 pass_info('FEN4NRV: preparing the linear form')
                 # Check if quicker without
                 if not self.inbound:
-                    self.L = Constant(self.V, ScalarType(0.0))*self.u*self.dx
+                    self.L = Constant(self.domain, ScalarType(0.0))*self.u*self.dx
                 else:
                     for i_space in range(self.Nspace): 
-                        self.L = Constant(self.V, ScalarType(0.0))*self.u[i_space]*self.dx
+                        self.L = Constant(self.domain, ScalarType(0.0))*self.u[i_space]*self.dx
                 self.__set_neuman_BC()
             self.solving_timer += time.time() - t0
         else: 
@@ -156,7 +156,7 @@ class FEMSimulation(SimParameters):
             bound = self.boundaries_list[i]
             condition = bound['condition']
             if condition.lower() =='dirichlet':
-                value = Constant(self.V, ScalarType(float(bound["value"]))) 
+                value = Constant(self.domain, ScalarType(float(bound["value"]))) 
                 label = self.boundaries.find(int(bound["mesh_domain"]))
                 if not self.inbound:
                     id_subspace = self.boundaries_list
@@ -181,9 +181,9 @@ class FEMSimulation(SimParameters):
             if condition.lower()== 'neuman':
                 labelL_list.append(int(bound['mesh_domain']))
                 if 'value' in bound:
-                    Neuman_list.append(Constant(self.V, ScalarType(bound['value'])))
+                    Neuman_list.append(Constant(self.domain, ScalarType(bound['value'])))
                 elif 'variable' in bound:
-                    Neuman_list.append(Constant(self.V, ScalarType(self.args[bound['variable']])))
+                    Neuman_list.append(Constant(self.domain, ScalarType(self.args[bound['variable']])))
                 else:
                     rise_error('A Neuman Boundary condition must be associated with a value or variable')
                 if not self.inbound:
@@ -239,7 +239,7 @@ class FEMSimulation(SimParameters):
         for i_ibound in self.inboundaries_list:
             mat_path = str(self.mat_pty_map[i_ibound])
             local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
-            local_thickness = Constant(self.V, ScalarType(self.inboundaries_list[i_ibound]['thickness']))
+            local_thickness = Constant(self.domain, ScalarType(self.inboundaries_list[i_ibound]['thickness']))
             jmp_v = avg(self.mixedvout[i_space]) - avg(self.mixedvout[i_space+1])
             jmp_u = avg(self.u[i_space]) - avg(self.u[i_space+1])
             self.a  += local_sigma/local_thickness * jmp_u * jmp_v * self.dS(i_ibound)
@@ -274,7 +274,7 @@ class FEMSimulation(SimParameters):
         elif is_mat(X):
             mat = X
         elif isinstance(X, (float, int)):
-            sigma = Constant(self.V, ScalarType(X * UN))
+            sigma = Constant(self.domain, ScalarType(X * UN))
         elif np.iterable(X) and len(X)==3:
                 sigma = as_tensor([\
                     [X[0] * UN, 0, 0],\
@@ -287,7 +287,7 @@ class FEMSimulation(SimParameters):
         if sigma is None:
             if mat.is_isotropic():
                 # isotropic material, sigma is a scalar
-                sigma = Constant(self.V, ScalarType(mat.sigma * UN))
+                sigma = Constant(self.domain, ScalarType(mat.sigma * UN))
             else:
                 # anisotropic material, sigma is a 2-order tensor
                 sigma = as_tensor([\
