@@ -5,7 +5,7 @@ from petsc4py.PETSc import ScalarType
 import time
 
 
-from dolfinx import *
+#from dolfinx import *
 from dolfinx.fem import (FunctionSpace, Constant, locate_dofs_topological,\
     dirichletbc, Function)
 from dolfinx.fem.petsc import  LinearProblem
@@ -253,8 +253,6 @@ class FEMSimulation(SimParameters):
         Parameters
         ----------
             X       : str, mat, float, list[3]
-            V       : dolfinx.fem.FunctionSpace
-                space on wich the constant should be define
             unit    : 'S/m' or 'S/um'
                 unit into witch the permitivity should be converted, by default S/m
 
@@ -365,13 +363,12 @@ class FEMSimulation(SimParameters):
         self.mixedvout = self.mixedvout.split()
         V_DG = FunctionSpace(self.domain, ('Discontinuous Lagrange', self.elem[1]))
         u, v = TrialFunction(V_DG), TestFunction(V_DG)
-        u_dg = Function(V_DG)
         adg = u*v * self.dx
         Ldg = 0
         for i_domain in self.domainsID:
             i_space = self.get_space_of_domain(i_domain)
             Ldg += v*self.mixedvout[i_space]*self.dx(i_domain)
-        problem = fem.petsc.LinearProblem(adg, Ldg,bcs=[], petsc_options=self.petsc_opt)
+        problem = LinearProblem(adg, Ldg,bcs=[], petsc_options=self.petsc_opt)
         self.vout = problem.solve()
 
     #####################################################

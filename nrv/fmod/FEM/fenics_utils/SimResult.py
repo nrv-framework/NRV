@@ -203,7 +203,6 @@ class SimResult:
         res = SimResult(mesh_file=self.mesh_file, V=self.V)
         res.vout = Function(self.V)
         self.vout.interpolate(expr)
-
         return res
 
     def __add__(self, b):
