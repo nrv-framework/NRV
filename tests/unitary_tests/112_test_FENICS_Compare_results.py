@@ -25,7 +25,7 @@ if not is_mesh:
     mesh.reshape_outerBox(res=2000)
     mesh.reshape_nerve(res=500)
     mesh.reshape_fascicle(D=2000, y_c=1000, z_c=0, ID=1, res=100)
-    mesh.reshape_axon(D=5, y_c=1200, z_c=100, ID=1, res=2)
+    #mesh.reshape_axon(D=5, y_c=1200, z_c=100, ID=1, res=2)
     mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=L/2, y_c=0, z_c=0, size = size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
 
     mesh.compute_mesh()
@@ -121,4 +121,4 @@ print('Substraction done in '+str(t4 - t3)+' s')
 
 print(sim1.vout.x.array[:])
 print(sim2.vout.x.array[:])
-print(sim1.vout.x.array[:]==sim2.vout.x.array[:])
+print(not np.allclose(sim1.vout.x.array, sim2.vout.x.array))

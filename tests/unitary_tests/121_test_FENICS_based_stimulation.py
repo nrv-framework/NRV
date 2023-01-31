@@ -58,6 +58,7 @@ test_stim.compute_electrodes_footprints(x, y, z, ID=0)
 elec_1.save_electrode(save=True, fname="./unitary_tests/results/json/121_elec1fen.json")
 
 print(np.shape(elec_1.footprint))
+test_stim.model.get_timers(verbose=True)
 
 #### plot fotprints
 plt.figure()
