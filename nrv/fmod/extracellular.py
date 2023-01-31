@@ -449,6 +449,7 @@ class FEM_stimulation(extracellular_context):
 
     def __del__(self):
         if MCH.do_master_only_work() and COMSOL_Status and self.comsol: #added for safe del in case of COMSOL status turned OFF
+            self.model.close()
             del self.model
 
     ## Save and Load mehtods
