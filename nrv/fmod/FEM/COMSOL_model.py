@@ -70,7 +70,7 @@ class COMSOL_model(FEM_model):
                 self.server = None
             self.client = mph.start(cores=self.Ncore)
             self.client.caching(True)
-            print('... loading the COMSOL model')
+            pass_info('... loading the COMSOL model')
             self.model = self.client.load(self.fname)
             #self.client.caching(True)
             # source
@@ -104,8 +104,6 @@ class COMSOL_model(FEM_model):
             self.server.stop()
             del self.server
 
-    def __del__(self):
-        self.close()
 
 
     #############################
