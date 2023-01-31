@@ -74,7 +74,7 @@ class MshCreator:
         self.N_nodes = 0
         self.N_elements = 0
         
-        
+        self.Ncore = GMSH_Ncores
         gmsh.option.setNumber('General.NumThreads', GMSH_Ncores)
         if GMSH_Ncores > 1:
             gmsh.option.set_number('Mesh.Algorithm3D', 10)
