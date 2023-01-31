@@ -112,7 +112,7 @@ class NerveMshCreator(MshCreator):
             elif "LIFE" in electrode["type"]:
                 self.add_LIFE(ID=i, **electrode["kwargs"])
         
-        self.fragment()
+        self.fragment(verbose=False)
         self.is_geo = True
 
     def reshape_outerBox(self, Outer_D=None, res="default", tresholded_res=None,):

@@ -22,7 +22,7 @@ machine_config = configparser.ConfigParser()
 config_fname = dir_path + '/NRV.ini'
 machine_config.read(config_fname)
 
-GMSH_Ncores = machine_config.get('GMSH', 'GMSH_CPU')
+GMSH_Ncores = int(machine_config.get('GMSH', 'GMSH_CPU'))
 GMSH_Status = machine_config.get('GMSH', 'GMSH_STATUS') == 'True'
 
 pi = np.pi
@@ -74,9 +74,12 @@ class MshCreator:
         self.N_nodes = 0
         self.N_elements = 0
         
-        #gmsh.option.set_number('Mesh.Algorithm3D', 10)
-        gmsh.option.setNumber('General.NumThreads', int(GMSH_Ncores))
-
+        
+        gmsh.option.setNumber('General.NumThreads', GMSH_Ncores)
+        if GMSH_Ncores > 1:
+            gmsh.option.set_number('Mesh.Algorithm3D', 10)
+        else:
+            gmsh.option.set_number('Mesh.Algorithm3D', 1)
 
     def __del__(self):
         gmsh.finalize()
@@ -132,6 +135,7 @@ class MshCreator:
         self.N_elements = sum(len(i) for i in elemTags)
         if verbose:
             pass_info('Mesh properties:')
+            pass_info('Number of processes : ' + str(self.Ncore))
             pass_info('Number of entities : ' + str(self.N_entities))
             pass_info('Number of nodes : ' + str(self.N_nodes))
             pass_info('Number of elements : ' + str(self.N_elements))
