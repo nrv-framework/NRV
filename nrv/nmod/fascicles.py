@@ -166,7 +166,7 @@ class fascicle():
                 fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
                 fascicle_config['footprints'] = self.footprints
                 fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
-                fascicle_config['unmyelinated_nseg_per_sec'] = self.unmyelinated_nseg_per_sec
+                fascicle_config['unmyelinated_nseg'] = self.unmyelinated_nseg
                 fascicle_config['is_footprinted'] = self.is_footprinted
 
             if rec_context:
@@ -219,8 +219,8 @@ class fascicle():
             self.is_footprinted = results['is_footprinted']
             if 'myelinated_nseg_per_sec' in results:
                 self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
-            if 'unmyelinated_nseg_per_sec' in results:
-                self.unmyelinated_nseg_per_sec = results['unmyelinated_nseg_per_sec']
+            if 'unmyelinated_nseg' in results:
+                self.unmyelinated_nseg = results['unmyelinated_nseg']
             
             self.extra_stim = load_any_extracel_context(results['extra_stim'])
             self.footprints = {}
@@ -906,7 +906,7 @@ class fascicle():
                 self.NoR_relative_position += [(x - 0.5)% node_length / node_length]
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
 
-    def get_electrodes_footprints_on_axons(self, myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
+    def get_electrodes_footprints_on_axons(self, myelinated_nseg_per_sec=None, unmyelinated_nseg=None,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines', Myelinated_model='MRG',\
         save_ftp_only=False, filename="electrodes_footprint.ftpt"):
         """
@@ -932,11 +932,15 @@ class fascicle():
             Dictionnary composed of axon footprint dictionary, the keys are int value
             of the corresponding axon ID
         """
+        footprints = {}
         if MCH.do_master_only_work():
             if unmyelinated_nseg is not None:
                 self.unmyelinated_nseg = unmyelinated_nseg
-            self.extra_stim.run_model()
-            footprints = {}
+            if myelinated_nseg_per_sec is not None:
+                self.myelinated_nseg_per_sec = myelinated_nseg_per_sec
+            if is_FEM_extra_stim(self.extra_stim):
+                self.extra_stim.run_model()
+
             for k in range(len(self.axons_diameter)):
                 if self.axons_type[k]==0:
                     axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
@@ -951,27 +955,25 @@ class fascicle():
                         axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
+                            Nseg_per_sec=self.myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
                             threshold=self.threshold)
                     else:
                         axon = myelinated(self.axons_y[k], self.axons_z[k],\
                             round(self.axons_diameter[k], 2), self.L, model=Myelinated_model,\
                             node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                            Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
+                            Nseg_per_sec=self.myelinated_nseg_per_sec, v_init=None, T=self.T,\
                             ID=k, threshold=self.threshold)
                 axon.attach_extracellular_stimulation(self.extra_stim)
-                footprints[k] = axon.get_electrodes_footprints_on_axon(save=save_ftp_only,filename=filename)
+                footprints[k] = axon.get_electrodes_footprints_on_axon(save_ftp_only=save_ftp_only,filename=filename)
             if save_ftp_only:
                 json_dump(footprints, filename)
-
-            self.footprints = footprints
-            self.myelinated_nseg_per_sec = myelinated_nseg_per_sec
+            
         else:
             pass
         sync_Flag = MCH.send_synchronization_flag()
-        if MCH.do_master_only_work():
-            self.is_footprinted = True
-            return footprints
+        self.footprints = MCH.master_broadcasts_array_to_all(footprints)
+        self.is_footprinted = True
+        return footprints
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
@@ -1277,9 +1279,9 @@ class fascicle():
                 del axon
                 ## postprocessing and data reduction
                 if postproc_script.lower() in OTF_PP_library:
-                    postproc_script = OTF_PP_path+postproc_script
+                    postproc_script = OTF_PP_path+postproc_script.lower()
                 elif postproc_script.lower() + '.py' in OTF_PP_library:
-                    postproc_script = OTF_PP_path+postproc_script+'.py'
+                    postproc_script = OTF_PP_path+postproc_script.lower()+'.py'
                 with open(postproc_script) as f:
                     code = compile(f.read(), postproc_script, 'exec')
                     exec(code, globals(), locals())
@@ -1292,3 +1294,4 @@ class fascicle():
         if MCH.is_alone() and verbose:
             pass_info('... Simulation done')
         self.is_simulated = True
+

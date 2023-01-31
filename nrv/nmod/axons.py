@@ -434,14 +434,14 @@ class axon():
         self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
 
-    def get_electrodes_footprints_on_axon(self,save=False, filename="electrodes_footprint.ftpt"):
+    def get_electrodes_footprints_on_axon(self,save_ftp_only=False, filename="electrodes_footprint.ftpt"):
         """
         get electrodes footprints on each axon segment
 
         Parameters
         ----------
-        save        :bool
-            if true save result in a .ftpt file
+        save_ftp_only        :bool
+            if true save_ftp_only result in a .ftpt file
         filename    :str
             saving file name and path
 
@@ -458,7 +458,7 @@ class axon():
         for i in range(len(self.extra_stim.electrodes)):
             elec = self.extra_stim.electrodes[i]
             footprints[i] = elec.footprint
-        if save:
+        if save_ftp_only:
             json_dump(footprints, filename)
         self.footprints = footprints
         return footprints
