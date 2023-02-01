@@ -522,13 +522,15 @@ class FEM_stimulation(extracellular_context):
         ----------
         outer_D : float
             FEM simulation outer box diameter, in mm, WARNING, this is the only parameter in mm !
+        res         : float or "default"
+            mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default 'default'
         """
         if MCH.do_master_only_work():
             if self.comsol:
                 self.model.set_parameter('Outer_D', str(Outer_D)+'[mm]')
             else:
                 self.model.reshape_outerBox(Outer_D, res=res)
-    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, Perineurium_thickness=5, res="default"):
+    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
         """
         Reshape the nerve of the FEM simulation
 
@@ -542,8 +544,8 @@ class FEM_stimulation(extracellular_context):
             Nerve center y-coordinate in um, 0 by default
         z_c                     : float
             Nerve z-coordinate center in um, 0 by default
-        Perineurium_thickness   :float
-            Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
+        res         : float or "default"
+            mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default 'default'
         """
         if MCH.do_master_only_work():
             if self.comsol:
@@ -552,7 +554,6 @@ class FEM_stimulation(extracellular_context):
                 self.model.set_parameter('Length', str(Length)+'[um]')
                 self.model.set_parameter('Nerve_y_c', str(y_c)+'[um]')
                 self.model.set_parameter('Nerve_z_c', str(z_c)+'[um]')
-                self.model.set_parameter('Perineurium_thickness', str(Perineurium_thickness)+'[um]')
             else:
                 self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
 
@@ -568,8 +569,12 @@ class FEM_stimulation(extracellular_context):
             Fascicle center y-coodinate in um, 0 by default
         z_c         : float
             Fascicle center y-coodinate in um, 0 by default
+        Perineurium_thickness   :float
+            Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
+        res         : float or "default"
+            mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default 'default'
         """
         if MCH.do_master_only_work():
             if self.comsol:
@@ -581,6 +586,7 @@ class FEM_stimulation(extracellular_context):
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_D', str(Fascicle_D)+'[um]')
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_y_c', str(y_c)+'[um]')
                     self.model.set_parameter('Fascicle_'+'str(ID)'+'_z_c', str(z_c)+'[um]')
+                self.model.set_parameter('Perineurium_thickness', str(Perineurium_thickness)+'[um]')
             else:
                 self.model.reshape_fascicle(Fascicle_D=Fascicle_D, y_c=y_c, z_c=z_c, ID=ID,\
                     Perineurium_thickness=Perineurium_thickness, res=res)
