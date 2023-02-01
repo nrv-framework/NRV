@@ -24,7 +24,7 @@ parser.add_argument('-l', '--list', action='store_true', dest='LIST_TEST',help='
 parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
-parser.add_argument('-t', '--target', dest='TARGET', type=int, default=0, help="The number of games to simulate")
+parser.add_argument('-t', '--target', dest='TARGET', type=int, nargs='+' ,default=1, help="The number of the tests to simulate")
 parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TESTS',help='Launch all and only FEniCS related tests')
 parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TESTS',help='Launch all and only COMSOL related tests')
 parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
@@ -97,45 +97,44 @@ if __name__ == "__main__":
         cli.columnize(tests, displaywidth=100)
 
     if args.TARGET:
-        target_script_key = f"{args.TARGET:03}"
+        for argt in args.TARGET:
+            target_script_key = f"{argt:03}"
+            ###################################
+            ## clean the test/figures folder ##
+            ###################################
+            if os.path.exists(unit_test_figures):
+                f_fig = [unit_test_figures+f for f in os.listdir(unit_test_figures) if\
+                    '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+                for f in f_fig:
+                    os.remove(f)
+            if not os.path.exists(unit_test_figures):
+                os.makedirs(unit_test_figures)
+            if os.path.exists(unit_test_results):
+                f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
+                    '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+                for f in f_fig:
+                    os.remove(f)
+            if not os.path.exists(unit_test_results):
+                os.makedirs(unit_test_results)
+            if not os.path.exists(unit_test_results+'json/'):
+                os.makedirs(unit_test_results+'json/')
+            if not os.path.exists(unit_test_results+'mesh/'):
+                os.makedirs(unit_test_results+'mesh/')
+            if not os.path.exists(unit_test_results+'outputs/'):
+                os.makedirs(unit_test_results+'outputs/') 
 
-        ###################################
-        ## clean the test/figures folder ##
-        ###################################
-        if os.path.exists(unit_test_figures):
-            f_fig = [unit_test_figures+f for f in os.listdir(unit_test_figures) if\
-                '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
-            for f in f_fig:
-                os.remove(f)
-        if not os.path.exists(unit_test_figures):
-            os.makedirs(unit_test_figures)
-        if os.path.exists(unit_test_results):
-            f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
-                '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
-            for f in f_fig:
-                os.remove(f)
-        if not os.path.exists(unit_test_results):
-            os.makedirs(unit_test_results)
-        if not os.path.exists(unit_test_results+'json/'):
-            os.makedirs(unit_test_results+'json/')
-        if not os.path.exists(unit_test_results+'mesh/'):
-            os.makedirs(unit_test_results+'mesh/')
-        if not os.path.exists(unit_test_results+'outputs/'):
-            os.makedirs(unit_test_results+'outputs/')
-            
+            nrv_cmd = 'nrv2calm '
+            if sys.platform == 'darwin':
+                python_cmd = 'python3 '
+            else:
+                python_cmd = 'python3 '
 
-        nrv_cmd = 'nrv2calm '
-        if sys.platform == 'darwin':
-            python_cmd = 'python3 '
-        else:
-            python_cmd = 'python3 '
-
-        for test in all_tests:
-            if str(target_script_key) in test:
-                print(test)
-                test_out = os.system(launcher+unit_test_folder+test)
-                print('test exited with value ', test_out)
-                break
+            for test in all_tests:
+                if str(target_script_key) in test:
+                    print(test)
+                    test_out = os.system(launcher+unit_test_folder+test)
+                    print('test exited with value ', test_out)
+                    break
         
     
     if args.UNIT_TEST or (not args.DEP_TEST and not args.LIST_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
