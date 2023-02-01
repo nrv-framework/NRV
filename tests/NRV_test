@@ -8,28 +8,38 @@ import subprocess
 import re
 import shutil
 import mph
+import cmd
 
 
 unit_test_folder = './unitary_tests/'
 all_tests = sorted(os.listdir(unit_test_folder), reverse=True)
 all_tests.reverse()
-unit_test_results = './unitary_tests/figures/'
-
+unit_test_figures = './unitary_tests/figures/'
+unit_test_results = './unitary_tests/results/'
 
 ## ARGUMENT PARSER ##
 parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
 parser.add_argument('-d', '--dependances', action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
+parser.add_argument('-l', '--list', action='store_true', dest='LIST_TEST',help='Print the name of all unitary tests')
 parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
 parser.add_argument('-t', '--target', dest='TARGET', type=int, default=0, help="The number of games to simulate")
+parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TESTS',help='Launch all and only FEniCS related tests')
+parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TESTS',help='Launch all and only COMSOL related tests')
 parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
+
 
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
+    exclude_test_keys = ['COMSOL', 'FENICS']
+    included_test_keys = []
+    if args.FENICS_TESTS:
+        included_test_keys += ['FENICS']
+    if args.COMSOL_TESTS:
+        included_test_keys += ['COMSOL']
 
-    exclude_test_keys = ['COMSOL']
     nrv_cmd = 'nrv2calm '
     if sys.platform == 'darwin':
         python_cmd = 'python3 '
@@ -72,13 +82,33 @@ if __name__ == "__main__":
                 print('Error launching COMSOL: ' + err_message)
         else:
             print('--- found access to a COMSOL server')
-            
+
+    if args.LIST_TEST:
+        tests = sorted(os.listdir(unit_test_folder))
+        i=0
+        while i < len(tests):
+            test = tests[i]
+            if ".py" in test:
+                tests[i] = test[:3]+ '-' +test[4:-3]
+                i += 1
+            else:
+                tests.remove(test)
+        cli = cmd.Cmd()
+        cli.columnize(tests, displaywidth=100)
+
     if args.TARGET:
         target_script_key = f"{args.TARGET:03}"
 
         ###################################
         ## clean the test/figures folder ##
         ###################################
+        if os.path.exists(unit_test_figures):
+            f_fig = [unit_test_figures+f for f in os.listdir(unit_test_figures) if\
+                '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+            for f in f_fig:
+                os.remove(f)
+        if not os.path.exists(unit_test_figures):
+            os.makedirs(unit_test_figures)
         if os.path.exists(unit_test_results):
             f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
                 '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
@@ -86,6 +116,14 @@ if __name__ == "__main__":
                 os.remove(f)
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
+        if not os.path.exists(unit_test_results+'json/'):
+            os.makedirs(unit_test_results+'json/')
+        if not os.path.exists(unit_test_results+'mesh/'):
+            os.makedirs(unit_test_results+'mesh/')
+        if not os.path.exists(unit_test_results+'outputs/'):
+            os.makedirs(unit_test_results+'outputs/')
+            
+
         nrv_cmd = 'nrv2calm '
         if sys.platform == 'darwin':
             python_cmd = 'python3 '
@@ -100,14 +138,27 @@ if __name__ == "__main__":
                 break
         
     
-    if args.UNIT_TEST or (not args.DEP_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
+    if args.UNIT_TEST or (not args.DEP_TEST and not args.LIST_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
         ###################################
         ## clean the test/figures folder ##
         ###################################
+        if os.path.exists(unit_test_figures):
+            shutil.rmtree(unit_test_figures)
+        if not os.path.exists(unit_test_figures):
+            os.makedirs(unit_test_figures)
+
         if os.path.exists(unit_test_results):
             shutil.rmtree(unit_test_results)
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
+
+        if not os.path.exists(unit_test_results+'json/'):
+            os.makedirs(unit_test_results+'json/')
+        if not os.path.exists(unit_test_results+'mesh/') and (args.ALL_TESTS or args.FENICS_TESTS):
+            os.makedirs(unit_test_results+'mesh/')
+        if not os.path.exists(unit_test_results+'outputs/') and (args.ALL_TESTS or args.FENICS_TESTS):
+            os.makedirs(unit_test_results+'outputs/')
+            
 
         success_flag = True
         test_nb = 0
@@ -116,9 +167,14 @@ if __name__ == "__main__":
         for test in all_tests:
             launch_test = True
             if not args.ALL_TESTS:
-                for test_key in exclude_test_keys:
-                    if test_key in test:
-                        launch_test = False
+                if args.FENICS_TESTS or args.COMSOL_TESTS:
+                    for test_key in included_test_keys:
+                        if not test_key in test:
+                            launch_test = False
+                else:
+                    for test_key in exclude_test_keys:
+                        if test_key in test:
+                            launch_test = False  
             if '.py' in test and launch_test:
                 test_nb += 1
                 print(test)

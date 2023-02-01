@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 ##### extracellular context
-my_model = '../nrv/comsol_templates/Nerve_1_Fascicle_2_LIFE.mph'
+my_model = "../nrv/_misc/comsol_templates/Nerve_1_Fascicle_2_LIFE.mph"
 test_stim = nrv.FEM_stimulation(my_model)
 
 ### Simulation box size

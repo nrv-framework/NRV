@@ -36,6 +36,27 @@ def is_iterable(some_stuff):
         flag = False
     return flag
 
+def rmv_ext(fname):
+    '''
+    return filename without extension
+
+    Parameters
+    ----------
+    fname   : str
+        file name with or without extention
+
+    Returns
+    -------
+    fname   : str
+        file name without extention
+    '''
+    if isinstance(fname, str):
+        i = fname.rfind(".")
+        if i > 0:
+            fname = fname[:i]
+    return fname
+
+
 #####################################
 ## Folder and archive related code ##
 #####################################

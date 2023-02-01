@@ -45,7 +45,7 @@ if nrv.COMSOL_Status:
     fascicle_1.attach_extracellular_stimulation(test_stim)
 
     #Footprint saving
-    footprints = fascicle_1.get_electrodes_footprints_on_axons(save=True, filename="./unitary_tests/figures/073_electrodes_footprints_on_axon.ftpts")
+    footprints = fascicle_1.get_electrodes_footprints_on_axons(save_ftp_only=True, filename="./unitary_tests/figures/073_electrodes_footprints_on_axon.ftpts")
 
     # simulation
 

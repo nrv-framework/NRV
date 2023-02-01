@@ -207,8 +207,6 @@ class Mcore_handler():
             final_result = self.master_broadcasts_array_to_all(sumed_result)
         return final_result
 
-
-
     def send_data_to_master(self, data):
         """
         Send a dictionary of data directly to the master.

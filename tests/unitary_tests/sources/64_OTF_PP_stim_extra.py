@@ -10,6 +10,6 @@ plt.title(title)
 plt.xlim(0,sim_results['tstop'])
 plt.ylim(0,sim_results['L'])
 plt.tight_layout()
-fig_name = './unitary_tests/figures/Fascicle_64/Activity_axon_'+str(k)+'.pdf'
+fig_name = './unitary_tests/figures/Fascicle_'+ str(self.ID) +'/Activity_axon_'+str(k)+'.pdf'
 plt.savefig(fig_name)
 plt.close()
