@@ -55,7 +55,7 @@ class COMSOL_model(FEM_model):
             self.model_path = fname
             f_in_librairy = rmv_ext(str(fname)) + '.mph'
             if f_in_librairy in material_library:
-                self.fname = dir_path+'/comsol_templates/' + str(fname) + '.mph'
+                self.fname = dir_path+'/comsol_templates/' + f_in_librairy
             else:
                 self.fname = fname
             #self.model_path = fname
