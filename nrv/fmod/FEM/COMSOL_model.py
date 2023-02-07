@@ -17,7 +17,6 @@ from .FEM import *
 # built in COMSOL models
 dir_path = os.environ['NRVPATH'] + '/_misc'
 material_library = os.listdir(dir_path+'/comsol_templates/')
-print(material_library)
 
 ###############
 ## Constants ##
