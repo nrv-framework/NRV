@@ -3,7 +3,6 @@ NRV-FEM
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-
 import numpy as np
 import configparser
 import os
@@ -71,6 +70,7 @@ class FENICS_model(FEM_model):
         self.Epineurium_mat = "epineurium"
         self.Endoneurium_mat = "endoneurium_ranck"
         self.Perineurium_mat = "perineurium"
+        self.Electrodes_mat = 1#"platinum"
 
         self.default_fascicle = {"D":200, "y_c":0, "z_c":0, "res":20}
         self.default_electrode = {"elec_type":"LIFE", "x_c":self.L/2, "y_c":0, "z_c":0, "length":1000, "D":25, "res":3}
@@ -106,32 +106,11 @@ class FENICS_model(FEM_model):
         Save the changes to the model file. (Avoid for the overal weight of the package)
         """
         if self.is_computed:
-                self.sim_res[0].save_sim_result(fname)
-                self.sim_res[0].save_sim_result(fname, ftype='xdmf')
-                E = 1
-                while E <self.N_electrode:
-                    self.sim_res[E].save_sim_result(fname)
-                    self.sim_res[E].save_sim_result(fname, ftype='xdmf', overwrite=True)
-                    E += 1
+            save_sim_res_list(self.sim_res, fname)
 
         elif self.is_meshed: 
             self.mesh_file = rmv_ext(fname)
             self.mesh.save(fname)
-
-    def clear(self):
-        """
-        Clear the mesh and result section of the model
-        """
-        pass
-
-    def close(self):
-        """
-        Close the FEM simulation and the FENICS link
-        """
-        pass
-
-    def __del__(self):
-        self.close()
 
 
     #############################
@@ -162,35 +141,12 @@ class FENICS_model(FEM_model):
         param['Epineurium_mat'] = self.Epineurium_mat
         param['Endoneurium_mat'] = self.Endoneurium_mat
         param['Perineurium_mat'] = self.Perineurium_mat
+        param['Perineurium_mat'] = self.Perineurium_mat
         
         param['Istim'] = self.Istim 
         return param
-        
-    def get_parameter(self, p_name):
-        """
-        Get a specific parameter
 
-        Returns
-        -------
-        str
-            value of the parameter as in FENICS (with unit)
-        """
-        pass
-
-    def set_parameter(self, p_name, p_value):
-        """
-        Set a parameter to a desired value
-
-        Parameters
-        ----------
-        p_name  : str
-            parameter name in the FENICS model
-        p_value : str
-            parameter value as in FENICS, with unit
-        """
-        pass
-
-    def _update_parameters(self):
+    def __update_parameters(self):
         """
         Internal use only: updates all the parameters from the mesh
         """   
@@ -221,7 +177,7 @@ class FENICS_model(FEM_model):
         """
         if not self.mesh_file_status:
             self.mesh.reshape_outerBox(Outer_D = Outer_D, res = res)
-            self._update_parameters()
+            self.__update_parameters()
 
     def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
         """
@@ -242,8 +198,9 @@ class FENICS_model(FEM_model):
         """
         if not self.mesh_file_status:
             self.L = Length
-            self.mesh.reshape_nerve(Nerve_D = Nerve_D, Length = Length, y_c = y_c, z_c = z_c, res = res)
-            self._update_parameters()
+            self.Nerve_D
+            self.mesh.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
+            self.__update_parameters()
 
     def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"):
         """
@@ -262,7 +219,7 @@ class FENICS_model(FEM_model):
         """
         if not self.mesh_file_status:
             self.mesh.reshape_fascicle(Fascicle_D, y_c, z_c, ID, res)
-            self._update_parameters()
+            self.__update_parameters()
             if ID is None:
                 if self.Perineurium_thickness == {}:
                     ID = 0
@@ -294,22 +251,24 @@ class FENICS_model(FEM_model):
         if self.is_meshed and not self.is_sim_ready:
             t0 = time.time()
             # For EIT change in for E in elec_patren:
-            for E in range(self.N_electrode):
-                active_elec = self.electrodes[E] 
+            for _,(E,active_elec) in enumerate(self.electrodes.items()):
                 # SETTING DOMAINS
                 #del self.mesh
                 #sim = FEMSimulation(mesh_file=self.mesh_file, elem=self.elem, comm=self.comm, rank=self.rank)
                 sim = FEMSimulation(mesh_file=self.mesh_file,mesh=self.mesh, elem=self.elem)
                 # Outerbox domain
-                sim.add_domain(mesh_domain=0,mat_file=self.Outer_mat)
+                sim.add_domain(mesh_domain=0,mat_pty=self.Outer_mat)
                 # Nerve domain
-                sim.add_domain(mesh_domain=2,mat_file=self.Epineurium_mat)
+                sim.add_domain(mesh_domain=2,mat_pty=self.Epineurium_mat)
                 for i in range(self.N_fascicle):
-                    sim.add_domain(mesh_domain=10+(2*i),mat_file=self.Endoneurium_mat)
+                    sim.add_domain(mesh_domain=10+(2*i),mat_pty=self.Endoneurium_mat)
+                for _,(i, elec) in enumerate(self.electrodes.items()):
+                    if not elec["type"]=="LIFE":
+                        sim.add_domain(mesh_domain=100+(2*i),mat_pty=self.Electrodes_mat)
                 # SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
                 for i in self.fascicles:
                     thickness = self.Perineurium_thickness[i]
-                    sim.add_inboundary(mesh_domain=11+(2*i),mat_file=self.Perineurium_mat, thickness=thickness, in_domains=[10+(2*i)])
+                    sim.add_inboundary(mesh_domain=11+(2*i),mat_pty=self.Perineurium_mat, thickness=thickness, in_domains=[10+(2*i)])
                 # SETTING BOUNDARY CONDITION
                 # Ground (to the external ring of Outerbox)
                 sim.add_boundary(mesh_domain=1, btype='Dirichlet', value=0)
@@ -323,9 +282,20 @@ class FENICS_model(FEM_model):
         self.preparing_timer += time.time() - t0
             
     
-    def set_materials(self, Outer_mat=None, Epineurium_mat=None, Endoneurium_mat=None, Perineurium_mat=None):
+    def set_materials(self, Outer_mat=None, Epineurium_mat=None, Endoneurium_mat=None, Perineurium_mat=None, Electrodes_mat=None):
         """
-            Set material files
+            Set material files for any domain
+        Outer_mat       :str
+            Outer box material fname if None not changed, by default None
+        Epineurium_mat      :str
+            Epineurium material fname if None not changed, by default None
+        Endoneurium_mat     :str
+            Endoneurium material fname if None not changed, by default None
+        Perineurium_mat     :str
+            Outer material fname if None not changed, by default None
+        Electrodes_mat      :str
+            Electrodes material fname if None not changed, by default None
+            
         """
         if Outer_mat is not None:
             self.Outer_mat = Outer_mat
@@ -335,6 +305,8 @@ class FENICS_model(FEM_model):
             self.Endoneurium_mat = Endoneurium_mat
         if Perineurium_mat is not None:
             self.Perineurium_mat = Perineurium_mat
+        if Electrodes_mat is not None:
+            self.Electrodes_mat = Electrodes_mat
 
     def __find_elec_subdomain(self, elec) -> int:
         """
@@ -352,16 +324,23 @@ class FENICS_model(FEM_model):
 
     def __find_elec_jstim(self, elec, I=None) -> float:
         """
-            Internal use only: 
+            Internal use only: return electrical current density in electrode 
+            from current valeu and electrode geometry
         """ 
         # Unitary stimulation
-        if I is None:
-            if elec["type"] == "LIFE":
-                d_e = elec["kwargs"]['D']
-                l_e = elec["kwargs"]['length']
-                S = pi*(d_e)*(l_e)
-                jstim = self.Istim / S
+        if I is not None:
+            self.Istim = I
 
+        if elec["type"] == "CUFF":
+            d_e = self.Nerve_D + 2*elec["kwargs"]['contact_thickness']
+            l_e = elec["kwargs"]['contact_length']
+
+        elif elec["type"] == "LIFE":
+            d_e = elec["kwargs"]['D']
+            l_e = elec["kwargs"]['length']
+        
+        S = pi*(d_e)*(l_e)
+        jstim = self.Istim / S
         return jstim
 
     ###################
@@ -386,15 +365,14 @@ class FENICS_model(FEM_model):
         """
         if not self.mesh_file_status:
             t0 = time.time()
-            self._update_parameters()
+            self.__update_parameters()
             if self.N_fascicle == 0:
                 self.reshape_fascicle(Fascicle_D=self.default_fascicle['D'], y_c=self.default_fascicle['y_c'], z_c=self.default_fascicle['z_c'], res=self.default_fascicle['res'])
             if self.N_electrode == 0:
                 self.add_electrode(elec_type=self.default_electrode['elec_type'], x_c=self.default_electrode['x_c'], y_c=self.default_electrode['y_c'], \
                     z_c=self.default_electrode['z_c'], length=self.default_electrode['length'], D=self.default_electrode['D'], res=self.default_electrode['res'])
-            self._update_parameters()
+            self.__update_parameters()
             self.mesh.compute_mesh()
-            self.get_meshes()
             self.is_meshed = True
             self.mesh.get_mesh_info(verbose=True)
             self.meshing_timer += time.time() - t0
@@ -449,8 +427,6 @@ class FENICS_model(FEM_model):
                 potentials = np.transpose(np.array(potentials)*V)
             self.access_res_timer += time.time() - t0
             return potentials
-                
-
 
     def export(self, path=''):
         """
