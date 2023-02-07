@@ -13,9 +13,12 @@ import cmd
 
 unit_test_folder = './unitary_tests/'
 all_tests = sorted(os.listdir(unit_test_folder), reverse=True)
+digits = [str(k) for k in range(10)]
+all_tests [:] = (value for value in all_tests if value[0] in digits)
 all_tests.reverse()
 unit_test_figures = './unitary_tests/figures/'
 unit_test_results = './unitary_tests/results/'
+
 
 ## ARGUMENT PARSER ##
 parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
@@ -24,7 +27,7 @@ parser.add_argument('-l', '--list', action='store_true', dest='LIST_TEST',help='
 parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
-parser.add_argument('-t', '--target', dest='TARGET', type=int, nargs='+' ,default=1, help="The number of the tests to simulate")
+parser.add_argument('-t', '--target', dest='TARGET', type=int, nargs='+' ,default=0, help="The number of the tests to simulate")
 parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TESTS',help='Launch all and only FEniCS related tests')
 parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TESTS',help='Launch all and only COMSOL related tests')
 parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
