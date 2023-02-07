@@ -11,11 +11,13 @@ import os
 
 
 from ...utils.units import V
+from ...backend.file_handler import rmv_ext
 from .FEM import *
 
 # built in COMSOL models
 dir_path = os.environ['NRVPATH'] + '/_misc'
 material_library = os.listdir(dir_path+'/comsol_templates/')
+print(material_library)
 
 ###############
 ## Constants ##
@@ -51,7 +53,7 @@ class COMSOL_model(FEM_model):
             self.type = 'COMSOL'
 
             self.model_path = fname
-            f_in_librairy = str(fname) + '.mph'
+            f_in_librairy = rmv_ext(str(fname)) + '.mph'
             if f_in_librairy in material_library:
                 self.fname = dir_path+'/comsol_templates/' + str(fname) + '.mph'
             else:
