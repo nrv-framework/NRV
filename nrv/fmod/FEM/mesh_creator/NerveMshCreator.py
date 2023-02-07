@@ -242,8 +242,8 @@ class NerveMshCreator(MshCreator):
             res = self.default_res["Electrode"]
         
         if elec_type=="CUFF":
-            if "thickness" in kwargs:
-                thickness = kwargs["thickness"]
+            if "contact_thickness" in kwargs:
+                thickness = kwargs["contact_thickness"]
             else:
                 thickness = 25
             if thickness/3 < res:
@@ -410,10 +410,10 @@ class NerveMshCreator(MshCreator):
         if self.electrodes[ID]['type'] != 'CUFF':
             return False
         # test good diameter
-        Syz = self.Nerve_D + 2*elec_kwargs["thickness"]
-        size_test =  np.allclose([dx, dy, dz], [elec_kwargs["length"], Syz, Syz])
+        Syz = self.Nerve_D + 2*elec_kwargs["contact_thickness"]
+        size_test =  np.allclose([dx, dy, dz], [elec_kwargs["contact_length"], Syz, Syz])
         # test center of mass in CUFF
-        com_test = np.allclose(com,(elec_kwargs["x_c"],elec_kwargs["y_c"], elec_kwargs["z_c"]), rtol=1, atol= Syz/2)
+        com_test = np.allclose(com,(elec_kwargs["x_c"],self.y_c, self.z_c), rtol=1, atol= Syz/2)
         return size_test and com_test
 
     def __is_LIFE_electrode(self, ID, dx, dy, dz, com):
@@ -627,8 +627,8 @@ class NerveMshCreator(MshCreator):
         z_active = z_c
         self.add_cylinder(x_active, y_active,z_active,length,D/2)
 
-    def add_CUFF(self, ID=None, x_c=0, y_c=0, z_c=0, length=50, thickness=5, inactive=True,\
-        inactive_th=20, inactive_L=1000):
+    def add_CUFF(self, ID=None, x_c=0, contact_length=50, contact_thickness=5, inactive=True,\
+        insulator_thickness=20, insulator_length=1000):
         """
         Add CUFF electrode to the mesh
 
@@ -642,31 +642,31 @@ class NerveMshCreator(MshCreator):
             y-position of the CUFF center in um, by default 0
         z_c         :float
             z-position of the CUFF center in um, by default 0
-        length      :float
+        contact_length      :float
             length of the CUFF electrod in um, by default 1000
         D           :float
             diameter of the CUFF electrod in um, by default 25        
         """
         if ID is not None:
-            self.electrodes[ID]["kwargs"]["length"] = length
-            self.electrodes[ID]["kwargs"]["thickness"] = thickness
+            self.electrodes[ID]["kwargs"]["contact_length"] = contact_length
+            self.electrodes[ID]["kwargs"]["contact_thickness"] = contact_thickness
             self.electrodes[ID]["volume"] = []
             self.electrodes[ID]["face"] = []
 
-        x_active = x_c-length/2
-        y_active = y_c
-        z_active = z_c
-        cyl_act = self.add_cylinder(x_active, y_active, z_active, length, self.Nerve_D/2+thickness)      
-        cyl_ner2 = self.add_cylinder(x_active, y_active, z_active, length, self.Nerve_D/2)
+        x_active = x_c-contact_length/2
+        y_active = self.y_c
+        z_active = self.z_c
+        cyl_act = self.add_cylinder(x_active, y_active, z_active, contact_length, self.Nerve_D/2+contact_thickness)      
+        cyl_ner2 = self.add_cylinder(x_active, y_active, z_active, contact_length, self.Nerve_D/2)
         self.model.occ.cut([(3, cyl_act)],[(3, cyl_ner2)])
 
         if inactive:            
-            x_inactive = x_c-inactive_L/2
-            y_inactive = y_c
-            z_inactive = z_c
+            x_inactive = x_c-insulator_length/2
+            y_inactive = self.y_c
+            z_inactive = self.z_c
 
-            cyl_ina = self.add_cylinder(x_inactive, y_inactive,z_inactive,inactive_L, self.Nerve_D/2 + inactive_th)
-            cyl_ner = self.add_cylinder(x_inactive, y_inactive,z_inactive,inactive_L, self.Nerve_D/2)
+            cyl_ina = self.add_cylinder(x_inactive, y_inactive,z_inactive,insulator_length, self.Nerve_D/2 + insulator_thickness)
+            cyl_ner = self.add_cylinder(x_inactive, y_inactive,z_inactive,insulator_length, self.Nerve_D/2)
             self.model.occ.cut([(3, cyl_ina)],[(3, cyl_ner), (3, cyl_act)])
 
 
