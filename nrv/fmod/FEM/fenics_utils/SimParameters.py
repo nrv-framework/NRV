@@ -143,13 +143,15 @@ class SimParameters:
             self.boundariesID = IDlist
         return IDlist[-1]
 
-    def add_domain(self, mesh_domain, mat_file=None, mat_perm=None, ID=None):
+    def add_domain(self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
         add new domain or change if ID already exists
         Parameters
         ----------
         mesh_domain     : int
             Mesh ID of the domain (should be 3D)
+        mat_pty         : str, float or list[3]
+            Material property, either mat_file or mat_perm
         mat_file        : str
             Material filename (see fmod.material.py) if None use mat_perm,
                 by default None
@@ -157,7 +159,9 @@ class SimParameters:
             Material permitivity, if float isotropic mat, if list[3] anisotropic mat
                 if None set to 1 (and mat_file is None), by default None
         """
-        if mat_file is not None:
+        if mat_pty is not None:
+            mat_pty = mat_pty
+        elif mat_file is not None:
             mat_pty = mat_file
         elif mat_perm is not None:
             mat_pty = mat_perm
@@ -202,7 +206,7 @@ class SimParameters:
             print("Warning: boundary not set, variable or boundary have to be precised")
         self.Nboundaries = len(self.boundariesID)
         
-    def add_inboundary(self, mesh_domain, in_domains, thickness, mat_file=None, mat_perm=None, ID=None):
+    def add_inboundary(self, mesh_domain, in_domains, thickness, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
         add new internal boundary or change if ID already exists
         Parameters
@@ -213,6 +217,8 @@ class SimParameters:
             Mesh ID of the domain inside the boundary (should be 3D)
         thickness       : float
             thicness of the internal boundary
+        mat_pty         : str, float or list[3]
+            Material property, either mat_file or mat_perm
         mat_file        : str
             Material filename (see fmod.material.py) if None use mat_perm,
                 by default None
@@ -220,7 +226,9 @@ class SimParameters:
             Material permitivity, if float isotropic mat, if list[3] anisotropic mat
                 if None set to 1 (and mat_file is None), by default None
         """
-        if mat_file is not None:
+        if mat_pty is not None:
+            mat_pty = mat_pty
+        elif mat_file is not None:
             mat_pty = mat_file
         elif mat_perm is not None:
             mat_pty = mat_perm
@@ -288,5 +296,3 @@ class SimParameters:
                 if self.domains_list[i_domain]['mixed_domain'][i] == i_domain:
                     return(i)
         print("Error: domain "  + str(i_domain) + " is in no space")
-
-
