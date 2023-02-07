@@ -455,8 +455,8 @@ class CUFF_electrode(FEM_electrode):
     """
     Longitudinal IntraFascicular Electrode for FEM models
     """
-    def __init__(self, label, inner_D, insulator_length, insulator_thickness,\
-        contact_length, contact_thickness, x_shift, y_c, z_c, ID=0):
+    def __init__(self, label, contact_length, contact_thickness,\
+        insulator_length, insulator_thickness, x_center, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -468,7 +468,7 @@ class CUFF_electrode(FEM_electrode):
             diameter of the electrode, in um
         length  : float
             length of the electrode, in um
-        x_shift : float
+        x_center : float
             geometrical offset from the start (x=0) of the simulation
         y_c     : float
             y-coordinate of the center of the electrode, in um
@@ -476,14 +476,11 @@ class CUFF_electrode(FEM_electrode):
             z-coordinate of the center of the electrode, in um
         """
         super().__init__(label, ID)
-        self.inner_D = inner_D
         self.insulator_length = insulator_length
         self.insulator_thickness = insulator_thickness
         self.contact_length = contact_length
         self.contact_thickness = contact_thickness
-        self.x_shift = x_shift
-        self.y_c = y_c
-        self.z_c = z_c
+        self.x_center = x_center
         self.type = "CUFF"
 
     ## Save and Load mehtods
@@ -505,14 +502,11 @@ class CUFF_electrode(FEM_electrode):
             dictionary containing all information
         """
         elec_dic = super().save_electrode()
-        elec_dic['inner_D'] = self.inner_D
         elec_dic['insulator_length'] = self.insulator_length
         elec_dic['insulator_thickness'] = self.insulator_thickness
         elec_dic['contact_length'] = self.contact_length
         elec_dic['contact_thickness'] = self.contact_thickness
-        elec_dic['x_shift'] = self.x_shift
-        elec_dic['y_c'] = self.y_c
-        elec_dic['z_c'] = self.z_c
+        elec_dic['x_center'] = self.x_center
         if save:
             json_dump(elec_dic, fname)
         return elec_dic
@@ -532,14 +526,11 @@ class CUFF_electrode(FEM_electrode):
         else: 
             elec_dic = data
         super().load_electrode(data)
-        self.inner_D = elec_dic['inner_D']
         self.insulator_length = elec_dic['insulator_length']
         self.insulator_thickness = elec_dic['insulator_thickness']
         self.contact_length = elec_dic['contact_length']
         self.contact_thickness = elec_dic['contact_thickness']
-        self.x_shift = elec_dic['x_shift']
-        self.y_c = elec_dic['y_c']
-        self.z_c = elec_dic['z_c']
+        self.x_center = elec_dic['x_center']
 
 
     def parameter_model(self, model):
@@ -552,13 +543,12 @@ class CUFF_electrode(FEM_electrode):
             FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
         if model.type == 'COMSOL':
-            model.set_parameter('Nerve_D_', str(self.inner_D)+'[um]')
             model.set_parameter(self.label+'insulator_length', str(self.insulator_length)+'[um]')
             model.set_parameter(self.label+'insulator_thickness', str(self.insulator_thickness)+'[um]')
             model.set_parameter(self.label+'contact_length', str(self.contact_length)+'[um]')
             model.set_parameter(self.label+'contact_thickness', str(self.contact_thickness)+'[um]')
-            model.set_parameter(self.label+'_y_c', str(self.y_c)+'[um]')
-            model.set_parameter(self.label+'_z_c', str(self.z_c)+'[um]')
-            model.set_parameter(self.label+'_x_offset', str(self.x_shift)+'[um]')
+            model.set_parameter(self.label+'_x_center', str(self.x_center)+'[um]')
         else:
-            model.add_electrode(elec_type=self.type, x_c=self.x_shift+(self.length/2), y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D)
+            model.add_electrode(elec_type=self.type, insulator_length=self.insulator_length,\
+                insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
+                contact_thickness=self.contact_thickness, x_c=self.x_center)
