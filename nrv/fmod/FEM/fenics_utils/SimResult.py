@@ -37,6 +37,19 @@ def is_sim_res(result):
     """
     return isinstance(result, SimResult)
 
+def save_sim_res_list(sim_res_list, fname):
+    """
+    
+    """
+    fname = rmv_ext(fname) + ".xdmf"
+    N_list = len(sim_res_list)
+    with XDMFFile(comm, fname, "w") as file:
+        file.write_mesh(sim_res_list[0].domain)
+        for E in range(N_list):
+            sim_res_list[E].vout.name = "vout_" + str(E+1)
+            file.write_function(sim_res_list[E].vout)
+
+
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     overload of dolfinx.io.gmshio.read_from_msh with no verbose from gmsh
@@ -85,17 +98,12 @@ def domain_from_meshfile(mesh_file):
     """
     return read_gmsh(mesh_file)[0]
 
-
-
-def V_from_meshfile(mesh_file, elem=('Lagrange', 1)):
-    mesh = domain_from_meshfile(mesh_file)
-    V = FunctionSpace(mesh, elem)
-    return V
     
 
 class SimResult:
-    def __init__(self, mesh_file="", domain=None, elem=('Lagrange', 1), V=None, vout=None,comm=MPI.COMM_WORLD):
-        self.mesh_file = mesh_file
+    def __init__(self, mesh_file=None, domain=None, elem=('Lagrange', 1), V=None, vout=None,comm=MPI.COMM_WORLD):
+        if mesh_file is not None:
+            self.mesh_file = mesh_file
 
         self.domain = domain
         self.V = V
@@ -116,24 +124,24 @@ class SimResult:
             self.vout = vout
         self.comm = comm     
     
-    def save_sim_result(self, file, ftype=None, overwrite=True):
+    def save_sim_result(self, file, ftype=None, overwrite=True, f_ID=0):
         if ftype == 'xdmf':
             fname = rmv_ext(file) + '.xdmf'
+            self.vout.name = "vout_" + str(f_ID)
             with XDMFFile(self.comm, fname, "w") as file:
                 if not overwrite:
-                        file.parameters.update(
-                            {
-                            "functions_share_mesh": True,
-                            "rewrite_function_mesh": False
-                            })
+                    pass
                 else:
                     file.write_mesh(self.domain)
                 file.write_function(self.vout)
         else:
-            fname = rmv_ext(file) + '.sres'
-            mdict = {"mesh_file":self.mesh_file, "element": self.elem,"vout":self.vout.vector[:]}
-            scipy.io.savemat(fname, mdict)
-            return mdict
+            if self.mesh_file is None:
+                rise_error('no mesh_file, simresult cannot be saved')
+            else:
+                fname = rmv_ext(file) + '.sres'
+                mdict = {"mesh_file":self.mesh_file, "element": self.elem,"vout":self.vout.vector[:]}
+                scipy.io.savemat(fname, mdict)
+                return mdict
 
     def load_sim_result(self, file):
         fname = rmv_ext(file) + '.sres'
