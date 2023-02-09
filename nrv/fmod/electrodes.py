@@ -17,6 +17,13 @@ def is_FEM_electrode(elec):
     """
     return issubclass(type(elec), FEM_electrode)
 
+
+def is_CUFF_electrode(elec):
+    """
+    Check if the electrode is a LIFE electrode
+    """
+    return isinstance(elec, CUFF_electrode)
+
 def is_LIFE_electrode(elec):
     """
     Check if the electrode is a LIFE electrode
