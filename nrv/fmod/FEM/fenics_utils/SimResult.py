@@ -182,7 +182,6 @@ class SimResult:
         cells = []
         for i in range(N):
             cell = cells_colliding.links(i)
-            print(i, N, cell,cells_candidates.links(i), X[i])
             if len(cell)==0:
                 rise_warning(X[i], " not found in mesh, value of ", X[i-1], " reused")
                 cells += [cells[-1]]
