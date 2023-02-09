@@ -550,10 +550,10 @@ class CUFF_electrode(FEM_electrode):
             FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
         if model.type == 'COMSOL':
-            model.set_parameter(self.label+'insulator_length', str(self.insulator_length)+'[um]')
-            model.set_parameter(self.label+'insulator_thickness', str(self.insulator_thickness)+'[um]')
-            model.set_parameter(self.label+'contact_length', str(self.contact_length)+'[um]')
-            model.set_parameter(self.label+'contact_thickness', str(self.contact_thickness)+'[um]')
+            model.set_parameter(self.label+'_insulator_length', str(self.insulator_length)+'[um]')
+            model.set_parameter(self.label+'_insulator_thickness', str(self.insulator_thickness)+'[um]')
+            model.set_parameter(self.label+'_contact_length', str(self.contact_length)+'[um]')
+            model.set_parameter(self.label+'_contact_thickness', str(self.contact_thickness)+'[um]')
             model.set_parameter(self.label+'_x_center', str(self.x_center)+'[um]')
         else:
             model.add_electrode(elec_type=self.type, insulator_length=self.insulator_length,\
