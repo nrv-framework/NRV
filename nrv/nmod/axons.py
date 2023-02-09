@@ -585,11 +585,17 @@ class axon():
                 electrodes_y = []
                 electrodes_z = []
                 for electrode in self.extra_stim.electrodes:
-                    if is_LIFE_electrode(electrode):
-                        electrodes_x.append(electrode.x_shift+electrode.length/2)
-                        electrodes_type.append('LIFE')
-                    electrodes_y.append(electrode.y_c)
-                    electrodes_z.append(electrode.z_c)
+                    if is_CUFF_electrode(electrode):
+                        electrodes_x.append(electrode.x_center)
+                        electrodes_y.append(0)
+                        electrodes_z.append(0)
+                        electrodes_type.append('CUFF')
+                    else:
+                        if is_LIFE_electrode(electrode):
+                            electrodes_x.append(electrode.x_shift+electrode.length/2)
+                            electrodes_type.append('LIFE')
+                        electrodes_y.append(electrode.y_c)
+                        electrodes_z.append(electrode.z_c)
                 axon_sim['extracellular_electrode_type'] = electrodes_type
                 axon_sim['extracellular_electrode_x'] = electrodes_x
                 axon_sim['extracellular_electrode_y'] = electrodes_y
