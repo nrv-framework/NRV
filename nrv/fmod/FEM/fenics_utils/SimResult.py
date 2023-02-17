@@ -37,6 +37,18 @@ def is_sim_res(result):
     """
     return isinstance(result, SimResult)
 
+def save_sim_res_list(sim_res_list, fname):
+    """
+    save a list of SimResults in a xdmf file
+    """
+    fname = rmv_ext(fname) + ".xdmf"
+    N_list = len(sim_res_list)
+    with XDMFFile(comm, fname, "w") as file:
+        file.write_mesh(sim_res_list[0].domain)
+        for E in range(N_list):
+            sim_res_list[E].vout.name = "vout_" + str(E+1)
+            file.write_function(sim_res_list[E].vout)
+
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     overload of dolfinx.io.gmshio.read_from_msh with no verbose from gmsh
@@ -55,6 +67,7 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     if comm.rank == rank:
         if isinstance(mesh, str):
             mesh_file = rmv_ext(mesh) + ".msh"
+            clear_gmsh()
             gmsh.initialize()
             gmsh.option.setNumber("General.Verbosity", 2)
             gmsh.model.add("Mesh from file")
@@ -172,10 +185,9 @@ class SimResult:
     def eval(self, X):
         """
         Eval the result field at X position
-
         """
         N = len(X)
-
+        to_round = False
         tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
         cells_candidates = compute_collisions(tree, X)
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
@@ -183,12 +195,22 @@ class SimResult:
         for i in range(N):
             cell = cells_colliding.links(i)
             if len(cell)==0:
-                rise_warning(X[i], " not found in mesh, value of ", X[i-1], " reused")
+                if i == N-1 and i>0:
+                    to_round = True
+                else:
+                    rise_warning(X[i], " not found in mesh, value of ", X[i-1], " reused")
                 cells += [cells[-1]]
             else:
                 cells += [cell[0]]
 
-        values = self.vout.eval(X, cells)[:,0]
+        values = self.vout.eval(X, cells)
+        if N>1:
+            values = values[:,0]
+        if to_round:
+            X_1 = X[-1]
+            X_1[0] = round(X_1[0], 1)
+            value_1 = self.eval([X_1])
+            values[-1] = value_1[0]
         return values
 
     
