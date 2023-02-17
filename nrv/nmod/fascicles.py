@@ -977,6 +977,7 @@ class fascicle():
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
+        record_g_mem = False, record_g_ions=False,\
         record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=False,\
         Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',Myelinated_model='MRG',\
         myelinated_nseg_per_sec=3, unmyelinated_nseg=None, Adelta_limit=None, PostProc_Filtering=None, postproc_script="default"):
@@ -1159,6 +1160,7 @@ class fascicle():
                         axon_ftpt = loaded_footprints[k]
                     sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                         record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
+                        record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
                         record_particles=record_particles, loaded_footprints=axon_ftpt)
                     del axon
                     ## postprocessing and data reduction
@@ -1275,6 +1277,7 @@ class fascicle():
 
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
+                    record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
                     record_particles=record_particles, loaded_footprints=axon_ftpt)
                 del axon
                 ## postprocessing and data reduction
