@@ -30,8 +30,8 @@ mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=L/4, y_c=0, z_c=0, size = (100
 mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=3*L/4, y_c=0, z_c=0, size = (1000, 500),\
     inactive=True, inactive_L=3000, inactive_th=500,res=50)
 
-mesh.add_electrode(elec_type="CUFF", x_c=L/2, y_c=0, z_c=0, length=50, thickness=100,\
-    inactive=True, inactive_L=1000, inactive_th=200, res=30)
+mesh.add_electrode(elec_type="CUFF", x_c=L/2, contact_length=50, contact_thickness=100,\
+    inactive=True, insulator_length=1000, insulator_thickness=200, res=30)
 
 mesh.compute_geo()
 mesh.compute_domains()
