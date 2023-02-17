@@ -43,8 +43,13 @@ def is_MshCreator(object):
     """
     return isinstance(object, MshCreator)
 
+def clear_gmsh():
+    if gmsh.isInitialized():
+        gmsh.finalize()
+
 class MshCreator:
     def __init__(self, D, ver_level=2):
+
         self.D = D 
         self.entities = {}
         self.volumes = []
@@ -62,6 +67,7 @@ class MshCreator:
         self.Nfeild = 0
         self.res = 1
 
+        clear_gmsh()
         gmsh.initialize()
         self.verbosity_level = ver_level
         self.set_verbosity(ver_level)
@@ -81,8 +87,6 @@ class MshCreator:
         else:
             gmsh.option.set_number('Mesh.Algorithm3D', 1)
 
-    def __del__(self):
-        gmsh.finalize()
     
     #####################
     ## special methods ##
@@ -555,5 +559,3 @@ class MshCreator:
         elif fname is not None:
             self.save(fname=fname)
             os.system('gmsh '+ self.file +'.msh')
-            
-        
