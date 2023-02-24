@@ -609,14 +609,17 @@ def check_test_AP(results_sim):
     else:
         mask = False
         test_AP = results_sim["intra_stim_starts"] 
-        if is_iterable(test_AP):
-            test_AP = test_AP[0]
-        i_first_pos = np.where(results_sim['V_mem_raster_x_position']==0) 
-        for i in i_first_pos[0]:
-            if results_sim['V_mem_raster_time'][i] >= test_AP-0.01 and\
-                results_sim['V_mem_raster_time'][i] <= test_AP+0.7:
-                mask = True
-        if not mask:
+        if (len(test_AP)):
+            if is_iterable(test_AP):
+                test_AP = test_AP[0]
+            i_first_pos = np.where(results_sim['V_mem_raster_x_position']==0) 
+            for i in i_first_pos[0]:
+                if results_sim['V_mem_raster_time'][i] >= test_AP-0.01 and\
+                    results_sim['V_mem_raster_time'][i] <= test_AP+0.7:
+                    mask = True
+            if not mask:
+                test_AP = None
+        else:
             test_AP = None
         return(test_AP)
 
