@@ -7,7 +7,7 @@ import time
 
 #from dolfinx import *
 from dolfinx.fem import (FunctionSpace, Constant, locate_dofs_topological,\
-    dirichletbc, Function)
+    dirichletbc, Function, form, assemble_scalar)
 from dolfinx.fem.petsc import  LinearProblem
 from dolfinx.io.utils import XDMFFile
 from ufl import (TestFunction, TrialFunction, as_tensor,\
@@ -370,7 +370,6 @@ class FEMSimulation(SimParameters):
     ################ Access the results #################
     #####################################################
 
-
     def solve_and_save_sim(self, filename, save=True):
         if not self.solve_status:
             self.solve()
@@ -388,4 +387,14 @@ class FEMSimulation(SimParameters):
 
     def visualize_mesh(self):
         os.system('gmsh '+ self.mesh_file +'.msh')
+
+
+    def get_domain_potential(self, dom_id, dim=2):
+        if dim == 2:
+            do = self.ds
+        elif dim == 3:
+            do = self.dx
+
+        S= assemble_scalar(form(1*do(dom_id)))
+        return assemble_scalar(form(self.vout*do(dom_id)))/S
 
