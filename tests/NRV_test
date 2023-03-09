@@ -36,12 +36,14 @@ parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',h
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
-    exclude_test_keys = ['COMSOL', 'FENICS']
+    exclude_test_keys = ['COMSOL', 'FENICS', 'COMxFEN']
     included_test_keys = []
     if args.FENICS_TESTS:
         included_test_keys += ['FENICS']
     if args.COMSOL_TESTS:
         included_test_keys += ['COMSOL']
+    if args.FENICS_TESTS and args.COMSOL_TESTS:
+        included_test_keys += ['COMxFEN']
 
     nrv_cmd = 'nrv2calm '
     if sys.platform == 'darwin':
