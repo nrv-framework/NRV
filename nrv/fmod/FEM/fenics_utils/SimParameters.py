@@ -118,7 +118,7 @@ class SimParameters:
         elif lname =='bound':
             IDlist = self.boundariesID
         else:
-            print('Error: _update_ID_list failed due to unknow list type')
+            rise_error('_update_ID_list failed due to unknow list type')
         
         if IDlist == []:
             if ID is None:
@@ -169,9 +169,11 @@ class SimParameters:
             mat_pty = 1
             rise_warning('neither mat_file or mat_perm set, set to default permitivity 1 S/m')
 
-        IDdom= self.__update_ID_list('domains', mesh_domain)
-        self.domains_list[IDdom] = {'mesh_domain': mesh_domain, 'mat_pty':mat_pty, 'mixed_domain':[mesh_domain]}
-
+        if not mesh_domain in self.domains_list:
+            IDdom = self.__update_ID_list('domains', mesh_domain)
+            self.domains_list[IDdom] = {'mesh_domain': mesh_domain, 'mat_pty':mat_pty, 'mixed_domain':[mesh_domain]}
+        else:
+            self.domains_list[mesh_domain]['mat_pty'] = mat_pty
         self.mat_pty_map[mesh_domain] = mat_pty
         self.Ndomains = len(self.domainsID)
     
@@ -203,7 +205,7 @@ class SimParameters:
             self.boundaries_list[IDbound] = {'mesh_domain': mesh_domain, 'condition':btype,\
                 "variable":variable, "mesh_domain_3D":mesh_domain_3D}
         else: 
-            print("Warning: boundary not set, variable or boundary have to be precised")
+            rise_warning("boundary not set, variable or boundary have to be precised")
         self.Nboundaries = len(self.boundariesID)
         
     def add_inboundary(self, mesh_domain, in_domains, thickness, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
@@ -237,22 +239,25 @@ class SimParameters:
             rise_warning('neither mat_file or mat_perm set, set to default permitivity 1 S/m')
 
         self.inbound = True
-        IDibound= self.__update_ID_list('inbound', mesh_domain)
-        self.inboundaries_list[IDibound] = {'mesh_domain': mesh_domain, 'in_domains':in_domains,\
+        if not mesh_domain in self.inboundaries_list:
+            IDibound= self.__update_ID_list('inbound', mesh_domain)
+            self.inboundaries_list[IDibound] = {'mesh_domain': mesh_domain, 'in_domains':in_domains,\
             'thickness' : thickness, 'mat_pty':mat_pty}
-        # Cumpute corresponding domain for mixed space
-        for i in in_domains:
+            # Cumpute corresponding domain for mixed space
             for j in self.domains_list:
                 domain = self.domains_list[j]
                 # Domain inside the boundary
-                if domain['mesh_domain'] == i:
-                    domain['mixed_domain'] += [i]
+                if domain['mesh_domain'] in in_domains:
+                    domain['mixed_domain'] += [domain['mesh_domain']]
                     if domain['mesh_domain'] == domain['mixed_domain'][0]: ##refaire une fois avec la nouvelle valeur pour le cas des axon
                         domain['mixed_domain'][0] = mesh_domain
                 # Domain outside the boundary
                 else:
-                    domain['mixed_domain'] += [mesh_domain] 
-        self.mat_pty_map[mesh_domain] = mat_pty           
+                    domain['mixed_domain'] += [mesh_domain]
+        else:
+            self.inboundaries_list[mesh_domain]['thickness'] = thickness
+            self.inboundaries_list[mesh_domain]['mat_pty'] = mat_pty
+        self.mat_pty_map[mesh_domain] = mat_pty
         self.Ninboundaries = len(self.inboundariesID)
     
     def get_mixedspace_domain(self, i_space=None, i_domain=None):
@@ -291,8 +296,24 @@ class SimParameters:
                     mmf = self.mat_pty_map[md]
             return mmf
 
-    def get_space_of_domain(self, i_domain=None):
+    def get_space_of_domain(self, i_domain):
         for i in range(len(self.domains_list[i_domain]['mixed_domain'])):
-                if self.domains_list[i_domain]['mixed_domain'][i] == i_domain:
-                    return(i)
-        print("Error: domain "  + str(i_domain) + " is in no space")
+            if self.domains_list[i_domain]['mixed_domain'][i] == i_domain:
+                return(i)
+        rise_error("Domain "  + str(i_domain) + " is in no space")
+
+    def get_spaces_of_ibound(self, i_ibound):
+        """
+        retrun the surounding spaces of an internal boundary.
+        !! Caution work for NerveMshCreator only : see if it can be generalized
+        """
+        in_space = self.get_space_of_domain(i_ibound-1)
+        
+        if i_ibound < 100:  # Should be a perineurium
+            out_space = 0
+        else:               # Should be an axon membrane
+            for i in self.inboundaries_list:
+                if i_ibound in self.inboundaries_list[i]['in_domains']:
+                    out_space = self.get_space_of_domain(i-1)
+        return in_space, out_space
+

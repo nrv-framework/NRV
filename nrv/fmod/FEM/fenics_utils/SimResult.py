@@ -52,7 +52,7 @@ def save_sim_res_list(sim_res_list, fname):
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     overload of dolfinx.io.gmshio.read_from_msh with no verbose from gmsh
-        Parameters
+    Parameters
     ----------
     mesh_file : str, 
         Path and name of mesh file 
@@ -177,9 +177,9 @@ class SimResult:
                 self.vout.interpolate(expr)
                 self.V = res2.V
             else:
-                print("Error: to aline mesh function reslults must have the same meshfile")
+                rise_error("To aline mesh function reslults must have the same meshfile")
         else:
-            print("Error: mesh function alinment must be done with SimResult")
+            rise_error("Mesh function alinment must be done with SimResult")
 
 
     def eval(self, X):
@@ -221,14 +221,14 @@ class SimResult:
 
     """
     def __abs__(self):
-        res = SimResult(mesh_file=self.mesh_file, V=self.V)
+        res = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         res.vout = df.project(abs(self.vout), self.V, solver_type=self.solver,\
             preconditioner_type=self.preconditioner, form_compiler_parameters=self.compiler_parameters)
         return res
     """
     def __neg__(self):
         expr = Expression(-self.vout, self.V.element.interpolation_points())
-        res = SimResult(mesh_file=self.mesh_file, V=self.V)
+        res = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         res.vout = Function(self.V)
         self.vout.interpolate(expr)
         return res
@@ -240,7 +240,7 @@ class SimResult:
         else:
             expr = Expression(self.vout + b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -252,7 +252,7 @@ class SimResult:
         else:
             expr = Expression(self.vout - b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -264,7 +264,7 @@ class SimResult:
         else:
             expr = Expression(self.vout * b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -276,7 +276,7 @@ class SimResult:
         else:
             expr = Expression(b + self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -288,7 +288,7 @@ class SimResult:
         else:
             expr = Expression(b - self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -300,7 +300,7 @@ class SimResult:
         else:
             expr = Expression(b * self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V)
+        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C

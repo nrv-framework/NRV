@@ -13,7 +13,7 @@ from dolfinx.io.utils import XDMFFile
 from ufl import (TestFunction, TrialFunction, as_tensor,\
     nabla_grad, inner, avg, FiniteElement, MixedElement, Measure)
 
-from ...materials import *
+from .fenics_materials import *
 from .SimParameters import *
 from .SimResult import *
 from ....utils.units import *
@@ -220,7 +220,7 @@ class FEMSimulation(SimParameters):
                 for i_domain in self.domains_list:
                     dom = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
                     # Recovering the label and the path to the material file
-                    label_list.append(self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain))
+                    label_list.append(dom)
                     mat_path = self.mat_pty_map[label_list[-1]]
                     # Recovering the material properties for the domain
                     local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
@@ -233,17 +233,17 @@ class FEMSimulation(SimParameters):
             
     def __set_jump(self):
         """
-        internal use only: set the jump for all internale boundary were a contact impedance is
+        internal use only: set the jump for all internale boundary to mimic the thin layers
         """
-        i_space = 0
+
         for i_ibound in self.inboundaries_list:
-            mat_path = str(self.mat_pty_map[i_ibound])
+            in_space, out_space = self.get_spaces_of_ibound(i_ibound)
+            mat_path = self.mat_pty_map[i_ibound]
             local_sigma = self.__get_permitivity(mat_path,unit=self.mat_unit)
             local_thickness = Constant(self.domain, ScalarType(self.inboundaries_list[i_ibound]['thickness']))
-            jmp_v = avg(self.mixedvout[i_space]) - avg(self.mixedvout[i_space+1])
-            jmp_u = avg(self.u[i_space]) - avg(self.u[i_space+1])
+            jmp_v = avg(self.mixedvout[out_space]) - avg(self.mixedvout[in_space])
+            jmp_u = avg(self.u[out_space]) - avg(self.u[in_space])
             self.a  += local_sigma/local_thickness * jmp_u * jmp_v * self.dS(i_ibound)
-            i_space += 1
 
     def __get_permitivity(self, X, unit='S/m'):
         """
@@ -261,18 +261,23 @@ class FEMSimulation(SimParameters):
             sigma   :   dolfinx.fem.Constant or ufl.as_tensor
                 permitivity 
         """
-        sigma = None
         if unit == 'S/um':
             UN = S/m
         else:
             UN = 1
 
+        mat = None
         if isinstance(X, str):
-            mat = load_material(X)
-        elif is_mat(X):
+            mat = load_fenics_material(X)
+        elif is_fen_mat(X):
             mat = X
+        elif is_mat(X):
+            mat = fenics_material(X)
+        
+        if mat is not None:
+            sigma = mat.get_fenics_sigma(domain=self.domain,elem=self.elem,UN=UN)
         elif isinstance(X, (float, int)):
-            sigma = Constant(self.domain, ScalarType(X * UN))
+            sigma = Constant(self.domain, ScalarType(X*UN))
         elif np.iterable(X) and len(X)==3:
                 sigma = as_tensor([\
                     [X[0] * UN, 0, 0],\
@@ -281,25 +286,13 @@ class FEMSimulation(SimParameters):
                     ]) 
         else:
             rise_error(('get_permitivity: X should be either an str, mat, float, list[3]'))
-        
-        if sigma is None:
-            if mat.is_isotropic():
-                # isotropic material, sigma is a scalar
-                sigma = Constant(self.domain, ScalarType(mat.sigma * UN))
-            else:
-                # anisotropic material, sigma is a 2-order tensor
-                sigma = as_tensor([\
-                    [mat.sigma_xx * UN, 0, 0],\
-                    [0, mat.sigma_yy * UN, 0],\
-                    [0, 0, mat.sigma_zz * UN],\
-                    ])
         return sigma
 
     #####################################################
     ################# Solve the sytstem #################
     #####################################################
 
-    def get_solver_opt(self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None):
+    def get_solver_opt(self):
         """
         get krylov solver options
         """
@@ -348,12 +341,13 @@ class FEMSimulation(SimParameters):
         self.cg_problem = LinearProblem(self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt)
         self.mixedvout = self.cg_problem.solve()
         if self.inbound:
-            self.__merge_mixed_solutions()
+            V_sol = self.__merge_mixed_solutions()
         else:
             self.vout = self.mixedvout
+            V_sol = self.V
 
         # return simulation result
-        self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=self.V, vout=self.vout, comm=self.domain.comm)
+        self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=V_sol, vout=self.vout, comm=self.domain.comm)
         
         self.solving_timer += time.time() - t0
         pass_info('FEN4NRV: solved in ' + str(self.solving_timer) + ' s')
@@ -370,6 +364,7 @@ class FEMSimulation(SimParameters):
             Ldg += v*self.mixedvout[i_space]*self.dx(i_domain)
         problem = LinearProblem(adg, Ldg,bcs=[], petsc_options=self.petsc_opt)
         self.vout = problem.solve()
+        return V_DG
 
     #####################################################
     ################ Access the results #################
