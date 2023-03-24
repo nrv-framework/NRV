@@ -4,12 +4,46 @@ import numpy as np
 from ....backend.file_handler import json_load, json_dump, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 
+def is_sim_param(X):
+    """
+    check if an object is a SimParameters, return True if yes, else False
+
+    Parameters
+    ----------
+    X : object
+        object to test
+
+    Returns
+    -------
+    bool
+        True it the type is a SimParameters object
+    """
+    return isinstance(X, SimParameters)
+
 class SimParameters:
+    """
+    Class gathering parameters of a FEM FEniCS simulation. It allows to add,
+    modify and store domains, boundaries condition and internal boundaries (thin layers)
+    Can be saved and used to generate FEMsimulation.
+    """
     def __init__(self, D=3, mesh_file="", data=None):
+        """
+        initialisation of the SimParameters:
+        Parameters
+        ----------
+        D               :int
+            dim of the mesh, by default 3
+            NB: only 3 is implemented
+        mesh_file       :str
+            mesh directory and file name: by default ""
+        data            :str, dict or SimParameters
+            if not None, load SimParameters attribute from data, by default None
+            (see SimParameters.load_SimParameters)
+        """
         self.D = D
         self.mesh_file = rmv_ext(mesh_file)
 
-        # domains 
+        # domains
         self.Ndomains = 0
         self.domainsID = []
         self.domains_list = {}
@@ -78,6 +112,8 @@ class SimParameters:
         """
         if type(data) == str:
             sp_dic = json_load(data)
+        elif is_sim_param(data):
+            sp_dic = self.save_SimParameters()
         else: 
             sp_dic = data
         self.D = sp_dic['D']
@@ -145,7 +181,7 @@ class SimParameters:
 
     def add_domain(self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
-        add new domain or change if ID already exists
+        add new domain or update if mesh_domain already exists
         Parameters
         ----------
         mesh_domain     : int
@@ -179,7 +215,7 @@ class SimParameters:
     
     def add_boundary(self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None):
         """
-        add new boundary or change if ID already exists 
+        add new boundary or update if mesh_domain already exists 
         Parameters
         ----------
         mesh_domain     : int
@@ -210,7 +246,7 @@ class SimParameters:
         
     def add_inboundary(self, mesh_domain, in_domains, thickness, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
-        add new internal boundary or change if ID already exists
+        add new internal boundary or update if mesh_domain already exists
         Parameters
         ----------
         mesh_domain     : int
@@ -264,7 +300,12 @@ class SimParameters:
         """
         
         """
-        if self.inbound:
+        if not self.inbound:
+                if i_domain is None:
+                    return self.domains_list
+                else:
+                    return i_domain
+        else:
             if i_space is None:
                 if i_domain is None:
                     md = [self.domains_list[k]['mixed_domain'] for k in self.domains_list]
@@ -297,6 +338,8 @@ class SimParameters:
             return mmf
 
     def get_space_of_domain(self, i_domain):
+        if i_domain==0:
+            return 0
         for i in range(len(self.domains_list[i_domain]['mixed_domain'])):
             if self.domains_list[i_domain]['mixed_domain'][i] == i_domain:
                 return(i)
@@ -308,9 +351,9 @@ class SimParameters:
         !! Caution work for NerveMshCreator only : see if it can be generalized
         """
         in_space = self.get_space_of_domain(i_ibound-1)
-        
-        if i_ibound < 100:  # Should be a perineurium
-            out_space = 0
+        out_space = 0
+        if i_ibound > 100:  # Should be a perineurium
+            out_space = 0    
         else:               # Should be an axon membrane
             for i in self.inboundaries_list:
                 if i_ibound in self.inboundaries_list[i]['in_domains']:

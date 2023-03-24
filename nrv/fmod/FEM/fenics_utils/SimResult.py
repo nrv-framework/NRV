@@ -2,7 +2,7 @@ import numpy as np
 
 from mpi4py import MPI 
 import scipy
-#from dolfinx import *
+
 from dolfinx.fem import (FunctionSpace, Function, Expression)
 from dolfinx.io.gmshio import read_from_msh, model_to_mesh
 from dolfinx.io.utils import XDMFFile
@@ -51,12 +51,18 @@ def save_sim_res_list(sim_res_list, fname):
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
-    overload of dolfinx.io.gmshio.read_from_msh with no verbose from gmsh
+    Given a mesh_file or a MeshCreator returns mesh cell_tags and facet_tags
+    (see dolfinx.io.gmshio.model_to_mesh for more details)
+    NB: copy of dolfinx.io.gmshio.read_from_msh verbose from gmsh 
     Parameters
     ----------
     mesh_file : str, 
         Path and name of mesh file 
         NB: extention is not required but must be a .msh file
+    comm            : tupple (str, int)
+        The MPI communicator to use for mesh creation
+    rank            : tupple (str, int)
+        The rank the Gmsh model is initialized on
 
     Returns
     -------
@@ -106,7 +112,29 @@ def V_from_meshfile(mesh_file, elem=('Lagrange', 1)):
     
 
 class SimResult:
+    """
+    Result of a FEMSimulation. 
+    Store the resulting function space giving the possibility to apply basic mathematical
+    operations on multiple results
+    """
     def __init__(self, mesh_file="", domain=None, elem=('Lagrange', 1), V=None, vout=None,comm=MPI.COMM_WORLD):
+        """
+        initialisation of the SimParameters:
+        Parameters
+        ----------
+        mesh_file       :str
+            mesh directory and file name: by default ""
+        domain       : None or mesh
+            mesh domain on which the result is defined, by default None
+        elem            :tupple (str, int)
+            if None, ('Lagrange', 1), else (element type, element order), by default None
+        V       : None or dolfinx.fem.FunctionSpace
+            FunctionSpace on which the result is defined, by default None
+        vout       : None or dolfinx.fem.Function
+            Function resulting from the FEMSimulation, by default None
+        comm            :int
+            The MPI communicator to use for mesh creation, by default MPI.COMM_WORLD
+        """    
         self.mesh_file = mesh_file
 
         self.domain = domain
@@ -128,7 +156,7 @@ class SimResult:
             self.vout = vout
         self.comm = comm     
     
-    def save_sim_result(self, file, ftype=None, overwrite=True):
+    def save_sim_result(self, file, ftype='xdmf', overwrite=True):
         if ftype == 'xdmf':
             fname = rmv_ext(file) + '.xdmf'
             with XDMFFile(self.comm, fname, "w") as file:
