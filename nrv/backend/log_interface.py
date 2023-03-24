@@ -54,7 +54,7 @@ def rise_error(*args, out=1, **kwargs):
     if MCH.is_alone():
         if LOG_Status:
             logging.error(message)
-        if verbose:
+        if verbose and VERBOSITY_LEVEL>=1:
             print(bcolors.FAIL + 'NRV ERROR: '+ message+ bcolors.ENDC)
     else:
         if LOG_Status:
@@ -86,7 +86,7 @@ def rise_warning(*args, abort=False, **kwargs):
     if MCH.is_alone():
         if LOG_Status:
             logging.warning('NRV WARNING: '+ message)
-        if verbose:
+        if verbose and VERBOSITY_LEVEL>=2:
             print(bcolors.WARNING + 'NRV WARNING: '+ message+ bcolors.ENDC)
     else:
         if LOG_Status:
@@ -114,7 +114,7 @@ def pass_info(*args, **kwargs):
     if MCH.is_alone():
         if LOG_Status:
             logging.info('NRV INFO: '+ message)
-        if verbose:
+        if verbose and VERBOSITY_LEVEL>=3:
             print('NRV INFO: '+ message)
     else:
         if LOG_Status:
@@ -158,4 +158,5 @@ def set_nrv_verbosity(i):
     """
     set general verbosity level
     """
+    global VERBOSITY_LEVEL
     VERBOSITY_LEVEL = i
