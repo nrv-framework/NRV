@@ -29,7 +29,7 @@ pi = np.pi
 
 def is_MshCreator(object):
     """
-    check if an object is a MshCreator, return True if yes, else False
+    Check if an object is a MshCreator, return True if yes, else False
 
     Parameters
     ----------
@@ -48,8 +48,20 @@ def clear_gmsh():
         gmsh.finalize()
 
 class MshCreator:
+    """
+    Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
+    Contains methodes dealing with the mesh geometries, physical domains and feilds
+    """
     def __init__(self, D, ver_level=2):
-
+        """
+        initialisation of the MshCreator
+        Parameters
+        ----------
+        D           : int(1,2,3)
+            mesh dimension
+        ver_level   : int(0,1,2,3,4,5,99)
+            verbosity level of gmsh (see MshCreator.set_verbosity), by default 2
+        """
         self.D = D 
         self.entities = {}
         self.volumes = []
@@ -213,9 +225,9 @@ class MshCreator:
         gmsh.option.setNumber("General.Verbosity", self.verbosity_level)
         
     
-    ####################################################################################################
-    #######################################   geometry methods  ########################################
-    ####################################################################################################
+    ##############################################################################################
+    #######################################   geometry methods  ##################################
+    ##############################################################################################
 
     def add_point(self,x=0, y=0, z=0):
         """
@@ -392,9 +404,9 @@ class MshCreator:
             new_entities[i[1]] = {"type":"fragment","parameters":parameters, 'dim':dim}
         self.entities.update(new_entities)
 
-    ####################################################################################################
-    #######################################   domains methods  #########################################
-    ####################################################################################################
+    ##############################################################################################
+    #######################################   domains methods  ###################################
+    ##############################################################################################
 
     def add_domains(self,obj_IDs,phys_ID,dim=None, name=None):
         """
@@ -417,9 +429,9 @@ class MshCreator:
 
         self.domains += (dim, phys_ID, name)
 
-    ####################################################################################################
-    #######################################   feilds methods  ##########################################
-    #################################################################################################### 
+    ##############################################################################################
+    #######################################   feilds methods  ####################################
+    ##############################################################################################
     def refine_entities(self, ent_ID, res_in, dim, res_out=None, IncludeBoundary=True):
         """
         refine mesh resolution in a list of faces or volumes IDs 
@@ -520,7 +532,11 @@ class MshCreator:
         self.model.mesh.field.setNumbers(self.Nfeild, "FieldsList", feild_IDs)
 
         return self.Nfeild
-    
+
+
+    ##############################################################################################
+    ################################   generate and saving methods  ##############################
+    ##############################################################################################
     def generate(self):
         """
         
