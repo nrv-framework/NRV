@@ -64,7 +64,7 @@ sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
 res1 = sim1.solve()
 
 ## Check result savings
-res1.save_sim_result(out_file1)
+res1.save_sim_result(out_file1, ftype='res')
 print('res1 saved')
 res2 = nrv.SimResult()
 res2.load_sim_result(out_file1)
