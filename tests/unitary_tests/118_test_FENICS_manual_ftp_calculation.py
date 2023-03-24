@@ -14,19 +14,15 @@ print('Building mesh')
 t1 = time.time()
 
 L=5000          #um
-Outer_D = 5    #mm
-Nerve_D = 250  #um
-
-
+Outer_D = 5     #mm
+Nerve_D = 250   #um
 
 #
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
 
 mesh.reshape_nerve(res=25)
-
-#mesh.reshape_fascicle(D=3000, y_c=0, z_c=0, ID=1, res=300)
+mesh.reshape_fascicle(D=200, y_c=0, z_c=0, res=100)
 mesh.add_electrode(elec_type="LIFE", x_c=L/2, y_c=0, z_c=0, length=1000, D=25, res=3)
-
 mesh.compute_mesh()
 
 mesh.save(mesh_file)
@@ -36,6 +32,7 @@ print(mesh.get_parameters())
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
 #mesh.visualize()
+
 mesh.get_mesh_info(True)
 
 # FEM Simulation
@@ -43,14 +40,14 @@ mesh.get_mesh_info(True)
 sim1 = nrv.FEMSimulation(D=3, mesh_file=mesh_file, mesh=mesh, elem=('Lagrange', 2))
 sim1.add_domain(mesh_domain=0,mat_file="saline")
 sim1.add_domain(mesh_domain=2,mat_file="endoneurium_ranck")
-#sim1.add_domain(mesh_domain=12,mat_file="endoneurium_ranck")
+sim1.add_domain(mesh_domain=10,mat_file="endoneurium_ranck")
 
 # Adding internal boundaries
-#sim1.add_inboundary(mesh_domain=13,mat_file="perineurium", thickness=0.005, in_domains=[12])
-sim1.add_inboundary(mesh_domain=3,mat_file="perineurium", thickness=5, in_domains=[2])
+sim1.add_inboundary(mesh_domain=11,mat_file="perineurium", thickness=0.005, in_domains=[10])
+#sim1.add_inboundary(mesh_domain=3,mat_file="perineurium", thickness=5, in_domains=[2])
 
 sim1.add_boundary(mesh_domain=1, btype='Dirichlet', value=0, variable=None)
-sim1.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim', mesh_domain_3D=2)
+sim1.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim', mesh_domain_3D=0)
 
 data = sim1.save_SimParameters()
 
