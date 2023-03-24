@@ -659,7 +659,7 @@ class fascicle():
         self.axons_diameter = self.axons_diameter[mask]
         self.axons_type = self.axons_type[mask]
         self.axons_y = self.axons_y[mask]
-        self.axons_z = self.axons_z[mask
+        self.axons_z = self.axons_z[mask]
         if len(self.NoR_relative_position) != 0:
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
