@@ -13,7 +13,7 @@ __license__         = 'CeCILL'
 
 
 from .backend import compileMods
-
+from .backend.log_interface import set_nrv_verbosity
 
 from .fmod.materials import *
 from .fmod.electrodes import *
