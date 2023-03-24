@@ -32,7 +32,6 @@ y2 = 90
 z = 0
 V = my_model.get_potentials(x, y, z)
 V2 = my_model.get_potentials(x, y2, z)
-print(V, np.shape(V))
 del my_model
 t = time.time()
 print("total time : "+str(t-t0))
