@@ -748,6 +748,8 @@ class NerveMshCreator(MshCreator):
 
         if contact_thickness is None:
             contact_thickness = 0.01*(self.Outer_D - self.Nerve_D)/2
+            if contact_thickness < 0:
+                contact_thickness = self.Nerve_D*0.1
         if insulator_thickness is None:
             insulator_thickness = min(5*contact_thickness, 0.4*(self.Outer_D - self.Nerve_D)/2)
         if insulator_length is None:
@@ -817,6 +819,8 @@ class NerveMshCreator(MshCreator):
         
         if contact_thickness is None:
             contact_thickness = 0.01*(self.Outer_D - self.Nerve_D)/2
+            if contact_thickness < 0:
+                contact_thickness = self.Nerve_D*0.1
         if insulator_thickness is None:
             insulator_thickness = min(5*contact_thickness, 0.4*(self.Outer_D - self.Nerve_D)/2)
         if insulator_length is None:
