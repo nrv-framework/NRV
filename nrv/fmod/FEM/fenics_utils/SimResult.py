@@ -37,17 +37,16 @@ def is_sim_res(result):
     """
     return isinstance(result, SimResult)
 
-def save_sim_res_list(sim_res_list, fname):
+def save_sim_res_list(sim_res_list, fname, dt=1):
     """
     save a list of SimResults in a xdmf file
     """
     fname = rmv_ext(fname) + ".xdmf"
     N_list = len(sim_res_list)
-    with XDMFFile(comm, fname, "w") as file:
-        file.write_mesh(sim_res_list[0].domain)
-        for E in range(N_list):
-            sim_res_list[E].vout.name = "vout_" + str(E+1)
-            file.write_function(sim_res_list[E].vout)
+    xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
+    xdmf.write_mesh(sim_res_list[0].domain)
+    for E in range(N_list):
+        xdmf.write_function(sim_res_list[E].vout, E*dt)
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
