@@ -746,6 +746,8 @@ class NerveMshCreator(MshCreator):
             length along x of the insulator ring in um, by default 1000
         """
 
+
+
         if contact_thickness is None:
             contact_thickness = 0.01*(self.Outer_D - self.Nerve_D)/2
             if contact_thickness < 0:
@@ -754,8 +756,9 @@ class NerveMshCreator(MshCreator):
             insulator_thickness = min(5*contact_thickness, 0.4*(self.Outer_D - self.Nerve_D)/2)
         if insulator_length is None:
             insulator_length = 2*contact_length
-        print(contact_thickness,insulator_thickness,insulator_length)
         #self.reshape_outerBox(tresholded_res=True)
+
+
 
         if ID is not None:
             self.electrodes[ID]["kwargs"]["contact_length"] = contact_length
@@ -818,13 +821,15 @@ class NerveMshCreator(MshCreator):
             contact_width = pi*self.Nerve_D*4/(5*N)
         
         if contact_thickness is None:
-            contact_thickness = 0.01*(self.Outer_D - self.Nerve_D)/2
+            contact_thickness = 0.1*(self.Outer_D - self.Nerve_D)/2
             if contact_thickness < 0:
                 contact_thickness = self.Nerve_D*0.1
         if insulator_thickness is None:
             insulator_thickness = min(5*contact_thickness, 0.4*(self.Outer_D - self.Nerve_D)/2)
         if insulator_length is None:
             insulator_length = 2*contact_length
+        print(contact_thickness,insulator_thickness,insulator_length)
+            
 
         if ID is not None:
             self.electrodes[ID]["kwargs"]["contact_width"] = contact_width
