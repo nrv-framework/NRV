@@ -19,7 +19,6 @@ from .fascicle_generator import *
 from ..utils.cell.CL_postprocessing import *
 
 from ..fmod.extracellular import *
-from ..fmod.extracellular import *
 from ..fmod.recording import *
 
 from ..backend.file_handler import *
@@ -44,6 +43,23 @@ OTF_PP_library = os.listdir(OTF_PP_path)
 #####################
 ## Fasscicle class ##
 #####################
+
+def is_fascicle(object):
+    """
+    check if an object is a fascicle, return True if yes, else False
+
+    Parameters
+    ----------
+    result : object
+        object to test
+
+    Returns
+    -------
+    bool
+        True it the type is a fascicle object
+    """
+    return isinstance(object, fascicle)
+
 class fascicle():
     """
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
@@ -141,6 +157,7 @@ class fascicle():
             fascicle_config = {}
             fascicle_config['ID'] = self.ID
             fascicle_config['type'] = self.type
+            fascicle_config['D'] = self.D
             fascicle_config['y_grav_center'] = self.y_grav_center
             fascicle_config['z_grav_center'] = self.z_grav_center
             fascicle_config['N_vertices'] = self.N_vertices
@@ -194,6 +211,7 @@ class fascicle():
             results = fname
         self.ID = results['ID']
         self.type = results['type']
+        self.D = results['D']
         self.y_grav_center = results['y_grav_center']
         self.z_grav_center = results['z_grav_center']
         self.N_vertices = results['N_vertices']
@@ -644,8 +662,7 @@ class fascicle():
             z = electrode.z
         else:
             # CUFF electrodes should not affect intrafascicular state
-            print('CUFF')
-            pass
+            return 0
         # compute the distance of all axons to electrode
         D_vectors = np.sqrt((self.axons_y - y)**2 + (self.axons_z - z)**2) - (self.axons_diameter/2 + D/2)
         colapse = np.argwhere(D_vectors < 0)
@@ -660,8 +677,6 @@ class fascicle():
         self.axons_type = self.axons_type[mask]
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
-        if len(self.NoR_relative_position) != 0:
-            self.NoR_relative_position = self.NoR_relative_position[mask]
 
     def remove_unmyelinated_axons(self):
         """
@@ -745,7 +760,7 @@ class fascicle():
                     if electrode.type == "LIFE":
                         circles.append(plt.Circle((electrode.y_c, electrode.z_c),\
                         electrode.D/2, color='gold', fill=True))
-                    else:
+                    elif not is_FEM_electrode(electrode):
                         axes.scatter(electrode.y, electrode.z, color='gold')
             for circle in circles:
                 axes.add_patch(circle)
@@ -796,7 +811,8 @@ class fascicle():
                 ## plot electrode(s) if existings
                 if self.extra_stim is not None:
                     for electrode in self.extra_stim.electrodes:
-                        axes.plot(electrode.x*np.ones(2), [0,self.N-1], color='gold')
+                        if not is_FEM_electrode(electrode):
+                            axes.plot(electrode.x*np.ones(2), [0,self.N-1], color='gold')
                 axes.set_xlabel('x (um)')
                 axes.set_ylabel('axon ID')
                 axes.set_yticks(np.arange(self.N))
@@ -806,6 +822,29 @@ class fascicle():
 
 
     ## STIMULATION METHODS
+    def clear_context(self):
+        """
+        Clear all stimulation and recording mecanism
+        """
+        self.L = None
+        # extra-cellular stimulation
+        self.extra_stim = None
+        self.footprints = {}
+        self.is_footprinted = False
+        self.myelinated_nseg_per_sec = 3
+        self.unmyelinated_nseg = 100
+        # intra-cellular stimulation
+        self.N_intra = 0
+        self.intra_stim_position = []
+        self.intra_stim_t_start = []
+        self.intra_stim_duration = []
+        self.intra_stim_amplitude = []
+        self.intra_stim_ON = []
+        ## recording mechanism
+        self.record = False
+        self.recorder = None
+        self.is_simulated = False
+
     def attach_extracellular_stimulation(self, stimulation):
         """
         attach a extracellular context of simulation for an axon.
@@ -979,10 +1018,11 @@ class fascicle():
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_g_mem = False, record_g_ions=False,\
-        record_particles=False, loaded_footprints=False, save_V_mem=False, save_path='', verbose=False,\
-        Unmyelinated_model='Rattay_Aberham', Adelta_model='extended_Gaines',Myelinated_model='MRG',\
-        myelinated_nseg_per_sec=3, unmyelinated_nseg=None, Adelta_limit=None, PostProc_Filtering=None, postproc_script="default"):
+        record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=False,\
+        save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham', \
+        Adelta_model='extended_Gaines',Myelinated_model='MRG',myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
+        Adelta_limit=None, PostProc_Filtering=None, postproc_script="default", **kwargs):
+        
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead 
@@ -1195,7 +1235,7 @@ class fascicle():
                         round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
                         dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
                         v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
-                        threshold=self.threshold)
+                        threshold=self.threshold, Nseg_per_sec=self.unmyelinated_nseg)
                 else:
                     ## if myelinated, test the axons_diameter[k],
                     ## if less than Adelta_limit -> A-delta model, else Myelinated
