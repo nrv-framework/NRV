@@ -186,7 +186,7 @@ class FEMSimulation(SimParameters):
         If FEMSimulation already defined, can be used to modify variable defined NBC
         """
         t0 = time.time()
-        if self.data_status :
+        if self.data_status:
             self.args = kwargs
             pass_info('Static/Quasi-Static electrical current problem')
             if self.D == 1:
