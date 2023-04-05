@@ -594,24 +594,36 @@ class FEM_stimulation(extracellular_context):
     def add_electrode(self, electrode, stimulus):
         """
         Add a stimulation electrode and its stimulus to the stimulation, only it the electrode is FEM based.
-
+        
         Parameters
         ----------
         electrode   : electrode object
             see Electrode.py or electrode object help for further details
-        stimulus    : stimulus object
-            see Stimulus.py or stimulus object help for further details
+        stimulus    : stimulus object or list[stimulus]
+            see Stimulus.py or stimulus object help for further details, for Multipolar electrode:
+            if stimulus a list of situmulus one stimulus set for each active site
+            else 
         """
         if is_FEM_electrode(electrode):
-            if self.electrodes == []:
+            if not electrode.is_multipolar:
+                if not self.electrodes == []:
+                    electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
                 self.electrodes.append(electrode)
                 self.electrodes_label.append(electrode.label)
                 self.stimuli.append(stimulus)
             else:
-                electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
-                self.electrodes.append(electrode)
-                self.electrodes_label.append(electrode.label)
-                self.stimuli.append(stimulus)
+                if np.iterable(stimulus):
+                    stimuli = stimulus
+                else:
+                    rise_warning('Only one stimulus for a multipolar electrode, it will be set for all active sites')
+                    stimuli = [stimulus for k in range(electrode.N_contact)]
+                for E in range(electrode.N_contact):
+                    if not self.electrodes == []:
+                        electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
+                    self.electrodes.append(electrode)
+                    self.electrodes_label.append(electrode.label+"_"+str())
+                    self.stimuli.append(stimuli[E])
+
             if self.fenics and MCH.do_master_only_work():
                 electrode.parameter_model(self.model)
             self.synchronised = False
