@@ -15,6 +15,7 @@ __license__         = 'CeCILL'
 from .backend import compileMods
 from .backend.log_interface import set_nrv_verbosity
 
+
 from .fmod.materials import *
 from .fmod.electrodes import *
 from .fmod.stimulus import *
@@ -26,6 +27,7 @@ from .fmod.FEM.FENICS_model import *
 ######### May not be requiered at the end ###############
 from .fmod.FEM.mesh_creator.MshCreator import *
 from .fmod.FEM.mesh_creator.NerveMshCreator import *
+from .fmod.FEM.mesh_creator.NRV_Msh import *
 from .fmod.FEM.fenics_utils.FEMSimulation import *    
 from .fmod.FEM.fenics_utils.SimParameters import *
 from .fmod.FEM.fenics_utils.SimResult import *
