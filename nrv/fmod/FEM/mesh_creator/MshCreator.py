@@ -62,6 +62,7 @@ class MshCreator:
         ver_level   : int(0,1,2,3,4,5,99)
             verbosity level of gmsh (see MshCreator.set_verbosity), by default 2
         """
+        self.type="GMSH"
         self.D = D 
         self.entities = {}
         self.volumes = []
