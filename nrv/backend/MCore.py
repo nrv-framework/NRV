@@ -285,5 +285,5 @@ def synchronize_processes():
         a flag set to True
     """
     if not MCH.is_alone():
-        sync_Flag = MCH.send_synchronization_flag()
+        comm.Barrier()
     return 0
