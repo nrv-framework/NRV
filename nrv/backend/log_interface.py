@@ -1,6 +1,6 @@
 """
-NRV-materials
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+log_interface handeling
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import os
@@ -154,9 +154,3 @@ def prompt_debug(*args):
     """
     ic(*args)
 
-def set_nrv_verbosity(i):
-    """
-    set general verbosity level
-    """
-    global VERBOSITY_LEVEL
-    VERBOSITY_LEVEL = i
