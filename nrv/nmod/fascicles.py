@@ -222,6 +222,7 @@ class fascicle():
         else:
             D, y, z = self.get_circular_contour()
             self.D = D
+
         self.A = results['A']
         self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
         self.N = len(self.axons_diameter)
@@ -1024,7 +1025,7 @@ class fascicle():
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
         record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=False,\
-        save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham', \
+        save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham',save_axon = True, \
         Adelta_model='extended_Gaines',Myelinated_model='MRG',myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
         Adelta_limit=None, PostProc_Filtering=None, postproc_script="default", **kwargs):
         
@@ -1220,7 +1221,8 @@ class fascicle():
                         exec(code, globals(), locals())
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
-                    save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                    if save_axon:
+                        save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
                 # sum up all recorded extracellular potential if applicable
                 if self.record:
                     self.recorder.gather_all_recordings()
@@ -1337,7 +1339,8 @@ class fascicle():
                     exec(code, globals(), locals())
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
-                save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                if (save_axon):
+                    save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
             # sum up all recorded extracellular potential if applicable
             if self.record:
                 self.recorder.gather_all_recordings()
