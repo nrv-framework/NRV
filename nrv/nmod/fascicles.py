@@ -222,7 +222,6 @@ class fascicle():
         else:
             D, y, z = self.get_circular_contour()
             self.D = D
-            print(D)
         self.A = results['A']
         self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
         self.N = len(self.axons_diameter)
