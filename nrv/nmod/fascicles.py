@@ -211,12 +211,18 @@ class fascicle():
             results = fname
         self.ID = results['ID']
         self.type = results['type']
-        self.D = results['D']
+
         self.y_grav_center = results['y_grav_center']
         self.z_grav_center = results['z_grav_center']
         self.N_vertices = results['N_vertices']
         self.y_vertices = np.asarray(results['y_vertices']).flatten()
         self.z_vertices = np.asarray(results['z_vertices']).flatten()
+        if ('D' in results):
+            self.D = results['D']
+        else:
+            D, y, z = self.get_circular_contour()
+            self.D = D
+            print(D)
         self.A = results['A']
         self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
         self.N = len(self.axons_diameter)
