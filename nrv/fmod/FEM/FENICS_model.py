@@ -65,7 +65,10 @@ class FENICS_model(FEM_model):
         self.N_electrode = 0
         self.electrodes = {}
         self.Istim = 1e-3        #A
+        self.jstims = []
+        self.j_electrode = {}
 
+     
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
         self.Endoneurium_mat = "endoneurium_ranck"
@@ -83,7 +86,7 @@ class FENICS_model(FEM_model):
             self.elem = ('Lagrange', 2)
 
         # FEM 
-        self.sim = []
+        self.sim = None
         self.sim_res = []
 
         # Mcore attributes
@@ -250,34 +253,36 @@ class FENICS_model(FEM_model):
 
         if self.is_meshed and not self.is_sim_ready:
             t0 = time.time()
+            # SETTING DOMAINS
+            #del self.mesh
+            #sim = FEMSimulation(mesh_file=self.mesh_file, elem=self.elem, comm=self.comm, rank=self.rank)
+            self.sim = FEMSimulation(mesh_file=self.mesh_file,mesh=self.mesh, elem=self.elem)
+            # Outerbox domain
+            self.sim.add_domain(mesh_domain=ENT_DOM_offset['Outerbox'],mat_pty=self.Outer_mat)
+            # Nerve domain
+            self.sim.add_domain(mesh_domain=ENT_DOM_offset['Nerve'],mat_pty=self.Epineurium_mat)
+            for i in range(self.N_fascicle):
+                self.sim.add_domain(mesh_domain=ENT_DOM_offset['Fascicle']+(2*i),mat_pty=self.Endoneurium_mat)
+            for _,(i, elec) in enumerate(self.electrodes.items()):
+                if not elec["type"]=="LIFE":
+                    self.sim.add_domain(mesh_domain=ENT_DOM_offset['Electrode']+(2*i),mat_pty=self.Electrodes_mat)
+            # SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
+            for i in self.fascicles:
+                thickness = self.Perineurium_thickness[i]
+                f_dom = ENT_DOM_offset['Fascicle']+(2*i)
+                self.sim.add_inboundary(mesh_domain=ENT_DOM_offset['Surface'] + f_dom,mat_pty=self.Perineurium_mat, thickness=thickness, in_domains=[f_dom])
+            # SETTING BOUNDARY CONDITION
+            # Ground (to the external ring of Outerbox)
+            self.sim.add_boundary(mesh_domain=1, btype='Dirichlet', value=0)
+            # Injected current from active electrode
             # For EIT change in for E in elec_patren:
             for _,(E,active_elec) in enumerate(self.electrodes.items()):
-                # SETTING DOMAINS
-                #del self.mesh
-                #sim = FEMSimulation(mesh_file=self.mesh_file, elem=self.elem, comm=self.comm, rank=self.rank)
-                sim = FEMSimulation(mesh_file=self.mesh_file,mesh=self.mesh, elem=self.elem)
-                # Outerbox domain
-                sim.add_domain(mesh_domain=0,mat_pty=self.Outer_mat)
-                # Nerve domain
-                sim.add_domain(mesh_domain=2,mat_pty=self.Epineurium_mat)
-                for i in range(self.N_fascicle):
-                    sim.add_domain(mesh_domain=10+(2*i),mat_pty=self.Endoneurium_mat)
-                for _,(i, elec) in enumerate(self.electrodes.items()):
-                    if not elec["type"]=="LIFE":
-                        sim.add_domain(mesh_domain=100+(2*i),mat_pty=self.Electrodes_mat)
-                # SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
-                for i in self.fascicles:
-                    thickness = self.Perineurium_thickness[i]
-                    sim.add_inboundary(mesh_domain=11+(2*i),mat_pty=self.Perineurium_mat, thickness=thickness, in_domains=[10+(2*i)])
-                # SETTING BOUNDARY CONDITION
-                # Ground (to the external ring of Outerbox)
-                sim.add_boundary(mesh_domain=1, btype='Dirichlet', value=0)
-                # Injected current from active electrode
+                E_var = 'E'+str(E)
                 mesh_domain_3D = self.__find_elec_subdomain(active_elec)
-                jstim = self.__find_elec_jstim(active_elec)
-                sim.add_boundary(mesh_domain=101+(2*E), btype='Neuman', value=jstim, mesh_domain_3D=mesh_domain_3D)
-                sim.prepare_sim()
-                self.sim += [sim]
+                self.jstims += {self.__find_elec_jstim(active_elec)}
+                self.j_electrode[E_var] = 0
+                e_dom = ENT_DOM_offset['Surface'] + ENT_DOM_offset['Electrode'] + (2*E)
+                self.sim.add_boundary(mesh_domain=e_dom, btype='Neuman', variable=E_var, mesh_domain_3D=mesh_domain_3D)
             self.is_sim_ready = True
         self.preparing_timer += time.time() - t0
             
@@ -387,13 +392,21 @@ class FENICS_model(FEM_model):
         t0 = time.time()
         # For EIT change in for E in elec_patren:
         for E in range(self.N_electrode):
-            self.sim_res += [self.sim[E].solve()]
+            for i_elec in self.j_electrode:
+                if i_elec == 'E' + str(E):
+                    self.j_electrode[i_elec] = self.jstims[E]
+                else:
+                    self.j_electrode[i_elec] = 0
+            self.sim.prepare_sim(**self.j_electrode)
+            self.sim_res += [self.sim.solve()]
+            self.sim_res[-1].vout.label = 'E'+str(E)
         self.is_computed = True
         self.solving_timer += time.time() - t0
 
     ######################
     ## results handling ##
     ######################
+
     def get_potentials(self, x, y, z, E=-1):
         """
         Get the potential on a line to get extracellular potential for axons stimulation.
@@ -427,14 +440,3 @@ class FENICS_model(FEM_model):
                 potentials = np.transpose(np.array(potentials)*V)
             self.access_res_timer += time.time() - t0
             return potentials
-
-    def export(self, path=''):
-        """
-        Export the figures of the FENICS results and posprocess (in PNG format)
-
-        Parameters
-        ----------
-        path    : str
-            path address where to save graphics
-        """
-        pass
