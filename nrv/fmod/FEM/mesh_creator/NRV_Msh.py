@@ -42,7 +42,6 @@ def mesh_from_fascicle(fascicle, mesh=None, Length=10000, Outer_D=5,  Nerve_D=40
                 mesh = mesh_from_electrode(elec, mesh=mesh)
                 if elec.is_multipolar:
                     N_contact = elec.N_contact
-                print('elec added')
             else:
                 N_contact -= 1
 
