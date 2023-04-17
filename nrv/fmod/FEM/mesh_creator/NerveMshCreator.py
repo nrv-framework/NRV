@@ -828,7 +828,6 @@ class NerveMshCreator(MshCreator):
             insulator_thickness = min(5*contact_thickness, 0.4*(self.Outer_D - self.Nerve_D)/2)
         if insulator_length is None:
             insulator_length = 2*contact_length
-        print(contact_thickness,insulator_thickness,insulator_length)
             
 
         if ID is not None:
