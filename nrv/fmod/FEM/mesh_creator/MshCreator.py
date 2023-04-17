@@ -9,6 +9,7 @@ import gmsh
 
 from ....backend.file_handler import rmv_ext
 from ....backend.MCore import *
+from ....backend.parameters import NRV_param
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 
 
@@ -18,12 +19,9 @@ dir_path = os.environ['NRVPATH'] + '/_misc'
 ###############
 ## Constants ##
 ###############
-machine_config = configparser.ConfigParser()
-config_fname = dir_path + '/NRV.ini'
-machine_config.read(config_fname)
 
-GMSH_Ncores = int(machine_config.get('GMSH', 'GMSH_CPU'))
-GMSH_Status = machine_config.get('GMSH', 'GMSH_STATUS') == 'True'
+
+
 
 pi = np.pi
 
@@ -93,9 +91,9 @@ class MshCreator:
         self.N_nodes = 0
         self.N_elements = 0
         
-        self.Ncore = GMSH_Ncores
-        gmsh.option.setNumber('General.NumThreads', GMSH_Ncores)
-        if GMSH_Ncores > 1:
+        self.Ncore = NRV_param.GMSH_Ncores
+        gmsh.option.setNumber('General.NumThreads', self.Ncore)
+        if self.Ncore > 1:
             gmsh.option.set_number('Mesh.Algorithm3D', 10)
         else:
             gmsh.option.set_number('Mesh.Algorithm3D', 1)
@@ -108,7 +106,7 @@ class MshCreator:
     def get_obj(self):
         """
         update and return list of mesh entities  
-        RETURNS
+        Returns
         -------
         self.entities       :dict
         """
@@ -118,7 +116,7 @@ class MshCreator:
         """
         update and return list of mesh volumes (optional: with their center of mass)
         
-        RETURNS
+        Returns
         -------
         self.faces      :list[tuple]
         """
@@ -162,7 +160,7 @@ class MshCreator:
         """
         update and return list of mesh face (optional: with their center of mass)
         
-        RETURNS
+        Returns
         -------
          self.faces     :list[tuple]
         """
@@ -189,7 +187,7 @@ class MshCreator:
     def get_res(self):
         """
         return the global resolution saved (usefull when no field are set)
-        RETURNS
+        Returns
         -------
         res     :float
             global resolution saved in the object
@@ -233,8 +231,8 @@ class MshCreator:
     def add_point(self,x=0, y=0, z=0):
         """
         add a point to the mesh
-        INPUTS
-        ------
+        Parameters
+        ----------
         x       : float
             x position of the first face center
         y       : float
@@ -242,7 +240,7 @@ class MshCreator:
         z       : float
             z position of the first face center
   
-        RETURNS
+        Returns
         -------
         """
         point = self.model.occ.addPoint(x, y, z)
@@ -252,14 +250,14 @@ class MshCreator:
     def add_line(self, X0, X1):
         """
         add a point to the mesh
-        INPUTS
-        ------
+        Parameters
+        ----------
         X0       : int or tupple(3)
             x position of the first face center
         X1       : int or tupple(3)
             y position of the first face center
   
-        RETURNS
+        Returns
         -------
         """
         if isinstance(X0, int):
@@ -286,8 +284,8 @@ class MshCreator:
     def add_box(self,x=0, y=0, z=0, ax=5, ay=1, az=1):
         """
         add a box to the mesh
-        INPUTS
-        ------
+        Parameters
+        ----------
         x       : float
             x position of the first face center
         y       : float
@@ -301,7 +299,7 @@ class MshCreator:
         az      : float
             Box length along z
   
-        RETURNS
+        Returns
         -------
         """
         if self.D ==3:
@@ -320,8 +318,8 @@ class MshCreator:
         """
         add a x-oriented cylinder to mesh entities 
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         x       : float
             x position of the first face center
         y       : float
@@ -333,7 +331,7 @@ class MshCreator:
         R       : float
             Cylinder radius       
 
-        RETURNS
+        Returns
         -------
 
         """
@@ -353,26 +351,46 @@ class MshCreator:
         """
         rotate volume
 
-        INPUTS
-        ------
-
-        RETURNS
-        -------
-
+        Parameters
+        ----------
+        volume      : int
+            gmsh id of the volume
+        angle:      : float
+            angle of the rotation
+        x           : float
+            x-position of the center of the rotation, by default 0
+        y           : float
+            y-position of the center of the rotation, by default 0
+        z           : float
+            z-position of the center of the rotation, by default 0
+        ax          : float
+            x-coefficient of the rotation axis direction vector, by default 0
+        ay          : float
+            y-coefficient of the rotation axis direction vector, by default 0
+        az          : float
+            z-coefficient of the rotation axis direction vector, by default 0
+        rad         : bool 
+            if true angle considered in rad, else in degree, by default 0
         """
         if not rad:
             angle = math.radians(angle)
-        self.model.occ.rotate([(3,volume)], x,y, z, ax, ay, az, angle)
+        self.model.occ.rotate([(3,volume)], x, y, z, ax, ay, az, angle)
 
 
     def fragment(self, IDs=None, dim=3, verbose=True):
         """
         Fragmentation of the mesh important to link entities to each other
+        Parameters
+        ----------
+        IDs     : list or None
+            list of IDs of the element to fragments, if None all dim dimension elements are 
+            fragmented, by default None
+        dim     : int
+            dimension of the elements considerated, by default 3
+        verbose : bool
+            print or not the verbose on the temrminal, by default False
 
-        INPUTS
-        ------
-
-        RETURNS
+        Returns
         -------
 
         """
@@ -389,9 +407,7 @@ class MshCreator:
         else:
             list_obj = [(dim, k) for k in IDs]
         
-        N_obj = len(list_obj)
         frag = self.model.occ.fragment([list_obj[0]], [k for k in list_obj[1:]])
-        
         new_entities={}
         if verbose:
             pass_info("Warning: New volume generated by fragmentation, bounds are no longer up to date")
@@ -414,8 +430,8 @@ class MshCreator:
         add domains (ID + name) to a goupe of entities
         Caution: as to be used after all entities are placed 
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         fname    : str
             path and name of saving file. If ends with '.msh' only save in '.msh' file 
         """
@@ -437,8 +453,8 @@ class MshCreator:
         """
         refine mesh resolution in a list of faces or volumes IDs 
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         ent_ID    : list[int] or int
             ID or list of ID of the entities where the resolution should be changed 
         res_in    : float
@@ -474,8 +490,8 @@ class MshCreator:
         """
         refine mesh resolution in a list of faces or volumes IDs 
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         ent_ID    : list[int] or int
             ID or list of ID of the entities where the resolution should be changed 
         res_in    : float
@@ -522,8 +538,8 @@ class MshCreator:
         """
         refine mesh resolution taking the minimum value for a list of refinment fields
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         feild_IDs    : list[int]
             list of field from wich the minimum should be taken
         """
@@ -559,8 +575,8 @@ class MshCreator:
         """
         Save mesh in fname in '.msh'
 
-        INPUTS
-        ------
+        Parameters
+        ----------
         fname    : str
             path and name of saving file. If ends with '.msh' only save in '.msh' file 
         """
