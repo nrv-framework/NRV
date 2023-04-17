@@ -92,6 +92,7 @@ class FEMSimulation(SimParameters):
 
         # Space and mesure
         self.V = None
+        self.V_DG = None
         self.dS = None
         self.ds = None
         self.dx = None
@@ -125,7 +126,7 @@ class FEMSimulation(SimParameters):
         self.u = None
         self.mixedvout = None
         self.vout = None
-        self.result = SimResult()
+        self.result = None
 
         # Mcore attributes
         self.comm = comm
@@ -350,37 +351,6 @@ class FEMSimulation(SimParameters):
         for dom, pty in self.mat_pty_map.items():
             self.mat_map[dom] = load_fenics_material(pty)
             self.mat_map[dom].update_fenics_sigma(domain=self.domain,elem=self.elem,UN=UN, id=dom)
-
-    def __get_permitivity(self, X, unit='S/m', i_sig=None):
-        """
-        Extract permitivity from an object X and convert it in dolfinx 
-        constant or tensor
-
-        Parameters
-        ----------
-            X       : str, mat, float, list[3]
-            unit    : 'S/m' or 'S/um'
-                unit into witch the permitivity should be converted, by default S/m
-
-        Returns
-        -------
-            sigma   :   dolfinx.fem.Constant or ufl.as_tensor
-                permitivity 
-        """
-        if unit == 'S/um':
-            UN = S/m
-        else:
-            UN = 1
-
-        mat = load_fenics_material(X)
-        mat.update_fenics_sigma(domain=self.domain,elem=self.elem,UN=UN, id=i_sig)
-        '''
-        if mat is not None:
-            sigma = mat.get_fenics_sigma(domain=self.domain,elem=self.elem,UN=UN, id=i_sig)
-        else:
-            rise_error(('get_permitivity: X should be either an str, mat, float, list[3]'))
-        '''
-        return mat
     
     def __set_linear_form(self):
         """
@@ -441,7 +411,18 @@ class FEMSimulation(SimParameters):
         if ksp_max_it is not None:
             self.petsc_opt['ksp_max_it'] = ksp_max_it
 
-    def solve(self):
+    def solve(self, overwrite=False):
+        """
+        Assemble and solve the linear problem
+        Parameters
+        ----------
+        overwrite   : bool
+            if true modify the existing sim_res value, else create a new one. by default False
+        Returns
+        -------
+        self.results    : SimResult
+            SimResult containing the result of the resulting field of the FEM simulation
+        """
         t0 = time.time()
         pass_info('FEN4NRV: solving electrical potential')
         #rise_warning('The result will not be saved, be sure you use or save it later')
@@ -456,8 +437,13 @@ class FEMSimulation(SimParameters):
             V_sol = self.V
 
         # return simulation result
-        self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=V_sol, vout=self.vout, comm=self.domain.comm)
-        
+        self.result = SimResult()
+        if not overwrite:
+            vout = Function(V_sol)
+            vout.x.array[:] = self.vout.x.array[:]
+        else:
+            vout = self.vout
+        self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=V_sol, vout=vout, comm=self.domain.comm)
         self.solving_timer += time.time() - t0
         pass_info('FEN4NRV: solved in ' + str(self.solving_timer) + ' s')
         return self.result
@@ -465,8 +451,8 @@ class FEMSimulation(SimParameters):
     def __merge_mixed_solutions(self):
         if self.dg_problem is None:
             self.mixedvouts = self.mixedvout.split()
-            V_DG = FunctionSpace(self.domain, ('Discontinuous Lagrange', self.elem[1]))
-            u, v = TrialFunction(V_DG), TestFunction(V_DG)
+            self.V_DG = FunctionSpace(self.domain, ('Discontinuous Lagrange', self.elem[1]))
+            u, v = TrialFunction(self.V_DG), TestFunction(self.V_DG)
             adg = u*v * self.dx
             Ldg = 0
             for i_domain in self.domainsID:
@@ -477,10 +463,10 @@ class FEMSimulation(SimParameters):
             mixedvouts =self.mixedvout.split()
             for i in range(len(mixedvouts)):
                 self.mixedvouts[i].vector[:] = mixedvouts[i].vector[:]
-                V_DG = self.V
+                
         
         self.vout = self.dg_problem.solve()
-        return V_DG
+        return self.V_DG
 
     #####################################################
     ################ Access the results #################
