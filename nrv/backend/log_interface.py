@@ -10,6 +10,11 @@ import sys
 from icecream import ic
 from .MCore import *
 
+from .parameters import NRV_param
+
+
+
+
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -26,11 +31,6 @@ dir_path = os.environ['NRVPATH'] + '/_misc'
 logging.basicConfig(filename=dir_path+'/log/NRV.log', level=logging.INFO, format=\
     '%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
-machine_config = configparser.ConfigParser()
-config_fname = dir_path + '/NRV.ini'
-machine_config.read(config_fname)
-LOG_Status = machine_config.get('LOG', 'LOG_STATUS') == 'True'
-VERBOSITY_LEVEL = int(machine_config.get('LOG', 'VERBOSITY_LEVEL'))
 
 def rise_error(*args, out=1, **kwargs):
     """
@@ -52,12 +52,12 @@ def rise_error(*args, out=1, **kwargs):
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.error(message)
-        if verbose and VERBOSITY_LEVEL>=1:
+        if verbose and NRV_param.VERBOSITY_LEVEL>=1:
             print(bcolors.FAIL + 'NRV ERROR: '+ message+ bcolors.ENDC)
     else:
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.error('NRV ERROR: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if out == 0:
         out = 1
@@ -84,12 +84,12 @@ def rise_warning(*args, abort=False, **kwargs):
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.warning('NRV WARNING: '+ message)
-        if verbose and VERBOSITY_LEVEL>=2:
+        if verbose and NRV_param.VERBOSITY_LEVEL>=2:
             print(bcolors.WARNING + 'NRV WARNING: '+ message+ bcolors.ENDC)
     else:
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.warning('NRV WARNING: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
     if abort:
         sys.exit(0)
@@ -112,12 +112,12 @@ def pass_info(*args, **kwargs):
     for arg in args:
         message += str(arg)
     if MCH.is_alone():
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.info('NRV INFO: '+ message)
-        if verbose and VERBOSITY_LEVEL>=3:
+        if verbose and NRV_param.VERBOSITY_LEVEL>=3:
             print('NRV INFO: '+ message)
     else:
-        if LOG_Status:
+        if NRV_param.LOG_Status:
             logging.info('NRV INFO: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))
 
 def progression_popup(current, max_iter, begin_message='', end_message='', endl=''):
