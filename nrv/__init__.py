@@ -39,7 +39,7 @@ from .nmod.myelinated import *
 from .nmod.thin_myelinated import *
 from .nmod.fascicles import *
 from .nmod.fascicle_generator import *
-from .nmod.nerves import *
+from .nmod.nerve import *
 
 
 from .utils.saving_handler import *
