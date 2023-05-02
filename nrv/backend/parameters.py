@@ -9,8 +9,6 @@ from numpy import pi
 
 
 
-
-
 class nrv_parameters():
     def __init__(self):
         """
@@ -20,7 +18,8 @@ class nrv_parameters():
 
         self.load()
 
-        with open('self.config_fname', 'w') as configfile:
+    def save(self):
+        with open(self.config_fname, 'w') as configfile:
             self.machine_config.write(configfile)
     
     def load(self, fname=None):
