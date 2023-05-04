@@ -337,7 +337,7 @@ class recorder():
             self.sigma_zz = None
         else:
             self.material = material
-            temporary_material = load(self.material)
+            temporary_material = load_material(self.material)
             if temporary_material.is_isotropic():
                 self.isotropic = True
                 self.sigma = temporary_material.sigma
