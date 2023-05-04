@@ -155,7 +155,7 @@ class SimResult:
             self.vout = vout
         self.comm = comm     
     
-    def save_sim_result(self, file, ftype='xdmf', overwrite=True):
+    def save(self, file, ftype='xdmf', overwrite=True):
         if ftype == 'xdmf':
             fname = rmv_ext(file) + '.xdmf'
             with XDMFFile(self.comm, fname, "w") as file:
@@ -174,7 +174,7 @@ class SimResult:
             scipy.io.savemat(fname, mdict)
             return mdict
 
-    def load_sim_result(self, file):
+    def load(self, file):
         fname = rmv_ext(file) + '.sres'
         mdict = scipy.io.loadmat(fname)
         self.mesh_file = mdict['mesh_file'][0]
@@ -185,7 +185,13 @@ class SimResult:
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict['vout']
 
-    
+    def save_sim_result(self, save=False, fname='sim_result.json'):
+        rise_warning('save_sim_result is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_sim_result(self, data='sim_result.json'):
+        rise_warning('load_sim_result is a deprecated method use load')
+        self.load(self, data=data)
+
     #############
     ## methods ##
     #############
