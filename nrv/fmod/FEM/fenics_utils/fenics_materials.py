@@ -153,7 +153,7 @@ class fenics_material(material):
 
 
     ## Save and Load mehtods
-    def save_fenics_material(self, save=False, fname='material.json'):
+    def save(self, save=False, fname='material.json'):
         """
         Return material as dictionary and eventually save it as json file
 
@@ -179,7 +179,7 @@ class fenics_material(material):
         return mat_dic
 
 
-    def load_fenics_material(self, data):
+    def load(self, data):
         """
         Load all material properties from a dictionary or a json file
 
@@ -200,6 +200,13 @@ class fenics_material(material):
         self.elem = mat_dic['elem']
         self.UN = mat_dic['UN']
         self.update_fenics_sigma()
+
+    def save_fenics_material(self, save=False, fname='fenics_material.json'):
+        rise_warning('save_fenics_material is a deprecated method use save')
+        self.save(save=save, fname=fname)
+    def load_fenics_material(self, data='fenics_material.json'):
+        rise_warning('load_fenics_material is a deprecated method use load')
+        self.load(data=data)
 
     def load_from_mat(self, mat):
         if is_mat(mat):
@@ -290,3 +297,4 @@ class fenics_material(material):
             else:
                 self.sigma_fen.ufl_operands[0].interpolate(self.sigma_func)
                 self.sigma_fen.ufl_operands[1].value = self.UN
+ 
