@@ -18,12 +18,13 @@ all_tests [:] = (value for value in all_tests if value[0] in digits)
 all_tests.reverse()
 unit_test_figures = './unitary_tests/figures/'
 unit_test_results = './unitary_tests/results/'
+out_file = 'log_NRV_test.txt'
 
 
 ## ARGUMENT PARSER ##
 parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
 parser.add_argument('-d', '--dependances', action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
-parser.add_argument('-l', '--list', action='store_true', dest='LIST_TEST',help='Print the name of all unitary tests')
+parser.add_argument('-l', '--list', dest='LIST_TEST',type=int, nargs='?',default=-1, help='Print the name of all unitary tests')
 parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
 parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
 parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
@@ -87,19 +88,26 @@ if __name__ == "__main__":
                 print('Error launching COMSOL: ' + err_message)
         else:
             print('--- found access to a COMSOL server')
-
-    if args.LIST_TEST:
-        tests = sorted(os.listdir(unit_test_folder))
+    if not args.LIST_TEST == -1:
+        if args.LIST_TEST is None:
+            N_col = 2
+        else:
+            N_col = int(args.LIST_TEST)
+        tests = []
+        tests[:] = all_tests[:]
         i=0
         while i < len(tests):
             test = tests[i]
             if ".py" in test:
                 tests[i] = test[:3]+ '-' +test[4:-3]
                 i += 1
-            else:
-                tests.remove(test)
         cli = cmd.Cmd()
-        cli.columnize(tests, displaywidth=100)
+        cli.columnize(tests, displaywidth=N_col*47)
+        args.LIST_TEST = True
+    else:
+        args.LIST_TEST = False
+
+        
 
     if args.TARGET:
         for argt in args.TARGET:
@@ -189,10 +197,20 @@ if __name__ == "__main__":
                     failed_test.append(test)
 
         if success_flag == True:
-            print('--- All tests passed without errors, check that all tests are true')
+            line = '--- All tests passed without errors, check that all tests are true'
+
         else:
-            print('--- Bugs in NRV2, please consider reported errors before simulations')
-            print('--- list of failed tests : ',failed_test)
+            line = '--- Bugs in NRV2, please consider reported errors before simulations\n'
+            line += '--- list of failed tests : ['
+            for t in failed_test:
+                line += t + ', '
+            line = line[:-2] +']\n'
+        
+        print(line)
+        file_object = open(out_file, 'a')
+        file_object.write(line)
+        file_object.close()
+
 
     if args.SYNTAX_TEST:
         print('Applying pylint to nrv package')
