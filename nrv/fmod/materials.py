@@ -106,7 +106,7 @@ class material():
 
     ## Save and Load mehtods
 
-    def save_material(self, save=False, fname='material.json'):
+    def save(self, save=False, fname='material.json'):
         """
         Return material as dictionary and eventually save it as json file
 
@@ -134,8 +134,7 @@ class material():
             json_dump(mat_dic, fname)
         return mat_dic
 
-
-    def load_material(self, data):
+    def load(self, data):
         """
         Load all material properties from a dictionary or a json file
 
@@ -155,6 +154,14 @@ class material():
         self.sigma_xx = mat_dic['sigma_xx']
         self.sigma_xx = mat_dic['sigma_yy']
         self.sigma_zz = mat_dic['sigma_zz']
+
+
+    def save_material(self, save=False, fname='material.json'):
+        rise_warning('save_material is a deprecated method use save')
+        self.save(save=save, fname=fname)
+    def load_material(self, data='material.json'):
+        rise_warning('load_material is a deprecated method use load')
+        self.load(data=data)
 
     def set_name(self, name):
         """
