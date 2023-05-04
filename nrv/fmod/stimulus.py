@@ -156,10 +156,10 @@ class stimulus():
 
     def save_stimulus(self, save=False, fname='stimulus.json'):
         rise_warning('save_stimulus is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(save=save, fname=fname)
     def load_stimulus(self, data='stimulus.json'):
         rise_warning('load_stimulus is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
     ############################
     ## basic handling methods ##
