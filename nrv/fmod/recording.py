@@ -86,7 +86,7 @@ class recording_point():
         self.init = False
         self.recording = None
 
-    def save_recording_point(self, save=False, fname='recording_point.json'):
+    def save(self, save=False, fname='recording_point.json'):
         """
         Return recording point as dictionary and eventually save it as json file
 
@@ -116,7 +116,7 @@ class recording_point():
         return recp_dic
 
 
-    def load_recording_point(self, data):
+    def load(self, data):
         """
         Load all recording point properties from a dictionary or a json file
 
@@ -137,6 +137,14 @@ class recording_point():
         self.footprints = recp_dic['footprints']
         self.init = recp_dic['init']
         self.recording = recp_dic['recording']
+
+
+    def save_recording_point(self, save=False, fname='recording_point.json'):
+        rise_warning('save_recording_point is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_recording_point(self, data='recording_point.json'):
+        rise_warning('load_recording_point is a deprecated method use load')
+        self.load(self, data=data)
 
 
     def get_ID(self):
@@ -329,7 +337,7 @@ class recorder():
             self.sigma_zz = None
         else:
             self.material = material
-            temporary_material = load_material(self.material)
+            temporary_material = load(self.material)
             if temporary_material.is_isotropic():
                 self.isotropic = True
                 self.sigma = temporary_material.sigma
@@ -345,7 +353,7 @@ class recorder():
         # for internal use
         self.recording_points = []
 
-    def save_recorder(self, save=False, fname='recorder.json'):
+    def save(self, save=False, fname='recorder.json'):
         """
         Return recorder as dictionary and eventually save it as json file
 
@@ -374,13 +382,13 @@ class recorder():
         rec_dic['recording_points'] = {}
         for i in range(len(self.recording_points)):
             recp = self.recording_points[i]
-            rec_dic['recording_points'][i] =recp.save_recording_point()
+            rec_dic['recording_points'][i] =recp.save()
         if save:
             json_dump(rec_dic, fname)
         return rec_dic
 
 
-    def load_recorder(self, data):
+    def load(self, data):
         """
         Load all recorder properties from a dictionary or a json file
 
@@ -406,10 +414,17 @@ class recorder():
         self.recording_points = []
         for i in range(len(rec_dic['recording_points'])):
             recp = recording_point(0,0,0)
-            recp.load_recording_point(rec_dic['recording_points'][str(i)])
+            recp.load(rec_dic['recording_points'][str(i)])
             self.recording_points += [recp]
-            rec_dic['recording_points'][i] =recp.save_recording_point()
+            rec_dic['recording_points'][i] =recp.save()
             del recp
+
+    def save_recorder(self, save=False, fname='recorder.json'):
+        rise_warning('save_recorder is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_recorder(self, data='recorder.json'):
+        rise_warning('load_recorder is a deprecated method use load')
+        self.load(self, data=data)
 
 
     def is_empty(self):
