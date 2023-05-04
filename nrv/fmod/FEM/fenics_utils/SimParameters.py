@@ -132,10 +132,10 @@ class SimParameters:
 
     def save_SimParameters(self, save=False, fname='SimParameters.json'):
         rise_warning('save_SimParameters is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        return self.save(save=save, fname=fname)
     def load_SimParameters(self, data='SimParameters.json'):
         rise_warning('load_SimParameters is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
     def set_mesh_file(self, new_mesh_file):
         """
