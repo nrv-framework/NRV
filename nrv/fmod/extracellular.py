@@ -159,10 +159,10 @@ class extracellular_context:
 
     def save_extracel_context(self, save=False, fname='extracel_context.json'):
         rise_warning('save_extracel_context is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(save=save, fname=fname)
     def load_extracel_context(self, data='extracel_context.json'):
         rise_warning('load_extracel_context is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
     def is_empty(self):
         """
