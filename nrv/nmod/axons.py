@@ -235,7 +235,7 @@ class axon():
         for section in neuron.h.allsec():
             section = None
 
-    def save_axon(self, save=False, fname='axon.json', extracel_context=False,
+    def save(self, save=False, fname='axon.json', extracel_context=False,
             intracel_context=False, rec_context=False):
         """
         Return axon as dictionary and eventually save it as json file
@@ -290,18 +290,18 @@ class axon():
             ax_dic['intra_voltage_stim_position'] = self.intra_voltage_stim_position
             ax_dic['intra_voltage_stim_stimulus'] = None
             if self.intra_voltage_stim_stimulus is not None:
-                ax_dic['intra_voltage_stim_stimulus'] = self.intra_voltage_stim_stimulus.save_stimulus() 
+                ax_dic['intra_voltage_stim_stimulus'] = self.intra_voltage_stim_stimulus.save() 
         if extracel_context:
-            ax_dic['extra_stim'] = self.extra_stim.save_extracel_context()
+            ax_dic['extra_stim'] = self.extra_stim.save()
             ax_dic['footprints'] = self.footprints
         if rec_context:
             ax_dic['record'] = self.record
-            ax_dic['recorder'] = self.recorder.save_recorder()
+            ax_dic['recorder'] = self.recorder.save()
         if save:
             json_dump(ax_dic, fname)
         return ax_dic
 
-    def load_axon(self, data, extracel_context=False, intracel_context=False, 
+    def load(self, data, extracel_context=False, intracel_context=False, 
             rec_context=False):
         """
         Load all axon properties from a dictionary or a json file
@@ -353,7 +353,18 @@ class axon():
             self.record = ax_dic['record']
             if self.recorder is None:
                 self.recorder = recorder()
-            self.recorder.load_recorder(ax_dic['recorder'])
+            self.recorder.load(ax_dic['recorder'])
+
+    def save_axon(self, save=False, fname='axon.json', extracel_context=False,
+            intracel_context=False, rec_context=False):
+        rise_warning('save_axon is a deprecated method use save')
+        self.save(save=save, fname=fname, extracel_context=extracel_context,\
+            intracel_context=intracel_context, rec_context=rec_context)
+        
+    def load_axon(self, data, extracel_context=False, intracel_context=False, 
+            rec_context=False):
+        rise_warning('load_axon is a deprecated method use load')
+        self.save(data, extracel_context, intracel_context,rec_context)
 
     def __define_shape(self):
         """
