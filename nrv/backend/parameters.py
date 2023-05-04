@@ -8,7 +8,6 @@ import os
 from numpy import pi
 
 
-
 class nrv_parameters():
     def __init__(self):
         """
@@ -66,4 +65,4 @@ class nrv_parameters():
 ########################### Parameter singleton ##########################
 ##########################################################################
 
-NRV_param = nrv_parameters()
+parameters = nrv_parameters()
