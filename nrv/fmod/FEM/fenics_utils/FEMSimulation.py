@@ -1,7 +1,7 @@
 import numpy as np
 import os
 from mpi4py import MPI 
-from petsc4py.PETSc import ScalarType
+from petsc4py.PETSc import ScalarType, Viewer
 import time
 
 #from dolfinx import *
@@ -62,7 +62,7 @@ class FEMSimulation(SimParameters):
             (see MshCreator and NerveMshCreator for more details)
         data            : str, dict or SimParameters
             if not None, load SimParameters attribute from data, by default None
-            (see SimParameters.load_SimParameters)
+            (see SimParameters.load)
         elem            :tupple (str, int)
             if None, ('Lagrange', 1), else (element type, element order), by default None
         ummesh          : bool
@@ -149,6 +149,7 @@ class FEMSimulation(SimParameters):
         self.linear_form_status = False  
         self.prepared_status = False
         self.solve_status = False
+        self.to_merge = True
 
 
 
@@ -411,6 +412,12 @@ class FEMSimulation(SimParameters):
         if ksp_max_it is not None:
             self.petsc_opt['ksp_max_it'] = ksp_max_it
 
+    def set_result_merging(self, to_merge=None):
+        if isinstance(to_merge, bool):
+            self.to_merge = to_merge
+        else:
+            self.to_merge = not self.to_merge
+
     def solve(self, overwrite=False):
         """
         Assemble and solve the linear problem
@@ -430,10 +437,11 @@ class FEMSimulation(SimParameters):
             self.cg_problem = LinearProblem(self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt)
         self.mixedvout = self.cg_problem.solve()
         self.solve_status = True
-        if self.inbound:
+        
+        if self.inbound and self.to_merge:
             V_sol = self.__merge_mixed_solutions()
         else:
-            self.vout = self.mixedvout
+            self.vout = self.mixedvout.copy()
             V_sol = self.V
 
         # return simulation result
@@ -472,6 +480,14 @@ class FEMSimulation(SimParameters):
     ################ Access the results #################
     #####################################################
 
+    def solver_info(self, txt_fname="solver.txt"):
+        solver = self.cg_problem.solver
+        viewer = Viewer().createASCII(txt_fname)
+        solver.view(viewer)
+        solver_output = open(txt_fname, "r")
+        for line in solver_output.readlines():
+            print(line)
+
     def solve_and_save_sim(self, filename, save=True):
         if not self.solve_status:
             self.solve()
@@ -491,12 +507,13 @@ class FEMSimulation(SimParameters):
         os.system('gmsh '+ self.mesh_file +'.msh')
 
 
-    def get_domain_potential(self, dom_id, dim=2):
+    def get_domain_potential(self, dom_id, dim=2, space=0):
         if dim == 2:
             do = self.ds
         elif dim == 3:
             do = self.dx
-
         S = assemble_scalar(form(1*do(dom_id)))
-        return assemble_scalar(form(self.vout*do(dom_id)))/S * V
-
+        if self.to_merge:
+            return assemble_scalar(form(self.vout*do(dom_id)))/S * V
+        else:
+            return assemble_scalar(form(self.vout[space]*do(dom_id)))/S * V
