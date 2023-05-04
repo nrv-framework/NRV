@@ -65,7 +65,7 @@ def load_any_electrode(data):
     else:
         rise_error("Electrode type not recognizede")
 
-    elec.load_electrode(elec_dic)
+    elec.load(elec_dic)
     return elec
 
 
@@ -91,7 +91,7 @@ class electrode():
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -116,7 +116,7 @@ class electrode():
             json_dump(elec_dic, fname)
         return elec_dic
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -135,6 +135,12 @@ class electrode():
         self.type = elec_dic['type']
         self.is_multipolar = elec_dic['is_multipolar']
 
+    def save_electrode(self, save=False, fname='extracel_context.json'):
+        rise_warning('save_electrode is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_electrode(self, data='extracel_context.json'):
+        rise_warning('load_electrode is a deprecated method use load')
+        self.load(self, data=data)
 
     def get_ID_number(self):
         """
@@ -228,7 +234,7 @@ class point_source_electrode(electrode):
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -244,7 +250,7 @@ class point_source_electrode(electrode):
         elec_dic : dict
             dictionary containing all information
         """
-        elec_dic = super().save_electrode()
+        elec_dic = super().save()
         elec_dic['x'] = self.x
         elec_dic['y'] = self.y
         elec_dic['z'] = self.z
@@ -253,7 +259,7 @@ class point_source_electrode(electrode):
         return elec_dic
 
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -266,12 +272,17 @@ class point_source_electrode(electrode):
             elec_dic = json_load(data)
         else: 
             elec_dic = data
-        super().load_electrode(data)
+        super().load(data)
         self.x = elec_dic['x']
         self.y = elec_dic['y']
         self.z = elec_dic['z']
 
-
+    def save_electrode(self, save=False, fname='electrode.json'):
+        rise_warning('save_electrode no longer up to date use save instead')
+        self.save(save=save,fname=fname)
+    def load_electrode(self, data):
+        rise_warning('load_electrode no longer up to date use save instead')
+        self.load(data=data)
     def compute_footprint(self, x, y, z, mat):
         """
         Compute the linear footprint (electrode response at 1mA)
@@ -316,7 +327,7 @@ class FEM_electrode(electrode):
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -332,14 +343,14 @@ class FEM_electrode(electrode):
         elec_dic : dict
             dictionary containing all information
         """
-        elec_dic = super().save_electrode()
+        elec_dic = super().save()
         elec_dic['label'] = self.label
         elec_dic['is_volume'] = self.is_volume
         if save:
             json_dump(elec_dic, fname)
         return elec_dic
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -352,7 +363,7 @@ class FEM_electrode(electrode):
             elec_dic = json_load(data)
         else: 
             elec_dic = data
-        super().load_electrode(data)
+        super().load(data)
         self.label = elec_dic['label']
         self.is_volume = elec_dic['is_volume']
 
@@ -371,7 +382,7 @@ class LIFE_electrode(FEM_electrode):
     """
     Longitudinal IntraFascicular Electrode for FEM models
     """
-    def __init__(self, label, D, length, x_shift, y_c, z_c, ID=0):
+    def __init__(self, label="LIFE_1", D=25, length=1000, x_shift=0, y_c=0, z_c=0, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -400,7 +411,7 @@ class LIFE_electrode(FEM_electrode):
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -416,7 +427,7 @@ class LIFE_electrode(FEM_electrode):
         elec_dic : dict
             dictionary containing all information
         """
-        elec_dic = super().save_electrode()
+        elec_dic = super().save()
         elec_dic['D'] = self.D
         elec_dic['length'] = self.length
         elec_dic['x_shift'] = self.x_shift
@@ -427,7 +438,7 @@ class LIFE_electrode(FEM_electrode):
         return elec_dic
 
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -440,7 +451,7 @@ class LIFE_electrode(FEM_electrode):
             elec_dic = json_load(data)
         else: 
             elec_dic = data
-        super().load_electrode(data)
+        super().load(data)
         self.D = elec_dic['D']
         self.length = elec_dic['length']
         self.x_shift = elec_dic['x_shift']
@@ -474,7 +485,7 @@ class CUFF_electrode(FEM_electrode):
     CUFF electrode for FEM models
     """
     def __init__(self, label="", contact_length=100, is_volume=False, contact_thickness=None,\
-        insulator_length=None, insulator_thickness=None,x_center=0, ID=0):
+        insulator=True, insulator_length=None, insulator_thickness=None, x_center=0, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -491,7 +502,7 @@ class CUFF_electrode(FEM_electrode):
             if True the contact is kept on the mesh as a volume, by default True
         contact_thickness   :float
             thickness of the contact site in um, by default 5
-        inactive            :bool
+        insulator            :bool
             remove insulator ring from the mesh (no conductivity), by default True
         insulator_thickness :float
             thickness of the insulator ring in um, by default 20
@@ -505,11 +516,12 @@ class CUFF_electrode(FEM_electrode):
         self.contact_thickness = contact_thickness
         self.x_center = x_center
         self.is_volume = is_volume
+        self.insulator = insulator
         self.type = "CUFF"
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -525,19 +537,20 @@ class CUFF_electrode(FEM_electrode):
         elec_dic : dict
             dictionary containing all information
         """
-        elec_dic = super().save_electrode()
+        elec_dic = super().save()
         elec_dic['insulator_length'] = self.insulator_length
         elec_dic['insulator_thickness'] = self.insulator_thickness
         elec_dic['contact_length'] = self.contact_length
         elec_dic['contact_thickness'] = self.contact_thickness
         elec_dic['x_center'] = self.x_center
         elec_dic['is_volume'] = self.is_volume
+        elec_dic['insulator'] = self.insulator
         if save:
             json_dump(elec_dic, fname)
         return elec_dic
 
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -550,13 +563,15 @@ class CUFF_electrode(FEM_electrode):
             elec_dic = json_load(data)
         else: 
             elec_dic = data
-        super().load_electrode(data)
-        self.insulator_length = elec_dic['insulator_length']
-        self.insulator_thickness = elec_dic['insulator_thickness']
+        super().load(data)
+
         self.contact_length = elec_dic['contact_length']
         self.contact_thickness = elec_dic['contact_thickness']
+        self.insulator_thickness = elec_dic['insulator_thickness']
+        self.insulator_length = elec_dic['insulator_length']
         self.x_center = elec_dic['x_center']
         self.is_volume = elec_dic['is_volume']
+        self.insulator = elec_dic['insulator']
 
     def parameter_model(self, model):
         """
@@ -568,14 +583,17 @@ class CUFF_electrode(FEM_electrode):
             FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
         if model.type == 'COMSOL':
-            model.set_parameter(self.label+'_insulator_length', str(self.insulator_length)+'[um]')
-            model.set_parameter(self.label+'_insulator_thickness', str(self.insulator_thickness)+'[um]')
             model.set_parameter(self.label+'_contact_length', str(self.contact_length)+'[um]')
-            model.set_parameter(self.label+'_contact_thickness', str(self.contact_thickness)+'[um]')
             model.set_parameter(self.label+'_x_center', str(self.x_center)+'[um]')
+            if self.contact_thickness is not None:
+                model.set_parameter(self.label+'_contact_thickness', str(self.contact_thickness)+'[um]')
+            if self.insulator_thickness is not None:
+                model.set_parameter(self.label+'_insulator_thickness', str(self.insulator_thickness)+'[um]')
+            if self.insulator_length is not None:
+                model.set_parameter(self.label+'_insulator_length', str(self.insulator_length)+'[um]')
         else:
             model.add_electrode(elec_type=self.type, insulator_length=self.insulator_length, is_volume=self.is_volume,\
-                insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
+                insulator=self.insulator, insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
                 contact_thickness=self.contact_thickness, x_c=self.x_center)
 
 class CUFF_MP_electrode(CUFF_electrode):
@@ -583,7 +601,7 @@ class CUFF_MP_electrode(CUFF_electrode):
     MultiPolar CUFF electrode for FEM models
     """
     def __init__(self, label="CUFF_MP", N_contact=4, contact_width=None, contact_length=100, is_volume=False,\
-        contact_thickness=None, insulator_length=None, insulator_thickness=None, x_center=0, ID=0):
+        contact_thickness=None, insulator=True, insulator_length=None, insulator_thickness=None, x_center=0, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -620,7 +638,7 @@ class CUFF_MP_electrode(CUFF_electrode):
 
     ## Save and Load mehtods
 
-    def save_electrode(self, save=False, fname='electrode.json'):
+    def save(self, save=False, fname='electrode.json'):
         """
         Return electrode as dictionary and eventually save it as json file
 
@@ -636,7 +654,7 @@ class CUFF_MP_electrode(CUFF_electrode):
         elec_dic : dict
             dictionary containing all information
         """
-        elec_dic = super().save_electrode()
+        elec_dic = super().save()
         elec_dic['N_contact'] = self.N_contact
         elec_dic['contact_width'] = self.contact_width
         if save:
@@ -644,7 +662,7 @@ class CUFF_MP_electrode(CUFF_electrode):
         return elec_dic
 
 
-    def load_electrode(self, data):
+    def load(self, data):
         """
         Load all electrode properties from a dictionary or a json file
 
@@ -657,7 +675,7 @@ class CUFF_MP_electrode(CUFF_electrode):
             elec_dic = json_load(data)
         else: 
             elec_dic = data
-        super().load_electrode(data)
+        super().load(data)
         self.N_contact = elec_dic['N_contact']
         self.contact_width = elec_dic['contact_width']
 
@@ -678,4 +696,4 @@ class CUFF_MP_electrode(CUFF_electrode):
             model.add_electrode(elec_type=self.type, N=self.N_contact, is_volume=self.is_volume,\
                 contact_width=self.contact_width, insulator_length=self.insulator_length,\
                 insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
-                contact_thickness=self.contact_thickness, x_c=self.x_center)
+                insulator=self.insulator, contact_thickness=self.contact_thickness, x_c=self.x_center)
