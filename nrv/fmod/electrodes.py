@@ -135,10 +135,10 @@ class electrode():
         self.type = elec_dic['type']
         self.is_multipolar = elec_dic['is_multipolar']
 
-    def save_electrode(self, save=False, fname='extracel_context.json'):
+    def save_electrode(self, save=False, fname='electrode.json'):
         rise_warning('save_electrode is a deprecated method use save')
         self.save(self, save=save, fname=fname)
-    def load_electrode(self, data='extracel_context.json'):
+    def load_electrode(self, data='electrode.json'):
         rise_warning('load_electrode is a deprecated method use load')
         self.load(self, data=data)
 
