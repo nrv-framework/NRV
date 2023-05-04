@@ -137,10 +137,10 @@ class electrode():
 
     def save_electrode(self, save=False, fname='electrode.json'):
         rise_warning('save_electrode is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(save=save, fname=fname)
     def load_electrode(self, data='electrode.json'):
         rise_warning('load_electrode is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
     def get_ID_number(self):
         """
@@ -277,12 +277,6 @@ class point_source_electrode(electrode):
         self.y = elec_dic['y']
         self.z = elec_dic['z']
 
-    def save_electrode(self, save=False, fname='electrode.json'):
-        rise_warning('save_electrode no longer up to date use save instead')
-        self.save(save=save,fname=fname)
-    def load_electrode(self, data):
-        rise_warning('load_electrode no longer up to date use save instead')
-        self.load(data=data)
     def compute_footprint(self, x, y, z, mat):
         """
         Compute the linear footprint (electrode response at 1mA)
