@@ -185,12 +185,12 @@ class SimResult:
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict['vout']
 
-    def save_sim_result(self, save=False, fname='sim_result.json'):
+    def save_sim_result(self, file, ftype='xdmf', overwrite=True):
         rise_warning('save_sim_result is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(file=file,ftype=ftype,overwrite=overwrite)
     def load_sim_result(self, data='sim_result.json'):
         rise_warning('load_sim_result is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
     #############
     ## methods ##
