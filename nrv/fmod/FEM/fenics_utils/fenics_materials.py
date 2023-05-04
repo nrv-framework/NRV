@@ -297,4 +297,3 @@ class fenics_material(material):
             else:
                 self.sigma_fen.ufl_operands[0].interpolate(self.sigma_func)
                 self.sigma_fen.ufl_operands[1].value = self.UN
- 
