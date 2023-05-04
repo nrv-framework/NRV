@@ -38,7 +38,7 @@ class SimParameters:
             mesh directory and file name: by default ""
         data            :str, dict or SimParameters
             if not None, load SimParameters attribute from data, by default None
-            (see SimParameters.load_SimParameters)
+            (see SimParameters.load)
         """
         self.D = D
         self.mesh_file = rmv_ext(mesh_file)
@@ -63,10 +63,10 @@ class SimParameters:
         self.mat_pty_map = {}
 
         if data is not None:
-            self.load_SimParameters(data)
+            self.load(data)
 
 
-    def save_SimParameters(self, save=False, fname='SimParameters.json'):
+    def save(self, save=False, fname='SimParameters.json'):
         """
         Return SimParameters as dictionary and eventually save it as json file
 
@@ -101,7 +101,7 @@ class SimParameters:
         return sp_dic
 
 
-    def load_SimParameters(self, data):
+    def load(self, data):
         """
         Load all SimParameters properties from a dictionary or a json file
 
@@ -113,7 +113,7 @@ class SimParameters:
         if type(data) == str:
             sp_dic = json_load(data)
         elif is_sim_param(data):
-            sp_dic = self.save_SimParameters()
+            sp_dic = self.save()
         else: 
             sp_dic = data
         self.D = sp_dic['D']
@@ -130,7 +130,12 @@ class SimParameters:
         self.inboundaries_list = sp_dic['inboundaries']
         self.mat_pty_map = sp_dic['mat_pty_map']
 
-
+    def save_SimParameters(self, save=False, fname='SimParameters.json'):
+        rise_warning('save_SimParameters is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_SimParameters(self, data='SimParameters.json'):
+        rise_warning('load_SimParameters is a deprecated method use load')
+        self.load(self, data=data)
 
     def set_mesh_file(self, new_mesh_file):
         """
@@ -359,4 +364,3 @@ class SimParameters:
                 if i_ibound in self.inboundaries_list[i]['in_domains']:
                     out_space = self.get_space_of_domain(i-1)
         return in_space, out_space
-
