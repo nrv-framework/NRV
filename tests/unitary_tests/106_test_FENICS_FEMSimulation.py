@@ -16,7 +16,7 @@ param.add_domain(mesh_domain=200,mat_file=[1, 1, 1])
 param.add_boundary(mesh_domain=11, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 
 sim1 = nrv.FEMSimulation(elem=('Lagrange', 1), data=data)
 

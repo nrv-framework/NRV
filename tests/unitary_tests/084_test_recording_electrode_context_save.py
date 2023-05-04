@@ -30,7 +30,7 @@ testrec.save_recorder(save=True, fname=recorder_file)
 print("Recorder saved")
 
 testrec2 = nrv.recorder()
-testrec2.load_recorder(recorder_file)
+testrec2.load(recorder_file)
 print("Recorder loaded")
 
 axon1.attach_extracellular_recorder(testrec2)

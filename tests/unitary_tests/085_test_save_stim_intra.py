@@ -24,7 +24,7 @@ axon1.insert_I_Clamp(0.25, t_start, duration, amplitude)
 axon1.insert_I_Clamp(0.75, t_start, duration, amplitude)
 axon1.insert_I_Clamp(0.5, t_start+7, duration, amplitude)
 
-axon1.save_axon(save=True, fname=unm_axon_file, intracel_context=True)
+axon1.save(save=True, fname=unm_axon_file, intracel_context=True)
 print("Axon saved")
 axon2 = nrv.load_any_axon(unm_axon_file, intracel_context=True)
 print("Axon loaded")
@@ -85,7 +85,7 @@ amplitude = 2
 axon3.insert_I_Clamp_node(1, t_start, duration, amplitude)
 '''
 
-axon3.save_axon(save=True,fname=m_axon_file, intracel_context=True)
+axon3.save(save=True,fname=m_axon_file, intracel_context=True)
 print("Axon saved")
 axon4 = nrv.load_any_axon(m_axon_file, intracel_context=True)
 print("Axon loaded")

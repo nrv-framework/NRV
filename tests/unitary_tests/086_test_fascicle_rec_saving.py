@@ -22,7 +22,7 @@ testrec.set_recording_point(3*L/4, 0, 100)
 
 # Fascicle declaration
 fascicle_1 = nrv.fascicle(dt=5e-3)
-fascicle_1.load_fascicle_configuration(source_file)
+fascicle_1.load(source_file)
 fascicle_1.define_length(L)
 fascicle_1.set_ID(82)
 # intra cellular stimulation
@@ -31,7 +31,7 @@ fascicle_1.attach_extracellular_recorder(testrec)
 
 #save/load
 
-fascicle_1.save_fascicle_configuration(fname=fascicle_file, intracel_context=True, rec_context=True)
+fascicle_1.save(fname=fascicle_file, intracel_context=True, rec_context=True)
 print('fascicle saved')
 fascicle_2, loadedrec = nrv.load_any_fascicle(fascicle_file, intracel_context=True, rec_context=True)
 print('fascicle loaded')

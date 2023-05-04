@@ -13,7 +13,7 @@ test_stim1.reshape_outerBox(Outer_D)
 test_stim2.reshape_outerBox(Outer_D)
 
 #### Nerve and fascicle geometry
-L = 7000
+L = 15000
 Nerve_D = 300
 Fascicle_D = 270
 test_stim1.reshape_nerve(Nerve_D, L)
@@ -65,4 +65,4 @@ plt.plot(x, com_elec_1.footprint,color='b', label='COMSOL')
 plt.plot(x, fen_elec_1.footprint,color='g',label='FEniCS')
 plt.legend()
 plt.savefig('./unitary_tests/figures/150_A.png')
-#plt.show()
+plt.show()

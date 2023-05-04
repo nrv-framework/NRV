@@ -45,7 +45,7 @@ amplitude = 3
 
 # Fascicle declaration
 fascicle_1 = nrv.fascicle(dt=dt)
-fascicle_1.load_fascicle_configuration(source_file)
+fascicle_1.load(source_file)
 fascicle_1.define_length(L)
 fascicle_1.set_ID(ID)
 # HFBS extra stimulation

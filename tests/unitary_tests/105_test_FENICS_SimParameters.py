@@ -10,16 +10,16 @@ param.add_domain(mesh_domain=200,mat_file="M1.mat", ID=5)
 param.add_boundary(mesh_domain=11, btype='Dirichlet', value=0, variable=None, ID=1)
 param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim', ID=2)
 
-p1 = param.save_SimParameters(save=True, fname=out_file)
+p1 = param.save(save=True, fname=out_file)
 #print(p1)
 
 param.add_domain(mesh_domain=200,mat_file="M2.mat", ID=5)
 param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim', ID=2)
-p2 = param.save_SimParameters(save=False)
+p2 = param.save(save=False)
 #print(p2)
 
 param2 = nrv.SimParameters(data=out_file)
-p3 = param2.save_SimParameters(save=False)
+p3 = param2.save(save=False)
 #print(p3)
 
 

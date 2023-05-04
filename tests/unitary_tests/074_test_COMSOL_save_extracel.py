@@ -8,7 +8,7 @@ E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 
 # load material properties
 endoneurium = nrv.load_material("endoneurium_ranck")
-print(endoneurium.save_material())
+print(endoneurium.save())
 # stimulus def
 start = 1
 I_cathod = 50
@@ -25,7 +25,7 @@ extra_stim = nrv.stimulation(endoneurium)
 extra_stim.add_electrode(E1, stim1)
 
 
-extra_stim.save_extracel_context(save=True, fname='./unitary_tests/figures/074_pointsources.json')
+extra_stim.save(save=True, fname='./unitary_tests/figures/074_pointsources.json')
 
 if nrv.COMSOL_Status:
     model = 'Nerve_1_Fascicle_1_LIFE'
@@ -39,6 +39,6 @@ if nrv.COMSOL_Status:
     stim = nrv.stimulus()
     FEM_stim.add_electrode(elec_1, stim)
 
-    FEM_stim.save_extracel_context(save=True, fname='./unitary_tests/figures/074_LIFE.json')
+    FEM_stim.save(save=True, fname='./unitary_tests/figures/074_LIFE.json')
 else:
     nrv.pass_info('not connected to COMSOL, parts of the test have been skiped')

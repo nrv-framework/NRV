@@ -1,5 +1,4 @@
 import nrv
-
 import time
 
 ## Results mesh_files
@@ -64,15 +63,15 @@ sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
 res1 = sim1.solve()
 
 ## Check result savings
-res1.save_sim_result(out_file1, ftype='res')
+res1.save(out_file1, ftype='res')
 print('res1 saved')
 res2 = nrv.SimResult()
-res2.load_sim_result(out_file1)
+res2.load(out_file1)
 print('res1 loaded')
 
 print(res1==res2)
 
 
-res1.save_sim_result(out_file2)
-res1.save_sim_result(out_file2, ftype="xdmf")
+res1.save(out_file2)
+res1.save(out_file2, ftype="xdmf")
 print('res2 saved')

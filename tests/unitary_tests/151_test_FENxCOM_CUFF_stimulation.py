@@ -68,7 +68,7 @@ test_stim2.model.get_timers(verbose=True)
 
 #### plot fotprints
 plt.figure()
-plt.plot(x, com_elec_1.footprint,'+--',color='b', label='COMSOL')
+plt.plot(x, com_elec_1.footprint,'--',color='b', label='COMSOL')
 plt.plot(x, fen_elec_1.footprint,color='g', label='FEniCS')
 plt.legend()
 plt.savefig('./unitary_tests/figures/151_A.png')

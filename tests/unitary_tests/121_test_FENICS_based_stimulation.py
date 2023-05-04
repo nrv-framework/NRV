@@ -44,7 +44,7 @@ elec_2 = nrv.LIFE_electrode('LIFE', D_2, length_2, x_2_offset, y_c_2, z_c_2)
 # stimulus def
 stim2 = nrv.stimulus()
 stim2.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
-#test_stim.add_electrode(elec_2, stim2)
+test_stim.add_electrode(elec_2, stim2)
 
 ##### run FEM model
 #test_stim.run_model()
@@ -63,5 +63,6 @@ test_stim.model.get_timers(verbose=True)
 #### plot fotprints
 plt.figure()
 plt.plot(x, elec_1.footprint,color='r')
+plt.plot(x, elec_2.footprint,color='r')
 plt.savefig('./unitary_tests/figures/121_A.png')
-#plt.show()
+plt.show()

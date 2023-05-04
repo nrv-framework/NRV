@@ -8,7 +8,7 @@ figfile = DIR + 'figures/77_A.png'
 
 ## Fascicle declaration
 fascicle_1 = nrv.fascicle()
-fascicle_1.load_fascicle_configuration(source_file,extracel_context=True)
+fascicle_1.load(source_file,extracel_context=True)
 fascicle_1.set_ID(77)
 
 fig, ax = plt.subplots(figsize=(6,6))
