@@ -133,7 +133,7 @@ class unmyelinated(axon):
         self.__get_seg_positions()
         self.__get_rec_positions(self.Nrec)
 
-    def save_axon(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
+    def save(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
         """
         Return axon as dictionary and eventually save it as json file
 
@@ -149,7 +149,7 @@ class unmyelinated(axon):
         ax_dic : dict
             dictionary containing all information
         """
-        ax_dic = super().save_axon(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+        ax_dic = super().save(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
 
         ax_dic['myelinated'] = self.myelinated
         ax_dic['Nsec'] = self.Nsec
@@ -160,7 +160,7 @@ class unmyelinated(axon):
             json_dump(ax_dic, fname)
         return ax_dic
 
-    def load_axon(self, data, extracel_context=False, intracel_context=False, rec_context=False):
+    def load(self, data, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Load all axon properties from a dictionary or a json file
 
@@ -173,7 +173,7 @@ class unmyelinated(axon):
             ax_dic = json_load(data)
         else: 
             ax_dic = data
-        super().load_axon(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+        super().load(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
 
         self.myelinated = ax_dic['myelinated']
         self.Nsec = ax_dic['Nsec']
@@ -194,7 +194,7 @@ class unmyelinated(axon):
             if ax_dic['intra_voltage_stim_stimulus'] is not None:
                 position = ax_dic['intra_voltage_stim_position'][0]
                 stim = stimulus()
-                stim.load_stimulus(ax_dic['intra_voltage_stim_stimulus'])
+                stim.load(ax_dic['intra_voltage_stim_stimulus'])
                 self.insert_V_Clamp(position/self.L, stim)
 
     def __set_Nseg(self):
@@ -959,4 +959,3 @@ class unmyelinated(axon):
                     c_kca_ax, n_kd_ax, x_kds_ax, y1_kds_ax, m_naf_ax, h_naf_ax, l_naf_ax,\
                     m_nas_ax, h_nas_ax]
         return results
-
