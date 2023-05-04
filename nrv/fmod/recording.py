@@ -141,10 +141,10 @@ class recording_point():
 
     def save_recording_point(self, save=False, fname='recording_point.json'):
         rise_warning('save_recording_point is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(save=save, fname=fname)
     def load_recording_point(self, data='recording_point.json'):
         rise_warning('load_recording_point is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
 
     def get_ID(self):
@@ -421,10 +421,10 @@ class recorder():
 
     def save_recorder(self, save=False, fname='recorder.json'):
         rise_warning('save_recorder is a deprecated method use save')
-        self.save(self, save=save, fname=fname)
+        self.save(save=save, fname=fname)
     def load_recorder(self, data='recorder.json'):
         rise_warning('load_recorder is a deprecated method use load')
-        self.load(self, data=data)
+        self.load(data=data)
 
 
     def is_empty(self):
