@@ -113,7 +113,7 @@ class stimulus():
 
     ## Save and Load mehtods
 
-    def save_stimulus(self, save=False, fname = 'stimulus.json'):
+    def save(self, save=False, fname = 'stimulus.json'):
         """
         Return stimulus as dictionary and eventually save it as json file
 
@@ -137,7 +137,7 @@ class stimulus():
         return stim_dic
 
 
-    def load_stimulus(self, data):
+    def load(self, data):
         """
         Load all stimulus properties from a dictionary or a json file
 
@@ -153,6 +153,13 @@ class stimulus():
 
         self.t = stim_dic['t']
         self.s = stim_dic['s']
+
+    def save_stimulus(self, save=False, fname='stimulus.json'):
+        rise_warning('save_stimulus is a deprecated method use save')
+        self.save(self, save=save, fname=fname)
+    def load_stimulus(self, data='stimulus.json'):
+        rise_warning('load_stimulus is a deprecated method use load')
+        self.load(self, data=data)
 
     ############################
     ## basic handling methods ##
