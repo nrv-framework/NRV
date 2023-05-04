@@ -139,7 +139,7 @@ class fascicle():
 
 
     ## save/load methods
-    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+    def save(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Save a fascicle in a json file
 
@@ -180,7 +180,7 @@ class fascicle():
                 fascicle_config['intra_stim_ON'] = self.intra_stim_ON
             if extracel_context:
                 fascicle_config['L'] = self.L
-                fascicle_config['extra_stim'] = self.extra_stim.save_extracel_context()
+                fascicle_config['extra_stim'] = self.extra_stim.save()
                 fascicle_config['footprints'] = self.footprints
                 fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
                 fascicle_config['unmyelinated_nseg'] = self.unmyelinated_nseg
@@ -188,11 +188,11 @@ class fascicle():
 
             if rec_context:
                 fascicle_config['record'] = self.record
-                fascicle_config['recorder'] = self.recorder.save_recorder()
+                fascicle_config['recorder'] = self.recorder.save()
             # save the dictionnary as a json file
             json_dump(fascicle_config, fname)
 
-    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+    def load(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         """
         Load a fascicle configuration from a json file
 
@@ -211,18 +211,11 @@ class fascicle():
             results = fname
         self.ID = results['ID']
         self.type = results['type']
-
         self.y_grav_center = results['y_grav_center']
         self.z_grav_center = results['z_grav_center']
         self.N_vertices = results['N_vertices']
         self.y_vertices = np.asarray(results['y_vertices']).flatten()
         self.z_vertices = np.asarray(results['z_vertices']).flatten()
-        if ('D' in results):
-            self.D = results['D']
-        else:
-            D, y, z = self.get_circular_contour()
-            self.D = D
-
         self.A = results['A']
         self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
         self.N = len(self.axons_diameter)
@@ -230,6 +223,11 @@ class fascicle():
         self.axons_y = np.asarray(results['axons_y']).flatten()
         self.axons_z = np.asarray(results['axons_z']).flatten()
         self.NoR_relative_position = np.asarray(results['NoR_relative_position']).flatten()
+        if 'D' in results:
+            self.D = results['D']
+        else:
+            rise_warning('Diameter not save in json, by default fitted to axon distribution')
+            self.fit_circular_contour()
         if intracel_context:
             self.L = results['L']
             self.N_intra = results['N_intra']
@@ -257,8 +255,14 @@ class fascicle():
         if rec_context:
             self.record = results['record']
             self.recorder = recorder()
-            self.recorder.load_recorder(results['recorder'])
+            self.recorder.load(results['recorder'])
 
+    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+        rise_warning('save_fascicle_configuration is a deprecated method use save instead')
+        self.save(fname=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
+    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+        rise_warning('load_fascicle_configuration is a deprecated method use load instead')
+        self.load(fname=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
 
     def set_ID(self, ID):
         """
@@ -284,7 +288,7 @@ class fascicle():
         self.unmyelinated_nseg = self.L//25
 
     ## generate stereotypic Fascicle
-    def define_circular_contour(self, D, y_c=0, z_c=0, N_vertices=100):
+    def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
         """
         Define a circular countour to the fascicle
 
@@ -301,12 +305,14 @@ class fascicle():
         """
         self.type = 'Circular'
         self.D = D
-        self.y_grav_center = y_c
-        self.z_grav_center = z_c
+        if y_c is not None:
+            self.y_grav_center = y_c
+        if z_c is not None:
+            self.z_grav_center = z_c
         self.N_vertices = N_vertices
         theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = y_c + (D/2)*np.cos(theta)
-        self.z_vertices = z_c + (D/2)*np.sin(theta)
+        self.y_vertices = self.y_grav_center + (D/2)*np.cos(theta)
+        self.z_vertices = self.z_grav_center + (D/2)*np.sin(theta)
         self.A = np.pi * (D/2)**2
 
     def get_circular_contour(self):
@@ -334,7 +340,7 @@ class fascicle():
             D = np.abs(np.amax(self.y_vertices)-np.amin(self.y_vertices))
         return D, y, z
 
-    def fit_circular_contour(self, y_c=0, z_c=0, Delta=0.1, N_vertices=100):
+    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1, N_vertices=100):
         """
         Define a circular countour to the fascicle
 
@@ -344,7 +350,7 @@ class fascicle():
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        D           : float
+        Delta       : float
             distance between farest axon and contour, in um
         N_vertices  : int
             Number of vertice in the compute the contour
@@ -352,14 +358,18 @@ class fascicle():
         N_axons = len(self.axons_diameter)
         D = 2 * Delta
 
+        if y_c is not None:
+            self.y_grav_center = y_c
+        if z_c is not None:
+            self.z_grav_center = z_c
         if N_axons == 0:
             pass_info('No axon to fit fascicul diameter set to '+str(D)+'um')
         else:
             for axon in range(N_axons):
-                dist_max = self.axons_diameter[axon]/2 + ((y_c - self.axons_y[axon])**2 +\
-                    (z_c - self.axons_z[axon])**2)**0.5
+                dist_max = self.axons_diameter[axon]/2 + ((self.y_grav_center - self.axons_y[axon])**2 +\
+                    (self.z_grav_center - self.axons_z[axon])**2)**0.5
                 D = max(D, 2*(dist_max+Delta))
-        self.define_circular_contour(D, y_c=y_c, z_c=z_c, N_vertices=N_vertices)
+        self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
@@ -1025,7 +1035,7 @@ class fascicle():
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
         record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=False,\
-        save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham',save_axon = True, \
+        save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham', \
         Adelta_model='extended_Gaines',Myelinated_model='MRG',myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
         Adelta_limit=None, PostProc_Filtering=None, postproc_script="default", **kwargs):
         
@@ -1087,7 +1097,7 @@ class fascicle():
         if MCH.do_master_only_work():
             create_folder(folder_name)
             config_filename = folder_name + '/00_Fascicle_config.json'
-            self.save_fascicle_configuration(config_filename)
+            self.save(config_filename)
         else:
             pass
         # impose myelinated_nseg_per_sec if footprint are loaded
@@ -1221,8 +1231,7 @@ class fascicle():
                         exec(code, globals(), locals())
                     ## store results
                     ax_fname = 'sim_axon_'+str(k)+'.json'
-                    if save_axon:
-                        save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                    save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
                 # sum up all recorded extracellular potential if applicable
                 if self.record:
                     self.recorder.gather_all_recordings()
@@ -1339,8 +1348,7 @@ class fascicle():
                     exec(code, globals(), locals())
                 ## store results
                 ax_fname = 'sim_axon_'+str(k)+'.json'
-                if (save_axon):
-                    save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
             # sum up all recorded extracellular potential if applicable
             if self.record:
                 self.recorder.gather_all_recordings()
