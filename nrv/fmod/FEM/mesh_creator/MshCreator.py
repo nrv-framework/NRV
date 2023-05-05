@@ -9,7 +9,7 @@ import gmsh
 
 from ....backend.file_handler import rmv_ext
 from ....backend.MCore import *
-from ....backend.parameters import NRV_param
+from ....backend.parameters import parameters
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 
 
@@ -50,7 +50,7 @@ class MshCreator:
     Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
     Contains methodes dealing with the mesh geometries, physical domains and feilds
     """
-    def __init__(self, D, ver_level=2):
+    def __init__(self, D=3, ver_level=2):
         """
         initialisation of the MshCreator
         Parameters
@@ -91,7 +91,7 @@ class MshCreator:
         self.N_nodes = 0
         self.N_elements = 0
         
-        self.Ncore = NRV_param.GMSH_Ncores
+        self.Ncore = parameters.GMSH_Ncores
         gmsh.option.setNumber('General.NumThreads', self.Ncore)
         if self.Ncore > 1:
             gmsh.option.set_number('Mesh.Algorithm3D', 10)

@@ -720,7 +720,7 @@ class NerveMshCreator(MshCreator):
         z_active = z_c
         self.add_cylinder(x_active, y_active,z_active,length,D/2)
 
-    def add_CUFF(self, ID=None, x_c=0, contact_length=100, is_volume=True ,contact_thickness=None, inactive=True,\
+    def add_CUFF(self, ID=None, x_c=0, contact_length=100, is_volume=True ,contact_thickness=None, insulator=True,\
         insulator_thickness=None, insulator_length=None):
         """
         Add CUFF electrode to the mesh
@@ -738,7 +738,7 @@ class NerveMshCreator(MshCreator):
             if True the contact is kept on the mesh as a volume, by default True
         contact_thickness       :float
             thickness of the contact site in um, by default 5
-        inactive                :bool
+        insulator                :bool
             remove insulator ring from the mesh (no conductivity), by default True
         insulator_thickness     :float
             thickness of the insulator ring in um, by default 20
@@ -776,19 +776,19 @@ class NerveMshCreator(MshCreator):
         cyl_ner2 = self.add_cylinder(x_active, y_active, z_active, contact_length, self.Nerve_D/2)
         self.model.occ.cut([(3, cyl_act)],[(3, cyl_ner2)])
 
-        if inactive:
-            x_inactive = x_c-insulator_length/2
-            y_inactive = self.y_c
-            z_inactive = self.z_c
+        if insulator:
+            x_insulator = x_c-insulator_length/2
+            y_insulator = self.y_c
+            z_insulator = self.z_c
 
-            cyl_ina = self.add_cylinder(x_inactive, y_inactive,z_inactive,insulator_length, self.Nerve_D/2 + insulator_thickness)
-            cyl_ner = self.add_cylinder(x_inactive, y_inactive,z_inactive,insulator_length, self.Nerve_D/2)
+            cyl_ina = self.add_cylinder(x_insulator, y_insulator,z_insulator,insulator_length, self.Nerve_D/2 + insulator_thickness)
+            cyl_ner = self.add_cylinder(x_insulator, y_insulator,z_insulator,insulator_length, self.Nerve_D/2)
             self.model.occ.cut([(3, cyl_ina)],[(3, cyl_ner), (3, cyl_act)])
 
 
 
     def add_CUFF_MP(self, ID=None, N=4,  x_c=0, contact_width=None, contact_length=100, is_volume=True,\
-        contact_thickness=None, inactive=True, insulator_thickness=None, insulator_length=None):
+        contact_thickness=None, insulator=True, insulator_thickness=None, insulator_length=None):
         """
         Add MultiPolar CUFF electrodes to the mesh
 
@@ -810,7 +810,7 @@ class NerveMshCreator(MshCreator):
             if True the contact is kept on the mesh as a volume, by default True
         contact_thickness       :float
             thickness of the contact site in um, by default 5
-        inactive                :bool
+        insulator                :bool
             remove insulator ring from the mesh (no conductivity), by default True
         insulator_thickness     :float
             thickness of the insulator ring in um, by default 20
@@ -851,16 +851,16 @@ class NerveMshCreator(MshCreator):
         y_c = self.y_c
         z_c = self.z_c
 
-        if inactive:
+        if insulator:
             if insulator_thickness is None:
                 insulator_thickness = contact_thickness * 3
             if insulator_length is None:
                 insulator_length = contact_length * 2
             
-            x_inactive = x_c-insulator_length/2
+            x_insulator = x_c-insulator_length/2
 
-            cyl1 = self.add_cylinder(x_inactive, y_c,z_c,insulator_length, self.Nerve_D/2 + insulator_thickness)
-            cyl2 = self.add_cylinder(x_inactive, y_c,z_c,insulator_length, self.Nerve_D/2)
+            cyl1 = self.add_cylinder(x_insulator, y_c,z_c,insulator_length, self.Nerve_D/2 + insulator_thickness)
+            cyl2 = self.add_cylinder(x_insulator, y_c,z_c,insulator_length, self.Nerve_D/2)
             self.model.occ.cut([(3, cyl1)], [(3, cyl2)])
 
 
@@ -890,6 +890,6 @@ class NerveMshCreator(MshCreator):
         elif not isinstance(size, tuple):
             size = (size, size)
         self.add_CUFF_MP(ID=ID, N=N,  x_c=x_c, contact_width=size[1], contact_length=size[0], is_volume=True,\
-        contact_thickness=thickness, inactive=inactive, insulator_thickness=inactive_th, insulator_length=inactive_L)
+        contact_thickness=thickness, insulator=inactive, insulator_thickness=inactive_th, insulator_length=inactive_L)
         if ID is not None:
             self.electrodes[ID]["type"]="CUFF MP"
