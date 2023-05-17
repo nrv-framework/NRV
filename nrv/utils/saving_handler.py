@@ -35,7 +35,7 @@ def load_any_fascicle(data, extracel_context=False, intracel_context=False, rec_
     else: 
         fasc_dic = data
     fasc = fascicle()
-    fasc.load_fascicle_configuration(fasc_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    fasc.load(fasc_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
     if extracel_context and rec_context:
         return fasc , fasc.extra_stim, fasc.recorder
     elif extracel_context:
@@ -69,7 +69,7 @@ def load_any_axon(data, extracel_context=False, intracel_context=False, rec_cont
     else:
         ax = axon(0,0,1,10)
 
-    ax.load_axon(ax_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    ax.load(ax_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
     if extracel_context and rec_context:
         return ax , ax.extra_stim, ax.recorder
     elif extracel_context:
@@ -78,5 +78,3 @@ def load_any_axon(data, extracel_context=False, intracel_context=False, rec_cont
         return ax , ax.recorder
     else:
         return ax
-
-
