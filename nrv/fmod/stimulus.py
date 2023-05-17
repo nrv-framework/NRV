@@ -7,6 +7,7 @@ import faulthandler
 import numpy as np
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import *
+from ..backend.NRV_Class import NRV_class
 
 
 # enable faulthandler to ease 'segmentation faults' debug
@@ -94,7 +95,7 @@ def datfile_2_stim(fname, dt=0.005):
 ################################
 ## Stimulus object definition ##
 ################################
-class stimulus():
+class stimulus(NRV_class):
     """Stimulus class for NRV2,
     signals are defined as asynchronous signals, with s the values and t as occurence timings.
     """
@@ -107,7 +108,8 @@ class stimulus():
         s_init  : float
             initial value of the signal, by default 0
         """
-        super(stimulus, self).__init__()
+        super().__init__()
+        self.type = "stimulus"
         self.s = np.array([s_init])
         self.t = np.array([0])
 
