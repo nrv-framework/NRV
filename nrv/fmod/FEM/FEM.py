@@ -3,7 +3,9 @@ NRV-FEM
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
+from abc import abstractmethod
 from ...backend.log_interface import rise_error, rise_warning, pass_info
+from ...backend.NRV_Class import NRV_class
 import time
 
 ###############
@@ -14,10 +16,11 @@ fem_verbose = True
 ###################
 ## Model classes ##
 ###################
-class FEM_model():
+class FEM_model(NRV_class):
     """
     A generic class for Finite Element models
     """
+    @abstractmethod
     def __init__(self, Ncore=None):
         """
         Creates a instance of FEM_model
@@ -27,6 +30,7 @@ class FEM_model():
         Ncore   : int
             number of cores for computation. If None is specified, this number is taken from the NRV2.ini configuration file. Byu default set to None
         """
+        super().__init__()
         self.Ncore = Ncore
         self.type = 'FEM'
 
