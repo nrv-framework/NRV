@@ -1,7 +1,7 @@
 import nrv
 import time
 
-nrv.NRV_param.set_nrv_verbosity(2)
+nrv.parameters.set_nrv_verbosity(2)
 
 ## Set parameters
 filename = "./unitary_tests/sources/127_mesh"
