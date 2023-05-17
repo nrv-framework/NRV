@@ -11,7 +11,7 @@ from ....backend.file_handler import rmv_ext
 from ....backend.MCore import *
 from ....backend.parameters import parameters
 from ....backend.log_interface import rise_error, rise_warning, pass_info
-
+from ....backend.NRV_Class import NRV_class
 
 dir_path = os.environ['NRVPATH'] + '/_misc'
 
@@ -19,9 +19,6 @@ dir_path = os.environ['NRVPATH'] + '/_misc'
 ###############
 ## Constants ##
 ###############
-
-
-
 
 pi = np.pi
 
@@ -45,7 +42,7 @@ def clear_gmsh():
     if gmsh.isInitialized():
         gmsh.finalize()
 
-class MshCreator:
+class MshCreator(NRV_class):
     """
     Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
     Contains methodes dealing with the mesh geometries, physical domains and feilds
@@ -60,6 +57,7 @@ class MshCreator:
         ver_level   : int(0,1,2,3,4,5,99)
             verbosity level of gmsh (see MshCreator.set_verbosity), by default 2
         """
+        super().__init__()
         self.type="GMSH"
         self.D = D 
         self.entities = {}
