@@ -16,7 +16,7 @@ from ..mesh_creator.MshCreator import *
 from ....backend.MCore import *
 from ....backend.file_handler import json_load, json_dump, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning, pass_info
-
+from ....backend.NRV_Class import NRV_class
 
 ###############
 ## Functions ##
@@ -110,7 +110,7 @@ def V_from_meshfile(mesh_file, elem=('Lagrange', 1)):
     return V
     
 
-class SimResult:
+class SimResult(NRV_class):
     """
     Result of a FEMSimulation. 
     Store the resulting function space giving the possibility to apply basic mathematical
@@ -134,6 +134,8 @@ class SimResult:
         comm            :int
             The MPI communicator to use for mesh creation, by default MPI.COMM_WORLD
         """    
+        super().__init__()
+        self.type = "simresult"
         self.mesh_file = mesh_file
 
         self.domain = domain
