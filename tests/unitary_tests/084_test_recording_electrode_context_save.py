@@ -26,7 +26,7 @@ testrec.set_recording_point(L/4, 0, 100)
 testrec.set_recording_point(L/2, 0, 100)
 testrec.set_recording_point(3*L/4, 0, 100)
 
-testrec.save_recorder(save=True, fname=recorder_file)
+testrec.save(save=True, fname=recorder_file)
 print("Recorder saved")
 
 testrec2 = nrv.recorder()
@@ -35,7 +35,7 @@ print("Recorder loaded")
 
 axon1.attach_extracellular_recorder(testrec2)
 
-axon1.save_axon(save=True, fname=axon_file, intracel_context=True, rec_context=True)
+axon1.save(save=True, fname=axon_file, intracel_context=True, rec_context=True)
 print("Axon saved")
 axon2, loadedrec = nrv.load_any_axon(axon_file, intracel_context=True, rec_context=True)
 print("Axon loaded")
