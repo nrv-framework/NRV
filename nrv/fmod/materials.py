@@ -7,6 +7,7 @@ import faulthandler
 import os
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump, json_load
+from ..backend.NRV_Class import NRV_class
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -87,7 +88,7 @@ def load_material(f_material):
 ####################
 ## material class ##
 ####################
-class material():
+class material(NRV_class):
     """
     a class for material, where all the physical properties constants are stored.
     """
@@ -95,7 +96,7 @@ class material():
         """
         material instantiation
         """
-        super(material, self).__init__()
+        super().__init__()
         self.name = ''
         self.source = ''
         self.isotrop_cond = True
