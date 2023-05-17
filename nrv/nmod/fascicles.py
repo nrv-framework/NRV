@@ -24,6 +24,7 @@ from ..fmod.recording import *
 from ..backend.file_handler import *
 from ..backend.MCore import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.NRV_Class import NRV_class
 
 # verbosity level
 verbose = True
@@ -60,7 +61,7 @@ def is_fascicle(object):
     """
     return isinstance(object, fascicle)
 
-class fascicle():
+class fascicle(NRV_class):
     """
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
     """
@@ -91,6 +92,8 @@ class fascicle():
         Adelta_limit    : float
             limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
+        super().__init__()
+        self.type = "fascicle"
         self.ID = ID
         self.type = None
         self.L = None
@@ -1355,4 +1358,3 @@ class fascicle():
         if MCH.is_alone() and verbose:
             pass_info('... Simulation done')
         self.is_simulated = True
-
