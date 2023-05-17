@@ -11,6 +11,7 @@ import time
 import traceback
 from scipy import optimize
 import numpy as np
+from abc import abstractmethod
 
 from ..fmod.extracellular import *
 from ..fmod.electrodes import *
@@ -18,6 +19,7 @@ from ..fmod.recording import *
 
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump
+from ..backend.NRV_Class import NRV_class
 
 import neuron
 
@@ -36,6 +38,7 @@ neuron.h.load_file('stdrun.hoc')
 unmyelinated_models = ['HH', 'Rattay_Aberham', 'Sundt', 'Tigerholm', 'Schild_94', 'Schild_97']
 myelinated_models = ['MRG', 'Gaines_motor', 'Gaines_sensory']
 thin_myelinated_models = ['Extended_Gaines', 'RGK']
+
 
 ##############################
 ## Usefull Neuron functions ##
@@ -148,7 +151,7 @@ def rotate_list(l, n):
 #############################
 ## Generic class for axons ##
 #############################
-class axon():
+class axon(NRV_class):
     """Axon is a generic object to describe an axonal fiber,
     (soma and interconnection are not taken into account, all axons are independant from others)
     From user perspective, call myelinated, unmylinated or thin_myelinated classes for robust code. All axons
@@ -156,6 +159,7 @@ class axon():
 
     WARNING: do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
     """
+    @abstractmethod
     def __init__(self, y, z, d, L, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0, \
         mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, v_init=None, T=None, ID=0,\
         threshold=-40):
@@ -189,6 +193,8 @@ class axon():
         threshold       : int
             membrane voltage threshold for spike detection (mV), by default -40mV
         """
+        super().__init__()
+        self.type = "axon"
         ## Given by user
         self.x = []
         self.y = y
@@ -965,3 +971,11 @@ class axon():
         t = np.array(self.timeVector)
         self.t_len = len(t)
         return t
+
+class axon_test(axon):
+    def __init__(self, y, z, d, L, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0, \
+        mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, v_init=None, T=None, ID=0,\
+        threshold=-40):
+        super().__init__(y, z, d, L, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0, \
+        mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, v_init=None, T=None, ID=0,\
+        threshold=-40)
