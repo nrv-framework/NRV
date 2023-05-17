@@ -7,6 +7,7 @@ import faulthandler
 import numpy as np
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import *
+from ..backend.NRV_Class import NRV_class
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -50,7 +51,7 @@ def load_any_electrode(data):
     else: 
         elec_dic = data
 
-    if elec_dic["type"] is None:
+    if elec_dic["type"] == "electrode":
         elec = electrode()
     elif elec_dic["type"] == "point source":
         elec = point_source_electrode(0,0,0)
@@ -69,7 +70,7 @@ def load_any_electrode(data):
     return elec
 
 
-class electrode():
+class electrode(NRV_class):
     """
     Objet for generic electrode description. Each electrode has an ID and a position.
 
@@ -83,10 +84,10 @@ class electrode():
         ID  : int
             electrode identification number, set to 0 by default
         """
-        super(electrode, self).__init__()
+        super().__init__()
         self.ID = ID
         self.footprint = np.asarray([])
-        self.type = None
+        self.type = "electrode"
         self.is_multipolar = False
 
     ## Save and Load mehtods
