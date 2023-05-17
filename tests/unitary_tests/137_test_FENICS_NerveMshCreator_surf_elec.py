@@ -17,10 +17,10 @@ mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=1100, z_c=-300, length = 100
 mesh.add_electrode(elec_type="LIFE", x_c=L/4, y_c=-800, z_c=-100, length = 1000, D=25, res=5)
 mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=-800, z_c=-100, length = 1000, D=25, res=5)
 mesh.add_electrode(elec_type="CUFF MP", N=5,  x_c=L/8, contact_length=1000, is_volume=False)
-mesh.add_electrode(elec_type="CUFF MP", N=12, x_c=7*L/8, contact_length=1000, contact_width=1000, is_volume=False, inactive=True, insulator_thickness=500, insulator_length=3000,res=200)
-mesh.add_electrode(elec_type="CUFF", x_c=3*L/8, contact_length=1000, is_volume=False,inactive=True)#, insulator_length=2000, insulator_thickness=500, res=200)
+mesh.add_electrode(elec_type="CUFF MP", N=12, x_c=7*L/8, contact_length=1000, contact_width=1000, is_volume=False, insulator=True, insulator_thickness=500, insulator_length=3000,res=200)
+mesh.add_electrode(elec_type="CUFF", x_c=3*L/8, contact_length=1000, is_volume=False,insulator=True)#, insulator_length=2000, insulator_thickness=500, res=200)
 mesh.add_electrode(elec_type="CUFF", is_volume=False,x_c=5*L/8, contact_length=400, contact_thickness=100,\
-    inactive=True, insulator_length=1500, insulator_thickness=600, res=30)
+    insulator=True, insulator_length=1500, insulator_thickness=600, res=30)
 
 mesh.compute_geo()
 
