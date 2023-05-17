@@ -10,6 +10,8 @@ from ..utils.units import *
 from ..backend.file_handler import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.MCore import *
+from ..backend.NRV_Class import NRV_class
+
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -51,7 +53,7 @@ def NodeD_interpol(diameter):
 
     return float(nodeD)
 
-class recording_point():
+class recording_point(NRV_class):
     """
     Object equivalent to a point source electrode for extracellular potential recording only (No stimulation)
     """
@@ -75,6 +77,8 @@ class recording_point():
             set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
             will automatically be performed using 'PSA'
         """
+        super().__init__()
+        self.type = "recording_point"
         # properties
         self.ID = ID
         self.x = x
@@ -313,7 +317,7 @@ class recording_point():
         self.recording += np.matmul(np.transpose(I_membrane),self.footprints[str(ID)])
 
 
-class recorder():
+class recorder(NRV_class):
     """
     Object for recording extracellular potential of axons.
     """
@@ -323,6 +327,8 @@ class recorder():
         be associated with a material and properties. The mechanism will perform the extracellular potential
         computation at each point for an axon when a simulation is performed.
         """
+        super().__init__()
+        self.type = "recorder"
         self.material = None
         self.is_isotropic = True
         self.t = None
