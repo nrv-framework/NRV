@@ -8,11 +8,12 @@ import matplotlib.pyplot as plt
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 
 from .fascicles import *
+from ..backend.NRV_Class import NRV_class
 
 #################
 ## Nerve class ##
 #################
-class nerve:
+class nerve(NRV_class):
     """A nerve in NRV2 is defined as:
         - a list of fascicles
         - a list of materials
@@ -47,6 +48,8 @@ class nerve:
         Adelta_limit    : float
             limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
+        super().__init__()
+        self.type = "nerve"
         self.L = Length
         self.y_c = y_c
         self.z_c = z_c
@@ -147,24 +150,15 @@ class nerve:
             self.fascicles[i_fasc].L = self.L
             
         
-
-    def add_stimulation(self, electrode, stimulus):
-        """
-        Add a stimulation to the current nerve
-
-        Parameters
-        ----------
-        electrode   : object
-
-        stimulus    : object
-        """
-        raise NotImplementedError
-
     def __build_extracellular_context(self):
         """
         Private method to create the correct extracellular context
         """
-        raise NotImplementedError
+        extracellular_context_list = []
+        for fasc in self.fascicles:
+            if fasc.extra_stim is not None:
+                extracellular_context_list += fasc.extra_stim
+                fasc.extra_stim = None
 
     def simulate(self, *args):
         """
@@ -181,7 +175,7 @@ class nerve:
         """
         raise NotImplementedError
         # step 1: create FEM geometry, mesh and compute
-        
+        self.__build_extracellular_context()
         # step 2: simulate all fascicles
         for fascicle in self.fascicles:
             fascicle.simulate()
