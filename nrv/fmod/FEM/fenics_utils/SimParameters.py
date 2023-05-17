@@ -3,7 +3,7 @@ import numpy as np
 
 from ....backend.file_handler import json_load, json_dump, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning, pass_info
-
+from ....backend.NRV_Class import NRV_class
 def is_sim_param(X):
     """
     check if an object is a SimParameters, return True if yes, else False
@@ -20,7 +20,7 @@ def is_sim_param(X):
     """
     return isinstance(X, SimParameters)
 
-class SimParameters:
+class SimParameters(NRV_class):
     """
     Class gathering parameters of a FEM FEniCS simulation. It allows to add,
     modify and store domains, boundaries condition and internal boundaries (thin layers)
@@ -40,6 +40,8 @@ class SimParameters:
             if not None, load SimParameters attribute from data, by default None
             (see SimParameters.load)
         """
+        super().__init__()
+        self.type = "simparameters"
         self.D = D
         self.mesh_file = rmv_ext(mesh_file)
 
