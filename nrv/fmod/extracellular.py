@@ -14,6 +14,7 @@ from .FEM.FENICS_model import *
 from ..backend.MCore import *
 from ..backend.file_handler import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.NRV_Class import NRV_class
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -65,7 +66,7 @@ def load_any_extracel_context(data):
     return extracel
 
 
-class extracellular_context:
+class extracellular_context(NRV_class):
     """
     extracellular_context is a class to handle the computation of the extracellular voltage field induced by the electrical stimulation.
     This class should not be used directly by user, but user friendly classes (for Analitycal or FEM based computations) inherits from extracellular_context.
@@ -74,6 +75,8 @@ class extracellular_context:
         """
         Instrantiation an extracellular_context object, empty shell to store electrodes and stimuli
         """
+        super().__init__()
+        self.type = "extracellular_context"
         # empty list to store electrodes and corresponding stimuli
         self.electrodes = []
         self.stimuli = []
