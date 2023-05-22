@@ -20,6 +20,7 @@ def is_sim_param(X):
     """
     return isinstance(X, SimParameters)
 
+
 class SimParameters(NRV_class):
     """
     Class gathering parameters of a FEM FEniCS simulation. It allows to add,
@@ -258,8 +259,9 @@ class SimParameters(NRV_class):
         ----------
         mesh_domain     : int
             Mesh ID of the boundary (should be 2D)
-        in_domains       : float
-            Mesh ID of the domain inside the boundary (should be 3D)
+        in_domains       : list
+            List of mesh IDs of the domain (if 3D group) or internal boundary (if 2D group) 
+            inside the boundary 
         thickness       : float
             thicness of the internal boundary
         mat_pty         : str, float or list[3]
@@ -284,15 +286,20 @@ class SimParameters(NRV_class):
         self.inbound = True
         if not mesh_domain in self.inboundaries_list:
             IDibound= self.__update_ID_list('inbound', mesh_domain)
-            self.inboundaries_list[IDibound] = {'mesh_domain': mesh_domain, 'in_domains':in_domains,\
-            'thickness' : thickness, 'mat_pty':mat_pty}
-            # Cumpute corresponding domain for mixed space
+            self.inboundaries_list[IDibound] = {'mesh_domain': mesh_domain, 'in_domains': in_domains,\
+            'thickness': thickness, 'mat_pty': mat_pty}
+            # Compute corresponding domain for mixed space
             for j in self.domains_list:
                 domain = self.domains_list[j]
                 # Domain inside the boundary
                 if domain['mesh_domain'] in in_domains:
                     domain['mixed_domain'] += [domain['mesh_domain']]
-                    if domain['mesh_domain'] == domain['mixed_domain'][0]: ##refaire une fois avec la nouvelle valeur pour le cas des axon
+                    if domain['mesh_domain'] == domain['mixed_domain'][0]:
+                        domain['mixed_domain'][0] = mesh_domain
+                # Domain inside the boundary but surounded by another internal boundary
+                elif domain['mesh_domain']+1 in in_domains:
+                    domain['mixed_domain'] += [domain['mesh_domain']+1]
+                    if domain['mesh_domain'] == domain['mixed_domain'][0]:
                         domain['mixed_domain'][0] = mesh_domain
                 # Domain outside the boundary
                 else:
