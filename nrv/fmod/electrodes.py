@@ -454,7 +454,7 @@ class LIFE_electrode(FEM_electrode):
         self.z_c = elec_dic['z_c']
 
 
-    def parameter_model(self, model):
+    def parameter_model(self, model, res="default"):
         """
         Parameter the model electrode with user specified dimensions
 
@@ -471,7 +471,7 @@ class LIFE_electrode(FEM_electrode):
             model.set_parameter(self.label+'_x_offset', str(self.x_shift)+'[um]')
         else:
             model.add_electrode(elec_type=self.type, x_c=self.x_shift+(self.length/2),\
-            y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D, is_volume=self.is_volume)
+            y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D, is_volume=self.is_volume, res=res)
 
 
 
@@ -568,7 +568,7 @@ class CUFF_electrode(FEM_electrode):
         self.is_volume = elec_dic['is_volume']
         self.insulator = elec_dic['insulator']
 
-    def parameter_model(self, model):
+    def parameter_model(self, model, res="default"):
         """
         Parameter the model electrode with user specified dimensions
 
@@ -589,7 +589,7 @@ class CUFF_electrode(FEM_electrode):
         else:
             model.add_electrode(elec_type=self.type, insulator_length=self.insulator_length, is_volume=self.is_volume,\
                 insulator=self.insulator, insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
-                contact_thickness=self.contact_thickness, x_c=self.x_center)
+                contact_thickness=self.contact_thickness, x_c=self.x_center, res=res)
 
 class CUFF_MP_electrode(CUFF_electrode):
     """
@@ -676,7 +676,7 @@ class CUFF_MP_electrode(CUFF_electrode):
 
 
 
-    def parameter_model(self, model):
+    def parameter_model(self, model, res="default"):
         """
         Parameter the model electrode with user specified dimensions
 
@@ -691,4 +691,5 @@ class CUFF_MP_electrode(CUFF_electrode):
             model.add_electrode(elec_type=self.type, N=self.N_contact, is_volume=self.is_volume,\
                 contact_width=self.contact_width, insulator_length=self.insulator_length,\
                 insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
-                insulator=self.insulator, contact_thickness=self.contact_thickness, x_c=self.x_center)
+                insulator=self.insulator, contact_thickness=self.contact_thickness,\
+                x_c=self.x_center, res=res)
