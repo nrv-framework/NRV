@@ -2,13 +2,11 @@ import nrv
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.special import erf
 
 ## Results filenames
 fig_file1 = "./unitary_tests/figures/138_A.png"
 fig_file2 = "./unitary_tests/figures/138_B.png"
 fig_file3 = "./unitary_tests/figures/138_C.png"
-fig_file4 = "./unitary_tests/figures/138_D.png"
 
 ## Mesh generation
 L = 2000
@@ -54,10 +52,9 @@ for i in range(1,20):
     plt.plot(X, gi(X))
 plt.plot(X, g(X), 'k')
 plt.grid()
-
+plt.savefig(fig_file2)
 
 plt.figure()
-
 g = nrv.gate(mu, sigma)
 g1 = nrv.gaussian(mu, sigma)
 g2 = 1 - nrv.gate(mu/2, sigma,N=10)
@@ -70,4 +67,5 @@ plt.plot(X, g2(X), ':')
 plt.plot(X, -g3(X), ':')
 plt.plot(X, G(X), 'k')
 plt.grid()
-plt.show()
+plt.savefig(fig_file3)
+#plt.show()
