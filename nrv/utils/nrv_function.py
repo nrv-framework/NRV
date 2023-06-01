@@ -76,7 +76,6 @@ class function_1D(nrv_function):
     class containing function from IR to IR
     Such function can be call either on 1 value or on a ndarray (and applied on each value)
     """
-    @abstractmethod
     def __init__(self):
         super().__init__()
         self.type = "function_1D"
