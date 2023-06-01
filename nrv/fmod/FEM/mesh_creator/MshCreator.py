@@ -47,7 +47,7 @@ class MshCreator(NRV_class):
     Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
     Contains methodes dealing with the mesh geometries, physical domains and feilds
     """
-    def __init__(self, D=3, ver_level=2):
+    def __init__(self, D=3, ver_level=None):
         """
         initialisation of the MshCreator
         Parameters
@@ -78,6 +78,7 @@ class MshCreator(NRV_class):
 
         clear_gmsh()
         gmsh.initialize()
+        
         self.verbosity_level = ver_level
         self.set_verbosity(ver_level)
         self.model = gmsh.model
@@ -138,7 +139,7 @@ class MshCreator(NRV_class):
             
         return self.volumes
 
-    def get_mesh_info(self, verbose=False):
+    def get_info(self, verbose=False):
         entities = self.model.getEntities()
         nodeTags= self.model.mesh.getNodes()[0]
         elemTags = self.model.mesh.getElements()[1]
@@ -152,7 +153,10 @@ class MshCreator(NRV_class):
             pass_info('Number of entities : ' + str(self.N_entities))
             pass_info('Number of nodes : ' + str(self.N_nodes))
             pass_info('Number of elements : ' + str(self.N_elements))
- 
+
+    def get_mesh_info(self, verbose=False):
+        rise_warning('DEPRECATED method use get_info instead')
+        self.get_info(verbose=verbose)
 
     def get_faces(self, com=False, bd=False):
         """
@@ -203,7 +207,7 @@ class MshCreator(NRV_class):
         """
         self.res = new_res
 
-    def set_verbosity(self, i=2):
+    def set_verbosity(self, i=None):
         """
         from gmsh : Level of information printed on the terminal and the message console\
             
@@ -218,6 +222,8 @@ class MshCreator(NRV_class):
             5: +status
             99: +debug
         """
+        if i is None:
+            i = parameters.VERBOSITY_LEVEL
         self.verbosity_level = i 
         gmsh.option.setNumber("General.Verbosity", self.verbosity_level)
         
@@ -547,6 +553,18 @@ class MshCreator(NRV_class):
         self.model.mesh.field.setNumbers(self.Nfeild, "FieldsList", feild_IDs)
 
         return self.Nfeild
+    
+    def refinement_callback(self, meshSizeCallback):
+        """
+        Add a call back function which is apply to the mesh size defined by fields and return
+        the final mesh size
+        Parameters
+        ----------
+        meshSizeCallback    : nrv.utils.MeshCallBack
+            
+        """
+        self.model.mesh.setSizeCallback(meshSizeCallback)
+    
 
 
     ##############################################################################################
