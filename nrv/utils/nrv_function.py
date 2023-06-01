@@ -6,25 +6,30 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 
 from scipy.interpolate import interp1d, CubicHermiteSpline
 import numpy as np
+from scipy.special import erf
+from abc import abstractmethod
 
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump, json_load
+from ..backend.NRV_Class import NRV_class
 #############################
 ## sigma functions classes ##
 #############################
 spy_interp1D_kind = ['linear', 'nearest', 'nearest-up', 'zero', 'slinear', 'quadratic', 'cubic', 'previous', 'next']
 
-class nrv_function:
+class nrv_function(NRV_class):
     """
     Class containg all comon method of fonction used in nrv
     """
+    @abstractmethod
     def __init__(self):
+        super().__init__()
         self.type = 'nrv_function'
     
     def __call__(self, *arg):
         return 1
     
-    def save_field_function(self, save=False, fname='nrv_function.json'):
+    def save(self, save=False, fname='nrv_function.json'):
         """
         Return feild function as dictionary and eventually save it as json file
 
@@ -46,7 +51,7 @@ class nrv_function:
             json_dump(ff_dic, fname)
         return ff_dic
 
-    def load_field_function(self, data):
+    def load(self, data):
         """
         Load function properties from a dictionary or a json file
 
@@ -61,6 +66,120 @@ class nrv_function:
             ff_dic = data
         self.type = ff_dic['type']
 
+
+###############################################################
+####################### 1D functions ##########################
+###############################################################
+
+class function_1D(nrv_function):
+    """
+    class containing function from IR to IR
+    Such function can be call either on 1 value or on a ndarray (and applied on each value)
+    """
+    @abstractmethod
+    def __init__(self):
+        super().__init__()
+        self.type = "function_1D"
+
+    def __call__(self, X):
+        return self.call_method(X)
+
+    @staticmethod
+    def call_method(self, X):
+        return X
+
+    def __add__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: self(X) + b(X)
+        else:
+            c.call_method = lambda X: self(X) + b
+        return c
+    
+    def __radd__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: b(X) + self(X)
+        else:
+            c.call_method = lambda X: b + self(X)
+        return c
+
+    def __sub__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: self(X) - b(X)
+        else:
+            c.call_method = lambda X: self(X) - b
+        return c
+    
+    def __rsub__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: b(X) - self(X)
+        else:
+            c.call_method = lambda X: b - self(X)
+        return c
+
+    def __mul__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: self(X) * b(X)
+        else:
+            c.call_method = lambda X: self(X) * b
+        return c
+    
+    def __rmul__(self, b):
+        c = function_1D()
+        if callable(b):
+            c.call_method = lambda X: b(X) * self(X)
+        else:
+            c.call_method = lambda X: b * self(X)
+        return c
+    
+
+class gaussian(function_1D):
+    def __init__(self, mu=0, sigma=1):
+        """
+        gaussian function define as
+        f(x) = e^{\frac}
+        """
+        super().__init__()
+        self.type = "gaussian"
+        self.mu = mu
+        self.sigma = sigma
+    
+    def call_method(self, X):
+        return np.exp(-((X - self.mu)/self.sigma)**2/2)#/(self.sigma*(2*np.pi)**0.5)
+    
+class gate(function_1D):
+    def __init__(self, mu, sigma, kind='Rational', N=None):
+        """
+
+        """
+        super().__init__()
+        self.type = "gate"
+        #self.kind = 
+        self.mu = mu
+        self.sigma = sigma
+        self.N = N
+        self.kind = kind
+
+    def call_method(self, X):
+        X_eff = (X-self.mu)/self.sigma
+        if self.N is None:
+            res = (np.sign(X_eff + 0.5) - np.sign(X_eff - 0.5))/2
+        elif self.kind.lower() == 'rational':
+            res = 1/((2*X_eff)**(2*self.N)+1)
+        else:
+            res = (erf((X_eff + (0.5* self.sigma)/self.mu)/self.N)\
+                - erf((X_eff - (0.5* self.sigma)/self.mu)/self.N))/2
+        return res
+    
+    
+
+###############################################################
+####################### 1D functions ##########################
+###############################################################
 class nrv_interp(nrv_function):
     def __init__(self, X_values, Y_values, kind="linear", dx=0.01, interpolator=None, dxdy=None,\
         scale=None, columns=[]):
@@ -165,8 +284,7 @@ class nrv_interp(nrv_function):
                 self.scale = scale
                     
             self.interpolator = CubicHermiteSpline(self.X_values, self.Y_values, self.scale*self.dxdy)
-
-        
+      
     def __call__(self, X):
         if self.columns == []:
             return self.interpolator(X)
@@ -175,8 +293,37 @@ class nrv_interp(nrv_function):
         except:
             rise_warning('nrv_interpol: columns out of bound, intepolation done on the whole vector')
             return self.interpolator(X)
+
+
+class MeshCallBack(nrv_function):
+    """
+
+    """
+    def __init__(self,f=None, axis='x'):
+        super().__init__()
+        self.type = 'nrv_mesh_cb'
+        self.f = None
+        self.axis = axis 
+
+        self.set_function(f)
+
+
+    def set_function(self, f=None):
+        if f is None:
+            self.f = lambda x: 1
+        elif callable(f):
+            self.f = f
+        elif isinstance(f, str):
+            self.f = lambda x: eval(f)
+        else:
+            rise_warning(type(f), 'Not recognized for MeshCallBack function')
     
-
-
-
-
+    def __call__(self, dim, tag, x, y, z, lc):
+        arg = []
+        if 'x' in self.axis:
+            arg += [x]
+        if 'y' in self.axis:
+            arg += [y]
+        if 'z' in self.axis:
+            arg += [z]
+        return lc * self.f(*arg)
