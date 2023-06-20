@@ -25,9 +25,15 @@ class nrv_function(NRV_class):
     def __init__(self):
         super().__init__()
         self.type = 'nrv_function'
-    
-    def __call__(self, *arg):
-        return 1
+
+
+    def __call__(self, *X):
+        return self.call_method(*X)
+
+    @staticmethod
+    def call_method(self, X):
+        return X
+
     
     def save(self, save=False, fname='nrv_function.json'):
         """
@@ -65,6 +71,91 @@ class nrv_function(NRV_class):
         else: 
             ff_dic = data
         self.type = ff_dic['type']
+    
+    def __compatible(self, b):
+        if not callable(b):
+            return True
+        elif 'dim' in self.__dir__() and 'dim' in b.__dir__():
+            if self.dim == b.dim:
+                return True
+        else:
+            rise_warning("Type not compatible for operation", type(self), type(b))
+            return False
+
+    
+    def __neg__(self):
+        c_type = 'function_'+str(self.dim)+'D'
+        c = eval(c_type)()
+        c.call_method = lambda *X: -self(*X)
+        return c
+
+    def __abs__(self):
+        c_type = 'function_'+str(self.dim)+'D'
+        c = eval(c_type)()
+        c.call_method = lambda *X: abs(self(*X))
+        return c
+
+
+    def __add__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: self(*X) + b(*X)
+            else:
+                c.call_method = lambda *X: self(*X) + b
+            return c
+
+    def __radd__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: b*(X) + self(*X)
+            else:
+                c.call_method = lambda *X: b + self(*X)
+            return c
+
+    def __sub__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: self(*X) - b(*X)
+            else:
+                c.call_method = lambda *X: self(*X) - b
+            return c
+    
+    def __rsub__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: b(*X) - self(*X)
+            else:
+                c.call_method = lambda *X: b - self(*X)
+            return c
+
+    def __mul__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: self(*X) * b(*X)
+            else:
+                c.call_method = lambda *X: self(*X) * b
+            return c
+    
+    def __rmul__(self, b):
+        if self.__compatible(b):
+            c_type = 'function_'+str(self.dim)+'D'
+            c = eval(c_type)()
+            if callable(b):
+                c.call_method = lambda *X: b(*X) * self(*X)
+            else:
+                c.call_method = lambda *X: b * self(*X)
+            return c
+    
 
 
 ###############################################################
@@ -79,68 +170,24 @@ class function_1D(nrv_function):
     def __init__(self):
         super().__init__()
         self.type = "function_1D"
+        self.dim = 1
 
-    def __call__(self, X):
-        return self.call_method(X)
-
-    @staticmethod
+    #@staticmethod
     def call_method(self, X):
-        return X
-
-    def __add__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: self(X) + b(X)
+        # Composition with N dim function
+        if isinstance(X, nrv_function):
+            c_type = 'function_'+str(X.dim)+'D'
+            c = eval(c_type)()
+            c.call_method = lambda *x: self(X(*x))
+            return c
         else:
-            c.call_method = lambda X: self(X) + b
-        return c
-    
-    def __radd__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: b(X) + self(X)
-        else:
-            c.call_method = lambda X: b + self(X)
-        return c
-
-    def __sub__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: self(X) - b(X)
-        else:
-            c.call_method = lambda X: self(X) - b
-        return c
-    
-    def __rsub__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: b(X) - self(X)
-        else:
-            c.call_method = lambda X: b - self(X)
-        return c
-
-    def __mul__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: self(X) * b(X)
-        else:
-            c.call_method = lambda X: self(X) * b
-        return c
-    
-    def __rmul__(self, b):
-        c = function_1D()
-        if callable(b):
-            c.call_method = lambda X: b(X) * self(X)
-        else:
-            c.call_method = lambda X: b * self(X)
-        return c
-    
+            return None
 
 class gaussian(function_1D):
     def __init__(self, mu=0, sigma=1):
         """
-        gaussian function define as
-        f(x) = e^{\frac}
+        gaussian function define as:
+        f(x) = e^{-\frac{(x-\mu)^2}{2*\sigma^2}}
         """
         super().__init__()
         self.type = "gaussian"
@@ -148,10 +195,13 @@ class gaussian(function_1D):
         self.sigma = sigma
     
     def call_method(self, X):
-        return np.exp(-((X - self.mu)/self.sigma)**2/2)#/(self.sigma*(2*np.pi)**0.5)
+        res = super().call_method(X)
+        if res is None:
+            res = np.exp(-((X - self.mu)/self.sigma)**2/2)#/(self.sigma*(2*np.pi)**0.5)
+        return res
     
 class gate(function_1D):
-    def __init__(self, mu, sigma, kind='Rational', N=None):
+    def __init__(self, mu=0, sigma=1, kind='Rational', N=None):
         """
 
         """
@@ -164,20 +214,79 @@ class gate(function_1D):
         self.kind = kind
 
     def call_method(self, X):
-        X_eff = (X-self.mu)/self.sigma
-        if self.N is None:
-            res = (np.sign(X_eff + 0.5) - np.sign(X_eff - 0.5))/2
-        elif self.kind.lower() == 'rational':
-            res = 1/((2*X_eff)**(2*self.N)+1)
-        else:
-            res = (erf((X_eff + (0.5* self.sigma)/self.mu)/self.N)\
-                - erf((X_eff - (0.5* self.sigma)/self.mu)/self.N))/2
+        res = super().call_method(X)
+        if res is None:
+            X_eff = (X-self.mu)/self.sigma
+            if self.N is None:
+                res = (np.sign(X_eff + 0.5) - np.sign(X_eff - 0.5))/2
+            elif self.kind.lower() == 'rational':
+                res = 1/((2*X_eff)**(2*self.N)+1)
+            else:
+                res = (erf((X_eff + (0.5* self.sigma)/self.mu)/self.N)\
+                    - erf((X_eff - (0.5* self.sigma)/self.mu)/self.N))/2
         return res
     
-    
+###############################################################
+####################### 2D functions ##########################
+############################################################### 
+
+class function_2D(nrv_function):
+    """
+    class containing function from IR^2 to IR
+    Such function can be call either on 1 value or on a ndarray (and applied on each value)
+    """
+    def __init__(self):
+        super().__init__()
+        self.type = "function_2D"
+        self.dim = 2
+
+    @staticmethod
+    def call_method(self, X):
+        return 1
+
 
 ###############################################################
-####################### 1D functions ##########################
+####################### ND functions ##########################
+############################################################### 
+class function_ND(nrv_function):
+    """
+    class containing function from IR^n to IR
+    Such function can be call either on 1 value or on a ndarray (and applied on each value)
+    """
+    def __init__(self):
+        super().__init__()
+        self.type = "function_ND"
+        self.dim = "N"
+
+    @staticmethod
+    def call_method(self, *X):
+        return 1
+
+class sphere(function_ND):
+    '''
+    Multi-dimensional Sphere function
+    '''
+    def __init__(self,Xc=None):
+        super().__init__()
+        self.type = "sphere"
+        self.Xc = Xc
+        if self.Xc is None:
+            self.Xc = []
+
+
+    def call_method(self, *X):
+        Nc = len(self.Xc)
+        res = 0
+        for i, xi in enumerate(X):
+            if i < Nc:
+                xc = self.Xc[i]
+            else:
+                xc = 0
+            res += (xi-xc)**2
+        return res**0.5
+
+###############################################################
+####################### interpolation ######################
 ###############################################################
 class nrv_interp(nrv_function):
     def __init__(self, X_values, Y_values, kind="linear", dx=0.01, interpolator=None, dxdy=None,\
@@ -300,7 +409,7 @@ class MeshCallBack(nrv_function):
     """
     def __init__(self,f=None, axis='x'):
         super().__init__()
-        self.type = 'nrv_mesh_cb'
+        self.type = 'MeshCallBack'
         self.f = None
         self.axis = axis 
 
@@ -309,7 +418,7 @@ class MeshCallBack(nrv_function):
 
     def set_function(self, f=None):
         if f is None:
-            self.f = lambda x: 1
+            self.f = lambda *x: 1
         elif callable(f):
             self.f = f
         elif isinstance(f, str):
@@ -318,11 +427,11 @@ class MeshCallBack(nrv_function):
             rise_warning(type(f), 'Not recognized for MeshCallBack function')
     
     def __call__(self, dim, tag, x, y, z, lc):
-        arg = []
+        X = []
         if 'x' in self.axis:
-            arg += [x]
+            X += [x]
         if 'y' in self.axis:
-            arg += [y]
+            X += [y]
         if 'z' in self.axis:
-            arg += [z]
-        return lc * self.f(*arg)
+            X += [z]
+        return lc * self.f(*X)
