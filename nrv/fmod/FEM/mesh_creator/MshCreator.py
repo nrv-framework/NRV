@@ -78,6 +78,7 @@ class MshCreator(NRV_class):
 
         clear_gmsh()
         gmsh.initialize()
+
         
         self.verbosity_level = ver_level
         self.set_verbosity(ver_level)
@@ -153,6 +154,7 @@ class MshCreator(NRV_class):
             pass_info('Number of entities : ' + str(self.N_entities))
             pass_info('Number of nodes : ' + str(self.N_nodes))
             pass_info('Number of elements : ' + str(self.N_elements))
+        return self.Ncore, self.N_entities, self.N_nodes, self.N_elements
 
     def get_mesh_info(self, verbose=False):
         rise_warning('DEPRECATED method use get_info instead')
@@ -199,8 +201,8 @@ class MshCreator(NRV_class):
     def set_res(self, new_res):
         """
         set the global resolution saved (usefull when no field are set)
-        INPUT
-        -----
+        Parameters
+        ----------
         new_res     :float
             global resolution to set the object
 
@@ -209,10 +211,10 @@ class MshCreator(NRV_class):
 
     def set_verbosity(self, i=None):
         """
-        from gmsh : Level of information printed on the terminal and the message console\
+        from gmsh: Level of information printed on the terminal and the message console\
             
-        INPUT
-        -----
+        Parameters
+        ----------
         i     : int (1, 2, 3, 4, 5 or 99)
             0: silent except for fatal errors
             1: +errors
@@ -226,6 +228,20 @@ class MshCreator(NRV_class):
             i = parameters.VERBOSITY_LEVEL
         self.verbosity_level = i 
         gmsh.option.setNumber("General.Verbosity", self.verbosity_level)
+
+    def set_chara_blen(i=0):
+        """
+        from gmsh: Extend characteristic lengths from the boundaries inside the surface/volume
+        
+        Parameters
+        ----------
+        i   : int, float, bool
+            Parameter value, by default 0
+        """
+        if isinstance(i, bool):
+            i = int(i)
+        gmsh.option.set_number("Mesh.CharacteristicLengthExtendFromBoundary", i)
+        
         
     
     ##############################################################################################
