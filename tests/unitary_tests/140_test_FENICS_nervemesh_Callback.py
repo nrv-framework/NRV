@@ -22,13 +22,13 @@ x_E2 = 5*L/8
 sigma = 1.5 * (x_E2 - x_E1)
 mu = L/2
 
-f =  1-nrv.gate(mu, sigma, N=5) + 0.5
+f =  (1-nrv.gate(mu, sigma, N=5)) + 0.5
 meshSizeCallback = nrv.MeshCallBack(f)
 
 X = np.linspace(0,L,L//4)
 m = max(f(X))
-plt.plot(X, f(X), label="f")
 
+plt.plot(X, f(X), label="f")
 plt.legend()
 plt.savefig(fig_file1)
 
