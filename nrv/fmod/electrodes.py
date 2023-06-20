@@ -90,52 +90,6 @@ class electrode(NRV_class):
         self.type = "electrode"
         self.is_multipolar = False
 
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = {}
-        elec_dic['ID'] = self.ID
-        elec_dic['footprint'] = self.footprint
-        elec_dic['type'] = self.type
-        elec_dic['is_multipolar'] = self.is_multipolar
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-
-        self.ID = elec_dic['ID']
-        self.footprint = np.asarray(elec_dic['footprint'])
-        self.type = elec_dic['type']
-        self.is_multipolar = elec_dic['is_multipolar']
-
     def save_electrode(self, save=False, fname='electrode.json'):
         rise_warning('save_electrode is a deprecated method use save')
         self.save(save=save, fname=fname)
@@ -320,48 +274,6 @@ class FEM_electrode(electrode):
         self.is_volume = False
         self.type = "FEM"
 
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = super().save()
-        elec_dic['label'] = self.label
-        elec_dic['is_volume'] = self.is_volume
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-        super().load(data)
-        self.label = elec_dic['label']
-        self.is_volume = elec_dic['is_volume']
-
     def set_footprint(self, V_1mA):
         """
         set the footprin of a FEM electrode
@@ -404,56 +316,7 @@ class LIFE_electrode(FEM_electrode):
         self.z_c = z_c
         self.type = "LIFE"
 
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = super().save()
-        elec_dic['D'] = self.D
-        elec_dic['length'] = self.length
-        elec_dic['x_shift'] = self.x_shift
-        elec_dic['y_c'] = self.y_c
-        elec_dic['z_c'] = self.z_c
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-        super().load(data)
-        self.D = elec_dic['D']
-        self.length = elec_dic['length']
-        self.x_shift = elec_dic['x_shift']
-        self.y_c = elec_dic['y_c']
-        self.z_c = elec_dic['z_c']
-
-
+    
     def parameter_model(self, model, res="default"):
         """
         Parameter the model electrode with user specified dimensions
@@ -471,7 +334,8 @@ class LIFE_electrode(FEM_electrode):
             model.set_parameter(self.label+'_x_offset', str(self.x_shift)+'[um]')
         else:
             model.add_electrode(elec_type=self.type, x_c=self.x_shift+(self.length/2),\
-            y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D, is_volume=self.is_volume, res=res)
+            y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D, is_volume=self.is_volume,\
+            res=res)
 
 
 
@@ -480,7 +344,8 @@ class CUFF_electrode(FEM_electrode):
     CUFF electrode for FEM models
     """
     def __init__(self, label="", contact_length=100, is_volume=False, contact_thickness=None,\
-        insulator=True, insulator_length=None, insulator_thickness=None, x_center=0, ID=0):
+        insulator=True, insulator_length=None, insulator_thickness=None, x_center=0,\
+        insulator_offset=0, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -505,68 +370,15 @@ class CUFF_electrode(FEM_electrode):
             length along x of the insulator ring in um, by default 1000
         """
         super().__init__(label, ID)
-        self.insulator_length = insulator_length
-        self.insulator_thickness = insulator_thickness
         self.contact_length = contact_length
         self.contact_thickness = contact_thickness
         self.x_center = x_center
         self.is_volume = is_volume
         self.insulator = insulator
+        self.insulator_length = insulator_length
+        self.insulator_thickness = insulator_thickness
+        self.insulator_offset = insulator_offset
         self.type = "CUFF"
-
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = super().save()
-        elec_dic['insulator_length'] = self.insulator_length
-        elec_dic['insulator_thickness'] = self.insulator_thickness
-        elec_dic['contact_length'] = self.contact_length
-        elec_dic['contact_thickness'] = self.contact_thickness
-        elec_dic['x_center'] = self.x_center
-        elec_dic['is_volume'] = self.is_volume
-        elec_dic['insulator'] = self.insulator
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-        super().load(data)
-
-        self.contact_length = elec_dic['contact_length']
-        self.contact_thickness = elec_dic['contact_thickness']
-        self.insulator_thickness = elec_dic['insulator_thickness']
-        self.insulator_length = elec_dic['insulator_length']
-        self.x_center = elec_dic['x_center']
-        self.is_volume = elec_dic['is_volume']
-        self.insulator = elec_dic['insulator']
 
     def parameter_model(self, model, res="default"):
         """
@@ -589,14 +401,15 @@ class CUFF_electrode(FEM_electrode):
         else:
             model.add_electrode(elec_type=self.type, insulator_length=self.insulator_length, is_volume=self.is_volume,\
                 insulator=self.insulator, insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
-                contact_thickness=self.contact_thickness, x_c=self.x_center, res=res)
+                contact_thickness=self.contact_thickness, insulator_offset=self.insulator_offset, x_c=self.x_center, res=res)
 
 class CUFF_MP_electrode(CUFF_electrode):
     """
     MultiPolar CUFF electrode for FEM models
     """
-    def __init__(self, label="CUFF_MP", N_contact=4, contact_width=None, contact_length=100, is_volume=False,\
-        contact_thickness=None, insulator=True, insulator_length=None, insulator_thickness=None, x_center=0, ID=0):
+    def __init__(self, label="CUFF_MP", N_contact=4, contact_width=None, contact_length=100,\
+        is_volume=False, contact_thickness=None, insulator=True, insulator_length=None,\
+        insulator_thickness=None, x_center=0, insulator_offset=0, ID=0):
         """
         Instantiation of a LIFE electrode
 
@@ -624,57 +437,12 @@ class CUFF_MP_electrode(CUFF_electrode):
         """
         super().__init__(label=label,contact_length=contact_length,is_volume=is_volume,\
             contact_thickness=contact_thickness, insulator_length=insulator_length,\
-            insulator_thickness=insulator_thickness, x_center=x_center, ID=ID)
+            insulator=insulator, insulator_thickness=insulator_thickness, x_center=x_center,\
+            insulator_offset=insulator_offset, ID=ID)
         self.N_contact = N_contact
         self.contact_width = contact_width
         self.type = "CUFF MP"
         self.is_multipolar = True
-
-
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = super().save()
-        elec_dic['N_contact'] = self.N_contact
-        elec_dic['contact_width'] = self.contact_width
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-        super().load(data)
-        self.N_contact = elec_dic['N_contact']
-        self.contact_width = elec_dic['contact_width']
-
-
 
     def parameter_model(self, model, res="default"):
         """
@@ -692,4 +460,4 @@ class CUFF_MP_electrode(CUFF_electrode):
                 contact_width=self.contact_width, insulator_length=self.insulator_length,\
                 insulator_thickness=self.insulator_thickness, contact_length=self.contact_length,\
                 insulator=self.insulator, contact_thickness=self.contact_thickness,\
-                x_c=self.x_center, res=res)
+                x_c=self.x_center, insulator_offset=self.insulator_offset, res=res)
