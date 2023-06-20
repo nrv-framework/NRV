@@ -373,3 +373,16 @@ class SimParameters(NRV_class):
                 if i_ibound in self.inboundaries_list[i]['in_domains']:
                     out_space = self.get_space_of_domain(i-1)
         return in_space, out_space
+    
+
+    def print_mixedspace_domain(self):
+        doms = self.get_mixedspace_domain()
+        print('spaces:   ',[k for k in range(len(doms[0]))])
+        for i, dom in enumerate(doms):
+            print("domain "+str(i)+": ", dom)
+
+    def print_mixedspace_mat_pty(self):        
+        mats = self.get_mixedspace_mat_pty()
+        print('domains:   ',[k for k in range(len(mats[0]))])
+        for i, mat in enumerate(mats):
+            print("space "+str(i)+": ",mat)
