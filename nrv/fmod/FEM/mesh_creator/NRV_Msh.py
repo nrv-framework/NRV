@@ -6,8 +6,6 @@ from ....nmod.fascicles import *
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 from ....utils.units import *
 
-
-
 def mesh_from_electrode(elec, mesh=None, Length=10000, Outer_D=5,  Nerve_D=4000, y_c=0, z_c=0, res="default"):
     """
     returns the corresponding mesh from a nrv.facsicle
@@ -37,6 +35,8 @@ def mesh_from_fascicle(fascicle, mesh=None, Length=10000, Outer_D=5,  Nerve_D=40
         ax_d=round(fascicle.axons_diameter[i_ax], 3)
         ax_y_c=round(fascicle.axons_y[i_ax], 3)
         ax_z_c=round(fascicle.axons_z[i_ax], 3)
+        if isinstance(res_ax, str) and res_ax != "default":
+            res_ax = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
         mesh.reshape_axon(D=ax_d, y_c=ax_y_c, z_c=ax_z_c, res=res_ax)
     
     if fascicle.extra_stim is not None:
