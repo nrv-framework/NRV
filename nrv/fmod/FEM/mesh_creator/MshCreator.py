@@ -229,7 +229,7 @@ class MshCreator(NRV_class):
         self.verbosity_level = i 
         gmsh.option.setNumber("General.Verbosity", self.verbosity_level)
 
-    def set_chara_blen(i=0):
+    def set_chara_blen(self, i=0):
         """
         from gmsh: Extend characteristic lengths from the boundaries inside the surface/volume
         
@@ -238,8 +238,7 @@ class MshCreator(NRV_class):
         i   : int, float, bool
             Parameter value, by default 0
         """
-        if isinstance(i, bool):
-            i = int(i)
+        i = float(i)
         gmsh.option.set_number("Mesh.CharacteristicLengthExtendFromBoundary", i)
         
         
