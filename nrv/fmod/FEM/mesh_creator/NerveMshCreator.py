@@ -721,7 +721,7 @@ class NerveMshCreator(MshCreator):
         self.add_cylinder(x_active, y_active,z_active,length,D/2)
 
     def add_CUFF(self, ID=None, x_c=0, contact_length=100, is_volume=True ,contact_thickness=None, insulator=True,\
-        insulator_thickness=None, insulator_length=None):
+        insulator_thickness=None, insulator_length=None, insulator_offset=0):
         """
         Add CUFF electrode to the mesh
 
@@ -764,6 +764,7 @@ class NerveMshCreator(MshCreator):
             self.electrodes[ID]["kwargs"]["contact_length"] = contact_length
             self.electrodes[ID]["kwargs"]["contact_thickness"] = contact_thickness
             self.electrodes[ID]["kwargs"]["is_volume"] = is_volume
+            self.electrodes[ID]["kwargs"]["insulator_offset"] = insulator_offset
             self.electrodes[ID]["volume"] = []
             self.electrodes[ID]["face"] = []
             if contact_length/3 < self.electrodes[ID]['res']:
@@ -777,7 +778,7 @@ class NerveMshCreator(MshCreator):
         self.model.occ.cut([(3, cyl_act)],[(3, cyl_ner2)])
 
         if insulator:
-            x_insulator = x_c-insulator_length/2
+            x_insulator = x_c + insulator_offset - insulator_length/2
             y_insulator = self.y_c
             z_insulator = self.z_c
 
@@ -787,8 +788,9 @@ class NerveMshCreator(MshCreator):
 
 
 
-    def add_CUFF_MP(self, ID=None, N=4,  x_c=0, contact_width=None, contact_length=100, is_volume=True,\
-        contact_thickness=None, insulator=True, insulator_thickness=None, insulator_length=None):
+    def add_CUFF_MP(self, ID=None, N=4,  x_c=0, contact_width=None, contact_length=100,\
+        is_volume=True, contact_thickness=None, insulator=True, insulator_thickness=None,\
+        insulator_length=None, insulator_offset=0):
         """
         Add MultiPolar CUFF electrodes to the mesh
 
@@ -836,6 +838,7 @@ class NerveMshCreator(MshCreator):
             self.electrodes[ID]["kwargs"]["contact_thickness"] = contact_thickness
             self.electrodes[ID]["kwargs"]["insulator_thickness"] = insulator_thickness
             self.electrodes[ID]["kwargs"]["insulator_length"] = insulator_length
+            self.electrodes[ID]["kwargs"]["insulator_offset"] = insulator_offset
             self.electrodes[ID]["kwargs"]["is_volume"] = is_volume
             self.electrodes[ID]["volume"] = [None for i in range(N)]
             self.electrodes[ID]["face"] = [None for i in range(N)]
@@ -857,8 +860,8 @@ class NerveMshCreator(MshCreator):
             if insulator_length is None:
                 insulator_length = contact_length * 2
             
-            x_insulator = x_c-insulator_length/2
-
+            x_insulator = x_c + insulator_offset - insulator_length/2
+            
             cyl1 = self.add_cylinder(x_insulator, y_c,z_c,insulator_length, self.Nerve_D/2 + insulator_thickness)
             cyl2 = self.add_cylinder(x_insulator, y_c,z_c,insulator_length, self.Nerve_D/2)
             self.model.occ.cut([(3, cyl1)], [(3, cyl2)])
