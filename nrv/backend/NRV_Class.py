@@ -37,8 +37,5 @@ class NRV_class(metaclass=ABCMeta):
         else: 
             key_dic = data
         for key in self.__dict__:
-            if key in key and key not in blacklist:
+            if key in key_dic and key not in blacklist:
                 self.__dict__[key] = key_dic[key]
-
-
-
