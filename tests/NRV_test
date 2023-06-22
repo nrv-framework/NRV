@@ -7,7 +7,6 @@ import traceback
 import subprocess
 import re
 import shutil
-import mph
 import cmd
 
 
@@ -37,14 +36,14 @@ parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',h
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
-    exclude_test_keys = ['COMSOL', 'FENICS', 'COMxFEN']
+    exclude_test_keys = ['COMSOL', 'FENxCOM']
     included_test_keys = []
     if args.FENICS_TESTS:
         included_test_keys += ['FENICS']
     if args.COMSOL_TESTS:
         included_test_keys += ['COMSOL']
     if args.FENICS_TESTS and args.COMSOL_TESTS:
-        included_test_keys += ['COMxFEN']
+        included_test_keys += ['FENxCOM']
 
     nrv_cmd = 'nrv2calm '
     if sys.platform == 'darwin':
@@ -166,9 +165,9 @@ if __name__ == "__main__":
 
         if not os.path.exists(unit_test_results+'json/'):
             os.makedirs(unit_test_results+'json/')
-        if not os.path.exists(unit_test_results+'mesh/') and (args.ALL_TESTS or args.FENICS_TESTS):
+        if not os.path.exists(unit_test_results+'mesh/'):
             os.makedirs(unit_test_results+'mesh/')
-        if not os.path.exists(unit_test_results+'outputs/') and (args.ALL_TESTS or args.FENICS_TESTS):
+        if not os.path.exists(unit_test_results+'outputs/'):
             os.makedirs(unit_test_results+'outputs/')
             
 
