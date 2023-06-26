@@ -6,19 +6,19 @@ class CostFunction(NRV_class):
 
     Parameters
     ----------
-    generate_waveform   : funct
-        function creating a waveform from a particle position, parameters:
+    generate_context   : funct
+        function creating a context from a particle position, parameters:
             position        : particle position in each dimensions (array)
             t_sim           : simulation time (float)
-            dt              : time step of the waveform (float)
+            dt              : time step of the context (float)
             kwargs          : keys word arguments
         returns
-            waveform        : values of a waveform (array)
-    simulate_waveform   : funct
-        function which perform the NEURONE simulation, parameters:
-            waveform        : waveform to use for the simulation (array)
+            context        : values of a context (array)
+    simulate_context   : funct
+        function which perform the NEURON simulation, parameters:
+            context        : context to use for the simulation (array)
             t_sim           : simulation time (float)
-            dt              : time step of the waveform (float)
+            dt              : time step of the context (float)
             kwargs          : keys word arguments
         returns
             results        : axon simulaiton results (dictionary) 
@@ -29,9 +29,9 @@ class CostFunction(NRV_class):
         returns
             cost              : residual value (float)
     kwargs_gw           : dict
-        key word arguments of generate_waveform function, by default {}
+        key word arguments of generate_context function, by default {}
     kwargs_sw           : dict
-        key word arguments of simulate_waveform function, by default {}
+        key word arguments of simulate_context function, by default {}
     kwargs_r            : dict
         key word arguments of residual function, by default {}
     t_sim           : float
@@ -46,11 +46,11 @@ class CostFunction(NRV_class):
         nothing will be saved,  by default None
 
     """
-    def __init__(self, generate_waveform, simulate_waveform, residual, kwargs_gw={},
+    def __init__(self, generate_context, simulate_context, residual, kwargs_gw={},
         kwargs_sw={}, kwargs_r={}, t_sim=100, dt=0.005, filter=None, saver=None, 
         file_name='cost_saver.csv'):
-        self.generate_waveform = generate_waveform
-        self.simulate_waveform = simulate_waveform
+        self.generate_context = generate_context
+        self.simulate_context = simulate_context
         self.residual = residual
         self.kwargs_gw = kwargs_gw
         self.kwargs_sw = kwargs_sw
@@ -61,26 +61,30 @@ class CostFunction(NRV_class):
         self.saver = saver
         self.file_name = file_name
 
-    def __call__(self, position):
+    def __call__(self, X):
         # Filter
         if self.filter is not None:
-            position = self.filter(position)
+            X_ = self.filter(X)
+        else:
+            X_ = X
 
         # Interpolation
-        waveform = self.generate_waveform(position, t_sim=t_sim, dt=dt, **kwargs_gw)
+        simulation_context = self.generate_context(X_, t_sim=self.t_sim, dt=self.dt, **self.kwargs_gw)
 
         # Simulation
-        results = simulate_waveform(waveform, t_sim=t_sim, dt=dt, **kwargs_sw)
+        results = self.simulate_context(simulation_context, t_sim=self.t_sim, dt=self.dt, **self.kwargs_sw)
 
         # Cost calculation
-        cost = residual(results, **kwargs_r)
+        cost = self.residual(results, **self.kwargs_r)
 
         # Savings
-        if saver is not None:
-            data = {'position':position, 'waveform':waveform, 'results':results, 'cost':cost}
-            saver(data, file_name=file_name)
+        if self.saver is not None:
+            data = {'position':X, 'context':simulation_context, 'results':results, 'cost':cost}
+            self.saver(data, file_name=self.file_name)
         return cost
 
+def NRV_context(func, X, t_sim, dt, kwargs)
+    return func()
 
 
         
