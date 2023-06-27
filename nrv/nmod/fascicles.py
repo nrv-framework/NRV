@@ -24,7 +24,7 @@ from ..fmod.recording import *
 from ..backend.file_handler import *
 from ..backend.MCore import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, load_any
 
 # verbosity level
 verbose = True
@@ -158,6 +158,7 @@ class fascicle(NRV_class):
         if MCH.do_master_only_work():
             # copy everything into a dictionnary
             fascicle_config = {}
+            fascicle_config['nrv_type'] = self.nrv_type
             fascicle_config['ID'] = self.ID
             fascicle_config['type'] = self.type
             fascicle_config['D'] = self.D
@@ -247,7 +248,7 @@ class fascicle(NRV_class):
             if 'unmyelinated_nseg' in results:
                 self.unmyelinated_nseg = results['unmyelinated_nseg']
             
-            self.extra_stim = load_any_extracel_context(results['extra_stim'])
+            self.extra_stim = load_any(results['extra_stim'])
             self.footprints = {}
             for axon, ftp in results['footprints'].items():
                 dic = {}
