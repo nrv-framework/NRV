@@ -14,7 +14,7 @@ __license__         = 'CeCILL'
 
 from .backend import compileMods
 from .backend.parameters import *
-
+from .backend.NRV_Class import load_any
 
 from .fmod.materials import *
 from .fmod.electrodes import *
