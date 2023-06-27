@@ -261,7 +261,7 @@ class axon(NRV_class):
             dictionary containing all information
         """
         ax_dic = {}
-
+        ax_dic['nrv_type'] = self.nrv_type
         ax_dic['x'] = self.x
         ax_dic['y'] = self.y
         ax_dic['z'] = self.z
