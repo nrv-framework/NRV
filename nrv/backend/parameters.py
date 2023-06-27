@@ -45,6 +45,13 @@ class nrv_parameters():
     def set_nrv_verbosity(self, i):
         """
         set general verbosity level
+        Parameters
+        ----------
+        O: None
+        1: + Error
+        2: + Warning
+        3: + Info
+        4: + Debug
         """
         self.VERBOSITY_LEVEL = i
 
