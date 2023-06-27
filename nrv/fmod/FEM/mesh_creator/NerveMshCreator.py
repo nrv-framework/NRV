@@ -191,7 +191,9 @@ class NerveMshCreator(MshCreator):
             FEM simulation outer box diameter, in mm, WARNING, this is the only parameter in mm !
         """
         if Outer_D is not None:
-            self.Outer_D = (Outer_D*mm)
+          if self.default_res["Outerbox"] == self.Outer_D/5:
+              self.default_res["Outerbox"] = Outer_D/5
+          self.Outer_D = (Outer_D*mm)
         
         if tresholded_res is not None:
             self.default_res["Outerbox_tresholded"] = tresholded_res
@@ -221,6 +223,8 @@ class NerveMshCreator(MshCreator):
         if Length is not None:
             self.L = Length
         if Nerve_D is not None:
+            if self.default_res['Nerve'] == self.Nerve_D/5:
+                self.default_res['Nerve'] = Nerve_D/5
             self.Nerve_D = Nerve_D
         if y_c is not None:
             self.y_c = y_c
