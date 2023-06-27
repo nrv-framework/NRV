@@ -105,58 +105,6 @@ class material(NRV_class):
         self.sigma_yy = 0
         self.sigma_zz = 0
 
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='material.json'):
-        """
-        Return material as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'material.json'
-
-        Returns
-        -------
-        mat_dic : dict
-            dictionary containing all information
-        """
-        mat_dic = {}
-        mat_dic['name'] = self.name
-        mat_dic['source'] = self.source
-        mat_dic['isotrop_cond'] = self.isotrop_cond
-        mat_dic['sigma'] = self.sigma
-        mat_dic['sigma_xx'] = self.sigma_xx
-        mat_dic['sigma_yy'] = self.sigma_xx
-        mat_dic['sigma_zz'] = self.sigma_zz
-        if save:
-            json_dump(mat_dic, fname)
-        return mat_dic
-
-    def load(self, data):
-        """
-        Load all material properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing material information
-        """
-        if type(data) == str:
-            mat_dic = json_load(data)
-        else: 
-            mat_dic = data
-        self.name = mat_dic['name']
-        self.source = mat_dic['source']
-        self.isotrop_cond = mat_dic['isotrop_cond']
-        self.sigma = mat_dic['sigma']
-        self.sigma_xx = mat_dic['sigma_xx']
-        self.sigma_xx = mat_dic['sigma_yy']
-        self.sigma_zz = mat_dic['sigma_zz']
-
-
     def save_material(self, save=False, fname='material.json'):
         rise_warning('save_material is a deprecated method use save')
         self.save(save=save, fname=fname)

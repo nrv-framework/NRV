@@ -165,7 +165,7 @@ class point_source_electrode(electrode):
     Point source electrode. Inherite from electrode. The electrode is punctual and act as a\
     monopole.
     """
-    def __init__(self, x, y, z, ID=0):
+    def __init__(self, x=0, y=0, z=0, ID=0):
         """
         Instantiation of a Point source electrode
 
@@ -186,51 +186,6 @@ class point_source_electrode(electrode):
         self.z = z
 
         self.type = "point source"
-
-    ## Save and Load mehtods
-
-    def save(self, save=False, fname='electrode.json'):
-        """
-        Return electrode as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'electrode.json'
-
-        Returns
-        -------
-        elec_dic : dict
-            dictionary containing all information
-        """
-        elec_dic = super().save()
-        elec_dic['x'] = self.x
-        elec_dic['y'] = self.y
-        elec_dic['z'] = self.z
-        if save:
-            json_dump(elec_dic, fname)
-        return elec_dic
-
-
-    def load(self, data):
-        """
-        Load all electrode properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing electrode information
-        """
-        if type(data) == str:
-            elec_dic = json_load(data)
-        else: 
-            elec_dic = data
-        super().load(data)
-        self.x = elec_dic['x']
-        self.y = elec_dic['y']
-        self.z = elec_dic['z']
 
     def compute_footprint(self, x, y, z, mat):
         """

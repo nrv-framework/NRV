@@ -14,7 +14,7 @@ from .FEM.FENICS_model import *
 from ..backend.MCore import *
 from ..backend.file_handler import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, load_any
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -88,42 +88,7 @@ class extracellular_context(NRV_class):
 
     ## Save and Load mehtods
 
-    def save(self, save=False, fname='extracel_context.json'):
-        """
-        Return extracellular context as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'extracel_context.json'
-
-        Returns
-        -------
-        context_dic : dict
-            dictionary containing all information
-        """
-        context_dic = {}
-        context_dic['electrodes'] = {}
-        context_dic['stimuli'] = {}
-        context_dic['synchronised_stimuli'] = {}
-        context_dic['synchronised'] = self.synchronised
-        context_dic['global_time_serie'] = self.global_time_serie
-        context_dic['type'] = self.type
-        for i in range(len(self.electrodes)):
-            elec = self.electrodes[i]
-            context_dic['electrodes'][i] = elec.save()
-        for i in range(len(self.stimuli)):
-            stim = self.stimuli[i]
-            context_dic['stimuli'][i] = stim.save()
-        for i in range(len(self.synchronised_stimuli)):
-            stim = self.synchronised_stimuli[i]
-            context_dic['synchronised_stimuli'][i] = stim.save()
-        if save:
-            json_dump(context_dic, fname)
-        return context_dic
-
+    
     def load(self, data='extracel_context.json'):
         """
         Load all extracellular context properties from a dictionary or a json file
@@ -133,32 +98,12 @@ class extracellular_context(NRV_class):
         data    : str or dict
             json file path or dictionary containing extracel_context information
         """
-        if type(data) == str:
-            context_dic = json_load(data)
-        else: 
-            context_dic = data
-        self.electrodes = []
-        self.stimuli = []
-        self.synchronised_stimuli = []
-        self.synchronised = context_dic['synchronised'] 
-        self.global_time_serie = context_dic['global_time_serie']
-        self.type = context_dic['type']
-        for i in range(len(context_dic['electrodes'])):
-            elec = load_any_electrode(context_dic['electrodes'][str(i)])
-            self.electrodes += [elec]
-            del elec
+        super().load(data=data)
+        self.electrodes = load_any(self.electrodes)
+        self.stimuli = load_any(self.stimuli)
+        self.synchronised_stimuli = load_any(self.synchronised_stimuli)
 
-        for i in range(len(context_dic['stimuli'])):
-            stim = stimulus()
-            stim.load(context_dic['stimuli'][str(i)])
-            self.stimuli += [stim]
-            del stim
 
-        for i in range(len(context_dic['synchronised_stimuli'])):
-            stim = stimulus()
-            stim.load(context_dic['synchronised_stimuli'][str(i)])
-            self.synchronised_stimuli += [stim]
-            del stim
 
     def save_extracel_context(self, save=False, fname='extracel_context.json'):
         rise_warning('save_extracel_context is a deprecated method use save')
@@ -307,29 +252,6 @@ class stimulation(extracellular_context):
         self.type = "stimulation"
 
     ## Save and Load mehtods
-
-    def save(self, save=False, fname='extracel_context.json'):
-        """
-        Return extracellular context as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'extracel_context.json'
-
-        Returns
-        -------
-        context_dic : dict
-            dictionary containing all information
-        """
-        context_dic = super().save()
-        context_dic['material'] = self.material.save()
-        if save:
-            json_dump(context_dic, fname)
-        return context_dic
-
     def load(self, data):
         """
         Load all extracellular context properties from a dictionary or a json file
@@ -339,12 +261,8 @@ class stimulation(extracellular_context):
         data    : str or dict
             json file path or dictionary containing extracel_context information
         """
-        if type(data) == str:
-            context_dic = json_load(data)
-        else: 
-            context_dic = data
         super().load(data)
-        self.material.load(context_dic['material'])
+        self.material = load_any(self.material)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -479,17 +397,9 @@ class FEM_stimulation(extracellular_context):
         context_dic : dict
             dictionary containing all information
         """
-        context_dic = super().save()
-        context_dic['endoneurium'] = self.endoneurium.save()
-        context_dic['perineurium'] = self.perineurium.save()
-        context_dic['epineurium'] = self.epineurium.save()
-        context_dic['external_material'] = self.external_material.save()
-        context_dic['electrodes_label'] = self.electrodes_label
-        context_dic['model_fname'] = self.model_fname
-        context_dic['setup'] = self.setup
-        if save:
-            json_dump(context_dic, fname)
-        return context_dic
+ 
+        return super().save(save=save, fname=fname, blacklist=['model'])
+
 
     def load(self, data, C_model=False):
         """
@@ -500,20 +410,11 @@ class FEM_stimulation(extracellular_context):
         data    : str or dict
             json file path or dictionary containing extracel_context information
         """
-        if type(data) == str:
-            context_dic = json_load(data)
-        else: 
-            context_dic = data
         super().load(data)
-
-        self.electrodes_label = context_dic['electrodes_label']
-        self.model_fname = context_dic['model_fname']
-        self.setup = context_dic['setup']
-
-        self.endoneurium.load(context_dic['endoneurium'])
-        self.perineurium.load(context_dic['perineurium'])
-        self.epineurium.load(context_dic['epineurium'])
-        self.external_material.load(context_dic['external_material'])
+        self.endoneurium = load_any(self.endoneurium)
+        self.perineurium = load_any(self.perineurium)
+        self.epineurium = load_any(self.epineurium)
+        self.external_material = load_any(self.external_material)
 
         if C_model:
             if MCH.do_master_only_work():

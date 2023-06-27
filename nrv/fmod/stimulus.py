@@ -115,47 +115,6 @@ class stimulus(NRV_class):
 
     ## Save and Load mehtods
 
-    def save(self, save=False, fname = 'stimulus.json'):
-        """
-        Return stimulus as dictionary and eventually save it as json file
-
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default 'stimulus.json'
-
-        Returns
-        -------
-        stim_dic : dict
-            dictionary containing all information
-        """
-        stim_dic = {}
-        stim_dic['t'] = self.t
-        stim_dic['s'] = self.s
-        if save:
-            json_dump(stim_dic, fname)
-        return stim_dic
-
-
-    def load(self, data):
-        """
-        Load all stimulus properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing stimulus information
-        """
-        if type(data) == str:
-            stim_dic = json_load(data)
-        else: 
-            stim_dic = data
-
-        self.t = stim_dic['t']
-        self.s = stim_dic['s']
-
     def save_stimulus(self, save=False, fname='stimulus.json'):
         rise_warning('save_stimulus is a deprecated method use save')
         self.save(save=save, fname=fname)
