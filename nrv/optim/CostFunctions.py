@@ -1,4 +1,6 @@
-from abc import ABCMeta, abstractmethod
+from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.file_handler import json_dump
+from ..backend.NRV_Class import NRV_class
 
 class CostFunction(NRV_class):
     """
@@ -46,7 +48,7 @@ class CostFunction(NRV_class):
         nothing will be saved,  by default None
 
     """
-    def __init__(self, generate_context, simulate_context, residual, kwargs_gw={},
+    def __init__(self, generate_context, residual, kwargs_gw={}, simulate_context = None,
         kwargs_sw={}, kwargs_r={}, t_sim=100, dt=0.005, filter=None, saver=None, 
         file_name='cost_saver.csv'):
         self.generate_context = generate_context
@@ -69,10 +71,11 @@ class CostFunction(NRV_class):
             X_ = X
 
         # Interpolation
-        simulation_context = self.generate_context(X_, t_sim=self.t_sim, dt=self.dt, **self.kwargs_gw)
+        simulation_context = self.generate_context(X_, **self.kwargs_gw)
 
         # Simulation
-        results = self.simulate_context(simulation_context, t_sim=self.t_sim, dt=self.dt, **self.kwargs_sw)
+        #results = self.simulate_context(simulation_context, t_sim=self.t_sim, dt=self.dt, **self.kwargs_sw)
+        results = 1
 
         # Cost calculation
         cost = self.residual(results, **self.kwargs_r)
@@ -83,8 +86,3 @@ class CostFunction(NRV_class):
             self.saver(data, file_name=self.file_name)
         return cost
 
-def NRV_context(func, X, t_sim, dt, kwargs)
-    return func()
-
-
-        
