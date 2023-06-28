@@ -1,3 +1,8 @@
+from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.file_handler import json_dump
+from ..backend.NRV_Class import NRV_class
+from .CostFunctions import CostFunction
+
 class Problem(NRV_class):
     '''
     Problem Class
@@ -11,7 +16,6 @@ class Problem(NRV_class):
         - problems where a geometric parameter can be optimized: please refer to ... 
         - problems where the waveform can be optimized: please refer to ...
     '''
-    @abstractmethod
     def __init__(self):
         self._CostFunction = None
         self._Optimizer = None
@@ -33,6 +37,9 @@ class Problem(NRV_class):
     @CostFunction.deleter
     def CostFunction(self):
         self._CostFunction = None
+
+    def compute_cost(self, X):
+        return self._CostFunction(X)
 
     @property
     def Optimizer(self):
@@ -56,6 +63,9 @@ class Problem(NRV_class):
         pass
 
     #additional methods
+    def context_and_cost(self, context_func, cost_func):
+        self.CostFunction = CostFunction(context_func, cost_func)
+
     def autoset_optimizer(self):
         pass
 
