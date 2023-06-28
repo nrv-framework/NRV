@@ -33,7 +33,7 @@ plt.step(stim1.t, stim1.s,where='post',label='1')
 plt.xlabel('time (s)')
 plt.ylabel('stimulation current (uA)')
 plt.grid()
-plt.savefig('./unitary_tests/figures/13_A.png')
+plt.savefig('./unitary_tests/figures/502_A.png')
 
 # extracellular stimulation setup
 extra_stim = nrv.stimulation(epineurium)
@@ -41,7 +41,7 @@ extra_stim.add_electrode(E1, stim1)
 axon1.attach_extracellular_stimulation(extra_stim)
 
 # simulate the axon
-axon1.save(True, "./unitary_tests/figures/13_ax.json", extracel_context=True)
+axon1.save(True, "./unitary_tests/figures/502_ax.json", extracel_context=True)
 results = axon1.simulate(t_sim=5)
 print(type(axon1))
 
@@ -53,10 +53,10 @@ plt.xlabel('time (ms)')
 plt.ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
-plt.savefig('./unitary_tests/figures/13_B.png')
+plt.savefig('./unitary_tests/figures/502_B.png')
 #plt.show()
 
-axon2 = nrv.load_any('./unitary_tests/figures/13_ax.json', extracel_context=True)
+axon2 = nrv.load_any('./unitary_tests/figures/502_ax.json', extracel_context=True)
 results = axon2.simulate(t_sim=5)
 del axon2
 
@@ -66,4 +66,4 @@ plt.xlabel('time (ms)')
 plt.ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
-plt.savefig('./unitary_tests/figures/13_C.png')
+plt.savefig('./unitary_tests/figures/502_C.png')
