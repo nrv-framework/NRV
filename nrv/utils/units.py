@@ -68,3 +68,12 @@ F = 1e6 * uF
 mF = 1e3 * uF
 pF = 1e-3 * uF
 nF = 1e-6 * uF
+
+
+#############################
+####  Usefull functions ####
+#############################
+
+def sci_round(number, digits=3):
+    power = "{:e}".format(number).split('e')[1]
+    return round(number, -(int(power) - digits))
