@@ -109,7 +109,7 @@ class myelinated(axon):
     Myelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
     """
-    def __init__(self, y, z, d, L, model='MRG', dt=0.001, node_shift=0, Nseg_per_sec=0, freq=100,\
+    def __init__(self, y=0, z=0, d=10, L=10000, model='MRG', dt=0.001, node_shift=0, Nseg_per_sec=0, freq=100,\
         freq_min=0, mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, rec='nodes',\
         v_init=None, T=None, ID=0, threshold=-40):
         """
