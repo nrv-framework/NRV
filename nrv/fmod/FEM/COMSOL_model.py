@@ -116,8 +116,8 @@ class COMSOL_model(FEM_model):
 
         Returns
         -------
-        list
-            all parameters as dictionnaries in a list, names a keys, with corresponding values
+        parameters
+            all parameters as dictionnary, names a keys, with corresponding values
         """
         return self.model.parameters()
 
