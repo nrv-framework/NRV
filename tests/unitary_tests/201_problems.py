@@ -10,4 +10,4 @@ def my_cost(results):
 test_prob = nrv.Problem()
 test_prob.context_and_cost(my_nerve_context, my_cost)
 
-print(test_prob.compute_cost(1))
+print(test_prob.compute_cost(1)==1)
