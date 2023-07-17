@@ -13,7 +13,7 @@ class unmyelinated(axon):
     Unmyelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
     """
-    def __init__(self, y, z, d, L, model='Rattay_Aberham', dt=0.001, Nrec=0, Nsec=1, \
+    def __init__(self, y=0, z=0, d=1, L=100, model='Rattay_Aberham', dt=0.001, Nrec=0, Nsec=1, \
         Nseg_per_sec=0, freq=100, freq_min=0, mesh_shape='plateau_sigmoid', alpha_max=0.3,\
          d_lambda=0.1, v_init=None, T=None, ID=0, threshold=-40):
         """
