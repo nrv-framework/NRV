@@ -160,7 +160,7 @@ class axon(NRV_class):
     WARNING: do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
     """
     @abstractmethod
-    def __init__(self, y, z, d, L, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0, \
+    def __init__(self, y=0, z=0, d=1, L=100, dt=0.001, Nseg_per_sec=0, freq=100, freq_min=0, \
         mesh_shape='plateau_sigmoid', alpha_max=0.3, d_lambda=0.1, v_init=None, T=None, ID=0,\
         threshold=-40):
         """
