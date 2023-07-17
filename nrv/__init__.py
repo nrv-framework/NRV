@@ -10,11 +10,8 @@ __copyright__       = 'Florian Kolbl'
 __license__         = 'CeCILL'
 
 # Public interface
-
-
 from .backend import compileMods
 from .backend.parameters import *
-from .backend.NRV_Class import load_any
 
 from .fmod.materials import *
 from .fmod.electrodes import *
@@ -41,12 +38,13 @@ from .nmod.fascicles import *
 from .nmod.fascicle_generator import *
 from .nmod.nerve import *
 
-
 from .utils.saving_handler import *
 from .utils.nrv_function import *
-
 from .utils.cell.CL_postprocessing import *
 from .utils.cell.CL_simulations import *
 from .utils.cell.CL_discretization import *
-
 from .utils.fascicle.FL_postprocessing import * 
+
+from .optim.CostFunctions import *
+from .optim.Optimizers import *
+from .optim.Problems import *
