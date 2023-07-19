@@ -26,7 +26,7 @@ axon1.insert_I_Clamp(0.5, t_start+7, duration, amplitude)
 
 axon1.save(save=True, fname=unm_axon_file, intracel_context=True)
 print("Axon saved")
-axon2 = nrv.load_any_axon(unm_axon_file, intracel_context=True)
+axon2 = nrv.load_any(unm_axon_file, intracel_context=True)
 print("Axon loaded")
 
 
@@ -87,7 +87,7 @@ axon3.insert_I_Clamp_node(1, t_start, duration, amplitude)
 
 axon3.save(save=True,fname=m_axon_file, intracel_context=True)
 print("Axon saved")
-axon4 = nrv.load_any_axon(m_axon_file, intracel_context=True)
+axon4 = nrv.load_any(m_axon_file, intracel_context=True)
 print("Axon loaded")
 results = axon3.simulate(t_sim=100)
 
@@ -109,6 +109,4 @@ plt.yticks([])
 plt.xlabel('time ($ms$)')
 plt.savefig('./unitary_tests/figures/85_E.png')
 
-
 #plt.show()
-
