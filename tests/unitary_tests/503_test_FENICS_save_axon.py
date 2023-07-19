@@ -2,63 +2,52 @@ import nrv
 import matplotlib.pyplot as plt
 
 
-# axon def
-y = 0						# axon y position, in [um]
-z = 0						# axon z position, in [um]
-d = 10						# axon diameter, in [um]
-L=nrv.get_length_from_nodes(d,20)                # get length for 20 nodes of ranvier
-
-dt = 0.001
-f_dlambda = 100
-
-
-endoneurium = nrv.load_material('endoneurium_bhadra')
-
-my_model = 'Nerve_1_Fascicle_1_LIFE'
-extra_stim = nrv.FEM_stimulation()#my_model) #, endo_mat=endoneurium)
+###########################
+## extracellular context ##
+###########################
+nrv.parameters.set_nrv_verbosity(2)
+test_stim = nrv.FEM_stimulation(comsol=False)
 ### Simulation box size
-Outer_D = 5     # in in [mm]
-extra_stim.reshape_outerBox(Outer_D)
+Outer_D = 5
+test_stim.reshape_outerBox(Outer_D)
 #### Nerve and fascicle geometry
-Nerve_D = 2000   # in [um]
-Fascicle_D = 1000# in [um]
-extra_stim.reshape_nerve(Nerve_D, L)
-extra_stim.reshape_fascicle(Fascicle_D)
+L = 10000
+Nerve_D = 250
+Fascicle_D = 220
+test_stim.reshape_nerve(Nerve_D, L)
+test_stim.reshape_fascicle(Fascicle_D)
 ##### electrode and stimulus definition
-
-# electrode def
-z_elec = 0				# electrode x position, in [um]
-y_elec = 500				# electrode y position, in [um]
-model = 'MRG'
-
-axon1 = nrv.myelinated(y,z,d,L,rec='all',dt=dt,freq=f_dlambda,model=model)
-x_elec = axon1.x_nodes[10]	# electrode y position, in [um]
-# first electrode
 D_1 = 25
 length_1 = 1000
-y_c_1 = 0
-z_c_1 = 500
-x_1_offset = x_elec - (length_1/2)
-elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
-
+y_c_1 = 50
+z_c_1 = 50
+x_1_offset = 4500
+elec_1 = nrv.LIFE_electrode('LIFE', D_1, length_1, x_1_offset, y_c_1, z_c_1)
+# stimulus def
 start = 1
-I_cathod = 10
+I_cathod = 40
 I_anod = I_cathod/5
 T_cathod = 60e-3
 T_inter = 40e-3
 stim1 = nrv.stimulus()
 stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
+test_stim.add_electrode(elec_1, stim1)
 
-# extracellular stimulation setup
-extra_stim.add_electrode(elec_1, stim1)
-
-axon1.attach_extracellular_stimulation(extra_stim)
+##########
+## axon ##
+##########
+# axon def
+y = 100						# axon y position, in [um]
+z = 0						# axon z position, in [um]
+d = 6.5						# axon diameter, in [um]
+axon1 = nrv.myelinated(y,z,d,L,rec='all')
+axon1.attach_extracellular_stimulation(test_stim)
 
 axon1.get_electrodes_footprints_on_axon()
-
+#print(axon1.extra_stim.electrodes[0].footprint)
 axon1.save(save=True, fname="./unitary_tests/figures/503_axon.json", extracel_context=True)
 # simulate the axon
-results = axon1.simulate(t_sim=5,loaded_footprints=True)
+results = axon1.simulate(t_sim=5, loaded_footprints=True)
 del axon1
 
 plt.figure()
