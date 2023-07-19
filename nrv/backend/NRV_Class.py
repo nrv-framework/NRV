@@ -56,6 +56,7 @@ class NRV_class(metaclass=ABCMeta):
     def save(self,save=False, fname='nrv_save.json', blacklist={}):
         bl = {}
         for key in blacklist:
+            if key in self.__dict__:
                 bl[key] = self.__dict__.pop(key)
         key_dic = deepcopy(self.__dict__)
         for key in bl:
@@ -78,8 +79,10 @@ class NRV_class(metaclass=ABCMeta):
             key_dic = data
         for key in self.__dict__:
             if key in key_dic and key not in blacklist:
-                self.__dict__[key] = key_dic[key]
-
+                if is_NRV_dict(key_dic[key]) or is_NRV_dict_list(key_dic[key]):
+                    self.__dict__[key] = load_any(key_dic[key])
+                else:
+                    self.__dict__[key] = key_dic[key]
 
 
 def load_any(data, **kwargs):
@@ -87,25 +90,16 @@ def load_any(data, **kwargs):
         key_dic = json_load(data)
     else: 
         key_dic = data
-    if is_NRV_dict(key_dic):
+    
+    if is_NRV_class(key_dic) or is_NRV_class_list(key_dic):
+        nrv_obj = key_dic
+    
+    elif is_NRV_dict(key_dic):
         nrv_type = key_dic['nrv_type']
         nrv_obj = eval("sys.modules['nrv']."+nrv_type)()
         nrv_obj.load(key_dic,**kwargs)
-        for key in nrv_obj.__dict__:
-            if is_NRV_dict(nrv_obj.__dict__[key]):
-                nrv_obj[key] = load_any(nrv_obj.__dict__[key], **kwargs)
-            elif is_NRV_dict_list(nrv_obj.__dict__[key]):
-                for i in range(len(nrv_obj.__dict__[key])):
-                    print(nrv_obj.__dict__[key][i].save(), key)
-
-                    nrv_obj.__dict__[key][i] = load_any(nrv_obj.__dict__[key][i], **kwargs)
     elif is_NRV_dict_list(key_dic):
         nrv_obj = []
         for i in key_dic:
             nrv_obj += [load_any(i, **kwargs)]
-    
-
-
     return nrv_obj
-
-        
