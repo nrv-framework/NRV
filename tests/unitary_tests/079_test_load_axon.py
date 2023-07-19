@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 # axon def
 
-axon1, _ = nrv.load_any_axon('./unitary_tests/sources/79_axon.json', extracel_context=True)
+axon1 = nrv.load_any('./unitary_tests/sources/79_axon.json', extracel_context=True)
 
 # stimulus def
 start = 1
@@ -20,7 +20,7 @@ axon1.change_stimulus_from_elecrode(0, stim1)
 
 
 # simulate the axon
-results = axon1.simulate(t_sim=5,loaded_footprints=True)
+results = axon1.simulate(t_sim=5)
 del axon1
 
 
