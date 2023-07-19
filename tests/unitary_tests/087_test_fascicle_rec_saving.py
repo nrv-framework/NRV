@@ -1,7 +1,7 @@
 import nrv
 import matplotlib.pyplot as plt
 
-fascicle_file = "./unitary_tests/figures/086_fascicle.json"
+fascicle_file = "./unitary_tests/figures/087_fascicle.json"
 
 # Fascicle config
 L = 10000           # length, in um
