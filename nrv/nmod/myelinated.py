@@ -441,7 +441,8 @@ class myelinated(axon):
         self.__get_seg_positions()
         self.__get_rec_positions()
 
-    def save(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
+    def save(self, save=False, fname='axon.json', extracel_context=False,\
+            intracel_context=False, rec_context=False, blacklist=[]):
         """
         Return axon as dictionary and eventually save it as json file
 
@@ -457,56 +458,10 @@ class myelinated(axon):
         ax_dic : dict
             dictionary containing all information
         """
-        ax_dic = super().save(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
-
-        ax_dic['myelinated'] = self.myelinated
-        ax_dic['thin'] = self.thin
-        ax_dic['rec'] = self.rec
-        ax_dic['node_shift'] = self.node_shift
-        ax_dic['model'] = self.model
-
-        if save:
-            json_dump(ax_dic, fname)
-        return ax_dic
-
-    def load(self, data, extracel_context=False, intracel_context=False, rec_context=False):
-        """
-        Load all axon properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing axon information
-        """
-        if type(data) == str:
-            ax_dic = json_load(data)
-        else: 
-            ax_dic = data
-        super().load(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
-
-        self.myelinated = ax_dic['myelinated']
-        self.thin = ax_dic['thin']
-        self.rec = ax_dic['rec']
-        self.node_shift = ax_dic['node_shift']
-
-        if ax_dic['model'] in myelinated_models:
-            self.model = ax_dic['model']
-        else:
-            self.model = 'MRG'
-        self.__compute_axon_parameters()
-        if intracel_context:
-            for i in range(len(ax_dic['intra_current_stim_positions'])):
-                position = ax_dic['intra_current_stim_positions'][i]
-                stim_start = ax_dic['intra_current_stim_starts'][i]
-                duration = ax_dic['intra_current_stim_durations'][i]
-                amplitude = ax_dic['intra_current_stim_amplitudes'][i]
-                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
-            if ax_dic['intra_voltage_stim_stimulus'] is not None:
-                position = ax_dic['intra_voltage_stim_position'][0]
-                stim = stimulus()
-                stim.load(ax_dic['intra_voltage_stim_stimulus'])
-                self.insert_V_Clamp(position/self.L, stim)
-
+        blacklist += ["node", "MYSA", "FLUT", "STIN"]
+        return super().save(save=save, fname=fname, extracel_context=extracel_context,\
+                            intracel_context=intracel_context, rec_context=rec_context,\
+                            blacklist=blacklist)
 
 
     def __set_model(self, model):
