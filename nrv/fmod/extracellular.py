@@ -99,11 +99,6 @@ class extracellular_context(NRV_class):
             json file path or dictionary containing extracel_context information
         """
         super().load(data=data)
-        self.electrodes = load_any(self.electrodes)
-        self.stimuli = load_any(self.stimuli)
-        self.synchronised_stimuli = load_any(self.synchronised_stimuli)
-
-
 
     def save_extracel_context(self, save=False, fname='extracel_context.json'):
         rise_warning('save_extracel_context is a deprecated method use save')
@@ -221,11 +216,21 @@ class extracellular_context(NRV_class):
         """
         i=0
         if len(footprints) == len(self.electrodes):
-            for electrode in self.electrodes:
-                electrode.set_footprint(footprints[i])
-                i+=1
+            for i,electrode in enumerate(self.electrodes):
+                if i in footprints:
+                    electrode.set_footprint(footprints[i])
+                else:
+                    electrode.set_footprint(footprints[str(i)])
         else:
             rise_error("Footprint number different than electrode number")
+    
+    def clear_electrodes_footprints(self):
+        """
+        clear the footprints for all electrodes from existing array
+        """
+        for electrode in self.electrodes:
+            electrode.set_footprint(np.asarray([]))
+
 
 class stimulation(extracellular_context):
     """
@@ -381,7 +386,7 @@ class FEM_stimulation(extracellular_context):
 
     ## Save and Load mehtods
 
-    def save(self, save=False, fname='extracel_context.json'):
+    def save(self, save=False, fname='extracel_context.json', blacklist=[]):
         """
         Return extracellular context as dictionary and eventually save it as json file
 
@@ -397,8 +402,8 @@ class FEM_stimulation(extracellular_context):
         context_dic : dict
             dictionary containing all information
         """
- 
-        return super().save(save=save, fname=fname, blacklist=['model'])
+        blacklist += ['model']
+        return super().save(save=save, fname=fname, blacklist=blacklist)
 
 
     def load(self, data, C_model=False):
@@ -411,10 +416,6 @@ class FEM_stimulation(extracellular_context):
             json file path or dictionary containing extracel_context information
         """
         super().load(data)
-        self.endoneurium = load_any(self.endoneurium)
-        self.perineurium = load_any(self.perineurium)
-        self.epineurium = load_any(self.epineurium)
-        self.external_material = load_any(self.external_material)
 
         if C_model:
             if MCH.do_master_only_work():
