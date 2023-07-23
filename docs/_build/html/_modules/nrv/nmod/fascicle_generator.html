@@ -1,0 +1,1091 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
+
+    <!-- Generated with Sphinx 6.2.1 and Furo 2023.05.20 -->
+        <title>nrv.nmod.fascicle_generator - NeuRon Virtualizer (NRV) 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=e6660623a769aa55fea372102b9bf3151b292993" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f0f0;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #232629;
+  --color-code-foreground: #cccccc;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #232629;
+  --color-code-foreground: #cccccc;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">NeuRon Virtualizer (NRV) 1.0.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">NeuRon Virtualizer (NRV) 1.0.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">nrv</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of nrv</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../nrv.html">nrv package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of nrv package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../nrv.backend.html">nrv.backend package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../nrv.fmod.html">nrv.fmod package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../nrv.nmod.html">nrv.nmod package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../nrv.optim.html">nrv.optim package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../nrv.utils.html">nrv.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for nrv.nmod.fascicle_generator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">NRV-fascicule generator</span>
+<span class="sd">Authors: Florian Kolbl / Roland Giraud / Louis Regnacq</span>
+<span class="sd">(c) ETIS - University Cergy-Pontoise - CNRS</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">faulthandler</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">rv_continuous</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">spatial</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+
+<span class="kn">from</span> <span class="nn">..backend.log_interface</span> <span class="kn">import</span> <span class="n">rise_error</span><span class="p">,</span> <span class="n">rise_warning</span><span class="p">,</span> <span class="n">pass_info</span><span class="p">,</span> <span class="n">progression_popup</span>
+
+<span class="c1"># WARNING:</span>
+<span class="c1"># no prompt message for numpy division by zeros: handled in the code !!!</span>
+<span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
+<span class="c1"># verbosity level</span>
+<span class="n">fg_verbose</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># enable faulthandler to ease &#39;segmentation faults&#39; debug</span>
+<span class="n">faulthandler</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="c1"># get the built-in material librairy</span>
+<span class="n">dir_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NRVPATH&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;/_misc&#39;</span>
+<span class="n">stat_library</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">dir_path</span><span class="o">+</span><span class="s1">&#39;/stats/&#39;</span><span class="p">)</span>
+
+<span class="c1">#################################################</span>
+<span class="c1">## Nerve composition statistics and generators ##</span>
+<span class="c1">#################################################</span>
+<span class="n">myelinated_stats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Schellens_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Schellens_2&#39;</span><span class="p">,</span> <span class="s1">&#39;Ochoa_M&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_9_A&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_9_B&#39;</span><span class="p">,</span>\
+    <span class="s1">&#39;Jacobs_9_C&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_9_D&#39;</span><span class="p">]</span>
+<span class="n">unmyelinated_stats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Ochoa_U&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_11_A&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_11_B&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_11_C&#39;</span><span class="p">,</span> <span class="s1">&#39;Jacobs_11_D&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="load_stat"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.load_stat">[docs]</a><span class="k">def</span> <span class="nf">load_stat</span><span class="p">(</span><span class="n">stat_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a statistic stored in the included librairy or specified by the user in a csv file (first corlumn: axon diameter bin start - second corlumn: proportion)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stat_name : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    diameters   : list</span>
+<span class="sd">        diameters as start of bins of the histogram</span>
+<span class="sd">    presence    : list</span>
+<span class="sd">        quantities of presence of each bin in the histogram</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f_in_librairy</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">stat_name</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span>
+    <span class="k">if</span> <span class="n">f_in_librairy</span> <span class="ow">in</span> <span class="n">stat_library</span><span class="p">:</span>
+        <span class="n">stat_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">dir_path</span><span class="o">+</span><span class="s1">&#39;/stats/&#39;</span><span class="o">+</span><span class="n">f_in_librairy</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">stat_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">dir_path</span><span class="o">+</span><span class="s1">&#39;/stats/&#39;</span><span class="o">+</span><span class="n">f_in_librairy</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+    <span class="n">diameters</span> <span class="o">=</span> <span class="n">stat_file</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">presence</span> <span class="o">=</span> <span class="n">stat_file</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">diameters</span><span class="p">,</span> <span class="n">presence</span></div>
+
+<div class="viewcode-block" id="one_Gamma"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.one_Gamma">[docs]</a><span class="k">def</span> <span class="nf">one_Gamma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">c1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gamma function, mono-modal, to interpolate unmyelinated statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x       : float</span>
+<span class="sd">        variable of the Gamma function, will correspond to diameter</span>
+<span class="sd">    a1      : float</span>
+<span class="sd">        shape parameter</span>
+<span class="sd">    beta1   : float</span>
+<span class="sd">        scale parameter</span>
+<span class="sd">    c1      : float</span>
+<span class="sd">        gain applied to the gamma function</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    location of the gamma pdf function is fixed to 0.2, diameters will be interpolated above this minimal value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">c1</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">beta1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="two_Gamma"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.two_Gamma">[docs]</a><span class="k">def</span> <span class="nf">two_Gamma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">transition</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gamma function, bi-modal, to interpolate myelinated statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x           : float</span>
+<span class="sd">        variable of the Gamma function, will correspond to diameter</span>
+<span class="sd">    a1          : float</span>
+<span class="sd">        shape parameter on the first (lowest) lobe</span>
+<span class="sd">    beta1       : float</span>
+<span class="sd">        scale parameter on the first (lowest) lobe</span>
+<span class="sd">    c1          : float</span>
+<span class="sd">        gain applied to the gamma function on the first (lowest) lobe</span>
+<span class="sd">    a2          : float</span>
+<span class="sd">        shape parameter on the second (highest) lobe</span>
+<span class="sd">    beta2       : float</span>
+<span class="sd">        scale parameter on the second (highest) lobe</span>
+<span class="sd">    c2          : float</span>
+<span class="sd">        gain applied to the gamma function on the second (highest) lobe</span>
+<span class="sd">    transition  :float</span>
+<span class="sd">        diameter value at the transition between the two lobes</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    location of the gamma pdf first function is fixed to 2, diameters will be interpolated above this minimal value. This corresponds to the minimal A-delta diamter tolerated value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">c1</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">beta1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">c2</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> \
+        <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="n">beta2</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">transition</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="nerve_gen_one_gamma"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_one_gamma">[docs]</a><span class="k">class</span> <span class="nc">nerve_gen_one_gamma</span><span class="p">(</span><span class="n">rv_continuous</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to create specific repartition law generator for unmyelinated axons. Inherits from scipy rv_continuous class. Some methods are overwritten</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="nerve_gen_one_gamma.set_bounds"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_one_gamma.set_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">set_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_min</span><span class="p">,</span> <span class="n">v_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set bounds to the generator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v_min   : float</span>
+<span class="sd">            minimum value</span>
+<span class="sd">        v_max   : float</span>
+<span class="sd">            maximum value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">v_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">v_max</span></div>
+
+<div class="viewcode-block" id="nerve_gen_one_gamma.configure"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_one_gamma.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">c1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the value from interpolated data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        a1      : float</span>
+<span class="sd">            shape parameter</span>
+<span class="sd">        beta1   : float</span>
+<span class="sd">            scale parameter</span>
+<span class="sd">        c1      : float</span>
+<span class="sd">            gain applied to the gamma function</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a1</span> <span class="o">=</span> <span class="n">a1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span></div>
+
+    <span class="k">def</span> <span class="nf">_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        overwritting the pdf to custom law, same definition as one_Gamma described upper.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="nerve_gen_two_gamma"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_two_gamma">[docs]</a><span class="k">class</span> <span class="nc">nerve_gen_two_gamma</span><span class="p">(</span><span class="n">rv_continuous</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class to create specific repartition law generator for myelinated axons. Inherits from scipy rv_continuous class. Some methods are overwritten</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="nerve_gen_two_gamma.set_bounds"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_two_gamma.set_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">set_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v_min</span><span class="p">,</span> <span class="n">v_max</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set bounds to the generator.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        v_min   : float</span>
+<span class="sd">            minimum value</span>
+<span class="sd">        v_max   : float</span>
+<span class="sd">            maximum value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">v_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">v_max</span></div>
+
+<div class="viewcode-block" id="nerve_gen_two_gamma.configure"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.nerve_gen_two_gamma.configure">[docs]</a>    <span class="k">def</span> <span class="nf">configure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">beta2</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">transition</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the value from interpolated data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        a1          : float</span>
+<span class="sd">            shape parameter on the first (lowest) lobe</span>
+<span class="sd">        beta1       : float</span>
+<span class="sd">            scale parameter on the first (lowest) lobe</span>
+<span class="sd">        c1          : float</span>
+<span class="sd">            gain applied to the gamma function on the first (lowest) lobe</span>
+<span class="sd">        a2          : float</span>
+<span class="sd">            shape parameter on the second (highest) lobe</span>
+<span class="sd">        beta2       : float</span>
+<span class="sd">            scale parameter on the second (highest) lobe</span>
+<span class="sd">        c2          : float</span>
+<span class="sd">            gain applied to the gamma function on the second (highest) lobe</span>
+<span class="sd">        transition  :float</span>
+<span class="sd">            diameter value at the transition between the two lobes</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a1</span> <span class="o">=</span> <span class="n">a1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a2</span> <span class="o">=</span> <span class="n">a2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta1</span> <span class="o">=</span> <span class="n">beta1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta2</span> <span class="o">=</span> <span class="n">beta2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">c1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">=</span> <span class="n">c2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transition</span> <span class="o">=</span> <span class="n">transition</span></div>
+
+    <span class="k">def</span> <span class="nf">_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        overwritting the pdf to custom law, same definition as two_Gamma described upper.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">beta1</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span>\
+            <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">*</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a2</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">beta2</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">transition</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="create_generator_from_stat"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.create_generator_from_stat">[docs]</a><span class="k">def</span> <span class="nf">create_generator_from_stat</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">myelinated</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a statistical generator (type rv_continuous) for a given statistic.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stat        : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv</span>
+<span class="sd">    myelinated  : bool</span>
+<span class="sd">        True if the statistic is describing myelinated diameters, esle False. If the statisticis in the librairy, this will be automatically chosen.</span>
+<span class="sd">    dmin        : float</span>
+<span class="sd">        minimal diameter to consider, in um. If None, the minimal value of the statistic is taken</span>
+<span class="sd">    dmax        : float</span>
+<span class="sd">        minimal diameter to consider, in um. If None, the maximal value of the statistic plus bin size is taken</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    generator   : rv_continuous</span>
+<span class="sd">        Generator object corresponding to the statistic.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if myelinated or not for standard stats</span>
+    <span class="k">if</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">myelinated_stats</span><span class="p">:</span>
+        <span class="n">myelinated</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">unmyelinated_stats</span><span class="p">:</span>
+        <span class="n">myelinated</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># load the stat</span>
+    <span class="n">diameters</span><span class="p">,</span> <span class="n">presence</span> <span class="o">=</span> <span class="n">load_stat</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+    <span class="c1"># chose min max values for the axon diameters</span>
+    <span class="k">if</span> <span class="n">dmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">diameters</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bin_size</span> <span class="o">=</span> <span class="n">diameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">diameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">diameters</span><span class="p">)</span> <span class="o">+</span> <span class="n">bin_size</span>
+    <span class="c1"># perform stat fitting and create generator</span>
+    <span class="k">if</span> <span class="n">myelinated</span><span class="p">:</span>
+        <span class="n">popt1</span><span class="p">,</span> <span class="n">pcov1</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">two_Gamma</span><span class="p">,</span> <span class="n">xdata</span><span class="o">=</span><span class="n">diameters</span><span class="p">,</span> <span class="n">ydata</span><span class="o">=</span><span class="n">presence</span><span class="p">,</span> \
+            <span class="n">bounds</span><span class="o">=</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">14</span><span class="p">]))</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">nerve_gen_two_gamma</span><span class="p">()</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">set_bounds</span><span class="p">(</span><span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span><span class="p">)</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="o">*</span><span class="n">popt1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">popt1</span><span class="p">,</span> <span class="n">pcov1</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">one_Gamma</span><span class="p">,</span> <span class="n">xdata</span><span class="o">=</span><span class="n">diameters</span><span class="p">,</span> <span class="n">ydata</span><span class="o">=</span><span class="n">presence</span><span class="p">,</span> \
+            <span class="n">bounds</span><span class="o">=</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">]))</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">nerve_gen_one_gamma</span><span class="p">()</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">set_bounds</span><span class="p">(</span><span class="n">dmin</span><span class="p">,</span> <span class="n">dmax</span><span class="p">)</span>
+        <span class="n">generator</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="o">*</span><span class="n">popt1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">generator</span><span class="p">,</span> <span class="n">popt1</span><span class="p">,</span> <span class="n">pcov1</span></div>
+
+
+<div class="viewcode-block" id="create_axon_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.create_axon_population">[docs]</a><span class="k">def</span> <span class="nf">create_axon_population</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">percent_unmyel</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">M_stat</span><span class="o">=</span><span class="s1">&#39;Schellens_1&#39;</span><span class="p">,</span> <span class="n">U_stat</span><span class="o">=</span><span class="s1">&#39;Ochoa_U&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a virtual population of axons (no Neuron implementation, axon class not called) of a controled number, with controlled statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    N               : int</span>
+<span class="sd">        Number of axon to generate for the population (Unmyelinated and myelinated)</span>
+<span class="sd">    percent_unmyel  : float</span>
+<span class="sd">        ratio of unmyelinated axons in the population. Should be between 0 and 1.</span>
+<span class="sd">    M_stat          : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv for myelinated diameters repartition</span>
+<span class="sd">    U_stat          : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv for unmyelinated diameters repartition</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axons_diameters     : np.array</span>
+<span class="sd">        Array of length N, containing all the diameters of the generated axon population</span>
+<span class="sd">    axons_type          : np.array</span>
+<span class="sd">        Array of length N, containing a &#39;1&#39; value for indexes where the axon is myelinated (A-delta or not), else &#39;0&#39;</span>
+<span class="sd">    M_diam_list         : np.array</span>
+<span class="sd">        list of myelinated only diameters</span>
+<span class="sd">    U_diam_list         : np.array</span>
+<span class="sd">        list of unmyelinated only diamters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create generators</span>
+    <span class="n">M_gen</span><span class="p">,</span> <span class="n">M_popt</span><span class="p">,</span> <span class="n">M_pcov</span> <span class="o">=</span> <span class="n">create_generator_from_stat</span><span class="p">(</span><span class="n">M_stat</span><span class="p">)</span>
+    <span class="n">U_gen</span><span class="p">,</span> <span class="n">U_popt</span><span class="p">,</span> <span class="n">U_pcov</span> <span class="o">=</span> <span class="n">create_generator_from_stat</span><span class="p">(</span><span class="n">U_stat</span><span class="p">)</span>
+    <span class="c1"># number of myelinated and unmyelinated axons to create</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">percent_unmyel</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="n">U</span>
+    <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;On &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; axons to generate, there are &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; Myelinated and &#39;</span><span class="o">+</span>\
+        <span class="nb">str</span><span class="p">(</span><span class="n">U</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; Unmyelinated&#39;</span><span class="p">)</span>
+    <span class="c1"># generate the myelinated axons</span>
+    <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;... generating the myelinated axons diameters, this may take a while&#39;</span><span class="p">)</span>
+    <span class="c1">#M_diam_list = M_gen.rvs(1,size = M)</span>
+    <span class="n">M_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">max_diam_value</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="mf">0.01</span><span class="o">*</span><span class="p">(</span><span class="n">M_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="n">progression_popup</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">begin_message</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> axon &#39;</span><span class="p">,</span> <span class="n">endl</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">prov_diam</span> <span class="o">&gt;</span> <span class="n">max_diam_value</span><span class="p">:</span>
+            <span class="c1"># definitely non ideal, but rv_continuous has a tendency of generating diameters</span>
+            <span class="c1"># at the max value, this while prevent from such accumulation</span>
+            <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">M_diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prov_diam</span><span class="p">)</span>
+    <span class="n">M_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="c1"># generate the unmyelinated axons</span>
+    <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;... generating the unmyelinated axons diameters, this may take a while&#39;</span><span class="p">)</span>
+    <span class="n">U_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">max_diam_value</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="mf">0.01</span><span class="o">*</span><span class="p">(</span><span class="n">U_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">U</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> axon &#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">U</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">prov_diam</span> <span class="o">&gt;</span> <span class="n">max_diam_value</span><span class="p">:</span>               <span class="c1"># same as for myelinated...</span>
+            <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">U_diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prov_diam</span><span class="p">)</span>
+    <span class="n">U_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+    <span class="c1"># final shuffle between unmyelinated and myelinated</span>
+    <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;... performing a shuffle on myelinated and unmyelinated axons&#39;</span><span class="p">)</span>
+    <span class="n">shuffle_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span><span class="p">))</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">M_type</span><span class="p">,</span> <span class="n">U_type</span><span class="p">))</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">axons_type</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span></div>
+
+<div class="viewcode-block" id="fill_area_with_axons"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.fill_area_with_axons">[docs]</a><span class="k">def</span> <span class="nf">fill_area_with_axons</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">percent_unmyel</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">FVF</span><span class="o">=</span><span class="mf">0.55</span><span class="p">,</span> <span class="n">M_stat</span><span class="o">=</span><span class="s1">&#39;Schellens_1&#39;</span><span class="p">,</span> <span class="n">U_stat</span><span class="o">=</span><span class="s1">&#39;Ochoa_U&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a virtual population of axons (no Neuron implementation, axon class not called) to fill a specified area, with controlled statistics.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    A               : float</span>
+<span class="sd">        surface area to fill, in um**2</span>
+<span class="sd">    percent_unmyel  : float</span>
+<span class="sd">        ratio of unmyelinated axons in the population. Should be between 0 and 1.</span>
+<span class="sd">    FVF             :</span>
+<span class="sd">        Fiber Volume Fraction estimated for the area. By default set to 0.55</span>
+<span class="sd">    M_stat          : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv for myelinated diameters repartition</span>
+<span class="sd">    U_stat          : str</span>
+<span class="sd">        name of the statistic in the librairy or path to a new librairy in csv for unmyelinated diameters repartition</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axons_diameters     : np.array</span>
+<span class="sd">        Array  containing all the diameters of the generated axon population</span>
+<span class="sd">    axons_type          : np.array</span>
+<span class="sd">        Array containing a &#39;1&#39; value for indexes where the axon is myelinated (A-delta or not), else &#39;0&#39;</span>
+<span class="sd">    M_diam_list         : np.array</span>
+<span class="sd">        list of myelinated only diameters</span>
+<span class="sd">    U_diam_list         : np.array</span>
+<span class="sd">        list of unmyelinated only diamters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># create generators</span>
+    <span class="n">M_gen</span><span class="p">,</span> <span class="n">M_popt</span><span class="p">,</span> <span class="n">M_pcov</span> <span class="o">=</span> <span class="n">create_generator_from_stat</span><span class="p">(</span><span class="n">M_stat</span><span class="p">)</span>
+    <span class="n">M_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">M_max_diam_value</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="mf">0.01</span><span class="o">*</span><span class="p">(</span><span class="n">M_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">U_gen</span><span class="p">,</span> <span class="n">U_popt</span><span class="p">,</span> <span class="n">U_pcov</span> <span class="o">=</span> <span class="n">create_generator_from_stat</span><span class="p">(</span><span class="n">U_stat</span><span class="p">)</span>
+    <span class="n">U_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">U_max_diam_value</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="mf">0.01</span><span class="o">*</span><span class="p">(</span><span class="n">U_gen</span><span class="o">.</span><span class="n">b</span> <span class="o">-</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+    <span class="c1"># area</span>
+    <span class="n">A_ax</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">A_total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># axon lists</span>
+    <span class="n">M_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">U_diam_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># loop</span>
+    <span class="k">while</span> <span class="n">A_total</span> <span class="o">&lt;</span> <span class="n">A</span><span class="p">:</span>
+        <span class="n">filled</span> <span class="o">=</span> <span class="n">A_total</span> <span class="o">/</span> <span class="n">A</span>
+        <span class="n">progression_popup</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">filled</span><span class="o">*</span><span class="mi">100</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="n">begin_message</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> Area filled at &#39;</span><span class="p">,</span> <span class="n">endl</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1">#print(&#39;\t Area filled at &#39; + f&quot;{round(filled*100)}&quot; + &#39; percent&#39;, end=&quot;\r&quot;)</span>
+        <span class="n">U_or_M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">U_or_M</span> <span class="o">&lt;</span> <span class="n">percent_unmyel</span><span class="p">:</span>
+            <span class="c1"># generate a unmyelinated axon</span>
+            <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">while</span> <span class="n">prov_diam</span> <span class="o">&gt;</span> <span class="n">U_max_diam_value</span><span class="p">:</span>
+                <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">U_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">U_diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prov_diam</span><span class="p">)</span>
+            <span class="n">A_ax</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">U_diam_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">while</span> <span class="n">prov_diam</span> <span class="o">&gt;</span> <span class="n">M_max_diam_value</span><span class="p">:</span>
+                <span class="n">prov_diam</span> <span class="o">=</span> <span class="n">M_gen</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">M_diam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prov_diam</span><span class="p">)</span>
+            <span class="n">A_ax</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">M_diam_list</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+        <span class="n">A_total</span> <span class="o">=</span> <span class="n">A_ax</span> <span class="o">/</span> <span class="n">FVF</span>
+    <span class="c1"># concatenate and shuffle</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">M_diam_list</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">U_diam_list</span><span class="p">)</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">M</span> <span class="o">+</span> <span class="n">U</span>
+    <span class="n">M_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+    <span class="n">U_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">U</span><span class="p">)</span>
+    <span class="n">shuffle_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span><span class="p">))</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">M_type</span><span class="p">,</span> <span class="n">U_type</span><span class="p">))</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">axons_type</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span></div>
+
+<div class="viewcode-block" id="shuffle_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.shuffle_population">[docs]</a><span class="k">def</span> <span class="nf">shuffle_population</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Shuffle an axonal population</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axons_diameters : np.array</span>
+<span class="sd">        array containing the axons diameters</span>
+<span class="sd">    axons_type      : np.array</span>
+<span class="sd">        array containing the axons type (&#39;1&#39; for myelinated, &#39;0&#39; for unmyelinated)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axons_diameters : np.array</span>
+<span class="sd">        shuffled axons diamters</span>
+<span class="sd">    axons_type      : np.array</span>
+<span class="sd">        corrresponding axons type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shuffle_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">))</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">axons_type</span><span class="p">[</span><span class="n">shuffle_mask</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span></div>
+
+<div class="viewcode-block" id="save_axon_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.save_axon_population">[docs]</a><span class="k">def</span> <span class="nf">save_axon_population</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save an axonal population to a file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f_name          : str</span>
+<span class="sd">        name of the file to store the population</span>
+<span class="sd">    axons_diameters : np.array</span>
+<span class="sd">        array containing the axons diameters</span>
+<span class="sd">    axons_type      : np.array</span>
+<span class="sd">        array containing the axons type (&#39;1&#39; for myelinated, &#39;0&#39; for unmyelinated)</span>
+<span class="sd">    comment         : str</span>
+<span class="sd">        comment added in the header of the file, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;# &#39;</span> <span class="o">+</span> <span class="n">comment</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">)):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">axons_type</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="load_axon_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.load_axon_population">[docs]</a><span class="k">def</span> <span class="nf">load_axon_population</span><span class="p">(</span><span class="n">f_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a population from a file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f_name          : str</span>
+<span class="sd">        name of the file where the population is stored</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axons_diameters     : np.array</span>
+<span class="sd">        Array containing all the diameters of the generated axon population</span>
+<span class="sd">    axons_type          : np.array</span>
+<span class="sd">        Array containing a &#39;1&#39; value for indexes where the axon is myelinated (A-delta or not), else &#39;0&#39;</span>
+<span class="sd">    M_diam_list         : np.array</span>
+<span class="sd">        list of myelinated only diameters</span>
+<span class="sd">    U_diam_list         : np.array</span>
+<span class="sd">        list of unmyelinated only diamters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">population_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">ind_myel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">axons_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ind_unmyel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">axons_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">M_diam_list</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">ind_myel</span><span class="p">]</span>
+    <span class="n">U_diam_list</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">ind_unmyel</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span></div>
+
+<span class="c1">#############################################</span>
+<span class="c1">#############################################</span>
+<span class="c1">#############################################</span>
+<div class="viewcode-block" id="axon_packer"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.axon_packer">[docs]</a><span class="k">def</span> <span class="nf">axon_packer</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">Delta</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_gc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z_gc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">20000</span><span class="p">,</span> <span class="n">probe</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>\
+    <span class="n">monitoring_Folder</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">monitoring_Niter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">v_att</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">v_rep</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Axon Packing algorithm: this operation takes a vector of diameter (random population) and places it at best. The used algorithm is largely based on [1]</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diameters           : np.array</span>
+<span class="sd">        Array containing all the diameters of the axon population to pack</span>
+<span class="sd">    Delta               : float</span>
+<span class="sd">        minimal inter-axon distance to respect before considering collision, in um</span>
+<span class="sd">    y_gc                : float</span>
+<span class="sd">        y coordinate of the gravity center for the packing, in um</span>
+<span class="sd">    z_gc                : float</span>
+<span class="sd">        z coordinate of the gravity center for the packing, in um</span>
+<span class="sd">    max_iter            : int</span>
+<span class="sd">        Max. number of iterations</span>
+<span class="sd">    probe               : int</span>
+<span class="sd">        Number of iterations between two Fiber Volume Fraction probing</span>
+<span class="sd">    monitor             : bool</span>
+<span class="sd">        if True, the packing process will be monitored and some steps are plotted and saved</span>
+<span class="sd">    monitoring_Folder   : str</span>
+<span class="sd">        in case of monitoring, folder where the images of the packing process are stored</span>
+<span class="sd">    monitoring_Niter    : str</span>
+<span class="sd">        in case of monitoring, number of iterations between two monitoring images</span>
+<span class="sd">    v_att               : float</span>
+<span class="sd">        vector norm for attraction velocity, in um per iteration</span>
+<span class="sd">    v_rep               : float</span>
+<span class="sd">        vector norm for repulsion velocity, in um per iteration</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    y_axons         : np.array</span>
+<span class="sd">        Array containing the y coordinates of axons, in um</span>
+<span class="sd">    z_axons         : np.array</span>
+<span class="sd">        Array containing the z coordinates of axons, in um</span>
+<span class="sd">    iteration       : int</span>
+<span class="sd">        number of iterations performed</span>
+<span class="sd">    FVF             : np.array</span>
+<span class="sd">        probed values for the Fiber Volume Fraction</span>
+<span class="sd">    probed_iter     : np.array</span>
+<span class="sd">        index of the FVF probed iterations</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    - scientific reference</span>
+<span class="sd">        [1] Mingasson, T., Duval, T., Stikov, N., and Cohen-Adad, J. (2017). AxonPacking: an open-source software to simulate arrangements of axons in white matter. Frontiers in neuroinformatics, 11, 5.</span>
+<span class="sd">    - dev Note</span>
+<span class="sd">        the algorithm perform a fixed number of iteration, the code could evoluate to tke into account the FVF convergence, however this value depends on the range on number of axons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diameters</span><span class="p">)</span>
+    <span class="n">max_diam</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">diameters</span><span class="p">)</span>
+    <span class="c1">##########</span>
+    <span class="c1">## INIT ##</span>
+    <span class="c1">##########</span>
+    <span class="c1">### create an initial square grid with the population of axons</span>
+    <span class="n">N_init</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">N_side</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N_init</span><span class="p">))</span>
+    <span class="n">size_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N_init</span><span class="o">*</span><span class="p">(</span><span class="n">max_diam</span><span class="o">+</span><span class="n">Delta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">placement_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">size_init</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">size_init</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N_side</span><span class="p">))),</span> <span class="p">((</span><span class="n">size_init</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>\
+        <span class="p">(</span><span class="n">size_init</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">N_side</span><span class="p">))),</span> <span class="n">num</span><span class="o">=</span><span class="n">N_side</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">y_axons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">placement_vector</span><span class="p">,</span> <span class="n">N_side</span><span class="p">)</span> <span class="o">+</span> <span class="n">y_gc</span>
+    <span class="n">z_axons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">placement_vector</span><span class="p">,</span> <span class="n">N_side</span><span class="p">)</span> <span class="o">+</span> <span class="n">z_gc</span>
+    <span class="c1">### remove unwanted places</span>
+    <span class="n">N_remove</span> <span class="o">=</span> <span class="n">N_init</span> <span class="o">-</span> <span class="n">N</span>
+    <span class="n">ind_to_delete</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_axons</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="n">N_remove</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">y_axons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">ind_to_delete</span><span class="p">)</span>
+    <span class="n">z_axons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">z_axons</span><span class="p">,</span> <span class="n">ind_to_delete</span><span class="p">)</span>
+    <span class="c1">### compute total total fiber surface and evaluate surface for FVF computation</span>
+    <span class="n">ax_areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">diameters</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+    <span class="n">A_axons</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ax_areas</span><span class="p">)</span>
+    <span class="n">size_monitor_square</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">A_axons</span><span class="o">*</span><span class="mf">1.4</span><span class="p">)</span>
+    <span class="n">monitor_area</span> <span class="o">=</span> <span class="n">A_axons</span><span class="o">*</span><span class="mf">1.4</span>
+    <span class="n">FVF</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">probed_iter</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">fg_verbose</span><span class="p">:</span>
+        <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;Axon Packer: initial grid computed...&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">monitor</span><span class="p">:</span>
+        <span class="n">plot_situation</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">size_init</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Init&#39;</span><span class="p">,</span> <span class="n">y_gc</span><span class="o">=</span><span class="n">y_gc</span><span class="p">,</span> <span class="n">z_gc</span><span class="o">=</span><span class="n">z_gc</span><span class="p">)</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="n">monitoring_Folder</span> <span class="o">+</span> <span class="s1">&#39;Packer_0.png&#39;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">f_name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="c1">################</span>
+    <span class="c1">## ITERATIONS ##</span>
+    <span class="c1">################</span>
+    <span class="k">if</span> <span class="n">fg_verbose</span><span class="p">:</span>
+        <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;Axon Packer: Begining iterations&#39;</span><span class="p">)</span>
+    <span class="n">iteration</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">iteration</span> <span class="o">&lt;</span> <span class="n">max_iter</span><span class="p">:</span>
+        <span class="n">iteration</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">fg_verbose</span><span class="p">:</span>
+            <span class="n">progression_popup</span><span class="p">(</span><span class="n">iteration</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_iter</span><span class="p">,</span> <span class="n">begin_message</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1"> iteration &#39;</span><span class="p">,</span> <span class="n">endl</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\r</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1">#print(&#39;\t iteration &#39; + f&quot;{iteration}&quot; + &#39;/&#39; + str(max_iter), end=&quot;\r&quot;)</span>
+        <span class="c1"># compute P matrix</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">compute_P_matrix</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="c1">#P = compute_P_fast(diameters, y_axons, z_axons, Delta)</span>
+        <span class="c1"># check overlap</span>
+        <span class="n">colapse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">P</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_colapsed_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">colapse</span><span class="p">)</span>
+        <span class="c1"># compute velocity, initialy consider that all velocities are attraction</span>
+        <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span> <span class="o">=</span> <span class="n">compute_attraction_velocities</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">y_gc</span><span class="p">,</span> <span class="n">z_gc</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">v_att</span><span class="p">)</span>
+        <span class="c1">#### prevent from division by 0 in the upper line</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">v_y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">v_z</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nan</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">v_y</span><span class="p">[</span><span class="n">all_colapsed_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>                   <span class="c1"># neutralize velocity where should be repulsion</span>
+        <span class="n">v_z</span><span class="p">[</span><span class="n">all_colapsed_ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>                   <span class="c1"># same</span>
+        <span class="c1"># compute velocities for colapsing cases</span>
+        <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span> <span class="o">=</span> <span class="n">handle_collisions</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">,</span> <span class="n">all_colapsed_ind</span><span class="p">,</span> <span class="n">colapse</span><span class="p">,</span> <span class="n">v_rep</span><span class="p">)</span>
+        <span class="c1"># compute new positions</span>
+        <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span> <span class="o">=</span> <span class="n">update_positions</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">)</span>
+        <span class="c1"># compute FVF</span>
+        <span class="k">if</span> <span class="n">iteration</span><span class="o">%</span><span class="n">probe</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># removing axons too much to the left</span>
+            <span class="n">ax_left_pts</span> <span class="o">=</span> <span class="n">y_axons</span> <span class="o">-</span> <span class="n">diameters</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">FVF_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">ax_left_pts</span> <span class="o">&gt;</span> <span class="p">(</span><span class="o">-</span><span class="n">size_monitor_square</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y_gc</span><span class="p">))</span>
+            <span class="c1"># removing axons too much to the right</span>
+            <span class="n">ax_right_pts</span> <span class="o">=</span> <span class="n">y_axons</span> <span class="o">+</span> <span class="n">diameters</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">FVF_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">FVF_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">ax_right_pts</span> <span class="o">&lt;</span> \
+                <span class="p">(</span><span class="n">size_monitor_square</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y_gc</span><span class="p">)))</span>
+            <span class="c1"># removing the axons that are too high</span>
+            <span class="n">ax_up_pts</span> <span class="o">=</span> <span class="n">z_axons</span> <span class="o">+</span> <span class="n">diameters</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">FVF_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">FVF_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">ax_up_pts</span> <span class="o">&lt;</span> \
+                <span class="p">(</span><span class="n">size_monitor_square</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z_gc</span><span class="p">)))</span>
+            <span class="c1"># removing the axons that are too low</span>
+            <span class="n">ax_down_pts</span> <span class="o">=</span> <span class="n">z_axons</span> <span class="o">-</span> <span class="n">diameters</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">FVF_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">FVF_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">ax_down_pts</span> <span class="o">&gt;</span> \
+                <span class="p">(</span><span class="o">-</span><span class="n">size_monitor_square</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z_gc</span><span class="p">)))</span>
+            <span class="n">FVF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ax_areas</span><span class="p">[</span><span class="n">FVF_mask</span><span class="p">])</span><span class="o">/</span><span class="n">monitor_area</span><span class="p">)</span>
+            <span class="n">probed_iter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span>
+        <span class="c1"># monitoring</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">iteration</span><span class="p">)</span> <span class="o">%</span> <span class="n">monitoring_Niter</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">monitor</span><span class="p">):</span>
+            <span class="n">plot_situation</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">size_init</span><span class="p">,</span> \
+                <span class="n">title</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; Iterations&#39;</span><span class="p">,</span> <span class="n">y_gc</span><span class="o">=</span><span class="n">y_gc</span><span class="p">,</span> <span class="n">z_gc</span><span class="o">=</span><span class="n">z_gc</span><span class="p">)</span>
+            <span class="n">f_name</span> <span class="o">=</span> <span class="n">monitoring_Folder</span> <span class="o">+</span> <span class="s1">&#39;Packer_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">f_name</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pass_info</span><span class="p">(</span><span class="s1">&#39;Axon Packer: Iterations done&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">monitor</span><span class="p">:</span>
+        <span class="n">plot_situation</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">size_init</span><span class="p">,</span> \
+            <span class="n">title</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39; Iterations&#39;</span><span class="p">,</span> <span class="n">y_gc</span><span class="o">=</span><span class="n">y_gc</span><span class="p">,</span> <span class="n">z_gc</span><span class="o">=</span><span class="n">z_gc</span><span class="p">)</span>
+        <span class="n">f_name</span> <span class="o">=</span> <span class="n">monitoring_Folder</span> <span class="o">+</span> <span class="s1">&#39;Packer_final.png&#39;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">f_name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">iteration</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">FVF</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">probed_iter</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="compute_attraction_velocities"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.compute_attraction_velocities">[docs]</a><span class="nd">@numba</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_attraction_velocities</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">y_gc</span><span class="p">,</span> <span class="n">z_gc</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">v_att</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes attraction velocity for axon packing. Just in time compiled to speed up. For internal use only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">*</span> <span class="n">y_gc</span> <span class="o">-</span> <span class="n">y_axons</span>
+    <span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">*</span> <span class="n">z_gc</span> <span class="o">-</span> <span class="n">z_axons</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">y_axons</span> <span class="o">-</span> <span class="n">y_gc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z_axons</span> <span class="o">-</span> <span class="n">z_gc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">v_y</span> <span class="o">=</span> <span class="n">v_att</span> <span class="o">*</span> <span class="n">dy</span><span class="o">/</span><span class="n">dist</span>
+    <span class="n">v_z</span> <span class="o">=</span> <span class="n">v_att</span> <span class="o">*</span> <span class="n">dz</span><span class="o">/</span><span class="n">dist</span>   <span class="c1"># same</span>
+    <span class="k">return</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span></div>
+
+<div class="viewcode-block" id="compute_P_matrix"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.compute_P_matrix">[docs]</a><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">compute_P_matrix</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the proximity matrix for axon packing. Just in time compiled to speed up. For internal use only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="c1">#P[i, j] = np.sqrt((y_axons[i] - y_axons[j])**2 + (z_axons[i] - z_axons[j])**2) -\</span>
+            <span class="c1"># ((diameters[i] + diameters[j])/2 + Delta)</span>
+            <span class="c1"># not hmogeneous to a distance, but work the same at the end and one square root less to compute...</span>
+            <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_axons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">z_axons</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>\
+                <span class="p">((</span><span class="n">diameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">diameters</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Delta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">return</span> <span class="n">P</span></div>
+
+<div class="viewcode-block" id="compute_P_fast"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.compute_P_fast">[docs]</a><span class="k">def</span> <span class="nf">compute_P_fast</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compyte the proximity matrix for axon packing. Based on numpy and scipy. Slower (just a bit) than JIT version on dev. For internal use only</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">))</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diameters</span><span class="p">)</span>
+    <span class="n">diams</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="c1">#diams = diameters.repeat(N).reshape((-1, N))</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">spatial</span><span class="o">.</span><span class="n">distance</span><span class="o">.</span><span class="n">cdist</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="p">((</span><span class="n">diams</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">diams</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>\
+        <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span><span class="o">*</span><span class="n">Delta</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">P</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="handle_collisions"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.handle_collisions">[docs]</a><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handle_collisions</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">,</span> <span class="n">all_colapsed_ind</span><span class="p">,</span> <span class="n">colapse</span><span class="p">,</span> <span class="n">v_rep</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handle collisions between axons for axon packing. Just in time compiled (doble loop...). For internal use only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">all_colapsed_ind</span><span class="p">:</span>
+        <span class="n">sum_y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">sum_z</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">colapse</span><span class="p">)):</span>
+            <span class="n">duplet</span> <span class="o">=</span> <span class="n">colapse</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">duplet</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">sum_y</span> <span class="o">+=</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">duplet</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">sum_z</span> <span class="o">+=</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">duplet</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="n">duplet</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">sum_y</span> <span class="o">+=</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">duplet</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="n">sum_z</span> <span class="o">+=</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">duplet</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="n">sum_y</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sum_z</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sum_y</span> <span class="o">=</span> <span class="mf">1e-12</span>
+            <span class="n">sum_z</span> <span class="o">=</span> <span class="mf">1e-12</span>
+        <span class="n">v_y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_rep</span> <span class="o">*</span> <span class="p">(</span><span class="n">sum_y</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sum_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sum_z</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+        <span class="n">v_z</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_rep</span> <span class="o">*</span> <span class="p">(</span><span class="n">sum_z</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sum_y</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">sum_z</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span></div>
+
+<div class="viewcode-block" id="update_positions"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.update_positions">[docs]</a><span class="nd">@numba</span><span class="o">.</span><span class="n">njit</span><span class="p">(</span><span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_positions</span><span class="p">(</span><span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute new positions considering velicities for axon packing. Just in time compiled to speed up. For internal use only.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">y_axons</span> <span class="o">+</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">z_axons</span> <span class="o">+</span> <span class="n">v_z</span></div>
+
+<div class="viewcode-block" id="delete_collisions"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.delete_collisions">[docs]</a><span class="k">def</span> <span class="nf">delete_collisions</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete collision cases in a placed population. In case of a detected collision, the axon or smaller diameter is removed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axons_diameters : np.array</span>
+<span class="sd">        array containing the axons diameters</span>
+<span class="sd">    axons_type      : np.array</span>
+<span class="sd">        array containing the axons type (&#39;1&#39; for myelinated, &#39;0&#39; for unmyelinated)</span>
+<span class="sd">    y_axons         : np.array</span>
+<span class="sd">        y coordinate of the axons to store, in um</span>
+<span class="sd">    z_axons         : np.array</span>
+<span class="sd">        z coordinate of the axons to store, in um</span>
+<span class="sd">    Delta           : float</span>
+<span class="sd">        space between axon fibers under which collision is considered, in um</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_axons_diameters : np.array</span>
+<span class="sd">        array containing the axons diameters without collisions</span>
+<span class="sd">    new_axons_type      : np.array</span>
+<span class="sd">        array containing the axons type (&#39;1&#39; for myelinated, &#39;0&#39; for unmyelinated)</span>
+<span class="sd">    new_y_axons     : np.array</span>
+<span class="sd">        y coordinate of the axons to store, in um</span>
+<span class="sd">    new_z_axons     : np.array</span>
+<span class="sd">        z coordinate of the axons to store, in um</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">)</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">compute_P_matrix</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">colapse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">P</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">flag_Collision</span> <span class="o">=</span> <span class="p">(</span><span class="n">colapse</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="n">flag_Collision</span><span class="p">:</span>
+        <span class="c1"># checking which axons to delete</span>
+        <span class="n">ind_to_delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">handled_collisions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">collision</span> <span class="ow">in</span> <span class="n">colapse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">handled_collisions</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">handled_collisions</span><span class="p">):</span>
+                <span class="n">handled_collisions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">handled_collisions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">collision</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">collision</span><span class="p">[</span><span class="mi">1</span><span class="p">]]:</span>
+                    <span class="n">ind_to_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ind_to_delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">collision</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># deleting problematic axons</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">ind_to_delete</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">axons_type</span> <span class="o">=</span> <span class="n">axons_type</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">y_axons</span> <span class="o">=</span> <span class="n">y_axons</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">z_axons</span> <span class="o">=</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">)</span>
+        <span class="c1"># check if there are remaing collisions</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">compute_P_matrix</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">colapse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">P</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">flag_Collision</span> <span class="o">=</span> <span class="p">(</span><span class="n">colapse</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span></div>
+
+
+<div class="viewcode-block" id="plot_situation"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.plot_situation">[docs]</a><span class="k">def</span> <span class="nf">plot_situation</span><span class="p">(</span><span class="n">diameters</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_gc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z_gc</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Discplay a population of axons. Doesn&#39;t return but declares a matplotlib figure</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    diameters   : np.array</span>
+<span class="sd">        diamters of the axons to display, in um</span>
+<span class="sd">    y_axons     : np.array</span>
+<span class="sd">        y coordinate of the axons to display, in um</span>
+<span class="sd">    z_axons     : np.array</span>
+<span class="sd">        z coordinate of the axons to display, in um</span>
+<span class="sd">    size        : float</span>
+<span class="sd">        size of the window as a square side, in um</span>
+<span class="sd">    title       : str</span>
+<span class="sd">        title of the figure</span>
+<span class="sd">    y_gc        : float</span>
+<span class="sd">        y coordinate of the gravity, in um</span>
+<span class="sd">    z_gc        : float</span>
+<span class="sd">        z coordinate of the gravity, in um</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">circles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">diameters</span><span class="p">)):</span>
+        <span class="n">circles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">Circle</span><span class="p">((</span><span class="n">y_axons</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">z_axons</span><span class="p">[</span><span class="n">k</span><span class="p">]),</span> <span class="n">diameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">circle</span> <span class="ow">in</span> <span class="n">circles</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y_gc</span><span class="p">,</span> <span class="n">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y_gc</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z_gc</span><span class="p">,</span> <span class="n">size</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z_gc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="save_placed_axon_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.save_placed_axon_population">[docs]</a><span class="k">def</span> <span class="nf">save_placed_axon_population</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span>\
+    <span class="n">comment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Save a placed axonal population to a file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f_name          : str</span>
+<span class="sd">        name of the file to store the population</span>
+<span class="sd">    axons_diameters : np.array</span>
+<span class="sd">        array containing the axons diameters</span>
+<span class="sd">    axons_type      : np.array</span>
+<span class="sd">        array containing the axons type (&#39;1&#39; for myelinated, &#39;0&#39; for unmyelinated)</span>
+<span class="sd">    y_axons     : np.array</span>
+<span class="sd">        y coordinate of the axons to store, in um</span>
+<span class="sd">    z_axons     : np.array</span>
+<span class="sd">        z coordinate of the axons to store, in um</span>
+<span class="sd">    comment         : str</span>
+<span class="sd">        comment added in the header of the file, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">comment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;# &#39;</span><span class="o">+</span><span class="n">comment</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">)):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">axons_diameters</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">axons_type</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">y_axons</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span>\
+            <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">z_axons</span><span class="p">[</span><span class="n">k</span><span class="p">])</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="load_placed_axon_population"><a class="viewcode-back" href="../../../nrv.nmod.html#nrv.nmod.fascicle_generator.load_placed_axon_population">[docs]</a><span class="k">def</span> <span class="nf">load_placed_axon_population</span><span class="p">(</span><span class="n">f_name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load a placed population from a file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f_name          : str</span>
+<span class="sd">        name of the file where the population is stored</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    axons_diameters     : np.array</span>
+<span class="sd">        Array containing all the diameters of the generated axon population</span>
+<span class="sd">    axons_type          : np.array</span>
+<span class="sd">        Array containing a &#39;1&#39; value for indexes where the axon is myelinated (A-delta or not), else &#39;0&#39;</span>
+<span class="sd">    y_axons     : np.array</span>
+<span class="sd">        y coordinate of the axons, in um</span>
+<span class="sd">    z_axons     : np.array</span>
+<span class="sd">        z coordinate of the axons, in um</span>
+<span class="sd">    M_diam_list         : np.array</span>
+<span class="sd">        list of myelinated only diameters</span>
+<span class="sd">    U_diam_list         : np.array</span>
+<span class="sd">        list of unmyelinated only diamters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">population_file</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="n">f_name</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+    <span class="n">axons_diameters</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">axons_type</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">y_axons</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">z_axons</span> <span class="o">=</span> <span class="n">population_file</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">ind_myel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">axons_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ind_unmyel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">axons_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">M_diam_list</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">ind_myel</span><span class="p">]</span>
+    <span class="n">U_diam_list</span> <span class="o">=</span> <span class="n">axons_diameters</span><span class="p">[</span><span class="n">ind_unmyel</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">axons_diameters</span><span class="p">,</span> <span class="n">axons_type</span><span class="p">,</span> <span class="n">y_axons</span><span class="p">,</span> <span class="n">z_axons</span><span class="p">,</span> <span class="n">M_diam_list</span><span class="p">,</span> <span class="n">U_diam_list</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            Made with 
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/furo.js"></script>
+    </body>
+</html>
