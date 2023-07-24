@@ -40,6 +40,7 @@ class NerveMshCreator(MshCreator):
     def __init__(self, Length=10000, Outer_D=5,  Nerve_D=4000, y_c=0, z_c=0, ver_level=2):
         """
         initialisation of the NerveMshCreator
+        
         Parameters
         ----------
         Length          : nerve
@@ -127,6 +128,7 @@ class NerveMshCreator(MshCreator):
     def set_gnd_facet(self,outfacet=None, lfacet=None, rfacet=None):
         """
             Set which of the outer facet should be the ground (element 1)
+            
             Parameters
             ----------
             outfacet        : bool or None
@@ -345,8 +347,9 @@ class NerveMshCreator(MshCreator):
     def __is_outerbox(self, dx, dy, dz, com, dim_key):
         """
         Internal use only: check if volume is the box or face is external face of box
-        INPUTS
-        ------
+
+        Parameters
+        ----------
         dx          : float
             length along x of the entity boundbox
         dy          : float
@@ -367,8 +370,9 @@ class NerveMshCreator(MshCreator):
     def __is_nerve(self, dx, dy, dz):
         """
         Internal use only: check if volume is nerve or face is external face of nerve
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         dx          : float
             length along x of the tested entity
         dy          : float
@@ -382,8 +386,9 @@ class NerveMshCreator(MshCreator):
     def __is_fascicle(self, ID, dx, dy, dz, com, dim_key):
         """
         Internal use only: check if volume is fascicle ID or face is external face of fascicle ID
-        INPUTS
-        ------
+
+        Parameters
+        ----------
         ID          :int
             ID of fascicle to test
         dx          : float
@@ -409,8 +414,9 @@ class NerveMshCreator(MshCreator):
     def __is_axon(self, ID, dx, dy, dz, com, dim_key):
         """
         Internal use only: check if volume is axon ID or face is external face of axon ID
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         ID          :int
             ID of axon to test
         dx          : float
@@ -436,8 +442,9 @@ class NerveMshCreator(MshCreator):
     def __is_CUFF_MP_electrode(self, ID, rc,dx, teta, com, dim_key):
         """
         Internal use only: check if volume is electrode ID or face is external face of fascicle ID
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         dx          : float
             length along x of the entity boundbox
         dy          : float
@@ -470,8 +477,9 @@ class NerveMshCreator(MshCreator):
     def __is_CUFF_electrode(self, ID, dx, dy, dz, com, dim_key):
         """
         Internal use only: check if volume is electrode ID or face is external face of fascicle ID
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         dx          : float
             length along x of the entity boundbox
         dy          : float
@@ -497,8 +505,9 @@ class NerveMshCreator(MshCreator):
     def __is_LIFE_electrode(self, ID, dx, dy, dz, com):
         """
         Internal use only: check if volume is electrode ID or face is external face of fascicle ID
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         dx          : float
             length along x of the entity boundbox
         dy          : float
@@ -522,8 +531,9 @@ class NerveMshCreator(MshCreator):
     def __link_entity_domains(self, dim):
         """
         Internal use only: link all entities from 
-        INPUTS
-        ------
+        
+        Parameters
+        ----------
         dx          : float
             length along x of the entity boundbox
         dy          : float
@@ -587,7 +597,7 @@ class NerveMshCreator(MshCreator):
 
     def compute_entity_domain(self):
         """
-
+        link all geometrical entities to corresponding physical domains
         """
         # Outer box domain
         if self.is_outer:
