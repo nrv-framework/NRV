@@ -50,7 +50,7 @@ extra_stim.add_electrode(elec_2, stim1)
 
 fascicle_1.attach_extracellular_stimulation(extra_stim)
 footprints = fascicle_1.get_electrodes_footprints_on_axons()
-fascicle_1.save(PSfile,extracel_context=True)
+dict_fasc1 = fascicle_1.save(fname=PSfile,extracel_context=True)
 
 
 
@@ -61,52 +61,60 @@ fig, ax = plt.subplots(figsize=(6,6))
 fascicle_1.plot(fig, ax, num=True)
 plt.savefig(DIR + 'figures/504_A.png')
 
-my_model = 'Nerve_1_Fascicle_1_LIFE'
+del fascicle_1
 
 ###########################
 ##### LIFE elecrtode ######
 ###########################
 
-if True:
-    LIFE_stim = nrv.FEM_stimulation()
-    # ### Simulation box size
-    Outer_D = 5
-    LIFE_stim.reshape_outerBox(Outer_D)
-    #### Nerve and fascicle geometry
-    Nerve_D = 250
-    Fascicle_D = 220
-    LIFE_stim.reshape_nerve(Nerve_D, L)
-    LIFE_stim.reshape_fascicle(Fascicle_D)
-    ##### electrode and stimulus definition
-    D_1 = 25
-    length_1 = 1000
-    y_c_1 = 0
-    z_c_1 = 0
-    x_1_offset = (L-length_1)/2
-    elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
-    # stimulus def
-    stim1 = nrv.stimulus()
-    LIFE_stim.add_electrode(elec_1, stim1)
-    fascicle_1.attach_extracellular_stimulation(LIFE_stim)
-    ##########################
-    ## Fascicle declaration ##
-    ##########################
+fascicle_2 = nrv.load_any(dict_fasc1)
 
-    t3 = time.time()
-    print('Extracel context generated in '+str(t3 - t2)+' s')
-    #Footprint saving
-    footprints = fascicle_1.get_electrodes_footprints_on_axons()
+LIFE_stim = nrv.FEM_stimulation()
+# ### Simulation box size
+Outer_D = 5
+LIFE_stim.reshape_outerBox(Outer_D)
+#### Nerve and fascicle geometry
+Nerve_D = 250
+Fascicle_D = 220
+LIFE_stim.reshape_nerve(Nerve_D, L)
+LIFE_stim.reshape_fascicle(Fascicle_D)
+##### electrode and stimulus definition
+D_1 = 25
+length_1 = 1000
+y_c_1 = 0
+z_c_1 = 0
+x_1_offset = (L-length_1)/2
+elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
+# stimulus def
+start = 1
+I_cathod = 40
+I_anod = I_cathod/5
+T_cathod = 60e-3
+T_inter = 40e-3
+stim1 = nrv.stimulus()
+stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
+LIFE_stim.add_electrode(elec_1, stim1)
+fascicle_2.attach_extracellular_stimulation(LIFE_stim)
+##########################
+## Fascicle declaration ##
+##########################
 
-    t4 = time.time()
-    print('Electrod footprint generated in '+str(t4 - t3)+' s')
 
-    fascicle_1.save_fascicle_configuration(LIFEfile,extracel_context=True)
+t3 = time.time()
+print('Extracel context generated in '+str(t3 - t2)+' s')
+#Footprint saving
+footprints = fascicle_2.get_electrodes_footprints_on_axons()
 
-    t6 = time.time()
-    print('Total time '+str(t6 - t_start)+' s')
+t4 = time.time()
+print('Electrod footprint generated in '+str(t4 - t3)+' s')
 
-    fig, ax = plt.subplots(figsize=(6,6))
-    fascicle_1.plot(fig, ax, num=True)
-    plt.savefig(DIR + 'figures/504_B.png')
-else:
-    nrv.pass_info('not connected to COMSOL, parts of the test have been skiped')
+fascicle_2.save(fname=LIFEfile,extracel_context=True)
+
+t6 = time.time()
+print('Total time '+str(t6 - t_start)+' s')
+
+fig, ax = plt.subplots(figsize=(6,6))
+fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
+
+fascicle_2.plot(fig, ax, num=True)
+plt.savefig(DIR + 'figures/504_B.png')
