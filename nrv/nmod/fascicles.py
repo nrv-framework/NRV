@@ -139,10 +139,12 @@ class fascicle(NRV_class):
         self.record = False
         self.recorder = None
         self.is_simulated = False
+        #Simulation status
+        self.processes_status = ["preparing" for _ in range(MCH.size)]
 
 
     ## save/load methods
-    def save(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+    def save(self, fname="fascicle.json", extracel_context=False, intracel_context=False, rec_context=False, save=True, blacklist=[]):
         """
         Save a fascicle in a json file
 
@@ -155,48 +157,41 @@ class fascicle(NRV_class):
         intracel_context: bool
             if True, add the intracellular context to the saving
         """
-        if MCH.do_master_only_work():
-            # copy everything into a dictionnary
-            fascicle_config = {}
-            fascicle_config['nrv_type'] = self.nrv_type
-            fascicle_config['ID'] = self.ID
-            fascicle_config['type'] = self.type
-            fascicle_config['D'] = self.D
-            fascicle_config['y_grav_center'] = self.y_grav_center
-            fascicle_config['z_grav_center'] = self.z_grav_center
-            fascicle_config['N_vertices'] = self.N_vertices
-            fascicle_config['y_vertices'] = self.y_vertices
-            fascicle_config['z_vertices'] = self.z_vertices
-            fascicle_config['A'] = self.A
-            fascicle_config['axons_diameter'] = self.axons_diameter
-            fascicle_config['axons_type'] = self.axons_type
-            fascicle_config['axons_y'] = self.axons_y
-            fascicle_config['axons_z'] = self.axons_z
-            fascicle_config['NoR_relative_position'] = self.NoR_relative_position
+        blacklist += ['extra_stim']
+        if not intracel_context:
+            blacklist += ['N_intra',\
+                        'intra_stim_position',\
+                        'intra_stim_t_start',\
+                        'intra_stim_duration',\
+                        'intra_stim_amplitude',\
+                        'intra_stim_ON']
+        
+        if not extracel_context:
+            blacklist += ['footprints',\
+                        'myelinated_nseg_per_sec',\
+                        'unmyelinated_nseg',\
+                        'is_footprinted']
+        
+        if not rec_context:
+            blacklist += ['record',\
+                        'recorder']
 
-            if intracel_context:
-                fascicle_config['L'] = self.L
-                fascicle_config['N_intra'] = self.N_intra
-                fascicle_config['intra_stim_position'] = self.intra_stim_position
-                fascicle_config['intra_stim_t_start'] = self.intra_stim_t_start
-                fascicle_config['intra_stim_duration'] = self.intra_stim_duration
-                fascicle_config['intra_stim_amplitude'] = self.intra_stim_amplitude
-                fascicle_config['intra_stim_ON'] = self.intra_stim_ON
-            if extracel_context:
-                fascicle_config['L'] = self.L
-                fascicle_config['extra_stim'] = self.extra_stim.save()
-                fascicle_config['footprints'] = self.footprints
-                fascicle_config['myelinated_nseg_per_sec'] = self.myelinated_nseg_per_sec
-                fascicle_config['unmyelinated_nseg'] = self.unmyelinated_nseg
-                fascicle_config['is_footprinted'] = self.is_footprinted
+        key_dict = super().save(blacklist=blacklist)
 
-            if rec_context:
-                fascicle_config['record'] = self.record
-                fascicle_config['recorder'] = self.recorder.save()
-            # save the dictionnary as a json file
-            json_dump(fascicle_config, fname)
+        # As to be done separatly because mph object cannot be deep copied
+        if extracel_context:
+            key_dict['extra_stim'] = self.extra_stim.save()
+        
+        if save and MCH.do_master_only_work():
+            json_dump(key_dict, fname)
+        
+        return key_dict
+            
+            
 
-    def load(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
+        json_dump(fascicle_config, fname)
+
+    def load(self, data, extracel_context=False, intracel_context=False, rec_context=False, blacklist=[]):
         """
         Load a fascicle configuration from a json file
 
@@ -209,64 +204,34 @@ class fascicle(NRV_class):
         intracel_context: bool
             if True, load the intracellular context as well
         """
-        if type(fname) == str:
-            results = json_load(fname)
-        else: 
-            results = fname
-        self.ID = results['ID']
-        self.type = results['type']
-        self.y_grav_center = results['y_grav_center']
-        self.z_grav_center = results['z_grav_center']
-        self.N_vertices = results['N_vertices']
-        self.y_vertices = np.asarray(results['y_vertices']).flatten()
-        self.z_vertices = np.asarray(results['z_vertices']).flatten()
-        self.A = results['A']
-        self.axons_diameter = np.asarray(results['axons_diameter']).flatten()
-        self.N = len(self.axons_diameter)
-        self.axons_type = np.asarray(results['axons_type']).flatten()
-        self.axons_y = np.asarray(results['axons_y']).flatten()
-        self.axons_z = np.asarray(results['axons_z']).flatten()
-        self.NoR_relative_position = np.asarray(results['NoR_relative_position']).flatten()
-        if 'D' in results:
-            self.D = results['D']
-        else:
-            rise_warning('Diameter not save in json, by default fitted to axon distribution')
-            self.fit_circular_contour()
-        if intracel_context:
-            self.L = results['L']
-            self.N_intra = results['N_intra']
-            self.intra_stim_position = results['intra_stim_position']
-            self.intra_stim_t_start = results['intra_stim_t_start']
-            self.intra_stim_duration = results['intra_stim_duration']
-            self.intra_stim_amplitude = results['intra_stim_amplitude']
-            self.intra_stim_ON = results['intra_stim_ON']
-        if extracel_context:
-            self.L = results['L']
-            self.is_footprinted = results['is_footprinted']
-            if 'myelinated_nseg_per_sec' in results:
-                self.myelinated_nseg_per_sec = results['myelinated_nseg_per_sec']
-            if 'unmyelinated_nseg' in results:
-                self.unmyelinated_nseg = results['unmyelinated_nseg']
-            
-            self.extra_stim = load_any(results['extra_stim'])
-            self.footprints = {}
-            for axon, ftp in results['footprints'].items():
-                dic = {}
-                for dim, ftpx in ftp.items():
-                    dic[int(dim)] = ftpx
-                self.footprints[int(axon)] = dic
-            
-        if rec_context:
-            self.record = results['record']
-            self.recorder = recorder()
-            self.recorder.load(results['recorder'])
+
+        if not intracel_context:
+            blacklist += ['N_intra',\
+                        'intra_stim_position',\
+                        'intra_stim_t_start',\
+                        'intra_stim_duration',\
+                        'intra_stim_amplitude',\
+                        'intra_stim_ON']
+        
+        if not extracel_context:
+            blacklist += ['extra_stim',\
+                        'footprints',\
+                        'myelinated_nseg_per_sec',\
+                        'unmyelinated_nseg',\
+                        'is_footprinted']
+        
+        if not rec_context:
+            blacklist += ['record',\
+                        'recorder']
+
+        super().load(data=data, blacklist=blacklist)
 
     def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         rise_warning('save_fascicle_configuration is a deprecated method use save instead')
         self.save(fname=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
     def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         rise_warning('load_fascicle_configuration is a deprecated method use load instead')
-        self.load(fname=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
+        self.load(data=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
 
     def set_ID(self, ID):
         """
@@ -288,6 +253,8 @@ class fascicle(NRV_class):
         L   : float
             length of the fascicle in um
         """
+        if self.extra_stim is not None or self.N_intra>0:
+            rise_warning("Modifying length of a fascicle with extra or intra cellular context can lead to error")
         self.L = L
         self.unmyelinated_nseg = self.L//25
 
@@ -1031,14 +998,14 @@ class fascicle(NRV_class):
             
         else:
             pass
-        sync_Flag = MCH.send_synchronization_flag()
+        synchronize_processes()
         self.footprints = MCH.master_broadcasts_array_to_all(footprints)
         self.is_footprinted = True
         return footprints
 
 
     def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=False,\
+        record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=True,\
         save_V_mem=False, save_path='', verbose=False,Unmyelinated_model='Rattay_Aberham', \
         Adelta_model='extended_Gaines',Myelinated_model='MRG',myelinated_nseg_per_sec=3, unmyelinated_nseg=None,\
         Adelta_limit=None, PostProc_Filtering=None, postproc_script="default", **kwargs):
@@ -1105,11 +1072,16 @@ class fascicle(NRV_class):
         else:
             pass
         # impose myelinated_nseg_per_sec if footprint are loaded
-        loaded_footprints = loaded_footprints or self.is_footprinted
+        loaded_footprints = loaded_footprints and self.is_footprinted
         if loaded_footprints:
             myelinated_nseg_per_sec = self.myelinated_nseg_per_sec
-        if unmyelinated_nseg is not None:
-            self.unmyelinated_nseg = unmyelinated_nseg
+        else:
+            if unmyelinated_nseg is not None:
+                self.unmyelinated_nseg = unmyelinated_nseg
+            if myelinated_nseg_per_sec is not None:
+                self.myelinated_nseg_per_sec = myelinated_nseg_per_sec
+        #
+        self.processes_status = ["computing" for _ in range(MCH.size)]
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
@@ -1120,55 +1092,105 @@ class fascicle(NRV_class):
             else:
                 pass
             # synchronize all process
-            sync_Flag = MCH.send_synchronization_flag()
+            synchronize_processes()
             # split the job
             this_core_mask = MCH.split_job_from_arrays_to_slaves(len(self.axons_diameter))
+            
+            ## Axons simulation handle with Master/Slaves configuration:
+            # Master: acts as a server, accepting request to compute external potential
+            #   Also, update status of slaves when simulations complete
+            # Slaves: computes neurons sending requests to the master
+            #   (see FEM_stimulation.compute_electrodes_footprints)
+            #   When simulations completed or interupted by an error,
+            #   send status update ('success' or 'error') to Master
+
+            ## MASTER ##
             if MCH.do_master_only_work():
-                ## Master acts as a server, accepting request to compute external potential
-                while not np.all(this_core_mask):
+                self.processes_status = ['server']+["computing" for _ in range(MCH.size-1)]
+                
+                while not np.all(this_core_mask) and "computing" in self.processes_status:
                     data = MCH.recieve_data_from_slave()
-                    this_core_mask[data['ID']] = True
-                    V = self.extra_stim.model.get_potentials(data['x'], data['y'], data['z'])
-                    back_data = {'V': V}
-                    MCH.send_back_array_to_dest(back_data, data['rank'])
-            else:
-                ## Slaves computes neurons sending requests to the master from (see FEM_stimulation.compute_electrodes_footprints method)
-                for k in this_core_mask:
-                    ## test axon axons_type[k]
-                    if self.axons_type[k] == 0:
-                        axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
-                            round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
-                            dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
-                            v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
-                            threshold=self.threshold, Nseg_per_sec=self.unmyelinated_nseg)
+                    if 'status' in data: 
+                        self.processes_status[data['rank']] = data['status']
                     else:
-                        ## if myelinated, test the axons_diameter[k],
-                        ## if less than Adelta_limit -> A-delta model, else Myelinated
-                        if self.axons_diameter[k] < self.Adelta_limit:
-                            axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
-                                node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
-                                Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
-                                threshold=self.threshold)
+                        this_core_mask[data['ID']] = True
+                        V = self.extra_stim.model.get_potentials(data['x'], data['y'], data['z'])
+                        back_data = {'V': V}
+                        MCH.send_back_array_to_dest(back_data, data['rank'])
+                if 'error' in self.processes_status:
+                    errors_rank = [i for i, x in enumerate(self.processes_status) if x == 'error']
+                    errors_ax = [i for i, x in enumerate(this_core_mask) if x == False]
+                    if len(errors_ax)>0:
+                        rise_warning("an issue occured during the simulation in rank: ",\
+                                    errors_rank, 
+                                    "\nThe following axons could not be computed: ", errors_ax)
+                    self.processes_status[data['rank']]
+                    self.processes_status[0] = ['error']
+                else:
+                    self.processes_status[0] = ['success']
+            else:
+                ## SLAVES ##
+                try:
+                    for k in this_core_mask:
+                        ## test axon axons_type[k]
+                        assert self.axons_type[k] in [0,1]
+                        if self.axons_type[k] == 0:
+                            axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
+                                round(self.axons_diameter[k], 2), self.L, model=Unmyelinated_model,\
+                                dt=self.dt, freq=self.freq, freq_min=self.freq_min, mesh_shape=self.mesh_shape,\
+                                v_init=None, alpha_max=self.alpha_max, d_lambda=self.d_lambda, T=self.T, ID=k,\
+                                threshold=self.threshold, Nseg_per_sec=self.unmyelinated_nseg)
                         else:
-                            axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
-                                node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
-                                Nseg_per_sec=myelinated_nseg_per_sec, v_init=None, T=self.T,\
-                                ID=k, threshold=self.threshold)
-                    ## add extracellular stimulation
-                    axon.attach_extracellular_stimulation(self.extra_stim)
-                    ## add recording mechanism
-                    if self.record:
-                        axon.attach_extracellular_recorder(self.recorder)
-                    # add intracellular stim
-                    if self.N_intra > 0:
-                        for j in range(self.N_intra):
-                            if is_iterable(self.intra_stim_ON[j]):
-                                # in this case, the stimulation is possibly not for all axons
-                                if self.intra_stim_ON[j][k]:
-                                    # then stimulation should apply, look for the parameters
-                                    # get position
+                            ## if myelinated, test the axons_diameter[k],
+                            ## if less than Adelta_limit -> A-delta model, else Myelinated
+                            if self.axons_diameter[k] < self.Adelta_limit:
+                                axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
+                                    round(self.axons_diameter[k], 2), self.L, model=Adelta_model,\
+                                    node_shift=self.NoR_relative_position[k], rec='nodes', dt=self.dt,\
+                                    Nseg_per_sec=self.myelinated_nseg_per_sec, v_init=None, T=self.T, ID=k,\
+                                    threshold=self.threshold)
+                            else:
+                                axon = myelinated(self.axons_y[k], self.axons_z[k],\
+                                    round(self.axons_diameter[k], 2), self.L, dt=self.dt, model=Myelinated_model,\
+                                    node_shift=self.NoR_relative_position[k], rec='nodes', freq=self.freq,\
+                                    Nseg_per_sec=self.myelinated_nseg_per_sec, v_init=None, T=self.T,\
+                                    ID=k, threshold=self.threshold)
+                        ## add extracellular stimulation
+                        axon.attach_extracellular_stimulation(self.extra_stim)
+                        ## add recording mechanism
+                        if self.record:
+                            axon.attach_extracellular_recorder(self.recorder)
+                        # add intracellular stim
+                        if self.N_intra > 0:
+                            for j in range(self.N_intra):
+                                if is_iterable(self.intra_stim_ON[j]):
+                                    # in this case, the stimulation is possibly not for all axons
+                                    if self.intra_stim_ON[j][k]:
+                                        # then stimulation should apply, look for the parameters
+                                        # get position
+                                        if is_iterable(self.intra_stim_position[j]):
+                                            position = self.intra_stim_position[j][k]
+                                        else:
+                                            position = self.intra_stim_position[j]
+                                        # get t_start
+                                        if is_iterable(self.intra_stim_t_start[j]):
+                                            t_start = self.intra_stim_t_start[j][k]
+                                        else:
+                                            t_start = self.intra_stim_t_start[j]
+                                        # get duration
+                                        if is_iterable(self.intra_stim_duration[j]):
+                                            duration = self.intra_stim_duration[j][k]
+                                        else:
+                                            duration = self.intra_stim_duration[j]
+                                        # get amplitude
+                                        if is_iterable(self.intra_stim_amplitude[j]):
+                                            amplitude = self.intra_stim_amplitude[j][k]
+                                        else:
+                                            amplitude = self.intra_stim_amplitude[j]
+                                        # APPLY INTRA CELLULAR STIMULATION
+                                        axon.insert_I_Clamp(position, t_start, duration, amplitude)
+                                else:
+                                    # in this case , stimulate all axons
                                     if is_iterable(self.intra_stim_position[j]):
                                         position = self.intra_stim_position[j][k]
                                     else:
@@ -1190,52 +1212,38 @@ class fascicle(NRV_class):
                                         amplitude = self.intra_stim_amplitude[j]
                                     # APPLY INTRA CELLULAR STIMULATION
                                     axon.insert_I_Clamp(position, t_start, duration, amplitude)
-                            else:
-                                # in this case , stimulate all axons
-                                if is_iterable(self.intra_stim_position[j]):
-                                    position = self.intra_stim_position[j][k]
-                                else:
-                                    position = self.intra_stim_position[j]
-                                # get t_start
-                                if is_iterable(self.intra_stim_t_start[j]):
-                                    t_start = self.intra_stim_t_start[j][k]
-                                else:
-                                    t_start = self.intra_stim_t_start[j]
-                                # get duration
-                                if is_iterable(self.intra_stim_duration[j]):
-                                    duration = self.intra_stim_duration[j][k]
-                                else:
-                                    duration = self.intra_stim_duration[j]
-                                # get amplitude
-                                if is_iterable(self.intra_stim_amplitude[j]):
-                                    amplitude = self.intra_stim_amplitude[j][k]
-                                else:
-                                    amplitude = self.intra_stim_amplitude[j]
-                                # APPLY INTRA CELLULAR STIMULATION
-                                axon.insert_I_Clamp(position, t_start, duration, amplitude)
-                    ## perform simulation
-                    if loaded_footprints==False:
-                        axon_ftpt = False
-                    elif loaded_footprints==True:
-                        axon_ftpt = self.footprints[k]
-                    else:
-                        axon_ftpt = loaded_footprints[k]
-                    sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
-                        record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                        record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
-                        record_particles=record_particles, loaded_footprints=axon_ftpt)
-                    del axon
-                    ## postprocessing and data reduction
-                    if postproc_script.lower() in OTF_PP_library:
-                        postproc_script = OTF_PP_path+postproc_script
-                    elif postproc_script.lower() + '.py' in OTF_PP_library:
-                        postproc_script = OTF_PP_path+postproc_script+'.py'
-                    with open(postproc_script) as f:
-                        code = compile(f.read(), postproc_script, 'exec')
-                        exec(code, globals(), locals())
-                    ## store results
-                    ax_fname = 'sim_axon_'+str(k)+'.json'
-                    save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                        ## perform simulation
+                        # loaded_footprints is suppose to be false 
+                        # Request to server instantiate in FEM_stimulation.compute_electrodes_footprints 
+                        # (called by axon.get_electrodes_footprints_on_axon)
+                        axon.get_electrodes_footprints_on_axon()
+                        sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
+                            record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
+                            record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
+                            record_particles=record_particles)
+                        del axon
+                        ## postprocessing and data reduction
+                        if postproc_script.lower() in OTF_PP_library:
+                            postproc_script = OTF_PP_path+postproc_script
+                        elif postproc_script.lower() + '.py' in OTF_PP_library:
+                            postproc_script = OTF_PP_path+postproc_script+'.py'
+                        with open(postproc_script) as f:
+                            code = compile(f.read(), postproc_script, 'exec')
+                            exec(code, globals(), locals())
+                        ## store results
+                        ax_fname = 'sim_axon_'+str(k)+'.json'
+                        save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                    data = {
+                        'rank': MCH.rank,
+                        'status': 'success'
+                        }
+                    MCH.send_data_to_master(data)   
+                except:
+                    data = {
+                        'rank': MCH.rank,
+                        'status': 'error'
+                        }
+                    MCH.send_data_to_master(data)    
                 # sum up all recorded extracellular potential if applicable
                 if self.record:
                     self.recorder.gather_all_recordings()
@@ -1245,10 +1253,10 @@ class fascicle(NRV_class):
             this_core_mask = MCH.split_job_from_arrays(len(self.axons_diameter))
             ## perform simulations
             if MCH.is_alone() and verbose:
-                print('Simulating axons in fascicle ' + str(self.ID))
+                pass_info('Simulating axons in fascicle ' + str(self.ID))
             for k in this_core_mask:
                 if MCH.is_alone() and verbose:
-                    print('\t Axon ' + f"{k+1}" + '/' + str(self.N), end="\r")
+                    pass_info('\t Axon ' + f"{k+1}" + '/' + str(self.N), end="\r")
                 ## test axon axons_type[k]
                 if self.axons_type[k] == 0:
                     axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
@@ -1330,13 +1338,17 @@ class fascicle(NRV_class):
                             # APPLY INTRA CELLULAR STIMULATION
                             axon.insert_I_Clamp(position, t_start, duration, amplitude)
                 ## perform simulation
-                if loaded_footprints==False:
-                    axon_ftpt = False
-                elif loaded_footprints==True:
-                    axon_ftpt = self.footprints[k]
+                if loaded_footprints==True and self.is_footprinted:
+                    axon_ftpt = True
+                    if k in self.footprints:
+                        axon.footprints = self.footprints[k]
+                    elif str(k) in self.footprints:
+                        axon.footprints = self.footprints[str(k)]
+                    else:
+                        rise_warning("footprints not computed for axon "+ str(k))
+                        axon_ftpt = False
                 else:
-                    axon_ftpt = loaded_footprints[k]
-
+                    axon_ftpt = False
                 sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
                     record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
                     record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
