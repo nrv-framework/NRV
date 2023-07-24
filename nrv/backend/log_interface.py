@@ -91,6 +91,9 @@ def rise_warning(*args, abort=False, **kwargs):
     else:
         if parameters.LOG_Status:
             logging.warning('NRV WARNING: '+ message + '\n encountered in process '+str(MCH.rank)+' out of '+str(MCH.size))
+        if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL>=2:
+            print(bcolors.WARNING + 'NRV WARNING: '+ message+ bcolors.ENDC)
+            sys.stdout.flush()
     if abort:
         sys.exit(0)
 
@@ -119,6 +122,33 @@ def pass_info(*args, **kwargs):
     else:
         if parameters.LOG_Status:
             logging.info('NRV INFO: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))
+    
+
+def pass_debug_info(*args, **kwargs):
+    """
+    Pass an info to the log and to the prompt for the master process (process ID 0) in case of
+    parallel computing.
+
+    Parameters
+    ----------
+    *args   :
+        anything to pass as info
+    """
+
+    verbose = True
+    if 'verbose' in kwargs:
+        verbose = kwargs['verbose']
+    message = ''
+    for arg in args:
+        message += str(arg)
+    if MCH.is_alone(): 
+        if parameters.LOG_Status and parameters.VERBOSITY_LEVEL>=4: 
+            logging.info('NRV DEBUG: '+ message)
+        if verbose and parameters.VERBOSITY_LEVEL>=4:
+            print('NRV DEBUG: '+ message)
+    else:
+        if parameters.LOG_Status:
+            logging.info('NRV DEBUG: '+ message + '\n from process '+str(MCH.rank)+' out of '+str(MCH.size))
 
 def progression_popup(current, max_iter, begin_message='', end_message='', endl=''):
     """
