@@ -5,6 +5,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 
 from abc import ABCMeta, abstractmethod
+import numpy as np
 import sys
 from copy import deepcopy
 from numpy import iterable
@@ -36,6 +37,7 @@ def is_NRV_dict_list(x):
                 return False
         return True
     return False
+
 
 
 
@@ -81,6 +83,8 @@ class NRV_class(metaclass=ABCMeta):
             if key in key_dic and key not in blacklist:
                 if is_NRV_dict(key_dic[key]) or is_NRV_dict_list(key_dic[key]):
                     self.__dict__[key] = load_any(key_dic[key])
+                elif isinstance(self.__dict__[key], np.ndarray):
+                    self.__dict__[key] = np.array(key_dic[key])
                 else:
                     self.__dict__[key] = key_dic[key]
 
