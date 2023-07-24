@@ -50,6 +50,7 @@ class MshCreator(NRV_class):
     def __init__(self, D=3, ver_level=None):
         """
         initialisation of the MshCreator
+        
         Parameters
         ----------
         D           : int(1,2,3)
@@ -106,6 +107,7 @@ class MshCreator(NRV_class):
     def get_obj(self):
         """
         update and return list of mesh entities  
+        
         Returns
         -------
         self.entities       :dict
@@ -191,6 +193,7 @@ class MshCreator(NRV_class):
     def get_res(self):
         """
         return the global resolution saved (usefull when no field are set)
+        
         Returns
         -------
         res     :float
@@ -201,6 +204,7 @@ class MshCreator(NRV_class):
     def set_res(self, new_res):
         """
         set the global resolution saved (usefull when no field are set)
+        
         Parameters
         ----------
         new_res     :float
@@ -250,17 +254,20 @@ class MshCreator(NRV_class):
     def add_point(self,x=0, y=0, z=0):
         """
         add a point to the mesh
+        
         Parameters
         ----------
-        x       : float
+        x        : float
             x position of the first face center
-        y       : float
+        y        : float
             y position of the first face center
-        z       : float
+        z        : float
             z position of the first face center
   
         Returns
         -------
+        point    : int
+            id of the added object
         """
         point = self.model.occ.addPoint(x, y, z)
         self.model.occ.synchronize()
@@ -269,6 +276,7 @@ class MshCreator(NRV_class):
     def add_line(self, X0, X1):
         """
         add a point to the mesh
+        
         Parameters
         ----------
         X0       : int or tupple(3)
@@ -278,6 +286,8 @@ class MshCreator(NRV_class):
   
         Returns
         -------
+        line    : int
+            id of the added object
         """
         if isinstance(X0, int):
             ix0 = X0
@@ -303,6 +313,7 @@ class MshCreator(NRV_class):
     def add_box(self,x=0, y=0, z=0, ax=5, ay=1, az=1):
         """
         add a box to the mesh
+        
         Parameters
         ----------
         x       : float
@@ -320,6 +331,8 @@ class MshCreator(NRV_class):
   
         Returns
         -------
+        box    : int
+            id of the added object
         """
         if self.D ==3:
             parameters = {"x":x, "y":y, "z":z, "ax":ax, "ay":ay, "az":az}
@@ -352,7 +365,8 @@ class MshCreator(NRV_class):
 
         Returns
         -------
-
+        cyl    : int
+            id of the added object
         """
         if self.D ==3:
             parameters = {"x":x, "y":y, "z":z, "L":L, "R":R}
@@ -399,6 +413,7 @@ class MshCreator(NRV_class):
     def fragment(self, IDs=None, dim=3, verbose=True):
         """
         Fragmentation of the mesh important to link entities to each other
+        
         Parameters
         ----------
         IDs     : list or None
@@ -408,10 +423,6 @@ class MshCreator(NRV_class):
             dimension of the elements considerated, by default 3
         verbose : bool
             print or not the verbose on the temrminal, by default False
-
-        Returns
-        -------
-
         """
         if IDs is None:
             if dim == 2:
@@ -573,6 +584,7 @@ class MshCreator(NRV_class):
         """
         Add a call back function which is apply to the mesh size defined by fields and return
         the final mesh size
+        
         Parameters
         ----------
         meshSizeCallback    : nrv.utils.MeshCallBack
@@ -587,7 +599,7 @@ class MshCreator(NRV_class):
     ##############################################################################################
     def generate(self):
         """
-        
+        genetate the mesh
         """
         if not self.is_generated:
             if self.Nfeild>0:
