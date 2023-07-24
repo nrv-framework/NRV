@@ -52,7 +52,8 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     Given a mesh_file or a MeshCreator returns mesh cell_tags and facet_tags
     (see dolfinx.io.gmshio.model_to_mesh for more details)
-    NB: copy of dolfinx.io.gmshio.read_from_msh verbose from gmsh 
+    NB: copy of dolfinx.io.gmshio.read_from_msh verbose from gmsh
+    
     Parameters
     ----------
     mesh_file : str, 
@@ -89,7 +90,8 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
 def domain_from_meshfile(mesh_file):
     """
         return only the domain from mesh_file
-        Parameters
+    
+    Parameters
     ----------
     mesh_file : str
         Path and name of mesh file 
@@ -119,6 +121,7 @@ class SimResult(NRV_class):
     def __init__(self, mesh_file="", domain=None, elem=('Lagrange', 1), V=None, vout=None,comm=MPI.COMM_WORLD):
         """
         initialisation of the SimParameters:
+        
         Parameters
         ----------
         mesh_file       :str
