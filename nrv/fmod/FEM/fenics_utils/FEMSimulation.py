@@ -50,6 +50,7 @@ class FEMSimulation(SimParameters):
         ummesh=True, comm=MPI.COMM_SELF, rank=0):
         """
         initialisation of the FEMSimulation:
+        
         Parameters
         ----------
         D               : int
@@ -421,6 +422,7 @@ class FEMSimulation(SimParameters):
     def solve(self, overwrite=False):
         """
         Assemble and solve the linear problem
+        
         Parameters
         ----------
         overwrite   : bool
@@ -505,7 +507,6 @@ class FEMSimulation(SimParameters):
 
     def visualize_mesh(self):
         os.system('gmsh '+ self.mesh_file +'.msh')
-
 
     def get_domain_potential(self, dom_id, dim=2, space=0):
         if dim == 2:
