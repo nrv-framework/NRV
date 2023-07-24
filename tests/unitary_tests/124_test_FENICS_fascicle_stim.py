@@ -3,7 +3,6 @@ import time
 
 t0 = time.time()
 source_file = './unitary_tests/sources/56_fasc.json'
-my_model = 'Nerve_1_Fascicle_1_LIFE'
 Ntest = 124
 ###########################
 ## extracellular context ##
