@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Introduction to NRV" href="introduction.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Quickstart" href="quickstart.html" /><link rel="prev" title="Welcome to NeuRon Virtualizer (NRV)’s documentation!" href="index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.05.20 -->
         <title>Installation - NeuRon Virtualizer (NRV) 1.0.0 documentation</title>
@@ -157,11 +157,10 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to NRV</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="scientific.html">Scientific foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">nrv</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of nrv</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="nrv.html">Complete API</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of Complete API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="nrv.backend.html">nrv.backend package</a></li>
@@ -209,18 +208,52 @@
         <article role="main">
           <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
-<p>Here is how you install</p>
+<p>NRV is pip installable and the hole process should be quite simple. However, to prevent from third packages version conflict we recommend to create a dedicated conda environnement:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">nrv</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+<p>and activate it before any installation with the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="n">nrv</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+<p>Even if the pip installation can take care of dependncies, somes third party librairy are safer to install with conda instead of pip, please consider the following method for a successfull use of NRV.</p>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
-<p>Here is how you install Dependencies</p>
+<p>First install latest versions of common scientific librairies, as well as numba (for code acceleration) and icecream for debug:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">mpi4py</span> <span class="n">matplotlib</span> <span class="n">numba</span> <span class="n">scipy</span> <span class="n">icecream</span>
+</pre></div>
+</div>
+<p>Then install everything for open source FEM computation with FENICS and GMSH:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">fenics</span><span class="o">-</span><span class="n">dolfinx</span> <span class="n">mpich</span> <span class="n">python</span><span class="o">-</span><span class="n">gmsh</span> <span class="n">pyvista</span>
+</pre></div>
+</div>
+<p>Then, install additional packages from pip, <em>and only these ones</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mph</span> <span class="n">ezdxf</span> <span class="n">neuron</span>
+</pre></div>
+</div>
 </section>
 <section id="installing-nrv">
 <h2>Installing NRV<a class="headerlink" href="#installing-nrv" title="Permalink to this heading">#</a></h2>
-<p>Here is how you install NRV</p>
+<p>NRV can simply be installed with pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">nrv</span><span class="o">-</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>if you want the very last development version under developpement, please consider:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>​​pip install git+https://github.com/fkolbl/NRV.git
+</pre></div>
+</div>
+<p>if you already installed a previous version and want to upgrade to the very last development version, please use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">reinstall</span> <span class="o">--</span><span class="n">ignore</span><span class="o">-</span><span class="n">installed</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">fkolbl</span><span class="o">/</span><span class="n">NRV</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
 </section>
 <section id="testing-installation">
 <h2>Testing installation<a class="headerlink" href="#testing-installation" title="Permalink to this heading">#</a></h2>
-<p>Here is how you test everything</p>
+<p>You should be now able to import nrv in your python shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nrv</span>
+</pre></div>
+</div>
+<p>which should return to the prompt the number of processors used to launch the package. Be aware that on the first import of NRV, some files related to simulation of ion channel are automatically compiled by NEURON, you may see the results of the compilation (including warning, but no errors) on your prompt.</p>
 </section>
 </section>
 
@@ -238,14 +271,14 @@
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="introduction.html">
+          <a class="prev-page" href="index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Introduction to NRV</div>
+                <div class="title">Home</div>
                 
               </div>
             </a>
