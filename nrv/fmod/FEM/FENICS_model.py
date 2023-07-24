@@ -379,7 +379,7 @@ class FENICS_model(FEM_model):
             self.__update_parameters()
             self.mesh.compute_mesh()
             self.is_meshed = True
-            self.mesh.get_mesh_info(verbose=True)
+            self.mesh.get_info(verbose=True)
             self.meshing_timer += time.time() - t0
 
     def solve(self, comm=None, rank=None):
