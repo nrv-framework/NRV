@@ -9,8 +9,8 @@ if nrv.MCH.do_master_only_work():
 
 L = 10000 			# length, in um
 fascicle_1 = nrv.fascicle()
-fascicle_1.define_length(L)
 fascicle_1.load('./unitary_tests/sources/56_fasc.json')
+fascicle_1.define_length(L)
 #fascicle_1.generate_random_NoR_position()
 fascicle_1.simulate(save_path='./unitary_tests/figures/')
 
