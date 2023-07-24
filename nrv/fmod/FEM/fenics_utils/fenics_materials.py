@@ -87,6 +87,7 @@ def mat_from_csv(f_material, **kwargs):
 def load_fenics_material(X, **kwargs):
     """
     Return fenics material from an object X
+    
     Parameters
     ----------
     X   : objects
