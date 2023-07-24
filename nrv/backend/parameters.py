@@ -52,6 +52,7 @@ class nrv_parameters():
         2: + Warning
         3: + Info
         4: + Debug
+        NB: to add Debug verbosity to the log VERBOSITY_LEVEL has to be set to 4
         """
         self.VERBOSITY_LEVEL = i
 
