@@ -30,6 +30,7 @@ class SimParameters(NRV_class):
     def __init__(self, D=3, mesh_file="", data=None):
         """
         initialisation of the SimParameters:
+        
         Parameters
         ----------
         D               :int
@@ -143,6 +144,7 @@ class SimParameters(NRV_class):
     def set_mesh_file(self, new_mesh_file):
         """
         set a new mesh file name
+        
         Parameters
         ----------
         new_mesh_file   :str 
@@ -190,6 +192,7 @@ class SimParameters(NRV_class):
     def add_domain(self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
         add new domain or update if mesh_domain already exists
+        
         Parameters
         ----------
         mesh_domain     : int
@@ -223,7 +226,8 @@ class SimParameters(NRV_class):
     
     def add_boundary(self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None):
         """
-        add new boundary or update if mesh_domain already exists 
+        add new boundary or update if mesh_domain already exists
+        
         Parameters
         ----------
         mesh_domain     : int
@@ -255,6 +259,7 @@ class SimParameters(NRV_class):
     def add_inboundary(self, mesh_domain, in_domains, thickness, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
         """
         add new internal boundary or update if mesh_domain already exists
+        
         Parameters
         ----------
         mesh_domain     : int
