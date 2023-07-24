@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 dt = 0.005
 t_sim = 10
 L = 10000 			# length, in um
-source_file = './unitary_tests/sources/70_fascicle_0.json'
+source_file = './unitary_tests/sources/56_fasc.json'
 ID = 70
 
 
