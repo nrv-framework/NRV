@@ -157,9 +157,10 @@ class fascicle(NRV_class):
         intracel_context: bool
             if True, add the intracellular context to the saving
         """
-        blacklist += ['extra_stim']
+        bc = [i for i in blacklist]
+        bc += ['extra_stim']
         if not intracel_context:
-            blacklist += ['N_intra',\
+            bc += ['N_intra',\
                         'intra_stim_position',\
                         'intra_stim_t_start',\
                         'intra_stim_duration',\
@@ -167,16 +168,16 @@ class fascicle(NRV_class):
                         'intra_stim_ON']
         
         if not extracel_context:
-            blacklist += ['footprints',\
+            bc += ['footprints',\
                         'myelinated_nseg_per_sec',\
                         'unmyelinated_nseg',\
                         'is_footprinted']
         
         if not rec_context:
-            blacklist += ['record',\
-                        'recorder']
+            bc += ['record',\
+                   'recorder']
 
-        key_dict = super().save(blacklist=blacklist)
+        key_dict = super().save(blacklist=bc)
 
         # As to be done separatly because mph object cannot be deep copied
         if extracel_context:
@@ -204,9 +205,9 @@ class fascicle(NRV_class):
         intracel_context: bool
             if True, load the intracellular context as well
         """
-
+        bc = [i for i in blacklist]
         if not intracel_context:
-            blacklist += ['N_intra',\
+            bc += ['N_intra',\
                         'intra_stim_position',\
                         'intra_stim_t_start',\
                         'intra_stim_duration',\
@@ -214,17 +215,17 @@ class fascicle(NRV_class):
                         'intra_stim_ON']
         
         if not extracel_context:
-            blacklist += ['extra_stim',\
+            bc += ['extra_stim',\
                         'footprints',\
                         'myelinated_nseg_per_sec',\
                         'unmyelinated_nseg',\
                         'is_footprinted']
         
         if not rec_context:
-            blacklist += ['record',\
-                        'recorder']
+            bc += ['record',\
+                   'recorder']
 
-        super().load(data=data, blacklist=blacklist)
+        super().load(data=data, blacklist=bc)
 
     def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
         rise_warning('save_fascicle_configuration is a deprecated method use save instead')
