@@ -1,5 +1,5 @@
-Complete API
-============
+nrv package
+===========
 
 Subpackages
 -----------

@@ -9,6 +9,8 @@ NRV is a fully open-source multi-scale and multi-domain Python-based framework d
 
 Extracellular potential computed with the FEM model is interpolated and used as input for the 1-D axon models. An intracellular voltage or current clamp can also be used to stimulate one or multiple axons of the NRV model. Axons are then simulated using the NEURON framework with the NEURON to Python bridge. All computation inputs and outputs are stored in dictionary objects to enable context saving. Post-processing tools are also provided to automatically detect spikes, filter the data, etc. Extracellular recorders are also implemented and can be added to the model to simulate electrically-evoked compound action potentials (eCAPs).
 
+.. image:: images/main_fig.png
+
 Large-scale fascicle or nerve simulations are embarrassingly parallel problems and can greatly reduce computation time. NRV also provides multiprocessing capabilities by implementing a message-passing interface (MPI) for Python (Dalcin and Fang 2021). Parallel computing is performed independently from the simulation description and the end-user only needs to provide the maximum number of usable cores on the machine, NRV automatically handles job distribution and synchronicity between the processes. Calls to Gmsh, FenicsX, COMSOL Server, NEURON, or other third-party libraries used are fully encapsulated in the NRV framework making their use completely transparent to the user.
 
 NRV aims at being accessible for users with basic Python knowledge as well as easily readable from high-level simulation perspectives. NRV also enables multi-scale simulations: single axonal fibers to whole nerve simulations can be performed with NRV and require only a couple of lines of code. The framework is pip- or conda installable (python packet managers) making the framework effortlessly deployable on a computer cluster or supercomputer.
@@ -21,14 +23,81 @@ NRV’s internal architecture is depicted in Fig. II.36. It is subdivided into f
 
 Computation of extracellular potentials
 ---------------------------------------
-NRV provides classes, tools, and templates to create 3-D models of the nerve and electrodes. By default, all axons are colinear to the 𝑥 − 𝑎𝑥𝑖𝑠 of the space frame. Fig. II.37 provides a synthetic overview of the extracellular simulated problem and a simplified UML- class diagram of the software implementation, containing class references that the end-user can access. Here are provided details about the implementation of physics and corresponding computational mechanisms.
+NRV provides classes, tools, and templates to create 3-D models of the nerve and electrodes. By default, all axons are colinear to the 𝑥 − 𝑎𝑥𝑖𝑠 of the space frame. The figure below provides a synthetic overview of the extracellular simulated problem and a simplified UML- class diagram of the software implementation, containing class references that the end-user can access. Here are provided details about the implementation of physics and corresponding computational mechanisms.
+
+.. image:: images/fmod.png
 
 The computation of the extracellular electric potential associated with electrical stimulation is handled by the extracellular_context-class. The analytical_stimulation-class and the FEM_stimulation-class are derived from the parent extracellular_context-class as illustrated in Fig. II.37 and detailed in the next two subsections. NRV provides the possibility of analytically estimate compound action potential (CAP) using recorder-objects. 
 
 Electrical stimulation potential: computation mechanism
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-NRV provides classes, tools, and templates to create 3-D models of the nerve and electrodes. By default, all axons are colinear to the 𝑥 − 𝑎𝑥𝑖𝑠 of the space frame. Fig. II.37 provides a synthetic overview of the extracellular simulated problem and a simplified UML- class diagram of the software implementation, containing class references that the end-user can access. Here are provided details about the implementation of physics and corresponding computational mechanisms.
+NRV provides classes, tools, and templates to create 3-D models of the nerve and electrodes. By default, all axons are colinear to the 𝑥 − 𝑎𝑥𝑖𝑠 of the space frame. The figure above provides a synthetic overview of the extracellular simulated problem and a simplified UML- class diagram of the software implementation, containing class references that the end-user can access. Here are provided details about the implementation of physics and corresponding computational mechanisms.
 
 .. math::
    V_{ext}{\left( \mathbf{r}, t\right)} =  \sum_{k\in E}{I_{stim_k}\left(t\right)V_{footprint_k}\left(\mathbf{r}\right) }
+
+Where :math:`E` is the set of electrodes in the simulation, :math:`I_{stim_k}` is the stimulation current at the electrode k, and :math:`V` is the electrode footprint computed for each electrode before any simulation. It corresponds to the electrical potential generated in space for a unitary current contribution of the electrode 𝑘. The electrode footprint can be computed with two distinct methods explained hereafter.
+
+The stimulationcurrent :math:`I_{stim_k}` is described by a dedicated stimulus-class that defines asynchronous stimulus current/time values applied to an electrode 𝑘. Arithmetic operations between Stimulus-objects are defined for the class, thus enabling fully customized arbitrary stimulating waveforms. This approach facilitates the design of complex waveforms.
+
+When describing the simulation by instantiating an extracellular_context- object, the end user can choose between two different methods of computation: analytical or using the FEM approach. This choice has a consequence on computational requirements but also on the degree of realism of the simulation. In any case, the end user can add a combination of electrodes (electrode-class) and stimulus (stimulus-class). Each Electrode-object in NRV has a unique ID and multiple electrodes can be added to the simulation model. If the field is solved analytically (with the analytical_stimulation-class), only point-source electrodes can be implemented. The method is only suitable for geometry-less simulation: axons are considered as being surrounded by a unique homogeneous material.
+
+With FEM, classes to simulate cuff electrodes and LIFEs have been implemented. FEM electrodes can be fully parameterized (active-site length, number of contacts, location, etc.). Implementation of the FEM solver is detailed in the next paragraph. Custom classes for alternative or more complex electrode designs can be further implemented by inheritance of the FEM_electrodes-class. All footprint computations are performed by the electrode- mother class automatically when the extracellular_context-object is associated with axons.
+
+Electrical conductivities (isotropic or anisotropic) of the tissues constituting the NRV nerve are defined using Material-class. The framework includes pre-defined materials for the epineurium, endoneurium, and perineum conductivities with values commonly found in the literature (Ranck and BeMent 1965). Custom conductivity values can also be user-specified.
+
+FEM computation of electrode footprints
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+FEM evaluation of potential in a realistic nerve model is handled by the FEM_stimulation-class. An ex-novo nerve in NRV is defined by its diameter, its length, and by the number of fascicles. The position and diameter of each fascicle on the NRV nerve can be specified. The nerve is plunged into a cylindrical material (by default saline solution). Fascicles of the NRV model are modeled as bulk volumes of endoneurium surrounded by a thin layer of perineurium tissue (Pelot et al. 2019). The remaining tissue of the nerve is modeled as a homogeneous epineurium.
+
+The NRV framework offers the possibility of using either COMSOL Multiphysics or FEniCS to solve the FEM problem. For the first one, mesh and FEM problems are defined in mph files which can be parameterized in the FEM_stimulation-class to match the extracellular properties, and the physic equations are integrated into the Electric Currents COMSOL library. For the FEniCS solver, NRV handles the mesh generation using Gmsh, the bridge with the FEM solver, and the finite element problem with FEniCS algorithms. Physic equations solved are defined in the framework.
+
+The electrode footprint :math:`\Omega` is solved under quasi-static assumption in the simulation space Ω. It is obtained from the Poisson equation, expressed as:
+
+.. math::
+    \mathbf{j}\left( \mathbf{r}\right) = \sigma\left( \mathbf{r}\right)\nabla V_{footprint}\left(\mathbf{r}\right), \forall \mathbf{r}\in \Omega
+
+Where :math:`\mathbf{j}` is the current density and and :math:`\sigma` the electrical conductivity. Electrical ground is imposed on the outer surface of the saline solution using Dirichlet boundary condition. Neuman boundary conditions are used on the electrode active-sites. Dirichlet and Neuman boundary are defined as follow: :math:`\mathbf{n}` 
+
+.. math::
+    V_{footprint}\left(\mathbf{r}\right) = 0, \forall \mathbf{r} \in \partial \Omega_G \\
+    \sigma\left(\mathbf{r}\right) V_{footprint}\left(\mathbf{r}\right)\cdot \mathbf{n} = \mathbf{j_E}\left(\mathbf{r}\right), \forall \mathbf{r} \in \partial \Omega_E
+
+Where :math:`\partial \Omega_G` and  :math:`\partial \Omega_E`  are the electrical ground and the electrode active-site surface respectively, :math:`\mathbf{n}` the normal vector to :math:`\partial \Omega_E`  and :math:`\mathbf{j_E}`  the injected current density considered homogeneously distributed and expressed as:
+
+.. math::
+    \mathbf{j_E}\left(\mathbf{r}\right)\cdot\mathbf{n} = \frac{I_{stim}}{S_E}, \forall \mathbf{r} \in \partial\Omega_E
+    
+Where :math:`S_E` is the electrode active site surface.
+
+The perineurium is defined using a thin-layer approximation to reduce the number of
+mesh elements associated with smaller material dimensions (Pelot et al. 2019). In COMSOL Multiphysics, the thin-layer approximation can be implemented using the contact impedance boundary condition. There is no direct equivalent with FEniCs thus the thin-layer approximation was manually implemented in NRV using the methodology described in (Givoli 2004).
+
+Generating and simualating axons with NRV
+-----------------------------------------
+The description of a physiological context in NRV, as well as the computation of the axon membrane potential, are set up in a hierarchical manner described in the figure below. At the bottom of the hierarchy, axons are individual computational problems for which NRV computes an electrical response. As a conventional hypothesis, each axon is assumed independent from others, i.e., there is no ephaptic coupling between fiber, meaning that all axon computation can be done separately. From the computation aspect, this hypothesis transforms the neural computation to an embarrassingly parallel problem enabling massively parallel computations. In this section, details of models are given with a bottom-up approach: first axons models are described and explain up to nerves entities.
+
+.. image:: images/nmod.png
+
+Axons models
+^^^^^^^^^^^^
+
+Axonal fibers in NRV are defined with the axon-class. This class is an abstract class and cannot be called directly by the user. It however handles all generic definitions and the simulation mechanism. Axons are defined along the x−axis of the nerve model. Axon coordinates and axon length are specified at the creation of an axon-object. End-user accessible Myelinated-class and unmyelinated-class define myelinated and unmyelinated fiber objects respectively and inherit from the axon-class. Computational models can be specified for both the myelinated and unmyelinated fibers. Currently, NRV supports the MRG (McIntyre et al. 2002) and Gaines (Gaines et al. 2018) models for myelinated fibers and the original Hodgkin-Huxley model (Hodgkin and Huxley 1952b), the Rattay-Aberham model (Rattay 1998), the Sundt model (Sundt et al. 2015), the Tigerholm model (Tigerholm et al. 2014), the Schild model (Schild et al. 1994) and its updated version (Schild and Kunze 1997) for unmyelinated fibers.
+
+MRG and Gaines model’s electrical properties are available on ModelDB (Hines et al. 2004) under accession numbers 3810 and 243841 respectively. Interpolation functions used in (Gaines et al. 2018) to estimate the relationship between fiber diameter and node-of-Ranvier, paranode, juxtaparanodes, internode length as well as axon diameter generate negative values when used with small fiber diameter. In NRV, morphological values in (McIntyre et al. 2002) and from (Pelot et al. 2017) are interpolated with cubic or quadratic functions. The juxtaparanode length is fitted with a 5th order polynomial function between 1μm and 16μm and with a linear interpolation outside this range. Parameters of the unmyelinated models are taken from (Pelot et al. 2021) and are available on ModelDB under accession number 266498.
+
+The extracellular stimulations are linked to the axon-object with the attach_extracellular_stimulation-method, where an instance of extracellular_context is linked to the axon. Voltage and current Patch-clamps can also be inserted to the axon model with the insert_V_Clamp-method and insert_I_Clamp-method. The simulate-method of the axon-class solves the axon model using the Neuron framework. NRV uses the NEURON-to-Python bridge (Hines et al. 2009) and is fully transparent to the user. The simulate-method returns a dictionary containing the fiber information and the simulation results.
+
+Fascicle construction and simulation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The fascicle-class of NRV defines a population of fibers. The fascicle-object specifies the number of axons in the population, and the fiber type (unmyelinated or myelinated), the diameter, the computational model used, and the spatial location of each axonal fiber.
+
+The axon population can be pre-defined and loaded into the fascicle-object. Third- party software such as AxonSeg (Zaimi et al. 2016) or AxonDeepSeg (Zaimi et al. 2018) can be used for generating axon populations from a histology section that are then loaded into the fascicle-object. Alternatively, the NRV framework provides tools to generate a realistic ex- novo population of axons. For example, the create_axon_population-function creates a population with a specified number of axons, a proportion of myelinated/unmyelinated fibers, and statistics for unmyelinated and myelinated fibers’ diameter repartition. Statistics taken from (Ochoa 1978; Jacobs and Love 1985; Schellens et al. 1993) have been interpolated and predefined as population-generating functions. User-defined statistics can also be specified. Alternatively, the fill_area_with_axons-function fills a user-specified area with axons according to the desired fiber volume fraction, fiber type, and diameter repartition statistics. To place cells inside the fascicle boundaries, an axon-packing algorithm is also included. The packing algorithm is inspired by (Mingasson et al. 2017). The generation of a realistic axon population and the packing principle are illustrated in the figure below.
+
+.. image:: images/packing.png
+
+The fascicle-class can perform logical and mathematical operations on the axon population. Operations include population rotation and translation and diameter or fiber-type filtering. Node-of-Ranvier of the myelinated fiber can be also aligned or randomly positioned in the fascicle. An extracellular_context-object is added to the fascicle-object using the attach_extracellular_stimulation-method. Intracellular stimulations can also be attached to the entire axon population or to a specified subset of fibers. The simulate- method creates an axon-object for each fiber of the fascicle, propagates the intracellular and extracellular stimulations and recorders, and simulates each of them. Parallelization of axons simulation is automatically handled by the framework and fully transparent to the user. The simulation output of each axon is saved inside a pre-defined folder.
+

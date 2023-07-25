@@ -16,7 +16,7 @@ release = nrv.__version__
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon','sphinx_rtd_theme']
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -24,8 +24,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
 # -- Options for HTML output -------------------------------------------------
-html_theme = 'alabaster'
-html_static_path = ['_static']
+
 
 # Rendering options
 myst_heading_anchors = 2               # Generate link anchors for sections.
