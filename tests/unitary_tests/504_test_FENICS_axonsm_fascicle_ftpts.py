@@ -16,7 +16,7 @@ axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_populati
 
 
 t1 = time.time()
-
+t2 = time.time()
 print('Population of '+str(N)+' axons generated in '+str(t1 - t_start)+' s')
 
 
@@ -50,7 +50,7 @@ extra_stim.add_electrode(elec_2, stim1)
 
 fascicle_1.attach_extracellular_stimulation(extra_stim)
 footprints = fascicle_1.get_electrodes_footprints_on_axons()
-dict_fasc1 = fascicle_1.save(fname=PSfile,extracel_context=True)
+dict_fasc1 = fascicle_1.save(fname=PSfile)
 
 
 
@@ -67,7 +67,10 @@ del fascicle_1
 ##### LIFE elecrtode ######
 ###########################
 
-fascicle_2 = nrv.load_any(dict_fasc1)
+## To investiguate
+##### Issue with load_any  from dict #####  
+#fascicle_2 = nrv.load_any(dict_fasc1)
+fascicle_2 = nrv.load_any(PSfile)
 
 LIFE_stim = nrv.FEM_stimulation()
 # ### Simulation box size
@@ -104,17 +107,16 @@ t3 = time.time()
 print('Extracel context generated in '+str(t3 - t2)+' s')
 #Footprint saving
 footprints = fascicle_2.get_electrodes_footprints_on_axons()
-
 t4 = time.time()
 print('Electrod footprint generated in '+str(t4 - t3)+' s')
 
-fascicle_2.save(fname=LIFEfile,extracel_context=True)
+dict_fasc2 = fascicle_2.save(fname=LIFEfile,extracel_context=True)
 
 t6 = time.time()
 print('Total time '+str(t6 - t_start)+' s')
 
 fig, ax = plt.subplots(figsize=(6,6))
 fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
-
+exit()
 fascicle_2.plot(fig, ax, num=True)
 plt.savefig(DIR + 'figures/504_B.png')
