@@ -6,12 +6,10 @@ sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
-import nrv
-
-project = nrv.__project__
-copyright = nrv.__copyright__
-author = nrv.__contributors__
-release = nrv.__version__
+project = 'NeuRon Virtualizer (NRV)'
+copyright = '2023, Florian Kolbl'
+author = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
