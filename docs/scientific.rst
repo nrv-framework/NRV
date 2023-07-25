@@ -101,3 +101,13 @@ The axon population can be pre-defined and loaded into the fascicle-object. Thir
 
 The fascicle-class can perform logical and mathematical operations on the axon population. Operations include population rotation and translation and diameter or fiber-type filtering. Node-of-Ranvier of the myelinated fiber can be also aligned or randomly positioned in the fascicle. An extracellular_context-object is added to the fascicle-object using the attach_extracellular_stimulation-method. Intracellular stimulations can also be attached to the entire axon population or to a specified subset of fibers. The simulate- method creates an axon-object for each fiber of the fascicle, propagates the intracellular and extracellular stimulations and recorders, and simulates each of them. Parallelization of axons simulation is automatically handled by the framework and fully transparent to the user. The simulation output of each axon is saved inside a pre-defined folder.
 
+Full nerve stimulations
+^^^^^^^^^^^^^^^^^^^^^^^
+
+**to write**
+
+Optimizing a setup
+------------------
+
+**to write**
+
