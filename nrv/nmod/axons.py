@@ -260,9 +260,10 @@ class axon(NRV_class):
         ax_dic : dict
             dictionary containing all information
         """
-        blacklist += ['extra_stim', 'intra_current_stim', 'intra_voltage_stim']
+        bc = [i for i in blacklist]
+        bc += ['extra_stim', 'intra_current_stim', 'intra_voltage_stim']
         if not intracel_context:
-            blacklist += ['intra_current_stim_positions',\
+            bc += ['intra_current_stim_positions',\
                         'intra_current_stim_starts',\
                         'intra_current_stim_durations',\
                         'intra_current_stim_amplitudes',\
@@ -271,12 +272,12 @@ class axon(NRV_class):
                         'intra_voltage_stim_stimulus',\
                         'intra_voltage_stim_stimulus']
         if not extracel_context:
-            blacklist += ['footprints']
+            bc += ['footprints']
         if not rec_context:
-            blacklist += ['record',\
-                        'recorder']
+            bc += ['record',\
+                   'recorder']
 
-        key_dict = super().save(blacklist=blacklist)
+        key_dict = super().save(blacklist=bc)
 
         # As to be done separatly because mph object cannot be deep copied
         if extracel_context:
@@ -296,9 +297,9 @@ class axon(NRV_class):
         data    : str or dict
             json file path or dictionary containing axon information
         """
-
+        bc = [i for i in blacklist]
         if not intracel_context:
-            blacklist += ['intra_current_stim_positions',\
+            bc += ['intra_current_stim_positions',\
                         'intra_current_stim_starts',\
                         'intra_current_stim_durations',\
                         'intra_current_stim_amplitudes',\
@@ -307,13 +308,13 @@ class axon(NRV_class):
                         'intra_voltage_stim_stimulus',\
                         'intra_voltage_stim_stimulus']
         if not extracel_context:
-            blacklist += ['footprints',\
+            bc += ['footprints',\
                         'extra_stim']
         if not rec_context:
-            blacklist += ['record',\
-                        'recorder']
+            bc += ['record',\
+                    'recorder']
 
-        super().load(data=data, blacklist=blacklist)
+        super().load(data=data, blacklist=bc)
         com = "self._"+self.nrv_type+"__compute_axon_parameters()"
         eval(com)
         if intracel_context:
