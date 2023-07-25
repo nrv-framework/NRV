@@ -1,6 +1,9 @@
 import nrv
 import matplotlib.pyplot as plt
+import time
 
+t0 = time.time()
+#nrv.parameters.set_nrv_verbosity(4)
 fascicle_file = "./unitary_tests/figures/087_fascicle.json"
 
 # Fascicle config
@@ -32,13 +35,17 @@ fascicle_1.attach_extracellular_recorder(testrec)
 #save/load
 
 fascicle_1.save(fname=fascicle_file, intracel_context=True, rec_context=True)
-print('fascicle saved')
+t1 = time.time()
+print('fascicle saved in '+ str(nrv.sci_round(t1-t0,2))+' s')
+t2 = time.time()
 fascicle_2, loadedrec = nrv.load_any_fascicle(fascicle_file, intracel_context=True, rec_context=True)
-print('fascicle loaded')
+print('fascicle loaded in '+ str(nrv.sci_round(t2-t1,2))+' s')
+print(loadedrec)
 
 # simulation
 fascicle_2.simulate(t_sim=15, save_path='./unitary_tests/figures/')
-
+t3 = time.time()
+print('fascicle simulated in '+ str(nrv.sci_round(t3-t2,2))+' s')
 if nrv.MCH.do_master_only_work():
     fig = plt.figure(figsize=(8,6))
     axs = []
