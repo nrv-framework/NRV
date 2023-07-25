@@ -3,7 +3,7 @@
 # Meta information
 __title__           = 'NRV'
 __project__         = 'NeuRon Virtualizer (NRV)'
-__version__         = '1.0.0'
+__version__         = '0.9.9'
 __date__            = '2023–07–23'
 __author__          = 'Florian Kolbl'
 __contributors__    = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
