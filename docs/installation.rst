@@ -16,6 +16,9 @@ Even if the pip installation can take care of dependncies, somes third party lib
 Dependencies
 ------------
 
+Open source third-party Dependencies
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 First install latest versions of common scientific librairies, as well as numba (for code acceleration) and icecream for debug: 
 ::
 
@@ -30,6 +33,23 @@ Then, install additional packages from pip, *and only these ones*:
 ::
 
     pip install mph ezdxf neuron
+
+COMSOL Installation
+^^^^^^^^^^^^^^^^^^^
+
+NRV can perform computations of FEM with COMSOL. However, the end user has to provide a valid commercial installed licence by its own. COMSOL installation can be performed before or after NRV's installation. For using COMSOL, informations about the install must be specified in the ''nrv/_misc'' code folder, by filling the following fields in the ''NRV.ini'' file:
+::
+
+    [COMSOL]
+    COMSOL_STATUS = True
+    COMSOL_SERVER = PATH_TO_COMSOL_SERVER_BINARIES
+    COMSOL_CPU = 1
+    COMSOL_PORT = 2036
+    TIME_COMSOL_SERVER_LAUNCH = 10
+ 
+Espcially, the correct path to the COMSOL server binaries has to be specified, the port has to be adapted if changed from default values.
+
+The use of FenicsX for FEM computations have been repeatedely tested by NRV's contributor, and we do not recommend to use COMSOL with NRV as novel geometries or electrode won't be implemented for COMSOL. Also, the use of commercial licences limits the reproducibility and open-science possibilities.
 
 Installing NRV
 --------------

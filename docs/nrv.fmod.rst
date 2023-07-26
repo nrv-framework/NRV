@@ -1,6 +1,14 @@
 nrv.fmod package
 ================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 5
+
+   nrv.fmod.FEM
+
 Submodules
 ----------
 

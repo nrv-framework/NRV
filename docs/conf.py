@@ -16,14 +16,14 @@ deps = ('mph', 'neuron', 'icecream', 'numba', 'mpi4py', 'scipy',
 for package in deps:
     sys.modules[package] = MagicMock()
 
-
+import nrv
 
 # -- Project information -----------------------------------------------------
-project = 'NeuRon Virtualizer (NRV)'
-copyright = '2023, Florian Kolbl'
-author = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
-release = '1.0.0'
-
+project = nrv.__project__
+copyright = nrv.__copyright__
+author = nrv.__contributors__
+release = nrv.__version__
+version = release
 
 # -- General configuration ---------------------------------------------------
 
@@ -35,7 +35,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 
 # -- Options for HTML output -------------------------------------------------
-
+# Web site
+html_title          = f'{project} {version}'  # document title
+html_logo           = 'images/logo.png'       # project logo
 
 # Rendering options
 myst_heading_anchors = 2               # Generate link anchors for sections.
