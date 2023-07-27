@@ -7,6 +7,7 @@ license = {file='License.txt'}
 keywords = ['neuronal simulation', 'computer simulation', 'neurosciences',
             'multiphysics', 'Neuron', 'Comsol']
 classifiers = [
+    'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
     'Development Status :: 5 - Production/Stable',
     'Programming Language :: Python :: 3.6',
     'Programming Language :: Python :: 3.7',
@@ -16,8 +17,10 @@ classifiers = [
     'Operating System :: Microsoft :: Windows',
     'Operating System :: POSIX :: Linux',
     'Operating System :: MacOS :: MacOS X',
-    'Topic :: Scientific/Engineering :: Neuroscience',
+    'Intended Audience :: Education',
     'Intended Audience :: Science/Research',
+    'Topic :: Scientific/Engineering :: Bio-Informatics',
+    'Topic :: Scientific/Engineering :: Medical Science Apps.',
     'Natural Language :: English']
 readme = 'pypi.md'
 requires-python = '>=3.6'
