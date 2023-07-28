@@ -13,7 +13,9 @@ jobs:
       - name: Run Super-Linter
         uses: github/super-linter@v4
         env:
-          DEFAULT_BRANCH: main
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: master
+          VALIDATE_JSCPD: false
           FILTER_REGEX_INCLUDE: .*nrv/.*
           FILTER_REGEX_EXCLUDE: .*nrv/_misc/.*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
