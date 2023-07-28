@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from unittest.mock import MagicMock    # mock imports
 import sys
 
@@ -21,7 +21,38 @@ setup(
    description=nrv.__project__,
    long_description = 'file: README.md',
    author=nrv.__contributors__,
-   packages=['nrv'],
+   packages=['nrv',
+             'nrv._misc',
+             'nrv._misc.OTF_PP',
+             'nrv._misc.comsol_templates',
+             'nrv._misc.geom',
+             'nrv._misc.log',
+             'nrv._misc.materials',
+             'nrv._misc.mods',
+             'nrv._misc.pops',
+             'nrv._misc.ppops',
+             'nrv._misc.stats',
+             'nrv.backend',
+             'nrv.fmod',
+             'nrv.fmod.FEM',
+             'nrv.fmod.FEM.fenics_utils',
+             'nrv.fmod.FEM.mesh_creator',
+             'nrv.nmod',
+             'nrv.optim',
+             'nrv.utils',
+             'nrv.utils.cell',
+             'nrv.utils.fascicle'
+             ],
+   package_data={'nrv':['nrv2calm'],
+                 'nrv._misc':['NRV.ini'],
+                 'nrv._misc.comsol_templates':['*.mph'],
+                 'nrv._misc.geom':['*.dxf', '*.png'],
+                 'nrv._misc.log':['NRV.log'],
+                 'nrv._misc.materials':['*.mat'],
+                 'nrv._misc.mods':['*.mod'],
+                 'nrv._misc.pops':['*.pop'],
+                 'nrv._misc.ppops':['*.ppop'],
+                 'nrv._misc.stats':['*.csv']},
    include_package_data = True,
    url = 'https://github.com/fkolbl/NRV',
    classifiers =[
