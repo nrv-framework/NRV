@@ -13,7 +13,6 @@ jobs:
       - name: Run Super-Linter
         uses: github/super-linter@v4
         env:
-          VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: master
           VALIDATE_JSCPD: false
           FILTER_REGEX_INCLUDE: .*nrv/.*
