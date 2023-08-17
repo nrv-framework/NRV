@@ -11,16 +11,17 @@ from numpy import pi
 class nrv_parameters():
     def __init__(self):
         """
+        A class for NRV parameters used to 
         """
-        self.dir_path = os.environ['NRVPATH'] + '/_misc'
-        self.config_fname = self.dir_path + '/NRV.ini'
+        self.dir_path = os.environ["NRVPATH"] + "/_misc"
+        self.config_fname = self.dir_path + "/NRV.ini"
 
         self.load()
 
     def save(self):
-        with open(self.config_fname, 'w') as configfile:
+        with open(self.config_fname, "w") as configfile:
             self.machine_config.write(configfile)
-    
+
     def load(self, fname=None):
         if fname is None:
             fname = self.config_fname
@@ -28,19 +29,18 @@ class nrv_parameters():
         self.machine_config = configparser.ConfigParser()
         self.machine_config.read(self.config_fname)
 
-        #GMSH
-        self.GMSH_Ncores = int(self.machine_config.get('GMSH', 'GMSH_CPU'))
-        self.GMSH_Status = self.machine_config.get('GMSH', 'GMSH_STATUS') == 'True'
-        #LOG
-        self.LOG_Status = self.machine_config.get('LOG', 'LOG_STATUS') == 'True'
-        self.VERBOSITY_LEVEL = int(self.machine_config.get('LOG', 'VERBOSITY_LEVEL'))
+        # GMSH
+        self.GMSH_Ncores = int(self.machine_config.get("GMSH", "GMSH_CPU"))
+        self.GMSH_Status = self.machine_config.get("GMSH", "GMSH_STATUS") == "True"
+        # LOG
+        self.LOG_Status = self.machine_config.get("LOG", "LOG_STATUS") == "True"
+        self.VERBOSITY_LEVEL = int(self.machine_config.get("LOG", "VERBOSITY_LEVEL"))
 
     def get_nrv_verbosity(self):
         """
         get general verbosity level
         """
         return self.VERBOSITY_LEVEL
-
 
     def set_nrv_verbosity(self, i):
         """
@@ -72,5 +72,6 @@ class nrv_parameters():
 ##########################################################################
 ########################### Parameter singleton ##########################
 ##########################################################################
+# TO DO
 
 parameters = nrv_parameters()
