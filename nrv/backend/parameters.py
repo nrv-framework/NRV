@@ -56,7 +56,6 @@ class nrv_parameters():
         """
         self.VERBOSITY_LEVEL = i
 
-
     def get_gmsh_ncore(self):
         """
         get gmsh core number
@@ -68,6 +67,7 @@ class nrv_parameters():
         set gmsh core number
         """
         self.GMSH_Ncores = n
+
 
 ##########################################################################
 ########################### Parameter singleton ##########################

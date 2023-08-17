@@ -1,58 +1,69 @@
 """ NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
 
 # Meta information
-__title__           = 'NRV'
-__project__         = 'NeuRon Virtualizer (NRV)'
-__version__         = '0.9.10'
-__date__            = '2023–07–23'
-__author__          = 'Florian Kolbl'
-__contributors__    = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
-__copyright__       = '2023, Florian Kolbl'
-__license__         = 'CeCILL'
+__title__           = "NRV"
+__project__         = "NeuRon Virtualizer (NRV)"
+__version__         = "0.9.10"
+__date__            = "2023–07–23"
+__author__          = "Florian Kolbl"
+__contributors__    = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
+__copyright__       = "2023, Florian Kolbl"
+__license__         = "CeCILL"
 
-#################################
-# check environnement variables #
-#################################
+#####################################
+## check environnement variables   ##
+## check correct NRV configuration ##
+#####################################
 import os
 import inspect
 import platform
 # create a dummy object to locate frameworks path
 class DummyClass: pass
 nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
-root_path = nrv_path.replace('/nrv/','')
+root_path = nrv_path.replace("/nrv/", "")
 # check the PATH with os.environ['PATH'], modify bash/zsh profile
-current_PATH = os.environ['PATH']
-conf_file = '.bashrc'
-if platform.system() == 'Darwin':
-    conf_file = '.zshrc'
-if not (nrv_path+':' in current_PATH or ':'+nrv_path in current_PATH):
-    with open(os.path.expanduser('~/'+conf_file), "a") as outfile:
+current_PATH = os.environ["PATH"]
+conf_file = ".bashrc"
+if platform.system() == "Darwin":
+    # for MacOsX platforms
+    conf_file = ".zshrc"
+if not (nrv_path + ":" in current_PATH or ":" + nrv_path in current_PATH or "/nrv:" in current_PATH):
+    with open(os.path.expanduser("~/" + conf_file), "r") as outfile:
         # test if bash/zsh profile already modified
         Flag = False
-        lines = file.readlines()
+        lines = outfile.readlines()
         for line in lines:
-            if 'NRV setup' in line:
+            if "NRV setup" in line:
                 Flag = True
+    outfile.close()
+    with open(os.path.expanduser("~/" + conf_file), "a") as outfile:
         # modify or suggest user to source it    
         if not Flag: # in this case, thte bash/zsh profile is not modified yet, then do it
-            outfile.write('\n\n\n# >>>>> NRV setup >>>>>\n')
-            outfile.write('export PATH="'+nrv_path+':$PATH"\n')
-            outfile.write('# <<<<< NRV setup <<<<<\n')
+            outfile.write("\n\n\n# >>>>> NRV setup >>>>>\n")
+            outfile.write('export PATH="' + nrv_path + ':$PATH"\n')
+            outfile.write("# <<<<< NRV setup <<<<<\n")
+            print(
+                conf_file
+                + " file modified, please source or restart console to be able to used nrv2calm"
+            )
         # ask to source bash/zsh profile
         else:
-            print('Please restart console to be able to use nrv2calm or source your own bash/zsh profile')
+            print(
+                "Please restart console to be able to use nrv2calm or source your own bash/zsh profile"
+            )
     outfile.close()
-    print(conf_file + ' file modified, please source or restart console to be able to used nrv2calm')
 # create the environnement variable NRVPATH if it does not exist
-if not 'NRVPATH' in os.environ:
-    os.environ['NRVPATH'] = nrv_path
+if not "NRVPATH" in os.environ:
+    os.environ["NRVPATH"] = nrv_path
 # change the permissions on nrv2calm
-if not os.access(nrv_path+'/nrv2calm', os.X_OK):
-    mode = os.stat(nrv_path+'/nrv2calm').st_mode
+if not os.access(nrv_path + "/nrv2calm", os.X_OK):
+    mode = os.stat(nrv_path + "/nrv2calm").st_mode
     mode |= (mode & 0o444) >> 2    # copy R bits to X
-    os.chmod(nrv_path+'/nrv2calm', mode)
+    os.chmod(nrv_path+"/nrv2calm", mode)
 
-# Public interface
+######################
+## Public interface ##
+######################
 from .backend import compileMods
 from .backend.parameters import *
 

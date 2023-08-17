@@ -20,6 +20,8 @@ import subprocess
 import time
 import re
 
+import nrv
+
 # test for possibility of parallel computing
 try :
 	import mpi4py.MPI as mpi
