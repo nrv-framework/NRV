@@ -27,9 +27,20 @@ if platform.system() == 'Darwin':
     conf_file = '.zshrc'
 if not (nrv_path+':' in current_PATH or ':'+nrv_path in current_PATH):
     with open(os.path.expanduser('~/'+conf_file), "a") as outfile:
-        outfile.write('\n\n\n# >>>>> NRV setup >>>>>\n')
-        outfile.write('export PATH="'+nrv_path+':$PATH"\n')
-        outfile.write('# <<<<< NRV setup <<<<<\n')
+        # test if bash/zsh profile already modified
+        Flag = False
+        lines = file.readlines()
+        for line in lines:
+            if 'NRV setup' in line:
+                Flag = True
+        # modify or suggest user to source it    
+        if not Flag: # in this case, thte bash/zsh profile is not modified yet, then do it
+            outfile.write('\n\n\n# >>>>> NRV setup >>>>>\n')
+            outfile.write('export PATH="'+nrv_path+':$PATH"\n')
+            outfile.write('# <<<<< NRV setup <<<<<\n')
+        # ask to source bash/zsh profile
+        else:
+            print('Please restart console to be able to use nrv2calm or source your own bash/zsh profile')
     outfile.close()
     print(conf_file + ' file modified, please source or restart console to be able to used nrv2calm')
 # create the environnement variable NRVPATH if it does not exist
