@@ -10,31 +10,31 @@ from .log_interface import rise_warning
 # test if neuron correctly installed
 # warning: difficult as neuron can be 'mocked' on github and rtd for delploy and help
 try:
-    import neuron as nrn                # this still work with fake neuron (mock)
-    nrn_version = nrn.__version__       # this fails :)
+    import neuron as nrn    # this still work with fake neuron (mock)
+
+    nrn_version = nrn.__version__   # this fails :)
 except:
     # no Neuron or fake neuron
-    rise_warning('No mods compiled as the environnement variable NRVPATH does not exist')
+    rise_warning(
+        "No mods compiled as the environnement variable NRVPATH does not exist"
+    )
 else:
-    if not 'NRVPATH' in os.environ:
-        pass                            # this is where there should be code to substitute to the bash_nrv file
-
-    # done anyway
-    dir_path = os.environ['NRVPATH'] + '/_misc/mods/'
+    # if true neuron installation
+    dir_path = os.environ["NRVPATH"] + "/_misc/mods/"
     ls = os.listdir(dir_path)
     test_mods = False
-    i=0
-    while (not test_mods) and i<len(ls):
+    i = 0
+    while (not test_mods) and i < len(ls):
         test_mods = not '.' in ls[i]
         i += 1
 
     def NeuronCompile():
-        #path2compiled_mods =  dir_path + '/mods/x86_64'
+        # path2compiled_mods =  dir_path + "/mods/x86_64"
         path2_mods = dir_path
-        os.system('chmod +x '+ os.environ['NRVPATH'] +'/nrv2calm')
-        os.system('cd ' +path2_mods+  '&& nrnivmodl')
+        os.system("chmod +x "+ os.environ["NRVPATH"] +"/nrv2calm")
+        os.system("cd " +path2_mods+  "&& nrnivmodl")
 
     if not test_mods:
-        print('Mods files are not compiled, executing nrnivmodl...')
+        print("Mods files are not compiled, executing nrnivmodl...")
         NeuronCompile()
-        print('Compilation done')
+        print("Compilation done")

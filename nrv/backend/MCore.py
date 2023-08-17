@@ -7,15 +7,18 @@ import numpy as np
 
 try:
     import mpi4py.MPI as mpi
+
     comm = mpi.COMM_WORLD
     MCore_Flag = True
 except ImportError:
     MCore_Flag = False
 
-class Mcore_handler():
+
+class Mcore_handler:
     """
     Class to handle parallel processing (cores, no threads) in NRV2
     """
+
     def __init__(self, Flag):
         """
         Instantiation of Mcore
@@ -72,11 +75,11 @@ class Mcore_handler():
         Display a sentence from each process on prompt. For debug only
         """
         if self.is_alone():
-            print('Hi, I am the only core launched')
+            print("Hi, I am the only core launched")
         elif self.is_master():
-            print('Hi, I am the master core')
+            print("Hi, I am the master core")
         else:
-            print('Hi, I am a slave core, my ID is '+str(self.rank))
+            print("Hi, I am a slave core, my ID is "+str(self.rank))
 
     def split_job_from_arrays(self, len_arrays):
         """
@@ -121,9 +124,9 @@ class Mcore_handler():
         """
         if self.is_master():
             all_indexes = np.arange(len_arrays)
-            jobs_to_do = np.asarray(np.full(len(all_indexes),False))
-            chunks = np.array_split(all_indexes, self.size-1, axis=0)
-            chunks.insert(0,jobs_to_do)
+            jobs_to_do = np.asarray(np.full(len(all_indexes), False))
+            chunks = np.array_split(all_indexes, self.size - 1, axis=0)
+            chunks.insert(0, jobs_to_do)
         else:
             chunks = None
         chunk = comm.scatter(chunks, root=0)
@@ -172,7 +175,7 @@ class Mcore_handler():
         else:
             results = comm.gather(partial_result, root=0)
             if self.is_master():
-                final_result = np.concatenate(tuple(results))#,axis = 1)
+                final_result = np.concatenate(tuple(results))
             else:
                 final_result = None
         return final_result
@@ -272,8 +275,10 @@ class Mcore_handler():
         Validation_Flag = comm.bcast(Validation_Flag, root=0)
         return Validation_Flag
 
+
 # public interface
 MCH = Mcore_handler(MCore_Flag)
+
 
 def synchronize_processes():
     """

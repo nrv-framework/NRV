@@ -3,7 +3,6 @@ Access and modify NRV Parameters
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-
 from abc import ABCMeta, abstractmethod
 import numpy as np
 import sys
@@ -13,8 +12,10 @@ from .file_handler import json_dump, json_load
 from .parameters import parameters
 from .log_interface import rise_error, rise_warning, pass_info
 
+
 def is_NRV_class(x):
     return isinstance(x, NRV_class)
+
 
 def is_NRV_class_list(x):
     if iterable(x):
@@ -24,11 +25,13 @@ def is_NRV_class_list(x):
         return True
     return False
 
+
 def is_NRV_dict(x):
     if isinstance(x, dict):
-        if 'nrv_type' in x:
+        if "nrv_type" in x:
             return True
-    return False 
+    return False
+
 
 def is_NRV_dict_list(x):
     if iterable(x):
@@ -39,23 +42,25 @@ def is_NRV_dict_list(x):
     return False
 
 
-
-
 class NRV_class(metaclass=ABCMeta):
     @abstractmethod
     def __init__(self):
         """
+        Instanciate a basic NRV class
+
+        NRV Class are empty shells, defined as abstract classes of which every class in NRV
+        should inherite. This enable automatic context backup with save and load methods
         """
         self.__NRVObject__ = True
         self.nrv_type = self.__class__.__name__
-        if parameters.get_nrv_verbosity()>=4:
-            pass_info(self.nrv_type, ' initialized')
+        if parameters.get_nrv_verbosity() >= 4:
+            pass_info(self.nrv_type, " initialized")
 
     def __del__(self):
-        if parameters.get_nrv_verbosity()>=4:
-            pass_info(self.nrv_type, ' deleted')        
+        if parameters.get_nrv_verbosity() >=4 :
+            pass_info(self.nrv_type, " deleted")        
 
-    def save(self,save=False, fname='nrv_save.json', blacklist={}):
+    def save(self,save=False, fname="nrv_save.json", blacklist={}):
         bl = {}
         for key in blacklist:
             if key in self.__dict__:
@@ -69,15 +74,14 @@ class NRV_class(metaclass=ABCMeta):
             elif is_NRV_class_list(key_dic[key]):
                 for i in range(len(key_dic[key])):
                     key_dic[key][i] = key_dic[key][i].save()
-
         if save:
             json_dump(key_dic, fname)
         return key_dic
-        
+
     def load(self, data, blacklist={}):
         if type(data) == str:
             key_dic = json_load(data)
-        else: 
+        else:
             key_dic = data
         for key in self.__dict__:
             if key in key_dic and key not in blacklist:
@@ -92,12 +96,12 @@ class NRV_class(metaclass=ABCMeta):
 def load_any(data, **kwargs):
     if type(data) == str:
         key_dic = json_load(data)
-    else: 
+    else:
         key_dic = data
-    
+    # test if NRV class
     if is_NRV_class(key_dic) or is_NRV_class_list(key_dic):
         nrv_obj = key_dic
-    
+    # test if NRV dict
     elif is_NRV_dict(key_dic):
         nrv_type = key_dic['nrv_type']
         nrv_obj = eval("sys.modules['nrv']."+nrv_type)()
