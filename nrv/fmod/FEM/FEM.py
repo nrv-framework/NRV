@@ -20,6 +20,7 @@ class FEM_model(NRV_class):
     """
     A generic class for Finite Element models
     """
+    
     @abstractmethod
     def __init__(self, Ncore=None):
         """
@@ -32,7 +33,7 @@ class FEM_model(NRV_class):
         """
         super().__init__()
         self.Ncore = Ncore
-        self.type = 'FEM'
+        self.type = "FEM"
 
         # Timmers
         self.meshing_timer = 0
@@ -44,15 +45,19 @@ class FEM_model(NRV_class):
         self.is_meshed = False
         self.is_computed = False
 
-    
     def get_timers(self, verbose=False):
         """
-        
+        TO BE COMPLETED
         """
         pass_info("mesh done in " + str(self.meshing_timer) + " s")
         pass_info("simulation prepared in " + str(self.preparing_timer) + " s")
         pass_info("simulation solved in " + str(self.solving_timer) + " s")
         pass_info("Time spent to access results " + str(self.access_res_timer) + " s")
-        total_timer = self.meshing_timer + self.preparing_timer + self.solving_timer + self.access_res_timer
+        total_timer = (
+            self.meshing_timer
+            + self.preparing_timer
+            + self.solving_timer
+            + self.access_res_timer
+        )
         pass_info("total duration " + str(total_timer) + " s")
         return self.meshing_timer, self.preparing_timer, self.solving_timer, total_timer
