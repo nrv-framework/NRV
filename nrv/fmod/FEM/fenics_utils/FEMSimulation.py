@@ -423,21 +423,27 @@ class FEMSimulation(SimParameters):
 
     def __get_static_component(self, i_dom, i_mat, i_space):
         """
-            Set a static componnent of the bimlinear form:
-            a = ∇v[i_space] x 𝜎[i_mat]∇u[i_space] dx(i_dom)
-            Parameters
-            ----------
-            i_dom    : int
-                id of the domain on which the component should be set
-            i_mat       : int
-                id of the material corresponding domain on which the component should be set
-            i_space     : int
-                id of the i_space
+        Set a static componnent of the bimlinear form:
+        a = ∇v[i_space] x 𝜎[i_mat]∇u[i_space] dx(i_dom)
+        Parameters
+        ----------
+        i_dom    : int
+            id of the domain on which the component should be set
+        i_mat       : int
+            id of the material corresponding domain on which the component should be set
+        i_space     : int
+            id of the i_space
         """
         if not self.inbound:
-            return inner(nabla_grad(self.mixedvout), self.mat_map[i_mat].sigma_fen*nabla_grad(self.u))*self.dx(i_dom)
+            return inner(
+                nabla_grad(self.mixedvout),
+                self.mat_map[i_mat].sigma_fen*nabla_grad(self.u)
+            ) * self.dx(i_dom)
         else:
-            return inner(nabla_grad(self.mixedvout[i_space]), self.mat_map[i_mat].sigma_fen*nabla_grad(self.u[i_space]))*self.dx(i_dom)
+            return inner(
+                nabla_grad(self.mixedvout[i_space]),
+                self.mat_map[i_mat].sigma_fen*nabla_grad(self.u[i_space])
+            ) * self.dx(i_dom)
 
     def __set_jump(self):
         """
@@ -445,12 +451,20 @@ class FEMSimulation(SimParameters):
         """
         for i_ibound in self.inboundaries_list:
             in_space, out_space = self.get_spaces_of_ibound(i_ibound)
-            local_thickness = Constant(self.domain, ScalarType(self.inboundaries_list[i_ibound]["thickness"]))
+            local_thickness = Constant(
+                self.domain, ScalarType(self.inboundaries_list[i_ibound]["thickness"])
+            )
             jmp_v = avg(self.mixedvout[out_space]) - avg(self.mixedvout[in_space])
             jmp_u = avg(self.u[out_space]) - avg(self.u[in_space])
-            self.a  += self.mat_map[i_ibound].sigma_fen/local_thickness * jmp_u * jmp_v * self.dS(i_ibound)
+            self.a  += (
+                self.mat_map[i_ibound].sigma_fen
+                /local_thickness
+                * jmp_u
+                * jmp_v
+                * self.dS(i_ibound)
+            )
         self.jump_status = True
-    
+
     def __set_material_map(self):
         """
         internal use only: build a dictionnary mat_map containing a material for every domain and layer
@@ -459,10 +473,11 @@ class FEMSimulation(SimParameters):
             UN = S/m
         else:
             UN = 1
-        
         for dom, pty in self.mat_pty_map.items():
             self.mat_map[dom] = load_fenics_material(pty)
-            self.mat_map[dom].update_fenics_sigma(domain=self.domain,elem=self.elem,UN=UN, id=dom)
+            self.mat_map[dom].update_fenics_sigma(
+                domain=self.domain,elem=self.elem,UN=UN, id=dom
+            )
     
     def __set_linear_form(self):
         """
@@ -472,10 +487,10 @@ class FEMSimulation(SimParameters):
         # Check if quicker without
         c_0 = Constant(self.domain, ScalarType(0.0))
         if not self.inbound:
-            self.L = c_0 *self.u*self.dx
+            self.L = c_0 * self.u * self.dx
         else:
             for i_space in range(self.Nspace): 
-                self.L = c_0*self.u[i_space]*self.dx
+                self.L = c_0 * self.u[i_space] * self.dx
         self.linear_form_status = True
 
     #####################################################
@@ -491,7 +506,7 @@ class FEMSimulation(SimParameters):
     def set_solver_opt(self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None):
         """
         set krylov solver options
-        
+
         Parameters
         ----------
         ksp_type        : str
@@ -510,12 +525,12 @@ class FEMSimulation(SimParameters):
             if ksp_type in ksp_type_list:
                 self.petsc_opt["ksp_type"] = ksp_type
             else:
-                rise_warning(ksp_type+" not set, should be in:\n"+ksp_type_list)
+                rise_warning(ksp_type + " not set, should be in:\n" + ksp_type_list)
         if pc_type is not None:
             if pc_type in pc_type_list:
                 self.petsc_opt["pc_type"] = pc_type
             else:
-                rise_warning(pc_type+" not set, should be in:\n"+pc_type_list)
+                rise_warning(pc_type + " not set, should be in:\n" + pc_type_list)
         if ksp_rtol is not None:
             self.petsc_opt["ksp_rtol"] = ksp_rtol
         if ksp_atol is not None:
@@ -532,7 +547,7 @@ class FEMSimulation(SimParameters):
     def solve(self, overwrite=False):
         """
         Assemble and solve the linear problem
-        
+
         Parameters
         ----------
         overwrite   : bool
@@ -544,9 +559,10 @@ class FEMSimulation(SimParameters):
         """
         t0 = time.time()
         pass_info("FEN4NRV: solving electrical potential")
-        #rise_warning("The result will not be saved, be sure you use or save it later")
         if self.cg_problem is None:
-            self.cg_problem = LinearProblem(self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt)
+            self.cg_problem = LinearProblem(
+                self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt
+            )
         self.mixedvout = self.cg_problem.solve()
         self.solve_status = True
         
@@ -563,7 +579,13 @@ class FEMSimulation(SimParameters):
             vout.x.array[:] = self.vout.x.array[:]
         else:
             vout = self.vout
-        self.result.set_sim_result(mesh_file=self.mesh_file, domain=self.domain, elem=self.multi_elem, V=V_sol, vout=vout, comm=self.domain.comm)
+        self.result.set_sim_result(
+            mesh_file=self.mesh_file,
+            domain=self.domain,
+            elem=self.multi_elem,
+            V=V_sol, vout=vout,
+            comm=self.domain.comm,
+        )
         self.solving_timer += time.time() - t0
         pass_info("FEN4NRV: solved in " + str(self.solving_timer) + " s")
         return self.result
@@ -573,18 +595,18 @@ class FEMSimulation(SimParameters):
             self.mixedvouts = self.mixedvout.split()
             self.V_DG = FunctionSpace(self.domain, ("Discontinuous Lagrange", self.elem[1]))
             u, v = TrialFunction(self.V_DG), TestFunction(self.V_DG)
-            adg = u*v * self.dx
+            adg = u * v * self.dx
             Ldg = 0
             for i_domain in self.domainsID:
                 i_space = self.get_space_of_domain(i_domain)
-                Ldg += v*self.mixedvout[i_space]*self.dx(i_domain)
-            self.dg_problem = LinearProblem(adg, Ldg,bcs=[], petsc_options=self.petsc_opt)
+                Ldg += v * self.mixedvout[i_space]*self.dx(i_domain)
+            self.dg_problem = LinearProblem(
+                adg, Ldg,bcs=[], petsc_options=self.petsc_opt
+            )
         else:
             mixedvouts =self.mixedvout.split()
             for i in range(len(mixedvouts)):
                 self.mixedvouts[i].vector[:] = mixedvouts[i].vector[:]
-                
-        
         self.vout = self.dg_problem.solve()
         return self.V_DG
 
@@ -605,7 +627,7 @@ class FEMSimulation(SimParameters):
             self.solve()
 
         fname = rmv_ext(filename)
-        if not (fname == filename or fname+".xdmf" == filename):
+        if not (fname == filename or fname + ".xdmf" == filename):
             rise_warning("Extension of solution will be save in xdmf files")
         with XDMFFile(self.domain.comm, fname+".xdmf", "w") as file:
             file.write_mesh(self.domain)
@@ -616,7 +638,7 @@ class FEMSimulation(SimParameters):
         return self.assembling_timer, self.solving_timer
 
     def visualize_mesh(self):
-        os.system("gmsh "+ self.mesh_file +".msh")
+        os.system("gmsh " + self.mesh_file + ".msh")
 
     def get_domain_potential(self, dom_id, dim=2, space=0):
         if dim == 2:
@@ -625,6 +647,6 @@ class FEMSimulation(SimParameters):
             do = self.dx
         S = assemble_scalar(form(1*do(dom_id)))
         if self.to_merge:
-            return assemble_scalar(form(self.vout*do(dom_id)))/S * V
+            return assemble_scalar(form(self.vout * do(dom_id))) / S * V
         else:
-            return assemble_scalar(form(self.vout[space]*do(dom_id)))/S * V
+            return assemble_scalar(form(self.vout[space] * do(dom_id))) / S * V

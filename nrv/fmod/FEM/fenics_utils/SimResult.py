@@ -1,17 +1,20 @@
 import numpy as np
 
-from mpi4py import MPI 
+from mpi4py import MPI
 import scipy
 
 from dolfinx.fem import (FunctionSpace, Function, Expression)
 from dolfinx.io.gmshio import read_from_msh, model_to_mesh
 from dolfinx.io.utils import XDMFFile
-from dolfinx.geometry import (BoundingBoxTree, compute_collisions, compute_colliding_cells)
+from dolfinx.geometry import (
+    BoundingBoxTree,
+    compute_collisions,
+    compute_colliding_cells,
+)
 from dolfinx.mesh import create_cell_partitioner, GhostMode
 import gmsh
 
 from ..mesh_creator.MshCreator import *
-
 
 from ....backend.MCore import *
 from ....backend.file_handler import json_load, json_dump, rmv_ext
@@ -37,6 +40,7 @@ def is_sim_res(result):
     """
     return isinstance(result, SimResult)
 
+
 def save_sim_res_list(sim_res_list, fname, dt=1):
     """
     save a list of SimResults in a xdmf file
@@ -46,18 +50,19 @@ def save_sim_res_list(sim_res_list, fname, dt=1):
     xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
     xdmf.write_mesh(sim_res_list[0].domain)
     for E in range(N_list):
-        xdmf.write_function(sim_res_list[E].vout, E*dt)
+        xdmf.write_function(sim_res_list[E].vout, E * dt)
+
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     """
     Given a mesh_file or a MeshCreator returns mesh cell_tags and facet_tags
     (see dolfinx.io.gmshio.model_to_mesh for more details)
     NB: copy of dolfinx.io.gmshio.read_from_msh verbose from gmsh
-    
+
     Parameters
     ----------
-    mesh_file : str, 
-        Path and name of mesh file 
+    mesh_file : str,
+        Path and name of mesh file
         NB: extention is not required but must be a .msh file
     comm            : tupple (str, int)
         The MPI communicator to use for mesh creation
@@ -68,7 +73,6 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
     -------
     output  :  tuple(3)
         (domain, cell_tag, facet_tag)
-
     """
     if comm.rank == rank:
         if isinstance(mesh, str):
@@ -83,7 +87,7 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
         elif is_MshCreator(mesh):
             output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
         else: 
-            rise_error('mesh should be either a filename or a MeshCreator')
+            rise_error("mesh should be either a filename or a MeshCreator")
     return output
 
 
@@ -94,7 +98,7 @@ def domain_from_meshfile(mesh_file):
     Parameters
     ----------
     mesh_file : str
-        Path and name of mesh file 
+        Path and name of mesh file
         NB: extention is not required but must be a .msh file
 
     Returns
@@ -105,12 +109,11 @@ def domain_from_meshfile(mesh_file):
     return read_gmsh(mesh_file)[0]
 
 
-
-def V_from_meshfile(mesh_file, elem=('Lagrange', 1)):
+def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
     mesh = domain_from_meshfile(mesh_file)
     V = FunctionSpace(mesh, elem)
     return V
-    
+
 
 class SimResult(NRV_class):
     """
@@ -118,10 +121,18 @@ class SimResult(NRV_class):
     Store the resulting function space giving the possibility to apply basic mathematical
     operations on multiple results
     """
-    def __init__(self, mesh_file="", domain=None, elem=('Lagrange', 1), V=None, vout=None,comm=MPI.COMM_WORLD):
+    def __init__(
+        self,
+        mesh_file="",
+        domain=None,
+        elem=("Lagrange", 1),
+        V=None,
+        vout=None,
+        comm=MPI.COMM_WORLD
+    ):
         """
         initialisation of the SimParameters:
-        
+
         Parameters
         ----------
         mesh_file       :str
@@ -129,14 +140,14 @@ class SimResult(NRV_class):
         domain       : None or mesh
             mesh domain on which the result is defined, by default None
         elem            :tupple (str, int)
-            if None, ('Lagrange', 1), else (element type, element order), by default None
+            if None, ("Lagrange", 1), else (element type, element order), by default None
         V       : None or dolfinx.fem.FunctionSpace
             FunctionSpace on which the result is defined, by default None
         vout       : None or dolfinx.fem.Function
             Function resulting from the FEMSimulation, by default None
         comm            :int
             The MPI communicator to use for mesh creation, by default MPI.COMM_WORLD
-        """    
+        """
         super().__init__()
         self.type = "simresult"
         self.mesh_file = mesh_file
@@ -147,7 +158,15 @@ class SimResult(NRV_class):
         self.vout = vout
         self.comm = comm
 
-    def set_sim_result(self, mesh_file="", domain=None, V=None, elem=None,vout=None, comm=None):
+    def set_sim_result(
+        self,
+        mesh_file="",
+        domain=None,
+        V=None,
+        elem=None,
+        vout=None,
+        comm=None
+    ):
         if mesh_file != "":
             self.mesh_file = mesh_file
         if domain is not None:
@@ -160,41 +179,44 @@ class SimResult(NRV_class):
             self.vout = vout
         self.comm = comm     
     
-    def save(self, file, ftype='xdmf', overwrite=True):
-        if ftype == 'xdmf':
-            fname = rmv_ext(file) + '.xdmf'
+    def save(self, file, ftype="xdmf", overwrite=True):
+        if ftype == "xdmf":
+            fname = rmv_ext(file) + ".xdmf"
             with XDMFFile(self.comm, fname, "w") as file:
                 if not overwrite:
                         file.parameters.update(
-                            {
-                            "functions_share_mesh": True,
-                            "rewrite_function_mesh": False
-                            })
+                            {"functions_share_mesh": True, "rewrite_function_mesh": False}
+                            )
                 else:
                     file.write_mesh(self.domain)
                 file.write_function(self.vout)
         else:
-            fname = rmv_ext(file) + '.sres'
-            mdict = {"mesh_file":self.mesh_file, "element": self.elem,"vout":self.vout.vector[:]}
+            fname = rmv_ext(file) + ".sres"
+            mdict = {
+                "mesh_file":self.mesh_file,
+                "element": self.elem,
+                "vout":self.vout.vector[:]
+            }
             scipy.io.savemat(fname, mdict)
             return mdict
 
     def load(self, file):
-        fname = rmv_ext(file) + '.sres'
+        fname = rmv_ext(file) + ".sres"
         mdict = scipy.io.loadmat(fname)
-        self.mesh_file = mdict['mesh_file'][0]
-        self.elem = (mdict['element'][0].strip(), int(mdict['element'][1]))
+        self.mesh_file = mdict["mesh_file"][0]
+        self.elem = (mdict["element"][0].strip(), int(mdict["element"][1]))
         if self.domain is None:
             self.domain = domain_from_meshfile(self.mesh_file)
             self.V = FunctionSpace(self.domain, self.elem)
         self.vout = Function(self.V)
-        self.vout.vector[:] = mdict['vout']
+        self.vout.vector[:] = mdict["vout"]
 
-    def save_sim_result(self, file, ftype='xdmf', overwrite=True):
-        rise_warning('save_sim_result is a deprecated method use save')
-        self.save(file=file,ftype=ftype,overwrite=overwrite)
-    def load_sim_result(self, data='sim_result.json'):
-        rise_warning('load_sim_result is a deprecated method use load')
+    def save_sim_result(self, file, ftype="xdmf", overwrite=True):
+        rise_warning("save_sim_result is a deprecated method use save")
+        self.save(file=file, ftype=ftype, overwrite=overwrite)
+
+    def load_sim_result(self, data="sim_result.json"):
+        rise_warning("load_sim_result is a deprecated method use load")
         self.load(data=data)
 
     #############
@@ -206,7 +228,7 @@ class SimResult(NRV_class):
 
     def aline_V(self, res2):
         """
-
+        TO DO
         """
         if is_sim_res(res2):
             if self.mesh_file == res2.mesh_file:
@@ -215,10 +237,11 @@ class SimResult(NRV_class):
                 self.vout.interpolate(expr)
                 self.V = res2.V
             else:
-                rise_error("To aline mesh function reslults must have the same meshfile")
+                rise_error(
+                    "To aline mesh function reslults must have the same meshfile"
+            )
         else:
             rise_error("Mesh function alinment must be done with SimResult")
-
 
     def eval(self, X):
         """
@@ -232,26 +255,26 @@ class SimResult(NRV_class):
         cells = []
         for i in range(N):
             cell = cells_colliding.links(i)
-            if len(cell)==0:
-                if i == N-1 and i>0:
+            if len(cell) == 0:
+                if i == N - 1 and i > 0:
                     to_round = True
                 else:
-                    rise_warning(X[i], " not found in mesh, value of ", X[i-1], " reused")
+                    rise_warning(
+                        X[i], " not found in mesh, value of ", X[i-1], " reused"
+                    )
                 cells += [cells[-1]]
             else:
                 cells += [cell[0]]
 
         values = self.vout.eval(X, cells)
-        if N>1:
-            values = values[:,0]
+        if N > 1:
+            values = values[:, 0]
         if to_round:
             X_1 = X[-1]
             X_1[0] = round(X_1[0], 1)
             value_1 = self.eval([X_1])
             values[-1] = value_1[0]
         return values
-
-    
 
     #####################
     ## special methods ##
@@ -264,9 +287,16 @@ class SimResult(NRV_class):
             preconditioner_type=self.preconditioner, form_compiler_parameters=self.compiler_parameters)
         return res
     """
+    
     def __neg__(self):
         expr = Expression(-self.vout, self.V.element.interpolation_points())
-        res = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        res = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         res.vout = Function(self.V)
         self.vout.interpolate(expr)
         return res
@@ -278,7 +308,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(self.vout + b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -290,7 +326,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(self.vout - b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -302,7 +344,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(self.vout * b, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -314,7 +362,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(b + self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -326,7 +380,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(b - self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -338,7 +398,13 @@ class SimResult(NRV_class):
         else:
             expr = Expression(b * self.vout, self.V.element.interpolation_points())
 
-        C = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
+        C = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
         C.vout = Function(self.V)
         C.vout.interpolate(expr)
         return C
@@ -350,5 +416,5 @@ class SimResult(NRV_class):
                     return True
         return False
 
-    def __ne__(self, b): # self != b
+    def __ne__(self, b):  # self != b
         return not self == b
