@@ -13,7 +13,7 @@ from ....backend.parameters import parameters
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 from ....backend.NRV_Class import NRV_class
 
-dir_path = os.environ['NRVPATH'] + '/_misc'
+dir_path = os.environ["NRVPATH"] + "/_misc"
 
 
 ###############
@@ -21,6 +21,7 @@ dir_path = os.environ['NRVPATH'] + '/_misc'
 ###############
 
 pi = np.pi
+
 
 def is_MshCreator(object):
     """
@@ -38,19 +39,22 @@ def is_MshCreator(object):
     """
     return isinstance(object, MshCreator)
 
+
 def clear_gmsh():
     if gmsh.isInitialized():
         gmsh.finalize()
+
 
 class MshCreator(NRV_class):
     """
     Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
     Contains methodes dealing with the mesh geometries, physical domains and feilds
     """
+    
     def __init__(self, D=3, ver_level=None):
         """
         initialisation of the MshCreator
-        
+
         Parameters
         ----------
         D           : int(1,2,3)
@@ -60,7 +64,7 @@ class MshCreator(NRV_class):
         """
         super().__init__()
         self.type="GMSH"
-        self.D = D 
+        self.D = D
         self.entities = {}
         self.volumes = []
         self.volumes_com = []
@@ -79,7 +83,6 @@ class MshCreator(NRV_class):
 
         clear_gmsh()
         gmsh.initialize()
-
         
         self.verbosity_level = ver_level
         self.set_verbosity(ver_level)
@@ -91,13 +94,13 @@ class MshCreator(NRV_class):
         self.N_entities = 0
         self.N_nodes = 0
         self.N_elements = 0
-        
+
         self.Ncore = parameters.GMSH_Ncores
-        gmsh.option.setNumber('General.NumThreads', self.Ncore)
+        gmsh.option.setNumber("General.NumThreads", self.Ncore)
         if self.Ncore > 1:
-            gmsh.option.set_number('Mesh.Algorithm3D', 10)
+            gmsh.option.set_number("Mesh.Algorithm3D", 10)
         else:
-            gmsh.option.set_number('Mesh.Algorithm3D', 1)
+            gmsh.option.set_number("Mesh.Algorithm3D", 1)
 
     
     #####################
@@ -128,9 +131,13 @@ class MshCreator(NRV_class):
         self.volumes_bd = []
         for i in range(len(self.volumes)):
             volume = self.volumes[i]
-            self.volumes_com += [np.round(self.model.occ.getCenterOfMass(volume[0], volume[1]),4)]
-            self.volumes_bd += [np.round(self.model.occ.getBoundingBox(volume[0], volume[1]),4)]
-        
+            self.volumes_com += [
+                np.round(self.model.occ.getCenterOfMass(volume[0], volume[1]),4)
+            ]
+            self.volumes_bd += [
+                np.round(self.model.occ.getBoundingBox(volume[0], volume[1]),4)
+            ]
+
         if com:
             if bd:
                 return self.volumes, self.volumes_com, self.volumes_bd
@@ -139,27 +146,27 @@ class MshCreator(NRV_class):
         else:
             if bd:
                 return self.volumes, self.volumes_bd
-            
+
         return self.volumes
 
     def get_info(self, verbose=False):
         entities = self.model.getEntities()
-        nodeTags= self.model.mesh.getNodes()[0]
+        nodeTags = self.model.mesh.getNodes()[0]
         elemTags = self.model.mesh.getElements()[1]
 
         self.N_entities = len(entities)
         self.N_nodes = len(nodeTags)
         self.N_elements = sum(len(i) for i in elemTags)
         if verbose:
-            pass_info('Mesh properties:')
-            pass_info('Number of processes : ' + str(self.Ncore))
-            pass_info('Number of entities : ' + str(self.N_entities))
-            pass_info('Number of nodes : ' + str(self.N_nodes))
-            pass_info('Number of elements : ' + str(self.N_elements))
+            pass_info("Mesh properties:")
+            pass_info("Number of processes : " + str(self.Ncore))
+            pass_info("Number of entities : " + str(self.N_entities))
+            pass_info("Number of nodes : " + str(self.N_nodes))
+            pass_info("Number of elements : " + str(self.N_elements))
         return self.Ncore, self.N_entities, self.N_nodes, self.N_elements
 
     def get_mesh_info(self, verbose=False):
-        rise_warning('DEPRECATED method use get_info instead')
+        rise_warning("DEPRECATED method use get_info instead")
         self.get_info(verbose=verbose)
 
     def get_faces(self, com=False, bd=False):
@@ -176,8 +183,12 @@ class MshCreator(NRV_class):
         self.faces_bd = []
         for i in range(len(self.faces)):
             face = self.faces[i]
-            self.faces_com += [np.round(self.model.occ.getCenterOfMass(face[0], face[1]),4)]
-            self.faces_bd += [np.round(self.model.occ.getBoundingBox(face[0], face[1]),4)]
+            self.faces_com += [
+                np.round(self.model.occ.getCenterOfMass(face[0], face[1]),4
+            ]
+            self.faces_bd += [
+                np.round(self.model.occ.getBoundingBox(face[0], face[1]),4
+            ]
 
         if com:
             if bd:
@@ -187,13 +198,13 @@ class MshCreator(NRV_class):
         else:
             if bd:
                 return self.faces, self.faces_com
-        
+
         return self.faces
 
     def get_res(self):
         """
         return the global resolution saved (usefull when no field are set)
-        
+
         Returns
         -------
         res     :float
@@ -230,13 +241,13 @@ class MshCreator(NRV_class):
         """
         if i is None:
             i = parameters.VERBOSITY_LEVEL
-        self.verbosity_level = i 
+        self.verbosity_level = i
         gmsh.option.setNumber("General.Verbosity", self.verbosity_level)
 
     def set_chara_blen(self, i=0):
         """
         from gmsh: Extend characteristic lengths from the boundaries inside the surface/volume
-        
+
         Parameters
         ----------
         i   : int, float, bool
@@ -244,17 +255,15 @@ class MshCreator(NRV_class):
         """
         i = float(i)
         gmsh.option.set_number("Mesh.CharacteristicLengthExtendFromBoundary", i)
-        
-        
-    
+
     ##############################################################################################
     #######################################   geometry methods  ##################################
     ##############################################################################################
 
-    def add_point(self,x=0, y=0, z=0):
+    def add_point(self, x=0, y=0, z=0):
         """
         add a point to the mesh
-        
+
         Parameters
         ----------
         x        : float
@@ -263,7 +272,7 @@ class MshCreator(NRV_class):
             y position of the first face center
         z        : float
             z position of the first face center
-  
+
         Returns
         -------
         point    : int
@@ -275,8 +284,8 @@ class MshCreator(NRV_class):
 
     def add_line(self, X0, X1):
         """
-        add a point to the mesh
-        
+        add a line to the mesh
+
         Parameters
         ----------
         X0       : int or tupple(3)
@@ -292,28 +301,26 @@ class MshCreator(NRV_class):
         if isinstance(X0, int):
             ix0 = X0
         elif np.iterable(X0):
-            if len(X0)!=self.D:
-                rise_error('not enough dimension given in add_line')
+            if len(X0) != self.D:
+                rise_error("not enough dimension given in add_line")
             else:
                 ix0 = self.add_point(X0[0], X0[1], X0[2])
-        
+
         if isinstance(X1, int):
             ix0 = X0
         elif np.iterable(X1):
-            if len(X1)!=self.D:
-                rise_error('not enough dimension given in add_line')
+            if len(X1) != self.D:
+                rise_error("not enough dimension given in add_line")
             else:
                 ix1 = self.add_point(X1[0], X1[1], X1[2])
         line = self.model.occ.addLine(ix0, ix1)
         self.model.occ.synchronize()
         return line
-    
 
-
-    def add_box(self,x=0, y=0, z=0, ax=5, ay=1, az=1):
+    def add_box(self, x=0, y=0, z=0, ax=5, ay=1, az=1):
         """
         add a box to the mesh
-        
+
         Parameters
         ----------
         x       : float
@@ -328,27 +335,27 @@ class MshCreator(NRV_class):
             Box length along y
         az      : float
             Box length along z
-  
+
         Returns
         -------
         box    : int
             id of the added object
         """
         if self.D ==3:
-            parameters = {"x":x, "y":y, "z":z, "ax":ax, "ay":ay, "az":az}
+            parameters = {"x": x, "y": y, "z": z, "ax": ax, "ay": ay, "az": az}
             box =self.model.occ.addBox(x, y, z,ax, ay, az)
             self.model.occ.synchronize()
-            bounds =self.model.getEntities(dim=2)[-6:]
-            self.entities[box] = {"type":"box","parameters":parameters, "bounds":bounds, 'dim':3}
+            bounds = self.model.getEntities(dim=2)[-6:]
+            self.entities[box] = {"type":"box","parameters":parameters, "bounds":bounds, "dim":3}
             return box
         else:
-            rise_warning('Not added : add_cylinder requiere 3D mesh')
+            rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
         
 
     def add_cylinder(self, x=0, y=0, z=0, L=5, R=1):
         """
-        add a x-oriented cylinder to mesh entities 
+        add a x-oriented cylinder to mesh entities
 
         Parameters
         ----------
@@ -361,22 +368,27 @@ class MshCreator(NRV_class):
         L       : float
             Cylinder length along x
         R       : float
-            Cylinder radius       
+            Cylinder radius
 
         Returns
         -------
         cyl    : int
             id of the added object
         """
-        if self.D ==3:
-            parameters = {"x":x, "y":y, "z":z, "L":L, "R":R}
-            cyl = self.model.occ.addCylinder(x, y,z,L,0,0, R)
+        if self.D == 3:
+            parameters = {"x": x, "y": y, "z": z, "L": L, "R": R}
+            cyl = self.model.occ.addCylinder(x, y, z, L, 0, 0, R)
             self.model.occ.synchronize()
             bounds =self.model.getEntities(dim=2)[-3:]
-            self.entities[cyl] = {"type":"cylinder","parameters":parameters, "bounds":bounds, 'dim':3}
+            self.entities[cyl] = {
+                "type":"cylinder",
+                "parameters":parameters,
+                "bounds":bounds,
+                "dim":3,
+            }
             return cyl
         else:
-            rise_warning('Not added : add_cylinder requiere 3D mesh')
+            rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
 
 
@@ -402,18 +414,17 @@ class MshCreator(NRV_class):
             y-coefficient of the rotation axis direction vector, by default 0
         az          : float
             z-coefficient of the rotation axis direction vector, by default 0
-        rad         : bool 
+        rad         : bool
             if true angle considered in rad, else in degree, by default 0
         """
         if not rad:
             angle = math.radians(angle)
-        self.model.occ.rotate([(3,volume)], x, y, z, ax, ay, az, angle)
-
+        self.model.occ.rotate([(3, volume)], x, y, z, ax, ay, az, angle)
 
     def fragment(self, IDs=None, dim=3, verbose=True):
         """
         Fragmentation of the mesh important to link entities to each other
-        
+
         Parameters
         ----------
         IDs     : list or None
@@ -431,8 +442,8 @@ class MshCreator(NRV_class):
                 list_obj = self.get_volumes(com=False)
             else:
                 list_obj = [(dim, k) for k in self.entities]
-        elif not np.iterable(IDs) or len(IDs)<2:
-            rise_warning('Need at least 2 entities to fragment')
+        elif not np.iterable(IDs) or len(IDs) < 2:
+            rise_warning("Need at least 2 entities to fragment")
             return -1
         else:
             list_obj = [(dim, k) for k in IDs]
@@ -440,37 +451,43 @@ class MshCreator(NRV_class):
         frag = self.model.occ.fragment([list_obj[0]], [k for k in list_obj[1:]])
         new_entities={}
         if verbose:
-            pass_info("Warning: New volume generated by fragmentation, bounds are no longer up to date")
+            pass_info(
+                "Warning: New volume generated by fragmentation, bounds are no longer up to date"
+            )
         for i in frag[0][:]:
             mask = [i in k for k in frag[1]]
-            p_id =  (np.array(list_obj)[mask][:,1]).tolist()
-            p_types = [self.entities[k]['type'] for k in p_id]
-            dim = min([self.entities[k]['dim'] for k in p_id])
-            com = np.round(self.model.occ.getCenterOfMass(i[0],i[1]),3)
-            parameters = {'p_id':p_id, "p_types":p_types, "com":com}
-            new_entities[i[1]] = {"type":"fragment","parameters":parameters, 'dim':dim}
+            p_id =  (np.array(list_obj)[mask][:, 1]).tolist()
+            p_types = [self.entities[k]["type"] for k in p_id]
+            dim = min([self.entities[k]["dim"] for k in p_id])
+            com = np.round(self.model.occ.getCenterOfMass(i[0], i[1]), 3)
+            parameters = {"p_id": p_id, "p_types": p_types, "com": com}
+            new_entities[i[1]] = {
+                "type": "fragment",
+                "parameters": parameters,
+                "dim": dim,
+            }
         self.entities.update(new_entities)
 
     ##############################################################################################
     #######################################   domains methods  ###################################
     ##############################################################################################
 
-    def add_domains(self,obj_IDs,phys_ID,dim=None, name=None):
+    def add_domains(self, obj_IDs,phys_ID, dim=None, name=None):
         """
         add domains (ID + name) to a goupe of entities
-        Caution: as to be used after all entities are placed 
+        Caution: as to be used after all entities are placed
 
         Parameters
         ----------
         fname    : str
-            path and name of saving file. If ends with '.msh' only save in '.msh' file 
+            path and name of saving file. If ends with ".msh" only save in ".msh" file
         """
         if not np.iterable(obj_IDs):
             obj_IDs = [obj_IDs]
         if dim is None:
-            dim = max([self.entities[k]['dim'] for k in obj_IDs])
+            dim = max([self.entities[k]["dim"] for k in obj_IDs])
         self.model.addPhysicalGroup(dim, obj_IDs, phys_ID)
-        
+
         if name is None:
             name = "domain " + str(self.N_domains)
 
@@ -481,12 +498,12 @@ class MshCreator(NRV_class):
     ##############################################################################################
     def refine_entities(self, ent_ID, res_in, dim, res_out=None, IncludeBoundary=True):
         """
-        refine mesh resolution in a list of faces or volumes IDs 
+        refine mesh resolution in a list of faces or volumes IDs
 
         Parameters
         ----------
         ent_ID    : list[int] or int
-            ID or list of ID of the entities where the resolution should be changed 
+            ID or list of ID of the entities where the resolution should be changed
         res_in    : float
             resolution inside the entities
         dim    : int (2 or 3)
@@ -497,10 +514,10 @@ class MshCreator(NRV_class):
             include the boundaries for the refinment, default True
         """
         self.Nfeild += 1
-        if not np.iterable(ent_ID) :
+        if not np.iterable(ent_ID):
             ent_ID = [ent_ID]
 
-        if dim==2:
+        if dim == 2:
             typelist = "SurfacesList"
         else:
             typelist = "VolumesList"
@@ -516,34 +533,36 @@ class MshCreator(NRV_class):
 
         return self.Nfeild
 
-    def refine_threshold(self, ent_ID,  dim, dist_min, dist_max, res_min,res_max=None, N_samples=100):
+    def refine_threshold(
+        self, ent_ID,  dim, dist_min, dist_max, res_min, res_max=None, N_samples=100
+    ):
         """
-        refine mesh resolution in a list of faces or volumes IDs 
+        refine mesh resolution in a list of faces or volumes IDs
 
         Parameters
         ----------
         ent_ID    : list[int] or int
-            ID or list of ID of the entities where the resolution should be changed 
+            ID or list of ID of the entities where the resolution should be changed
         res_in    : float
             resolution inside the entities
         dim    : int (2 or 3)
-            dimention of the considerated entities 
+            dimention of the considerated entities
         res_out    : float
             resolution outside the entities if None take self.res, default None
         IncludeBoundary    : bool
             include the boundaries for the refinment, default True
         """
-        self.Nfeild += 1  
-        if not np.iterable(ent_ID) :
+        self.Nfeild += 1
+        if not np.iterable(ent_ID):
             ent_ID = [ent_ID]
 
-        if dim==2:
+        if dim == 2:
             typelist = "SurfacesList"
-        elif dim==1:
+        elif dim == 1:
             typelist = "CurvesList"
         else:
             typelist = "PointsList"
-        
+
         if res_max is None:
             res_max = self.res
 
@@ -552,18 +571,18 @@ class MshCreator(NRV_class):
         self.model.mesh.field.add("Distance", i_Dist_field)
         self.model.mesh.field.setNumbers(i_Dist_field, typelist, ent_ID)
         self.model.mesh.field.setNumber(i_Dist_field, "Sampling", N_samples)
-        
+
         self.Nfeild += 1
-        self.model.mesh.field.add("Threshold",self.Nfeild)
+        self.model.mesh.field.add("Threshold", self.Nfeild)
         self.model.mesh.field.setNumber(self.Nfeild, "InField", i_Dist_field)
         self.model.mesh.field.setNumber(self.Nfeild, "SizeMin", res_min)
         self.model.mesh.field.setNumber(self.Nfeild, "SizeMax", res_max)
-        self.model.mesh.field.setNumber(self.Nfeild, "DistMin",  dist_min)
+        self.model.mesh.field.setNumber(self.Nfeild, "DistMin", dist_min)
         self.model.mesh.field.setNumber(self.Nfeild, "DistMax", dist_max)
         self.model.mesh.field.setNumber(self.Nfeild, "Sigmoid", 1)
 
         return self.Nfeild
-    
+
     def refine_min(self, feild_IDs):
         """
         refine mesh resolution taking the minimum value for a list of refinment fields
@@ -584,15 +603,12 @@ class MshCreator(NRV_class):
         """
         Add a call back function which is apply to the mesh size defined by fields and return
         the final mesh size
-        
+
         Parameters
         ----------
-        meshSizeCallback    : nrv.utils.MeshCallBack
-            
+        meshSizeCallback    : nrv.utils.MeshCallBack  
         """
         self.model.mesh.setSizeCallback(meshSizeCallback)
-    
-
 
     ##############################################################################################
     ################################   generate and saving methods  ##############################
@@ -602,30 +618,30 @@ class MshCreator(NRV_class):
         genetate the mesh
         """
         if not self.is_generated:
-            if self.Nfeild>0:
+            if self.Nfeild > 0:
                 self.model.mesh.field.setAsBackgroundMesh(self.Nfeild)
             else:
-                gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.1*self.res)
+                gmsh.option.setNumber("Mesh.CharacteristicLengthMin", 0.1 * self.res)
                 gmsh.option.setNumber("Mesh.CharacteristicLengthMax", self.res)
 
             self.model.occ.synchronize()
 
-            #print("nt:", gmsh.option.getNumber("General.NumThreads"))
+            # print("nt:", gmsh.option.getNumber("General.NumThreads"))
             self.model.mesh.generate(self.D)
             self.is_generated = True
 
     def save(self, fname):
         """
-        Save mesh in fname in '.msh'
+        Save mesh in fname in ".msh"
 
         Parameters
         ----------
         fname    : str
-            path and name of saving file. If ends with '.msh' only save in '.msh' file 
+            path and name of saving file. If ends with ".msh" only save in ".msh" file
         """
         self.generate()
         fname = rmv_ext(fname)
-        gmsh.write(fname+".msh")
+        gmsh.write(fname + ".msh")
         self.file = fname
 
     def visualize(self, fname=None):
@@ -634,4 +650,4 @@ class MshCreator(NRV_class):
             gmsh.fltk.run()
         elif fname is not None:
             self.save(fname=fname)
-            os.system('gmsh '+ self.file +'.msh')
+            os.system("gmsh " + self.file + ".msh")
