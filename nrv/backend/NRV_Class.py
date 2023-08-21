@@ -10,8 +10,12 @@ from copy import deepcopy
 from numpy import iterable
 from .file_handler import json_dump, json_load
 from .parameters import parameters
-from .log_interface import rise_error, rise_warning, pass_info
+from .log_interface import rise_error, rise_warning, pass_info, pass_debug_info
 
+
+########################################
+###########  check object  #############
+########################################
 
 def is_NRV_class(x):
     return isinstance(x, NRV_class)
@@ -26,6 +30,22 @@ def is_NRV_class_list(x):
     return False
 
 
+def is_NRV_class_dict(x):
+    if isinstance(x, dict):
+        for xi in x.values():
+            if not is_NRV_class(xi):
+                return False
+        return True
+    return False
+
+
+##########################################
+#########  check dictionaries  ###########
+##########################################
+
+def is_NRV_object_dict(x):
+    return is_NRV_dict(x) or is_NRV_dict_list(x) or is_NRV_dict_dict(x)
+
 def is_NRV_dict(x):
     if isinstance(x, dict):
         if "nrv_type" in x:
@@ -35,60 +55,76 @@ def is_NRV_dict(x):
 
 def is_NRV_dict_list(x):
     if iterable(x):
-        for xi in x:
-            if not (is_NRV_dict(xi)):
+        if len(x)>0:
+            for xi in x:
+                if not (is_NRV_dict(xi)):
+                    return False
+            return True
+    return False
+
+
+def is_NRV_dict_dict(x):
+    if isinstance(x, dict):
+        for key in x:
+            if not (is_NRV_dict(x[key])):
                 return False
         return True
     return False
 
 
+
+
 class NRV_class(metaclass=ABCMeta):
+    """
+        Instanciate a basic NRV class
+        NRV Class are empty shells, defined as abstract classes of which every class in NRV
+        should inherite. This enable automatic context backup with save and load methods
+    """
     @abstractmethod
     def __init__(self):
         """
-        Instanciate a basic NRV class
-
-        NRV Class are empty shells, defined as abstract classes of which every class in NRV
-        should inherite. This enable automatic context backup with save and load methods
         """
         self.__NRVObject__ = True
         self.nrv_type = self.__class__.__name__
-        if parameters.get_nrv_verbosity() >= 4:
-            pass_info(self.nrv_type, " initialized")
+        pass_debug_info(self.nrv_type, " initialized")
 
     def __del__(self):
-        if parameters.get_nrv_verbosity() >=4 :
-            pass_info(self.nrv_type, " deleted")        
+        pass_debug_info(self.nrv_type, " deleted")        
 
-    def save(self,save=False, fname="nrv_save.json", blacklist={}):
-        bl = {}
-        for key in blacklist:
-            if key in self.__dict__:
-                bl[key] = self.__dict__.pop(key)
-        key_dic = deepcopy(self.__dict__)
-        for key in bl:
-            self.__dict__[key] = bl[key]
-        for key in key_dic:
-            if is_NRV_class(key_dic[key]):
-                key_dic[key] = key_dic[key].save()
-            elif is_NRV_class_list(key_dic[key]):
-                for i in range(len(key_dic[key])):
-                    key_dic[key][i] = key_dic[key][i].save()
+    def save(self,save=False, fname="nrv_save.json", blacklist={}, **kwargs):
+        key_dic = {}
+        for key in self.__dict__:
+            if not key in blacklist:
+                if is_NRV_class(self.__dict__[key]):
+                    key_dic[key] = self.__dict__[key].save(**kwargs)
+                elif is_NRV_class_list(self.__dict__[key]):
+                    key_dic[key] = []
+                    for i in range(len(self.__dict__[key])):
+                        key_dic[key] += [self.__dict__[key][i].save(**kwargs)]
+                elif is_NRV_class_dict(self.__dict__[key]):
+                    key_dic[key] = {}
+                    for i in self.__dict__[key]:
+                        key_dic[key][i] = self.__dict__[key][i].save(**kwargs)
+                else:
+                    key_dic[key] = deepcopy(self.__dict__[key])
         if save:
             json_dump(key_dic, fname)
         return key_dic
 
-    def load(self, data, blacklist={}):
+
+    def load(self, data, blacklist={}, **kwargs):
         if type(data) == str:
             key_dic = json_load(data)
         else:
             key_dic = data
         for key in self.__dict__:
             if key in key_dic and key not in blacklist:
-                if is_NRV_dict(key_dic[key]) or is_NRV_dict_list(key_dic[key]):
-                    self.__dict__[key] = load_any(key_dic[key])
+                if is_NRV_object_dict(key_dic[key]):
+                    self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
+                elif isinstance(self.__dict__[key], dict) and key_dic[key]==[]:
+                    self.__dict__[key] = {}
                 else:
                     self.__dict__[key] = key_dic[key]
 
@@ -106,6 +142,10 @@ def load_any(data, **kwargs):
         nrv_type = key_dic['nrv_type']
         nrv_obj = eval("sys.modules['nrv']."+nrv_type)()
         nrv_obj.load(key_dic,**kwargs)
+    elif is_NRV_dict_dict(key_dic):
+        nrv_obj = {}
+        for key in key_dic:
+            nrv_obj[key] = load_any(key_dic[key], **kwargs)
     elif is_NRV_dict_list(key_dic):
         nrv_obj = []
         for i in key_dic:

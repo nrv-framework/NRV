@@ -19,5 +19,5 @@ if nrv.MCH.do_master_only_work():
 	print('simulation performed in '+str(sim_time)+' s')
 	fig, ax = plt.subplots(figsize=(8,8))
 	fascicle_1.plot(fig, ax)
-	plt.savefig('./unitary_tests/figures/56.png')
+	plt.savefig('./unitary_tests/figures/56_A.png')
 	#plt.show()

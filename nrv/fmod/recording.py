@@ -92,7 +92,7 @@ class recording_point(NRV_class):
         self.z = z
         self.method = method
         # footprints
-        self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon"s ID
+        self.footprints = {}    # footprints are stored for each axon with the key beeing the axon's ID
         self.init = False
         self.recording = None
 
@@ -103,6 +103,7 @@ class recording_point(NRV_class):
     def load_recording_point(self, data="recording_point.json"):
         rise_warning("load_recording_point is a deprecated method use load")
         self.load(data=data)
+
 
     def get_ID(self):
         """
@@ -359,6 +360,22 @@ class recorder(NRV_class):
         """
         return self.recording_points == []
 
+    def translate(self, x=None, y=None, z=None):
+        """
+        Move recorder rec points by group translation
+
+        Parameters
+        ----------
+        x   : float
+            x axis value for the translation in um
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        for rec_p in self.recording_points:
+            rec_p.translate(x=x, y=y, z=z)
+
     def set_time(self, t_vector):
         """
         set the time vector of a recorder
@@ -409,7 +426,7 @@ class recorder(NRV_class):
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
-    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx=10, dy=10, method="PSA"):
+    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx=10, dy=10, method='PSA'):
         """
         Generate equaly spaced recording points in the z plane
 
@@ -447,7 +464,7 @@ class recorder(NRV_class):
             for y in y_positions:
                 self.set_recording_point(x, y, z, method=method)
 
-    def set_recording_yplane(x_min, x_max, y, z_min, z_max, dx=10, dz=10, method="PSA"):
+    def set_recording_yplane(self, x_min, x_max, y, z_min, z_max, dx=10, dz=10, method='PSA'):
         """
         Generate equaly spaced recording points in the y plane
 
@@ -486,16 +503,17 @@ class recorder(NRV_class):
                 self.set_recording_point(x, y, z, method=method)
 
     def set_recording_volume(
+        self,
         x_min,
         x_max,
         y_min,
-        ymax,
+        y_max,
         z_min,
         z_max,
         dx= 10,
         dy=10,
         dz=10,
-        method="PSA",
+        method='PSA'
     ):
         """
         Generate equaly spaced recording points in the y plane
@@ -692,11 +710,29 @@ class recorder(NRV_class):
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
-    def gather_all_recordings(self):
+    def __update_master_t(self):
+        """
+        if the recorder has not been used in the master process:
+        recover the time verctor in the master from an other process (rank 1)
+        """
+        synchronize_processes()
+        if MCH.do_master_only_work():
+            self.t = MCH.recieve_data_from_slave()['t']
+        elif MCH.rank == 1:
+            MCH.send_data_to_master({'t':self.t})
+        else:
+            pass
+
+    def gather_all_recordings(self, master_computed=True):
         """
         Gather all recordings computed by each cores in case of parallel simulation (fascicle
         level), sum de result and propagate final extracellular potential to each core.
         """
         if not self.is_empty():
+            if not master_computed:
+                self.__update_master_t()
+
             for point in self.recording_points:
+                if point.recording is None:
+                    point.recording = 0.
                 point.recording = MCH.sum_jobs(point.recording)

@@ -240,6 +240,7 @@ class axon(NRV_class):
     def __del__(self):
         for section in neuron.h.allsec():
             section = None
+        super().__del__()
 
     def save(self, save=False, fname='axon.json', extracel_context=False,
             intracel_context=False, rec_context=False, blacklist=[]):
@@ -275,7 +276,7 @@ class axon(NRV_class):
             bc += ['footprints']
         if not rec_context:
             bc += ['record',\
-                   'recorder']
+                'recorder']
 
         key_dict = super().save(blacklist=bc)
 
@@ -558,7 +559,7 @@ class axon(NRV_class):
                 axon_sim['extracellular_stimuli'] = stimuli_list
                 axon_sim['extracellular_stimuli_t'] = stimuli_time_list
             else:
-                axon_sim['extracellular_context'] = 'FEM_COMSOL'
+                axon_sim['extracellular_context'] = 'FEM'
                 axon_sim['model_name'] = self.extra_stim.model_fname
                 axon_sim['endoneurium_material'] = self.extra_stim.endoneurium.name
                 axon_sim['perineurium_material'] = self.extra_stim.perineurium.name
@@ -577,10 +578,10 @@ class axon(NRV_class):
                         electrodes_type.append('CUFF')
                     else:
                         if is_LIFE_electrode(electrode):
-                            electrodes_x.append(electrode.x_shift+electrode.length/2)
+                            electrodes_x.append(electrode.x+electrode.length/2)
                             electrodes_type.append('LIFE')
-                        electrodes_y.append(electrode.y_c)
-                        electrodes_z.append(electrode.z_c)
+                        electrodes_y.append(electrode.y)
+                        electrodes_z.append(electrode.z)
                 axon_sim['extracellular_electrode_type'] = electrodes_type
                 axon_sim['extracellular_electrode_x'] = electrodes_x
                 axon_sim['extracellular_electrode_y'] = electrodes_y

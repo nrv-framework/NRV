@@ -72,6 +72,41 @@ def load_any_electrode(data):
     elec.load(elec_dic)
     return elec
 
+def check_electrodes_overlap(elec1, elec2):
+    """
+    check if two FEM electrodes are overlaping
+
+    Parameters
+    ----------
+    elec1:      FEM_electrode
+        first electrode
+    elec2:      FEM_electrode
+        second electrode
+    
+    Returns
+    -------
+    test:           bool
+        True if 
+    """
+    if not is_FEM_electrode(elec1) or not is_FEM_electrode(elec2):
+        return False
+    if is_CUFF_electrode(elec1) and is_CUFF_electrode(elec2):
+        dist_e = abs(elec1.x - elec2.x)
+        len_min = (elec1.contact_length + elec2.contact_length)/2
+        if dist_e < len_min:
+            return True
+        else:
+            return False
+    elif is_LIFE_electrode(elec1) and is_LIFE_electrode(elec2):
+        dist_e_x = abs(elec1.x - elec2.x)
+        len_min_x = (elec1.length + elec2.length)/2
+        dist_e_yz = (elec1.y - elec2.y)**2 + (elec1.z - elec2.z)**2
+        len_min_yz = ((elec1.D + elec2.D)/2)**2
+        if dist_e_x < len_min_x and dist_e_yz < len_min_yz:
+            return True
+        else:
+            return False        
+    return False
 
 class electrode(NRV_class):
     """
@@ -93,6 +128,9 @@ class electrode(NRV_class):
         self.footprint = np.asarray([])
         self.type = "electrode"
         self.is_multipolar = False
+        self.x = None
+        self.y = None
+        self.z = None
 
     def save_electrode(self, save=False, fname="electrode.json"):
         rise_warning("save_electrode is a deprecated method use save")
@@ -146,6 +184,12 @@ class electrode(NRV_class):
         """
         self.footprint = np.array(footprint)
 
+    def clear_footprint(self):
+        """
+        clear the footprint of a electrode
+        """
+        self.footprint = np.array([])
+
     def compute_field(self, I):
         """ Compute the external field using the Point source approximation
 
@@ -163,6 +207,27 @@ class electrode(NRV_class):
         I_mA = I * 1e-3
         v_ext = I_mA * self.footprint
         return v_ext
+
+    def translate(self, x=None, y=None, z=None):
+        """
+        Move electrode by translation
+
+        Parameters
+        ----------
+        x   : float
+            x axis value for the translation in um
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        if x is not None:
+            self.x += x
+        if y is not None:
+            self.y += y
+        if z is not None:
+            self.z += z
+        self.clear_footprint()
 
 class point_source_electrode(electrode):
     """
@@ -281,9 +346,9 @@ class LIFE_electrode(FEM_electrode):
         super().__init__(label, ID)
         self.D = D
         self.length = length
-        self.x_shift = x_shift
-        self.y_c = y_c
-        self.z_c = z_c
+        self.x = x_shift
+        self.y = y_c
+        self.z = z_c
         self.type = "LIFE"
 
     def parameter_model(self, model, res="default"):
@@ -296,14 +361,14 @@ class LIFE_electrode(FEM_electrode):
             FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
         if model.type == "COMSOL":
-            model.set_parameter(self.label+"_D", str(self.D)+"[um]")
-            model.set_parameter(self.label+"_Length", str(self.length)+"[um]")
-            model.set_parameter(self.label+"_y_c", str(self.y_c)+"[um]")
-            model.set_parameter(self.label+"_z_c", str(self.z_c)+"[um]")
-            model.set_parameter(self.label+"_x_offset", str(self.x_shift)+"[um]")
+            model.set_parameter(self.label + "_D", str(self.D) + "[um]")
+            model.set_parameter(self.label + "_Length", str(self.length) + "[um]")
+            model.set_parameter(self.label + "_y_c", str(self.y_c) + "[um]")
+            model.set_parameter(self.label + "_z_c", str(self.z_c) + "[um]")
+            model.set_parameter(self.label + "_x_offset", str(self.x_shift) + "[um]")
         else:
-            model.add_electrode(elec_type=self.type, x_c=self.x_shift+(self.length/2),\
-            y_c=self.y_c, z_c=self.z_c, length=self.length, D=self.D, is_volume=self.is_volume,\
+            model.add_electrode(elec_type=self.type, x_c=self.x+(self.length/2),\
+            y_c=self.y, z_c=self.z, length=self.length, D=self.D, is_volume=self.is_volume,\
             res=res)
 
 
@@ -351,13 +416,28 @@ class CUFF_electrode(FEM_electrode):
         super().__init__(label, ID)
         self.contact_length = contact_length
         self.contact_thickness = contact_thickness
-        self.x_center = x_center
+        self.x = x_center
         self.is_volume = is_volume
         self.insulator = insulator
         self.insulator_length = insulator_length
         self.insulator_thickness = insulator_thickness
         self.insulator_offset = insulator_offset
         self.type = "CUFF"
+
+    def translate(self, x=None, y=None, z=None):
+        """
+        Move electrode by translation
+
+        Parameters
+        ----------
+        x   : float
+            x axis value for the translation in um
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        super().translate(x)
 
     def parameter_model(self, model, res="default"):
         """
@@ -371,7 +451,7 @@ class CUFF_electrode(FEM_electrode):
         if model.type == "COMSOL":
             model.set_parameter(
                 self.label + "_contact_length",
-                str(self.contact_length)+"[um]"
+                str(self.contact_length) + "[um]"
             )
             model.set_parameter(
                 self.label + "_x_center",
@@ -380,17 +460,17 @@ class CUFF_electrode(FEM_electrode):
             if self.contact_thickness is not None:
                 model.set_parameter(
                     self.label + "_contact_thickness",
-                    str(self.contact_thickness)+"[um]"
+                    str(self.contact_thickness) + "[um]"
                 )
             if self.insulator_thickness is not None:
                 model.set_parameter(
                     self.label + "_insulator_thickness",
-                    str(self.insulator_thickness)+"[um]"
+                    str(self.insulator_thickness) + "[um]"
                 )
             if self.insulator_length is not None:
                 model.set_parameter(
                     self.label+"_insulator_length",
-                    str(self.insulator_length)+"[um]"
+                    str(self.insulator_length) + "[um]"
                 )
         else:
             model.add_electrode(

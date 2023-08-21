@@ -94,26 +94,16 @@ class extracellular_context(NRV_class):
         self.synchronised_stimuli = []
         self.global_time_serie = []
         self.type = None
-    
-    def load(self, data="extracel_context.json"):
-        """
-        Load all extracellular context properties from a dictionary or a json file
 
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing extracel_context information
-        """
-        super().load(data=data)
-
-    def save_extracel_context(self, save=False, fname="extracel_context.json"):
-        rise_warning("save_extracel_context is a deprecated method use save")
+    def save_extracel_context(self, save=False, fname='extracel_context.json'):
+        rise_warning('save_extracel_context is a deprecated method use save')
         self.save(save=save, fname=fname)
 
     def load_extracel_context(self, data="extracel_context.json"):
         rise_warning("load_extracel_context is a deprecated method use load")
         self.load(data=data)
 
+    ## 
     def is_empty(self):
         """
         check if a stimulation object is empty (No electrodes and stimuli, no external field can be computed).
@@ -125,6 +115,22 @@ class extracellular_context(NRV_class):
             True if a simulation is empty, else False
         """
         return self.electrodes == []
+    
+    def translate(self, x=None, y=None, z=None):
+        """
+        Move extracellular context electrodes by group translation
+
+        Parameters
+        ----------
+        x   : float
+            x axis value for the translation in um
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        for elec in self.electrodes:
+            elec.translate(x=x, y=y, z=z)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -156,7 +162,7 @@ class extracellular_context(NRV_class):
         self.electrodes = []
         self.reset_stimuli()
 
-    def synchronise_stimuli(self):
+    def synchronise_stimuli(self, snap_time=False):
         """
         Synchronise all stimuli before simulation. Copies of the stimuli are created with the global number of samples
         from merging all stimuli time samples. Original stimuli are not affected.
@@ -184,6 +190,11 @@ class extracellular_context(NRV_class):
                     self.synchronised_stimuli.append(stimulus)
             # anyway, take the first stimulus time serie as the global one
             self.global_time_serie = self.synchronised_stimuli[0].t
+        if snap_time:
+            for stim in self.stimuli:
+                print(min(np.diff(stim.t)))
+                stim.snap_time(0.001)
+                print(min(np.diff(stim.t)))
         self.synchronised = True
 
     def compute_vext(self, time_index):
@@ -236,7 +247,7 @@ class extracellular_context(NRV_class):
         clear the footprints for all electrodes from existing array
         """
         for electrode in self.electrodes:
-            electrode.set_footprint(np.asarray([]))
+            electrode.clear_footprint()
 
 
 class stimulation(extracellular_context):
@@ -262,19 +273,6 @@ class stimulation(extracellular_context):
         else:
             self.material = load_material(material)
         self.type = "stimulation"
-
-    ## Save and Load mehtods
-    def load(self, data):
-        """
-        Load all extracellular context properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing extracel_context information
-        """
-        super().load(data)
-        self.material = load_any(self.material)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -352,6 +350,7 @@ class FEM_stimulation(extracellular_context):
         self.electrodes_label = []
         self.model_fname = model_fname
         self.setup = False
+        self.is_run = False
         ## get material properties and add to model
 
         if is_mat(endo_mat):
@@ -404,7 +403,7 @@ class FEM_stimulation(extracellular_context):
 
     ## Save and Load mehtods
 
-    def save(self, save=False, fname="extracel_context.json", blacklist=[]):
+    def save(self, save=False, fname='extracel_context.json', blacklist=[]):
         """
         Return extracellular context as dictionary and eventually save it as json file
 
@@ -420,11 +419,11 @@ class FEM_stimulation(extracellular_context):
         context_dic : dict
             dictionary containing all information
         """
-        blacklist += ["model"]
+        blacklist += ['model']
         return super().save(save=save, fname=fname, blacklist=blacklist)
 
 
-    def load(self, data, C_model=False):
+    def load(self, data, C_model=False, **kwargs):
         """
         Load all extracellular context properties from a dictionary or a json file
 
@@ -433,7 +432,7 @@ class FEM_stimulation(extracellular_context):
         data    : str or dict
             json file path or dictionary containing extracel_context information
         """
-        super().load(data)
+        super().load(data, **kwargs)
 
         if C_model:
             if MCH.do_master_only_work():
@@ -490,7 +489,7 @@ class FEM_stimulation(extracellular_context):
             else:
                 self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
 
-    def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"):
+    def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5,res="default"):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -530,6 +529,18 @@ class FEM_stimulation(extracellular_context):
                     res=res,
                 )
 
+    def remove_fascicles(self, ID=None):
+        """
+        remove a fascicle of the FEM simulation
+
+        Parameters
+        ----------
+        ID          : int, None
+            ID number of the fascicle to remove, if None, remove all fascicles, by default None
+        """
+        if MCH.do_master_only_work():
+            self.model.remove_fascicles(ID=ID)
+
     def add_electrode(self, electrode, stimulus):
         """
         Add a stimulation electrode and its stimulus to the stimulation, only it the electrode is FEM based.
@@ -546,7 +557,7 @@ class FEM_stimulation(extracellular_context):
         if is_FEM_electrode(electrode):
             if not electrode.is_multipolar:
                 if not self.electrodes == []:
-                    electrode.set_ID_number(self.electrodes[-1].get_ID_number() + 1)
+                    electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
                 self.electrodes.append(electrode)
                 self.electrodes_label.append(electrode.label)
                 self.stimuli.append(stimulus)
@@ -554,19 +565,20 @@ class FEM_stimulation(extracellular_context):
                 if np.iterable(stimulus):
                     stimuli = stimulus
                 else:
-                    rise_warning("Only one stimulus for a multipolar electrode, it will be set for all active sites")
+                    rise_warning('Only one stimulus for a multipolar electrode, it will be set for all active sites')
                     stimuli = [stimulus for k in range(electrode.N_contact)]
                 for E in range(electrode.N_contact):
                     if not self.electrodes == []:
-                        electrode.set_ID_number(self.electrodes[-1].get_ID_number() + 1)
+                        electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
                     self.electrodes.append(electrode)
-                    self.electrodes_label.append(electrode.label + "_" + str())
+                    self.electrodes_label.append(electrode.label+"_"+str())
                     self.stimuli.append(stimuli[E])
 
-            if self.fenics and MCH.do_master_only_work():
-                electrode.parameter_model(self.model)
-            self.synchronised = False
-            self.setup = False
+                if self.fenics and MCH.do_master_only_work():
+                    electrode.parameter_model(self.model)
+                self.synchronised = False
+                self.setup = False
+                self.is_run = False
 
     def setup_FEM(self):
         """
@@ -635,7 +647,9 @@ class FEM_stimulation(extracellular_context):
         if MCH.do_master_only_work():
             if not self.setup:
                 self.setup_FEM()
-            self.model.solve()
+            if not self.is_run:
+                self.model.solve()
+                self.is_run = True
 
     def compute_electrodes_footprints(self, x, y, z, ID):
         """

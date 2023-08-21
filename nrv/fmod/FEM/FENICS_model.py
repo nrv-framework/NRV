@@ -68,7 +68,7 @@ class FENICS_model(FEM_model):
         self.Nerve_D = 250  # um
         self.N_fascicle = 0
         self.fascicles = {}
-        self.Perineurium_thickness={}
+        self.Perineurium_thickness = {}
         self.N_electrode = 0
         self.electrodes = {}
         self.Istim = 1e-3 # A
@@ -111,6 +111,8 @@ class FENICS_model(FEM_model):
         # Status
         self.mesh_file_status = not self.mesh_file is None
         self.is_sim_ready = False
+        self.is_meshed = False
+        self.is_computed = False
 
         if not self.mesh_file_status:
             self.mesh = NerveMshCreator(
@@ -121,15 +123,56 @@ class FENICS_model(FEM_model):
                 z_c=self.z_c
             )
 
-    def save(self, fname, type="msh"):
+    def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):
+        """
+        Save the changes to the model file. (Avoid for the overal weight of the package)
+        """
+        bl = [i for i in blacklist]
+        bl += ["comm", "rank", "mesh", "sim", "sim_res"]
+        return super().save(save=save, fname=fname, blacklist=bl, **kwargs)
+
+    def save_results(self, save=False, fname="Fenics_model.json"):
         """
         Save the changes to the model file. (Avoid for the overal weight of the package)
         """
         if self.is_computed:
             save_sim_res_list(self.sim_res, fname)
+
         elif self.is_meshed: 
             self.mesh_file = rmv_ext(fname)
             self.mesh.save(fname)
+        
+    def load(self, data="extracel_context.json", **kwargs):
+        """
+        Load all extracellular context properties from a dictionary or a json file
+
+        Parameters
+        ----------
+        data    : str or dict
+            json file path or dictionary containing extracel_context information
+        """
+        bl = ["comm", "rank", "mesh","sim", "sim_res"]
+        super().load(data=data, blacklist=bl, **kwargs)
+        param = self.get_parameters()
+        self.load_from_parameters(**param)
+        
+    def load_from_parameters(self, **param):
+        """
+        
+        """
+        self.reset_parameters()
+        self.reshape_outerBox(param["Outer_D"])
+        self.reshape_nerve(Nerve_D=param["Nerve_D"], Length=param["L"], y_c=param["y_c"],\
+                           z_c=param["z_c"])
+        for id in param["fascicles"]:
+            fasc = param["fascicles"][id]
+            per_th = param["Perineurium_thickness"][id]
+            self.reshape_fascicle(fasc["D"], y_c=fasc["y_c"], z_c=fasc["z_c"], ID=int(id),\
+                                  Perineurium_thickness=per_th, res=fasc["res"])
+        for id in param["electrodes"]:
+            elec = param["electrodes"][id]
+            self.add_electrode(elec_type=elec["type"], ID=int(id), res=elec["res"],\
+                               **elec["kwargs"])
 
     #############################
     ## Access model parameters ##
@@ -140,14 +183,14 @@ class FENICS_model(FEM_model):
 
         Returns
         -------
-        list    : dict
+        param    : dict
             all parameters as dictionnaries in a list, names a keys, with corresponding values
         """
         param = {}
         param["L"] = self.L
         param["y_c"] = self.y_c
         param["z_c"] = self.z_c
-        param["Outer_D"] = self.Outer_D
+        param["Outer_D"] = self.Outer_D / mm
         param["Nerve_D"] = self.Nerve_D
         param["N_fascicle"] = self.N_fascicle
         param["fascicles"] = self.fascicles
@@ -177,6 +220,38 @@ class FENICS_model(FEM_model):
         self.N_electrode = param["N_electrode"]
         self.electrodes = param["electrodes"]
 
+    def reset_parameters(self):
+        """
+        reset model parameters
+        """
+        self.L = 5000
+        self.y_c = 0
+        self.z_c = 0
+        self.Outer_D = 5       #mm
+        self.Nerve_D = 250     #um
+        self.N_fascicle = 0
+        self.fascicles = {}
+        self.Perineurium_thickness = {}
+        self.N_electrode = 0
+        self.electrodes = {}
+        self.Istim = 1e-3        #A
+        self.jstims = []
+        self.j_electrode = {}
+
+        self.mesh_file_status = not self.mesh_file is None
+        self.is_sim_ready = False
+        self.is_meshed = False
+        self.is_computed = False
+        del self.mesh
+        if not self.mesh_file_status:
+            self.mesh = NerveMshCreator(
+                Length=self.L,
+                Outer_D=self.Outer_D,
+                Nerve_D=self.Nerve_D,
+                y_c=self.y_c,
+                z_c=self.z_c
+            )
+            
 
     #####################
     ## customize model ##
@@ -219,6 +294,7 @@ class FENICS_model(FEM_model):
             )
             self.__update_parameters()
 
+    
     def reshape_fascicle(
         self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"
     ):
@@ -245,6 +321,27 @@ class FENICS_model(FEM_model):
                 else:  ## To check when not all ID are fixed
                     ID = max(self.Perineurium_thickness) + 1
             self.Perineurium_thickness[ID] = Perineurium_thickness
+
+    
+    def remove_fascicles(self, ID=None):
+        """
+        remove a fascicle of the FEM simulation
+
+        Parameters
+        ----------
+        ID          : int, None
+            ID number of the fascicle to remove, if None, remove all fascicles, by default None
+        """
+        if ID is None:
+            self.fascicles = {}
+            self.Perineurium_thickness = {}
+            self.N_fascicle = 0
+        elif ID in self.fascicles:
+            del self.fascicles[ID]
+            del self.Perineurium_thickness[ID]
+            self.N_fascicle -= 1
+        self.mesh.remove_fascicles(ID=ID)
+
 
     def add_electrode(self, elec_type, ID=None, res="default", **kwargs):
         """
@@ -359,17 +456,16 @@ class FENICS_model(FEM_model):
 
     def __find_elec_subdomain(self, elec) -> int:
         """
-        Internal use only:
+        Internal use only: 
         """
-        if elec["type"] == "LIFE":
+        if elec["type"]=="LIFE":
             y_e, z_e = elec["kwargs"]["y_c"], elec["kwargs"]["z_c"]
             for i in self.fascicles:
                 fascicle = self.fascicles[i]
                 d_f, y_f, z_f = fascicle["D"], fascicle["y_c"], fascicle["z_c"]
-                if (y_e - y_f) ** 2 + (z_e - z_f) ** 2 < d_f**2:
-                    return 10 + i
-        else:
-            return 0
+                if (y_e - y_f) ** 2 + (z_e - z_f) ** 2 < (d_f/2) ** 2:
+                    return 10 + 2 * i
+        return 0
 
     def __find_elec_jstim(self, elec, I=None) -> float:
         """
@@ -398,12 +494,8 @@ class FENICS_model(FEM_model):
 
     def get_meshes(self):
         """
-        Get the different meshes implemented in the model
-
-        Returns
-        -------
-        list
-            list of meshes implemented in the FENICS model file
+        Visualize the model mesh
+        WARNING: debbug use only + might not work on all os
         """
         if self.is_meshed:
             self.mesh.visualize()
@@ -444,20 +536,20 @@ class FENICS_model(FEM_model):
         """
         if not self.is_sim_ready:
             self.setup_simulations()
-
-        t0 = time.time()
-        # For EIT change in for E in elec_patren:
-        for E in range(self.N_electrode):
-            for i_elec in self.j_electrode:
-                if i_elec == "E" + str(E):
-                    self.j_electrode[i_elec] = self.jstims[E]
-                else:
-                    self.j_electrode[i_elec] = 0
-            self.sim.prepare_sim(**self.j_electrode)
-            self.sim_res += [self.sim.solve()]
-            self.sim_res[-1].vout.label = "E" + str(E)
-        self.is_computed = True
-        self.solving_timer += time.time() - t0
+        if not self.is_computed:
+            t0 = time.time()
+            # For EIT change in for E in elec_patren:
+            for E in range(self.N_electrode):
+                for i_elec in self.j_electrode:
+                    if i_elec == "E" + str(E):
+                        self.j_electrode[i_elec] = self.jstims[E]
+                    else:
+                        self.j_electrode[i_elec] = 0
+                self.sim.prepare_sim(**self.j_electrode)
+                self.sim_res += [self.sim.solve()]
+                self.sim_res[-1].vout.label = "E" + str(E)
+            self.is_computed = True
+            self.solving_timer += time.time() - t0
 
     ######################
     ## results handling ##

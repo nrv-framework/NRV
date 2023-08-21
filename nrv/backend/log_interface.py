@@ -59,15 +59,18 @@ def rise_error(*args, out=1, **kwargs):
         if verbose and parameters.VERBOSITY_LEVEL >= 1:
             print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
     else:
-        if parameters.LOG_Status:
-            logging.error(
-                "NRV ERROR: "
-                + message
-                + "\n encountered in process "
-                + str(MCH.rank)
-                + " out of "
+        err =  "NRV ERROR: "\
+                + message\
+                + "\n encountered in process "\
+                + str(MCH.rank)\
+                + " out of "\
                 + str(MCH.size)
-            )
+        if parameters.LOG_Status:
+            logging.error(err)
+        if parameters.VERBOSITY_LEVEL>=1:
+            print(err)
+            sys.stdout.flush()
+            
     if out == 0:
         out = 1
     sys.exit(out)
@@ -98,17 +101,19 @@ def rise_warning(*args, abort=False, **kwargs):
         if verbose and parameters.VERBOSITY_LEVEL>=2:
             print(bcolors.WARNING + "NRV WARNING: " + message + bcolors.ENDC)
     else:
-        if parameters.LOG_Status:
-            logging.warning(
-                "NRV WARNING: "
-                + message
-                + "\n encountered in process "
-                + str(MCH.rank)
-                +" out of "
+        war = "NRV WARNING: "\
+                + message\
+                + "\n encountered in process "\
+                + str(MCH.rank)\
+                +" out of "\
                 + str(MCH.size)
-            )
+        if parameters.LOG_Status:
+            logging.warning(war)
         if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL >= 2:
-            print(bcolors.WARNING + "NRV WARNING: " + message + bcolors.ENDC)
+            print(war)
+            sys.stdout.flush()
+        elif parameters.VERBOSITY_LEVEL >= 4:
+            print(war)
             sys.stdout.flush()
     if abort:
         sys.exit(0)
@@ -137,15 +142,17 @@ def pass_info(*args, **kwargs):
         if verbose and parameters.VERBOSITY_LEVEL>=3:
             print("NRV INFO: " + message)
     else:
-        if parameters.LOG_Status:
-            logging.info(
-                "NRV INFO: "
-                + message
-                + "\n from process "
-                + str(MCH.rank)
-                + " out of "
+        inf = "NRV INFO: "\
+                + message\
+                + "\n from process "\
+                + str(MCH.rank)\
+                + " out of "\
                 + str(MCH.size)
-            )
+        if parameters.LOG_Status:
+            logging.info(inf)
+        if parameters.VERBOSITY_LEVEL >= 4:
+            print(inf)
+            sys.stdout.flush()
 
 
 def pass_debug_info(*args, **kwargs):
@@ -171,15 +178,17 @@ def pass_debug_info(*args, **kwargs):
         if verbose and parameters.VERBOSITY_LEVEL>=4:
             print("NRV DEBUG: " + message)
     else:
-        if parameters.LOG_Status:
-            logging.info(
-                "NRV DEBUG: "
-                + message
-                + "\n from process "
-                + str(MCH.rank)
-                + " out of "
+        inf = "NRV DEBUG: "\
+                + message\
+                + "\n from process "\
+                + str(MCH.rank)\
+                + " out of "\
                 + str(MCH.size)
-            )
+        if parameters.LOG_Status:
+            logging.info(inf)
+        if parameters.VERBOSITY_LEVEL >= 4:
+            print(inf)
+            sys.stdout.flush()
 
 
 def progression_popup(current, max_iter, begin_message='', end_message='', endl=''):
