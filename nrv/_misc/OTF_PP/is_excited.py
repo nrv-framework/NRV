@@ -18,17 +18,29 @@ for key in removable_keys:
 ####################################
 ## check if the axon fired or not ##
 ####################################
-file_object = open(folder_name+'/spike_summary.csv', 'a')
 if len(sim_results['V_mem_raster_position']) == 0:
-	# no spike
-	spike = 0
+    # no spike
+    spike = 0
 else:
-	spike = 1
-line = str(sim_results['ID'])+'\t'+\
-		str(sim_results['y'])+'\t'+\
-		str(sim_results['z'])+'\t'+\
-		str(sim_results['diameter'])+'\t'+\
-		str(sim_results['myelinated'])+'\t'+\
-		str(spike)+'\n'
+    spike = 1
+
+################################
+## Save results in a csv file ##
+################################
+if 'in_nerve' in kwargs:        # Nerve Simulation
+    file_object = open(save_path+'/spike_summary.csv', 'a')
+    line = str(self.ID)
+else:                           # Fascicle Simulation
+    file_object = open(folder_name+'/spike_summary.csv', 'a')
+    line = ''
+
+
+line += str(sim_results['ID'])+'\t'+\
+        str(sim_results['y'])+'\t'+\
+        str(sim_results['z'])+'\t'+\
+        str(sim_results['diameter'])+'\t'+\
+        str(sim_results['myelinated'])+'\t'+\
+        str(spike)+'\n'
+
 file_object.write(line)
 file_object.close()

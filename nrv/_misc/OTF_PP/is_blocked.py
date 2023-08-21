@@ -19,9 +19,20 @@ for key in removable_keys:
 ####################################
 ## check if the axon fired or not ##
 ####################################
-file_object = open(folder_name+'/block_summary.csv', 'a')
 block_state = block(sim_results, t_start=sim_results['intra_stim_starts'])
-line = str(sim_results['ID'])+'\t'+\
+
+################################
+## Save results in a csv file ##
+################################
+if 'in_nerve' in kwargs:        # Nerve Simulation
+    file_object = open(save_path+'/block_summary.csv', 'a')
+    line = str(self.ID)
+else:                           # Fascicle Simulation
+    file_object = open(folder_name+'/block_summary.csv', 'a')
+    line = ''
+
+
+line += str(sim_results['ID'])+'\t'+\
 		str(sim_results['y'])+'\t'+\
 		str(sim_results['z'])+'\t'+\
 		str(sim_results['diameter'])+'\t'+\
