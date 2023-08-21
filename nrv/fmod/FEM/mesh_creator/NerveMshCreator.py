@@ -271,6 +271,22 @@ class NerveMshCreator(MshCreator):
 
         self.fascicles[ID] = {"y_c":y_c, "z_c":z_c,"D":D, "res":res, "face":None, "volume":None}
 
+    def remove_fascicles(self, ID=None):
+        """
+        remove a fascicle of the FEM simulation
+
+        Parameters
+        ----------
+        ID          : int, None
+            ID number of the fascicle to remove, if None, remove all fascicles, by default None
+        """
+        if ID is None:
+            self.fascicles = {}
+            self.N_fascicle = 0
+        elif ID in self.fascicles:
+            del self.fascicles[ID]
+            self.N_fascicle -= 1
+
     def reshape_axon(self, D, y_c=0, z_c=0, ID=None, res="default"):
         """
         Reshape a axon of the FEM simulation
@@ -521,11 +537,10 @@ class NerveMshCreator(MshCreator):
         elec_kwargs = self.electrodes[ID]["kwargs"]
         if self.electrodes[ID]['type'] != 'LIFE':
             return False
-
         # test good diameter
         size_test =  np.allclose([dx, dy, dz], [elec_kwargs["length"], elec_kwargs["D"],elec_kwargs["D"]])
         # test center of mass in LIFE
-        com_test = np.allclose(com,(elec_kwargs["x_c"],elec_kwargs["y_c"], elec_kwargs["z_c"]), rtol=1, atol= elec_kwargs["D"]/2)
+        com_test = np.allclose(com,(elec_kwargs["x_c"],elec_kwargs["y_c"], elec_kwargs["z_c"]), atol= elec_kwargs["D"]/2)
         return size_test and com_test
 
     def __link_entity_domains(self, dim):
