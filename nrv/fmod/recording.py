@@ -13,22 +13,26 @@ from ..backend.MCore import *
 from ..backend.NRV_Class import NRV_class
 
 
-# enable faulthandler to ease 'segmentation faults' debug
+# enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
+
+
 def is_recording_point(point):
     """
     Check if the specified object is a recording point
     """
     return isinstance(point, recording_point)
 
+
 def is_recorder(rec):
     """
     Check if the specified object is a recorder
     """
     return isinstance(rec, recorder)
+
 
 def NodeD_interpol(diameter):
     """
@@ -53,11 +57,13 @@ def NodeD_interpol(diameter):
 
     return float(nodeD)
 
+
 class recording_point(NRV_class):
     """
     Object equivalent to a point source electrode for extracellular potential recording only (No stimulation)
     """
-    def __init__(self, x=0, y=0, z=0, ID=0, method='PSA'):
+    
+    def __init__(self, x=0, y=0, z=0, ID=0, method="PSA"):
         """
         Instantiation of a recording point.
 
@@ -72,10 +78,10 @@ class recording_point(NRV_class):
         ID      : int
             electrode identification number, set to 0 by default
         method  : string
-            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
-            or 'LSA' (Line Source Approximation).
-            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
-            will automatically be performed using 'PSA'
+            electrical potential approximation method, can be "PSA" (Point Source Approximation)
+            or "LSA" (Line Source Approximation).
+            set to "PSA" by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using "PSA"
         """
         super().__init__()
         self.type = "recording_point"
@@ -86,17 +92,17 @@ class recording_point(NRV_class):
         self.z = z
         self.method = method
         # footprints
-        self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon's ID
+        self.footprints = dict()    # footprints are stored for each axon with the key beeing the axon"s ID
         self.init = False
         self.recording = None
 
-    def save_recording_point(self, save=False, fname='recording_point.json'):
-        rise_warning('save_recording_point is a deprecated method use save')
+    def save_recording_point(self, save=False, fname="recording_point.json"):
+        rise_warning("save_recording_point is a deprecated method use save")
         self.save(save=save, fname=fname)
-    def load_recording_point(self, data='recording_point.json'):
-        rise_warning('load_recording_point is a deprecated method use load')
-        self.load(data=data)
 
+    def load_recording_point(self, data="recording_point.json"):
+        rise_warning("load_recording_point is a deprecated method use load")
+        self.load(data=data)
 
     def get_ID(self):
         """
@@ -116,7 +122,7 @@ class recording_point(NRV_class):
         Returns
         -------
         method : str
-            name of the method, either 'PSA' for point source approximation or 'LSA' for line Source Approximation
+            name of the method, either "PSA" for point source approximation or "LSA" for line Source Approximation
         """
         return self.method
 
@@ -127,11 +133,19 @@ class recording_point(NRV_class):
         Parameters
         ----------
         method : str
-            name of the method, either 'PSA' for point source approximation or 'LSA' for line Source Approximation
+            name of the method, either "PSA" for point source approximation or "LSA" for line Source Approximation
         """
         self.method = method
 
-    def compute_PSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma,myelinated=False):
+    def compute_PSA_isotropic_footprint(
+        self,
+        x_axon,
+        y_axon,
+        z_axon,
+        d,
+        ID,
+        sigma,myelinated=False,
+    ):
         """
         Compute the footprint for Point Source approximation an isotropic material
 
@@ -158,7 +172,17 @@ class recording_point(NRV_class):
         electrical_distance = 4*np.pi*sigma*(((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2+ ((self.z - z_axon)/m)**2)**0.5
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
-    def compute_PSA_anisotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma_xx, sigma_yy, sigma_zz):
+    def compute_PSA_anisotropic_footprint(
+        self,
+        x_axon,
+        y_axon,
+        z_axon,
+        d,
+        ID,
+        sigma_xx,
+        sigma_yy,
+        sigma_zz,
+    ):
         """
         Compute the footprint for Point Source approximation an anisotropic material
 
@@ -188,7 +212,16 @@ class recording_point(NRV_class):
         electrical_distance = 4*np.pi*((sx*(self.x - x_axon)/m)**2 + (sy*(self.y - y_axon)/m)**2+ (sz*(self.z - z_axon)/m)**2)**0.5
         self.footprints[str(ID)] = np.divide(surface,electrical_distance)
 
-    def compute_LSA_isotropic_footprint(self, x_axon, y_axon, z_axon, d, ID, sigma,myelinated=False):
+    def compute_LSA_isotropic_footprint(
+        self,
+        x_axon,
+        y_axon,
+        z_axon,
+        d,
+        ID,
+        sigma,
+        myelinated=False,
+    ):
         """
         Compute the footprint for Linear Source approximation an isotropic material
 
@@ -208,16 +241,16 @@ class recording_point(NRV_class):
             conductivity of the isotropic extracellular material, in [S.m]
         """
         if myelinated :
-            d=NodeD_interpol(d)
-            surface= np.pi * (d/cm)*(1/cm)
+            d = NodeD_interpol(d)
+            surface = np.pi * (d / cm) * (1 / cm)
             d_internode = np.gradient(x_axon)           
         else:
-            surface = surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
+            surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
             d_internode = np.gradient(x_axon)
 
-        dist = ((((self.x - x_axon)/m)**2 + ((self.y - y_axon)/m)**2)**0.5)
+        dist = ((((self.x - x_axon)/m) **2 + ((self.y - y_axon)/m) **2) **0.5)
         electrical_distance = (4*np.pi*(d_internode/m)*sigma)/np.log(abs((dist-(self.x-x_axon)/m)/((((d_internode+(self.x-x_axon))**2+(self.y-y_axon)**2)**0.5)/m-(d_internode+(self.x-x_axon))/m)))
-        self.footprints[str(ID)] = np.divide(surface,electrical_distance)
+        self.footprints[str(ID)] = np.divide(surface, electrical_distance)
 
     def init_recording(self, N_points):
         """
@@ -234,7 +267,9 @@ class recording_point(NRV_class):
             self.init = True
         else:
             if len(self.recording)!=N_points:
-                rise_error('Trying to compute an extracellular potential of a wrong temporal size')
+                rise_error(
+                    "Trying to compute an extracellular potential of a wrong temporal size"
+                )
 
     def reset_recording(self, N_points):
         """
@@ -261,7 +296,7 @@ class recording_point(NRV_class):
         ID          : int
             axon ID as footprint are stored in a dictionnary with their ID as key
         """
-        self.recording += np.matmul(np.transpose(I_membrane),self.footprints[str(ID)])
+        self.recording += np.matmul(np.transpose(I_membrane), self.footprints[str(ID)])
 
 
 class recorder(NRV_class):
@@ -307,11 +342,11 @@ class recorder(NRV_class):
         self.recording_points = []
 
 
-    def save_recorder(self, save=False, fname='recorder.json'):
-        rise_warning('save_recorder is a deprecated method use save')
+    def save_recorder(self, save=False, fname="recorder.json"):
+        rise_warning("save_recorder is a deprecated method use save")
         self.save(save=save, fname=fname)
-    def load_recorder(self, data='recorder.json'):
-        rise_warning('load_recorder is a deprecated method use load')
+    def load_recorder(self, data="recorder.json"):
+        rise_warning("load_recorder is a deprecated method use load")
         self.load(data=data)
 
 
@@ -348,7 +383,7 @@ class recorder(NRV_class):
         if is_recording_point(point):
             self.recording_points.append(point)
 
-    def set_recording_point(self, x, y, z, method='PSA'):
+    def set_recording_point(self, x, y, z, method="PSA"):
         """
         Set a recording point at a given location and add to the recording points list
 
@@ -362,10 +397,10 @@ class recorder(NRV_class):
             z position of the recording point, in um
         Parameters
         method  : string
-            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
-            or 'LSA' (Line Source Approximation).
-            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
-            will automatically be performed using 'PSA'
+            electrical potential approximation method, can be "PSA" (Point Source Approximation)
+            or "LSA" (Line Source Approximation).
+            set to "PSA" by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using "PSA"
         """
         if self.is_empty():
             new_point = recording_point(x, y, z, method=method)
@@ -374,7 +409,7 @@ class recorder(NRV_class):
             new_point = recording_point(x, y, z, ID=lowest_ID+1, method=method)
         self.add_recording_point(new_point)
 
-    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx=10, dy=10, method='PSA'):
+    def set_recording_zplane(x_min, x_max, y_min, y_max, z, dx=10, dy=10, method="PSA"):
         """
         Generate equaly spaced recording points in the z plane
 
@@ -395,24 +430,24 @@ class recorder(NRV_class):
         dy      : float
             distance between recording points on the y coordinate, in um
         method  : string
-            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
-            or 'LSA' (Line Source Approximation).
-            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
-            will automatically be performed using 'PSA'
+            electrical potential approximation method, can be "PSA" (Point Source Approximation)
+            or "LSA" (Line Source Approximation).
+            set to "PSA" by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using "PSA"
         """
         if np.abs(x_max - x_min) < dx:
             dx = np.abs(x_max - x_min)/10
-            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+            rise_warning("dx too large, changed automatically to "+str(dx)+" um")
         if np.abs(y_max - y_min) < dy:
             dy = np.abs(y_max - y_min)/10
-            rise_warning('dy too large, changed automatically to '+str(dy)+' um')
+            rise_warning("dy too large, changed automatically to "+str(dy)+" um")
         x_positions = np.arange(x_min, x_max, dx)
         y_positions = np.arange(y_min, y_max, dy)
         for x in x_positions:
             for y in y_positions:
                 self.set_recording_point(x, y, z, method=method)
 
-    def set_recording_yplane(x_min, x_max, y, z_min, z_max, dx=10, dz=10, method='PSA'):
+    def set_recording_yplane(x_min, x_max, y, z_min, z_max, dx=10, dz=10, method="PSA"):
         """
         Generate equaly spaced recording points in the y plane
 
@@ -433,24 +468,35 @@ class recorder(NRV_class):
         dz      : float
             distance between recording points on the z coordinate, in um
         method  : string
-            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
-            or 'LSA' (Line Source Approximation).
-            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
-            will automatically be performed using 'PSA'
+            electrical potential approximation method, can be "PSA" (Point Source Approximation)
+            or "LSA" (Line Source Approximation).
+            set to "PSA" by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using "PSA"
         """
         if np.abs(x_max - x_min) < dx:
             dx = np.abs(x_max - x_min)/10
-            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+            rise_warning("dx too large, changed automatically to "+str(dx)+" um")
         if np.abs(z_max - z_min) < dz:
             dz = np.abs(z_max - z_min)/10
-            rise_warning('dz too large, changed automatically to '+str(dz)+' um')
+            rise_warning("dz too large, changed automatically to "+str(dz)+" um")
         x_positions = np.arange(x_min, x_max, dx)
         z_positions = np.arange(z_min, z_max, dz)
         for x in x_positions:
             for z in z_positions:
                 self.set_recording_point(x, y, z, method=method)
 
-    def set_recording_volume(x_min, x_max, y_min, ymax, z_min, z_max, dx= 10, dy=10, dz=10, method='PSA'):
+    def set_recording_volume(
+        x_min,
+        x_max,
+        y_min,
+        ymax,
+        z_min,
+        z_max,
+        dx= 10,
+        dy=10,
+        dz=10,
+        method="PSA",
+    ):
         """
         Generate equaly spaced recording points in the y plane
 
@@ -475,20 +521,20 @@ class recorder(NRV_class):
         dz      : float
             distance between recording points on the z coordinate, in um
         method  : string
-            electrical potential approximation method, can be 'PSA' (Point Source Approximation)
-            or 'LSA' (Line Source Approximation).
-            set to 'PSA' by default. Note that if LSA is requested with an anisotropic material, computation
-            will automatically be performed using 'PSA'
+            electrical potential approximation method, can be "PSA" (Point Source Approximation)
+            or "LSA" (Line Source Approximation).
+            set to "PSA" by default. Note that if LSA is requested with an anisotropic material, computation
+            will automatically be performed using "PSA"
         """
         if np.abs(x_max - x_min) < dx:
             dx = np.abs(x_max - x_min)/10
-            rise_warning('dx too large, changed automatically to '+str(dx)+' um')
+            rise_warning("dx too large, changed automatically to "+str(dx)+" um")
         if np.abs(y_max - y_min) < dy:
             dy = np.abs(y_max - y_min)/10
-            rise_warning('dy too large, changed automatically to '+str(dy)+' um')
+            rise_warning("dy too large, changed automatically to "+str(dy)+" um")
         if np.abs(z_max - z_min) < dz:
             dz = np.abs(z_max - z_min)/10
-            rise_warning('dz too large, changed automatically to '+str(dz)+' um')
+            rise_warning("dz too large, changed automatically to "+str(dz)+" um")
         x_positions = np.arange(x_min, x_max, dx)
         y_positions = np.arange(y_min, y_max, dy)
         z_positions = np.arange(z_min, z_max, dz)
@@ -517,30 +563,91 @@ class recorder(NRV_class):
         if not self.is_empty():
             for point in self.recording_points:
                 if myelinated:
-                    if point.method=='PSA':
+                    if point.method=="PSA":
                         if self.isotropic:
-                            point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
+                            point.compute_PSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma,
+                                True,
+                            )
                         else:
-                            point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
-                    if point.method=='LSA':
+                            point.compute_PSA_anisotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma_xx,
+                                self.sigma_yy,
+                                self.sigma_zz,
+                            )
+                    if point.method=="LSA":
                         if self.isotropic:
-                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma,True)
+                            point.compute_LSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma,
+                                True
+                            )
                         else:
-                            rise_warning('LSA not implemented for anisotropic material return isotropic by default')
-                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                            rise_warning("LSA not implemented for anisotropic material return isotropic by default")
+                            point.compute_LSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma
+                            )
                 else:
-                    surface=np.pi * (d/cm) * (np.gradient(x_axon)/cm)
-                    if point.method=='PSA':
+                    surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
+                    if point.method=="PSA":
                         if self.isotropic:
-                            point.compute_PSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                            point.compute_PSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma)
                         else:
-                            point.compute_PSA_anisotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma_xx, self.sigma_yy, self.sigma_zz)
-                    if point.method=='LSA':
+                            point.compute_PSA_anisotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma_xx,
+                                self.sigma_yy,
+                                self.sigma_zz
+                            )
+                    if point.method=="LSA":
                         if self.isotropic:
-                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                            point.compute_LSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma
+                            )
                         else:
-                            rise_warning('LSA not implemented for anisotropic material return isotropic by default')
-                            point.compute_LSA_isotropic_footprint(x_axon, y_axon, z_axon, d, ID, self.sigma)
+                            rise_warning("LSA not implemented for anisotropic material return isotropic by default")
+                            point.compute_LSA_isotropic_footprint(
+                                x_axon,
+                                y_axon,
+                                z_axon,
+                                d,
+                                ID,
+                                self.sigma
+                            )
 
     def init_recordings(self, N_points):
         """

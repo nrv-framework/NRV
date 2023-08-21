@@ -10,7 +10,7 @@ from ..backend.file_handler import *
 from ..backend.NRV_Class import NRV_class
 
 
-# enable faulthandler to ease 'segmentation faults' debug
+# enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
 ###############
@@ -32,6 +32,7 @@ def is_stim(stim):
     """
     return isinstance(stim, stimulus)
 
+
 def set_common_time_series(stim1, stim2):
     """
     set two signals at the same time samples, missing samples are reconstructed by holding a value
@@ -45,6 +46,7 @@ def set_common_time_series(stim1, stim2):
     """
     stim1.insert_samples(stim2.t)
     stim2.insert_samples(stim1.t)
+
 
 def get_equal_timing_copies(stim1, stim2):
     """
@@ -74,6 +76,7 @@ def get_equal_timing_copies(stim1, stim2):
     stim_b.insert_samples(stim_a.t)
     return stim_a, stim_b
 
+
 def datfile_2_stim(fname, dt=0.005):
     """ Creates a stimulus from sampled data specified in a .dat file
 
@@ -96,9 +99,11 @@ def datfile_2_stim(fname, dt=0.005):
 ## Stimulus object definition ##
 ################################
 class stimulus(NRV_class):
-    """Stimulus class for NRV2,
+    """
+    Stimulus class for NRV2,
     signals are defined as asynchronous signals, with s the values and t as occurence timings.
     """
+    
     def __init__(self, s_init=0):
         """
         Instantiation of a stimulus object.
@@ -114,12 +119,12 @@ class stimulus(NRV_class):
         self.t = np.array([0])
 
     ## Save and Load mehtods
-
-    def save_stimulus(self, save=False, fname='stimulus.json'):
-        rise_warning('save_stimulus is a deprecated method use save')
+    def save_stimulus(self, save=False, fname="stimulus.json"):
+        rise_warning("save_stimulus is a deprecated method use save")
         self.save(save=save, fname=fname)
-    def load_stimulus(self, data='stimulus.json'):
-        rise_warning('load_stimulus is a deprecated method use load')
+
+    def load_stimulus(self, data="stimulus.json"):
+        rise_warning("load_stimulus is a deprecated method use load")
         self.load(data=data)
 
     ############################
@@ -189,9 +194,9 @@ class stimulus(NRV_class):
         j = 1
         for k in range(1, len(new_t)):
             if j < self.len():
-                if new_t[k] < self.t[j]: # added sample, hold the last value
+                if new_t[k] < self.t[j]:  # added sample, hold the last value
                     new_s.append(new_s[-1])
-                else:   # orinal sample, retrieve value in original signal and increment counter
+                else:  # orinal sample, retrieve value in original signal and increment counter
                     new_s.append(self.s[j])
                     j += 1
             else:
@@ -299,7 +304,7 @@ class stimulus(NRV_class):
                     flag = False
         return flag
 
-    def __ne__(self, b): # self != b
+    def __ne__(self, b):  # self != b
         return not self == b
 
     #######################
@@ -403,17 +408,17 @@ class stimulus(NRV_class):
         if dt == 0:
             dt = 1/(freq*100)
         elif freq > (1./(2*dt)):
-            rise_warning('dt too low in stimulus creation, Shannon criterion not respected')
+            rise_warning("dt too low in stimulus creation, Shannon criterion not respected")
         Nb_points = int(duration/dt)
         # create the signal
         if start == 0:
-            self.s[0] = amplitude*np.sin(phase) + offset
+            self.s[0] = amplitude * np.sin(phase) + offset
             t = np.linspace(dt, start+duration, num=Nb_points-1)
-            s = amplitude*np.sin(2*np.pi*freq*t + phase) + offset
+            s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
             self.concatenate(s, t, t_shift=0)
         else:
-            t = np.linspace(start, start+duration, num=Nb_points)
-            s = amplitude*np.sin(2*np.pi*freq*t + phase) + offset
+            t = np.linspace(start, start + duration, num=Nb_points)
+            s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
             self.concatenate(s, t, t_shift=0)
 
     def square(self, start, duration, freq, amplitude, offset, dt):
@@ -446,13 +451,12 @@ class stimulus(NRV_class):
             if i < point_start:
                 s[i] = 0
             else:
-                if t[i]%T<T/2:
+                if t[i] % T < T / 2:
                     s[i] = - s[i]
                 s[i] = amplitude * s[i] + offset
         self.concatenate(s, t, t_shift=0)
 
     def ramp(self, slope, start, duration, dt, bounds=(0, float("inf")), printslope=False):
-
         """
         Create a ramp waveform with slop value
 
@@ -483,9 +487,9 @@ class stimulus(NRV_class):
         point_start = int(start/dt)
         for i in range(point_start, Nb_points):
             if slope >= 0:
-                s[i] = min(bounds[1],bounds[0]+(i-point_start)*slope*dt)
+                s[i] = min(bounds[1], bounds[0] + (i - point_start) * slope * dt)
             if slope < 0:
-                s[i] = max(bounds[0],bounds[1]+(i-point_start)*slope*dt)
+                s[i] = max(bounds[0], bounds[1] + (i - point_start) * slope * dt)
         self.concatenate(s, t, t_shift=0)
 
     def ramp_lim(self, tstart, tstop, ampstart, ampmax, duration, dt, printslope=False):
@@ -509,6 +513,6 @@ class stimulus(NRV_class):
         printslope  : bool, optional
             if True, the value of the slope is printed on the prompt
         """
-        slope = (ampstart-ampmax)/(tstart-tstop)
-        bounds = (min(ampstart, ampmax),max(ampstart, ampmax))
+        slope = (ampstart - ampmax) / (tstart - tstop)
+        bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)

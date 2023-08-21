@@ -66,7 +66,9 @@ class COMSOL_model(FEM_model):
                 self.Ncore = Ncore
             self.handle_server = handle_server
             # start client and server
-            pass_info("Starting COMSOL server/client, this may take few seconds")
+            pass_info(
+                "Starting COMSOL server/client, this may take few seconds"
+            )
             if self.handle_server:
                 self.server = mph.Server(cores=self.Ncore)
             else:
@@ -209,7 +211,7 @@ class COMSOL_model(FEM_model):
         """
         t0 = time.time()
         COMSOL_expressions = [
-            "at3("+str(x[k]) + "[um], " + str(y)+ "[um], " + str(z) + "[um], V)"
+            "at3("+str(x[k]) + "[um], " + str(y) + "[um], " + str(z) + "[um], V)"
             for k in range(len(x))
         ]
         Voltage = self.model.evaluate(COMSOL_expressions) * V

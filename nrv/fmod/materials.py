@@ -9,12 +9,12 @@ from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump, json_load
 from ..backend.NRV_Class import NRV_class
 
-# enable faulthandler to ease 'segmentation faults' debug
+# enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
 # get the built-in material librairy
-dir_path = os.environ['NRVPATH'] + '/_misc'
-material_library = os.listdir(dir_path+'/materials/')
+dir_path = os.environ["NRVPATH"] + "/_misc"
+material_library = os.listdir(dir_path+"/materials/")
 
 ###############
 ## Functions ##
@@ -36,6 +36,7 @@ def is_mat(mat):
     """
     return isinstance(mat, material)
 
+
 def get_mat_file_as_dict(fname):
     """
     Open .mat material librairy file and return all lines as a dictionnary
@@ -46,11 +47,12 @@ def get_mat_file_as_dict(fname):
         physical properties of the material
     """
     d = {}
-    with open(fname, 'r') as f:
+    with open(fname, "r") as f:
         for line in f:
             (key, value) = line.split()
             d[key] = value
     return d
+
 
 def load_material(f_material):
     """
@@ -64,26 +66,27 @@ def load_material(f_material):
         .mat material file
     """
     # load from librairy or from file
-    f_in_librairy = str(f_material) + '.mat'
+    f_in_librairy = str(f_material) + ".mat"
     if f_in_librairy in material_library:
-        mat_file = get_mat_file_as_dict(dir_path + '/materials/' + f_in_librairy)
+        mat_file = get_mat_file_as_dict(dir_path + "/materials/" + f_in_librairy)
     else:
         mat_file = get_mat_file_as_dict(f_material)
     # creat material instance
     mat_obj = material()
-    if 'name' in mat_file:
-        mat_obj.set_name(mat_file['name'])
-    if 'source' in mat_file:
-        mat_obj.set_source(mat_file['source'])
-    if 'sigma_xx' in mat_file:
-        mat_obj.set_anisotropic_conductivity(mat_file['sigma_xx'], mat_file['sigma_yy'],\
-            mat_file['sigma_zz'])
-    elif 'sigma' in mat_file:
-        mat_obj.set_isotropic_conductivity(mat_file['sigma'])
+    if "name" in mat_file:
+        mat_obj.set_name(mat_file["name"])
+    if "source" in mat_file:
+        mat_obj.set_source(mat_file["source"])
+    if "sigma_xx" in mat_file:
+        mat_obj.set_anisotropic_conductivity(mat_file["sigma_xx"], mat_file["sigma_yy"],\
+            mat_file["sigma_zz"])
+    elif "sigma" in mat_file:
+        mat_obj.set_isotropic_conductivity(mat_file["sigma"])
     else:
-        rise_warning('loading a material with 0 conductivity, \
-            this may induce further division by 0')
+        rise_warning("loading a material with 0 conductivity, \
+            this may induce further division by 0")
     return mat_obj
+
 
 ####################
 ## material class ##
@@ -92,24 +95,26 @@ class material(NRV_class):
     """
     a class for material, where all the physical properties constants are stored.
     """
+    
     def __init__(self):
         """
         material instantiation
         """
         super().__init__()
-        self.name = ''
-        self.source = ''
+        self.name = ""
+        self.source = ""
         self.isotrop_cond = True
         self.sigma = 0
         self.sigma_xx = 0
         self.sigma_yy = 0
         self.sigma_zz = 0
 
-    def save_material(self, save=False, fname='material.json'):
-        rise_warning('save_material is a deprecated method use save')
+    def save_material(self, save=False, fname="material.json"):
+        rise_warning("save_material is a deprecated method use save")
         self.save(save=save, fname=fname)
-    def load_material(self, data='material.json'):
-        rise_warning('load_material is a deprecated method use load')
+
+    def load_material(self, data="material.json"):
+        rise_warning("load_material is a deprecated method use load")
         self.load(data=data)
 
     def set_name(self, name):
