@@ -33,7 +33,7 @@ plt.legend()
 plt.savefig(fig_file1)
 
 ## Mesh generation
-mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=4)
+mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
 
 mesh.reshape_fascicle(D=700, y_c=700, z_c=0, ID=1)
 mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import nrv
 import matplotlib.pyplot as plt
 
+#nrv.parameters.set_nrv_verbosity(4)
 # Fascicle config
 dt = 0.005
 t_sim = 10
@@ -62,5 +63,5 @@ fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular
 
 fig, ax = plt.subplots(figsize=(8,8))
 nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
-plt.savefig("./unitary_tests/figures/70_Facsicular_state.png")
+plt.savefig("./unitary_tests/figures/70_A.png")
 
