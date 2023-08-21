@@ -116,7 +116,7 @@ def fascicular_state(dir_path, save=False, saving_file="facsicular_state.json", 
 
     """
 
-    fascicular = load_simulation_from_json(dir_path+'00_Fascicle_config.json')
+    fascicular = json_load(dir_path+'00_Fascicle_config.json')
     facsicular_state = {'-1': fascicular}
 
     for file in ls_axons_results(dir_path):
