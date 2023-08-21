@@ -7,6 +7,7 @@ import faulthandler
 import numpy as np
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import *
+from ..utils.units import *
 from ..backend.NRV_Class import NRV_class
 
 
@@ -198,6 +199,20 @@ class stimulus(NRV_class):
                 new_s.append(self.s[-1])
         self.s = np.asarray(new_s)
         self.t = new_t
+    
+    def snap_time(self, dt_min):
+        i_mask = [True for _ in range(len(self.t))]
+        for i in range(len(self.t)-1):
+            j=0
+            while i > j and not i_mask[i-j]:
+                j += 1
+            if self.t[i+1] - self.t[i-j] < dt_min:
+                i_mask = False
+
+        self.s = self.s[i_mask]
+        self.t = self.t[i_mask]
+
+        
 
     #####################
     ## special methods ##
