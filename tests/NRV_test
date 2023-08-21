@@ -95,7 +95,9 @@ if __name__ == "__main__":
         tests = []
         tests[:] = all_tests[:]
         i=0
-        while i < len(tests):
+        i_break = 5000
+        while i < len(tests) and i_break > 0:
+            i_break -= 1
             test = tests[i]
             if ".py" in test:
                 tests[i] = test[:3]+ '-' +test[4:-3]
