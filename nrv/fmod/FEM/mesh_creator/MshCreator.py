@@ -184,10 +184,10 @@ class MshCreator(NRV_class):
         for i in range(len(self.faces)):
             face = self.faces[i]
             self.faces_com += [
-                np.round(self.model.occ.getCenterOfMass(face[0], face[1]),4
+                np.round(self.model.occ.getCenterOfMass(face[0], face[1]),4)
             ]
             self.faces_bd += [
-                np.round(self.model.occ.getBoundingBox(face[0], face[1]),4
+                np.round(self.model.occ.getBoundingBox(face[0], face[1]),4)
             ]
 
         if com:
