@@ -504,7 +504,7 @@ class FENICS_model(FEM_model):
         """
         Build the geometry and perform meshing process
         """
-        if not self.mesh_file_status:
+        if not self.mesh_file_status and not self.is_meshed:
             t0 = time.time()
             self.__update_parameters()
             if self.N_fascicle == 0:
