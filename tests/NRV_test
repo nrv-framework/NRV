@@ -10,46 +10,46 @@ import shutil
 import cmd
 
 
-unit_test_folder = './unitary_tests/'
+unit_test_folder = "./unitary_tests/"
 all_tests = sorted(os.listdir(unit_test_folder), reverse=True)
 digits = [str(k) for k in range(10)]
 all_tests [:] = (value for value in all_tests if value[0] in digits)
 all_tests.reverse()
-unit_test_figures = './unitary_tests/figures/'
-unit_test_results = './unitary_tests/results/'
-out_file = 'log_NRV_test.txt'
+unit_test_figures = "./unitary_tests/figures/"
+unit_test_results = "./unitary_tests/results/"
+out_file = "log_NRV_test.txt"
 
 
 ## ARGUMENT PARSER ##
-parser = argparse.ArgumentParser(description='NeuRon Virtualizer automated test module')
-parser.add_argument('-d', '--dependances', action='store_true', dest='DEP_TEST',help='Check NEURON and COMSOL installation')
-parser.add_argument('-l', '--list', dest='LIST_TEST',type=int, nargs='?',default=-1, help='Print the name of all unitary tests')
-parser.add_argument('-u', '--unitary_tests', action='store_true', dest='UNIT_TEST',help='Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only')
-parser.add_argument('-s', '--syntax', action='store_true', dest='SYNTAX_TEST',help='Lint nvr syntax source code')
-parser.add_argument('-a', '--all', action='store_true', dest='ALL_TESTS',help='launches even potentially failing tests due to third party softwares such as COMSOL')
-parser.add_argument('-t', '--target', dest='TARGET', type=int, nargs='+' ,default=0, help="The number of the tests to simulate")
-parser.add_argument('-F', '--fenics', action='store_true', dest='FENICS_TESTS',help='Launch all and only FEniCS related tests')
-parser.add_argument('-C', '--comsol', action='store_true', dest='COMSOL_TESTS',help='Launch all and only COMSOL related tests')
-parser.add_argument('-p', '--python', action='store_true', dest='FORCE_PYTHON',help='Forces Python as interpreted instead of nrv2calm')
+parser = argparse.ArgumentParser(description="NeuRon Virtualizer automated test module")
+parser.add_argument("-d", "--dependances", action="store_true", dest="DEP_TEST",help="Check NEURON and COMSOL installation")
+parser.add_argument("-l", "--list", dest="LIST_TEST",type=int, nargs="?",default=-1, help="Print the name of all unitary tests")
+parser.add_argument("-u", "--unitary_tests", action="store_true", dest="UNIT_TEST",help="Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only")
+parser.add_argument("-s", "--syntax", action="store_true", dest="SYNTAX_TEST",help="Lint nvr syntax source code")
+parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="launches even potentially failing tests due to third party softwares such as COMSOL")
+parser.add_argument("-t", "--target", dest="TARGET", type=int, nargs="+" ,default=0, help="The number of the tests to simulate")
+parser.add_argument("-F", "--fenics", action="store_true", dest="FENICS_TESTS",help="Launch all and only FEniCS related tests")
+parser.add_argument("-C", "--comsol", action="store_true", dest="COMSOL_TESTS",help="Launch all and only COMSOL related tests")
+parser.add_argument("-p", "--python", action="store_true", dest="FORCE_PYTHON",help="Forces Python as interpreted instead of nrv2calm")
 
 
 if __name__ == "__main__":
     # Parsing arguments
     args = parser.parse_args()
-    exclude_test_keys = ['COMSOL', 'FENxCOM']
+    exclude_test_keys = ["COMSOL", "FENxCOM"]
     included_test_keys = []
     if args.FENICS_TESTS:
-        included_test_keys += ['FENICS']
+        included_test_keys += ["FENICS"]
     if args.COMSOL_TESTS:
-        included_test_keys += ['COMSOL']
+        included_test_keys += ["COMSOL"]
     if args.FENICS_TESTS and args.COMSOL_TESTS:
-        included_test_keys += ['FENxCOM']
+        included_test_keys += ["FENxCOM"]
 
-    nrv_cmd = 'nrv2calm '
-    if sys.platform == 'darwin':
-        python_cmd = 'python3 '
+    nrv_cmd = "nrv2calm "
+    if sys.platform == "darwin":
+        python_cmd = "python3 "
     else:
-        python_cmd = 'python3 '
+        python_cmd = "python3 "
         
     launcher = nrv_cmd
     if args.FORCE_PYTHON:
@@ -59,34 +59,34 @@ if __name__ == "__main__":
         ###############################
         ## test neurnon installation ##
         ###############################
-        print('Testing NEURON installation')
+        print("Testing NEURON installation")
         try:
             import neuron
         except Error:
-            print('--- Please install neuron (https://www.neuron.yale.edu/neuron/)')
+            print("--- Please install neuron (https://www.neuron.yale.edu/neuron/)")
         else:
             version = neuron.__version__
             v_number = int(version[0])*10+int(version[2])
             if v_number<77:
-                print('--- Critical Warning: consider update your neuron version to 7.7 or more recent, following tests may fail')
+                print("--- Critical Warning: consider update your neuron version to 7.7 or more recent, following tests may fail")
             else:
-                print('--- Neuron version up to date for NRV')
+                print("--- Neuron version up to date for NRV")
         ##############################
         ## test comsol installation ##
         ##############################
-        print('Testing COMSOL acces...')
+        print("Testing COMSOL acces...")
         try:
             import mph
             client = mph.start()
             client.disconnect()
         except Exception as e:
             err_message = str(e)
-            if 'License error:' in err_message:
-                print('No comsol licence found or accessible, please get a valid access or disable COMSOL in NRV to prevent errors')
+            if "License error:" in err_message:
+                print("No comsol licence found or accessible, please get a valid access or disable COMSOL in NRV to prevent errors")
             else:
-                print('Error launching COMSOL: ' + err_message)
+                print("Error launching COMSOL: " + err_message)
         else:
-            print('--- found access to a COMSOL server')
+            print("--- found access to a COMSOL server")
     if not args.LIST_TEST == -1:
         if args.LIST_TEST is None:
             N_col = 2
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             i_break -= 1
             test = tests[i]
             if ".py" in test:
-                tests[i] = test[:3]+ '-' +test[4:-3]
+                tests[i] = test[:3]+ "-" +test[4:-3]
                 i += 1
         cli = cmd.Cmd()
         cli.columnize(tests, displaywidth=N_col*47)
@@ -118,36 +118,36 @@ if __name__ == "__main__":
             ###################################
             if os.path.exists(unit_test_figures):
                 f_fig = [unit_test_figures+f for f in os.listdir(unit_test_figures) if\
-                    '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+                    "00"+f[:1]==target_script_key or "0"+f[:2]==target_script_key or f[:3]==target_script_key]
                 for f in f_fig:
                     os.remove(f)
             if not os.path.exists(unit_test_figures):
                 os.makedirs(unit_test_figures)
             if os.path.exists(unit_test_results):
                 f_fig = [unit_test_results+f for f in os.listdir(unit_test_results) if\
-                    '00'+f[:1]==target_script_key or '0'+f[:2]==target_script_key or f[:3]==target_script_key]
+                    "00"+f[:1]==target_script_key or "0"+f[:2]==target_script_key or f[:3]==target_script_key]
                 for f in f_fig:
                     os.remove(f)
             if not os.path.exists(unit_test_results):
                 os.makedirs(unit_test_results)
-            if not os.path.exists(unit_test_results+'json/'):
-                os.makedirs(unit_test_results+'json/')
-            if not os.path.exists(unit_test_results+'mesh/'):
-                os.makedirs(unit_test_results+'mesh/')
-            if not os.path.exists(unit_test_results+'outputs/'):
-                os.makedirs(unit_test_results+'outputs/') 
+            if not os.path.exists(unit_test_results+"json/"):
+                os.makedirs(unit_test_results+"json/")
+            if not os.path.exists(unit_test_results+"mesh/"):
+                os.makedirs(unit_test_results+"mesh/")
+            if not os.path.exists(unit_test_results+"outputs/"):
+                os.makedirs(unit_test_results+"outputs/") 
 
-            nrv_cmd = 'nrv2calm '
-            if sys.platform == 'darwin':
-                python_cmd = 'python3 '
+            nrv_cmd = "nrv2calm "
+            if sys.platform == "darwin":
+                python_cmd = "python3 "
             else:
-                python_cmd = 'python3 '
+                python_cmd = "python3 "
 
             for test in all_tests:
                 if str(target_script_key) in test:
                     print(test)
                     test_out = os.system(launcher+unit_test_folder+test)
-                    print('test exited with value ', test_out)
+                    print("test exited with value ", test_out)
                     break
         
     
@@ -165,12 +165,12 @@ if __name__ == "__main__":
         if not os.path.exists(unit_test_results):
             os.makedirs(unit_test_results)
 
-        if not os.path.exists(unit_test_results+'json/'):
-            os.makedirs(unit_test_results+'json/')
-        if not os.path.exists(unit_test_results+'mesh/'):
-            os.makedirs(unit_test_results+'mesh/')
-        if not os.path.exists(unit_test_results+'outputs/'):
-            os.makedirs(unit_test_results+'outputs/')
+        if not os.path.exists(unit_test_results+"json/"):
+            os.makedirs(unit_test_results+"json/")
+        if not os.path.exists(unit_test_results+"mesh/"):
+            os.makedirs(unit_test_results+"mesh/")
+        if not os.path.exists(unit_test_results+"outputs/"):
+            os.makedirs(unit_test_results+"outputs/")
             
 
         success_flag = True
@@ -188,7 +188,7 @@ if __name__ == "__main__":
                     for test_key in exclude_test_keys:
                         if test_key in test:
                             launch_test = False  
-            if '.py' in test and launch_test:
+            if ".py" in test and launch_test:
                 test_nb += 1
                 print(test)
                 #test_out = os.system(python_cmd+unit_test_folder+test)
@@ -198,22 +198,22 @@ if __name__ == "__main__":
                     failed_test.append(test)
 
         if success_flag == True:
-            line = '--- All tests passed without errors, check that all tests are true'
+            line = "--- All tests passed without errors, check that all tests are true"
 
         else:
-            line = '--- Bugs in NRV2, please consider reported errors before simulations\n'
-            line += '--- list of failed tests : ['
+            line = "--- Bugs in NRV, please consider reported errors before simulations\n"
+            line += "--- list of failed tests : ["
             for t in failed_test:
-                line += t + ', '
-            line = line[:-2] +']\n'
+                line += t + ", "
+            line = line[:-2] +"]\n"
         
         print(line)
-        file_object = open(out_file, 'a')
+        file_object = open(out_file, "a")
         file_object.write(line)
         file_object.close()
 
 
     if args.SYNTAX_TEST:
-        print('Applying pylint to nrv package')
-        test_out = os.system('pylint nrv --disable=C > ./code_review/nrv_lint.txt')
-        print('--- result saved in ./code_review/')
+        print("Applying pylint to nrv package")
+        test_out = os.system("pylint nrv --disable=C > ./code_review/nrv_lint.txt")
+        print("--- result saved in ./code_review/")
