@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 
-
-nrv.parameters.set_nrv_verbosity(4)
+#nrv.parameters.set_nrv_verbosity(4)
 
 t0 = time.time()
 test_num = 303
@@ -19,7 +18,7 @@ nerve.fit_circular_contour()
 
 
 LIFE_stim = nrv.FEM_stimulation()
-# ### Simulation box size
+#### Simulation box size
 Outer_D = 5
 LIFE_stim.reshape_outerBox(Outer_D)
 #### Nerve and fascicle geometry
