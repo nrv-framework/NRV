@@ -91,7 +91,7 @@ def datfile_2_stim(fname, dt=0.005):
     stim_1 = stimulus()
     # open the dat file and feed the stimulus
     data = np.genfromtxt(fname)
-    stim_1.t = np.arange(len(data))*dt
+    stim_1.t = np.arange(len(data)) * dt
     stim_1.s = data
     return stim_1
 
@@ -156,7 +156,8 @@ class stimulus(NRV_class):
         t       : float
             time serie of the values, numpy array like
         t_shift : float
-            time to shift the t values at the end of original signal, by default equal to 0. Here to prevent possible duplicates if the t serie starts with 0
+            time to shift the t values at the end of original signal, by default equal to 0.
+            Here to prevent possible duplicates if the t serie starts with 0
         """
         self.s = np.append(self.s, np.asarray(s))
         self.t = np.append(self.t, np.asarray(t) + self.t[-1] + t_shift)
@@ -168,7 +169,8 @@ class stimulus(NRV_class):
         Returns
         -------
         len : int
-            length of the signal (s and t attribute should have the same length if the signal is not corrupted)
+            length of the signal (s and t attribute should have the same length
+            if the signal is not corrupted)
         """
         return len(self.s)
 
@@ -195,9 +197,9 @@ class stimulus(NRV_class):
         j = 1
         for k in range(1, len(new_t)):
             if j < self.len():
-                if new_t[k] < self.t[j]:  # added sample, hold the last value
+                if new_t[k] < self.t[j]: # added sample, hold the last value
                     new_s.append(new_s[-1])
-                else:  # orinal sample, retrieve value in original signal and increment counter
+                else:   # orinal sample, retrieve value in original signal and increment counter
                     new_s.append(self.s[j])
                     j += 1
             else:
@@ -319,7 +321,7 @@ class stimulus(NRV_class):
                     flag = False
         return flag
 
-    def __ne__(self, b):  # self != b
+    def __ne__(self, b): # self != b
         return not self == b
 
     #######################
@@ -349,7 +351,8 @@ class stimulus(NRV_class):
         start       : float
             starting time of the pulse
         duration    : float
-            duration of the pulse, optional and by default equal to zero, if non zero value, a point is added at the end of the pulse with the previous value
+            duration of the pulse, optional and by default equal to zero, if non zero value,
+            a point is added at the end of the pulse with the previous value
         """
         s_last = self.s[-1]
         self.append(value, start)
@@ -374,7 +377,9 @@ class stimulus(NRV_class):
         t_inter     : float
             inter pulse timing, in ms
         anod_first  : bool
-            if true, stimulation is anodic and begins with the anodic value and is balanced with cathodic value, else stimuation is cathodic and begins with the cathodic value and is balances with anodic value,
+            if true, stimulation is anodic and begins with the anodic value
+            and is balanced with cathodic value, else stimuation is cathodic
+            and begins with the cathodic value and is balances with anodic value,
             by default set to False (cathodic first as most stimulation protocols)
         """
         if not anod_first:
@@ -417,18 +422,19 @@ class stimulus(NRV_class):
         phase       : float
             initial phase of the waveform, in rad, by default set to 0
         dt          : float
-            sampling time period to generate the sinusoidal shape. If equal to 0, dt is automatically set to match 100 samples per sinusoid period by default set to 0
+            sampling time period to generate the sinusoidal shape. If equal to 0,
+            dt is automatically set to match 100 samples per sinusoid period by default set to 0
         """
         # check the pseudo sampling period
         if dt == 0:
-            dt = 1/(freq*100)
-        elif freq > (1./(2*dt)):
+            dt = 1/(freq * 100)
+        elif freq > (1./(2 * dt)):
             rise_warning("dt too low in stimulus creation, Shannon criterion not respected")
         Nb_points = int(duration/dt)
         # create the signal
         if start == 0:
             self.s[0] = amplitude * np.sin(phase) + offset
-            t = np.linspace(dt, start+duration, num=Nb_points-1)
+            t = np.linspace(dt, start + duration, num=Nb_points-1)
             s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
             self.concatenate(s, t, t_shift=0)
         else:
@@ -453,7 +459,8 @@ class stimulus(NRV_class):
         offset      : float
             offset current of the waveform, in uA, by default set to 0
         dt          : float
-            sampling time period to generate the sinusoidal shape. If equal to 0, dt is automatically set to match 100 samples per sinusoid period by default set to 0
+            sampling time period to generate the sinusoidal shape. If equal to 0,
+            dt is automatically set to match 100 samples per sinusoid period by default set to 0
         """
         Nb_points = int(duration / dt)
         if start == 0:
@@ -528,6 +535,6 @@ class stimulus(NRV_class):
         printslope  : bool, optional
             if True, the value of the slope is printed on the prompt
         """
-        slope = (ampstart - ampmax) / (tstart - tstop)
+        slope = (ampstart - ampmax)/(tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
