@@ -95,8 +95,8 @@ class extracellular_context(NRV_class):
         self.global_time_serie = []
         self.type = None
 
-    def save_extracel_context(self, save=False, fname='extracel_context.json'):
-        rise_warning('save_extracel_context is a deprecated method use save')
+    def save_extracel_context(self, save=False, fname="extracel_context.json"):
+        rise_warning("save_extracel_context is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_extracel_context(self, data="extracel_context.json"):
@@ -403,7 +403,7 @@ class FEM_stimulation(extracellular_context):
 
     ## Save and Load mehtods
 
-    def save(self, save=False, fname='extracel_context.json', blacklist=[]):
+    def save(self, save=False, fname="extracel_context.json", blacklist=[], **kwargs):
         """
         Return extracellular context as dictionary and eventually save it as json file
 
@@ -419,8 +419,10 @@ class FEM_stimulation(extracellular_context):
         context_dic : dict
             dictionary containing all information
         """
-        blacklist += ['model']
-        return super().save(save=save, fname=fname, blacklist=blacklist)
+        if self.comsol:
+            blacklist += ["model"]
+            
+        return super().save(save=save, fname=fname, blacklist=blacklist, **kwargs)
 
 
     def load(self, data, C_model=False, **kwargs):
@@ -481,7 +483,6 @@ class FEM_stimulation(extracellular_context):
         """
         if MCH.do_master_only_work():
             if self.comsol:
-            
                 self.model.set_parameter("Nerve_D", str(Nerve_D)+"[um]")
                 self.model.set_parameter("Length", str(Length)+"[um]")
                 self.model.set_parameter("Nerve_y_c", str(y_c)+"[um]")
@@ -515,10 +516,12 @@ class FEM_stimulation(extracellular_context):
                     self.model.set_parameter("Fascicle_y_c", str(y_c) + "[um]")
                     self.model.set_parameter("Fascicle_z_c", str(z_c) + "[um]")
                 else:
-                    self.model.set_parameter("Fascicle_" + "str(ID)" + "_D", str(Fascicle_D) + "[um]")
-                    self.model.set_parameter("Fascicle_" + "str(ID)" + "_y_c", str(y_c) + "[um]")
-                    self.model.set_parameter("Fascicle_" + "str(ID)" + "_z_c", str(z_c) + "[um]")
-                self.model.set_parameter("Perineurium_thickness", str(Perineurium_thickness) + "[um]")
+                    self.model.set_parameter("Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]")
+                    self.model.set_parameter("Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]")
+                    self.model.set_parameter("Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]")
+                self.model.set_parameter(
+                    "Perineurium_thickness",
+                    str(Perineurium_thickness) + "[um]")
             else:
                 self.model.reshape_fascicle(
                     Fascicle_D=Fascicle_D,
@@ -554,25 +557,32 @@ class FEM_stimulation(extracellular_context):
             if stimulus a list of situmulus one stimulus set for each active site
             else 
         """
-        if is_FEM_electrode(electrode):
-            if not electrode.is_multipolar:
-                if not self.electrodes == []:
-                    electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
-                self.electrodes.append(electrode)
-                self.electrodes_label.append(electrode.label)
-                self.stimuli.append(stimulus)
-            else:
-                if np.iterable(stimulus):
-                    stimuli = stimulus
-                else:
-                    rise_warning('Only one stimulus for a multipolar electrode, it will be set for all active sites')
-                    stimuli = [stimulus for k in range(electrode.N_contact)]
-                for E in range(electrode.N_contact):
+        is_overlaping = False
+        for elec in self.electrodes:
+            is_overlaping = is_overlaping or check_electrodes_overlap(elec, electrode)
+
+        if is_overlaping:
+            rise_warning("overlaping electrod: not added to context")
+        else:
+            if is_FEM_electrode(electrode):
+                if not electrode.is_multipolar:
                     if not self.electrodes == []:
                         electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
                     self.electrodes.append(electrode)
-                    self.electrodes_label.append(electrode.label+"_"+str())
-                    self.stimuli.append(stimuli[E])
+                    self.electrodes_label.append(electrode.label)
+                    self.stimuli.append(stimulus)
+                else:
+                    if np.iterable(stimulus):
+                        stimuli = stimulus
+                    else:
+                        rise_warning("Only one stimulus for a multipolar electrode, it will be set for all active sites")
+                        stimuli = [stimulus for k in range(electrode.N_contact)]
+                    for E in range(electrode.N_contact):
+                        if not self.electrodes == []:
+                            electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
+                        self.electrodes.append(electrode)
+                        self.electrodes_label.append(electrode.label+"_"+str())
+                        self.stimuli.append(stimuli[E])
 
                 if self.fenics and MCH.do_master_only_work():
                     electrode.parameter_model(self.model)
@@ -693,6 +703,6 @@ class FEM_stimulation(extracellular_context):
             # set the footprints
             for k, electrode in enumerate(self.electrodes):
                 self.electrodes[k].set_footprint(V[:,k])
-                # electrode.set_footprint(V[:, k])
+                #electrode.set_footprint(V[:, k])
         else:
             self.electrodes[0].set_footprint(V)
