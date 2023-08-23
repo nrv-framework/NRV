@@ -14,11 +14,12 @@ faulthandler.enable()
 
 # get the built-in material librairy
 dir_path = os.environ["NRVPATH"] + "/_misc"
-material_library = os.listdir(dir_path+"/materials/")
+material_library = os.listdir(dir_path + "/materials/")
 
 ###############
 ## Functions ##
 ###############
+
 
 def is_mat(mat):
     """
@@ -78,13 +79,16 @@ def load_material(f_material):
     if "source" in mat_file:
         mat_obj.set_source(mat_file["source"])
     if "sigma_xx" in mat_file:
-        mat_obj.set_anisotropic_conductivity(mat_file["sigma_xx"], mat_file["sigma_yy"],\
-            mat_file["sigma_zz"])
+        mat_obj.set_anisotropic_conductivity(
+            mat_file["sigma_xx"], mat_file["sigma_yy"], mat_file["sigma_zz"]
+        )
     elif "sigma" in mat_file:
         mat_obj.set_isotropic_conductivity(mat_file["sigma"])
     else:
-        rise_warning("loading a material with 0 conductivity, \
-            this may induce further division by 0")
+        rise_warning(
+            "loading a material with 0 conductivity, \
+            this may induce further division by 0"
+        )
     return mat_obj
 
 
@@ -95,7 +99,7 @@ class material(NRV_class):
     """
     a class for material, where all the physical properties constants are stored.
     """
-    
+
     def __init__(self):
         """
         material instantiation
