@@ -3,7 +3,7 @@ import numpy as np
 from mpi4py import MPI
 import scipy
 
-from dolfinx.fem import (FunctionSpace, Function, Expression)
+from dolfinx.fem import FunctionSpace, Function, Expression
 from dolfinx.io.gmshio import read_from_msh, model_to_mesh
 from dolfinx.io.utils import XDMFFile
 from dolfinx.geometry import (
@@ -20,6 +20,7 @@ from ....backend.MCore import *
 from ....backend.file_handler import json_load, json_dump, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning, pass_info
 from ....backend.NRV_Class import NRV_class
+
 
 ###############
 ## Functions ##
@@ -86,7 +87,7 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
             gmsh.finalize()
         elif is_MshCreator(mesh):
             output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
-        else: 
+        else:
             rise_error("mesh should be either a filename or a MeshCreator")
     return output
 
@@ -94,7 +95,7 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
 def domain_from_meshfile(mesh_file):
     """
         return only the domain from mesh_file
-    
+
     Parameters
     ----------
     mesh_file : str
@@ -117,10 +118,11 @@ def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
 
 class SimResult(NRV_class):
     """
-    Result of a FEMSimulation. 
+    Result of a FEMSimulation.
     Store the resulting function space giving the possibility to apply basic mathematical
     operations on multiple results
     """
+
     def __init__(
         self,
         mesh_file="",
@@ -128,7 +130,7 @@ class SimResult(NRV_class):
         elem=("Lagrange", 1),
         V=None,
         vout=None,
-        comm=MPI.COMM_WORLD
+        comm=MPI.COMM_WORLD,
     ):
         """
         initialisation of the SimParameters:
@@ -159,13 +161,7 @@ class SimResult(NRV_class):
         self.comm = comm
 
     def set_sim_result(
-        self,
-        mesh_file="",
-        domain=None,
-        V=None,
-        elem=None,
-        vout=None,
-        comm=None
+        self, mesh_file="", domain=None, V=None, elem=None, vout=None, comm=None
     ):
         if mesh_file != "":
             self.mesh_file = mesh_file
@@ -177,25 +173,25 @@ class SimResult(NRV_class):
             self.V = V
         if vout is not None:
             self.vout = vout
-        self.comm = comm     
-    
+        self.comm = comm
+
     def save(self, file, ftype="xdmf", overwrite=True):
         if ftype == "xdmf":
             fname = rmv_ext(file) + ".xdmf"
             with XDMFFile(self.comm, fname, "w") as file:
                 if not overwrite:
-                        file.parameters.update(
-                            {"functions_share_mesh": True, "rewrite_function_mesh": False}
-                            )
+                    file.parameters.update(
+                        {"functions_share_mesh": True, "rewrite_function_mesh": False}
+                    )
                 else:
                     file.write_mesh(self.domain)
                 file.write_function(self.vout)
         else:
             fname = rmv_ext(file) + ".sres"
             mdict = {
-                "mesh_file":self.mesh_file,
+                "mesh_file": self.mesh_file,
                 "element": self.elem,
-                "vout":self.vout.vector[:]
+                "vout": self.vout.vector[:],
             }
             scipy.io.savemat(fname, mdict)
             return mdict
@@ -239,7 +235,7 @@ class SimResult(NRV_class):
             else:
                 rise_error(
                     "To aline mesh function reslults must have the same meshfile"
-            )
+                )
         else:
             rise_error("Mesh function alinment must be done with SimResult")
 
@@ -260,7 +256,7 @@ class SimResult(NRV_class):
                     to_round = True
                 else:
                     rise_warning(
-                        X[i], " not found in mesh, value of ", X[i-1], " reused"
+                        X[i], " not found in mesh, value of ", X[i - 1], " reused"
                     )
                 cells += [cells[-1]]
             else:
@@ -287,7 +283,7 @@ class SimResult(NRV_class):
             preconditioner_type=self.preconditioner, form_compiler_parameters=self.compiler_parameters)
         return res
     """
-    
+
     def __neg__(self):
         expr = Expression(-self.vout, self.V.element.interpolation_points())
         res = SimResult(
