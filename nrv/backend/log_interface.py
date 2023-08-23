@@ -59,18 +59,19 @@ def rise_error(*args, out=1, **kwargs):
         if verbose and parameters.VERBOSITY_LEVEL >= 1:
             print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
     else:
-        err =  "NRV ERROR: "\
-                + message\
-                + "\n encountered in process "\
-                + str(MCH.rank)\
-                + " out of "\
-                + str(MCH.size)
+        err = (
+            NRV ERROR: "
+            + message
+            + "\n encountered in process "
+            + str(MCH.rank)
+            + " out of "
+            + str(MCH.size)
+        )
         if parameters.LOG_Status:
             logging.error(err)
-        if parameters.VERBOSITY_LEVEL>=1:
+        if parameters.VERBOSITY_LEVEL >= 1:
             print(err)
             sys.stdout.flush()
-            
     if out == 0:
         out = 1
     sys.exit(out)
@@ -98,15 +99,17 @@ def rise_warning(*args, abort=False, **kwargs):
     if MCH.is_alone():
         if parameters.LOG_Status:
             logging.warning("NRV WARNING: " + message)
-        if verbose and parameters.VERBOSITY_LEVEL>=2:
+        if verbose and parameters.VERBOSITY_LEVEL >= 2:
             print(bcolors.WARNING + "NRV WARNING: " + message + bcolors.ENDC)
     else:
-        war = "NRV WARNING: "\
-                + message\
-                + "\n encountered in process "\
-                + str(MCH.rank)\
-                +" out of "\
-                + str(MCH.size)
+        war = (
+            "NRV WARNING: "
+            + message
+            + "\n encountered in process "
+            + str(MCH.rank)
+            +" out of "
+            + str(MCH.size)
+        )
         if parameters.LOG_Status:
             logging.warning(war)
         if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL >= 2:
@@ -129,7 +132,6 @@ def pass_info(*args, **kwargs):
     *args   :
         anything to pass as info
     """
-
     verbose = True
     if "verbose" in kwargs:
         verbose = kwargs["verbose"]
@@ -139,15 +141,17 @@ def pass_info(*args, **kwargs):
     if MCH.is_alone():
         if parameters.LOG_Status:
             logging.info("NRV INFO: " + message)
-        if verbose and parameters.VERBOSITY_LEVEL>=3:
+        if verbose and parameters.VERBOSITY_LEVEL >= 3:
             print("NRV INFO: " + message)
     else:
-        inf = "NRV INFO: "\
-                + message\
-                + "\n from process "\
-                + str(MCH.rank)\
-                + " out of "\
-                + str(MCH.size)
+        inf = (
+            "NRV INFO: "
+            + message
+            + "\n from process "
+            + str(MCH.rank)
+            + " out of "
+            + str(MCH.size)
+        )
         if parameters.LOG_Status:
             logging.info(inf)
         if parameters.VERBOSITY_LEVEL >= 4:
@@ -165,25 +169,26 @@ def pass_debug_info(*args, **kwargs):
     *args   :
         anything to pass as info
     """
-
     verbose = True
     if "verbose" in kwargs:
         verbose = kwargs["verbose"]
     message = ""
     for arg in args:
         message += str(arg)
-    if MCH.is_alone(): 
-        if parameters.LOG_Status and parameters.VERBOSITY_LEVEL >= 4: 
+    if MCH.is_alone():
+        if parameters.LOG_Status and parameters.VERBOSITY_LEVEL >= 4:
             logging.info("NRV DEBUG: " + message)
-        if verbose and parameters.VERBOSITY_LEVEL>=4:
+        if verbose and parameters.VERBOSITY_LEVEL >= 4:
             print("NRV DEBUG: " + message)
     else:
-        inf = "NRV DEBUG: "\
-                + message\
-                + "\n from process "\
-                + str(MCH.rank)\
-                + " out of "\
-                + str(MCH.size)
+        inf = (
+            "NRV DEBUG: "
+            + message
+            + "\n from process "
+            + str(MCH.rank)
+            + " out of "
+            + str(MCH.size)
+        )
         if parameters.LOG_Status:
             logging.info(inf)
         if parameters.VERBOSITY_LEVEL >= 4:
@@ -191,7 +196,7 @@ def pass_debug_info(*args, **kwargs):
             sys.stdout.flush()
 
 
-def progression_popup(current, max_iter, begin_message='', end_message='', endl=''):
+def progression_popup(current, max_iter, begin_message="", end_message="", endl=""):
     """
     Displays the progression on prompt, for single process only, nothing saved to the log
 
@@ -210,7 +215,7 @@ def progression_popup(current, max_iter, begin_message='', end_message='', endl=
     """
     if MCH.is_alone():
         print(
-            begin_message + f"{current+1}" + '/' + str(max_iter) + end_message, end=endl
+            begin_message + f"{current+1}" + "/" + str(max_iter) + end_message, end=endl
         )
         if current == max_iter - 1:
             print("\n")

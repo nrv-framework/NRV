@@ -36,6 +36,7 @@ def is_iterable(some_stuff):
         flag = False
     return flag
 
+
 def rmv_ext(fname):
     """
     return filename without extension
@@ -79,6 +80,7 @@ def create_folder(foldername, access_rights=0o755):
             % foldername
         )
 
+
 #######################
 ## JSON related code ##
 #######################
@@ -93,7 +95,7 @@ def json_dump(results, filename):
     filename    : str
         name of the file where results are saved
     """
-    with open(filename, 'w') as file_to_save:
+    with open(filename, "w") as file_to_save:
         json.dump(results, file_to_save, cls=NRV_Encoder)
 
 

@@ -5,13 +5,16 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import configparser
 import os
-from numpy import pi
 
 
-class nrv_parameters():
+class nrv_parameters:
+    """
+    A class for NRV parameters used to gather parameters
+    """
+    
     def __init__(self):
         """
-        A class for NRV parameters used to 
+        Initialize the class for parameters
         """
         self.dir_path = os.environ["NRVPATH"] + "/_misc"
         self.config_fname = self.dir_path + "/NRV.ini"
@@ -19,10 +22,16 @@ class nrv_parameters():
         self.load()
 
     def save(self):
+        """
+        Saving the parameters
+        """
         with open(self.config_fname, "w") as configfile:
             self.machine_config.write(configfile)
 
     def load(self, fname=None):
+        """
+        Loading the parameters
+        """
         if fname is None:
             fname = self.config_fname
 
@@ -62,7 +71,7 @@ class nrv_parameters():
         """
         return self.GMSH_Ncores
 
-    def set_gmsh_ncore(self,n):
+    def set_gmsh_ncore(self, n):
         """
         set gmsh core number
         """

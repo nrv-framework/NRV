@@ -79,7 +79,7 @@ class Mcore_handler:
         elif self.is_master():
             print("Hi, I am the master core")
         else:
-            print("Hi, I am a slave core, my ID is "+str(self.rank))
+            print("Hi, I am a slave core, my ID is " + str(self.rank))
 
     def split_job_from_arrays(self, len_arrays):
         """
