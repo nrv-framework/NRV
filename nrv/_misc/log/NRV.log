@@ -55,3 +55,12 @@
 08/18/2023 04:46:43 PM /Users/fkolbl/Dropbox/01_CODE/NRV/nrv/nmod/fascicle_generator.py:628: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
   @numba.jit(fastmath=True, cache=True)
 
+08/23/2023 11:16:57 AM /Users/fkolbl/Library/CloudStorage/Dropbox/01_CODE/NRV/nrv/nmod/fascicle_generator.py:628: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+08/23/2023 11:22:30 AM /Users/fkolbl/Dropbox/01_CODE/NRV/nrv/nmod/fascicle_generator.py:628: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+08/23/2023 11:22:32 AM /Users/fkolbl/Dropbox/01_CODE/NRV/nrv/nmod/fascicle_generator.py:628: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+

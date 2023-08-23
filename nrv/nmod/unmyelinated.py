@@ -13,9 +13,28 @@ class unmyelinated(axon):
     Unmyelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
     """
-    def __init__(self, y=0, z=0, d=1, L=1000, model='Rattay_Aberham', dt=0.001, Nrec=0, Nsec=1, \
-        Nseg_per_sec=0, freq=100, freq_min=0, mesh_shape='plateau_sigmoid', alpha_max=0.3,\
-         d_lambda=0.1, v_init=None, T=None, ID=0, threshold=-40):
+    
+    def __init__(
+        self,
+        y=0,
+        z=0,
+        d=1,
+        L=1000,
+        model="Rattay_Aberham",
+        dt=0.001,
+        Nrec=0,
+        Nsec=1,
+        Nseg_per_sec=0,
+        freq=100,
+        freq_min=0,
+        mesh_shape="plateau_sigmoid",
+        alpha_max=0.3
+        d_lambda=0.1,
+        v_init=None,
+        T=None,
+        ID=0,
+        threshold=-40
+    ):
         """
         initialisation of an unmyelinted axon
 
@@ -31,12 +50,12 @@ class unmyelinated(axon):
             axon length along the x axins, in um
         model           : str
             choice of conductance based model, possibly:
-                'HH'                : original squid giant axon model, warning - low temperature model, not adapted to mamalian modeling
-                'Rattay_Aberham'    : Rattay Aberham model, see [1] for details
-                'Sundt'             : Sundt model, see [1] for details
-                'Tigerholm'         : Tigerholm model, see [1] for details
-                'Schild_94'         : Schild 1994 model, see [1] for details
-                'Schild_97'         : Schild 1997 model, see [1] for details
+                "HH"                : original squid giant axon model, warning - low temperature model, not adapted to mamalian modeling
+                "Rattay_Aberham"    : Rattay Aberham model, see [1] for details
+                "Sundt"             : Sundt model, see [1] for details
+                "Tigerholm"         : Tigerholm model, see [1] for details
+                "Schild_94"         : Schild 1994 model, see [1] for details
+                "Schild_97"         : Schild 1997 model, see [1] for details
         dt              : float
             computation step for simulations, in ms. By default equal to 1 us
         Nrec            : int
@@ -51,10 +70,10 @@ class unmyelinated(axon):
             Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
         mesh_shape      : str
             Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
-                'pyramidal'         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
-                'sigmoid'           -> same a befor with sigmoid increase instead of linear
-                'plateau'           -> sale as pyramidal except the max frequency is holded on a central plateau
-                'plateau_sigmoid'   -> same as previous with sigmoid increase
+                "pyramidal"         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
+                "sigmoid"           -> same a befor with sigmoid increase instead of linear
+                "plateau"           -> sale as pyramidal except the max frequency is holded on a central plateau
+                "plateau_sigmoid"   -> same as previous with sigmoid increase
         alpha_max       : float
             Proportion of the axon set to the maximum frequency for plateau shapes, by default set to 0.3
         d_lambda        : float
@@ -73,16 +92,30 @@ class unmyelinated(axon):
         reference [1] corresponds to:
             Pelot, N. A., Catherall, D. C., Thio, B. J., Titus, N. D., Liang, E. D., Henriquez, C. S., & Grill, W. M. (2021). Excitation properties of computational models of unmyelinated peripheral axons. Journal of neurophysiology, 125(1), 86-104.
         """
-        super().__init__(y, z, d, L, dt=dt, Nseg_per_sec=Nseg_per_sec,\
-            freq=freq, freq_min=freq_min, mesh_shape=mesh_shape, alpha_max=alpha_max, \
-            d_lambda=d_lambda, v_init=v_init, T=T, ID=ID, threshold=threshold)
+        super().__init__(
+            y,
+            z,
+            d,
+            L,
+            dt=dt,
+            Nseg_per_sec=Nseg_per_sec,
+            freq=freq,
+            freq_min=freq_min,
+            mesh_shape=mesh_shape,
+            alpha_max=alpha_max,
+            d_lambda=d_lambda,
+            v_init=v_init,
+            T=T,
+            ID=ID,
+            threshold=threshold
+        )
         self.Nsec = Nsec
         self.Nrec = Nrec
         self.myelinated = False
         if model in unmyelinated_models:
             self.model = model
         else:
-            self.model = 'Rattay_Aberham'
+            self.model = "Rattay_Aberham"
         self.__compute_axon_parameters()
 
     def __compute_axon_parameters(self):
@@ -92,14 +125,14 @@ class unmyelinated(axon):
         ## Handling v_init
         if self.v_init is None:
             # model driven
-            if self.model == 'HH':
+            if self.model == "HH":
                 self.v_init = -67.5
-            elif self.model == 'Rattay_Aberham':
+            elif self.model == "Rattay_Aberham":
                 self.v_init = -70
-            elif self.model == 'Sundt':
+            elif self.model == "Sundt":
                 self.v_init = -60
-            elif self.model == 'Tigerholm':
-                self.v_init = -62   # -55 in Pelot 2020, changed by FK 19/01/2021
+            elif self.model == "Tigerholm":
+                self.v_init = -62  # -55 in Pelot 2020, changed by FK 19/01/2021
             else:
                 self.v_init = -70
         else:
@@ -108,13 +141,13 @@ class unmyelinated(axon):
         ## Handling temperature
         if self.T is None:
             # model driven
-            if self.model == 'HH':
+            if self.model == "HH":
                 self.T = 32 # original HH model, cold model, maximal temperature at which spike propagation is not altered
             else:
                 self.T = 37 # mamalian models
 
         # create and connect (if more than 1) sections
-        self.unmyelinated_sections = [neuron.h.Section(name='U_axon[%d]' % i) for i in \
+        self.unmyelinated_sections = [neuron.h.Section(name="U_axon[%d]" % i) for i in \
             range(self.Nsec)]
         for sec in self.unmyelinated_sections:
             # morphologic parameters
@@ -133,7 +166,7 @@ class unmyelinated(axon):
         self.__get_seg_positions()
         self.__get_rec_positions(self.Nrec)
 
-    def save(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False, blacklist=[]):
+    def save(self, save=False, fname="axon.json", extracel_context=False, intracel_context=False, rec_context=False, blacklist=[]):
         """
         Return axon as dictionary and eventually save it as json file
 
@@ -142,7 +175,7 @@ class unmyelinated(axon):
         save    : bool
             if True, save in json files
         fname   : str
-            Path and Name of the saving file, by default 'axon.json'
+            Path and Name of the saving file, by default "axon.json"
 
         Returns
         -------
@@ -171,7 +204,7 @@ class unmyelinated(axon):
             # set the number of segment for all declared sections
             for sec in self.unmyelinated_sections:
                 sec.nseg = Nseg
-                if self.model == 'Schild_94' or self.model == 'Schild_97':
+                if self.model == "Schild_94" or self.model == "Schild_97":
                     sec.nseg_caintscale = Nseg
                     sec.nseg_caextscale = Nseg
                 self.Nseg += Nseg
@@ -182,7 +215,7 @@ class unmyelinated(axon):
                 Nseg = d_lambda_rule(self.unmyelinated_sections[k].L, self.d_lambda, freqs[k], \
                     self.unmyelinated_sections[k])
                 self.unmyelinated_sections[k].nseg = Nseg
-                if self.model == 'Schild_94' or self.model == 'Schild_97':
+                if self.model == "Schild_94" or self.model == "Schild_97":
                     sec.nseg_caintscale = Nseg
                     sec.nseg_caextscale = Nseg
                 self.Nseg += Nseg
@@ -253,15 +286,15 @@ class unmyelinated(axon):
         """
         for sec in self.unmyelinated_sections:
             # insert mechanisms
-            if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
-                sec.insert('pas')
-            sec.insert('extracellular')
+            if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
+                sec.insert("pas")
+            sec.insert("extracellular")
             sec.xg[0] = 1e10 # short circuit, no myelin
             sec.xc[0] = 0    # short circuit, no myelin
             ## Except for HH, the following code is directly take from modelDB: https://senselab.med.yale.edu/ModelDB/showmodel.cshtml?model=266498#tabs-1
             ## Pelot N (2020) Excitation Properties of Computational Models of Unmyelinated Peripheral Axons J Neurophysiology
-            if model == 'HH':
-                sec.insert('hh')
+            if model == "HH":
+                sec.insert("hh")
                 # explicit mechanisms settings
                 sec.cm = 1.0
                 sec.Ra = 200.0
@@ -271,21 +304,21 @@ class unmyelinated(axon):
                 sec.ena = 50
                 sec.ek = -77
                 sec.el_hh = -54.3
-            elif model == 'Rattay_Aberham':
-                sec.insert('RattayAberham') # Model adjusted for a resting potential of -70mV instead of 0 (subtract Vrest from each reversal potential)
+            elif model == "Rattay_Aberham":
+                sec.insert("RattayAberham") # Model adjusted for a resting potential of -70mV instead of 0 (subtract Vrest from each reversal potential)
                 sec.Ra = 100
                 sec.cm = 1
                 sec.v = -70
                 sec.ena = 45
                 sec.ek = -82
                 sec.e_pas = -70
-            elif model == 'Sundt':
-                sec.insert('nahh')
+            elif model == "Sundt":
+                sec.insert("nahh")
                 sec.gnabar_nahh = .04
                 sec.mshift_nahh = -6            # NaV1.7/1.8 channelshift
                 sec.hshift_nahh = 6             # NaV1.7/1.8 channelshift
 
-                sec.insert('borgkdr')           # insert delayed rectifier K channels
+                sec.insert("borgkdr")           # insert delayed rectifier K channels
                 sec.gkdrbar_borgkdr = .04       # density of K channels
                 sec.ek = -90                    # K equilibrium potential
 
@@ -293,33 +326,33 @@ class unmyelinated(axon):
                 sec.Ra = 100                    # intracellular resistance
                 sec.v = -60
                 sec.e_pas = sec.v + (sec.ina + sec.ik)/sec.g_pas    # calculate leak equilibrium potential
-            elif self.model == 'Tigerholm':
-                sec.insert('ks')
+            elif self.model == "Tigerholm":
+                sec.insert("ks")
                 sec.gbar_ks = 0.0069733
-                sec.insert('kf')
+                sec.insert("kf")
                 sec.gbar_kf = 0.012756
-                sec.insert('h')
+                sec.insert("h")
                 sec.gbar_h = 0.0025377
-                sec.insert('nattxs')
+                sec.insert("nattxs")
                 sec.gbar_nattxs = 0.10664
-                sec.insert('nav1p8')
+                sec.insert("nav1p8")
                 sec.gbar_nav1p8 = 0.24271
-                sec.insert('nav1p9')
+                sec.insert("nav1p9")
                 sec.gbar_nav1p9 = 9.4779e-05
-                sec.insert('nakpump')
+                sec.insert("nakpump")
                 sec.smalla_nakpump = -0.0047891
-                sec.insert('kdrTiger')
+                sec.insert("kdrTiger")
                 sec.gbar_kdrTiger = 0.018002
-                sec.insert('kna')
+                sec.insert("kna")
                 sec.gbar_kna = 0.00042
-                sec.insert('naoi')
+                sec.insert("naoi")
 
-                sec.insert('koi')
+                sec.insert("koi")
                 sec.theta_naoi = 0.029
                 sec.theta_koi = 0.029
 
-                sec.insert('leak')
-                sec.insert('extrapump')
+                sec.insert("leak")
+                sec.insert("extrapump")
 
                 sec.Ra = 35.5
                 sec.cm = 1.
@@ -336,24 +369,24 @@ class unmyelinated(axon):
             else: # Schild 94 or 97 models
                 R = 8314
                 F = 96500
-                sec.insert('leakSchild')                        # All mechanisms from Schild 1994 inserted into model
-                sec.insert('kd')
-                sec.insert('ka')
-                sec.insert('can')
-                sec.insert('cat')
-                sec.insert('kds')
-                sec.insert('kca')
-                sec.insert('caextscale')
-                sec.insert('caintscale')
-                sec.insert('CaPump')
-                sec.insert('NaCaPump')
-                sec.insert('NaKpumpSchild')
-                if self.model == 'Schild_94':
-                    sec.insert('naf')
-                    sec.insert('nas')
+                sec.insert("leakSchild")                        # All mechanisms from Schild 1994 inserted into model
+                sec.insert("kd")
+                sec.insert("ka")
+                sec.insert("can")
+                sec.insert("cat")
+                sec.insert("kds")
+                sec.insert("kca")
+                sec.insert("caextscale")
+                sec.insert("caintscale")
+                sec.insert("CaPump")
+                sec.insert("NaCaPump")
+                sec.insert("NaKpumpSchild")
+                if self.model == "Schild_94":
+                    sec.insert("naf")
+                    sec.insert("nas")
                 else:
-                    sec.insert('naf97mean')
-                    sec.insert('nas97mean')
+                    sec.insert("naf97mean")
+                    sec.insert("nas97mean")
                 # Ionic concentrations
                 #cao0_ca_ion = 2.0                                      # not in section, adapter considering: https://neuronsimulator.github.io/nrn/rxd-tutorials/initialization.html
                 neuron.h.cao0_ca_ion = 2.0                              # [mM] Initial Cao Concentration
@@ -367,7 +400,7 @@ class unmyelinated(axon):
                 nai = 8.9                                               # [mM] Internal Na Concentration
                 nastyle = neuron.h.ion_style("na_ion", 1, 2, 0, 0, 0)   # Allows ena to be calculated manually
                 sec.ena = ((R*(self.T+273.15))/F)*math.log(nao/nai)     # Manual Calculation of ena in order to use Schild F and R values
-                if self.model == 'Schild_97':
+                if self.model == "Schild_97":
                     sec.gbar_naf97mean = 0.022434928                    # [S/cm^2] This block sets the conductance to the conductances in Schild 1997
                     sec.gbar_nas97mean = 0.022434928
                     sec.gbar_kd = 0.001956534
@@ -490,7 +523,7 @@ class unmyelinated(axon):
         """
         Prepare the ionic currents recording. For internal use only.
         """
-        if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.i_na_reclist = neuron.h.List()
             self.i_k_reclist = neuron.h.List()
             self.i_l_reclist = neuron.h.List()
@@ -526,7 +559,7 @@ class unmyelinated(axon):
         """
         get the ionic currents at the end of simulation. For internal use only.
         """
-        if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             i_na_ax = np.zeros((self.Nrec, self.t_len))
             i_k_ax = np.zeros((self.Nrec, self.t_len))
             i_l_ax = np.zeros((self.Nrec, self.t_len))
@@ -550,7 +583,7 @@ class unmyelinated(axon):
         """
         Prepare the membrane voltage recording. For internal use only.
         """
-        if self.model == 'HH':
+        if self.model == "HH":
             self.g_na_reclist = neuron.h.List()
             self.g_k_reclist = neuron.h.List()
             self.g_l_reclist = neuron.h.List()
@@ -568,7 +601,7 @@ class unmyelinated(axon):
                     self.g_na_reclist.append(g_na_rec)
                     self.g_k_reclist.append(g_k_rec)
                     self.g_l_reclist.append(g_l_rec)
-        elif self.model == 'Rattay_Aberham':
+        elif self.model == "Rattay_Aberham":
             self.g_na_reclist = neuron.h.List()
             self.g_k_reclist = neuron.h.List()
             self.g_l_reclist = neuron.h.List()
@@ -594,7 +627,7 @@ class unmyelinated(axon):
         get the membrane voltage at the end of simulation. For internal use only.
         """
         g_mem_rec = []
-        if self.model in ['HH', 'Rattay_Aberham']:
+        if self.model in ["HH", "Rattay_Aberham"]:
             g_mem_rec = np.zeros((self.Nrec, self.t_len))
             for k in range(self.Nrec):
                 g_mem_rec[k, :] = np.asarray(self.g_na_reclist[k]) + np.asarray(self.g_k_reclist[k])\
@@ -606,7 +639,7 @@ class unmyelinated(axon):
         get the membrane voltage at the end of simulation. For internal use only.
         """
         results = []
-        if self.model in ['HH', 'Rattay_Aberham']:
+        if self.model in ["HH", "Rattay_Aberham"]:
             g_na_rec = np.zeros((self.Nrec, self.t_len))
             g_k_rec = np.zeros((self.Nrec, self.t_len))
             g_l_rec = np.zeros((self.Nrec, self.t_len))
@@ -621,7 +654,7 @@ class unmyelinated(axon):
         """
         Prepare the particule value recording. For internal use only.
         """
-        if self.model == 'HH':
+        if self.model == "HH":
             self.hhmreclist = neuron.h.List()
             self.hhnreclist = neuron.h.List()
             self.hhhreclist = neuron.h.List()
@@ -633,7 +666,7 @@ class unmyelinated(axon):
                     self.hhmreclist.append(hhm)
                     self.hhnreclist.append(hhn)
                     self.hhhreclist.append(hhh)
-        elif self.model == 'Rattay_Aberham':
+        elif self.model == "Rattay_Aberham":
             self.hhmreclist = neuron.h.List()
             self.hhnreclist = neuron.h.List()
             self.hhhreclist = neuron.h.List()
@@ -645,7 +678,7 @@ class unmyelinated(axon):
                     self.hhmreclist.append(hhm)
                     self.hhnreclist.append(hhn)
                     self.hhhreclist.append(hhh)
-        elif self.model == 'Sundt':
+        elif self.model == "Sundt":
             self.hhmreclist = neuron.h.List()
             self.hhnreclist = neuron.h.List()
             self.hhhreclist = neuron.h.List()
@@ -657,7 +690,7 @@ class unmyelinated(axon):
                     self.hhmreclist.append(hhm)
                     self.hhnreclist.append(hhn)
                     self.hhhreclist.append(hhh)
-        elif self.model == 'Tigerholm':
+        elif self.model == "Tigerholm":
             # NAV 1.8
             self.m_nav18_reclist = neuron.h.List()
             self.h_nav18_reclist = neuron.h.List()
@@ -778,7 +811,7 @@ class unmyelinated(axon):
                     y1_kds = neuron.h.Vector().record(self.unmyelinated_sections[k](pos)._ref_y1_kds, sec=self.unmyelinated_sections[k])
                     self.x_kds_reclist.append(x_kds)
                     self.y1_kds_reclist.append(y1_kds)
-            if self.model == 'Schild_94':
+            if self.model == "Schild_94":
                 # Fast Na
                 self.m_naf_reclist = neuron.h.List()
                 self.h_naf_reclist = neuron.h.List()
@@ -824,7 +857,7 @@ class unmyelinated(axon):
         """
         get the particules values at the end of simulation. For internal use only.
         """
-        if self.model in ['HH', 'Rattay_Aberham', 'Sundt']:
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             m_ax = np.zeros((self.Nrec, self.t_len))
             n_ax = np.zeros((self.Nrec, self.t_len))
             h_ax = np.zeros((self.Nrec, self.t_len))
@@ -833,7 +866,7 @@ class unmyelinated(axon):
                 n_ax[k, :] = np.asarray(self.hhnreclist[k])
                 h_ax[k, :] = np.asarray(self.hhhreclist[k])
             results = [m_ax, n_ax, h_ax]
-        elif self.model in ['Tigerholm']:
+        elif self.model in ["Tigerholm"]:
             m_nav18_ax = np.zeros((self.Nrec, self.t_len))
             h_nav18_ax = np.zeros((self.Nrec, self.t_len))
             s_nav18_ax = np.zeros((self.Nrec, self.t_len))
@@ -874,7 +907,7 @@ class unmyelinated(axon):
             results = [m_nav18_ax, h_nav18_ax, s_nav18_ax, u_nav18_ax, m_nav19_ax, h_nav19_ax,\
                 s_nav19_ax, m_nattxs_ax, h_nattxs_ax, s_nattxs_ax, n_kdr_ax, m_kf_ax, h_kf_ax,\
                 ns_ks_ax, nf_ks_ax, w_kna_ax, ns_h_ax, nf_h_ax]
-        else: # should be 'Schild_94' or 'Schild_97'
+        else: # should be "Schild_94" or "Schild_97"
             d_can_ax = np.zeros((self.Nrec, self.t_len))
             f1_can_ax = np.zeros((self.Nrec, self.t_len))
             f2_can_ax = np.zeros((self.Nrec, self.t_len))
@@ -906,10 +939,10 @@ class unmyelinated(axon):
                 h_naf_ax[k, :] = np.asarray(self.h_naf_reclist[k])
                 m_nas_ax[k, :] = np.asarray(self.m_nas_reclist[k])
                 h_nas_ax[k, :] = np.asarray(self.h_nas_reclist[k])
-            if self.model == 'Schild_97':
+            if self.model == "Schild_97":
                 results = [d_can_ax, f1_can_ax, f2_can_ax, d_cat_ax, f_cat_ax, p_ka_ax, q_ka_ax,\
                     c_kca_ax, n_kd_ax, x_kds_ax, y1_kds_ax, m_naf_ax, h_naf_ax, m_nas_ax, h_nas_ax]
-            else: # should be 'Schild 94'
+            else: # should be "Schild 94"
                 l_naf_ax = np.zeros((self.Nrec, self.t_len))
                 for k in range(self.Nrec):
                     l_naf_ax[k, :] = np.asarray(self.l_naf_reclist[k])

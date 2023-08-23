@@ -81,6 +81,7 @@ class NRV_class(metaclass=ABCMeta):
     NRV Class are empty shells, defined as abstract classes of which every class in NRV
     should inherite. This enable automatic context backup with save and load methods
     """
+    
     @abstractmethod
     def __init__(self):
         """
@@ -99,7 +100,7 @@ class NRV_class(metaclass=ABCMeta):
     def save(self, save=False, fname="nrv_save.json", blacklist={}, **kwargs):
         """
         Generic saving method for NRV class instance
-        
+
         Parameters
         ----------
         save : bool, optional
@@ -133,7 +134,7 @@ class NRV_class(metaclass=ABCMeta):
     def load(self, data, blacklist={}, **kwargs):
         """
         Generic loading method for NRV class instance
-        
+
         Parameters
         ----------
         data : dict
