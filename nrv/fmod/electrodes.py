@@ -12,6 +12,7 @@ from ..backend.NRV_Class import NRV_class
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
+
 def is_FEM_electrode(elec):
     """
     Check if the electrode is a FEM based electrode
@@ -51,7 +52,7 @@ def load_any_electrode(data):
     """
     if type(data) == str:
         elec_dic = json_load(data)
-    else: 
+    else:
         elec_dic = data
 
     if elec_dic["type"] == "electrode":
@@ -83,7 +84,7 @@ def check_electrodes_overlap(elec1, elec2):
         first electrode
     elec2:      FEM_electrode
         second electrode
-    
+
     Returns
     -------
     test:           bool
@@ -93,20 +94,20 @@ def check_electrodes_overlap(elec1, elec2):
         return False
     if is_CUFF_electrode(elec1) and is_CUFF_electrode(elec2):
         dist_e = abs(elec1.x - elec2.x)
-        len_min = (elec1.contact_length + elec2.contact_length)/2
+        len_min = (elec1.contact_length + elec2.contact_length) / 2
         if dist_e < len_min:
             return True
         else:
             return False
     elif is_LIFE_electrode(elec1) and is_LIFE_electrode(elec2):
         dist_e_x = abs(elec1.x - elec2.x)
-        len_min_x = (elec1.length + elec2.length)/2
+        len_min_x = (elec1.length + elec2.length) / 2
         dist_e_yz = (elec1.y - elec2.y) ** 2 + (elec1.z - elec2.z) ** 2
-        len_min_yz = ((elec1.D + elec2.D)/2) ** 2
+        len_min_yz = ((elec1.D + elec2.D) / 2) ** 2
         if dist_e_x < len_min_x and dist_e_yz < len_min_yz:
             return True
         else:
-            return False        
+            return False
     return False
 
 
@@ -114,6 +115,7 @@ class electrode(NRV_class):
     """
     Objet for generic electrode description. Each electrode has an ID and a position.
     """
+
     def __init__(self, ID=0):
         """
         Instantiation of a generic electrode
@@ -135,6 +137,7 @@ class electrode(NRV_class):
     def save_electrode(self, save=False, fname="electrode.json"):
         rise_warning("save_electrode is a deprecated method use save")
         self.save(save=save, fname=fname)
+
     def load_electrode(self, data="electrode.json"):
         rise_warning("load_electrode is a deprecated method use load")
         self.load(data=data)
@@ -191,7 +194,7 @@ class electrode(NRV_class):
         self.footprint = np.array([])
 
     def compute_field(self, I):
-        """ Compute the external field using the Point source approximation
+        """Compute the external field using the Point source approximation
 
         Parameters
         ----------
@@ -229,11 +232,13 @@ class electrode(NRV_class):
             self.z += z
         self.clear_footprint()
 
+
 class point_source_electrode(electrode):
     """
     Point source electrode. Inherite from electrode. The electrode is punctual and act as a\
     monopole.
     """
+
     def __init__(self, x=0, y=0, z=0, ID=0):
         """
         Instantiation of a Point source electrode
@@ -273,20 +278,37 @@ class point_source_electrode(electrode):
         """
         if mat.is_isotropic():
             # 1e-6  on distances to stay in m (condivtivity specified in S/m
-            self.footprint = 1./(4 * np.pi * np.sqrt((1e-6 * (self.x - x)) ** 2 + (1e-6 * (self.y - y)) ** 2 +\
-                (1e-6 * (self.z - z)) ** 2) * mat.sigma)
+            self.footprint = 1.0 / (
+                4
+                * np.pi
+                * np.sqrt(
+                    (1e-6 * (self.x - x)) ** 2
+                    + (1e-6 * (self.y - y)) ** 2
+                    + (1e-6 * (self.z - z)) ** 2
+                )
+                * mat.sigma
+            )
         else:
             sx = mat.sigma_yy * mat.sigma_zz
             sy = mat.sigma_xx * mat.sigma_zz
             sz = mat.sigma_xx * mat.sigma_yy
             # 1e-6  on distances to stay in m (condivtivity specified in S/m)
-            self.footprint = 1./(4 * np.pi * np.sqrt(sx * (1e-6 * (self.x - x)) ** 2 +\
-                sy * (1e-6 * (self.y - y)) ** 2 + sz * (1e-6 * (self.z - z)) ** 2))
+            self.footprint = 1.0 / (
+                4
+                * np.pi
+                * np.sqrt(
+                    sx * (1e-6 * (self.x - x)) ** 2
+                    + sy * (1e-6 * (self.y - y)) ** 2
+                    + sz * (1e-6 * (self.z - z)) ** 2
+                )
+            )
+
 
 class FEM_electrode(electrode):
     """
     Electrode located in Finite Element Model in Comsol
     """
+
     def __init__(self, label, ID=0):
         """
         Instrantiation of a FEM electrode
@@ -309,17 +331,20 @@ class FEM_electrode(electrode):
         """
         self.footprint = np.asarray(V_1mA)
 
+
 class LIFE_electrode(FEM_electrode):
     """
     Longitudinal IntraFascicular Electrode for FEM models
     """
-    def __init__(self,
-        label="LIFE_1", 
-        D=25, 
-        length=1000, 
-        x_shift=0, 
-        y_c=0, 
-        z_c=0, 
+
+    def __init__(
+        self,
+        label="LIFE_1",
+        D=25,
+        length=1000,
+        x_shift=0,
+        y_c=0,
+        z_c=0,
         ID=0,
     ):
         """
@@ -348,7 +373,6 @@ class LIFE_electrode(FEM_electrode):
         self.z = z_c
         self.type = "LIFE"
 
-    
     def parameter_model(self, model, res="default"):
         """
         Parameter the model electrode with user specified dimensions
@@ -359,20 +383,21 @@ class LIFE_electrode(FEM_electrode):
             FEM COMSOL or Fenics simulation to parameter, se FEM or Extracellular for more details
         """
         if model.type == "COMSOL":
-            model.set_parameter(self.label+"_D", str(self.D)+"[um]")
-            model.set_parameter(self.label+"_Length", str(self.length)+"[um]")
-            model.set_parameter(self.label+"_y_c", str(self.y)+"[um]")
-            model.set_parameter(self.label+"_z_c", str(self.z)+"[um]")
-            model.set_parameter(self.label+"_x_offset", str(self.x)+"[um]")
+            model.set_parameter(self.label + "_D", str(self.D) + "[um]")
+            model.set_parameter(self.label + "_Length", str(self.length) + "[um]")
+            model.set_parameter(self.label + "_y_c", str(self.y) + "[um]")
+            model.set_parameter(self.label + "_z_c", str(self.z) + "[um]")
+            model.set_parameter(self.label + "_x_offset", str(self.x) + "[um]")
         else:
             model.add_electrode(
                 elec_type=self.type,
-                x_c=self.x+(self.length/2),
-                y_c=self.y, z_c=self.z,
+                x_c=self.x + (self.length / 2),
+                y_c=self.y,
+                z_c=self.z,
                 length=self.length,
                 D=self.D,
                 is_volume=self.is_volume,
-                res=res
+                res=res,
             )
 
 
@@ -380,6 +405,7 @@ class CUFF_electrode(FEM_electrode):
     """
     CUFF electrode for FEM models
     """
+
     def __init__(
         self,
         label="",
@@ -405,7 +431,7 @@ class CUFF_electrode(FEM_electrode):
             length of the CUFF electrod in um, by default 100
         contact_length      :float
             length along x of the contact site in um, by default 100
-        is_volume   : bool 
+        is_volume   : bool
             if True the contact is kept on the mesh as a volume, by default True
         contact_thickness   :float
             thickness of the contact site in um, by default 5
@@ -453,27 +479,24 @@ class CUFF_electrode(FEM_electrode):
         """
         if model.type == "COMSOL":
             model.set_parameter(
-                self.label + "_contact_length", 
-                str(self.contact_length) + "[um]"
+                self.label + "_contact_length", str(self.contact_length) + "[um]"
             )
-            model.set_parameter(
-                self.label + "_x_center",
-                str(self.x) + "[um]"
-            )
+            model.set_parameter(self.label + "_x_center", str(self.x) + "[um]")
             if self.contact_thickness is not None:
                 model.set_parameter(
                     self.label + "_contact_thickness",
-                    str(self.contact_thickness) + "[um]"
+                    str(self.contact_thickness) + "[um]",
                 )
             if self.insulator_thickness is not None:
                 model.set_parameter(
                     self.label + "_insulator_thickness",
-                    str(self.insulator_thickness) + "[um]"
+                    str(self.insulator_thickness) + "[um]",
                 )
             if self.insulator_length is not None:
                 model.set_parameter(
                     self.label + "_insulator_length",
-                    str(self.insulator_length) + "[um]")
+                    str(self.insulator_length) + "[um]",
+                )
         else:
             model.add_electrode(
                 elec_type=self.type,
@@ -481,17 +504,19 @@ class CUFF_electrode(FEM_electrode):
                 is_volume=self.is_volume,
                 insulator=self.insulator,
                 insulator_thickness=self.insulator_thickness,
-                contact_length=self.contact_length,\
+                contact_length=self.contact_length,
                 contact_thickness=self.contact_thickness,
                 insulator_offset=self.insulator_offset,
                 x_c=self.x,
-                res=res
+                res=res,
             )
+
 
 class CUFF_MP_electrode(CUFF_electrode):
     """
     MultiPolar CUFF electrode for FEM models
     """
+
     def __init__(
         self,
         label="CUFF_MP",
@@ -521,7 +546,7 @@ class CUFF_MP_electrode(CUFF_electrode):
             length of the CUFF electrod in um, by default 100
         contact_length      :float
             length along x of the contact site in um, by default 100
-        is_volume   : bool 
+        is_volume   : bool
             if True the contact is kept on the mesh as a volume, by default True
         contact_thickness   :float
             thickness of the contact site in um, by default 5
@@ -571,6 +596,7 @@ class CUFF_MP_electrode(CUFF_electrode):
                 contact_length=self.contact_length,
                 insulator=self.insulator,
                 contact_thickness=self.contact_thickness,
-                x_c=self.x, insulator_offset=self.insulator_offset,
+                x_c=self.x,
+                insulator_offset=self.insulator_offset,
                 res=res,
             )
