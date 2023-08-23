@@ -47,10 +47,10 @@ def clear_gmsh():
 
 class MshCreator(NRV_class):
     """
-    Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html) 
+    Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html)
     Contains methodes dealing with the mesh geometries, physical domains and feilds
     """
-    
+
     def __init__(self, D=3, ver_level=None):
         """
         initialisation of the MshCreator
@@ -63,7 +63,7 @@ class MshCreator(NRV_class):
             verbosity level of gmsh (see MshCreator.set_verbosity), by default 2
         """
         super().__init__()
-        self.type="GMSH"
+        self.type = "GMSH"
         self.D = D
         self.entities = {}
         self.volumes = []
@@ -83,7 +83,7 @@ class MshCreator(NRV_class):
 
         clear_gmsh()
         gmsh.initialize()
-        
+
         self.verbosity_level = ver_level
         self.set_verbosity(ver_level)
         self.model = gmsh.model
@@ -102,25 +102,24 @@ class MshCreator(NRV_class):
         else:
             gmsh.option.set_number("Mesh.Algorithm3D", 1)
 
-    
     #####################
     ## special methods ##
     #####################
 
     def get_obj(self):
         """
-        update and return list of mesh entities  
-        
+        update and return list of mesh entities
+
         Returns
         -------
         self.entities       :dict
         """
         return self.entities
-    
+
     def get_volumes(self, com=False, bd=False):
         """
         update and return list of mesh volumes (optional: with their center of mass)
-        
+
         Returns
         -------
         self.faces      :list[tuple]
@@ -132,10 +131,10 @@ class MshCreator(NRV_class):
         for i in range(len(self.volumes)):
             volume = self.volumes[i]
             self.volumes_com += [
-                np.round(self.model.occ.getCenterOfMass(volume[0], volume[1]),4)
+                np.round(self.model.occ.getCenterOfMass(volume[0], volume[1]), 4)
             ]
             self.volumes_bd += [
-                np.round(self.model.occ.getBoundingBox(volume[0], volume[1]),4)
+                np.round(self.model.occ.getBoundingBox(volume[0], volume[1]), 4)
             ]
 
         if com:
@@ -172,7 +171,7 @@ class MshCreator(NRV_class):
     def get_faces(self, com=False, bd=False):
         """
         update and return list of mesh face (optional: with their center of mass)
-        
+
         Returns
         -------
          self.faces     :list[tuple]
@@ -184,10 +183,10 @@ class MshCreator(NRV_class):
         for i in range(len(self.faces)):
             face = self.faces[i]
             self.faces_com += [
-                np.round(self.model.occ.getCenterOfMass(face[0], face[1]),4)
+                np.round(self.model.occ.getCenterOfMass(face[0], face[1]), 4)
             ]
             self.faces_bd += [
-                np.round(self.model.occ.getBoundingBox(face[0], face[1]),4)
+                np.round(self.model.occ.getBoundingBox(face[0], face[1]), 4)
             ]
 
         if com:
@@ -215,7 +214,7 @@ class MshCreator(NRV_class):
     def set_res(self, new_res):
         """
         set the global resolution saved (usefull when no field are set)
-        
+
         Parameters
         ----------
         new_res     :float
@@ -292,7 +291,7 @@ class MshCreator(NRV_class):
             x position of the first face center
         X1       : int or tupple(3)
             y position of the first face center
-  
+
         Returns
         -------
         line    : int
@@ -341,17 +340,21 @@ class MshCreator(NRV_class):
         box    : int
             id of the added object
         """
-        if self.D ==3:
+        if self.D == 3:
             parameters = {"x": x, "y": y, "z": z, "ax": ax, "ay": ay, "az": az}
-            box =self.model.occ.addBox(x, y, z,ax, ay, az)
+            box = self.model.occ.addBox(x, y, z, ax, ay, az)
             self.model.occ.synchronize()
             bounds = self.model.getEntities(dim=2)[-6:]
-            self.entities[box] = {"type":"box","parameters":parameters, "bounds":bounds, "dim":3}
+            self.entities[box] = {
+                "type": "box",
+                "parameters": parameters,
+                "bounds": bounds,
+                "dim": 3,
+            }
             return box
         else:
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
-        
 
     def add_cylinder(self, x=0, y=0, z=0, L=5, R=1):
         """
@@ -379,20 +382,19 @@ class MshCreator(NRV_class):
             parameters = {"x": x, "y": y, "z": z, "L": L, "R": R}
             cyl = self.model.occ.addCylinder(x, y, z, L, 0, 0, R)
             self.model.occ.synchronize()
-            bounds =self.model.getEntities(dim=2)[-3:]
+            bounds = self.model.getEntities(dim=2)[-3:]
             self.entities[cyl] = {
-                "type":"cylinder",
-                "parameters":parameters,
-                "bounds":bounds,
-                "dim":3,
+                "type": "cylinder",
+                "parameters": parameters,
+                "bounds": bounds,
+                "dim": 3,
             }
             return cyl
         else:
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
 
-
-    def rotate(self, volume, angle,x=0, y=0, z=0, ax=0, ay=0, az=0, rad=True):
+    def rotate(self, volume, angle, x=0, y=0, z=0, ax=0, ay=0, az=0, rad=True):
         """
         rotate volume
 
@@ -428,7 +430,7 @@ class MshCreator(NRV_class):
         Parameters
         ----------
         IDs     : list or None
-            list of IDs of the element to fragments, if None all dim dimension elements are 
+            list of IDs of the element to fragments, if None all dim dimension elements are
             fragmented, by default None
         dim     : int
             dimension of the elements considerated, by default 3
@@ -447,16 +449,16 @@ class MshCreator(NRV_class):
             return -1
         else:
             list_obj = [(dim, k) for k in IDs]
-        
+
         frag = self.model.occ.fragment([list_obj[0]], [k for k in list_obj[1:]])
-        new_entities={}
+        new_entities = {}
         if verbose:
             pass_info(
                 "Warning: New volume generated by fragmentation, bounds are no longer up to date"
             )
         for i in frag[0][:]:
             mask = [i in k for k in frag[1]]
-            p_id =  (np.array(list_obj)[mask][:, 1]).tolist()
+            p_id = (np.array(list_obj)[mask][:, 1]).tolist()
             p_types = [self.entities[k]["type"] for k in p_id]
             dim = min([self.entities[k]["dim"] for k in p_id])
             com = np.round(self.model.occ.getCenterOfMass(i[0], i[1]), 3)
@@ -472,7 +474,7 @@ class MshCreator(NRV_class):
     #######################################   domains methods  ###################################
     ##############################################################################################
 
-    def add_domains(self, obj_IDs,phys_ID, dim=None, name=None):
+    def add_domains(self, obj_IDs, phys_ID, dim=None, name=None):
         """
         add domains (ID + name) to a goupe of entities
         Caution: as to be used after all entities are placed
@@ -507,7 +509,7 @@ class MshCreator(NRV_class):
         res_in    : float
             resolution inside the entities
         dim    : int (2 or 3)
-            dimention of the considerated entities 
+            dimention of the considerated entities
         res_out    : float
             resolution outside the entities if None take self.res, default None
         IncludeBoundary    : bool
@@ -521,7 +523,7 @@ class MshCreator(NRV_class):
             typelist = "SurfacesList"
         else:
             typelist = "VolumesList"
-        
+
         if res_out is None:
             res_out = self.res
 
@@ -534,7 +536,7 @@ class MshCreator(NRV_class):
         return self.Nfeild
 
     def refine_threshold(
-        self, ent_ID,  dim, dist_min, dist_max, res_min, res_max=None, N_samples=100
+        self, ent_ID, dim, dist_min, dist_max, res_min, res_max=None, N_samples=100
     ):
         """
         refine mesh resolution in a list of faces or volumes IDs
@@ -598,7 +600,7 @@ class MshCreator(NRV_class):
         self.model.mesh.field.setNumbers(self.Nfeild, "FieldsList", feild_IDs)
 
         return self.Nfeild
-    
+
     def refinement_callback(self, meshSizeCallback):
         """
         Add a call back function which is apply to the mesh size defined by fields and return
@@ -606,7 +608,7 @@ class MshCreator(NRV_class):
 
         Parameters
         ----------
-        meshSizeCallback    : nrv.utils.MeshCallBack  
+        meshSizeCallback    : nrv.utils.MeshCallBack
         """
         self.model.mesh.setSizeCallback(meshSizeCallback)
 
