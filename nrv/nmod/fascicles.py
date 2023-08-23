@@ -38,12 +38,13 @@ if not MCH.is_alone():
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
-OTF_PP_path = os.environ['NRVPATH'] + '/_misc/OTF_PP/'
+OTF_PP_path = os.environ["NRVPATH"] + "/_misc/OTF_PP/"
 OTF_PP_library = os.listdir(OTF_PP_path)
 
 #####################
 ## Fasscicle class ##
 #####################
+
 
 def is_fascicle(object):
     """
@@ -61,10 +62,12 @@ def is_fascicle(object):
     """
     return isinstance(object, fascicle)
 
+
 class fascicle(NRV_class):
     """
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
     """
+
     def __init__(self, ID=0, **kwargs):
         """
         Instrantation of a Fascicle
@@ -111,36 +114,39 @@ class fascicle(NRV_class):
         self.axons_z = np.array([])
         self.NoR_relative_position = np.array([])
         # Axons objects default parameters
-        self.unmyelinated_param = {'model':'Rattay_Aberham',\
-                                    'dt' : 0.001,\
-                                    'Nrec' : 0,\
-                                    'Nsec' : 1,\
-                                    'Nseg_per_sec' : 100,\
-                                    'freq' : 100,\
-                                    'freq_min' : 0,\
-                                    'mesh_shape' : 'plateau_sigmoid',\
-                                    'alpha_max' : 0.3,\
-                                    'd_lambda' : 0.1,\
-                                    'v_init': None,\
-                                    'T' : None,\
-                                    'threshold' : -40}
+        self.unmyelinated_param = {
+            "model": "Rattay_Aberham",
+            "dt": 0.001,
+            "Nrec": 0,
+            "Nsec": 1,
+            "Nseg_per_sec": 100,
+            "freq": 100,
+            "freq_min": 0,
+            "mesh_shape": "plateau_sigmoid",
+            "alpha_max": 0.3,
+            "d_lambda": 0.1,
+            "v_init": None,
+            "T": None,
+            "threshold": -40,
+        }
 
-        self.myelinated_param = {'model':'MRG',\
-                                 'dt' : 0.001,\
-                                 'node_shift' : 0,\
-                                 'Nseg_per_sec':3,\
-                                 'freq' : 100,\
-                                 'freq_min' : 0,\
-                                 'mesh_shape' : 'plateau_sigmoid',\
-                                 'alpha_max' : 0.3,\
-                                 'd_lambda' : 0.1,\
-                                 'rec' : 'nodes',\
-                                 'T' : None,\
-                                 'threshold' : -40,\
-                                 } 
+        self.myelinated_param = {
+            "model": "MRG",
+            "dt": 0.001,
+            "node_shift": 0,
+            "Nseg_per_sec": 3,
+            "freq": 100,
+            "freq_min": 0,
+            "mesh_shape": "plateau_sigmoid",
+            "alpha_max": 0.3,
+            "d_lambda": 0.1,
+            "rec": "nodes",
+            "T": None,
+            "threshold": -40,
+        }
         self.Adelta_limit = 1
         self.set_axons_parameters(**kwargs)
-          
+
         # extra-cellular stimulation
         self.extra_stim = None
         self.footprints = {}
@@ -155,14 +161,20 @@ class fascicle(NRV_class):
         ## recording mechanism
         self.record = False
         self.recorder = None
-        #Simulation status
+        # Simulation status
         self.is_simulated = False
         self.processes_status = ["preparing" for _ in range(MCH.size)]
 
-
     ## save/load methods
-    def save(self, fname="fascicle.json", extracel_context=False, intracel_context=False,\
-             rec_context=False, save=True, blacklist=[]):
+    def save(
+        self,
+        fname="fascicle.json",
+        extracel_context=False,
+        intracel_context=False,
+        rec_context=False,
+        save=True,
+        blacklist=[],
+    ):
         """
         Save a fascicle in a json file
 
@@ -180,7 +192,7 @@ class fascicle(NRV_class):
             key to exclude from saving
         save:               bool
             if false only return the dictionary
-        
+
         Returns
         -------
         key_dict:           dict
@@ -188,27 +200,32 @@ class fascicle(NRV_class):
         """
         bl = [i for i in blacklist]
         if not intracel_context:
-            bl += ['N_intra',\
-                    'intra_stim_position',\
-                    'intra_stim_t_start',\
-                    'intra_stim_duration',\
-                    'intra_stim_amplitude',\
-                    'intra_stim_ON']
-        
+            bl += [
+                "N_intra",
+                "intra_stim_position",
+                "intra_stim_t_start",
+                "intra_stim_duration",
+                "intra_stim_amplitude",
+                "intra_stim_ON",
+            ]
+
         if not extracel_context:
-            bl += ['extra_stim',\
-                   'footprints',\
-                   'is_footprinted']
-        
+            bl += ["extra_stim", "footprints", "is_footprinted"]
+
         if not rec_context:
-            bl += ['record',\
-                   'recorder']
+            bl += ["record", "recorder"]
 
         to_save = save and MCH.do_master_only_work()
         return super().save(fname=fname, save=to_save, blacklist=bl)
 
-    def load(self, data, extracel_context=False, intracel_context=False, rec_context=False,\
-             blacklist=[]):
+    def load(
+        self,
+        data,
+        extracel_context=False,
+        intracel_context=False,
+        rec_context=False,
+        blacklist=[],
+    ):
         """
         Load a fascicle configuration from a json file
 
@@ -227,40 +244,62 @@ class fascicle(NRV_class):
         """
         if type(data) == str:
             key_dic = json_load(data)
-        else: 
+        else:
             key_dic = data
 
         bl = [i for i in blacklist]
         if not intracel_context:
-            bl += ['N_intra',\
-                    'intra_stim_position',\
-                    'intra_stim_t_start',\
-                    'intra_stim_duration',\
-                    'intra_stim_amplitude',\
-                    'intra_stim_ON']
-        
+            bl += [
+                "N_intra",
+                "intra_stim_position",
+                "intra_stim_t_start",
+                "intra_stim_duration",
+                "intra_stim_amplitude",
+                "intra_stim_ON",
+            ]
+
         if not extracel_context:
-            bl += ['extra_stim',\
-                        'footprints',\
-                        'myelinated_nseg_per_sec',\
-                        'unmyelinated_nseg',\
-                        'is_footprinted']
-        
+            bl += [
+                "extra_stim",
+                "footprints",
+                "myelinated_nseg_per_sec",
+                "unmyelinated_nseg",
+                "is_footprinted",
+            ]
+
         if not rec_context:
-            bl += ['record',\
-                   'recorder']
+            bl += ["record", "recorder"]
 
         super().load(data=key_dic, blacklist=bl)
-        if 'unmyelinated_param' not in key_dic:
-            rise_warning('Deprecated fascicle file')
+        if "unmyelinated_param" not in key_dic:
+            rise_warning("Deprecated fascicle file")
             self.set_axons_parameters(key_dic)
 
-    def save_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
-        rise_warning('save_fascicle_configuration is a deprecated method use save instead')
-        self.save(fname=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
-    def load_fascicle_configuration(self, fname, extracel_context=False, intracel_context=False, rec_context=False):
-        rise_warning('load_fascicle_configuration is a deprecated method use load instead')
-        self.load(data=fname,extracel_context=extracel_context,intracel_context=intracel_context,rec_context=rec_context)
+    def save_fascicle_configuration(
+        self, fname, extracel_context=False, intracel_context=False, rec_context=False
+    ):
+        rise_warning(
+            "save_fascicle_configuration is a deprecated method use save instead"
+        )
+        self.save(
+            fname=fname,
+            extracel_context=extracel_context,
+            intracel_context=intracel_context,
+            rec_context=rec_context,
+        )
+
+    def load_fascicle_configuration(
+        self, fname, extracel_context=False, intracel_context=False, rec_context=False
+    ):
+        rise_warning(
+            "load_fascicle_configuration is a deprecated method use load instead"
+        )
+        self.load(
+            data=fname,
+            extracel_context=extracel_context,
+            intracel_context=intracel_context,
+            rec_context=rec_context,
+        )
 
     ## Fascicle property method
     def set_ID(self, ID):
@@ -283,10 +322,12 @@ class fascicle(NRV_class):
         L   : float
             length of the fascicle in um
         """
-        if self.extra_stim is not None or self.N_intra>0:
-            rise_warning("Modifying length of a fascicle with extra or intra cellular context can lead to error")
+        if self.extra_stim is not None or self.N_intra > 0:
+            rise_warning(
+                "Modifying length of a fascicle with extra or intra cellular context can lead to error"
+            )
         self.L = L
-        self.set_axons_parameters(unmyelinated_nseg=self.L//25)
+        self.set_axons_parameters(unmyelinated_nseg=self.L // 25)
 
     ## generate stereotypic Fascicle
     def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
@@ -304,7 +345,7 @@ class fascicle(NRV_class):
         N_vertices  : int
             Number of vertice in the compute the contour
         """
-        self.type = 'Circular'
+        self.type = "Circular"
         self.D = D
         if y_c is not None:
             self.y_grav_center = y_c
@@ -312,9 +353,9 @@ class fascicle(NRV_class):
             self.z_grav_center = z_c
         self.N_vertices = N_vertices
         theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = self.y_grav_center + (D/2)*np.cos(theta)
-        self.z_vertices = self.z_grav_center + (D/2)*np.sin(theta)
-        self.A = np.pi * (D/2)**2
+        self.y_vertices = self.y_grav_center + (D / 2) * np.cos(theta)
+        self.z_vertices = self.z_grav_center + (D / 2) * np.sin(theta)
+        self.A = np.pi * (D / 2) ** 2
 
     def get_circular_contour(self):
         """
@@ -336,9 +377,9 @@ class fascicle(NRV_class):
         elif self.D is not None:
             D = self.D
         else:
-            y = (np.amax(self.y_vertices)-np.amin(self.y_vertices))/2
-            z = (np.amax(self.z_vertices)-np.amin(self.z_vertices))/2
-            D = np.abs(np.amax(self.y_vertices)-np.amin(self.y_vertices))
+            y = (np.amax(self.y_vertices) - np.amin(self.y_vertices)) / 2
+            z = (np.amax(self.z_vertices) - np.amin(self.z_vertices)) / 2
+            D = np.abs(np.amax(self.y_vertices) - np.amin(self.y_vertices))
         return D, y, z
 
     def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1, N_vertices=100):
@@ -364,12 +405,18 @@ class fascicle(NRV_class):
         if z_c is not None:
             self.z_grav_center = z_c
         if N_axons == 0:
-            pass_info('No axon to fit fascicul diameter set to '+str(D)+'um')
+            pass_info("No axon to fit fascicul diameter set to " + str(D) + "um")
         else:
             for axon in range(N_axons):
-                dist_max = self.axons_diameter[axon]/2 + ((self.y_grav_center - self.axons_y[axon])**2 +\
-                    (self.z_grav_center - self.axons_z[axon])**2)**0.5
-                D = max(D, 2*(dist_max+Delta))
+                dist_max = (
+                    self.axons_diameter[axon] / 2
+                    + (
+                        (self.y_grav_center - self.axons_y[axon]) ** 2
+                        + (self.z_grav_center - self.axons_z[axon]) ** 2
+                    )
+                    ** 0.5
+                )
+                D = max(D, 2 * (dist_max + Delta))
         self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
@@ -386,8 +433,16 @@ class fascicle(NRV_class):
         pass
 
     ## fill fascicle methods
-    def fill(self, parallel=True, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1',\
-        U_stat='Ochoa_U', ppop_fname=None, pop_fname=None):
+    def fill(
+        self,
+        parallel=True,
+        percent_unmyel=0.7,
+        FVF=0.55,
+        M_stat="Schellens_1",
+        U_stat="Ochoa_U",
+        ppop_fname=None,
+        pop_fname=None,
+    ):
         """
         Fill a geometricaly defined contour with axons
 
@@ -411,41 +466,70 @@ class fascicle(NRV_class):
         #### AXON GENERATION: parallelization if resquested ####
         Area_to_fill = 0
         # Note: generate a bit too much axons just in case
-        if self.type == 'Circular':
-            Area_to_fill = np.pi * (self.D/2 + 28)**2
+        if self.type == "Circular":
+            Area_to_fill = np.pi * (self.D / 2 + 28) ** 2
         if parallel:
             if MCH.do_master_only_work():
-                pass_info('Generating axons')
+                pass_info("Generating axons")
             # split the generation over the N cores
-            partial_axons_diameter, partial_axons_type, M_diam_list, U_diam_list = \
-            fill_area_with_axons(Area_to_fill/MCH.size, percent_unmyel=percent_unmyel, \
-                FVF=FVF, M_stat=M_stat, U_stat=U_stat)
+            (
+                partial_axons_diameter,
+                partial_axons_type,
+                M_diam_list,
+                U_diam_list,
+            ) = fill_area_with_axons(
+                Area_to_fill / MCH.size,
+                percent_unmyel=percent_unmyel,
+                FVF=FVF,
+                M_stat=M_stat,
+                U_stat=U_stat,
+            )
             # gather results
             axons_diameter = MCH.gather_jobs_as_array(partial_axons_diameter)
             axons_type = MCH.gather_jobs_as_array(partial_axons_type)
         else:
             if MCH.do_master_only_work():
-                axons_diameter, axons_type, M_diam_list, U_diam_list = fill_area_with_axons(\
-                    Area_to_fill, percent_unmyel=percent_unmyel, FVF=FVF, M_stat=M_stat,\
-                    U_stat=U_stat)
+                (
+                    axons_diameter,
+                    axons_type,
+                    M_diam_list,
+                    U_diam_list,
+                ) = fill_area_with_axons(
+                    Area_to_fill,
+                    percent_unmyel=percent_unmyel,
+                    FVF=FVF,
+                    M_stat=M_stat,
+                    U_stat=U_stat,
+                )
         #### AXON PACKING: never parallel
         if MCH.do_master_only_work():
             N = len(axons_diameter)
-            pass_info('\n ... '+str(N)+' axons generated')
+            pass_info("\n ... " + str(N) + " axons generated")
             if pop_fname is not None:
-                save_axon_population(pop_fname, axons_diameter, axons_type, comment=None)
-            pass_info('Axon Packing is starting')
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(axons_diameter,\
-                Delta=0.1, y_gc=self.y_grav_center, z_gc=self.z_grav_center, max_iter=20000,\
-                monitor=False)
+                save_axon_population(
+                    pop_fname, axons_diameter, axons_type, comment=None
+                )
+            pass_info("Axon Packing is starting")
+            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
+                axons_diameter,
+                Delta=0.1,
+                y_gc=self.y_grav_center,
+                z_gc=self.z_grav_center,
+                max_iter=20000,
+                monitor=False,
+            )
             # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(axons_diameter,\
-                axons_type, axons_y, axons_z)
+            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
+                axons_diameter, axons_type, axons_y, axons_z
+            )
             N = len(axons_diameter)
-            pass_info('... Axon Packing done')
+            pass_info("... Axon Packing done")
             # check if axons are inside the fascicle
-            inside_axons = np.power(axons_y - self.y_grav_center, 2) + np.power(axons_z -\
-                self.z_grav_center, 2)  - np.power(np.ones(N)*(self.D/2)-axons_diameter/2, 2)
+            inside_axons = (
+                np.power(axons_y - self.y_grav_center, 2)
+                + np.power(axons_z - self.z_grav_center, 2)
+                - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
+            )
             axons_to_keep = np.argwhere(inside_axons < 0)
             axons_diameter = axons_diameter[axons_to_keep]
             axons_type = axons_type[axons_to_keep]
@@ -454,8 +538,14 @@ class fascicle(NRV_class):
             N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(ppop_fname, self.axons_diameter, self.axons_type,\
-                    self.axons_y, self.axons_z, comment=None)
+                save_placed_axon_population(
+                    ppop_fname,
+                    self.axons_diameter,
+                    self.axons_type,
+                    self.axons_y,
+                    self.axons_z,
+                    comment=None,
+                )
         else:
             axons_diameter = None
             axons_type = None
@@ -463,13 +553,17 @@ class fascicle(NRV_class):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(
+            axons_diameter
+        ).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
         self.N = MCH.master_broadcasts_array_to_all(N)
 
-    def fill_with_population(self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55):
+    def fill_with_population(
+        self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55
+    ):
         """
         Fill a geometricaly defined contour with an already generated axon population
 
@@ -488,25 +582,38 @@ class fascicle(NRV_class):
             ## check the population area
             total_ax_area = 0
             for diam in axons_diameter:
-                total_ax_area += np.pi*((diam/2)**2)
-            if self.A*FVF > total_ax_area:
-                rise_warning('Warning: the specified population maybe too small to fill the current fascicle')
+                total_ax_area += np.pi * ((diam / 2) ** 2)
+            if self.A * FVF > total_ax_area:
+                rise_warning(
+                    "Warning: the specified population maybe too small to fill the current fascicle"
+                )
             N = len(axons_diameter)
-            pass_info('\n ... ' + str(N) + ' axons loaded')
+            pass_info("\n ... " + str(N) + " axons loaded")
             if ppop_fname is not None:
-                save_axon_population(ppop_fname, axons_diameter, axons_type, comment=None)
-            pass_info('Axon Packing is starting')
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(axons_diameter,\
-                Delta=Delta, y_gc=self.y_grav_center, z_gc=self.z_grav_center, max_iter=20000,\
-                monitor=False)
+                save_axon_population(
+                    ppop_fname, axons_diameter, axons_type, comment=None
+                )
+            pass_info("Axon Packing is starting")
+            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
+                axons_diameter,
+                Delta=Delta,
+                y_gc=self.y_grav_center,
+                z_gc=self.z_grav_center,
+                max_iter=20000,
+                monitor=False,
+            )
             # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(axons_diameter,\
-                axons_type, axons_y, axons_z)
+            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
+                axons_diameter, axons_type, axons_y, axons_z
+            )
             N = len(axons_diameter)
-            pass_info('... Axon Packing done')
+            pass_info("... Axon Packing done")
             # check if axons are inside the fascicle
-            inside_axons = np.power(axons_y - self.y_grav_center, 2) + np.power(axons_z -\
-                self.z_grav_center, 2)  - np.power(np.ones(N)*(self.D/2) - axons_diameter/2, 2)
+            inside_axons = (
+                np.power(axons_y - self.y_grav_center, 2)
+                + np.power(axons_z - self.z_grav_center, 2)
+                - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
+            )
             axons_to_keep = np.argwhere(inside_axons < 0)
             axons_diameter = axons_diameter[axons_to_keep]
             axons_type = axons_type[axons_to_keep]
@@ -515,8 +622,14 @@ class fascicle(NRV_class):
             N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(ppop_fname, self.axons_diameter, self.axons_type,\
-                    self.axons_y, self.axons_z, comment=None)
+                save_placed_axon_population(
+                    ppop_fname,
+                    self.axons_diameter,
+                    self.axons_type,
+                    self.axons_y,
+                    self.axons_z,
+                    comment=None,
+                )
         else:
             axons_diameter = None
             axons_type = None
@@ -524,14 +637,24 @@ class fascicle(NRV_class):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(
+            axons_diameter
+        ).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
         self.N = MCH.master_broadcasts_array_to_all(N)
 
-    def fill_with_placed_population(self, axons_diameter, axons_type, axons_y, axons_z,\
-        check_inside=True, check_collision=True, ppop_fname=None):
+    def fill_with_placed_population(
+        self,
+        axons_diameter,
+        axons_type,
+        axons_y,
+        axons_z,
+        check_inside=True,
+        check_collision=True,
+        ppop_fname=None,
+    ):
         """
         Fill a geometricaly defined contour with an already generated axon population
 
@@ -556,14 +679,17 @@ class fascicle(NRV_class):
             N = len(axons_diameter)
             if check_collision:
                 # check for remaining collisions and delete problematic axons
-                axons_diameter, axons_type, axons_y, axons_z = delete_collisions(axons_diameter,\
-                    axons_type, axons_y, axons_z)
+                axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
+                    axons_diameter, axons_type, axons_y, axons_z
+                )
                 N = len(axons_diameter)
             # check if axons are inside the fascicle
             if check_inside:
-                inside_axons = np.power(axons_y - self.y_grav_center, 2) +\
-                    np.power(axons_z - self.z_grav_center, 2)  - np.power(np.ones(N)*(self.D/2)\
-                    -axons_diameter/2, 2)
+                inside_axons = (
+                    np.power(axons_y - self.y_grav_center, 2)
+                    + np.power(axons_z - self.z_grav_center, 2)
+                    - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
+                )
                 axons_to_keep = np.argwhere(inside_axons < 0)
                 axons_diameter = axons_diameter[axons_to_keep]
                 axons_type = axons_type[axons_to_keep]
@@ -572,8 +698,14 @@ class fascicle(NRV_class):
                 N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(ppop_fname, self.axons_diameter, self.axons_type,\
-                    self.axons_y, self.axons_z, comment=None)
+                save_placed_axon_population(
+                    ppop_fname,
+                    self.axons_diameter,
+                    self.axons_type,
+                    self.axons_y,
+                    self.axons_z,
+                    comment=None,
+                )
         else:
             axons_diameter = None
             axons_type = None
@@ -581,7 +713,9 @@ class fascicle(NRV_class):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(
+            axons_diameter
+        ).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
@@ -619,9 +753,9 @@ class fascicle(NRV_class):
         self.z_vertices += z
         self.translate_axons(y, z)
         if self.extra_stim is not None:
-            self.extra_stim.translate(y=y,z=z)
+            self.extra_stim.translate(y=y, z=z)
         if self.recorder is not None:
-            self.recorder.translate(y=y,z=z)
+            self.recorder.translate(y=y, z=z)
 
     def rotate_axons(self, theta, y_c=0, z_c=0):
         """
@@ -636,10 +770,12 @@ class fascicle(NRV_class):
         z_c     : float
             z axis value for the rotation center in um, by default set to 0
         """
-        self.axons_y = (np.cos(theta) * (self.axons_y - y_c) - np.sin(theta) *\
-            (self.axons_z - z_c)) + y_c
-        self.axons_z = (np.sin(theta) * (self.axons_y - y_c) + np.cos(theta) *\
-            (self.axons_z - z_c)) + z_c
+        self.axons_y = (
+            np.cos(theta) * (self.axons_y - y_c) - np.sin(theta) * (self.axons_z - z_c)
+        ) + y_c
+        self.axons_z = (
+            np.sin(theta) * (self.axons_y - y_c) + np.cos(theta) * (self.axons_z - z_c)
+        ) + z_c
 
     def rotate_fascicle(self, theta, y_c=0, z_c=0):
         """
@@ -654,14 +790,22 @@ class fascicle(NRV_class):
         z_c     : float
             z axis value for the rotation center in um, by default set to 0
         """
-        self.y_grav_center = (np.cos(theta) * (self.y_grav_center - y_c) - np.sin(theta) *\
-            (self.z_grav_center - z_c)) + y_c
-        self.z_grav_center = (np.sin(theta) * (self.y_grav_center - y_c) + np.cos(theta) *\
-            (self.z_grav_center - z_c)) + z_c
-        self.y_vertices += (np.cos(theta) * (self.y_vertices - y_c) - np.sin(theta) *\
-            (self.z_vertices - z_c)) + y_c
-        self.z_vertices += (np.sin(theta) * (self.y_vertices - y_c) + np.cos(theta) *\
-            (self.z_vertices - z_c)) + z_c
+        self.y_grav_center = (
+            np.cos(theta) * (self.y_grav_center - y_c)
+            - np.sin(theta) * (self.z_grav_center - z_c)
+        ) + y_c
+        self.z_grav_center = (
+            np.sin(theta) * (self.y_grav_center - y_c)
+            + np.cos(theta) * (self.z_grav_center - z_c)
+        ) + z_c
+        self.y_vertices += (
+            np.cos(theta) * (self.y_vertices - y_c)
+            - np.sin(theta) * (self.z_vertices - z_c)
+        ) + y_c
+        self.z_vertices += (
+            np.sin(theta) * (self.y_vertices - y_c)
+            + np.cos(theta) * (self.z_vertices - z_c)
+        ) + z_c
         self.rotate_axons(theta, y_c=y_c, z_c=z_c)
 
     def remove_axons_electrode_overlap(self, electrode):
@@ -685,13 +829,19 @@ class fascicle(NRV_class):
             # CUFF electrodes should not affect intrafascicular state
             return 0
         # compute the distance of all axons to electrode
-        D_vectors = np.sqrt((self.axons_y - y)**2 + (self.axons_z - z)**2) - (self.axons_diameter/2 + D/2)
+        D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
+            self.axons_diameter / 2 + D / 2
+        )
         colapse = np.argwhere(D_vectors < 0)
         mask = np.ones(len(self.axons_diameter), dtype=bool)
         mask[colapse] = False
         # remove axons colliding the electrode
-        if len(colapse)>0:
-            pass_info('From Fascicle level: Electrode/Axons overlap, '+str(len(colapse))+' axons will be removed from the fascicle')
+        if len(colapse) > 0:
+            pass_info(
+                "From Fascicle level: Electrode/Axons overlap, "
+                + str(len(colapse))
+                + " axons will be removed from the fascicle"
+            )
         self.N -= len(colapse)
         pass_info(self.N, "axons remaining")
         self.axons_diameter = self.axons_diameter[mask]
@@ -700,7 +850,9 @@ class fascicle(NRV_class):
         self.axons_z = self.axons_z[mask]
 
     ## Axons related method
-    def set_axons_parameters(self, unmyelinated_only=False, myelinated_only=False, **kwargs):
+    def set_axons_parameters(
+        self, unmyelinated_only=False, myelinated_only=False, **kwargs
+    ):
         """
         set parameters of axons in the fascicle
 
@@ -710,32 +862,32 @@ class fascicle(NRV_class):
             if true modification only done for unmyelinated axons parameters, by default False
         myelinated_only:        bool
             if true modification only done for myelinated axons parameters, by default False
-        kwargs:      
+        kwargs:
             parameters to modify (see myelinated and unmyelinated)
         """
         ## Standard keys
         for key in kwargs:
-            if 'model' in key:
+            if "model" in key:
                 if not myelinated_only and kwargs[key] in unmyelinated_models:
-                    self.unmyelinated_param['model'] = kwargs[key]
+                    self.unmyelinated_param["model"] = kwargs[key]
                 elif not unmyelinated_only and kwargs[key] in myelinated_models:
-                    self.myelinated_param['model'] = kwargs[key]
+                    self.myelinated_param["model"] = kwargs[key]
                 else:
-                    rise_warning(kwargs[key], ' is not an implemented axon model')
+                    rise_warning(kwargs[key], " is not an implemented axon model")
             else:
                 if not myelinated_only and key in self.unmyelinated_param:
-                    self.unmyelinated_param['model'] = kwargs[key]
+                    self.unmyelinated_param["model"] = kwargs[key]
                 if not unmyelinated_only and key in self.myelinated_param:
-                    self.myelinated_param['model'] = kwargs[key]
-        
+                    self.myelinated_param["model"] = kwargs[key]
+
         ## Specific keys
-        if 'unmyelinated_nseg' in kwargs:
-            self.unmyelinated_param['Nseg_per_sec'] = kwargs['unmyelinated_nseg']    
-        if 'myelinated_nseg_per_sec' in kwargs:
-            self.myelinated_param['Nseg_per_sec'] = kwargs['myelinated_nseg_per_sec']
-        if 'Adelta_limit' in kwargs:
-            self.Adelta_limit = kwargs['self.Adelta_limit']
-        
+        if "unmyelinated_nseg" in kwargs:
+            self.unmyelinated_param["Nseg_per_sec"] = kwargs["unmyelinated_nseg"]
+        if "myelinated_nseg_per_sec" in kwargs:
+            self.myelinated_param["Nseg_per_sec"] = kwargs["myelinated_nseg_per_sec"]
+        if "Adelta_limit" in kwargs:
+            self.Adelta_limit = kwargs["self.Adelta_limit"]
+
     def get_axons_parameters(self, unmyelinated_only=False, myelinated_only=False):
         """
         get parameters of axons in the fascicle
@@ -743,9 +895,9 @@ class fascicle(NRV_class):
         Parameters
         ----------
         unmyelinated_only:      bool
-            modification will only         
+            modification will only
         myelinated_only:        bool
-            modification will only 
+            modification will only
         """
         if unmyelinated_only:
             return self.unmyelinated_param
@@ -799,7 +951,9 @@ class fascicle(NRV_class):
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
     ## Representation methods
-    def plot(self, fig, axes, contour_color='k', myel_color='r', unmyel_color='b', num=False):
+    def plot(
+        self, fig, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+    ):
         """
         plot the fascicle in the Y-Z plane (transverse section)
 
@@ -820,31 +974,52 @@ class fascicle(NRV_class):
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.plot(self.y_vertices, self.z_vertices, linewidth=2, color=contour_color)
+            axes.plot(
+                self.y_vertices, self.z_vertices, linewidth=2, color=contour_color
+            )
             ## plot axons
             circles = []
             for k in range(self.N):
-                if self.axons_type[k] == 1: # myelinated
-                    circles.append(plt.Circle((self.axons_y[k], self.axons_z[k]),\
-                        self.axons_diameter[k]/2, color=myel_color, fill=True))
+                if self.axons_type[k] == 1:  # myelinated
+                    circles.append(
+                        plt.Circle(
+                            (self.axons_y[k], self.axons_z[k]),
+                            self.axons_diameter[k] / 2,
+                            color=myel_color,
+                            fill=True,
+                        )
+                    )
                 else:
-                    circles.append(plt.Circle((self.axons_y[k], self.axons_z[k]),\
-                        self.axons_diameter[k]/2, color=unmyel_color, fill=True))
+                    circles.append(
+                        plt.Circle(
+                            (self.axons_y[k], self.axons_z[k]),
+                            self.axons_diameter[k] / 2,
+                            color=unmyel_color,
+                            fill=True,
+                        )
+                    )
             if self.extra_stim is not None:
                 for electrode in self.extra_stim.electrodes:
                     if electrode.type == "LIFE":
-                        circles.append(plt.Circle((electrode.y, electrode.z),\
-                        electrode.D/2, color='gold', fill=True))
+                        circles.append(
+                            plt.Circle(
+                                (electrode.y, electrode.z),
+                                electrode.D / 2,
+                                color="gold",
+                                fill=True,
+                            )
+                        )
                     elif not is_FEM_electrode(electrode):
-                        axes.scatter(electrode.y, electrode.z, color='gold')
+                        axes.scatter(electrode.y, electrode.z, color="gold")
             for circle in circles:
                 axes.add_patch(circle)
             if num:
                 for k in range(self.N):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
 
-
-    def plot_x(self, fig, axes, myel_color='r', unmyel_color='b', Myelinated_model='MRG'):
+    def plot_x(
+        self, fig, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
+    ):
         """
         plot the fascicle's axons along Xline (longitudinal)
 
@@ -863,41 +1038,57 @@ class fascicle(NRV_class):
         """
         if MCH.do_master_only_work():
             if self.L is None or self.NoR_relative_position != []:
-                drange = [min(self.axons_diameter.flatten()),max(self.axons_diameter.flatten())]
-                polysize = np.poly1d(np.polyfit(drange, [0.5,5], 1))
+                drange = [
+                    min(self.axons_diameter.flatten()),
+                    max(self.axons_diameter.flatten()),
+                ]
+                polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
                 for k in range(self.N):
                     relative_pos = self.NoR_relative_position[k]
-                    d = round(self.axons_diameter.flatten()[k],2)
+                    d = round(self.axons_diameter.flatten()[k], 2)
                     if self.axons_type.flatten()[k] == 0.0:
                         color = unmyel_color
                         size = polysize(d)
-                        axes.plot([0,self.L],np.ones(2)+k-1,color=color, lw=size)
+                        axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
                     else:
                         color = myel_color
                         size = polysize(d)
-                        axon = myelinated(0, 0, d, self.L, model=Myelinated_model,\
-                            node_shift=self.NoR_relative_position[k])
+                        axon = myelinated(
+                            0,
+                            0,
+                            d,
+                            self.L,
+                            model=Myelinated_model,
+                            node_shift=self.NoR_relative_position[k],
+                        )
                         x_nodes = axon.x_nodes
                         node_number = len(x_nodes)
                         del axon
-                        axes.plot([0,self.L],np.ones(2)+k-1,color=color, lw=size)
-                        axes.scatter(x_nodes,np.ones(node_number)+k-1,marker='x',color=color)
+                        axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
+                        axes.scatter(
+                            x_nodes,
+                            np.ones(node_number) + k - 1,
+                            marker="x",
+                            color=color,
+                        )
 
                 ## plot electrode(s) if existings
                 if self.extra_stim is not None:
                     for electrode in self.extra_stim.electrodes:
                         if not is_FEM_electrode(electrode):
-                            axes.plot(electrode.x*np.ones(2), [0,self.N-1], color='gold')
-                axes.set_xlabel('x (um)')
-                axes.set_ylabel('axon ID')
+                            axes.plot(
+                                electrode.x * np.ones(2), [0, self.N - 1], color="gold"
+                            )
+                axes.set_xlabel("x (um)")
+                axes.set_ylabel("axon ID")
                 axes.set_yticks(np.arange(self.N))
-                axes.set_xlim(0,self.L)
+                axes.set_xlim(0, self.L)
                 plt.tight_layout()
 
-
-
     ## Context handeling methods
-    def clear_context(self, extracel_context=True, intracel_context=True, rec_context=True):
+    def clear_context(
+        self, extracel_context=True, intracel_context=True, rec_context=True
+    ):
         """
         Clear all stimulation and recording mecanism
         """
@@ -938,7 +1129,7 @@ class fascicle(NRV_class):
     def change_stimulus_from_elecrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
-        
+
         parameters:
         ----------
             ID_elec  : int
@@ -947,7 +1138,6 @@ class fascicle(NRV_class):
         self.extra_stim.stimuli[ID_elec] = stimulus
         self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
-
 
     def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
         """
@@ -1000,7 +1190,9 @@ class fascicle(NRV_class):
         Generates radom Node of Ranvier shifts to prevent from axons with the same diamters to be aligned.
         """
         # also generated for unmyelinated but the meaningless value won't be used
-        self.NoR_relative_position = np.random.uniform(low=0.0, high=1.0, size=len(self.axons_diameter))
+        self.NoR_relative_position = np.random.uniform(
+            low=0.0, high=1.0, size=len(self.axons_diameter)
+        )
 
     def generate_ligned_NoR_position(self, x=0):
         """
@@ -1020,12 +1212,12 @@ class fascicle(NRV_class):
             else:
                 d = round(self.axons_diameter.flatten()[i], 2)
                 node_length = get_MRG_parameters(d)[5]
-                self.NoR_relative_position += [(x - 0.5)% node_length / node_length]
+                self.NoR_relative_position += [(x - 0.5) % node_length / node_length]
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
 
-
-    def compute_electrodes_footprints(self, save_ftp_only=False,\
-                    filename="electrodes_footprint.ftpt", **kwargs):
+    def compute_electrodes_footprints(
+        self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
+    ):
         """
         get electrodes footprints on each segment of each axon
 
@@ -1056,24 +1248,44 @@ class fascicle(NRV_class):
                 self.extra_stim.run_model()
 
             for k in range(len(self.axons_diameter)):
-                if self.axons_type[k]==0:
-                    axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.unmyelinated_param)
+                if self.axons_type[k] == 0:
+                    axon = unmyelinated(
+                        self.axons_y[k],
+                        self.axons_z[k],
+                        round(self.axons_diameter[k], 2),
+                        self.L,
+                        ID=k,
+                        **self.unmyelinated_param,
+                    )
                 else:
                     ## if myelinated, test the axons_diameter[k],
                     ## if less than Adelta_limit -> A-delta model, else Myelinated
                     if self.axons_diameter[k] < self.Adelta_limit:
-                        axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                        axon = thin_myelinated(
+                            self.axons_y[k],
+                            self.axons_z[k],
+                            round(self.axons_diameter[k], 2),
+                            self.L,
+                            ID=k,
+                            **self.myelinated_param,
+                        )
                     else:
-                        axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                        axon = myelinated(
+                            self.axons_y[k],
+                            self.axons_z[k],
+                            round(self.axons_diameter[k], 2),
+                            self.L,
+                            ID=k,
+                            **self.myelinated_param,
+                        )
                 axon.attach_extracellular_stimulation(self.extra_stim)
-                footprints[k] = axon.get_electrodes_footprints_on_axon(save_ftp_only=save_ftp_only,filename=filename)
+                footprints[k] = axon.get_electrodes_footprints_on_axon(
+                    save_ftp_only=save_ftp_only, filename=filename
+                )
                 del axon
             if save_ftp_only:
                 json_dump(footprints, filename)
-            
+
         else:
             pass
         synchronize_processes()
@@ -1081,23 +1293,37 @@ class fascicle(NRV_class):
         self.is_footprinted = True
         return footprints
 
-    def get_electrodes_footprints_on_axons(self, save_ftp_only=False,\
-        filename="electrodes_footprint.ftpt", **kwargs):
-        
-        rise_warning("Deprecation method get_electrodes_footprints_on_axons",\
-                     "\nuse get_electrodes_footprints_on_axons instead")
-        self.compute_electrodes_footprints(save_ftp_only=save_ftp_only,\
-                    filename=filename, **kwargs)
+    def get_electrodes_footprints_on_axons(
+        self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
+    ):
+        rise_warning(
+            "Deprecation method get_electrodes_footprints_on_axons",
+            "\nuse get_electrodes_footprints_on_axons instead",
+        )
+        self.compute_electrodes_footprints(
+            save_ftp_only=save_ftp_only, filename=filename, **kwargs
+        )
 
-
-    def simulate(self, t_sim=2e1, record_V_mem=True, record_I_mem=False, record_I_ions=False,\
-        record_g_mem=False, record_g_ions=False, record_particles=False, loaded_footprints=True,\
-        save_V_mem=False, save_path='', verbose=False, PostProc_Filtering=None, postproc_script="default",\
-        **kwargs):
-        
+    def simulate(
+        self,
+        t_sim=2e1,
+        record_V_mem=True,
+        record_I_mem=False,
+        record_I_ions=False,
+        record_g_mem=False,
+        record_g_ions=False,
+        record_particles=False,
+        loaded_footprints=True,
+        save_V_mem=False,
+        save_path="",
+        verbose=False,
+        PostProc_Filtering=None,
+        postproc_script="default",
+        **kwargs,
+    ):
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
-        results (possibly too large in memory and complex with parallel computing), but instead 
+        results (possibly too large in memory and complex with parallel computing), but instead
         creates a folder and store fascicle configuration and all axons results.
         On the fly post processing is possible by specifying an additional script.
 
@@ -1139,34 +1365,39 @@ class fascicle(NRV_class):
         postproc_script     : str
             path to a postprocessing file. If specified, the basic post processing is not
             performed, and all postprocessing have to be handled by user. The specified script
-            can access global and local variables. Can also be key word ('Vmem_plot' or 'scarter') 
+            can access global and local variables. Can also be key word ('Vmem_plot' or 'scarter')
             to use script saved in OTF_PP folder, use with caution
         """
         if postproc_script is not None:
-            import nrv # not ideal at all but gives direct acces to nrv in the postprocessing script
+            import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()
         ## create folder and save fascicle config
-        folder_name = save_path + 'Fascicle_' + str(self.ID)
+        folder_name = save_path + "Fascicle_" + str(self.ID)
         if MCH.do_master_only_work():
             create_folder(folder_name)
-            config_filename = folder_name + '/00_Fascicle_config.json'
+            config_filename = folder_name + "/00_Fascicle_config.json"
             self.save(config_filename)
         else:
             pass
         # impose myelinated_nseg_per_sec if footprint are loaded
         loaded_footprints = loaded_footprints and self.is_footprinted
         if loaded_footprints:
-            kwargs['myelinated_nseg_per_sec'] = self.myelinated_param['Nseg_per_sec']
-            kwargs['unmyelinated_nseg'] = self.unmyelinated_param['Nseg_per_sec']
-        
+            kwargs["myelinated_nseg_per_sec"] = self.myelinated_param["Nseg_per_sec"]
+            kwargs["unmyelinated_nseg"] = self.unmyelinated_param["Nseg_per_sec"]
+
         self.set_axons_parameters(**kwargs)
         #
         self.processes_status = ["computing" for _ in range(MCH.size)]
         ## create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
-        if self.extra_stim is not None and loaded_footprints == False and not is_analytical_extra_stim(self.extra_stim) and not MCH.is_alone():
+        if (
+            self.extra_stim is not None
+            and loaded_footprints == False
+            and not is_analytical_extra_stim(self.extra_stim)
+            and not MCH.is_alone()
+        ):
             # master solves FEM model
             if MCH.do_master_only_work():
                 self.extra_stim.run_model()
@@ -1175,7 +1406,9 @@ class fascicle(NRV_class):
             # synchronize all process
             synchronize_processes()
             # split the job
-            this_core_mask = MCH.split_job_from_arrays_to_slaves(len(self.axons_diameter))
+            this_core_mask = MCH.split_job_from_arrays_to_slaves(
+                len(self.axons_diameter)
+            )
             ## Axons simulation handle with Master/Slaves configuration:
             # Master: acts as a server, accepting request to compute external potential
             #   Also, update status of slaves when simulations complete
@@ -1186,45 +1419,72 @@ class fascicle(NRV_class):
 
             ## MASTER ##
             if MCH.do_master_only_work():
-                self.processes_status = ['server']+["computing" for _ in range(MCH.size-1)]
+                self.processes_status = ["server"] + [
+                    "computing" for _ in range(MCH.size - 1)
+                ]
                 while "computing" in self.processes_status:
                     data = MCH.recieve_data_from_slave()
-                    if 'status' in data: 
-                        self.processes_status[data['rank']] = data['status']
+                    if "status" in data:
+                        self.processes_status[data["rank"]] = data["status"]
                     else:
-                        this_core_mask[data['ID']] = True
-                        V = self.extra_stim.model.get_potentials(data['x'], data['y'], data['z'])
-                        back_data = {'V': V}
-                        MCH.send_back_array_to_dest(back_data, data['rank'])
-                if 'error' in self.processes_status:
-                    errors_rank = [i for i, x in enumerate(self.processes_status) if x == 'error']
+                        this_core_mask[data["ID"]] = True
+                        V = self.extra_stim.model.get_potentials(
+                            data["x"], data["y"], data["z"]
+                        )
+                        back_data = {"V": V}
+                        MCH.send_back_array_to_dest(back_data, data["rank"])
+                if "error" in self.processes_status:
+                    errors_rank = [
+                        i for i, x in enumerate(self.processes_status) if x == "error"
+                    ]
                     errors_ax = [i for i, x in enumerate(this_core_mask) if x == False]
-                    if len(errors_ax)>0:
-                        rise_warning("an issue occured during the simulation in rank: ",\
-                                    errors_rank, 
-                                    "\nThe following axons could not be computed: ", errors_ax)
-                    self.processes_status[data['rank']]
-                    self.processes_status[0] = ['error']
+                    if len(errors_ax) > 0:
+                        rise_warning(
+                            "an issue occured during the simulation in rank: ",
+                            errors_rank,
+                            "\nThe following axons could not be computed: ",
+                            errors_ax,
+                        )
+                    self.processes_status[data["rank"]]
+                    self.processes_status[0] = ["error"]
                 else:
-                    self.processes_status[0] = ['success']
+                    self.processes_status[0] = ["success"]
             else:
                 ## SLAVES ##
                 try:
                     for k in this_core_mask:
                         ## test axon axons_type[k]
-                        assert self.axons_type[k] in [0,1]
+                        assert self.axons_type[k] in [0, 1]
                         if self.axons_type[k] == 0:
-                            axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, ID=k, **self.unmyelinated_param)
+                            axon = unmyelinated(
+                                self.axons_y[k],
+                                self.axons_z[k],
+                                round(self.axons_diameter[k], 2),
+                                self.L,
+                                ID=k,
+                                **self.unmyelinated_param,
+                            )
                         else:
                             ## if myelinated, test the axons_diameter[k],
                             ## if less than Adelta_limit -> A-delta model, else Myelinated
                             if self.axons_diameter[k] < self.Adelta_limit:
-                                axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                                axon = thin_myelinated(
+                                    self.axons_y[k],
+                                    self.axons_z[k],
+                                    round(self.axons_diameter[k], 2),
+                                    self.L,
+                                    ID=k,
+                                    **self.myelinated_param,
+                                )
                             else:
-                                axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                                round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                                axon = myelinated(
+                                    self.axons_y[k],
+                                    self.axons_z[k],
+                                    round(self.axons_diameter[k], 2),
+                                    self.L,
+                                    ID=k,
+                                    **self.myelinated_param,
+                                )
                         ## add extracellular stimulation
                         axon.attach_extracellular_stimulation(self.extra_stim)
                         ## add recording mechanism
@@ -1258,7 +1518,9 @@ class fascicle(NRV_class):
                                         else:
                                             amplitude = self.intra_stim_amplitude[j]
                                         # APPLY INTRA CELLULAR STIMULATION
-                                        axon.insert_I_Clamp(position, t_start, duration, amplitude)
+                                        axon.insert_I_Clamp(
+                                            position, t_start, duration, amplitude
+                                        )
                                 else:
                                     # in this case , stimulate all axons
                                     if is_iterable(self.intra_stim_position[j]):
@@ -1281,39 +1543,42 @@ class fascicle(NRV_class):
                                     else:
                                         amplitude = self.intra_stim_amplitude[j]
                                     # APPLY INTRA CELLULAR STIMULATION
-                                    axon.insert_I_Clamp(position, t_start, duration, amplitude)
+                                    axon.insert_I_Clamp(
+                                        position, t_start, duration, amplitude
+                                    )
                         ## perform simulation
-                        # loaded_footprints is suppose to be false 
-                        # Request to server instantiate in FEM_stimulation.compute_electrodes_footprints 
+                        # loaded_footprints is suppose to be false
+                        # Request to server instantiate in FEM_stimulation.compute_electrodes_footprints
                         # (called by axon.get_electrodes_footprints_on_axon)
                         axon.get_electrodes_footprints_on_axon()
-                        sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
-                            record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                            record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
-                            record_particles=record_particles)
+                        sim_results = axon.simulate(
+                            t_sim=t_sim,
+                            record_V_mem=record_V_mem,
+                            record_I_mem=record_I_mem,
+                            record_I_ions=record_I_ions,
+                            record_g_mem=record_g_mem,
+                            record_g_ions=record_g_ions,
+                            record_particles=record_particles,
+                        )
                         del axon
                         ## postprocessing and data reduction
                         if postproc_script.lower() in OTF_PP_library:
-                            postproc_script = OTF_PP_path+postproc_script
-                        elif postproc_script.lower() + '.py' in OTF_PP_library:
-                            postproc_script = OTF_PP_path+postproc_script+'.py'
+                            postproc_script = OTF_PP_path + postproc_script
+                        elif postproc_script.lower() + ".py" in OTF_PP_library:
+                            postproc_script = OTF_PP_path + postproc_script + ".py"
                         with open(postproc_script) as f:
-                            code = compile(f.read(), postproc_script, 'exec')
+                            code = compile(f.read(), postproc_script, "exec")
                             exec(code, globals(), locals())
                         ## store results
-                        ax_fname = 'sim_axon_'+str(k)+'.json'
-                        save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
-                    data = {
-                        'rank': MCH.rank,
-                        'status': 'success'
-                        }
-                    MCH.send_data_to_master(data)   
+                        ax_fname = "sim_axon_" + str(k) + ".json"
+                        save_axon_results_as_json(
+                            sim_results, folder_name + "/" + ax_fname
+                        )
+                    data = {"rank": MCH.rank, "status": "success"}
+                    MCH.send_data_to_master(data)
                 except:
-                    data = {
-                        'rank': MCH.rank,
-                        'status': 'error'
-                        }
-                    MCH.send_data_to_master(data)    
+                    data = {"rank": MCH.rank, "status": "error"}
+                    MCH.send_data_to_master(data)
                 # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:
@@ -1324,24 +1589,42 @@ class fascicle(NRV_class):
             this_core_mask = MCH.split_job_from_arrays(len(self.axons_diameter))
             ## perform simulations
             if MCH.is_alone() and verbose:
-                pass_info('Simulating axons in fascicle ' + str(self.ID))
+                pass_info("Simulating axons in fascicle " + str(self.ID))
             for k in this_core_mask:
                 if MCH.is_alone() and verbose:
-                    pass_info('\t Axon ' + f"{k+1}" + '/' + str(self.N), end="\r")
+                    pass_info("\t Axon " + f"{k+1}" + "/" + str(self.N), end="\r")
                 ## test axon axons_type[k]
-                assert self.axons_type[k] in [0,1]
+                assert self.axons_type[k] in [0, 1]
                 if self.axons_type[k] == 0:
-                    axon = unmyelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.unmyelinated_param)
+                    axon = unmyelinated(
+                        self.axons_y[k],
+                        self.axons_z[k],
+                        round(self.axons_diameter[k], 2),
+                        self.L,
+                        ID=k,
+                        **self.unmyelinated_param,
+                    )
                 else:
                     ## if myelinated, test the axons_diameter[k],
                     ## if less than Adelta_limit -> A-delta model, else Myelinated
                     if self.axons_diameter[k] < self.Adelta_limit:
-                        axon = thin_myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                        axon = thin_myelinated(
+                            self.axons_y[k],
+                            self.axons_z[k],
+                            round(self.axons_diameter[k], 2),
+                            self.L,
+                            ID=k,
+                            **self.myelinated_param,
+                        )
                     else:
-                        axon = myelinated(self.axons_y[k], self.axons_z[k],\
-                        round(self.axons_diameter[k], 2), self.L, ID=k, **self.myelinated_param)
+                        axon = myelinated(
+                            self.axons_y[k],
+                            self.axons_z[k],
+                            round(self.axons_diameter[k], 2),
+                            self.L,
+                            ID=k,
+                            **self.myelinated_param,
+                        )
                 ## add extracellular stimulation
                 if self.extra_stim is not None:
                     axon.attach_extracellular_stimulation(self.extra_stim)
@@ -1376,7 +1659,9 @@ class fascicle(NRV_class):
                                 else:
                                     amplitude = self.intra_stim_amplitude[j]
                                 # APPLY INTRA CELLULAR STIMULATION
-                                axon.insert_I_Clamp(position, t_start, duration, amplitude)
+                                axon.insert_I_Clamp(
+                                    position, t_start, duration, amplitude
+                                )
                         else:
                             # in this case , stimulate all axons
                             if is_iterable(self.intra_stim_position[j]):
@@ -1401,36 +1686,42 @@ class fascicle(NRV_class):
                             # APPLY INTRA CELLULAR STIMULATION
                             axon.insert_I_Clamp(position, t_start, duration, amplitude)
                 ## perform simulation
-                if loaded_footprints==True and self.is_footprinted:
+                if loaded_footprints == True and self.is_footprinted:
                     axon_ftpt = True
                     if k in self.footprints:
                         axon.footprints = self.footprints[k]
                     elif str(k) in self.footprints:
                         axon.footprints = self.footprints[str(k)]
                     else:
-                        rise_warning("footprints not computed for axon "+ str(k))
+                        rise_warning("footprints not computed for axon " + str(k))
                         axon_ftpt = False
                 else:
                     axon_ftpt = False
-                sim_results = axon.simulate(t_sim=t_sim, record_V_mem=record_V_mem,\
-                    record_I_mem=record_I_mem, record_I_ions=record_I_ions,\
-                    record_g_mem=record_g_mem, record_g_ions=record_g_ions, \
-                    record_particles=record_particles, loaded_footprints=axon_ftpt)
+                sim_results = axon.simulate(
+                    t_sim=t_sim,
+                    record_V_mem=record_V_mem,
+                    record_I_mem=record_I_mem,
+                    record_I_ions=record_I_ions,
+                    record_g_mem=record_g_mem,
+                    record_g_ions=record_g_ions,
+                    record_particles=record_particles,
+                    loaded_footprints=axon_ftpt,
+                )
                 del axon
                 ## postprocessing and data reduction
                 if postproc_script.lower() in OTF_PP_library:
-                    postproc_script = OTF_PP_path+postproc_script.lower()
-                elif postproc_script.lower() + '.py' in OTF_PP_library:
-                    postproc_script = OTF_PP_path+postproc_script.lower()+'.py'
+                    postproc_script = OTF_PP_path + postproc_script.lower()
+                elif postproc_script.lower() + ".py" in OTF_PP_library:
+                    postproc_script = OTF_PP_path + postproc_script.lower() + ".py"
                 with open(postproc_script) as f:
-                    code = compile(f.read(), postproc_script, 'exec')
+                    code = compile(f.read(), postproc_script, "exec")
                     exec(code, globals(), locals())
                 ## store results
-                ax_fname = 'sim_axon_'+str(k)+'.json'
-                save_axon_results_as_json(sim_results, folder_name+'/'+ax_fname)
+                ax_fname = "sim_axon_" + str(k) + ".json"
+                save_axon_results_as_json(sim_results, folder_name + "/" + ax_fname)
             # sum up all recorded extracellular potential if applicable
             if self.record:
                 self.recorder.gather_all_recordings()
         if MCH.is_alone() and verbose:
-            pass_info('... Simulation done')
+            pass_info("... Simulation done")
         self.is_simulated = True

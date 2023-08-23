@@ -8,6 +8,7 @@ import numpy as np
 from .axons import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 
+
 def get_Adelta_parameters(diameter):
     """
     Compute the A delta parameters, see on code for exact scientific references.
@@ -49,24 +50,30 @@ def get_Adelta_parameters(diameter):
     # step 1: get axonD
     def solver(D, C0, C1, C2, k):
         def fiber_axon_diameter_equation(axonD):
-            return (2*k*C0 - D) + axonD*(1+2*k*C1) + 2*k*C2*np.log10(axonD)
+            return (
+                (2 * k * C0 - D)
+                + axonD * (1 + 2 * k * C1)
+                + 2 * k * C2 * np.log10(axonD)
+            )
+
         return fiber_axon_diameter_equation
 
     root = optimize.fsolve(solver(diameter, C0, C1, C2, k), 1)
     axonD = root[0]
     # step 2: get nl
-    nl = C0 + C1*axonD + C2*np.log10(axonD)
+    nl = C0 + C1 * axonD + C2 * np.log10(axonD)
     # step 3: get nodeD
     nodeD = nodeD_vs_nl_poly(nl)
     # step 4: get deltax
     # interpolation from Jacobs, J. M., & Love, S. (1985). Qualitative and quantitative morphology of human sural nerve at different ages. Brain, 108(4), 897-924.
-    deltax = 80*(diameter-1)
+    deltax = 80 * (diameter - 1)
     # step 5: paraD
     # arbitrary conical structure not possible in neuron, therefore, an average of axonD and nodeD to ensure transition
     # matter of choice, could also be changed to paraD = nodeD as in MRG model
-    paraD = (nodeD + axonD)/2
+    paraD = (nodeD + axonD) / 2
 
     return float(axonD), float(nodeD), float(paraD), float(deltax), float(nl)
+
 
 def get_length_from_nodes_thin(diameter, nodes):
     """
@@ -85,8 +92,9 @@ def get_length_from_nodes_thin(diameter, nodes):
     length      : float
         lenth of the axon with the correct number of nodes in um
     """
-    deltax = 80*(diameter-1)
-    return float(math.ceil(deltax*(nodes-1)))
+    deltax = 80 * (diameter - 1)
+    return float(math.ceil(deltax * (nodes - 1)))
+
 
 ###############################################
 ## Thin myelinated axons:                    ##
@@ -97,9 +105,29 @@ class thin_myelinated(axon):
     Thin Mylineated, A-delta specific, axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherits from axon class. see axon for further detail.
     """
-    def __init__(self, y, z, d, L, model='Extended_Gaines', dt=0.001, node_shift=0,\
-        Nseg_per_sec=0, freq=100, freq_min=0, mesh_shape='plateau_sigmoid', alpha_max=0.3,\
-        d_lambda=0.1, rec='nodes', v_init=None, md_based_v_init=True, T=None, ID=0, threshold=-40):
+
+    def __init__(
+        self,
+        y,
+        z,
+        d,
+        L,
+        model="Extended_Gaines",
+        dt=0.001,
+        node_shift=0,
+        Nseg_per_sec=0,
+        freq=100,
+        freq_min=0,
+        mesh_shape="plateau_sigmoid",
+        alpha_max=0.3,
+        d_lambda=0.1,
+        rec="nodes",
+        v_init=None,
+        md_based_v_init=True,
+        T=None,
+        ID=0,
+        threshold=-40,
+    ):
         """
         initialisation of a thinnmyelinted (A-delta) axon
 
@@ -160,9 +188,23 @@ class thin_myelinated(axon):
         [1] Tigerholm, J., Poulsen, A. H., Andersen, O. K., and Morch, C. D. (2019). from perception threshold to ion channels—a computational study. Biophysical journal, 117(2), 281-295.
         [2] Gaines, J. L., Finn, K. E., Slopsema, J. P., Heyboer, L. A.,  Polasek, K. H. (2018). A model of motor and sensory axon activation in the median nerve using surface electrical stimulation. Journal of computational neuroscience, 45(1), 29-43.
         """
-        super().__init__(y, z, d, L, dt=dt, Nseg_per_sec=Nseg_per_sec,\
-            freq=freq, freq_min=freq_min, mesh_shape=mesh_shape, alpha_max=alpha_max, \
-            d_lambda=d_lambda, v_init=v_init, T=T, ID=ID, threshold=threshold)
+        super().__init__(
+            y,
+            z,
+            d,
+            L,
+            dt=dt,
+            Nseg_per_sec=Nseg_per_sec,
+            freq=freq,
+            freq_min=freq_min,
+            mesh_shape=mesh_shape,
+            alpha_max=alpha_max,
+            d_lambda=d_lambda,
+            v_init=v_init,
+            T=T,
+            ID=ID,
+            threshold=threshold,
+        )
         self.myelinated = True
         self.thin = True
         self.rec = rec
@@ -179,7 +221,7 @@ class thin_myelinated(axon):
         ## Handling v_init
         if self.v_init is None:
             # model driven
-            if self.model == 'RGK':
+            if self.model == "RGK":
                 self.v_init = -64.2
             else:
                 self.v_init = -80
@@ -195,91 +237,119 @@ class thin_myelinated(axon):
         ## PARMETERS FOR THE COMPARTIMENTAL MODEL ##
         ############################################
         # compute variable MRG parameters, (usefull also if non MRG models)
-        self.axonD, self.nodeD, self.paraD, self.deltax, self.nl = get_Adelta_parameters(self.d)
+        (
+            self.axonD,
+            self.nodeD,
+            self.paraD,
+            self.deltax,
+            self.nl,
+        ) = get_Adelta_parameters(self.d)
         # Morphological parameters
         self.nodelength = 2
-        self.paralength = 10 # Tigerholm used 5
+        self.paralength = 10  # Tigerholm used 5
         self.space_p = 0.002
         self.space_i = 0.004
-        self.interlength = (self.deltax-self.nodelength-(2*self.paralength))/6
+        self.interlength = (self.deltax - self.nodelength - (2 * self.paralength)) / 6
         # electrical parameters
-        self.rhoa = 0.7e6   # Ohm-um
-        self.mycm = 0.1     # uF/cm2/lamella membrane
-        self.mygm = 0.001   # S/cm2/lamella membrane
-        self.Rpn0 = (self.rhoa*.01)/(math.pi*((((self.nodeD/2)+self.space_p)**2)-\
-            ((self.nodeD/2)**2)))
-        self.Rpn1 = (self.rhoa*.01)/(math.pi*((((self.paraD/2)+self.space_p)**2)-\
-            ((self.paraD/2)**2)))
-        self.Rpx = (self.rhoa*.01)/(math.pi*((((self.axonD/2)+self.space_i)**2)-\
-            ((self.axonD/2)**2)))
+        self.rhoa = 0.7e6  # Ohm-um
+        self.mycm = 0.1  # uF/cm2/lamella membrane
+        self.mygm = 0.001  # S/cm2/lamella membrane
+        self.Rpn0 = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.nodeD / 2) + self.space_p) ** 2) - ((self.nodeD / 2) ** 2))
+        )
+        self.Rpn1 = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.paraD / 2) + self.space_p) ** 2) - ((self.paraD / 2) ** 2))
+        )
+        self.Rpx = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.axonD / 2) + self.space_i) ** 2) - ((self.axonD / 2) ** 2))
+        )
 
         #########################
         ## morphology planning ##
         #########################
         # thin myelinated double cable sequence sequence
-        self.MRG_Sequence = ['node', 'MYSA', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN', 'MYSA']
+        self.MRG_Sequence = [
+            "node",
+            "MYSA",
+            "STIN",
+            "STIN",
+            "STIN",
+            "STIN",
+            "STIN",
+            "STIN",
+            "MYSA",
+        ]
         # basic MRG starts with the node, if needed, adapt the sequence
         if self.node_shift == 0:
             # no Rotation
             self.this_ax_sequence = self.MRG_Sequence
             self.first_section_size = self.nodelength
 
-        elif self.node_shift < (self.paralength)/self.deltax:
+        elif self.node_shift < (self.paralength) / self.deltax:
             # rotation of less than 1 MYSA
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 1)
-            self.first_section_size = self.paralength - (self.node_shift*self.deltax)
+            self.first_section_size = self.paralength - (self.node_shift * self.deltax)
 
-        elif self.node_shift < (self.paralength + self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + self.interlength) / self.deltax:
             # rotation of 1 MYSA and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 2)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength
+            )
 
-        elif self.node_shift < (self.paralength + 2*self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + 2 * self.interlength) / self.deltax:
             # rotation of 1 MYSA, 1 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 3)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength - self.interlength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength - self.interlength
+            )
 
-        elif self.node_shift < (self.paralength+ 3*self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + 3 * self.interlength) / self.deltax:
             # rotation of 1 MYSA, 2 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 4)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength - 2*self.interlength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength - 2 * self.interlength
+            )
 
-        elif self.node_shift < (self.paralength + 4*self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + 4 * self.interlength) / self.deltax:
             # rotation of 1 MYSA, 3 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 5)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength - 3*self.interlength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength - 3 * self.interlength
+            )
 
-        elif self.node_shift < (self.paralength + 5*self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + 5 * self.interlength) / self.deltax:
             # rotation of 1 MYSA, 4 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 6)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength - 4*self.interlength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength - 4 * self.interlength
+            )
 
-        elif self.node_shift < (self.paralength + 6*self.interlength)/self.deltax:
+        elif self.node_shift < (self.paralength + 6 * self.interlength) / self.deltax:
             # rotation of 1 MYSA, 5 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 7)
-            self.first_section_size = self.interlength - (self.node_shift*self.deltax - \
-                self.paralength - 5*self.interlength)
+            self.first_section_size = self.interlength - (
+                self.node_shift * self.deltax - self.paralength - 5 * self.interlength
+            )
 
         else:
             # rotation of 1 MYSA, 6 STIN and less than a MYSA
             # WARNING FOR DEV : the unprobable case of a node cut in two halfs is not considered...
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 8)
-            self.first_section_size = self.deltax*(1-self.node_shift)
+            self.first_section_size = self.deltax * (1 - self.node_shift)
 
         ################
         ## morphology ##
         ################
-        self.axonnodes = 0      # number of nodes in the axon
-        self.node = []          # list of nodes in the axon
-        self.paranodes = 0      # number of MYSA in the axon
-        self.MYSA = []          # list of MYSA in the axon
-        self.axoninter = 0      # number of STIN in the axon
-        self.STIN = []          # list of STIN in the axon
+        self.axonnodes = 0  # number of nodes in the axon
+        self.node = []  # list of nodes in the axon
+        self.paranodes = 0  # number of MYSA in the axon
+        self.MYSA = []  # list of MYSA in the axon
+        self.axoninter = 0  # number of STIN in the axon
+        self.STIN = []  # list of STIN in the axon
 
         prov_length = 0
         self.Nsec = 0
@@ -289,86 +359,92 @@ class thin_myelinated(axon):
         self.axon_path_index = []
         while prov_length < self.L:
             # axon is too short, create a section
-            pos_in_sequence = (self.Nsec)%len(self.this_ax_sequence)    # find the current position in the node sequence
-            if self.this_ax_sequence[pos_in_sequence] == 'node':
+            pos_in_sequence = (self.Nsec) % len(
+                self.this_ax_sequence
+            )  # find the current position in the node sequence
+            if self.this_ax_sequence[pos_in_sequence] == "node":
                 # you need to create a node
-                self.node.append(neuron.h.Section(name='node[%d]' % self.axonnodes))
-                self.axon_path_type.append('node')
+                self.node.append(neuron.h.Section(name="node[%d]" % self.axonnodes))
+                self.axon_path_type.append("node")
                 self.axon_path_index.append(self.axonnodes)
                 self.axonnodes += 1
                 self.Nsec += 1
                 # increment the prov length and check it is not to much
                 if prov_length + self.nodelength >= self.L:
                     # it will be the last section to add to the axon
-                    self.last_section_kind = 'node'
+                    self.last_section_kind = "node"
                     self.last_section_size = self.L - prov_length
                 prov_length += self.nodelength
                 # CONNECT THE NODE TO ITS PARENT: a node can only have a MYSA for parent, check it's not the start...
                 if self.paranodes != 0:
                     self.node[-1].connect(self.MYSA[-1], 1, 0)
 
-            elif self.this_ax_sequence[pos_in_sequence] == 'MYSA':
+            elif self.this_ax_sequence[pos_in_sequence] == "MYSA":
                 # you need to create a MYSA
-                self.MYSA.append(neuron.h.Section(name='MYSA[%d]' % self.paranodes))
-                self.axon_path_type.append('MYSA')
+                self.MYSA.append(neuron.h.Section(name="MYSA[%d]" % self.paranodes))
+                self.axon_path_type.append("MYSA")
                 self.axon_path_index.append(self.paranodes)
                 self.paranodes += 1
                 self.Nsec += 1
                 # increment the prov length and check it is not to much
                 if prov_length + self.paralength >= self.L:
                     # it will be the last section to add to the axon
-                    self.last_section_kind = 'MYSA'
+                    self.last_section_kind = "MYSA"
                     self.last_section_size = self.L - prov_length
                 prov_length += self.paralength
                 # CONNECT THE MYSA TO ITS PARENT: a MYSA can have for parent a node or a TIN, check it's not the start...
-                connect_to_type = self.this_ax_sequence[pos_in_sequence - 1] # get parent type
-                if connect_to_type == 'node' and self.axonnodes != 0:
+                connect_to_type = self.this_ax_sequence[
+                    pos_in_sequence - 1
+                ]  # get parent type
+                if connect_to_type == "node" and self.axonnodes != 0:
                     self.MYSA[-1].connect(self.node[-1], 1, 0)
-                if connect_to_type == 'STIN' and self.axoninter != 0:
+                if connect_to_type == "STIN" and self.axoninter != 0:
                     self.MYSA[-1].connect(self.STIN[-1], 1, 0)
 
             else:
                 # you need to create a STIN
-                self.STIN.append(neuron.h.Section(name='STIN[%d]' % self.axoninter))
-                self.axon_path_type.append('STIN')
+                self.STIN.append(neuron.h.Section(name="STIN[%d]" % self.axoninter))
+                self.axon_path_type.append("STIN")
                 self.axon_path_index.append(self.axoninter)
                 self.axoninter += 1
                 self.Nsec += 1
                 # increment the prov length and check it is not to much
                 if prov_length + self.interlength >= self.L:
                     # it will be the last section to add to the axon
-                    self.last_section_kind = 'STIN'
+                    self.last_section_kind = "STIN"
                     self.last_section_size = self.L - prov_length
                 prov_length += self.interlength
                 # CONNECT THE STIN TO ITS PARENT: a STIN can have for parent a STIN od a MYSA, check it's not the start...
                 connect_to_type = self.this_ax_sequence[pos_in_sequence - 1]
-                if connect_to_type == 'STIN' and self.axoninter > 1:
+                if connect_to_type == "STIN" and self.axoninter > 1:
                     self.STIN[-1].connect(self.STIN[-2], 1, 0)
-                if connect_to_type == 'MYSA' and self.paranodes != 0:
+                if connect_to_type == "MYSA" and self.paranodes != 0:
                     self.STIN[-1].connect(self.MYSA[-1], 1, 0)
 
         if self.node == []:
-            #logging.warning(
-            rise_warning('Warning, thin myelinated axon without node... this can cause latter \
-                errors and is maybe unwanted ?\n')
+            # logging.warning(
+            rise_warning(
+                "Warning, thin myelinated axon without node... this can cause latter \
+                errors and is maybe unwanted ?\n"
+            )
 
         ####################
         ## programm model ##
         ####################
         self.__set_model(self.model)
         # adjust the length of the first section
-        if self.this_ax_sequence[0] == 'node':
+        if self.this_ax_sequence[0] == "node":
             self.node[0].L = self.first_section_size
-        elif self.this_ax_sequence[0] == 'MYSA':
+        elif self.this_ax_sequence[0] == "MYSA":
             self.MYSA[0].L = self.first_section_size
-        else: # should be a STIN
+        else:  # should be a STIN
             self.STIN[0].L = self.first_section_size
         # adjust the length if the last section
-        if self.last_section_kind == 'node':
+        if self.last_section_kind == "node":
             self.node[-1].L = self.last_section_size
-        elif self.last_section_kind == 'MYSA':
+        elif self.last_section_kind == "MYSA":
             self.MYSA[-1].L = self.last_section_size
-        else: # should be a STIN
+        else:  # should be a STIN
             self.STIN[-1].L = self.last_section_size
         # define the geometry of the axon
         self._axon__define_shape()
@@ -378,8 +454,14 @@ class thin_myelinated(axon):
         self.__get_seg_positions()
         self.__get_rec_positions()
 
-
-    def save(self, save=False, fname='axon.json', extracel_context=False, intracel_context=False, rec_context=False):
+    def save(
+        self,
+        save=False,
+        fname="axon.json",
+        extracel_context=False,
+        intracel_context=False,
+        rec_context=False,
+    ):
         """
         Return axon as dictionary and eventually save it as json file
 
@@ -395,21 +477,26 @@ class thin_myelinated(axon):
         ax_dic : dict
             dictionary containing all information
         """
-        ax_dic = super().save(extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+        ax_dic = super().save(
+            extracel_context=extracel_context,
+            intracel_context=intracel_context,
+            rec_context=rec_context,
+        )
 
-
-        ax_dic['myelinated'] = self.myelinated
-        ax_dic['thin'] = self.thin
-        ax_dic['rec'] = self.rec
-        ax_dic['node_shift'] = self.node_shift
-        ax_dic['md_based_v_init'] = self.md_based_v_init
-        ax_dic['model'] = self.model
+        ax_dic["myelinated"] = self.myelinated
+        ax_dic["thin"] = self.thin
+        ax_dic["rec"] = self.rec
+        ax_dic["node_shift"] = self.node_shift
+        ax_dic["md_based_v_init"] = self.md_based_v_init
+        ax_dic["model"] = self.model
 
         if save:
             json_dump(ax_dic, fname)
         return ax_dic
 
-    def load(self, data, extracel_context=False, intracel_context=False, rec_context=False):
+    def load(
+        self, data, extracel_context=False, intracel_context=False, rec_context=False
+    ):
         """
         Load all axon properties from a dictionary or a json file
 
@@ -420,33 +507,37 @@ class thin_myelinated(axon):
         """
         if type(data) == str:
             ax_dic = json_load(data)
-        else: 
-            ax_dic = data
-        super().load(data, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
-
-        self.myelinated = ax_dic['myelinated']
-        self.thin = ax_dic['thin']
-        self.rec = ax_dic['rec']
-        self.node_shift = ax_dic['node_shift']
-        self.md_based_v_init = ax_dic['md_based_v_init']
-        if ax_dic['model'] in myelinated_models:
-            self.model = ax_dic['model']
         else:
-            self.model = 'Extended_Gaines'
+            ax_dic = data
+        super().load(
+            data,
+            extracel_context=extracel_context,
+            intracel_context=intracel_context,
+            rec_context=rec_context,
+        )
+
+        self.myelinated = ax_dic["myelinated"]
+        self.thin = ax_dic["thin"]
+        self.rec = ax_dic["rec"]
+        self.node_shift = ax_dic["node_shift"]
+        self.md_based_v_init = ax_dic["md_based_v_init"]
+        if ax_dic["model"] in myelinated_models:
+            self.model = ax_dic["model"]
+        else:
+            self.model = "Extended_Gaines"
         self.__compute_axon_parameters()
         if intracel_context:
-            for i in range(len(ax_dic['intra_current_stim_positions'])):
-                position = ax_dic['intra_current_stim_positions'][i]
-                stim_start = ax_dic['intra_current_stim_starts'][i]
-                duration = ax_dic['intra_current_stim_durations'][i]
-                amplitude = ax_dic['intra_current_stim_amplitudes'][i]
-                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
-            if ax_dic['intra_voltage_stim_stimulus'] is not None:
-                position = ax_dic['intra_voltage_stim_position'][0]
+            for i in range(len(ax_dic["intra_current_stim_positions"])):
+                position = ax_dic["intra_current_stim_positions"][i]
+                stim_start = ax_dic["intra_current_stim_starts"][i]
+                duration = ax_dic["intra_current_stim_durations"][i]
+                amplitude = ax_dic["intra_current_stim_amplitudes"][i]
+                self.insert_I_Clamp(position / self.L, stim_start, duration, amplitude)
+            if ax_dic["intra_voltage_stim_stimulus"] is not None:
+                position = ax_dic["intra_voltage_stim_position"][0]
                 stim = stimulus()
-                stim.load(ax_dic['intra_voltage_stim_stimulus'])
-                self.insert_V_Clamp(position/self.L, stim)
-
+                stim.load(ax_dic["intra_voltage_stim_stimulus"])
+                self.insert_V_Clamp(position / self.L, stim)
 
     def __set_model(self, model):
         """
@@ -466,26 +557,26 @@ class thin_myelinated(axon):
             n.nseg = 1
             n.diam = self.nodeD
             n.L = self.nodelength
-            if model == 'Extended_Gaines':
-                #n.insert('axnode')
-                n.Ra = self.rhoa/10000
+            if model == "Extended_Gaines":
+                # n.insert('axnode')
+                n.Ra = self.rhoa / 10000
                 n.cm = 2
-                n.insert('node_sensory')
-            else: #RGK
+                n.insert("node_sensory")
+            else:  # RGK
                 n.Ra = 130
                 n.cm = 1
-                n.insert('nav1p9')
+                n.insert("nav1p9")
                 n.gbar_nav1p9 = 1.1e-3
                 n.celsiusT_nav1p9 = self.T
-                n.insert('nax')
+                n.insert("nax")
                 n.gbar_nax = 1.45e-1
-                n.insert('ks')
+                n.insert("ks")
                 n.gbar_ks = 2.10e-3
                 n.v = self.v_init
-                n.insert('pas')
+                n.insert("pas")
                 n.g_pas = 1e-7
                 n.e_pas = -60
-            n.insert('extracellular')
+            n.insert("extracellular")
             n.xraxial[0] = self.Rpn0
             n.xg[0] = 1e10
             n.xc[0] = 0
@@ -493,48 +584,48 @@ class thin_myelinated(axon):
             m.nseg = 1
             m.diam = self.d
             m.L = self.paralength
-            m.cm = 2*self.paraD/self.d
-            if model == 'Extended_Gaines':
-                m.Ra = self.rhoa*(1/(self.paraD/self.d)**2)/10000
-                #m.insert('pas')
-                #m.g_pas = 0.001*self.paraD/self.d
-                #m.e_pas = -80
-                m.insert('mysa_sensory')
+            m.cm = 2 * self.paraD / self.d
+            if model == "Extended_Gaines":
+                m.Ra = self.rhoa * (1 / (self.paraD / self.d) ** 2) / 10000
+                # m.insert('pas')
+                # m.g_pas = 0.001*self.paraD/self.d
+                # m.e_pas = -80
+                m.insert("mysa_sensory")
             else:
                 m.Ra = 130
-                m.insert('kdrTiger')
+                m.insert("kdrTiger")
                 m.celsiusT_kdrTiger = self.T
                 m.gbar_kdrTiger = 4.80e-3
-                m.insert('h')
+                m.insert("h")
                 m.gbar_h = 1.52e-4
                 m.celsiusT_h = self.T
-                m.insert('kaslow')
+                m.insert("kaslow")
                 m.gbar_kaslow = 3.0e-3
                 m.v = self.v_init
-                m.insert('pas')
+                m.insert("pas")
                 m.g_pas = 1e-7
                 m.e_pas = -60
-            m.insert('extracellular')
+            m.insert("extracellular")
             m.xraxial[0] = self.Rpn1
-            m.xg[0] = self.mygm/(self.nl*2)
-            m.xc[0] = self.mycm/(self.nl*2)
+            m.xg[0] = self.mygm / (self.nl * 2)
+            m.xc[0] = self.mycm / (self.nl * 2)
         for s in self.STIN:
             s.nseg = 1
             s.diam = self.d
             s.L = self.interlength
-            s.cm = 2*self.axonD/self.d
-            if self.model == 'Extended_Gaines':
-                s.Ra = self.rhoa*(1/(self.axonD/self.d)**2)/10000
-                s.insert('stin_sensory')
+            s.cm = 2 * self.axonD / self.d
+            if self.model == "Extended_Gaines":
+                s.Ra = self.rhoa * (1 / (self.axonD / self.d) ** 2) / 10000
+                s.insert("stin_sensory")
             else:
                 s.Ra = 130
-                s.insert('pas')
-                s.g_pas = 1e-7#0.0001*self.axonD/self.d
+                s.insert("pas")
+                s.g_pas = 1e-7  # 0.0001*self.axonD/self.d
                 s.e_pas = -60
-            s.insert('extracellular')
+            s.insert("extracellular")
             s.xraxial[0] = self.Rpx
-            s.xg[0] = self.mygm/(self.nl*2)
-            s.xc[0] = self.mycm/(self.nl*2)
+            s.xg[0] = self.mygm / (self.nl * 2)
+            s.xc[0] = self.mycm / (self.nl * 2)
 
     def __set_Nseg(self):
         """
@@ -572,24 +663,37 @@ class thin_myelinated(axon):
                     self.STIN_Nseg += Nseg
             else:
                 # non-uniform meshing
-                freqs = create_Nseg_freq_shape(self.Nsec, self.mesh_shape, self.freq, \
-                    self.freq_min, self.alpha_max)
+                freqs = create_Nseg_freq_shape(
+                    self.Nsec, self.mesh_shape, self.freq, self.freq_min, self.alpha_max
+                )
                 for k in range(len(self.axon_path_type)):
                     sec_type = self.axon_path_type[k]
                     sec_index = self.axon_path_index[k]
-                    if sec_type == 'node':
-                        Nseg = d_lambda_rule(self.node[sec_index].L, self.d_lambda, self.freq, \
-                            self.node[sec_index])
+                    if sec_type == "node":
+                        Nseg = d_lambda_rule(
+                            self.node[sec_index].L,
+                            self.d_lambda,
+                            self.freq,
+                            self.node[sec_index],
+                        )
                         self.node[sec_index].nseg = Nseg
                         self.node_Nseg += Nseg
-                    elif sec_type == 'MYSA':
-                        Nseg = d_lambda_rule(self.MYSA[sec_index].L, self.d_lambda, self.freq, \
-                            self.MYSA[sec_index])
+                    elif sec_type == "MYSA":
+                        Nseg = d_lambda_rule(
+                            self.MYSA[sec_index].L,
+                            self.d_lambda,
+                            self.freq,
+                            self.MYSA[sec_index],
+                        )
                         self.MYSA[sec_index].nseg = Nseg
                         self.MYSA_Nseg += Nseg
-                    else: # should be STIN
-                        Nseg = d_lambda_rule(self.STIN[sec_index].L, self.d_lambda, self.freq, \
-                            self.STIN[sec_index])
+                    else:  # should be STIN
+                        Nseg = d_lambda_rule(
+                            self.STIN[sec_index].L,
+                            self.d_lambda,
+                            self.freq,
+                            self.STIN[sec_index],
+                        )
                         self.STIN[sec_index].nseg = Nseg
                         self.STIN_Nseg += Nseg
         self.Nseg = self.node_Nseg + self.MYSA_Nseg + self.STIN_Nseg
@@ -607,38 +711,38 @@ class thin_myelinated(axon):
             sec_type = self.axon_path_type[k]
             sec_index = self.axon_path_index[k]
             self.rec_position_list.append([])
-            if sec_type == 'node':
-                x_nodes.append(x_offset + self.node[sec_index].L/2)
+            if sec_type == "node":
+                x_nodes.append(x_offset + self.node[sec_index].L / 2)
                 for seg in self.node[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.node[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.node[sec_index].L) + x_offset)
                         nodes_index.append(0)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.node[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.node[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
-                            nodes_index.append(len(x)-1)
+                            nodes_index.append(len(x) - 1)
                             self.rec_position_list[-1].append(seg.x)
                 x_offset += self.node[sec_index].L
-            elif sec_type == 'MYSA':
+            elif sec_type == "MYSA":
                 for seg in self.MYSA[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.MYSA[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.MYSA[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.MYSA[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.MYSA[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
                             self.rec_position_list[-1].append(seg.x)
                 x_offset += self.MYSA[sec_index].L
-            else: # should be STIN
+            else:  # should be STIN
                 for seg in self.STIN[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.STIN[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.STIN[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.STIN[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.STIN[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
                             self.rec_position_list[-1].append(seg.x)
@@ -651,7 +755,7 @@ class thin_myelinated(axon):
         """
         Get the position of points with voltage recording. For internal use only.
         """
-        if self.rec == 'nodes':
+        if self.rec == "nodes":
             self.x_rec = self.x_nodes
         else:
             self.x_rec = self.x
@@ -702,7 +806,7 @@ class thin_myelinated(axon):
             amplitude of the pulse (nA)
         """
         # adapt position to the number of sections
-        index = round((position * (self.axonnodes - 1)+0.5))
+        index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
     def insert_V_Clamp_node(self, index, stimulus):
@@ -737,14 +841,22 @@ class thin_myelinated(axon):
             stimulus for the clamp, see Stimulus.py for more information
         """
         # adapt position to the number of sections
-        index = round((position * (self.axonnodes - 1)+0.5))
+        index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_V_Clamp_node(index, stimulus)
 
     ##############################
     ## Result recording methods ##
     ##############################
-    def _set_recorders_with_key(self, reclist, key=None, single_mod=True, key_node=None,\
-        key_MYSA=None, key_FLUT=None, key_STIN=None):
+    def _set_recorders_with_key(
+        self,
+        reclist,
+        key=None,
+        single_mod=True,
+        key_node=None,
+        key_MYSA=None,
+        key_FLUT=None,
+        key_STIN=None,
+    ):
         """
         To automate the methods set_recorder. For internal use only.
         Parameters
@@ -773,8 +885,7 @@ class thin_myelinated(axon):
         if single_mod:
             key_node, key_MYSA, key_FLUT, key_STIN = key, key, key, key
 
-        if self.rec == 'nodes':
-
+        if self.rec == "nodes":
             # recording only on middle of all nodes
             for n in self.node:
                 if key_node is not None:
@@ -788,33 +899,41 @@ class thin_myelinated(axon):
                 sec_type = self.axon_path_type[k]
                 sec_index = self.axon_path_index[k]
                 for position in self.rec_position_list[k]:
-                    if sec_type == 'node':
+                    if sec_type == "node":
                         if key_node is not None:
-                            rec = neuron.h.Vector().record(getattr(self.node[sec_index](position), key_node),\
-                                sec=self.node[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.node[sec_index](position), key_node),
+                                sec=self.node[sec_index],
+                            )
                         else:
                             rec = neuron.h.Vector([0])
                         reclist.append(rec)
-                    elif sec_type == 'MYSA':
+                    elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            rec = neuron.h.Vector().record(getattr(self.MYSA[sec_index](position), key_MYSA), \
-                                sec=self.MYSA[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.MYSA[sec_index](position), key_MYSA),
+                                sec=self.MYSA[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0])                            
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
-                    elif sec_type == 'FLUT':
+                    elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            rec = neuron.h.Vector().record(getattr(self.FLUT[sec_index](position), key_FLUT), \
-                                sec=self.FLUT[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.FLUT[sec_index](position), key_FLUT),
+                                sec=self.FLUT[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0]) 
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
-                    else: # should be STIN
+                    else:  # should be STIN
                         if key_STIN is not None:
-                            rec = neuron.h.Vector().record(getattr(self.STIN[sec_index](position), key_STIN), \
-                                sec=self.STIN[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.STIN[sec_index](position), key_STIN),
+                                sec=self.STIN[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0]) 
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
 
     def _get_recorders_from_list(self, reclist):
@@ -824,13 +943,13 @@ class thin_myelinated(axon):
         ----------
         reclist     : neuron.h.List
             List in witch the reccorders are saved
-        
+
         Returns
         -------
         val         : np.array
             array of every recorded value for all rec point and time
         """
-        if self.rec == 'nodes':
+        if self.rec == "nodes":
             dim = (self.axonnodes, self.t_len)
         else:
             dim = (len(self.x_rec), self.t_len)
@@ -840,34 +959,44 @@ class thin_myelinated(axon):
             val[k, :] = np.asarray(reclist[k])
         return val
 
-    def _get_var_from_mod(self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None):
+    def _get_var_from_mod(
+        self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None
+    ):
         """
         return a column with value in every recording point of a constant from a mod. For internal use only.
         """
-        if self.rec == 'nodes':
-            val = np.zeros((len(self.node),1))
+        if self.rec == "nodes":
+            val = np.zeros((len(self.node), 1))
             if key_node is not None:
-                val[:,0] = getattr(self.node[0](0.5), key_node)[0]
+                val[:, 0] = getattr(self.node[0](0.5), key_node)[0]
         else:
             val = np.zeros((len(self.x_rec), 1))
-            i=-1
+            i = -1
             for k in range(len(self.axon_path_type)):
                 sec_type = self.axon_path_type[k]
                 sec_index = self.axon_path_index[k]
                 for position in self.rec_position_list[k]:
                     i += 1
-                    if sec_type == 'node':
+                    if sec_type == "node":
                         if key_node is not None:
-                            val[i,0] = getattr(self.node[sec_index](position), key_node)[0]
-                    elif sec_type == 'MYSA':
+                            val[i, 0] = getattr(
+                                self.node[sec_index](position), key_node
+                            )[0]
+                    elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            val[i,0] = getattr(self.MYSA[sec_index](position), key_MYSA)[0]
-                    elif sec_type == 'FLUT':
+                            val[i, 0] = getattr(
+                                self.MYSA[sec_index](position), key_MYSA
+                            )[0]
+                    elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            val[i,0] = getattr(self.FLUT[sec_index](position), key_FLUT)[0]
-                    else: # should be STIN
+                            val[i, 0] = getattr(
+                                self.FLUT[sec_index](position), key_FLUT
+                            )[0]
+                    else:  # should be STIN
                         if key_STIN is not None:
-                            val[i,0] = getattr(self.STIN[sec_index](position), key_STIN)[0]
+                            val[i, 0] = getattr(
+                                self.STIN[sec_index](position), key_STIN
+                            )[0]
         return val
 
     def set_membrane_voltage_recorders(self):
@@ -875,7 +1004,7 @@ class thin_myelinated(axon):
         Prepare the membrane voltage recording. For internal use only.
         """
         self.vreclist = neuron.h.List()
-        key = '_ref_v'
+        key = "_ref_v"
         self._set_recorders_with_key(self.vreclist, key)
 
     def get_membrane_voltage(self):
@@ -889,7 +1018,7 @@ class thin_myelinated(axon):
         Prepare the membrane current recording. For internal use only.
         """
         self.ireclist = neuron.h.List()
-        key = '_ref_i_membrane'
+        key = "_ref_i_membrane"
         self._set_recorders_with_key(self.ireclist, key)
 
     def get_membrane_current(self):
@@ -898,22 +1027,27 @@ class thin_myelinated(axon):
         """
         return self._get_recorders_from_list(self.ireclist)
 
-
     def set_ionic_current_recorders(self):
         """
         Prepare the ionic current recording. For internal use only.
         """
-        if self.model == 'Extended_Gaines':
+        if self.model == "Extended_Gaines":
             self.gaines_ina_reclist = neuron.h.List()
             self.gaines_inap_reclist = neuron.h.List()
             self.gaines_ik_reclist = neuron.h.List()
             self.gaines_ikf_reclist = neuron.h.List()
             self.gaines_il_reclist = neuron.h.List()
             for n in self.node:
-                gaines_ina = neuron.h.Vector().record(n(0.5)._ref_ina_node_sensory, sec=n)
-                gaines_inap = neuron.h.Vector().record(n(0.5)._ref_inap_node_sensory, sec=n)
+                gaines_ina = neuron.h.Vector().record(
+                    n(0.5)._ref_ina_node_sensory, sec=n
+                )
+                gaines_inap = neuron.h.Vector().record(
+                    n(0.5)._ref_inap_node_sensory, sec=n
+                )
                 gaines_ik = neuron.h.Vector().record(n(0.5)._ref_ik_node_sensory, sec=n)
-                gaines_ikf = neuron.h.Vector().record(n(0.5)._ref_ikf_node_sensory, sec=n)
+                gaines_ikf = neuron.h.Vector().record(
+                    n(0.5)._ref_ikf_node_sensory, sec=n
+                )
                 gaines_il = neuron.h.Vector().record(n(0.5)._ref_il_node_sensory, sec=n)
                 self.gaines_ina_reclist.append(gaines_ina)
                 self.gaines_inap_reclist.append(gaines_inap)
@@ -936,7 +1070,7 @@ class thin_myelinated(axon):
         """
         get the ionic currents at the end of simulation. For internal use only.
         """
-        if self.model == 'Extended_Gaines':
+        if self.model == "Extended_Gaines":
             gaines_ina_ax = np.zeros((self.axonnodes, self.t_len))
             gaines_inap_ax = np.zeros((self.axonnodes, self.t_len))
             gaines_ik_ax = np.zeros((self.axonnodes, self.t_len))
@@ -948,7 +1082,13 @@ class thin_myelinated(axon):
                 gaines_ik_ax[k, :] = np.asarray(self.gaines_ik_reclist[k])
                 gaines_ikf_ax[k, :] = np.asarray(self.gaines_ikf_reclist[k])
                 gaines_il_ax[k, :] = np.asarray(self.gaines_il_reclist[k])
-            results = [gaines_ina_ax, gaines_inap_ax, gaines_ik_ax, gaines_ikf_ax, gaines_il_ax]
+            results = [
+                gaines_ina_ax,
+                gaines_inap_ax,
+                gaines_ik_ax,
+                gaines_ikf_ax,
+                gaines_il_ax,
+            ]
         else:
             RGK_ina_ax = np.zeros((self.axonnodes, self.t_len))
             RGK_ik_ax = np.zeros((self.axonnodes, self.t_len))
@@ -964,7 +1104,7 @@ class thin_myelinated(axon):
         """
         Prepare the particules values recording. For internal use only.
         """
-        if self.model == 'Extended_Gaines':
+        if self.model == "Extended_Gaines":
             self.gaines_mreclist = neuron.h.List()
             self.gaines_mpreclist = neuron.h.List()
             self.gaines_sreclist = neuron.h.List()
@@ -1012,7 +1152,7 @@ class thin_myelinated(axon):
         """
         get the particules values at the end of simulation. For internal use only.
         """
-        if self.model == 'Extended_Gaines':
+        if self.model == "Extended_Gaines":
             gaines_m_ax = np.zeros((self.axonnodes, self.t_len))
             gaines_mp_ax = np.zeros((self.axonnodes, self.t_len))
             gaines_s_ax = np.zeros((self.axonnodes, self.t_len))
@@ -1041,6 +1181,13 @@ class thin_myelinated(axon):
                 RGK_h_nax_ax[k, :] = np.asarray(self.RGK_h_nax_reclist[k])
                 RGK_ns_ks_ax[k, :] = np.asarray(self.RGK_ns_ks_reclist[k])
                 RGK_nf_ks_ax[k, :] = np.asarray(self.RGK_nf_ks_reclist[k])
-            results = [RGK_m_nav1p9_ax, RGK_h_nav1p9_ax, RGK_s_nav1p9_ax, RGK_m_nax_ax,\
-                RGK_h_nax_ax, RGK_ns_ks_ax, RGK_nf_ks_ax]
+            results = [
+                RGK_m_nav1p9_ax,
+                RGK_h_nav1p9_ax,
+                RGK_s_nav1p9_ax,
+                RGK_m_nax_ax,
+                RGK_h_nax_ax,
+                RGK_ns_ks_ax,
+                RGK_nf_ks_ax,
+            ]
         return results

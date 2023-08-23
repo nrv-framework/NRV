@@ -9,7 +9,9 @@ from .axons import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
-MRG_g = np.asarray([0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791])
+MRG_g = np.asarray(
+    [0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791]
+)
 MRG_axonD = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
 MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
 MRG_paraD1 = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
@@ -17,6 +19,7 @@ MRG_paraD2 = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.
 MRG_deltax = np.asarray([100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500])
 MRG_paralength2 = np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60])
 MRG_nl = np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150])
+
 
 def get_MRG_parameters(diameter):
     """
@@ -59,7 +62,7 @@ def get_MRG_parameters(diameter):
         paraD1_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD1, 3))
         paraD2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD2, 3))
         deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
-        if diameter < 1. or diameter > 16.0:
+        if diameter < 1.0 or diameter > 16.0:
             # outside of the MRG originla limit, take 1st order approx,
             paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 1))
         else:
@@ -75,8 +78,16 @@ def get_MRG_parameters(diameter):
         deltax = deltax_poly(diameter)
         paralength2 = paralength2_poly(diameter)
         nl = nl_poly(diameter)
-    return float(g), float(axonD), float(nodeD), float(paraD1), float(paraD2), float(deltax), \
-        float(paralength2), float(nl)
+    return (
+        float(g),
+        float(axonD),
+        float(nodeD),
+        float(paraD1),
+        float(paraD2),
+        float(deltax),
+        float(paralength2),
+        float(nl),
+    )
 
 
 def get_length_from_nodes(diameter, nodes):
@@ -102,7 +113,7 @@ def get_length_from_nodes(diameter, nodes):
     else:
         deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
         deltax = deltax_poly(diameter)
-    return float(math.ceil(deltax*(nodes-1)))
+    return float(math.ceil(deltax * (nodes - 1)))
 
 
 class myelinated(axon):
@@ -110,7 +121,7 @@ class myelinated(axon):
     Myelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
     """
-    
+
     def __init__(
         self,
         y=0,
@@ -194,7 +205,8 @@ class myelinated(axon):
             y,
             z,
             d,
-            L, dt=dt,
+            L,
+            dt=dt,
             Nseg_per_sec=Nseg_per_sec,
             freq=freq,
             freq_min=freq_min,
@@ -241,23 +253,48 @@ class myelinated(axon):
         ## PARMETERS FOR THE COMPARTIMENTAL MODEL ##
         ############################################
         # compute variable MRG parameters, (usefull also if non MRG models)
-        self.g, self.axonD, self.nodeD, self.paraD1, self.paraD2, self.deltax, self.paralength2,\
-            self.nl = get_MRG_parameters(self.d)
+        (
+            self.g,
+            self.axonD,
+            self.nodeD,
+            self.paraD1,
+            self.paraD2,
+            self.deltax,
+            self.paralength2,
+            self.nl,
+        ) = get_MRG_parameters(self.d)
         # Morphological parameters
         self.paralength1 = 3
         self.nodelength = 1.0
         self.space_p1 = 0.002
         self.space_p2 = 0.004
         self.space_i = 0.004
-        self.interlength = (self.deltax-self.nodelength-(2*self.paralength1)-(2*self.paralength2))/6
+        self.interlength = (
+            self.deltax
+            - self.nodelength
+            - (2 * self.paralength1)
+            - (2 * self.paralength2)
+        ) / 6
         # electrical parameters
-        self.rhoa = 0.7e6   # Ohm-um
-        self.mycm = 0.1     # uF/cm2/lamella membrane
-        self.mygm = 0.001   # S/cm2/lamella membrane
-        self.Rpn0 = (self.rhoa * .01) / (math.pi * ((((self.nodeD / 2) + self.space_p1) **2) - ((self.nodeD / 2) **2)))
-        self.Rpn1 = (self.rhoa * .01) / (math.pi * ((((self.paraD1 / 2) + self.space_p1) **2) - ((self.paraD1 / 2) **2)))
-        self.Rpn2 = (self.rhoa * .01) / (math.pi * ((((self.paraD2 / 2) + self.space_p2) **2) - ((self.paraD2 / 2) **2)))
-        self.Rpx = (self.rhoa * .01)/(math.pi * ((((self.axonD / 2) + self.space_i) **2) - ((self.axonD / 2) **2)))
+        self.rhoa = 0.7e6  # Ohm-um
+        self.mycm = 0.1  # uF/cm2/lamella membrane
+        self.mygm = 0.001  # S/cm2/lamella membrane
+        self.Rpn0 = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.nodeD / 2) + self.space_p1) ** 2) - ((self.nodeD / 2) ** 2))
+        )
+        self.Rpn1 = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.paraD1 / 2) + self.space_p1) ** 2) - ((self.paraD1 / 2) ** 2))
+        )
+        self.Rpn2 = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.paraD2 / 2) + self.space_p2) ** 2) - ((self.paraD2 / 2) ** 2))
+        )
+        self.Rpx = (self.rhoa * 0.01) / (
+            math.pi
+            * ((((self.axonD / 2) + self.space_i) ** 2) - ((self.axonD / 2) ** 2))
+        )
         #########################
         ## morphology planning ##
         #########################
@@ -273,7 +310,7 @@ class myelinated(axon):
             "STIN",
             "STIN",
             "FLUT",
-            "MYSA"
+            "MYSA",
         ]
         # basic MRG starts with the node, if needed, adapt the sequence
         if self.node_shift == 0 or self.node_shift == 1:
@@ -281,31 +318,30 @@ class myelinated(axon):
             self.this_ax_sequence = self.MRG_Sequence
             self.first_section_size = self.nodelength
 
-        elif self.node_shift < (self.paralength1)/self.deltax:
+        elif self.node_shift < (self.paralength1) / self.deltax:
             # rotation of less than 1 MYSA
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 1)
-            self.first_section_size = (
-                self.node_shift * self.deltax
-            )
+            self.first_section_size = self.node_shift * self.deltax
 
-        elif self.node_shift < (self.paralength1 + self.paralength2)/self.deltax:
+        elif self.node_shift < (self.paralength1 + self.paralength2) / self.deltax:
             # rotation of 1 MYSA and less than one FLUT
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 2)
-            self.first_section_size = (
-                self.node_shift * self.deltax
-                - self.paralength1
-            )
+            self.first_section_size = self.node_shift * self.deltax - self.paralength1
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 3)
             self.first_section_size = (
-                self.node_shift * self.deltax
-                - self.paralength1
-                - self.paralength2
+                self.node_shift * self.deltax - self.paralength1 - self.paralength2
             )
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + 2 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + 2 * self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 1 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 4)
             self.first_section_size = (
@@ -315,7 +351,10 @@ class myelinated(axon):
                 - self.interlength
             )
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + 3 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + 3 * self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 2 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 5)
             self.first_section_size = (
@@ -325,7 +364,10 @@ class myelinated(axon):
                 - 2 * self.interlength
             )
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + 4 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + 4 * self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 3 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 6)
             self.first_section_size = (
@@ -335,7 +377,10 @@ class myelinated(axon):
                 - 3 * self.interlength
             )
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + 5 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + 5 * self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 4 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 7)
             self.first_section_size = (
@@ -345,7 +390,10 @@ class myelinated(axon):
                 - 4 * self.interlength
             )
 
-        elif self.node_shift < (self.paralength1 + self.paralength2 + 6 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + self.paralength2 + 6 * self.interlength) / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 5 STIN and less than a STIN
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 8)
             self.first_section_size = (
@@ -355,10 +403,14 @@ class myelinated(axon):
                 - 5 * self.interlength
             )
 
-        elif self.node_shift < (self.paralength1 + 2*self.paralength2 + 6 * self.interlength) / self.deltax:
+        elif (
+            self.node_shift
+            < (self.paralength1 + 2 * self.paralength2 + 6 * self.interlength)
+            / self.deltax
+        ):
             # rotation of 1 MYSA, 1 FLUT, 6 STIN and less than a FLUT
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 9)
-            self.first_section_size =(
+            self.first_section_size = (
                 self.node_shift * self.deltax
                 - self.paralength1
                 - self.paralength2
@@ -369,7 +421,7 @@ class myelinated(axon):
             # rotation of 1 MYSA, 2 FLUT, 6 STIN and less than a MYSA
             # WARNING FOR DEV : the unprobable case of a node cut in two halfs is not considered...
             self.this_ax_sequence = rotate_list(self.MRG_Sequence, 10)
-            self.first_section_size = self.deltax*(1-self.node_shift)
+            self.first_section_size = self.deltax * (1 - self.node_shift)
         ################
         ## morphology ##
         ################
@@ -390,7 +442,9 @@ class myelinated(axon):
         self.axon_path_index = []
         while prov_length < self.L:
             # axon is too short, create a section
-            pos_in_sequence = (self.Nsec) % len(self.this_ax_sequence)    # find the current position in the node sequence
+            pos_in_sequence = (self.Nsec) % len(
+                self.this_ax_sequence
+            )  # find the current position in the node sequence
             if self.this_ax_sequence[pos_in_sequence] == "node":
                 # you need to create a node
                 self.node.append(neuron.h.Section(name="node[%d]" % self.axonnodes))
@@ -422,7 +476,9 @@ class myelinated(axon):
                     self.last_section_size = self.L - prov_length
                 prov_length += self.paralength1
                 # CONNECT THE MYSA TO ITS PARENT: a MYSA can have for parent a node or a FLUT, check it"s not the start...
-                connect_to_type = self.this_ax_sequence[pos_in_sequence - 1] # get parent type
+                connect_to_type = self.this_ax_sequence[
+                    pos_in_sequence - 1
+                ]  # get parent type
                 if connect_to_type == "node" and self.axonnodes != 0:
                     self.MYSA[-1].connect(self.node[-1], 1, 0)
                 if connect_to_type == "FLUT" and self.paranodes2 != 0:
@@ -442,7 +498,9 @@ class myelinated(axon):
                     self.last_section_size = self.L - prov_length
                 prov_length += self.paralength2
                 # CONNECT THE FLUT TO ITS PARENT: a FLUT can have for parent a MYSA of a STIN, check it"s not the start...
-                connect_to_type = self.this_ax_sequence[pos_in_sequence - 1] # get parent type
+                connect_to_type = self.this_ax_sequence[
+                    pos_in_sequence - 1
+                ]  # get parent type
                 if connect_to_type == "MYSA" and self.paranodes1 != 0:
                     self.FLUT[-1].connect(self.MYSA[-1], 1, 0)
                 if connect_to_type == "STIN" and self.axoninter != 0:
@@ -469,8 +527,10 @@ class myelinated(axon):
                     self.STIN[-1].connect(self.FLUT[-1], 1, 0)
 
         if self.node == []:
-            rise_warning("Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n")
-            #logging.warning("Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n")
+            rise_warning(
+                "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n"
+            )
+            # logging.warning("Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n")
 
         ####################
         ## programm model ##
@@ -483,7 +543,7 @@ class myelinated(axon):
             self.MYSA[0].L = self.first_section_size
         elif self.this_ax_sequence[0] == "FLUT":
             self.FLUT[0].L = self.first_section_size
-        else: # should be a STIN
+        else:  # should be a STIN
             self.STIN[0].L = self.first_section_size
         # adjust the length if the last section
         if self.last_section_kind == "node":
@@ -492,7 +552,7 @@ class myelinated(axon):
             self.MYSA[-1].L = self.last_section_size
         elif self.last_section_kind == "FLUT":
             self.FLUT[-1].L = self.last_section_size
-        else: # should be a STIN
+        else:  # should be a STIN
             self.STIN[-1].L = self.last_section_size
         # define the geometry of the axon
         self._axon__define_shape()
@@ -536,7 +596,6 @@ class myelinated(axon):
             blacklist=blacklist,
         )
 
-
     def __set_model(self, model):
         """
         Set the double cable model. For internal use only.
@@ -575,7 +634,7 @@ class myelinated(axon):
             m.nseg = 1
             m.diam = self.d
             m.L = self.paralength1
-            m.Ra = self.rhoa * (1 / (self.paraD1 / self.d) **2) / 10000
+            m.Ra = self.rhoa * (1 / (self.paraD1 / self.d) ** 2) / 10000
             m.cm = 2 * self.paraD1 / self.d
             if model == "Gaines_sensory":
                 m.insert("mysa_sensory")
@@ -587,13 +646,13 @@ class myelinated(axon):
                 m.e_pas = -80
             m.insert("extracellular")
             m.xraxial[0] = self.Rpn1
-            m.xg[0] = self.mygm /(self.nl * 2)
-            m.xc[0] = self.mycm /(self.nl * 2)
+            m.xg[0] = self.mygm / (self.nl * 2)
+            m.xc[0] = self.mycm / (self.nl * 2)
         for f in self.FLUT:
             f.nseg = 1
             f.diam = self.d
             f.L = self.paralength2
-            f.Ra = self.rhoa * (1 / (self.paraD2 / self.d) **2) / 10000
+            f.Ra = self.rhoa * (1 / (self.paraD2 / self.d) ** 2) / 10000
             f.cm = 2 * self.paraD2 / self.d
             if model == "Gaines_sensory":
                 f.insert("flut_sensory")
@@ -611,7 +670,7 @@ class myelinated(axon):
             s.nseg = 1
             s.diam = self.d
             s.L = self.interlength
-            s.Ra = self.rhoa *(1 / (self.axonD / self.d) **2) / 10000
+            s.Ra = self.rhoa * (1 / (self.axonD / self.d) ** 2) / 10000
             s.cm = 2 * self.axonD / self.d
             if model == "Gaines_sensory":
                 s.insert("stin_sensory")
@@ -732,8 +791,9 @@ class myelinated(axon):
                     self.STIN_Nseg += Nseg
             else:
                 # non-uniform meshing
-                freqs = create_Nseg_freq_shape(self.Nsec, self.mesh_shape, self.freq, \
-                    self.freq_min, self.alpha_max)
+                freqs = create_Nseg_freq_shape(
+                    self.Nsec, self.mesh_shape, self.freq, self.freq_min, self.alpha_max
+                )
                 for k in range(len(self.axon_path_type)):
                     sec_type = self.axon_path_type[k]
                     sec_index = self.axon_path_index[k]
@@ -764,7 +824,7 @@ class myelinated(axon):
                         )
                         self.FLUT[sec_index].nseg = Nseg
                         self.FLUT_Nseg += Nseg
-                    else: # should be STIN
+                    else:  # should be STIN
                         Nseg = d_lambda_rule(
                             self.STIN[sec_index].L,
                             self.d_lambda,
@@ -773,12 +833,7 @@ class myelinated(axon):
                         )
                         self.STIN[sec_index].nseg = Nseg
                         self.STIN_Nseg += Nseg
-        self.Nseg = (
-            self.node_Nseg
-            + self.MYSA_Nseg
-            + self.FLUT_Nseg
-            + self.STIN_Nseg
-        )
+        self.Nseg = self.node_Nseg + self.MYSA_Nseg + self.FLUT_Nseg + self.STIN_Nseg
 
     def __get_seg_positions(self):
         """
@@ -794,26 +849,26 @@ class myelinated(axon):
             sec_index = self.axon_path_index[k]
             self.rec_position_list.append([])
             if sec_type == "node":
-                x_nodes.append(x_offset + self.node[sec_index].L/2)
+                x_nodes.append(x_offset + self.node[sec_index].L / 2)
                 for seg in self.node[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.node[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.node[sec_index].L) + x_offset)
                         nodes_index.append(0)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.node[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.node[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
-                            nodes_index.append(len(x)-1)
+                            nodes_index.append(len(x) - 1)
                             self.rec_position_list[-1].append(seg.x)
                 x_offset += self.node[sec_index].L
             elif sec_type == "MYSA":
                 for seg in self.MYSA[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.MYSA[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.MYSA[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.MYSA[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.MYSA[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
                             self.rec_position_list[-1].append(seg.x)
@@ -821,21 +876,21 @@ class myelinated(axon):
             elif sec_type == "FLUT":
                 for seg in self.FLUT[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.FLUT[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.FLUT[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.FLUT[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.FLUT[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
                             self.rec_position_list[-1].append(seg.x)
                 x_offset += self.FLUT[sec_index].L
-            else: # should be STIN
+            else:  # should be STIN
                 for seg in self.STIN[sec_index].allseg():
                     if x == []:
-                        x.append(seg.x*(self.STIN[sec_index].L) + x_offset)
+                        x.append(seg.x * (self.STIN[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
-                        x_seg = seg.x*(self.STIN[sec_index].L) + x_offset
+                        x_seg = seg.x * (self.STIN[sec_index].L) + x_offset
                         if x_seg != x[-1]:
                             x.append(x_seg)
                             self.rec_position_list[-1].append(seg.x)
@@ -945,7 +1000,7 @@ class myelinated(axon):
         reclist,
         key=None,
         single_mod=True,
-        key_node=None,\
+        key_node=None,
         key_MYSA=None,
         key_FLUT=None,
         key_STIN=None,
@@ -979,7 +1034,6 @@ class myelinated(axon):
             key_node, key_MYSA, key_FLUT, key_STIN = key, key, key, key
 
         if self.rec == "nodes":
-
             # recording only on middle of all nodes
             for n in self.node:
                 if key_node is not None:
@@ -995,31 +1049,39 @@ class myelinated(axon):
                 for position in self.rec_position_list[k]:
                     if sec_type == "node":
                         if key_node is not None:
-                            rec = neuron.h.Vector().record(getattr(self.node[sec_index](position), key_node),\
-                                sec=self.node[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.node[sec_index](position), key_node),
+                                sec=self.node[sec_index],
+                            )
                         else:
                             rec = neuron.h.Vector([0])
                         reclist.append(rec)
                     elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            rec = neuron.h.Vector().record(getattr(self.MYSA[sec_index](position), key_MYSA), \
-                                sec=self.MYSA[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.MYSA[sec_index](position), key_MYSA),
+                                sec=self.MYSA[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0])                            
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
                     elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            rec = neuron.h.Vector().record(getattr(self.FLUT[sec_index](position), key_FLUT), \
-                                sec=self.FLUT[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.FLUT[sec_index](position), key_FLUT),
+                                sec=self.FLUT[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0]) 
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
-                    else: # should be STIN
+                    else:  # should be STIN
                         if key_STIN is not None:
-                            rec = neuron.h.Vector().record(getattr(self.STIN[sec_index](position), key_STIN), \
-                                sec=self.STIN[sec_index])
+                            rec = neuron.h.Vector().record(
+                                getattr(self.STIN[sec_index](position), key_STIN),
+                                sec=self.STIN[sec_index],
+                            )
                         else:
-                            rec = neuron.h.Vector([0]) 
+                            rec = neuron.h.Vector([0])
                         reclist.append(rec)
 
     def _get_recorders_from_list(self, reclist):
@@ -1029,7 +1091,7 @@ class myelinated(axon):
         ----------
         reclist     : neuron.h.List
             List in witch the reccorders are saved
-        
+
         Returns
         -------
         val         : np.array
@@ -1045,17 +1107,19 @@ class myelinated(axon):
             val[k, :] = np.asarray(reclist[k])
         return val
 
-    def _get_var_from_mod(self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None):
+    def _get_var_from_mod(
+        self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None
+    ):
         """
         return a column with value in every recording point of a constant from a mod. For internal use only.
         """
         if self.rec == "nodes":
-            val = np.zeros((len(self.node),1))
+            val = np.zeros((len(self.node), 1))
             if key_node is not None:
-                val[:,0] = getattr(self.node[0](0.5), key_node)[0]
+                val[:, 0] = getattr(self.node[0](0.5), key_node)[0]
         else:
             val = np.zeros((len(self.x_rec), 1))
-            i=-1
+            i = -1
             for k in range(len(self.axon_path_type)):
                 sec_type = self.axon_path_type[k]
                 sec_index = self.axon_path_index[k]
@@ -1063,16 +1127,24 @@ class myelinated(axon):
                     i += 1
                     if sec_type == "node":
                         if key_node is not None:
-                            val[i,0] = getattr(self.node[sec_index](position), key_node)[0]
+                            val[i, 0] = getattr(
+                                self.node[sec_index](position), key_node
+                            )[0]
                     elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            val[i,0] = getattr(self.MYSA[sec_index](position), key_MYSA)[0]
+                            val[i, 0] = getattr(
+                                self.MYSA[sec_index](position), key_MYSA
+                            )[0]
                     elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            val[i,0] = getattr(self.FLUT[sec_index](position), key_FLUT)[0]
-                    else: # should be STIN
+                            val[i, 0] = getattr(
+                                self.FLUT[sec_index](position), key_FLUT
+                            )[0]
+                    else:  # should be STIN
                         if key_STIN is not None:
-                            val[i,0] = getattr(self.STIN[sec_index](position), key_STIN)[0]
+                            val[i, 0] = getattr(
+                                self.STIN[sec_index](position), key_STIN
+                            )[0]
         return val
 
     def set_membrane_voltage_recorders(self):
@@ -1103,52 +1175,80 @@ class myelinated(axon):
         """
         return self._get_recorders_from_list(self.ireclist)
 
-
     def set_ionic_current_recorders(self):
         """
         Prepare the ionic channels current recording. For internal use only.
         """
         if self.model == "MRG":
             self.ina_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.ina_reclist, single_mod=False, key_node="_ref_ina_axnode")
+            self._set_recorders_with_key(
+                self.ina_reclist, single_mod=False, key_node="_ref_ina_axnode"
+            )
             self.inap_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.inap_reclist, single_mod=False, key_node="_ref_inap_axnode")
+            self._set_recorders_with_key(
+                self.inap_reclist, single_mod=False, key_node="_ref_inap_axnode"
+            )
             self.ik_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.ik_reclist, single_mod=False, key_node="_ref_ik_axnode")
+            self._set_recorders_with_key(
+                self.ik_reclist, single_mod=False, key_node="_ref_ik_axnode"
+            )
             self.il_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.il_reclist, single_mod=False, key_node="_ref_il_axnode")
-        else: #should be Gaines, motor or sensory
-            if self. model == "Gaines_motor":
+            self._set_recorders_with_key(
+                self.il_reclist, single_mod=False, key_node="_ref_il_axnode"
+            )
+        else:  # should be Gaines, motor or sensory
+            if self.model == "Gaines_motor":
                 key_mod = "_motor"
-            else: 
+            else:
                 key_mod = "_sensory"
             self.ina_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.ina_reclist, single_mod=False,\
-                key_node="_ref_ina_node"+key_mod)
-            
+            self._set_recorders_with_key(
+                self.ina_reclist, single_mod=False, key_node="_ref_ina_node" + key_mod
+            )
+
             self.inap_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.inap_reclist, single_mod=False,\
-                key_node="_ref_inap_node"+key_mod)
-            
+            self._set_recorders_with_key(
+                self.inap_reclist, single_mod=False, key_node="_ref_inap_node" + key_mod
+            )
+
             self.ik_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.ik_reclist, single_mod=False,\
-                key_node="_ref_ik_node"+key_mod, key_MYSA="_ref_ik_mysa"+key_mod,\
-                key_FLUT="_ref_ik_flut"+key_mod, key_STIN="_ref_ik_stin"+key_mod)
-                        
+            self._set_recorders_with_key(
+                self.ik_reclist,
+                single_mod=False,
+                key_node="_ref_ik_node" + key_mod,
+                key_MYSA="_ref_ik_mysa" + key_mod,
+                key_FLUT="_ref_ik_flut" + key_mod,
+                key_STIN="_ref_ik_stin" + key_mod,
+            )
+
             self.ikf_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.ikf_reclist, single_mod=False,\
-                key_node="_ref_ikf_node"+key_mod,key_MYSA="_ref_ikf_mysa"+key_mod,\
-                key_FLUT="_ref_ikf_flut"+key_mod, key_STIN="_ref_ikf_stin"+key_mod)
-            
+            self._set_recorders_with_key(
+                self.ikf_reclist,
+                single_mod=False,
+                key_node="_ref_ikf_node" + key_mod,
+                key_MYSA="_ref_ikf_mysa" + key_mod,
+                key_FLUT="_ref_ikf_flut" + key_mod,
+                key_STIN="_ref_ikf_stin" + key_mod,
+            )
+
             self.iq_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.iq_reclist, single_mod=False,\
-                key_MYSA="_ref_iq_mysa"+key_mod, key_FLUT="_ref_iq_flut"+key_mod,\
-                key_STIN="_ref_iq_stin"+key_mod)
-            
+            self._set_recorders_with_key(
+                self.iq_reclist,
+                single_mod=False,
+                key_MYSA="_ref_iq_mysa" + key_mod,
+                key_FLUT="_ref_iq_flut" + key_mod,
+                key_STIN="_ref_iq_stin" + key_mod,
+            )
+
             self.il_reclist = neuron.h.List()
-            self._set_recorders_with_key(self.il_reclist, single_mod=False,\
-                key_node="_ref_il_node"+key_mod, key_MYSA="_ref_il_mysa"+key_mod,\
-                key_FLUT="_ref_il_flut"+key_mod, key_STIN="_ref_il_stin"+key_mod)
+            self._set_recorders_with_key(
+                self.il_reclist,
+                single_mod=False,
+                key_node="_ref_il_node" + key_mod,
+                key_MYSA="_ref_il_mysa" + key_mod,
+                key_FLUT="_ref_il_flut" + key_mod,
+                key_STIN="_ref_il_stin" + key_mod,
+            )
 
     def get_ionic_current(self):
         """
@@ -1158,7 +1258,7 @@ class myelinated(axon):
         results += [self._get_recorders_from_list(self.ina_reclist)]
         results += [self._get_recorders_from_list(self.inap_reclist)]
         results += [self._get_recorders_from_list(self.ik_reclist)]
-        if  self.model == "Gaines_motor" or self.model == "Gaines_sensory":
+        if self.model == "Gaines_motor" or self.model == "Gaines_sensory":
             results += [self._get_recorders_from_list(self.ikf_reclist)]
             results += [self._get_recorders_from_list(self.iq_reclist)]
         results += [self._get_recorders_from_list(self.il_reclist)]
@@ -1170,46 +1270,71 @@ class myelinated(axon):
         """
         if self.model == "MRG":
             self.mreclist = neuron.h.List()
-            self._set_recorders_with_key(self.mreclist, single_mod=False, key_node="_ref_m_axnode")
+            self._set_recorders_with_key(
+                self.mreclist, single_mod=False, key_node="_ref_m_axnode"
+            )
             self.mpreclist = neuron.h.List()
-            self._set_recorders_with_key(self.mpreclist, single_mod=False, key_node="_ref_mp_axnode")
+            self._set_recorders_with_key(
+                self.mpreclist, single_mod=False, key_node="_ref_mp_axnode"
+            )
             self.hreclist = neuron.h.List()
-            self._set_recorders_with_key(self.hreclist, single_mod=False, key_node="_ref_h_axnode")
+            self._set_recorders_with_key(
+                self.hreclist, single_mod=False, key_node="_ref_h_axnode"
+            )
             self.sreclist = neuron.h.List()
-            self._set_recorders_with_key(self.sreclist, single_mod=False, key_node="_ref_s_axnode")
+            self._set_recorders_with_key(
+                self.sreclist, single_mod=False, key_node="_ref_s_axnode"
+            )
 
-        else: #should be Gaines, motor or sensory
-            if self. model == "Gaines_motor":
+        else:  # should be Gaines, motor or sensory
+            if self.model == "Gaines_motor":
                 key_mod = "_motor"
-            else: 
+            else:
                 key_mod = "_sensory"
 
             self.mreclist = neuron.h.List()
-            self._set_recorders_with_key(self.mreclist, single_mod=False,\
-                key_node="_ref_m_node"+key_mod)
+            self._set_recorders_with_key(
+                self.mreclist, single_mod=False, key_node="_ref_m_node" + key_mod
+            )
 
             self.mpreclist = neuron.h.List()
-            self._set_recorders_with_key(self.mpreclist, single_mod=False,\
-                key_node="_ref_mp_node"+key_mod)
+            self._set_recorders_with_key(
+                self.mpreclist, single_mod=False, key_node="_ref_mp_node" + key_mod
+            )
 
             self.hreclist = neuron.h.List()
-            self._set_recorders_with_key(self.hreclist, single_mod=False,\
-                key_node="_ref_h_node"+key_mod)
+            self._set_recorders_with_key(
+                self.hreclist, single_mod=False, key_node="_ref_h_node" + key_mod
+            )
 
             self.sreclist = neuron.h.List()
-            self._set_recorders_with_key(self.sreclist, single_mod=False,\
-                key_node="_ref_s_node"+key_mod, key_MYSA="_ref_s_mysa"+key_mod,\
-                key_FLUT="_ref_s_flut"+key_mod, key_STIN="_ref_s_stin"+key_mod)
+            self._set_recorders_with_key(
+                self.sreclist,
+                single_mod=False,
+                key_node="_ref_s_node" + key_mod,
+                key_MYSA="_ref_s_mysa" + key_mod,
+                key_FLUT="_ref_s_flut" + key_mod,
+                key_STIN="_ref_s_stin" + key_mod,
+            )
 
             self.nreclist = neuron.h.List()
-            self._set_recorders_with_key(self.nreclist, single_mod=False,\
-                key_node="_ref_n_node"+key_mod, key_MYSA="_ref_n_mysa"+key_mod,\
-                key_FLUT="_ref_n_flut"+key_mod, key_STIN="_ref_n_stin"+key_mod)
+            self._set_recorders_with_key(
+                self.nreclist,
+                single_mod=False,
+                key_node="_ref_n_node" + key_mod,
+                key_MYSA="_ref_n_mysa" + key_mod,
+                key_FLUT="_ref_n_flut" + key_mod,
+                key_STIN="_ref_n_stin" + key_mod,
+            )
 
             self.qreclist = neuron.h.List()
-            self._set_recorders_with_key(self.qreclist, single_mod=False,\
-                key_MYSA="_ref_q_mysa"+key_mod, key_FLUT="_ref_q_flut"+key_mod,\
-                key_STIN="_ref_q_stin"+key_mod)
+            self._set_recorders_with_key(
+                self.qreclist,
+                single_mod=False,
+                key_MYSA="_ref_q_mysa" + key_mod,
+                key_FLUT="_ref_q_flut" + key_mod,
+                key_STIN="_ref_q_stin" + key_mod,
+            )
 
     def get_particles_values(self):
         """
@@ -1220,19 +1345,16 @@ class myelinated(axon):
         results += [self._get_recorders_from_list(self.mpreclist)]
         results += [self._get_recorders_from_list(self.hreclist)]
         results += [self._get_recorders_from_list(self.sreclist)]
-        if  self.model == "Gaines_motor" or self.model == "Gaines_sensory":
+        if self.model == "Gaines_motor" or self.model == "Gaines_sensory":
             results += [self._get_recorders_from_list(self.nreclist)]
             results += [self._get_recorders_from_list(self.qreclist)]
         return results
-    
 
     def set_conductance_recorders(self):
         """
         Prepare the ionic channels conductance recording. For internal use only.
         """
         self.set_particules_values_recorders()
-
-
 
     def get_ionic_conductance(self):
         """
@@ -1244,7 +1366,9 @@ class myelinated(axon):
             gnapbar = self._get_var_from_mod(key_node="_ref_gnapbar_axnode")
             gkbar = self._get_var_from_mod(key_node="_ref_gkbar_axnode")
             glbar = self._get_var_from_mod(key_node="_ref_gl_axnode")
-            gibar = self._get_var_from_mod(key_MYSA="_ref_g_pas", key_FLUT="_ref_g_pas", key_STIN="_ref_g_pas")
+            gibar = self._get_var_from_mod(
+                key_MYSA="_ref_g_pas", key_FLUT="_ref_g_pas", key_STIN="_ref_g_pas"
+            )
             g_na_ax = gnabar * m_ax**3 * h_ax
             g_nap_ax = gnapbar * mp_ax**3
             g_k_ax = gkbar * s_ax
@@ -1252,27 +1376,39 @@ class myelinated(axon):
             g_i_ax = gibar * np.ones((len(gibar), self.t_len))
 
             results = [g_na_ax, g_nap_ax, g_k_ax, g_l_ax, g_i_ax]
-        else: #should be Gaines, motor or sensory
+        else:  # should be Gaines, motor or sensory
             m_ax, mp_ax, h_ax, s_ax, n_ax, q_ax = self.get_particles_values()
-            
-            if self. model == "Gaines_motor":
+
+            if self.model == "Gaines_motor":
                 key_mod = "_motor"
-            else: 
+            else:
                 key_mod = "_sensory"
 
-            gnabar = self._get_var_from_mod(key_node="_ref_gnabar_node"+key_mod)
-            gnapbar = self._get_var_from_mod(key_node="_ref_gnapbar_node"+key_mod)
-            gkbar = self._get_var_from_mod(key_node="_ref_gkbar_node"+key_mod,\
-                key_MYSA="_ref_gkbar_mysa"+key_mod, key_FLUT="_ref_gkbar_flut"+key_mod,\
-                key_STIN="_ref_gkbar_stin"+key_mod)
-            gkfbar = self._get_var_from_mod(key_node="_ref_gkf_node"+key_mod,\
-                key_MYSA="_ref_gkf_mysa"+key_mod, key_FLUT="_ref_gkf_flut"+key_mod,\
-                key_STIN="_ref_gkf_stin"+key_mod)
-            glbar = self._get_var_from_mod(key_node="_ref_gl_node"+key_mod,\
-                key_MYSA="_ref_gl_mysa"+key_mod, key_FLUT="_ref_gl_flut"+key_mod,\
-                key_STIN="_ref_gl_stin"+key_mod)
-            gqbar = self._get_var_from_mod(key_MYSA="_ref_gq_mysa"+key_mod,\
-                key_FLUT="_ref_gq_flut"+key_mod, key_STIN="_ref_gq_stin"+key_mod)
+            gnabar = self._get_var_from_mod(key_node="_ref_gnabar_node" + key_mod)
+            gnapbar = self._get_var_from_mod(key_node="_ref_gnapbar_node" + key_mod)
+            gkbar = self._get_var_from_mod(
+                key_node="_ref_gkbar_node" + key_mod,
+                key_MYSA="_ref_gkbar_mysa" + key_mod,
+                key_FLUT="_ref_gkbar_flut" + key_mod,
+                key_STIN="_ref_gkbar_stin" + key_mod,
+            )
+            gkfbar = self._get_var_from_mod(
+                key_node="_ref_gkf_node" + key_mod,
+                key_MYSA="_ref_gkf_mysa" + key_mod,
+                key_FLUT="_ref_gkf_flut" + key_mod,
+                key_STIN="_ref_gkf_stin" + key_mod,
+            )
+            glbar = self._get_var_from_mod(
+                key_node="_ref_gl_node" + key_mod,
+                key_MYSA="_ref_gl_mysa" + key_mod,
+                key_FLUT="_ref_gl_flut" + key_mod,
+                key_STIN="_ref_gl_stin" + key_mod,
+            )
+            gqbar = self._get_var_from_mod(
+                key_MYSA="_ref_gq_mysa" + key_mod,
+                key_FLUT="_ref_gq_flut" + key_mod,
+                key_STIN="_ref_gq_stin" + key_mod,
+            )
 
             g_na_ax = gnabar * m_ax**3 * h_ax
             g_nap_ax = gnapbar * mp_ax**3
@@ -1281,7 +1417,7 @@ class myelinated(axon):
             g_l_ax = glbar * np.ones((len(glbar), self.t_len))
             g_q_ax = gqbar * q_ax
 
-            results = [g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax, g_q_ax]            
+            results = [g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax, g_q_ax]
         return results
 
     def get_membrane_conductance(self):
@@ -1312,20 +1448,27 @@ class myelinated(axon):
         self.I2_nav16_reclist = neuron.h.List()
         for k in self.Markov_Nav_modeled_NoR:
             # Nav1.1
-            I_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_ina_na11a,\
-                sec=self.node[k])
-            C1_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_C1_na11a,\
-                sec=self.node[k])
-            C2_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_C2_na11a,\
-                sec=self.node[k])
-            O1_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_O1_na11a,\
-                sec=self.node[k])
-            O2_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_O2_na11a,\
-                sec=self.node[k])
-            I1_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_I1_na11a,\
-                sec=self.node[k])
-            I2_nav11 = neuron.h.Vector().record(self.node[k](0.5)._ref_I2_na11a,\
-                sec=self.node[k])
+            I_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_ina_na11a, sec=self.node[k]
+            )
+            C1_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_C1_na11a, sec=self.node[k]
+            )
+            C2_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_C2_na11a, sec=self.node[k]
+            )
+            O1_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_O1_na11a, sec=self.node[k]
+            )
+            O2_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_O2_na11a, sec=self.node[k]
+            )
+            I1_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_I1_na11a, sec=self.node[k]
+            )
+            I2_nav11 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_I2_na11a, sec=self.node[k]
+            )
             self.I_nav11_reclist.append(I_nav11)
             self.C1_nav11_reclist.append(C1_nav11)
             self.C2_nav11_reclist.append(C2_nav11)
@@ -1334,20 +1477,27 @@ class myelinated(axon):
             self.I1_nav11_reclist.append(I1_nav11)
             self.I2_nav11_reclist.append(I2_nav11)
             # Nav1.6
-            I_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_ina_na16a,\
-                sec=self.node[k])
-            C1_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_C1_na16a,\
-                sec=self.node[k])
-            C2_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_C2_na16a,\
-                sec=self.node[k])
-            O1_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_O1_na16a,\
-                sec=self.node[k])
-            O2_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_O2_na16a,\
-                sec=self.node[k])
-            I1_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_I1_na16a,\
-                sec=self.node[k])
-            I2_nav16 = neuron.h.Vector().record(self.node[k](0.5)._ref_I2_na16a,\
-                sec=self.node[k])
+            I_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_ina_na16a, sec=self.node[k]
+            )
+            C1_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_C1_na16a, sec=self.node[k]
+            )
+            C2_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_C2_na16a, sec=self.node[k]
+            )
+            O1_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_O1_na16a, sec=self.node[k]
+            )
+            O2_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_O2_na16a, sec=self.node[k]
+            )
+            I1_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_I1_na16a, sec=self.node[k]
+            )
+            I2_nav16 = neuron.h.Vector().record(
+                self.node[k](0.5)._ref_I2_na16a, sec=self.node[k]
+            )
             self.I_nav16_reclist.append(I_nav16)
             self.C1_nav16_reclist.append(C1_nav16)
             self.C2_nav16_reclist.append(C2_nav16)
@@ -1392,4 +1542,19 @@ class myelinated(axon):
             O2_nav16_ax[k, :] = np.asarray(self.O2_nav16_reclist[k])
             I1_nav16_ax[k, :] = np.asarray(self.I1_nav16_reclist[k])
             I2_nav16_ax[k, :] = np.asarray(self.I2_nav16_reclist[k])
-        return I_nav11_ax, C1_nav11_ax, C2_nav11_ax, O1_nav11_ax, O2_nav11_ax, I1_nav11_ax, I2_nav11_ax, I_nav16_ax, C1_nav16_ax, C2_nav16_ax, O1_nav16_ax, O2_nav16_ax, I1_nav16_ax, I2_nav16_ax
+        return (
+            I_nav11_ax,
+            C1_nav11_ax,
+            C2_nav11_ax,
+            O1_nav11_ax,
+            O2_nav11_ax,
+            I1_nav11_ax,
+            I2_nav11_ax,
+            I_nav16_ax,
+            C1_nav16_ax,
+            C2_nav16_ax,
+            O1_nav16_ax,
+            O2_nav16_ax,
+            I1_nav16_ax,
+            I2_nav16_ax,
+        )

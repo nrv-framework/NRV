@@ -31,7 +31,7 @@ faulthandler.enable()
 
 # instructions for Neuron, find mod files and hide GUI
 dir_path = os.environ["NRVPATH"] + "/_misc"
-neuron.load_mechanisms(dir_path+"/mods")
+neuron.load_mechanisms(dir_path + "/mods")
 neuron.h.load_file("stdrun.hoc")
 
 # list of supported models
@@ -85,7 +85,7 @@ def d_lambda_rule(L, d_lambda, f, sec):
     Nseg        : int
         number of segment recommended to the section
     """
-    return int((L / (d_lambda*neuron.h.lambda_f(f, sec=sec)) + .999) / 2) * 2 + 1
+    return int((L / (d_lambda * neuron.h.lambda_f(f, sec=sec)) + 0.999) / 2) * 2 + 1
 
 
 def create_Nseg_freq_shape(N_sec, shape, freq, freq_min, alpha_max):
@@ -116,53 +116,66 @@ def create_Nseg_freq_shape(N_sec, shape, freq, freq_min, alpha_max):
         vector of frequency to apply to a multi-sections axon
     """
     if shape == "pyramidal":
-        if (N_sec%2) == 0:
-            X = np.concatenate([
-                np.linspace(0, 1, num=int(N_sec / 2)),
-                np.linspace(1, 0, num=int(N_sec/2)),
-            ])
+        if (N_sec % 2) == 0:
+            X = np.concatenate(
+                [
+                    np.linspace(0, 1, num=int(N_sec / 2)),
+                    np.linspace(1, 0, num=int(N_sec / 2)),
+                ]
+            )
         else:
-            X = np.concatenate([
-                np.linspace(0, 1, num=int(N_sec/2)),
-                np.asarray([1]),
-                np.linspace(1, 0, num=int(N_sec/2)),
-            ])
+            X = np.concatenate(
+                [
+                    np.linspace(0, 1, num=int(N_sec / 2)),
+                    np.asarray([1]),
+                    np.linspace(1, 0, num=int(N_sec / 2)),
+                ]
+            )
     elif shape == "sigmoid":
-        if (N_sec%2) == 0:
+        if (N_sec % 2) == 0:
             x_1 = np.linspace(-6, 6, num=int(N_sec / 2))
             x_2 = np.linspace(6, -6, num=int(N_sec / 2))
-            X = np.concatenate([
-                (1/(1+np.exp(-x_1))),
-                (1/(1+np.exp(-x_2))),
-            ])
+            X = np.concatenate(
+                [
+                    (1 / (1 + np.exp(-x_1))),
+                    (1 / (1 + np.exp(-x_2))),
+                ]
+            )
         else:
             x_1 = np.linspace(-6, 6, num=int(N_sec / 2))
             x_2 = np.linspace(6, -6, num=int(N_sec / 2))
-            X = np.concatenate([
-                (1 / (1 + np.exp(-x_1))),
-                np.asarray([1]),
-                (1 / (1 + np.exp(-x_2))),
-            ])
+            X = np.concatenate(
+                [
+                    (1 / (1 + np.exp(-x_1))),
+                    np.asarray([1]),
+                    (1 / (1 + np.exp(-x_2))),
+                ]
+            )
     elif shape == "plateau_sigmoid":
         length = int(N_sec * (1.0 - alpha_max) / 2)
         x_1 = np.linspace(-6, 6, num=length)
         x_2 = np.linspace(6, -6, num=length)
-        X = np.concatenate([
-            (1 / (1 + np.exp(-x_1))),
-            np.ones(int(N_sec) - 2 * length),
-            (1 / (1 + np.exp(-x_2))),
-        ])
+        X = np.concatenate(
+            [
+                (1 / (1 + np.exp(-x_1))),
+                np.ones(int(N_sec) - 2 * length),
+                (1 / (1 + np.exp(-x_2))),
+            ]
+        )
     else:
         # pyramid with plateau shape
         length = int(N_sec * (1.0 - alpha_max) / 2)
-        X = np.concatenate([
-            np.linspace(0, 1, num=length),
-            np.ones(N_sec - 2 * length),
-            np.linspace(1, 0, num=length),
-        ])
+        X = np.concatenate(
+            [
+                np.linspace(0, 1, num=length),
+                np.ones(N_sec - 2 * length),
+                np.linspace(1, 0, num=length),
+            ]
+        )
     # applying the shape to the number of sections between the two specified frequencies
     freqs = X * (freq - freq_min) + freq_min
     return freqs
+
 
 def rotate_list(l, n):
     """
@@ -194,7 +207,7 @@ class axon(NRV_class):
 
     WARNING: do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
     """
-    
+
     @abstractmethod
     def __init__(
         self,
@@ -293,17 +306,18 @@ class axon(NRV_class):
             section = None
         super().__del__()
 
-    def save(self,
+    def save(
+        self,
         save=False,
         fname="axon.json",
         extracel_context=False,
         intracel_context=False,
         rec_context=False,
-        blacklist=[]
+        blacklist=[],
     ):
         """
         Return axon as dictionary and eventually save it as json file
-        WARNING to use BEFORE stimulation, (for post simulation savings use 
+        WARNING to use BEFORE stimulation, (for post simulation savings use
         save_axon_results_as_json on results dictionary
 
         Parameters
@@ -346,7 +360,7 @@ class axon(NRV_class):
         # As to be done separatly because mph object cannot be deep copied
         if extracel_context:
             key_dict["extra_stim"] = self.extra_stim.save()
-        
+
         if save:
             json_dump(key_dict, fname)
         return key_dict
@@ -355,7 +369,7 @@ class axon(NRV_class):
         self,
         data,
         extracel_context=False,
-        intracel_context=False, 
+        intracel_context=False,
         rec_context=False,
         blacklist=[],
     ):
@@ -380,10 +394,7 @@ class axon(NRV_class):
                 "intra_voltage_stim_stimulus",
             ]
         if not extracel_context:
-            bc += [
-                "footprints",
-                "extra_stim"
-            ]
+            bc += ["footprints", "extra_stim"]
         if not rec_context:
             bc += [
                 "record",
@@ -399,10 +410,10 @@ class axon(NRV_class):
                 stim_start = self.intra_current_stim_starts[i]
                 duration = self.intra_current_stim_durations[i]
                 amplitude = self.intra_current_stim_amplitudes[i]
-                self.insert_I_Clamp(position/self.L, stim_start, duration, amplitude)
+                self.insert_I_Clamp(position / self.L, stim_start, duration, amplitude)
             if self.intra_voltage_stim_stimulus is not None:
                 position = self.intra_voltage_stim_position[0]
-                self.insert_V_Clamp(position/self.L, self.intra_voltage_stim_stimulus)
+                self.insert_V_Clamp(position / self.L, self.intra_voltage_stim_stimulus)
 
     def save_axon(
         self,
@@ -420,16 +431,16 @@ class axon(NRV_class):
             intracel_context=intracel_context,
             rec_context=rec_context,
         )
-        
+
     def load_axon(
         self,
         data,
         extracel_context=False,
-        intracel_context=False, 
+        intracel_context=False,
         rec_context=False,
     ):
         rise_warning("load_axon is a deprecated method use load")
-        self.save(data, extracel_context, intracel_context,rec_context)
+        self.save(data, extracel_context, intracel_context, rec_context)
 
     def __define_shape(self):
         """
@@ -497,7 +508,7 @@ class axon(NRV_class):
     def change_stimulus_from_elecrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
-        
+
         Input:
         ------
             ID_elec  : int
@@ -510,7 +521,9 @@ class axon(NRV_class):
         self.extra_stim.synchronised_stimuli = []
         self.extra_stim.synchronised = False
 
-    def get_electrodes_footprints_on_axon(self,save_ftp_only=False, filename="electrodes_footprint.ftpt"):
+    def get_electrodes_footprints_on_axon(
+        self, save_ftp_only=False, filename="electrodes_footprint.ftpt"
+    ):
         """
         get electrodes footprints on each axon segment
 
@@ -566,9 +579,9 @@ class axon(NRV_class):
         record_I_mem=False,
         record_I_ions=False,
         record_particles=False,
-        record_g_mem = False,
+        record_g_mem=False,
         record_g_ions=False,
-        loaded_footprints=None
+        loaded_footprints=None,
     ):
         """
         Simulates the axon using neuron framework
@@ -677,7 +690,7 @@ class axon(NRV_class):
                         electrodes_type.append("CUFF")
                     else:
                         if is_LIFE_electrode(electrode):
-                            electrodes_x.append(electrode.x+electrode.length/2)
+                            electrodes_x.append(electrode.x + electrode.length / 2)
                             electrodes_type.append("LIFE")
                         electrodes_y.append(electrode.y)
                         electrodes_z.append(electrode.z)
@@ -741,7 +754,9 @@ class axon(NRV_class):
                         self.get_electrodes_footprints_on_axon()
                 elif loaded_footprints:
                     if self.footprints is None:
-                        rise_warning("no loaded footprints: computation will be done anyway")
+                        rise_warning(
+                            "no loaded footprints: computation will be done anyway"
+                        )
                         self.get_electrodes_footprints_on_axon()
                 elif not loaded_footprints:
                     self.get_electrodes_footprints_on_axon()
@@ -751,7 +766,7 @@ class axon(NRV_class):
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
                 if Delta_T_min < self.dt:
                     ## WARNING: the stimulus is over sampled compared to the neuron dt:
-                    if Delta_T_min/self.dt < 1:             #HERE!! FOr dt test only
+                    if Delta_T_min / self.dt < 1:  # HERE!! FOr dt test only
                         # if the stimulus minimal change time is more than 10% of user specified dt, change it to avoid problem
                         # prints a warning as computation time will increase !
                         new_dt = self.dt / np.ceil(self.dt / Delta_T_min)
@@ -767,33 +782,45 @@ class axon(NRV_class):
                         self.dt = new_dt
                         neuron.h.dt = self.dt
                     else:
-                        rise_warning("Neuron will undersample the stimulus... \
+                        rise_warning(
+                            "Neuron will undersample the stimulus... \
                             this may be unfortunate, consider to undersample your stimuli yourself,\
-                            or chose a smaller dt")
-                        rise_warning("... dt is "+str(Delta_T_min/self.dt)+" times bigger \
-                            than the stimulus minimum time step difference")
+                            or chose a smaller dt"
+                        )
+                        rise_warning(
+                            "... dt is "
+                            + str(Delta_T_min / self.dt)
+                            + " times bigger \
+                            than the stimulus minimum time step difference"
+                        )
                 # loop on stimuli time serie
                 for i in range(1, len(self.extra_stim.global_time_serie)):
                     t_step = min(self.extra_stim.global_time_serie[i], t_sim)
-                    vext = self.extra_stim.compute_vext(i-1)
+                    vext = self.extra_stim.compute_vext(i - 1)
                     self.__set_allseg_vext(vext)
                     neuron.h.continuerun(t_step)
                 # finish simulation if needed
                 if neuron.h.t < t_sim:
-                    vext = self.extra_stim.compute_vext(len(self.extra_stim.global_time_serie)-1)
+                    vext = self.extra_stim.compute_vext(
+                        len(self.extra_stim.global_time_serie) - 1
+                    )
                     self.__set_allseg_vext(vext)
                     neuron.h.continuerun(neuron.h.tstop)
             elif self.intra_voltage_stim is not None:
                 # init if first point is at 0
                 if self.intra_voltage_stim_stimulus.t[0] == 0:
-                    self.intra_voltage_stim.amp[0] = self.intra_voltage_stim_stimulus.s[0]
+                    self.intra_voltage_stim.amp[0] = self.intra_voltage_stim_stimulus.s[
+                        0
+                    ]
                 # run simulation with a loop on the voltage clamp times
                 for i in range(1, len(self.intra_voltage_stim_stimulus.t)):
                     t_step = min(self.intra_voltage_stim_stimulus.t[i], t_sim)
                     # run simulation
                     neuron.h.continuerun(t_step)
                     # apply new voltage clamp value
-                    self.intra_voltage_stim.amp[0] = self.intra_voltage_stim_stimulus.s[i]
+                    self.intra_voltage_stim.amp[0] = self.intra_voltage_stim_stimulus.s[
+                        i
+                    ]
                 # finish simulation if needed
                 if neuron.h.t < t_sim:
                     neuron.h.continuerun(neuron.h.tstop)
@@ -828,17 +855,30 @@ class axon(NRV_class):
                             "g_ions recorder not implemented for "
                             + self.model
                             + " model "
-                        )     
+                        )
                 else:
                     if self.model == "MRG":
-                        g_na_ax, g_nap_ax, g_k_ax, g_l_ax, g_i_ax = self.get_ionic_conductance()
+                        (
+                            g_na_ax,
+                            g_nap_ax,
+                            g_k_ax,
+                            g_l_ax,
+                            g_i_ax,
+                        ) = self.get_ionic_conductance()
                         axon_sim["g_na"] = g_na_ax
                         axon_sim["g_nap"] = g_nap_ax
                         axon_sim["g_k"] = g_k_ax
                         axon_sim["g_l"] = g_l_ax
                         axon_sim["g_i"] = g_i_ax
                     elif self.model in ["Gaines_motor", "Gaines_sensory"]:
-                        g_na_ax, g_nap_ax, g_k_ax, g_kf_ax, g_l_ax, g_q_ax = self.get_ionic_conductance()
+                        (
+                            g_na_ax,
+                            g_nap_ax,
+                            g_k_ax,
+                            g_kf_ax,
+                            g_l_ax,
+                            g_q_ax,
+                        ) = self.get_ionic_conductance()
                         axon_sim["g_na"] = g_na_ax
                         axon_sim["g_nap"] = g_nap_ax
                         axon_sim["g_k"] = g_k_ax
@@ -850,7 +890,7 @@ class axon(NRV_class):
                             "g_ions recorder not implemented for "
                             + self.model
                             + " model "
-                        ) 
+                        )
             if record_I_ions:
                 if not self.myelinated:
                     if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
@@ -871,7 +911,14 @@ class axon(NRV_class):
                         axon_sim["I_k"] = I_k_ax
                         axon_sim["I_l"] = I_l_ax
                     elif self.model in ["Gaines_motor", "Gaines_sensory"]:
-                        I_na_ax, I_nap_ax, I_k_ax, I_kf_ax, I_q_ax, I_l_ax = self.get_ionic_current()
+                        (
+                            I_na_ax,
+                            I_nap_ax,
+                            I_k_ax,
+                            I_kf_ax,
+                            I_q_ax,
+                            I_l_ax,
+                        ) = self.get_ionic_current()
                         axon_sim["I_na"] = I_na_ax
                         axon_sim["I_nap"] = I_nap_ax
                         axon_sim["I_k"] = I_k_ax
@@ -879,13 +926,19 @@ class axon(NRV_class):
                         axon_sim["I_q"] = I_q_ax
                         axon_sim["I_l"] = I_l_ax
                     elif self.model in ["Extended_Gaines"]:
-                        I_na_ax, I_nap_ax, I_k_ax, I_kf_ax,I_l_ax = self.get_ionic_current()
+                        (
+                            I_na_ax,
+                            I_nap_ax,
+                            I_k_ax,
+                            I_kf_ax,
+                            I_l_ax,
+                        ) = self.get_ionic_current()
                         axon_sim["I_na"] = I_na_ax
                         axon_sim["I_nap"] = I_nap_ax
                         axon_sim["I_k"] = I_k_ax
                         axon_sim["I_kf"] = I_kf_ax
                         axon_sim["I_l"] = I_l_ax
-                    else: # should be RGK
+                    else:  # should be RGK
                         I_na_ax, I_k_ax, I_l_ax = self.get_ionic_current()
                         axon_sim["I_na"] = I_na_ax
                         axon_sim["I_k"] = I_k_ax
@@ -898,8 +951,26 @@ class axon(NRV_class):
                         axon_sim["n"] = n_ax
                         axon_sim["h"] = h_ax
                     elif self.model in ["Tigerholm"]:
-                        m_nav18_ax, h_nav18_ax, s_nav18_ax, u_nav18_ax, m_nav19_ax, h_nav19_ax, \
-                            s_nav19_ax, m_nattxs_ax, h_nattxs_ax, s_nattxs_ax, n_kdr_ax, m_kf_ax, h_kf_ax, ns_ks_ax, nf_ks_ax, w_kna_ax, ns_h_ax, nf_h_ax = self.get_particles_values()
+                        (
+                            m_nav18_ax,
+                            h_nav18_ax,
+                            s_nav18_ax,
+                            u_nav18_ax,
+                            m_nav19_ax,
+                            h_nav19_ax,
+                            s_nav19_ax,
+                            m_nattxs_ax,
+                            h_nattxs_ax,
+                            s_nattxs_ax,
+                            n_kdr_ax,
+                            m_kf_ax,
+                            h_kf_ax,
+                            ns_ks_ax,
+                            nf_ks_ax,
+                            w_kna_ax,
+                            ns_h_ax,
+                            nf_h_ax,
+                        ) = self.get_particles_values()
                         axon_sim["m_nav18"] = m_nav18_ax
                         axon_sim["h_nav18"] = h_nav18_ax
                         axon_sim["s_nav18"] = s_nav18_ax
@@ -919,9 +990,24 @@ class axon(NRV_class):
                         axon_sim["ns_h"] = ns_h_ax
                         axon_sim["nf_h"] = nf_h_ax
                     elif self.model in ["Schild_94"]:
-                        d_can_ax, f1_can_ax, f2_can_ax, d_cat_ax, f_cat_ax, p_ka_ax, q_ka_ax,\
-                            c_kca_ax, n_kd_ax, x_kds_ax, y1_kds_ax, m_naf_ax, h_naf_ax, l_naf_ax,\
-                            m_nas_ax, h_nas_ax = self.get_particles_values()
+                        (
+                            d_can_ax,
+                            f1_can_ax,
+                            f2_can_ax,
+                            d_cat_ax,
+                            f_cat_ax,
+                            p_ka_ax,
+                            q_ka_ax,
+                            c_kca_ax,
+                            n_kd_ax,
+                            x_kds_ax,
+                            y1_kds_ax,
+                            m_naf_ax,
+                            h_naf_ax,
+                            l_naf_ax,
+                            m_nas_ax,
+                            h_nas_ax,
+                        ) = self.get_particles_values()
                         axon_sim["d_can"] = d_can_ax
                         axon_sim["f1_can"] = f1_can_ax
                         axon_sim["f2_can"] = f2_can_ax
@@ -938,10 +1024,24 @@ class axon(NRV_class):
                         axon_sim["l_naf"] = l_naf_ax
                         axon_sim["m_nas"] = m_nas_ax
                         axon_sim["h_nas"] = h_nas_ax
-                    else: #should be "Schild_97"
-                        d_can_ax, f1_can_ax, f2_can_ax, d_cat_ax, f_cat_ax, p_ka_ax, q_ka_ax, \
-                            c_kca_ax, n_kd_ax, x_kds_ax, y1_kds_ax, m_naf_ax, h_naf_ax, m_nas_ax,\
-                            h_nas_ax = self.get_particles_values()
+                    else:  # should be "Schild_97"
+                        (
+                            d_can_ax,
+                            f1_can_ax,
+                            f2_can_ax,
+                            d_cat_ax,
+                            f_cat_ax,
+                            p_ka_ax,
+                            q_ka_ax,
+                            c_kca_ax,
+                            n_kd_ax,
+                            x_kds_ax,
+                            y1_kds_ax,
+                            m_naf_ax,
+                            h_naf_ax,
+                            m_nas_ax,
+                            h_nas_ax,
+                        ) = self.get_particles_values()
                         axon_sim["d_can"] = d_can_ax
                         axon_sim["f1_can"] = f1_can_ax
                         axon_sim["f2_can"] = f2_can_ax
@@ -965,7 +1065,14 @@ class axon(NRV_class):
                         axon_sim["h"] = h_ax
                         axon_sim["s"] = s_ax
                     elif self.model in ["Gaines_motor", "Gaines_sensory"]:
-                        m_ax, mp_ax, h_ax, s_ax, n_ax, q_ax = self.get_particles_values()
+                        (
+                            m_ax,
+                            mp_ax,
+                            h_ax,
+                            s_ax,
+                            n_ax,
+                            q_ax,
+                        ) = self.get_particles_values()
                         axon_sim["m"] = m_ax
                         axon_sim["mp"] = mp_ax
                         axon_sim["h"] = h_ax
@@ -979,9 +1086,16 @@ class axon(NRV_class):
                         axon_sim["s"] = s_ax
                         axon_sim["h"] = h_ax
                         axon_sim["n"] = n_ax
-                    else: # Should be RGK
-                        RGK_m_nav1p9_ax, RGK_h_nav1p9_ax, RGK_s_nav1p9_ax, RGK_m_nax_ax, \
-                            RGK_h_nax_ax, RGK_ns_ks_ax, RGK_nf_ks_ax = self.get_particles_values()
+                    else:  # Should be RGK
+                        (
+                            RGK_m_nav1p9_ax,
+                            RGK_h_nav1p9_ax,
+                            RGK_s_nav1p9_ax,
+                            RGK_m_nax_ax,
+                            RGK_h_nax_ax,
+                            RGK_ns_ks_ax,
+                            RGK_nf_ks_ax,
+                        ) = self.get_particles_values()
                         axon_sim["m_nav19"] = RGK_m_nav1p9_ax
                         axon_sim["h_nav19"] = RGK_h_nav1p9_ax
                         axon_sim["s_nav19"] = RGK_s_nav1p9_ax
@@ -990,8 +1104,22 @@ class axon(NRV_class):
                         axon_sim["ns_ks"] = RGK_ns_ks_ax
                         axon_sim["nf_ks"] = RGK_nf_ks_ax
                 if hasattr(self, "Markov_Nav_modeled_NoR"):
-                    I_nav11_ax, C1_nav11_ax, C2_nav11_ax, O1_nav11_ax, O2_nav11_ax, I1_nav11_ax,\
-                        I2_nav11_ax, I_nav16_ax, C1_nav16_ax, C2_nav16_ax, O1_nav16_ax, O2_nav16_ax, I1_nav16_ax, I2_nav16_ax = self.get_Nav_values()
+                    (
+                        I_nav11_ax,
+                        C1_nav11_ax,
+                        C2_nav11_ax,
+                        O1_nav11_ax,
+                        O2_nav11_ax,
+                        I1_nav11_ax,
+                        I2_nav11_ax,
+                        I_nav16_ax,
+                        C1_nav16_ax,
+                        C2_nav16_ax,
+                        O1_nav16_ax,
+                        O2_nav16_ax,
+                        I1_nav16_ax,
+                        I2_nav16_ax,
+                    ) = self.get_Nav_values()
                     axon_sim["I_Nav11"] = I_nav11_ax
                     axon_sim["C1_nav11"] = C1_nav11_ax
                     axon_sim["C2_nav11"] = C2_nav11_ax
@@ -1011,11 +1139,25 @@ class axon(NRV_class):
                 # init the potential, if already done by another axon nothing should be performed
                 self.recorder.init_recordings(len(axon_sim["t"]))
                 # compute footprints
-                if self.myelinated==True:
-                    self.recorder.compute_footprints(axon_sim["x_nodes"], self.y, self.z, self.d, self.ID,self.myelinated)
+                if self.myelinated == True:
+                    self.recorder.compute_footprints(
+                        axon_sim["x_nodes"],
+                        self.y,
+                        self.z,
+                        self.d,
+                        self.ID,
+                        self.myelinated,
+                    )
                     # compute extra-cellular potential and add it to already computed ones
                 else:
-                    self.recorder.compute_footprints(axon_sim["x_rec"], self.y, self.z, self.d, self.ID,self.myelinated)
+                    self.recorder.compute_footprints(
+                        axon_sim["x_rec"],
+                        self.y,
+                        self.z,
+                        self.d,
+                        self.ID,
+                        self.myelinated,
+                    )
                     # compute extra-cellular potential and add it to already computed ones
                 self.recorder.set_time(axon_sim["t"])
                 self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
@@ -1057,11 +1199,12 @@ class axon(NRV_class):
         self.t_len = len(t)
         return t
 
+
 class axon_test(axon):
     """
     TO DO
     """
-    
+
     def __init__(
         self,
         y,

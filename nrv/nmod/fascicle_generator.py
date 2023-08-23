@@ -14,11 +14,16 @@ from scipy import spatial
 import matplotlib.pyplot as plt
 import numba
 
-from ..backend.log_interface import rise_error, rise_warning, pass_info, progression_popup
+from ..backend.log_interface import (
+    rise_error,
+    rise_warning,
+    pass_info,
+    progression_popup,
+)
 
 # WARNING:
 # no prompt message for numpy division by zeros: handled in the code !!!
-np.seterr(divide='ignore', invalid='ignore')
+np.seterr(divide="ignore", invalid="ignore")
 
 # verbosity level
 fg_verbose = True
@@ -27,15 +32,29 @@ fg_verbose = True
 faulthandler.enable()
 
 # get the built-in material librairy
-dir_path = os.environ['NRVPATH'] + '/_misc'
-stat_library = os.listdir(dir_path+'/stats/')
+dir_path = os.environ["NRVPATH"] + "/_misc"
+stat_library = os.listdir(dir_path + "/stats/")
 
 #################################################
 ## Nerve composition statistics and generators ##
 #################################################
-myelinated_stats = ['Schellens_1', 'Schellens_2', 'Ochoa_M', 'Jacobs_9_A', 'Jacobs_9_B',\
-    'Jacobs_9_C', 'Jacobs_9_D']
-unmyelinated_stats = ['Ochoa_U', 'Jacobs_11_A', 'Jacobs_11_B', 'Jacobs_11_C', 'Jacobs_11_D']
+myelinated_stats = [
+    "Schellens_1",
+    "Schellens_2",
+    "Ochoa_M",
+    "Jacobs_9_A",
+    "Jacobs_9_B",
+    "Jacobs_9_C",
+    "Jacobs_9_D",
+]
+unmyelinated_stats = [
+    "Ochoa_U",
+    "Jacobs_11_A",
+    "Jacobs_11_B",
+    "Jacobs_11_C",
+    "Jacobs_11_D",
+]
+
 
 def load_stat(stat_name):
     """
@@ -53,14 +72,15 @@ def load_stat(stat_name):
     presence    : list
         quantities of presence of each bin in the histogram
     """
-    f_in_librairy = str(stat_name)+'.csv'
+    f_in_librairy = str(stat_name) + ".csv"
     if f_in_librairy in stat_library:
-        stat_file = np.genfromtxt(dir_path+'/stats/'+f_in_librairy, delimiter=',')
+        stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
     else:
-        stat_file = np.genfromtxt(dir_path+'/stats/'+f_in_librairy, delimiter=',')
+        stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
     diameters = stat_file[:, 0]
     presence = stat_file[:, 1]
     return diameters, presence
+
 
 def one_Gamma(x, a1, beta1, c1):
     """
@@ -81,7 +101,8 @@ def one_Gamma(x, a1, beta1, c1):
     ----
     location of the gamma pdf function is fixed to 0.2, diameters will be interpolated above this minimal value.
     """
-    return c1*(stats.gamma.pdf(x, a1, scale=1/beta1, loc=0.2))
+    return c1 * (stats.gamma.pdf(x, a1, scale=1 / beta1, loc=0.2))
+
 
 def two_Gamma(x, a1, beta1, c1, a2, beta2, c2, transition):
     """
@@ -110,13 +131,16 @@ def two_Gamma(x, a1, beta1, c1, a2, beta2, c2, transition):
     ----
     location of the gamma pdf first function is fixed to 2, diameters will be interpolated above this minimal value. This corresponds to the minimal A-delta diamter tolerated value.
     """
-    return c1*(stats.gamma.pdf(x, a1, scale=1/beta1, loc=2)) + c2*(stats.gamma.pdf(x, a2, \
-        scale=1/beta2, loc=transition))
+    return c1 * (stats.gamma.pdf(x, a1, scale=1 / beta1, loc=2)) + c2 * (
+        stats.gamma.pdf(x, a2, scale=1 / beta2, loc=transition)
+    )
+
 
 class nerve_gen_one_gamma(rv_continuous):
     """
     Class to create specific repartition law generator for unmyelinated axons. Inherits from scipy rv_continuous class. Some methods are overwritten
     """
+
     def set_bounds(self, v_min, v_max):
         """
         Set bounds to the generator.
@@ -153,12 +177,14 @@ class nerve_gen_one_gamma(rv_continuous):
         """
         overwritting the pdf to custom law, same definition as one_Gamma described upper.
         """
-        return self.c1*(stats.gamma.pdf(x, self.a1, scale=1/self.beta1, loc=0.2))
+        return self.c1 * (stats.gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=0.2))
+
 
 class nerve_gen_two_gamma(rv_continuous):
     """
     Class to create specific repartition law generator for myelinated axons. Inherits from scipy rv_continuous class. Some methods are overwritten
     """
+
     def set_bounds(self, v_min, v_max):
         """
         Set bounds to the generator.
@@ -207,8 +233,12 @@ class nerve_gen_two_gamma(rv_continuous):
         """
         overwritting the pdf to custom law, same definition as two_Gamma described upper.
         """
-        return self.c1*(stats.gamma.pdf(x, self.a1, scale=1/self.beta1, loc=2)) +\
-            self.c2*(stats.gamma.pdf(x, self.a2, scale=1/self.beta2, loc=self.transition))
+        return self.c1 * (
+            stats.gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=2)
+        ) + self.c2 * (
+            stats.gamma.pdf(x, self.a2, scale=1 / self.beta2, loc=self.transition)
+        )
+
 
 def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
     """
@@ -245,21 +275,34 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
     if myelinated:
-        popt1, pcov1 = curve_fit(two_Gamma, xdata=diameters, ydata=presence, \
-            bounds=([1, 0, 0, 1, 0, 0, 2], [np.inf, 15, np.inf, np.inf, 15, np.inf, 14]))
+        popt1, pcov1 = curve_fit(
+            two_Gamma,
+            xdata=diameters,
+            ydata=presence,
+            bounds=(
+                [1, 0, 0, 1, 0, 0, 2],
+                [np.inf, 15, np.inf, np.inf, 15, np.inf, 14],
+            ),
+        )
         generator = nerve_gen_two_gamma()
         generator.set_bounds(dmin, dmax)
         generator.configure(*popt1)
     else:
-        popt1, pcov1 = curve_fit(one_Gamma, xdata=diameters, ydata=presence, \
-            bounds=([1, 0, 0], [np.inf, 10, np.inf]))
+        popt1, pcov1 = curve_fit(
+            one_Gamma,
+            xdata=diameters,
+            ydata=presence,
+            bounds=([1, 0, 0], [np.inf, 10, np.inf]),
+        )
         generator = nerve_gen_one_gamma()
         generator.set_bounds(dmin, dmax)
         generator.configure(*popt1)
     return generator, popt1, pcov1
 
 
-def create_axon_population(N, percent_unmyel=0.7, M_stat='Schellens_1', U_stat='Ochoa_U'):
+def create_axon_population(
+    N, percent_unmyel=0.7, M_stat="Schellens_1", U_stat="Ochoa_U"
+):
     """
     Create a virtual population of axons (no Neuron implementation, axon class not called) of a controled number, with controlled statistics.
 
@@ -289,17 +332,24 @@ def create_axon_population(N, percent_unmyel=0.7, M_stat='Schellens_1', U_stat='
     M_gen, M_popt, M_pcov = create_generator_from_stat(M_stat)
     U_gen, U_popt, U_pcov = create_generator_from_stat(U_stat)
     # number of myelinated and unmyelinated axons to create
-    U = int(N*percent_unmyel)
+    U = int(N * percent_unmyel)
     M = N - U
-    pass_info('On '+str(N)+' axons to generate, there are '+str(M)+' Myelinated and '+\
-        str(U)+' Unmyelinated')
+    pass_info(
+        "On "
+        + str(N)
+        + " axons to generate, there are "
+        + str(M)
+        + " Myelinated and "
+        + str(U)
+        + " Unmyelinated"
+    )
     # generate the myelinated axons
-    pass_info('... generating the myelinated axons diameters, this may take a while')
-    #M_diam_list = M_gen.rvs(1,size = M)
+    pass_info("... generating the myelinated axons diameters, this may take a while")
+    # M_diam_list = M_gen.rvs(1,size = M)
     M_diam_list = []
-    max_diam_value = M_gen.b - 0.01*(M_gen.b - M_gen.a)
+    max_diam_value = M_gen.b - 0.01 * (M_gen.b - M_gen.a)
     for k in range(M):
-        progression_popup(k, M, begin_message='\t axon ', endl="\r")
+        progression_popup(k, M, begin_message="\t axon ", endl="\r")
         prov_diam = M_gen.rvs(1, size=1)[0]
         while prov_diam > max_diam_value:
             # definitely non ideal, but rv_continuous has a tendency of generating diameters
@@ -308,18 +358,18 @@ def create_axon_population(N, percent_unmyel=0.7, M_stat='Schellens_1', U_stat='
         M_diam_list.append(prov_diam)
     M_type = np.ones(M)
     # generate the unmyelinated axons
-    pass_info('... generating the unmyelinated axons diameters, this may take a while')
+    pass_info("... generating the unmyelinated axons diameters, this may take a while")
     U_diam_list = []
-    max_diam_value = U_gen.b - 0.01*(U_gen.b - U_gen.a)
+    max_diam_value = U_gen.b - 0.01 * (U_gen.b - U_gen.a)
     for k in range(U):
-        print('\t axon ' + f"{k+1}" + '/' + str(U), end="\r")
+        print("\t axon " + f"{k+1}" + "/" + str(U), end="\r")
         prov_diam = U_gen.rvs(1, size=1)[0]
-        while prov_diam > max_diam_value:               # same as for myelinated...
+        while prov_diam > max_diam_value:  # same as for myelinated...
             prov_diam = U_gen.rvs(1, size=1)[0]
         U_diam_list.append(prov_diam)
     U_type = np.zeros(U)
     # final shuffle between unmyelinated and myelinated
-    pass_info('... performing a shuffle on myelinated and unmyelinated axons')
+    pass_info("... performing a shuffle on myelinated and unmyelinated axons")
     shuffle_mask = np.random.permutation(N)
     axons_diameters = np.concatenate((M_diam_list, U_diam_list))
     axons_type = np.concatenate((M_type, U_type))
@@ -327,7 +377,10 @@ def create_axon_population(N, percent_unmyel=0.7, M_stat='Schellens_1', U_stat='
     axons_type = axons_type[shuffle_mask]
     return axons_diameters, axons_type, M_diam_list, U_diam_list
 
-def fill_area_with_axons(A, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1', U_stat='Ochoa_U'):
+
+def fill_area_with_axons(
+    A, percent_unmyel=0.7, FVF=0.55, M_stat="Schellens_1", U_stat="Ochoa_U"
+):
     """
     Create a virtual population of axons (no Neuron implementation, axon class not called) to fill a specified area, with controlled statistics.
 
@@ -358,10 +411,10 @@ def fill_area_with_axons(A, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1', 
     # create generators
     M_gen, M_popt, M_pcov = create_generator_from_stat(M_stat)
     M_diam_list = []
-    M_max_diam_value = M_gen.b - 0.01*(M_gen.b - M_gen.a)
+    M_max_diam_value = M_gen.b - 0.01 * (M_gen.b - M_gen.a)
     U_gen, U_popt, U_pcov = create_generator_from_stat(U_stat)
     U_diam_list = []
-    U_max_diam_value = U_gen.b - 0.01*(U_gen.b - U_gen.a)
+    U_max_diam_value = U_gen.b - 0.01 * (U_gen.b - U_gen.a)
     # area
     A_ax = 0
     A_total = 0
@@ -371,8 +424,10 @@ def fill_area_with_axons(A, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1', 
     # loop
     while A_total < A:
         filled = A_total / A
-        progression_popup(round(filled*100), 100, begin_message='\t Area filled at ', endl="\r")
-        #print('\t Area filled at ' + f"{round(filled*100)}" + ' percent', end="\r")
+        progression_popup(
+            round(filled * 100), 100, begin_message="\t Area filled at ", endl="\r"
+        )
+        # print('\t Area filled at ' + f"{round(filled*100)}" + ' percent', end="\r")
         U_or_M = np.random.uniform(0, 1)
         if U_or_M < percent_unmyel:
             # generate a unmyelinated axon
@@ -380,13 +435,13 @@ def fill_area_with_axons(A, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1', 
             while prov_diam > U_max_diam_value:
                 prov_diam = U_gen.rvs(1, size=1)[0]
             U_diam_list.append(prov_diam)
-            A_ax += np.power(U_diam_list[-1]/2, 2)*np.pi
+            A_ax += np.power(U_diam_list[-1] / 2, 2) * np.pi
         else:
             prov_diam = M_gen.rvs(1, size=1)[0]
             while prov_diam > M_max_diam_value:
                 prov_diam = M_gen.rvs(1, size=1)[0]
             M_diam_list.append(prov_diam)
-            A_ax += np.power(M_diam_list[-1]/2, 2)*np.pi
+            A_ax += np.power(M_diam_list[-1] / 2, 2) * np.pi
         A_total = A_ax / FVF
     # concatenate and shuffle
     M = len(M_diam_list)
@@ -400,6 +455,7 @@ def fill_area_with_axons(A, percent_unmyel=0.7, FVF=0.55, M_stat='Schellens_1', 
     axons_diameters = axons_diameters[shuffle_mask]
     axons_type = axons_type[shuffle_mask]
     return axons_diameters, axons_type, M_diam_list, U_diam_list
+
 
 def shuffle_population(axons_diameters, axons_type):
     """
@@ -424,6 +480,7 @@ def shuffle_population(axons_diameters, axons_type):
     axons_type = axons_type[shuffle_mask]
     return axons_diameters, axons_type
 
+
 def save_axon_population(f_name, axons_diameters, axons_type, comment=None):
     """
     Save an axonal population to a file
@@ -439,14 +496,15 @@ def save_axon_population(f_name, axons_diameters, axons_type, comment=None):
     comment         : str
         comment added in the header of the file, optional
     """
-    f = open(f_name, 'w')
+    f = open(f_name, "w")
     if comment is not None:
-        line = '# ' + comment
+        line = "# " + comment
         f.write(line)
     for k in range(len(axons_diameters)):
-        line = str(axons_diameters[k]) + ', ' + str(axons_type[k]) + '\n'
+        line = str(axons_diameters[k]) + ", " + str(axons_type[k]) + "\n"
         f.write(line)
     f.close()
+
 
 def load_axon_population(f_name):
     """
@@ -468,7 +526,7 @@ def load_axon_population(f_name):
     U_diam_list         : np.array
         list of unmyelinated only diamters
     """
-    population_file = np.genfromtxt(f_name, delimiter=',', comments='#')
+    population_file = np.genfromtxt(f_name, delimiter=",", comments="#")
     axons_diameters = population_file[:, 0]
     axons_type = population_file[:, 1]
     ind_myel = np.argwhere(axons_type == 1)
@@ -477,11 +535,23 @@ def load_axon_population(f_name):
     U_diam_list = axons_diameters[ind_unmyel]
     return axons_diameters, axons_type, M_diam_list, U_diam_list
 
+
 #############################################
 #############################################
 #############################################
-def axon_packer(diameters, Delta=0, y_gc=0, z_gc=0, max_iter=20000, probe=100, monitor=False,\
-    monitoring_Folder='', monitoring_Niter=100, v_att=0.01, v_rep=0.1):
+def axon_packer(
+    diameters,
+    Delta=0,
+    y_gc=0,
+    z_gc=0,
+    max_iter=20000,
+    probe=100,
+    monitor=False,
+    monitoring_Folder="",
+    monitoring_Niter=100,
+    v_att=0.01,
+    v_rep=0.1,
+):
     """
     Axon Packing algorithm: this operation takes a vector of diameter (random population) and places it at best. The used algorithm is largely based on [1]
 
@@ -536,11 +606,15 @@ def axon_packer(diameters, Delta=0, y_gc=0, z_gc=0, max_iter=20000, probe=100, m
     ## INIT ##
     ##########
     ### create an initial square grid with the population of axons
-    N_init = int(math.ceil(np.sqrt(N))**2)
+    N_init = int(math.ceil(np.sqrt(N)) ** 2)
     N_side = int(np.sqrt(N_init))
-    size_init = np.sqrt(N_init*(max_diam+Delta)**2)
-    placement_vector = np.linspace(-((size_init/2) - (size_init/(2*N_side))), ((size_init/2) -\
-        (size_init/(2*N_side))), num=N_side, endpoint=True)
+    size_init = np.sqrt(N_init * (max_diam + Delta) ** 2)
+    placement_vector = np.linspace(
+        -((size_init / 2) - (size_init / (2 * N_side))),
+        ((size_init / 2) - (size_init / (2 * N_side))),
+        num=N_side,
+        endpoint=True,
+    )
     y_axons = np.tile(placement_vector, N_side) + y_gc
     z_axons = np.repeat(placement_vector, N_side) + z_gc
     ### remove unwanted places
@@ -549,33 +623,37 @@ def axon_packer(diameters, Delta=0, y_gc=0, z_gc=0, max_iter=20000, probe=100, m
     y_axons = np.delete(y_axons, ind_to_delete)
     z_axons = np.delete(z_axons, ind_to_delete)
     ### compute total total fiber surface and evaluate surface for FVF computation
-    ax_areas = np.power(diameters/2, 2)*np.pi
+    ax_areas = np.power(diameters / 2, 2) * np.pi
     A_axons = np.sum(ax_areas)
-    size_monitor_square = np.sqrt(A_axons*1.4)
-    monitor_area = A_axons*1.4
+    size_monitor_square = np.sqrt(A_axons * 1.4)
+    monitor_area = A_axons * 1.4
     FVF = []
     probed_iter = []
     if fg_verbose:
-        pass_info('Axon Packer: initial grid computed...')
+        pass_info("Axon Packer: initial grid computed...")
     if monitor:
-        plot_situation(diameters, y_axons, z_axons, size_init, title='Init', y_gc=y_gc, z_gc=z_gc)
-        f_name = monitoring_Folder + 'Packer_0.png'
+        plot_situation(
+            diameters, y_axons, z_axons, size_init, title="Init", y_gc=y_gc, z_gc=z_gc
+        )
+        f_name = monitoring_Folder + "Packer_0.png"
         plt.savefig(f_name)
         plt.close()
     ################
     ## ITERATIONS ##
     ################
     if fg_verbose:
-        pass_info('Axon Packer: Begining iterations')
+        pass_info("Axon Packer: Begining iterations")
     iteration = 0
     while iteration < max_iter:
         iteration += 1
         if fg_verbose:
-            progression_popup(iteration-1, max_iter, begin_message='\t iteration ', endl="\r")
-            #print('\t iteration ' + f"{iteration}" + '/' + str(max_iter), end="\r")
+            progression_popup(
+                iteration - 1, max_iter, begin_message="\t iteration ", endl="\r"
+            )
+            # print('\t iteration ' + f"{iteration}" + '/' + str(max_iter), end="\r")
         # compute P matrix
         P = compute_P_matrix(diameters, y_axons, z_axons, Delta, N)
-        #P = compute_P_fast(diameters, y_axons, z_axons, Delta)
+        # P = compute_P_fast(diameters, y_axons, z_axons, Delta)
         # check overlap
         colapse = np.argwhere(P < 0)
         all_colapsed_ind = np.unique(colapse)
@@ -584,58 +662,79 @@ def axon_packer(diameters, Delta=0, y_gc=0, z_gc=0, max_iter=20000, probe=100, m
         #### prevent from division by 0 in the upper line
         np.nan_to_num(v_y, copy=False, nan=0.0)
         np.nan_to_num(v_z, copy=False, nan=0.0)
-        v_y[all_colapsed_ind] = 0                   # neutralize velocity where should be repulsion
-        v_z[all_colapsed_ind] = 0                   # same
+        v_y[all_colapsed_ind] = 0  # neutralize velocity where should be repulsion
+        v_z[all_colapsed_ind] = 0  # same
         # compute velocities for colapsing cases
-        v_y, v_z = handle_collisions(y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_rep)
+        v_y, v_z = handle_collisions(
+            y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_rep
+        )
         # compute new positions
         y_axons, z_axons = update_positions(y_axons, z_axons, v_y, v_z)
         # compute FVF
-        if iteration%probe == 0:
+        if iteration % probe == 0:
             # removing axons too much to the left
-            ax_left_pts = y_axons - diameters/2
-            FVF_mask = np.argwhere(ax_left_pts > (-size_monitor_square/2 + y_gc))
+            ax_left_pts = y_axons - diameters / 2
+            FVF_mask = np.argwhere(ax_left_pts > (-size_monitor_square / 2 + y_gc))
             # removing axons too much to the right
-            ax_right_pts = y_axons + diameters/2
-            FVF_mask = np.intersect1d(FVF_mask, np.argwhere(ax_right_pts < \
-                (size_monitor_square/2 + y_gc)))
+            ax_right_pts = y_axons + diameters / 2
+            FVF_mask = np.intersect1d(
+                FVF_mask, np.argwhere(ax_right_pts < (size_monitor_square / 2 + y_gc))
+            )
             # removing the axons that are too high
-            ax_up_pts = z_axons + diameters/2
-            FVF_mask = np.intersect1d(FVF_mask, np.argwhere(ax_up_pts < \
-                (size_monitor_square/2 + z_gc)))
+            ax_up_pts = z_axons + diameters / 2
+            FVF_mask = np.intersect1d(
+                FVF_mask, np.argwhere(ax_up_pts < (size_monitor_square / 2 + z_gc))
+            )
             # removing the axons that are too low
-            ax_down_pts = z_axons - diameters/2
-            FVF_mask = np.intersect1d(FVF_mask, np.argwhere(ax_down_pts > \
-                (-size_monitor_square/2 + z_gc)))
-            FVF.append(np.sum(ax_areas[FVF_mask])/monitor_area)
+            ax_down_pts = z_axons - diameters / 2
+            FVF_mask = np.intersect1d(
+                FVF_mask, np.argwhere(ax_down_pts > (-size_monitor_square / 2 + z_gc))
+            )
+            FVF.append(np.sum(ax_areas[FVF_mask]) / monitor_area)
             probed_iter.append(iteration)
         # monitoring
-        if ((iteration) % monitoring_Niter == 0 and monitor):
-            plot_situation(diameters, y_axons, z_axons, size_init, \
-                title=str(iteration)+' Iterations', y_gc=y_gc, z_gc=z_gc)
-            f_name = monitoring_Folder + 'Packer_' + str(iteration) + '.png'
+        if (iteration) % monitoring_Niter == 0 and monitor:
+            plot_situation(
+                diameters,
+                y_axons,
+                z_axons,
+                size_init,
+                title=str(iteration) + " Iterations",
+                y_gc=y_gc,
+                z_gc=z_gc,
+            )
+            f_name = monitoring_Folder + "Packer_" + str(iteration) + ".png"
             plt.savefig(f_name)
             plt.close()
-    pass_info('Axon Packer: Iterations done')
+    pass_info("Axon Packer: Iterations done")
     if monitor:
-        plot_situation(diameters, y_axons, z_axons, size_init, \
-            title=str(iteration)+' Iterations', y_gc=y_gc, z_gc=z_gc)
-        f_name = monitoring_Folder + 'Packer_final.png'
+        plot_situation(
+            diameters,
+            y_axons,
+            z_axons,
+            size_init,
+            title=str(iteration) + " Iterations",
+            y_gc=y_gc,
+            z_gc=z_gc,
+        )
+        f_name = monitoring_Folder + "Packer_final.png"
         plt.savefig(f_name)
         plt.close()
     return y_axons, z_axons, iteration, np.asarray(FVF), np.asarray(probed_iter)
+
 
 @numba.jit(fastmath=True, cache=True)
 def compute_attraction_velocities(y_axons, z_axons, y_gc, z_gc, N, v_att):
     """
     Computes attraction velocity for axon packing. Just in time compiled to speed up. For internal use only.
     """
-    dy = np.ones(N)* y_gc - y_axons
-    dz = np.ones(N)* z_gc - z_axons
-    dist = np.sqrt((y_axons - y_gc)**2 + (z_axons - z_gc)**2)
-    v_y = v_att * dy/dist
-    v_z = v_att * dz/dist   # same
+    dy = np.ones(N) * y_gc - y_axons
+    dz = np.ones(N) * z_gc - z_axons
+    dist = np.sqrt((y_axons - y_gc) ** 2 + (z_axons - z_gc) ** 2)
+    v_y = v_att * dy / dist
+    v_z = v_att * dz / dist  # same
     return v_y, v_z
+
 
 @numba.njit(fastmath=True, cache=True)
 def compute_P_matrix(diameters, y_axons, z_axons, Delta, N):
@@ -644,13 +743,15 @@ def compute_P_matrix(diameters, y_axons, z_axons, Delta, N):
     """
     P = np.zeros((N, N))
     for i in range(N):
-        for j in range(i+1, N):
-            #P[i, j] = np.sqrt((y_axons[i] - y_axons[j])**2 + (z_axons[i] - z_axons[j])**2) -\
+        for j in range(i + 1, N):
+            # P[i, j] = np.sqrt((y_axons[i] - y_axons[j])**2 + (z_axons[i] - z_axons[j])**2) -\
             # ((diameters[i] + diameters[j])/2 + Delta)
             # not hmogeneous to a distance, but work the same at the end and one square root less to compute...
-            P[i, j] = ((y_axons[i] - y_axons[j])**2 + (z_axons[i] - z_axons[j])**2) -\
-                ((diameters[i] + diameters[j])/2 + Delta)**2
+            P[i, j] = (
+                (y_axons[i] - y_axons[j]) ** 2 + (z_axons[i] - z_axons[j]) ** 2
+            ) - ((diameters[i] + diameters[j]) / 2 + Delta) ** 2
     return P
+
 
 def compute_P_fast(diameters, y_axons, z_axons, Delta):
     """
@@ -659,11 +760,13 @@ def compute_P_fast(diameters, y_axons, z_axons, Delta):
     points = np.column_stack((y_axons, z_axons))
     N = len(diameters)
     diams = np.tile(diameters, (N, 1))
-    #diams = diameters.repeat(N).reshape((-1, N))
-    P = spatial.distance.cdist(points, points, 'euclidean') - ((diams + np.transpose(diams))*(1/2)\
-        + np.ones((N, N))*Delta)
+    # diams = diameters.repeat(N).reshape((-1, N))
+    P = spatial.distance.cdist(points, points, "euclidean") - (
+        (diams + np.transpose(diams)) * (1 / 2) + np.ones((N, N)) * Delta
+    )
     np.fill_diagonal(P, 0)
     return np.triu(P)
+
 
 @numba.njit(fastmath=True, cache=True)
 def handle_collisions(y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_rep):
@@ -688,12 +791,14 @@ def handle_collisions(y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_r
         v_z[k] = v_rep * (sum_z / (np.sqrt(sum_y**2 + sum_z**2)))
     return v_y, v_z
 
+
 @numba.njit(fastmath=True, cache=True)
 def update_positions(y_axons, z_axons, v_y, v_z):
     """
     Compute new positions considering velicities for axon packing. Just in time compiled to speed up. For internal use only.
     """
     return y_axons + v_y, z_axons + v_z
+
 
 def delete_collisions(axons_diameters, axons_type, y_axons, z_axons, Delta=0):
     """
@@ -726,14 +831,16 @@ def delete_collisions(axons_diameters, axons_type, y_axons, z_axons, Delta=0):
     N = len(axons_diameters)
     P = compute_P_matrix(axons_diameters, y_axons, z_axons, Delta, N)
     colapse = np.argwhere(P < 0)
-    flag_Collision = (colapse.size != 0)
+    flag_Collision = colapse.size != 0
 
     while flag_Collision:
         # checking which axons to delete
         ind_to_delete = []
         handled_collisions = []
         for collision in colapse:
-            if (collision[0] not in handled_collisions) and (collision[1] not in handled_collisions):
+            if (collision[0] not in handled_collisions) and (
+                collision[1] not in handled_collisions
+            ):
                 handled_collisions.append(collision[0])
                 handled_collisions.append(collision[1])
                 if axons_diameters[collision[0]] < axons_diameters[collision[1]]:
@@ -751,7 +858,7 @@ def delete_collisions(axons_diameters, axons_type, y_axons, z_axons, Delta=0):
         # check if there are remaing collisions
         P = compute_P_matrix(axons_diameters, y_axons, z_axons, Delta, N)
         colapse = np.argwhere(P < 0)
-        flag_Collision = (colapse.size != 0)
+        flag_Collision = colapse.size != 0
 
     return axons_diameters, axons_type, y_axons, z_axons
 
@@ -779,17 +886,23 @@ def plot_situation(diameters, y_axons, z_axons, size, title=None, y_gc=0, z_gc=0
     """
     circles = []
     for k in range(len(diameters)):
-        circles.append(plt.Circle((y_axons[k], z_axons[k]), diameters[k]/2, color='r', fill=False))
+        circles.append(
+            plt.Circle(
+                (y_axons[k], z_axons[k]), diameters[k] / 2, color="r", fill=False
+            )
+        )
     fig, ax = plt.subplots(figsize=(8, 8))
     for circle in circles:
         ax.add_patch(circle)
     if title is not None:
         plt.title(title)
-    plt.xlim(-size/2 + y_gc, size/2 + y_gc)
-    plt.ylim(-size/2 + z_gc, size/2 + z_gc)
+    plt.xlim(-size / 2 + y_gc, size / 2 + y_gc)
+    plt.ylim(-size / 2 + z_gc, size / 2 + z_gc)
 
-def save_placed_axon_population(f_name, axons_diameters, axons_type, y_axons, z_axons,\
-    comment=None):
+
+def save_placed_axon_population(
+    f_name, axons_diameters, axons_type, y_axons, z_axons, comment=None
+):
     """
     Save a placed axonal population to a file
 
@@ -808,15 +921,24 @@ def save_placed_axon_population(f_name, axons_diameters, axons_type, y_axons, z_
     comment         : str
         comment added in the header of the file, optional
     """
-    f = open(f_name, 'w')
+    f = open(f_name, "w")
     if comment is not None:
-        line = '# '+comment
+        line = "# " + comment
         f.write(line)
     for k in range(len(axons_diameters)):
-        line = str(axons_diameters[k]) + ', ' + str(axons_type[k]) + ', ' + str(y_axons[k]) +\
-            ', ' + str(z_axons[k]) +'\n'
+        line = (
+            str(axons_diameters[k])
+            + ", "
+            + str(axons_type[k])
+            + ", "
+            + str(y_axons[k])
+            + ", "
+            + str(z_axons[k])
+            + "\n"
+        )
         f.write(line)
     f.close()
+
 
 def load_placed_axon_population(f_name):
     """
@@ -842,7 +964,7 @@ def load_placed_axon_population(f_name):
     U_diam_list         : np.array
         list of unmyelinated only diamters
     """
-    population_file = np.genfromtxt(f_name, delimiter=',', comments='#')
+    population_file = np.genfromtxt(f_name, delimiter=",", comments="#")
     axons_diameters = population_file[:, 0]
     axons_type = population_file[:, 1]
     y_axons = population_file[:, 2]
