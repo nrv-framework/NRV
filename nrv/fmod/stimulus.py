@@ -1,6 +1,6 @@
 """
 NRV-Stimulus
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey / Thomas Couppey
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
@@ -13,6 +13,7 @@ from ..backend.NRV_Class import NRV_class
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
+
 
 ###############
 ## Functions ##
@@ -79,7 +80,7 @@ def get_equal_timing_copies(stim1, stim2):
 
 
 def datfile_2_stim(fname, dt=0.005):
-    """ Creates a stimulus from sampled data specified in a .dat file
+    """Creates a stimulus from sampled data specified in a .dat file
 
     Parameters
     ----------
@@ -104,7 +105,7 @@ class stimulus(NRV_class):
     Stimulus class for NRV2,
     signals are defined as asynchronous signals, with s the values and t as occurence timings.
     """
-    
+
     def __init__(self, s_init=0):
         """
         Instantiation of a stimulus object.
@@ -197,29 +198,27 @@ class stimulus(NRV_class):
         j = 1
         for k in range(1, len(new_t)):
             if j < self.len():
-                if new_t[k] < self.t[j]: # added sample, hold the last value
+                if new_t[k] < self.t[j]:  # added sample, hold the last value
                     new_s.append(new_s[-1])
-                else:   # orinal sample, retrieve value in original signal and increment counter
+                else:  # orinal sample, retrieve value in original signal and increment counter
                     new_s.append(self.s[j])
                     j += 1
             else:
                 new_s.append(self.s[-1])
         self.s = np.asarray(new_s)
         self.t = new_t
-    
+
     def snap_time(self, dt_min):
         i_mask = [True for _ in range(len(self.t))]
-        for i in range(len(self.t)-1):
-            j=0
-            while i > j and not i_mask[i-j]:
+        for i in range(len(self.t) - 1):
+            j = 0
+            while i > j and not i_mask[i - j]:
                 j += 1
-            if self.t[i+1] - self.t[i-j] < dt_min:
+            if self.t[i + 1] - self.t[i - j] < dt_min:
                 i_mask = False
 
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
-
-        
 
     #####################
     ## special methods ##
@@ -298,16 +297,16 @@ class stimulus(NRV_class):
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
-            C.s = B.s*A.s
+            C.s = B.s * A.s
             C.t = A.t
         else:
-            C.s = float(b)*self.s
+            C.s = float(b) * self.s
             C.t = self.t
         return C
 
     def __pow__(self, p):
         C = stimulus()
-        C.s = self.s**float(p)
+        C.s = self.s ** float(p)
         return C
 
     def __eq__(self, b):
@@ -321,7 +320,7 @@ class stimulus(NRV_class):
                     flag = False
         return flag
 
-    def __ne__(self, b): # self != b
+    def __ne__(self, b):  # self != b
         return not self == b
 
     #######################
@@ -359,7 +358,9 @@ class stimulus(NRV_class):
         if duration != 0:
             self.append(s_last, start + duration)
 
-    def biphasic_pulse(self, start, s_cathod, t_stim, s_anod, t_inter, anod_first=False):
+    def biphasic_pulse(
+        self, start, s_cathod, t_stim, s_anod, t_inter, anod_first=False
+    ):
         """
         Create a biphasic pulse waveform
 
@@ -383,13 +384,13 @@ class stimulus(NRV_class):
             by default set to False (cathodic first as most stimulation protocols)
         """
         if not anod_first:
-            s_1 = - s_cathod
+            s_1 = -s_cathod
             s_2 = s_anod
         else:
-            s_2 = - s_cathod
+            s_2 = -s_cathod
             s_1 = s_anod
         if s_2 != 0:
-            t_balance = abs(s_1/s_2)*t_stim
+            t_balance = abs(s_1 / s_2) * t_stim
         else:
             t_balance = 0
         self.concatenate(s_1, start)
@@ -427,14 +428,16 @@ class stimulus(NRV_class):
         """
         # check the pseudo sampling period
         if dt == 0:
-            dt = 1/(freq * 100)
-        elif freq > (1./(2 * dt)):
-            rise_warning("dt too low in stimulus creation, Shannon criterion not respected")
-        Nb_points = int(duration/dt)
+            dt = 1 / (freq * 100)
+        elif freq > (1.0 / (2 * dt)):
+            rise_warning(
+                "dt too low in stimulus creation, Shannon criterion not respected"
+            )
+        Nb_points = int(duration / dt)
         # create the signal
         if start == 0:
             self.s[0] = amplitude * np.sin(phase) + offset
-            t = np.linspace(dt, start + duration, num=Nb_points-1)
+            t = np.linspace(dt, start + duration, num=Nb_points - 1)
             s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
             self.concatenate(s, t, t_shift=0)
         else:
@@ -466,19 +469,21 @@ class stimulus(NRV_class):
         if start == 0:
             Nb_points -= 1
         T = 1 / freq
-        t = np.linspace(dt, start+duration, num=Nb_points)
+        t = np.linspace(dt, start + duration, num=Nb_points)
         s = np.ones(Nb_points)
-        point_start = int(start/dt)
+        point_start = int(start / dt)
         for i in range(Nb_points):
             if i < point_start:
                 s[i] = 0
             else:
                 if t[i] % T < T / 2:
-                    s[i] = - s[i]
+                    s[i] = -s[i]
                 s[i] = amplitude * s[i] + offset
         self.concatenate(s, t, t_shift=0)
 
-    def ramp(self, slope, start, duration, dt, bounds=(0, float("inf")), printslope=False):
+    def ramp(
+        self, slope, start, duration, dt, bounds=(0, float("inf")), printslope=False
+    ):
         """
         Create a ramp waveform with slop value
 
@@ -499,14 +504,14 @@ class stimulus(NRV_class):
         """
         # create the signal
         if printslope:
-            pass_info("slope = "+str(slope))
-        Nb_points = int(duration/dt)
-        t = np.array([k*dt for k in range(Nb_points)])
+            pass_info("slope = " + str(slope))
+        Nb_points = int(duration / dt)
+        t = np.array([k * dt for k in range(Nb_points)])
         if slope < 0:
             s = max(bounds) * np.ones(Nb_points)
         else:
             s = min(bounds) * np.ones(Nb_points)
-        point_start = int(start/dt)
+        point_start = int(start / dt)
         for i in range(point_start, Nb_points):
             if slope >= 0:
                 s[i] = min(bounds[1], bounds[0] + (i - point_start) * slope * dt)
@@ -535,6 +540,6 @@ class stimulus(NRV_class):
         printslope  : bool, optional
             if True, the value of the slope is printed on the prompt
         """
-        slope = (ampstart - ampmax)/(tstart - tstop)
+        slope = (ampstart - ampmax) / (tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
