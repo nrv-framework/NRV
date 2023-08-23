@@ -45,7 +45,7 @@ def is_fen_mat(mat):
 
 
 def mat_from_interp(
-    X, Y, kind="linear", dx=0.01, interpolator=None, dxdy=None,scale=None, columns=0
+    X, Y, kind="linear", dx=0.01, interpolator=None, dxdy=None, scale=None, columns=0
 ):
     """
     Return a fenics material with a conductivity space function define as the nrv_interp of X and Y
@@ -73,6 +73,7 @@ def mat_from_interp(
     mat_obj = fenics_material()
     mat_obj.set_conductivity_function(sigma_func)
     return mat_obj
+
 
 def mat_from_csv(f_material, **kwargs):
     """
@@ -114,7 +115,7 @@ def load_fenics_material(X, **kwargs):
         mat = fenics_material(X)
     elif isinstance(X, str):
         if ".csv" in X:
-            mat = mat_from_csv(X,**kwargs)
+            mat = mat_from_csv(X, **kwargs)
         else:
             mat = fenics_material(load_material(X))
     elif isinstance(X, (float, int)):
@@ -137,7 +138,7 @@ class fenics_material(material):
     a class for material material more suited for the FEM solving with fenics
     Inherit from material class. see material for further detail
     """
-    
+
     def __init__(self, mat=None):
         """
         initialisation of the fenics_material
@@ -211,6 +212,7 @@ class fenics_material(material):
     def save_fenics_material(self, save=False, fname="fenics_material.json"):
         rise_warning("save_fenics_material is a deprecated method use save")
         self.save(save=save, fname=fname)
+
     def load_fenics_material(self, data="fenics_material.json"):
         rise_warning("load_fenics_material is a deprecated method use load")
         self.load(data=data)
@@ -231,8 +233,7 @@ class fenics_material(material):
         else:
             rise_warning("Not an material nothing is load")
         self.update_fenics_sigma()
-        
-    
+
     def set_conductivity_function(self, sigma_func):
         """
         set the conductivity space function for an anisotropic material
@@ -246,7 +247,7 @@ class fenics_material(material):
         self.isotrop_cond = False
         self.is_func = True
         self.sigma_func = sigma_func
-        
+
     def is_function_defined(self):
         """
         check that the material conductivity is define as a function
@@ -257,7 +258,7 @@ class fenics_material(material):
             True if the per
         """
         return self.is_func
-    
+
     def get_fenics_sigma(
         self, domain, elem=("Discontinuous Lagrange", 1), UN=1, id=None
     ):
