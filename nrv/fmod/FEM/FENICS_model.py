@@ -1,6 +1,6 @@
 """
 NRV-FEM
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
+Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import numpy as np
@@ -36,7 +36,7 @@ class FENICS_model(FEM_model):
     """
     A class for FENICS Finite Element Models, inherits from FEM_model.
     """
-    
+
     def __init__(
         self,
         fname=None,
@@ -44,7 +44,7 @@ class FENICS_model(FEM_model):
         handle_server=False,
         elem=None,
         comm=MPI.COMM_SELF,
-        rank=0
+        rank=0,
     ):
         """
         Creates a instance of a FENICS Finite Element Model object.
@@ -71,11 +71,10 @@ class FENICS_model(FEM_model):
         self.Perineurium_thickness = {}
         self.N_electrode = 0
         self.electrodes = {}
-        self.Istim = 1e-3 # A
+        self.Istim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
 
-     
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
         self.Endoneurium_mat = "endoneurium_ranck"
@@ -85,22 +84,22 @@ class FENICS_model(FEM_model):
         self.default_fascicle = {"D": 200, "y_c": 0, "z_c": 0, "res": 20}
         self.default_electrode = {
             "elec_type": "LIFE",
-            "x_c": self.L/2,
+            "x_c": self.L / 2,
             "y_c": 0,
             "z_c": 0,
             "length": 1000,
             "D": 25,
-            "res": 3
+            "res": 3,
         }
 
-        # Mesh 
+        # Mesh
         self.mesh_file = fname
         self.mesh = None
         self.elem = elem
         if elem is None:
             self.elem = ("Lagrange", 2)
 
-        # FEM 
+        # FEM
         self.sim = None
         self.sim_res = []
 
@@ -120,7 +119,7 @@ class FENICS_model(FEM_model):
                 Outer_D=self.Outer_D,
                 Nerve_D=self.Nerve_D,
                 y_c=self.y_c,
-                z_c=self.z_c
+                z_c=self.z_c,
             )
 
     def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):
@@ -138,10 +137,10 @@ class FENICS_model(FEM_model):
         if self.is_computed:
             save_sim_res_list(self.sim_res, fname)
 
-        elif self.is_meshed: 
+        elif self.is_meshed:
             self.mesh_file = rmv_ext(fname)
             self.mesh.save(fname)
-        
+
     def load(self, data="extracel_context.json", **kwargs):
         """
         Load all extracellular context properties from a dictionary or a json file
@@ -151,28 +150,37 @@ class FENICS_model(FEM_model):
         data    : str or dict
             json file path or dictionary containing extracel_context information
         """
-        bl = ["comm", "rank", "mesh","sim", "sim_res"]
+        bl = ["comm", "rank", "mesh", "sim", "sim_res"]
         super().load(data=data, blacklist=bl, **kwargs)
         param = self.get_parameters()
         self.load_from_parameters(**param)
-        
+
     def load_from_parameters(self, **param):
-        """
-        
-        """
+        """ """
         self.reset_parameters()
         self.reshape_outerBox(param["Outer_D"])
-        self.reshape_nerve(Nerve_D=param["Nerve_D"], Length=param["L"], y_c=param["y_c"],\
-                           z_c=param["z_c"])
+        self.reshape_nerve(
+            Nerve_D=param["Nerve_D"],
+            Length=param["L"],
+            y_c=param["y_c"],
+            z_c=param["z_c"],
+        )
         for id in param["fascicles"]:
             fasc = param["fascicles"][id]
             per_th = param["Perineurium_thickness"][id]
-            self.reshape_fascicle(fasc["D"], y_c=fasc["y_c"], z_c=fasc["z_c"], ID=int(id),\
-                                  Perineurium_thickness=per_th, res=fasc["res"])
+            self.reshape_fascicle(
+                fasc["D"],
+                y_c=fasc["y_c"],
+                z_c=fasc["z_c"],
+                ID=int(id),
+                Perineurium_thickness=per_th,
+                res=fasc["res"],
+            )
         for id in param["electrodes"]:
             elec = param["electrodes"][id]
-            self.add_electrode(elec_type=elec["type"], ID=int(id), res=elec["res"],\
-                               **elec["kwargs"])
+            self.add_electrode(
+                elec_type=elec["type"], ID=int(id), res=elec["res"], **elec["kwargs"]
+            )
 
     #############################
     ## Access model parameters ##
@@ -202,13 +210,13 @@ class FENICS_model(FEM_model):
         param["Endoneurium_mat"] = self.Endoneurium_mat
         param["Perineurium_mat"] = self.Perineurium_mat
         param["Perineurium_mat"] = self.Perineurium_mat
-        param["Istim"] = self.Istim 
+        param["Istim"] = self.Istim
         return param
 
     def __update_parameters(self):
         """
         Internal use only: updates all the parameters from the mesh
-        """   
+        """
         param = self.mesh.get_parameters()
         self.L = param["L"]
         self.y_c = param["y_c"]
@@ -227,14 +235,14 @@ class FENICS_model(FEM_model):
         self.L = 5000
         self.y_c = 0
         self.z_c = 0
-        self.Outer_D = 5       #mm
-        self.Nerve_D = 250     #um
+        self.Outer_D = 5  # mm
+        self.Nerve_D = 250  # um
         self.N_fascicle = 0
         self.fascicles = {}
         self.Perineurium_thickness = {}
         self.N_electrode = 0
         self.electrodes = {}
-        self.Istim = 1e-3        #A
+        self.Istim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
 
@@ -249,9 +257,8 @@ class FENICS_model(FEM_model):
                 Outer_D=self.Outer_D,
                 Nerve_D=self.Nerve_D,
                 y_c=self.y_c,
-                z_c=self.z_c
+                z_c=self.z_c,
             )
-            
 
     #####################
     ## customize model ##
@@ -294,7 +301,6 @@ class FENICS_model(FEM_model):
             )
             self.__update_parameters()
 
-    
     def reshape_fascicle(
         self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"
     ):
@@ -322,7 +328,6 @@ class FENICS_model(FEM_model):
                     ID = max(self.Perineurium_thickness) + 1
             self.Perineurium_thickness[ID] = Perineurium_thickness
 
-    
     def remove_fascicles(self, ID=None):
         """
         remove a fascicle of the FEM simulation
@@ -341,7 +346,6 @@ class FENICS_model(FEM_model):
             del self.Perineurium_thickness[ID]
             self.N_fascicle -= 1
         self.mesh.remove_fascicles(ID=ID)
-
 
     def add_electrode(self, elec_type, ID=None, res="default", **kwargs):
         """
@@ -380,55 +384,54 @@ class FENICS_model(FEM_model):
             )
             for i in range(self.N_fascicle):
                 self.sim.add_domain(
-                    mesh_domain=ENT_DOM_offset["Fascicle"] + (2*i),
-                    mat_pty=self.Endoneurium_mat
+                    mesh_domain=ENT_DOM_offset["Fascicle"] + (2 * i),
+                    mat_pty=self.Endoneurium_mat,
                 )
             for _, (i, elec) in enumerate(self.electrodes.items()):
                 if not elec["type"] == "LIFE":
                     self.sim.add_domain(
-                        mesh_domain=ENT_DOM_offset["Electrode"] + (2*i),
-                        mat_pty=self.Electrodes_mat
+                        mesh_domain=ENT_DOM_offset["Electrode"] + (2 * i),
+                        mat_pty=self.Electrodes_mat,
                     )
             # SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
             for i in self.fascicles:
                 thickness = self.Perineurium_thickness[i]
-                f_dom = ENT_DOM_offset["Fascicle"] + (2*i)
+                f_dom = ENT_DOM_offset["Fascicle"] + (2 * i)
                 self.sim.add_inboundary(
                     mesh_domain=ENT_DOM_offset["Surface"] + f_dom,
                     mat_pty=self.Perineurium_mat,
                     thickness=thickness,
-                    in_domains=[f_dom]
+                    in_domains=[f_dom],
                 )
             # SETTING BOUNDARY CONDITION
             # Ground (to the external ring of Outerbox)
             self.sim.add_boundary(mesh_domain=1, btype="Dirichlet", value=0)
             # Injected current from active electrode
             # For EIT change in for E in elec_patren:
-            for _, (E,active_elec) in enumerate(self.electrodes.items()):
+            for _, (E, active_elec) in enumerate(self.electrodes.items()):
                 E_var = "E" + str(E)
                 mesh_domain_3D = self.__find_elec_subdomain(active_elec)
                 self.jstims += {self.__find_elec_jstim(active_elec)}
                 self.j_electrode[E_var] = 0
                 e_dom = (
-                    ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2*E)
+                    ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * E)
                 )
                 self.sim.add_boundary(
                     mesh_domain=e_dom,
                     btype="Neuman",
                     variable=E_var,
-                    mesh_domain_3D=mesh_domain_3D
+                    mesh_domain_3D=mesh_domain_3D,
                 )
             self.is_sim_ready = True
         self.preparing_timer += time.time() - t0
-            
-    
+
     def set_materials(
         self,
         Outer_mat=None,
         Epineurium_mat=None,
         Endoneurium_mat=None,
         Perineurium_mat=None,
-        Electrodes_mat=None
+        Electrodes_mat=None,
     ):
         """
         Set material files for any domain
@@ -456,22 +459,22 @@ class FENICS_model(FEM_model):
 
     def __find_elec_subdomain(self, elec) -> int:
         """
-        Internal use only: 
+        Internal use only:
         """
-        if elec["type"]=="LIFE":
+        if elec["type"] == "LIFE":
             y_e, z_e = elec["kwargs"]["y_c"], elec["kwargs"]["z_c"]
             for i in self.fascicles:
                 fascicle = self.fascicles[i]
                 d_f, y_f, z_f = fascicle["D"], fascicle["y_c"], fascicle["z_c"]
-                if (y_e - y_f) ** 2 + (z_e - z_f) ** 2 < (d_f/2) ** 2:
+                if (y_e - y_f) ** 2 + (z_e - z_f) ** 2 < (d_f / 2) ** 2:
                     return 10 + 2 * i
         return 0
 
     def __find_elec_jstim(self, elec, I=None) -> float:
         """
-        Internal use only: return electrical current density in electrode 
+        Internal use only: return electrical current density in electrode
         from current valeu and electrode geometry
-        """ 
+        """
         # Unitary stimulation
         if I is not None:
             self.Istim = I
@@ -483,7 +486,7 @@ class FENICS_model(FEM_model):
         elif elec["type"] == "LIFE":
             d_e = elec["kwargs"]["D"]
             l_e = elec["kwargs"]["length"]
-        
+
         S = pi * (d_e) * (l_e)
         jstim = self.Istim / S
         return jstim
@@ -512,7 +515,7 @@ class FENICS_model(FEM_model):
                     Fascicle_D=self.default_fascicle["D"],
                     y_c=self.default_fascicle["y_c"],
                     z_c=self.default_fascicle["z_c"],
-                    res=self.default_fascicle["res"]
+                    res=self.default_fascicle["res"],
                 )
             if self.N_electrode == 0:
                 self.add_electrode(
@@ -522,7 +525,7 @@ class FENICS_model(FEM_model):
                     z_c=self.default_electrode["z_c"],
                     length=self.default_electrode["length"],
                     D=self.default_electrode["D"],
-                    res=self.default_electrode["res"]
+                    res=self.default_electrode["res"],
                 )
             self.__update_parameters()
             self.mesh.compute_mesh()
@@ -580,7 +583,7 @@ class FENICS_model(FEM_model):
             t0 = time.time()
             line = [[x_, y, z] for x_ in x]
             if self.N_electrode == 1 or (E < self.N_electrode and E >= 0):
-                potentials =  self.sim_res[E].eval(line) * V
+                potentials = self.sim_res[E].eval(line) * V
             else:
                 potentials = []
                 for E in range(self.N_electrode):
