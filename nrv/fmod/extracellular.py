@@ -28,8 +28,11 @@ def is_extra_stim(test_stim):
     """
     check if an object is a stimulation, return True if yes, else False
     """
-    Flag = isinstance(test_stim, stimulation) or isinstance(test_stim, FEM_stimulation)\
+    Flag = (
+        isinstance(test_stim, stimulation)
+        or isinstance(test_stim, FEM_stimulation)
         or isinstance(test_stim, extracellular_context)
+    )
     return Flag
 
 
@@ -58,7 +61,7 @@ def load_any_extracel_context(data):
     """
     if type(data) == str:
         context_dic = json_load(data)
-    else: 
+    else:
         context_dic = data
 
     if context_dic["type"] is None:
@@ -66,7 +69,7 @@ def load_any_extracel_context(data):
     elif context_dic["type"] == "stimulation":
         extracel = stimulation()
     elif context_dic["type"] == "FEM_stim":
-        extracel = FEM_stimulation(data["model_fname"],comsol=False)
+        extracel = FEM_stimulation(data["model_fname"], comsol=False)
     else:
         rise_error("extra cellular context type not recognizede")
 
@@ -79,7 +82,7 @@ class extracellular_context(NRV_class):
     extracellular_context is a class to handle the computation of the extracellular voltage field induced by the electrical stimulation.
     This class should not be used directly by user, but user friendly classes (for Analitycal or FEM based computations) inherits from extracellular_context.
     """
-    
+
     def __init__(self):
         """
         Instrantiation an extracellular_context object, empty shell to store electrodes and stimuli
@@ -103,7 +106,7 @@ class extracellular_context(NRV_class):
         rise_warning("load_extracel_context is a deprecated method use load")
         self.load(data=data)
 
-    ## 
+    ##
     def is_empty(self):
         """
         check if a stimulation object is empty (No electrodes and stimuli, no external field can be computed).
@@ -115,7 +118,7 @@ class extracellular_context(NRV_class):
             True if a simulation is empty, else False
         """
         return self.electrodes == []
-    
+
     def translate(self, x=None, y=None, z=None):
         """
         Move extracellular context electrodes by group translation
@@ -171,12 +174,16 @@ class extracellular_context(NRV_class):
             if len(self.electrodes) == 1:
                 self.synchronised_stimuli.append(self.stimuli[0])
             elif len(self.electrodes) == 2:
-                stim_a, stim_b = get_equal_timing_copies(self.stimuli[0], self.stimuli[1])
+                stim_a, stim_b = get_equal_timing_copies(
+                    self.stimuli[0], self.stimuli[1]
+                )
                 self.synchronised_stimuli.append(stim_a)
                 self.synchronised_stimuli.append(stim_b)
             else:
                 # init : put first two and synchronize them
-                stim_a, stim_b = get_equal_timing_copies(self.stimuli[0], self.stimuli[1])
+                stim_a, stim_b = get_equal_timing_copies(
+                    self.stimuli[0], self.stimuli[1]
+                )
                 self.synchronised_stimuli.append(stim_a)
                 self.synchronised_stimuli.append(stim_b)
                 # remaining stimuli to handle
@@ -216,7 +223,9 @@ class extracellular_context(NRV_class):
         Vext = np.zeros(len(self.electrodes[0].footprint))
         if not self.synchronised:
             self.synchronise_stimuli()
-        if time_index < len(self.global_time_serie): # requested time index is in stimulus range (safeguard)
+        if time_index < len(
+            self.global_time_serie
+        ):  # requested time index is in stimulus range (safeguard)
             for k in range(len(self.electrodes)):
                 Istim = self.synchronised_stimuli[k].s[time_index]
                 vext_elec = self.electrodes[k].compute_field(Istim)
@@ -232,16 +241,16 @@ class extracellular_context(NRV_class):
         footprints  : list of array like
             list footprint for each electode of the extracellular context
         """
-        i=0
+        i = 0
         if len(footprints) == len(self.electrodes):
-            for i,electrode in enumerate(self.electrodes):
+            for i, electrode in enumerate(self.electrodes):
                 if i in footprints:
                     electrode.set_footprint(footprints[i])
                 else:
                     electrode.set_footprint(footprints[str(i)])
         else:
             rise_error("Footprint number different than electrode number")
-    
+
     def clear_electrodes_footprints(self):
         """
         clear the footprints for all electrodes from existing array
@@ -258,6 +267,7 @@ class stimulation(extracellular_context):
     - a list of corresponding current stimuli
     This class inherits from extracellular_context.
     """
+
     def __init__(self, material="endoneurium_ranck"):
         """
         Implement a stimulation object.
@@ -311,7 +321,10 @@ class stimulation(extracellular_context):
             axon ID, unused here, added to fit FEM_stimulation declaration of same method
         """
         for electrode in self.electrodes:
-            electrode.compute_footprint(np.asarray(x), np.asarray(y), np.asarray(z), self.material)
+            electrode.compute_footprint(
+                np.asarray(x), np.asarray(y), np.asarray(z), self.material
+            )
+
 
 class FEM_stimulation(extracellular_context):
     """
@@ -320,7 +333,7 @@ class FEM_stimulation(extracellular_context):
     - a list of electrode(s)
     - a list of corresponding current stimuli
     """
-    
+
     def __init__(
         self,
         model_fname=None,
@@ -328,7 +341,7 @@ class FEM_stimulation(extracellular_context):
         peri_mat="perineurium",
         epi_mat="epineurium",
         ext_mat="saline",
-        comsol=True
+        comsol=True,
     ):
         """
         Implement a FEM_based_stimulation object.
@@ -378,7 +391,7 @@ class FEM_stimulation(extracellular_context):
             self.external_material = load_material(ext_mat)
             self.ext_mat_file = ext_mat
 
-        self.type ="FEM_stim"
+        self.type = "FEM_stim"
 
         self.comsol = comsol and not (model_fname is None)
         self.fenics = not self.comsol
@@ -393,11 +406,13 @@ class FEM_stimulation(extracellular_context):
             if not COMSOL_Status:
                 rise_warning(
                     "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
-                    abort=True
+                    abort=True,
                 )
 
     def __del__(self):
-        if MCH.do_master_only_work() and COMSOL_Status and self.comsol: #added for safe del in case of COMSOL status turned OFF
+        if (
+            MCH.do_master_only_work() and COMSOL_Status and self.comsol
+        ):  # added for safe del in case of COMSOL status turned OFF
             self.model.close()
             del self.model
 
@@ -421,9 +436,8 @@ class FEM_stimulation(extracellular_context):
         """
         if self.comsol:
             blacklist += ["model"]
-            
-        return super().save(save=save, fname=fname, blacklist=blacklist, **kwargs)
 
+        return super().save(save=save, fname=fname, blacklist=blacklist, **kwargs)
 
     def load(self, data, C_model=False, **kwargs):
         """
@@ -444,7 +458,7 @@ class FEM_stimulation(extracellular_context):
                 if not COMSOL_Status:
                     rise_warning(
                         "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
-                        abort=True
+                        abort=True,
                     )
 
     def reshape_outerBox(self, Outer_D, res="default"):
@@ -460,7 +474,7 @@ class FEM_stimulation(extracellular_context):
         """
         if MCH.do_master_only_work():
             if self.comsol:
-                self.model.set_parameter("Outer_D", str(Outer_D)+"[mm]")
+                self.model.set_parameter("Outer_D", str(Outer_D) + "[mm]")
             else:
                 self.model.reshape_outerBox(Outer_D, res=res)
 
@@ -483,14 +497,18 @@ class FEM_stimulation(extracellular_context):
         """
         if MCH.do_master_only_work():
             if self.comsol:
-                self.model.set_parameter("Nerve_D", str(Nerve_D)+"[um]")
-                self.model.set_parameter("Length", str(Length)+"[um]")
-                self.model.set_parameter("Nerve_y_c", str(y_c)+"[um]")
-                self.model.set_parameter("Nerve_z_c", str(z_c)+"[um]")
+                self.model.set_parameter("Nerve_D", str(Nerve_D) + "[um]")
+                self.model.set_parameter("Length", str(Length) + "[um]")
+                self.model.set_parameter("Nerve_y_c", str(y_c) + "[um]")
+                self.model.set_parameter("Nerve_z_c", str(z_c) + "[um]")
             else:
-                self.model.reshape_nerve(Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res)
+                self.model.reshape_nerve(
+                    Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res
+                )
 
-    def reshape_fascicle(self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5,res="default"):
+    def reshape_fascicle(
+        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"
+    ):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -516,12 +534,18 @@ class FEM_stimulation(extracellular_context):
                     self.model.set_parameter("Fascicle_y_c", str(y_c) + "[um]")
                     self.model.set_parameter("Fascicle_z_c", str(z_c) + "[um]")
                 else:
-                    self.model.set_parameter("Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]")
-                    self.model.set_parameter("Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]")
-                    self.model.set_parameter("Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]")
+                    self.model.set_parameter(
+                        "Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]"
+                    )
+                    self.model.set_parameter(
+                        "Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]"
+                    )
+                    self.model.set_parameter(
+                        "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
+                    )
                 self.model.set_parameter(
-                    "Perineurium_thickness",
-                    str(Perineurium_thickness) + "[um]")
+                    "Perineurium_thickness", str(Perineurium_thickness) + "[um]"
+                )
             else:
                 self.model.reshape_fascicle(
                     Fascicle_D=Fascicle_D,
@@ -547,7 +571,7 @@ class FEM_stimulation(extracellular_context):
     def add_electrode(self, electrode, stimulus):
         """
         Add a stimulation electrode and its stimulus to the stimulation, only it the electrode is FEM based.
-        
+
         Parameters
         ----------
         electrode   : electrode object
@@ -555,7 +579,7 @@ class FEM_stimulation(extracellular_context):
         stimulus    : stimulus object or list[stimulus]
             see Stimulus.py or stimulus object help for further details, for Multipolar electrode:
             if stimulus a list of situmulus one stimulus set for each active site
-            else 
+            else
         """
         is_overlaping = False
         for elec in self.electrodes:
@@ -567,7 +591,7 @@ class FEM_stimulation(extracellular_context):
             if is_FEM_electrode(electrode):
                 if not electrode.is_multipolar:
                     if not self.electrodes == []:
-                        electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
+                        electrode.set_ID_number(self.electrodes[-1].get_ID_number() + 1)
                     self.electrodes.append(electrode)
                     self.electrodes_label.append(electrode.label)
                     self.stimuli.append(stimulus)
@@ -575,13 +599,17 @@ class FEM_stimulation(extracellular_context):
                     if np.iterable(stimulus):
                         stimuli = stimulus
                     else:
-                        rise_warning("Only one stimulus for a multipolar electrode, it will be set for all active sites")
+                        rise_warning(
+                            "Only one stimulus for a multipolar electrode, it will be set for all active sites"
+                        )
                         stimuli = [stimulus for k in range(electrode.N_contact)]
                     for E in range(electrode.N_contact):
                         if not self.electrodes == []:
-                            electrode.set_ID_number(self.electrodes[-1].get_ID_number()+1)
+                            electrode.set_ID_number(
+                                self.electrodes[-1].get_ID_number() + 1
+                            )
                         self.electrodes.append(electrode)
-                        self.electrodes_label.append(electrode.label+"_"+str())
+                        self.electrodes_label.append(electrode.label + "_" + str())
                         self.stimuli.append(stimuli[E])
 
                 if self.fenics and MCH.do_master_only_work():
@@ -600,42 +628,39 @@ class FEM_stimulation(extracellular_context):
                 electrode.parameter_model(self.model)
                 # parameter materials
                 self.model.set_parameter(
-                    "Outer_conductivity",
-                    str(self.external_material.sigma) + "[S/m]"
+                    "Outer_conductivity", str(self.external_material.sigma) + "[S/m]"
                 )
                 self.model.set_parameter(
-                    "Epineurium_conductivity",
-                    str(self.epineurium.sigma) + "[S/m]"
+                    "Epineurium_conductivity", str(self.epineurium.sigma) + "[S/m]"
                 )
                 self.model.set_parameter(
-                    "Perineurium_conductivity",
-                    str(self.perineurium.sigma) + "[S/m]"
+                    "Perineurium_conductivity", str(self.perineurium.sigma) + "[S/m]"
                 )
                 if self.endoneurium.is_isotropic():
                     self.model.set_parameter(
                         "Endoneurium_conductivity_xx",
-                        str(self.endoneurium.sigma) + "[S/m]"
+                        str(self.endoneurium.sigma) + "[S/m]",
                     )
                     self.model.set_parameter(
                         "Endoneurium_conductivity_yy",
-                        str(self.endoneurium.sigma) + "[S/m]"
+                        str(self.endoneurium.sigma) + "[S/m]",
                     )
                     self.model.set_parameter(
                         "Endoneurium_conductivity_zz",
-                        str(self.endoneurium.sigma) + "[S/m]"
+                        str(self.endoneurium.sigma) + "[S/m]",
                     )
                 else:
                     self.model.set_parameter(
                         "Endoneurium_conductivity_xx",
-                        str(self.endoneurium.sigma_xx) + "[S/m]"
+                        str(self.endoneurium.sigma_xx) + "[S/m]",
                     )
                     self.model.set_parameter(
                         "Endoneurium_conductivity_yy",
-                        str(self.endoneurium.sigma_yy) + "[S/m]"
+                        str(self.endoneurium.sigma_yy) + "[S/m]",
                     )
                     self.model.set_parameter(
                         "Endoneurium_conductivity_zz",
-                        str(self.endoneurium.sigma_zz) + "[S/m]"
+                        str(self.endoneurium.sigma_zz) + "[S/m]",
                     )
                 ## create geometry and mesh
                 self.model.build_and_mesh()
@@ -684,13 +709,7 @@ class FEM_stimulation(extracellular_context):
             V = self.model.get_potentials(x, y, z)
         else:
             # send a request to the master to get all potentials
-            data = {
-                "rank": MCH.rank,
-                "x": x,
-                "y": y,
-                "z": z,
-                "ID": ID
-            }
+            data = {"rank": MCH.rank, "x": x, "y": y, "z": z, "ID": ID}
             MCH.send_data_to_master(data)
             # listen to the master to get V
             V = MCH.recieve_potential_array_from_master()["V"]
@@ -702,7 +721,7 @@ class FEM_stimulation(extracellular_context):
             self.stimuli = list(np.asarray(self.stimuli)[sorter])
             # set the footprints
             for k, electrode in enumerate(self.electrodes):
-                self.electrodes[k].set_footprint(V[:,k])
-                #electrode.set_footprint(V[:, k])
+                self.electrodes[k].set_footprint(V[:, k])
+                # electrode.set_footprint(V[:, k])
         else:
             self.electrodes[0].set_footprint(V)
