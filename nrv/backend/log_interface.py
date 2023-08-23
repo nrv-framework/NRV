@@ -60,7 +60,7 @@ def rise_error(*args, out=1, **kwargs):
             print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
     else:
         err = (
-            NRV ERROR: "
+            "NRV ERROR: "
             + message
             + "\n encountered in process "
             + str(MCH.rank)
