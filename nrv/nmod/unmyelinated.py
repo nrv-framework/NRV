@@ -142,9 +142,9 @@ class unmyelinated(axon):
         if self.T is None:
             # model driven
             if self.model == "HH":
-                self.T = 32 # original HH model, cold model, maximal temperature at which spike propagation is not altered
+                self.T = 32  # original HH model, cold model, maximal temperature at which spike propagation is not altered
             else:
-                self.T = 37 # mamalian models
+                self.T = 37  # mamalian models
 
         # create and connect (if more than 1) sections
         self.unmyelinated_sections = [neuron.h.Section(name="U_axon[%d]" % i) for i in \

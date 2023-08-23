@@ -107,7 +107,7 @@ def rise_warning(*args, abort=False, **kwargs):
             + message
             + "\n encountered in process "
             + str(MCH.rank)
-            +" out of "
+            + " out of "
             + str(MCH.size)
         )
         if parameters.LOG_Status:
@@ -215,7 +215,8 @@ def progression_popup(current, max_iter, begin_message="", end_message="", endl=
     """
     if MCH.is_alone():
         print(
-            begin_message + f"{current + 1}" + "/" + str(max_iter) + end_message, end=endl
+            begin_message + f"{current + 1}" + "/" + str(max_iter) + end_message,
+            end=endl,
         )
         if current == max_iter - 1:
             print("\n")
