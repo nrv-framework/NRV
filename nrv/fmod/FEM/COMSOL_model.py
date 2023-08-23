@@ -16,7 +16,7 @@ from .FEM import *
 
 # built in COMSOL models
 dir_path = os.environ["NRVPATH"] + "/_misc"
-material_library = os.listdir(dir_path+"/comsol_templates/")
+material_library = os.listdir(dir_path + "/comsol_templates/")
 
 ###############
 ## Constants ##
@@ -34,7 +34,7 @@ class COMSOL_model(FEM_model):
     """
     A class for COMSOL Finite Element Models, inherits from FEM_model.
     """
-    
+
     def __init__(self, fname, Ncore=None, handle_server=False):
         """
         Creates a instance of a COMSOL Finite Element Model object.
@@ -56,7 +56,7 @@ class COMSOL_model(FEM_model):
             self.model_path = fname
             f_in_librairy = rmv_ext(str(fname)) + ".mph"
             if f_in_librairy in material_library:
-                self.fname = dir_path+"/comsol_templates/" + f_in_librairy
+                self.fname = dir_path + "/comsol_templates/" + f_in_librairy
             else:
                 self.fname = fname
             # self.model_path = fname
@@ -66,9 +66,7 @@ class COMSOL_model(FEM_model):
                 self.Ncore = Ncore
             self.handle_server = handle_server
             # start client and server
-            pass_info(
-                "Starting COMSOL server/client, this may take few seconds"
-            )
+            pass_info("Starting COMSOL server/client, this may take few seconds")
             if self.handle_server:
                 self.server = mph.Server(cores=self.Ncore)
             else:
@@ -85,7 +83,7 @@ class COMSOL_model(FEM_model):
             ## COMSOL TURNED OFF, no error, but only a warning and no computation (exit)
             rise_warning(
                 "Bad implementation, a COMSOL simulation is implemented while NRV2 has COMSOL status turned OFF, unterminated computation, early exit without error",
-                abort=True
+                abort=True,
             )
 
     def save(self):
@@ -105,7 +103,7 @@ class COMSOL_model(FEM_model):
         """
         Close the FEM simulation and the COMSOL link
         """
-        #self.client.disconnect()
+        # self.client.disconnect()
         del self.client
         if self.handle_server:
             self.server.stop()
@@ -211,7 +209,7 @@ class COMSOL_model(FEM_model):
         """
         t0 = time.time()
         COMSOL_expressions = [
-            "at3("+str(x[k]) + "[um], " + str(y) + "[um], " + str(z) + "[um], V)"
+            "at3(" + str(x[k]) + "[um], " + str(y) + "[um], " + str(z) + "[um], V)"
             for k in range(len(x))
         ]
         Voltage = self.model.evaluate(COMSOL_expressions) * V
