@@ -29,7 +29,7 @@ class SimParameters(NRV_class):
     modify and store domains, boundaries condition and internal boundaries (thin layers)
     Can be saved and used to generate FEMsimulation.
     """
-    
+
     def __init__(self, D=3, mesh_file="", data=None):
         """
         initialisation of the SimParameters:
@@ -138,7 +138,7 @@ class SimParameters(NRV_class):
     def save_SimParameters(self, save=False, fname="SimParameters.json"):
         rise_warning("save_SimParameters is a deprecated method use save")
         return self.save(save=save, fname=fname)
-    
+
     def load_SimParameters(self, data="SimParameters.json"):
         rise_warning("load_SimParameters is a deprecated method use load")
         self.load(data=data)
@@ -149,25 +149,25 @@ class SimParameters(NRV_class):
 
         Parameters
         ----------
-        new_mesh_file   :str 
+        new_mesh_file   :str
             name of the new filename, will be save without the filename extension
         """
-        self.mesh_file = new_mesh_file.replace(".gmsh","").replace(".xdml","") 
+        self.mesh_file = new_mesh_file.replace(".gmsh", "").replace(".xdml", "")
 
     def __update_ID_list(self, lname, ID):
         """
         Internal use only:
         Parameter
         """
-        if lname =="domains":
+        if lname == "domains":
             IDlist = self.domainsID
-        elif lname =="inbound":
+        elif lname == "inbound":
             IDlist = self.inboundariesID
-        elif lname =="bound":
+        elif lname == "bound":
             IDlist = self.boundariesID
         else:
             rise_error("_update_ID_list failed due to unknow list type")
-        
+
         if IDlist == []:
             if ID is None:
                 IDlist = [1]
@@ -182,11 +182,11 @@ class SimParameters(NRV_class):
                     return ID
                 else:
                     IDlist += [ID]
-        
+
         if lname == "domains":
             self.domainsID = IDlist
         elif lname == "inbound":
-            self.inboundariesID = IDlist     
+            self.inboundariesID = IDlist
         else:
             self.boundariesID = IDlist
         return IDlist[-1]
@@ -220,21 +220,23 @@ class SimParameters(NRV_class):
             mat_pty = 1
             rise_warning(
                 "neither mat_file or mat_perm set, set to default permitivity 1 S/m"
-        )
+            )
 
         if not mesh_domain in self.domains_list:
             IDdom = self.__update_ID_list("domains", mesh_domain)
             self.domains_list[IDdom] = {
                 "mesh_domain": mesh_domain,
                 "mat_pty": mat_pty,
-                "mixed_domain":[mesh_domain],
+                "mixed_domain": [mesh_domain],
             }
         else:
             self.domains_list[mesh_domain]["mat_pty"] = mat_pty
         self.mat_pty_map[mesh_domain] = mat_pty
         self.Ndomains = len(self.domainsID)
-    
-    def add_boundary(self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None):
+
+    def add_boundary(
+        self, mesh_domain, btype, value=None, variable=None, mesh_domain_3D=0, ID=None
+    ):
         """
         add new boundary or update if mesh_domain already exists
 
@@ -255,7 +257,7 @@ class SimParameters(NRV_class):
         ID              : int
             ID of the boundary condition
         """
-        IDbound= self.__update_ID_list("bound", mesh_domain)
+        IDbound = self.__update_ID_list("bound", mesh_domain)
         if value is not None:
             self.boundaries_list[IDbound] = {
                 "mesh_domain": mesh_domain,
@@ -266,11 +268,11 @@ class SimParameters(NRV_class):
         elif variable is not None:
             self.boundaries_list[IDbound] = {
                 "mesh_domain": mesh_domain,
-                "condition":btype,
-                "variable":variable,
-                "mesh_domain_3D":mesh_domain_3D,
+                "condition": btype,
+                "variable": variable,
+                "mesh_domain_3D": mesh_domain_3D,
             }
-        else: 
+        else:
             rise_warning("boundary not set, variable or boundary have to be precised")
         self.Nboundaries = len(self.boundariesID)
 
@@ -282,7 +284,7 @@ class SimParameters(NRV_class):
         mat_pty=None,
         mat_file=None,
         mat_perm=None,
-        ID=None
+        ID=None,
     ):
         """
         add new internal boundary or update if mesh_domain already exists
@@ -319,7 +321,7 @@ class SimParameters(NRV_class):
 
         self.inbound = True
         if not mesh_domain in self.inboundaries_list:
-            IDibound= self.__update_ID_list("inbound", mesh_domain)
+            IDibound = self.__update_ID_list("inbound", mesh_domain)
             self.inboundaries_list[IDibound] = {
                 "mesh_domain": mesh_domain,
                 "in_domains": in_domains,
@@ -335,8 +337,8 @@ class SimParameters(NRV_class):
                     if domain["mesh_domain"] == domain["mixed_domain"][0]:
                         domain["mixed_domain"][0] = mesh_domain
                 # Domain inside the boundary but surounded by another internal boundary
-                elif domain["mesh_domain"] +1 in in_domains:
-                    domain["mixed_domain"] += [domain["mesh_domain"]+1]
+                elif domain["mesh_domain"] + 1 in in_domains:
+                    domain["mixed_domain"] += [domain["mesh_domain"] + 1]
                     if domain["mesh_domain"] == domain["mixed_domain"][0]:
                         domain["mixed_domain"][0] = mesh_domain
                 # Domain outside the boundary
@@ -385,8 +387,8 @@ class SimParameters(NRV_class):
             if i_space is None:
                 if i_domain is None:
                     mmf = [
-                        [self.mat_pty_map[md[i][j]]
-                         for i in range(S[0])] for j in range(S[1])
+                        [self.mat_pty_map[md[i][j]] for i in range(S[0])]
+                        for j in range(S[1])
                     ]
                 else:
                     mmf = [self.mat_pty_map[md[i]] for i in range(S[0])]
@@ -405,8 +407,8 @@ class SimParameters(NRV_class):
             return 0
         for i in range(len(self.domains_list[i_domain]["mixed_domain"])):
             if self.domains_list[i_domain]["mixed_domain"][i] == i_domain:
-                return(i)
-        rise_error("Domain "  + str(i_domain) + " is in no space")
+                return i
+        rise_error("Domain " + str(i_domain) + " is in no space")
 
     def get_spaces_of_ibound(self, i_ibound):
         """
@@ -416,21 +418,21 @@ class SimParameters(NRV_class):
         in_space = self.get_space_of_domain(i_ibound - 1)
         out_space = 0
         if i_ibound > 100:  # Should be a perineurium
-            out_space = 0    
-        else:               # Should be an axon membrane
+            out_space = 0
+        else:  # Should be an axon membrane
             for i in self.inboundaries_list:
                 if i_ibound in self.inboundaries_list[i]["in_domains"]:
                     out_space = self.get_space_of_domain(i - 1)
         return in_space, out_space
-    
+
     def print_mixedspace_domain(self):
         doms = self.get_mixedspace_domain()
-        print("spaces:   ",[k for k in range(len(doms[0]))])
+        print("spaces:   ", [k for k in range(len(doms[0]))])
         for i, dom in enumerate(doms):
-            print("domain "+str(i)+": ", dom)
+            print("domain " + str(i) + ": ", dom)
 
-    def print_mixedspace_mat_pty(self):        
+    def print_mixedspace_mat_pty(self):
         mats = self.get_mixedspace_mat_pty()
-        print("domains:   ",[k for k in range(len(mats[0]))])
+        print("domains:   ", [k for k in range(len(mats[0]))])
         for i, mat in enumerate(mats):
-            print("space "+str(i)+": ",mat)
+            print("space " + str(i) + ": ", mat)
