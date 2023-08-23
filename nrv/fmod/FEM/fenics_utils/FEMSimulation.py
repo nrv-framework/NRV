@@ -13,7 +13,7 @@ from dolfinx.fem import (
     form,
     assemble_scalar,
 )
-from dolfinx.fem.petsc import  LinearProblem
+from dolfinx.fem.petsc import LinearProblem
 from dolfinx.io.utils import XDMFFile
 from ufl import (
     TestFunction,
@@ -110,7 +110,7 @@ class FEMSimulation(SimParameters):
 
     Inherit from SimParameters class. see SimParameters for further detail
     """
-    
+
     def __init__(
         self,
         D=3,
@@ -124,7 +124,7 @@ class FEMSimulation(SimParameters):
     ):
         """
         initialisation of the FEMSimulation:
-        
+
         Parameters
         ----------
         D               : int
@@ -195,11 +195,11 @@ class FEMSimulation(SimParameters):
 
         # Solver parameters
         self.petsc_opt = {
-            "ksp_type":"cg",
-            "pc_type":"ilu",
-            "ksp_rtol":1e-4,
-            "ksp_atol":1e-7,
-            "ksp_max_it":1000,
+            "ksp_type": "cg",
+            "pc_type": "ilu",
+            "ksp_rtol": 1e-4,
+            "ksp_atol": 1e-7,
+            "ksp_max_it": 1000,
         }
         self.cg_problem = None
         self.dg_problem = None
@@ -263,7 +263,9 @@ class FEMSimulation(SimParameters):
                              (set domain before simulation or create a new one)"
                 )
 
-    def add_domain(self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None):
+    def add_domain(
+        self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None
+    ):
         super().add_domain(mesh_domain, mat_pty, mat_file, mat_perm, ID)
         if self.prepared_status:
             if mesh_domain in self.mat_map:
@@ -324,7 +326,7 @@ class FEMSimulation(SimParameters):
             self.domain, self.subdomains, self.boundaries = read_gmsh(
                 self.mesh, comm=self.comm, rank=self.rank, gdim=3
             )
-            # SPACE FOR INTEGRATION 
+            # SPACE FOR INTEGRATION
             if self.inbound:
                 self.Nspace = self.Ninboundaries + 1
                 ME = [
@@ -355,13 +357,13 @@ class FEMSimulation(SimParameters):
                 label = self.boundaries.find(int(bound["mesh_domain"]))
                 if not self.inbound:
                     dofs = locate_dofs_topological(
-                        self.V, self.domain.topology.dim-1, label
+                        self.V, self.domain.topology.dim - 1, label
                     )
                     self.bcs.append(dirichletbc(value, dofs, self.V))
                 else:
                     i_space = self.get_space_of_domain(bound["mesh_domain_3D"])
                     dofs = locate_dofs_topological(
-                        self.V.sub(i_space), self.domain.topology.dim-1, label
+                        self.V.sub(i_space), self.domain.topology.dim - 1, label
                     )
                     self.bcs.append(dirichletbc(value, dofs, self.V.sub(i_space)))
         if not self.bcs:
@@ -383,18 +385,26 @@ class FEMSimulation(SimParameters):
                 if condition.lower() in "neumann":
                     dom = int(bound["mesh_domain"])
                     if "value" in bound:
-                        self.Neuman_list[i_bound] = (Constant(self.domain, ScalarType(bound["value"])))
+                        self.Neuman_list[i_bound] = Constant(
+                            self.domain, ScalarType(bound["value"])
+                        )
                     elif "variable" in bound:
-                        self.Neuman_list[i_bound] = (Constant(self.domain, ScalarType(self.args[bound["variable"]])))
+                        self.Neuman_list[i_bound] = Constant(
+                            self.domain, ScalarType(self.args[bound["variable"]])
+                        )
                     else:
                         rise_error(
                             "A Neuman Boundary condition must be associated with a value or variable"
                         )
                     if not self.inbound:
-                        self.L = self.L + self.Neuman_list[i_bound] * self.u * self.ds(dom)
+                        self.L = self.L + self.Neuman_list[i_bound] * self.u * self.ds(
+                            dom
+                        )
                     else:
                         i_space = self.get_space_of_domain(bound["mesh_domain_3D"])
-                        self.L = self.L + self.Neuman_list[i_bound] * self.u[i_space] * self.ds(dom)
+                        self.L = self.L + self.Neuman_list[i_bound] * self.u[
+                            i_space
+                        ] * self.ds(dom)
             self.neumann_BC_status = True
         else:
             for i_bound in self.boundaries_list:
@@ -437,12 +447,12 @@ class FEMSimulation(SimParameters):
         if not self.inbound:
             return inner(
                 nabla_grad(self.mixedvout),
-                self.mat_map[i_mat].sigma_fen*nabla_grad(self.u)
+                self.mat_map[i_mat].sigma_fen * nabla_grad(self.u),
             ) * self.dx(i_dom)
         else:
             return inner(
                 nabla_grad(self.mixedvout[i_space]),
-                self.mat_map[i_mat].sigma_fen*nabla_grad(self.u[i_space])
+                self.mat_map[i_mat].sigma_fen * nabla_grad(self.u[i_space]),
             ) * self.dx(i_dom)
 
     def __set_jump(self):
@@ -456,9 +466,9 @@ class FEMSimulation(SimParameters):
             )
             jmp_v = avg(self.mixedvout[out_space]) - avg(self.mixedvout[in_space])
             jmp_u = avg(self.u[out_space]) - avg(self.u[in_space])
-            self.a  += (
+            self.a += (
                 self.mat_map[i_ibound].sigma_fen
-                /local_thickness
+                / local_thickness
                 * jmp_u
                 * jmp_v
                 * self.dS(i_ibound)
@@ -470,18 +480,18 @@ class FEMSimulation(SimParameters):
         internal use only: build a dictionnary mat_map containing a material for every domain and layer
         """
         if self.mat_unit == "S/um":
-            UN = S/m
+            UN = S / m
         else:
             UN = 1
         for dom, pty in self.mat_pty_map.items():
             self.mat_map[dom] = load_fenics_material(pty)
             self.mat_map[dom].update_fenics_sigma(
-                domain=self.domain,elem=self.elem,UN=UN, id=dom
+                domain=self.domain, elem=self.elem, UN=UN, id=dom
             )
-    
+
     def __set_linear_form(self):
         """
-        internal use only: set the linear form L(u) from the parameters        
+        internal use only: set the linear form L(u) from the parameters
         """
         pass_info("FEN4NRV: preparing the linear form")
         # Check if quicker without
@@ -489,7 +499,7 @@ class FEMSimulation(SimParameters):
         if not self.inbound:
             self.L = c_0 * self.u * self.dx
         else:
-            for i_space in range(self.Nspace): 
+            for i_space in range(self.Nspace):
                 self.L = c_0 * self.u[i_space] * self.dx
         self.linear_form_status = True
 
@@ -503,7 +513,9 @@ class FEMSimulation(SimParameters):
         """
         return self.petsc_opt
 
-    def set_solver_opt(self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None):
+    def set_solver_opt(
+        self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None
+    ):
         """
         set krylov solver options
 
@@ -565,7 +577,7 @@ class FEMSimulation(SimParameters):
             )
         self.mixedvout = self.cg_problem.solve()
         self.solve_status = True
-        
+
         if self.inbound and self.to_merge:
             V_sol = self.__merge_mixed_solutions()
         else:
@@ -583,7 +595,8 @@ class FEMSimulation(SimParameters):
             mesh_file=self.mesh_file,
             domain=self.domain,
             elem=self.multi_elem,
-            V=V_sol, vout=vout,
+            V=V_sol,
+            vout=vout,
             comm=self.domain.comm,
         )
         self.solving_timer += time.time() - t0
@@ -593,18 +606,20 @@ class FEMSimulation(SimParameters):
     def __merge_mixed_solutions(self):
         if self.dg_problem is None:
             self.mixedvouts = self.mixedvout.split()
-            self.V_DG = FunctionSpace(self.domain, ("Discontinuous Lagrange", self.elem[1]))
+            self.V_DG = FunctionSpace(
+                self.domain, ("Discontinuous Lagrange", self.elem[1])
+            )
             u, v = TrialFunction(self.V_DG), TestFunction(self.V_DG)
             adg = u * v * self.dx
             Ldg = 0
             for i_domain in self.domainsID:
                 i_space = self.get_space_of_domain(i_domain)
-                Ldg += v * self.mixedvout[i_space]*self.dx(i_domain)
+                Ldg += v * self.mixedvout[i_space] * self.dx(i_domain)
             self.dg_problem = LinearProblem(
-                adg, Ldg,bcs=[], petsc_options=self.petsc_opt
+                adg, Ldg, bcs=[], petsc_options=self.petsc_opt
             )
         else:
-            mixedvouts =self.mixedvout.split()
+            mixedvouts = self.mixedvout.split()
             for i in range(len(mixedvouts)):
                 self.mixedvouts[i].vector[:] = mixedvouts[i].vector[:]
         self.vout = self.dg_problem.solve()
@@ -629,7 +644,7 @@ class FEMSimulation(SimParameters):
         fname = rmv_ext(filename)
         if not (fname == filename or fname + ".xdmf" == filename):
             rise_warning("Extension of solution will be save in xdmf files")
-        with XDMFFile(self.domain.comm, fname+".xdmf", "w") as file:
+        with XDMFFile(self.domain.comm, fname + ".xdmf", "w") as file:
             file.write_mesh(self.domain)
             file.write_function(self.vout)
         return self.result
@@ -645,7 +660,7 @@ class FEMSimulation(SimParameters):
             do = self.ds
         elif dim == 3:
             do = self.dx
-        S = assemble_scalar(form(1*do(dom_id)))
+        S = assemble_scalar(form(1 * do(dom_id)))
         if self.to_merge:
             return assemble_scalar(form(self.vout * do(dom_id))) / S * V
         else:
