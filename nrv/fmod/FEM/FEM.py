@@ -13,6 +13,7 @@ import time
 ###############
 fem_verbose = True
 
+
 ###################
 ## Model classes ##
 ###################
@@ -20,7 +21,7 @@ class FEM_model(NRV_class):
     """
     A generic class for Finite Element models
     """
-    
+
     @abstractmethod
     def __init__(self, Ncore=None):
         """
