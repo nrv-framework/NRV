@@ -28,12 +28,12 @@ class unmyelinated(axon):
         freq=100,
         freq_min=0,
         mesh_shape="plateau_sigmoid",
-        alpha_max=0.3
+        alpha_max=0.3,
         d_lambda=0.1,
         v_init=None,
         T=None,
         ID=0,
-        threshold=-40
+        threshold=-40,
     ):
         """
         initialisation of an unmyelinted axon
@@ -107,7 +107,7 @@ class unmyelinated(axon):
             v_init=v_init,
             T=T,
             ID=ID,
-            threshold=threshold
+            threshold=threshold,
         )
         self.Nsec = Nsec
         self.Nrec = Nrec
