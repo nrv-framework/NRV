@@ -236,6 +236,14 @@ class recording_point(NRV_class):
         sigma_zz    : float
             conductivity of the isotropic extracellular material alog the z-axis, in [S.m]
         """
+        if myelinated:
+            d = NodeD_interpol(d)
+            surface = np.pi * (d / cm) * (1 / cm)
+            d_internode = np.gradient(x_axon)
+        else:
+            surface = surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
+            d_internode = np.gradient(x_axon)
+
         sx = sigma_yy * sigma_zz
         sy = sigma_xx * sigma_zz
         sz = sigma_xx * sigma_yy

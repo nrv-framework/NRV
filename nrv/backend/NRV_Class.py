@@ -81,7 +81,7 @@ class NRV_class(metaclass=ABCMeta):
     NRV Class are empty shells, defined as abstract classes of which every class in NRV
     should inherite. This enable automatic context backup with save and load methods
     """
-    
+
     @abstractmethod
     def __init__(self):
         """
@@ -180,7 +180,7 @@ def load_any(data, **kwargs):
     elif is_NRV_dict(key_dic):
         nrv_type = key_dic["nrv_type"]
         nrv_obj = eval('sys.modules["nrv"].' + nrv_type)()
-        nrv_obj.load(key_dic,**kwargs)
+        nrv_obj.load(key_dic, **kwargs)
     elif is_NRV_dict_dict(key_dic):
         nrv_obj = {}
         for key in key_dic:

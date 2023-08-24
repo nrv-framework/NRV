@@ -213,7 +213,9 @@ class SimResult(NRV_class):
 
     def load_sim_result(self, data="sim_result.json"):
         rise_warning("load_sim_result is a deprecated method use load")
-        self.load(data=data)
+        # self.load(data=data)
+        # FIXME: data does not exist yet in load method
+        self.load(file=data)
 
     #############
     ## methods ##

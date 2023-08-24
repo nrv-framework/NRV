@@ -650,7 +650,9 @@ class FEMSimulation(SimParameters):
         return self.result
 
     def get_timers(self):
-        return self.assembling_timer, self.solving_timer
+        # return self.assembling_timer, self.solving_timer
+        # !!! FIXME: no self.assembling_timer
+        return self.solving_timer
 
     def visualize_mesh(self):
         os.system("gmsh " + self.mesh_file + ".msh")

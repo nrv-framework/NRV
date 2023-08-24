@@ -13,7 +13,7 @@ try:
     import neuron as nrn  # this still work with fake neuron (mock)
 
     nrn_version = nrn.__version__  # this fails :)
-except:
+except AttributeError:
     # no Neuron or fake neuron
     rise_warning(
         "No mods compiled as the environnement variable NRVPATH does not exist"

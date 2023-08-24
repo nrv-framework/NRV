@@ -11,7 +11,7 @@ class nrv_parameters:
     """
     A class for NRV parameters used to gather parameters
     """
-    
+
     def __init__(self):
         """
         Initialize the class for parameters
