@@ -7,21 +7,23 @@ import faulthandler
 from collections.abc import Iterable
 import matplotlib.pyplot as plt
 import numpy as np
-from pylab import argmin,argmax
+from pylab import argmin, argmax
 from scipy import signal
 from numba import jit
 from ...backend.file_handler import json_dump, json_load, is_iterable
 from ...backend.log_interface import rise_error, rise_warning, pass_info
 from ...nmod.myelinated import get_MRG_parameters
 from ..units import *
+
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
+
 
 #############################
 ## miscellaneous functions ##
 #############################
-def distance_point2point(x_1,y_1,x_2=0,y_2=0):
-    '''
+def distance_point2point(x_1, y_1, x_2=0, y_2=0):
+    """
     Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
 
     Parameters
@@ -39,12 +41,13 @@ def distance_point2point(x_1,y_1,x_2=0,y_2=0):
     --------
     d : float
         distance between the point and the orthogonal projection of (x_p,y_p) on it
-    '''
-    d = ((x_1 -x_2)**2 + (y_1-y_2)**2)**0.5
+    """
+    d = ((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2) ** 0.5
     return d
 
-def distance_point2line(x_p,y_p,a,b):
-    '''
+
+def distance_point2line(x_p, y_p, a, b):
+    """
     Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
 
     Parameters
@@ -62,15 +65,17 @@ def distance_point2line(x_p,y_p,a,b):
     --------
     d : float
         distance between the point and the orthogonal projection of (x_p,y_p) on it
-    '''
-    d = np.abs(a*x_p - y_p + b)/(np.sqrt(a**2 + 1))
+    """
+    d = np.abs(a * x_p - y_p + b) / (np.sqrt(a**2 + 1))
     return d
+
 
 #####################################
 ## SAVE AND LOAD RESULTS FUNCTIONS ##
 #####################################
 
-def save_axon_results_as_json(results,filename):
+
+def save_axon_results_as_json(results, filename):
     """
     save dictionary as a json file
 
@@ -83,7 +88,8 @@ def save_axon_results_as_json(results,filename):
     """
     json_dump(results, filename)
 
-def load_simulation_from_json(filename):        
+
+def load_simulation_from_json(filename):
     """
     load results of individual axon simulation from a json. This function is specific to axons simulation as some identified results are automatically converted as numpy arrays.
 
@@ -94,24 +100,32 @@ def load_simulation_from_json(filename):
     """
     results = json_load(filename)
     # convert iterables to numpy arrays
-    int_iterables = ['node_index','Markov_Nav_modeled_NoR','V_mem_raster_position','V_mem_filtered_raster_position','V_mem_raster_time_index','V_mem_filtered_raster_time_index']
+    int_iterables = [
+        "node_index",
+        "Markov_Nav_modeled_NoR",
+        "V_mem_raster_position",
+        "V_mem_filtered_raster_position",
+        "V_mem_raster_time_index",
+        "V_mem_filtered_raster_time_index",
+    ]
     for key, value in results.items():
         if is_iterable(value):
             if key in int_iterables:
-                results[key] = np.asarray(value,dtype=np.int16)
+                results[key] = np.asarray(value, dtype=np.int16)
             else:
                 if len(value) == 0:
                     results[key] = []
-                elif isinstance(value[0],str):
+                elif isinstance(value[0], str):
                     results[key] = value
                 else:
-                    if key in 'rec_pos_list':         
+                    if key in "rec_pos_list":
                         results[key] = value
                     else:
-                        results[key] = np.asarray(value,dtype=np.float32)
+                        results[key] = np.asarray(value, dtype=np.float32)
         else:
             results[key] = value
     return results
+
 
 ##############################################
 ## HANDLE THE SIMULATION RESULT DICTIONNARY ##
@@ -127,12 +141,13 @@ def remove_key(my_dict, key, verbose=False):
     key     : str
         name of the key to delete
     """
-    #if isinstance(key, Iterable):
+    # if isinstance(key, Iterable):
     #    for k in key:
     #        del my_dict[k]
-    #else:
+    # else:
     del my_dict[key]
-    pass_info('removed the following key from results: ', key, verbose=verbose)
+    pass_info("removed the following key from results: ", key, verbose=verbose)
+
 
 def remove_non_NoR_zones(my_dict, key):
     """
@@ -146,21 +161,26 @@ def remove_non_NoR_zones(my_dict, key):
     key     : str
         name of the key to clean
     """
-    if ('V_mem' in key):
-        if my_dict['Axon_type'] == 'Myelinated':
+    if "V_mem" in key:
+        if my_dict["Axon_type"] == "Myelinated":
             new_entry = []
-            for i in my_dict['Nodes_of_Ranvier_indexes']:
-                new_entry.append(my_dict[key][i,:])
+            for i in my_dict["Nodes_of_Ranvier_indexes"]:
+                new_entry.append(my_dict[key][i, :])
             my_dict[key] = np.asarray(new_entry)
         else:
-            rise_warning('Warning, remove_non_NoR_zones only applicable to Myelinated axons')
+            rise_warning(
+                "Warning, remove_non_NoR_zones only applicable to Myelinated axons"
+            )
     else:
-        rise_warning('Warning, remove_non_NoR_zones only applicable to membrane voltage or current')
+        rise_warning(
+            "Warning, remove_non_NoR_zones only applicable to membrane voltage or current"
+        )
+
 
 ############################
 ## AXON SIGNAL PROCESSING ##
 ############################
-def filter_freq(my_dict,my_key,freq,Q=10):
+def filter_freq(my_dict, my_key, freq, Q=10):
     """
     Basic Filtering of quantities. This function design a notch filter (scipy IIR-notch).
     Adds an item to the specified dictionary, with the key termination '_filtered' concatenated to the original key.
@@ -181,28 +201,32 @@ def filter_freq(my_dict,my_key,freq,Q=10):
         f0 = np.asarray(freq)
     else:
         f0 = freq
-    if my_dict['dt'] == 0:
-        rise_warning('Warning: filtering aborted, variable time step used for differential equation solving')
+    if my_dict["dt"] == 0:
+        rise_warning(
+            "Warning: filtering aborted, variable time step used for differential equation solving"
+        )
         return False
     else:
-        fs = 1/my_dict['dt']
+        fs = 1 / my_dict["dt"]
         if isinstance(f0, Iterable):
             new_sig = np.zeros(my_dict[my_key].shape)
             for k in range(len(my_dict[my_key])):
-                new_sig[k,:] = my_dict[my_key][k]
+                new_sig[k, :] = my_dict[my_key][k]
                 for f in f0:
                     b_notch, a_notch = signal.iirnotch(f, Q, fs)
-                    new_sig[k,:] = signal.lfilter(b_notch,a_notch,new_sig[k,:][k])
+                    new_sig[k, :] = signal.lfilter(b_notch, a_notch, new_sig[k, :][k])
         else:
             ##  NOTCH at the stimulation frequency
             b_notch, a_notch = signal.iirnotch(f0, Q, fs)
             new_sig = np.zeros(my_dict[my_key].shape)
             for k in range(len(my_dict[my_key])):
-                new_sig[k,:] = signal.lfilter(b_notch,a_notch,my_dict[my_key][k])
-        my_dict[my_key+'_filtered'] = new_sig
+                new_sig[k, :] = signal.lfilter(b_notch, a_notch, my_dict[my_key][k])
+        my_dict[my_key + "_filtered"] = new_sig
 
 
-def rasterize(my_dict,my_key,t_start=0,t_stop=0,t_min_spike=0.1,t_refractory=2,threshold = 0):
+def rasterize(
+    my_dict, my_key, t_start=0, t_stop=0, t_min_spike=0.1, t_refractory=2, threshold=0
+):
     """
     Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with spike detection.
     This function adds 4 items to the dictionnary, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
@@ -231,54 +255,84 @@ def rasterize(my_dict,my_key,t_start=0,t_stop=0,t_min_spike=0.1,t_refractory=2,t
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
     if t_stop == 0:
-        t_stop = int(my_dict['tstop']/my_dict['dt'])
+        t_stop = int(my_dict["tstop"] / my_dict["dt"])
     else:
-        t_stop=int(t_stop/my_dict['dt'])
+        t_stop = int(t_stop / my_dict["dt"])
     if threshold == 0:
-        thr = my_dict['threshold']
+        thr = my_dict["threshold"]
     else:
         thr = threshold
     ## selecting the list of position considering what has been recorded
-    if my_dict['myelinated'] == True:
-        if my_dict['rec'] == 'all':
-            list_to_parse = my_dict['node_index']
-            x = my_dict['x']
+    if my_dict["myelinated"] == True:
+        if my_dict["rec"] == "all":
+            list_to_parse = my_dict["node_index"]
+            x = my_dict["x"]
         else:
-            list_to_parse = np.arange(len(my_dict['x_rec']))#my_dict[my_key]
-            x = my_dict['x_rec']
+            list_to_parse = np.arange(len(my_dict["x_rec"]))  # my_dict[my_key]
+            x = my_dict["x_rec"]
     else:
-        list_to_parse = np.arange(len(my_dict['x_rec'])) #my_dict[my_key]
-        x = my_dict['x_rec']
+        list_to_parse = np.arange(len(my_dict["x_rec"]))  # my_dict[my_key]
+        x = my_dict["x_rec"]
     # spike detection
-    my_dict[my_key+'_raster_position'], my_dict[my_key+'_raster_x_position'], my_dict[my_key+'_raster_time_index'], my_dict[my_key+'_raster_time'] = spike_detection(my_dict[my_key],my_dict['t'],x,list_to_parse, thr, my_dict['dt'], t_start, t_stop, t_refractory, t_min_spike)
+    (
+        my_dict[my_key + "_raster_position"],
+        my_dict[my_key + "_raster_x_position"],
+        my_dict[my_key + "_raster_time_index"],
+        my_dict[my_key + "_raster_time"],
+    ) = spike_detection(
+        my_dict[my_key],
+        my_dict["t"],
+        x,
+        list_to_parse,
+        thr,
+        my_dict["dt"],
+        t_start,
+        t_stop,
+        t_refractory,
+        t_min_spike,
+    )
 
-@jit(nopython=True,fastmath=True)
-def spike_detection(Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike):
+
+@jit(nopython=True, fastmath=True)
+def spike_detection(
+    Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
+):
     """
     Internal use only, spike detection just in time compiled to speed up the process
     """
-    raster_position=[]
-    raster_x_position=[]
-    raster_time_index=[]
+    raster_position = []
+    raster_x_position = []
+    raster_time_index = []
     raster_time = []
     # parsing to find spikes
     for i in list_to_parse:
         t_last_spike = t_start - t_refractory
-        for j in range(int(t_start*(1/dt)),t_stop):
-            if Voltage[i][j] <= thr and Voltage[i][j+1] >= thr \
-                and Voltage[i][min((j+int(t_min_spike*(1/dt))),t_stop)] >= thr \
-                and (j*dt - t_last_spike) > t_refractory: # 1st line: threshold crossing, 2nd: minimum time above threshold,3rd: refractory period
+        for j in range(int(t_start * (1 / dt)), t_stop):
+            if (
+                Voltage[i][j] <= thr
+                and Voltage[i][j + 1] >= thr
+                and Voltage[i][min((j + int(t_min_spike * (1 / dt))), t_stop)] >= thr
+                and (j * dt - t_last_spike) > t_refractory
+            ):  # 1st line: threshold crossing, 2nd: minimum time above threshold,3rd: refractory period
                 # there was a spike, get time and position
                 raster_position.append(i)
                 raster_x_position.append(x[i])
                 raster_time_index.append(j)
                 raster_time.append(t[j])
                 # memorize the time in ms, to evaluate refractory period
-                t_last_spike = j*dt
+                t_last_spike = j * dt
     # return results
-    return np.asarray(raster_position), np.asarray(raster_x_position), np.asarray(raster_time_index), np.asarray(raster_time)
+    return (
+        np.asarray(raster_position),
+        np.asarray(raster_x_position),
+        np.asarray(raster_time_index),
+        np.asarray(raster_time),
+    )
 
-def find_spike_origin(my_dict,my_key=None,t_start=0,t_stop=0,x_min=None,x_max=None):
+
+def find_spike_origin(
+    my_dict, my_key=None, t_start=0, t_stop=0, x_min=None, x_max=None
+):
     """
     Find the start time and position of a spike or a spike train. Only work on rasterized keys
 
@@ -306,34 +360,34 @@ def find_spike_origin(my_dict,my_key=None,t_start=0,t_stop=0,x_min=None,x_max=No
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict['tstop']
+        t_stop = my_dict["tstop"]
     # find the best raster plot
     if my_key == None:
-        if 'V_mem_filtered_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_filtered_raster'
-        elif 'V_mem_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_raster'
+        if "V_mem_filtered_raster_position" in my_dict:
+            good_key_prefix = "V_mem_filtered_raster"
+        elif "V_mem_raster_position" in my_dict:
+            good_key_prefix = "V_mem_raster"
         else:
             # there is no rasterized voltage, nothing to find
             return False
     else:
         good_key_prefix = my_key
     # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
+    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
+    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
     good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes]
-    good_spike_positions = my_dict[good_key_prefix+'_x_position'][good_indexes]
+    good_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
+    good_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
     # get data only in the z window if applicable
     if x_min != None:
-        sup_xmin_indexes = np.where(good_spike_positions>x_min)
+        sup_xmin_indexes = np.where(good_spike_positions > x_min)
     else:
         sup_xmin_indexes = np.arange(len(good_spike_positions))
     if x_max != None:
-        inf_xmax_indexes = np.where(good_spike_positions<x_max)
+        inf_xmax_indexes = np.where(good_spike_positions < x_max)
     else:
         inf_xmax_indexes = np.arange(len(good_spike_positions))
-    good_x_indexes = np.intersect1d(sup_xmin_indexes,inf_xmax_indexes)
+    good_x_indexes = np.intersect1d(sup_xmin_indexes, inf_xmax_indexes)
     considered_spike_times = good_spike_times[good_x_indexes]
     considered_spike_positions = good_spike_positions[good_x_indexes]
     # fin the minimum time corresponding to spike initiation
@@ -342,7 +396,10 @@ def find_spike_origin(my_dict,my_key=None,t_start=0,t_stop=0,x_min=None,x_max=No
     start_x_position = considered_spike_positions[start_index]
     return start_time, start_x_position
 
-def find_spike_last_occurance(my_dict,my_key=None,t_start=0,t_stop=0,direction='up',x_start=0):
+
+def find_spike_last_occurance(
+    my_dict, my_key=None, t_start=0, t_stop=0, direction="up", x_start=0
+):
     """
     Find the last position of a spike occurance for rasterized data
 
@@ -372,13 +429,13 @@ def find_spike_last_occurance(my_dict,my_key=None,t_start=0,t_stop=0,direction='
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict['tstop']
+        t_stop = my_dict["tstop"]
     # find the best raster plot
     if my_key == None:
-        if 'V_mem_filtered_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_filtered_raster'
-        elif 'V_mem_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_raster'
+        if "V_mem_filtered_raster_position" in my_dict:
+            good_key_prefix = "V_mem_filtered_raster"
+        elif "V_mem_raster_position" in my_dict:
+            good_key_prefix = "V_mem_raster"
         else:
             # there is no rasterized voltage, nothing to find
             return False
@@ -386,14 +443,16 @@ def find_spike_last_occurance(my_dict,my_key=None,t_start=0,t_stop=0,direction='
         good_key_prefix = my_key
     # get x_start, eventually t_start
     if x_start == 0:
-        t_start, x_start = find_spike_origin(my_dict,my_key=good_key_prefix,t_start=t_start,t_stop=t_stop)
+        t_start, x_start = find_spike_origin(
+            my_dict, my_key=good_key_prefix, t_start=t_start, t_stop=t_stop
+        )
     # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
+    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
+    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
     good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    considered_spike_times = my_dict[good_key_prefix+'_time'][good_indexes]
-    considered_spike_positions = my_dict[good_key_prefix+'_x_position'][good_indexes]
-    if direction=='up':
+    considered_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
+    considered_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
+    if direction == "up":
         # find the spike in the upper region of the start
         upper_spike_index = np.where(considered_spike_positions > x_start)
         upper_spike_times = considered_spike_times[upper_spike_index]
@@ -402,7 +461,7 @@ def find_spike_last_occurance(my_dict,my_key=None,t_start=0,t_stop=0,direction='
         last_spike_index = np.where(upper_spike_times == np.amax(upper_spike_times))
         t_last = upper_spike_times[last_spike_index]
         x_last = upper_spike_positions[last_spike_index]
-    elif direction=='down':
+    elif direction == "down":
         # find the spike in the upper region of the start
         lower_spike_index = np.where(considered_spike_positions < x_start)
         lower_spike_times = considered_spike_times[lower_spike_index]
@@ -421,13 +480,28 @@ def find_spike_last_occurance(my_dict,my_key=None,t_start=0,t_stop=0,direction='
         lower_spike_times = considered_spike_times[lower_spike_index]
         lower_spike_positions = considered_spike_positions[lower_spike_index]
         # find the last occurances
-        last_upper_spike_index = np.where(upper_spike_times == np.amax(upper_spike_times))
-        last_lower_spike_index = np.where(lower_spike_times == np.amax(lower_spike_times))
-        t_last = np.asarray([lower_spike_times[last_lower_spike_index][0],lower_spike_times[last_upper_spike_index]][0])
-        x_last = np.asarray([lower_spike_positions[last_lower_spike_index][0],lower_spike_positions[last_upper_spike_index]][0])
+        last_upper_spike_index = np.where(
+            upper_spike_times == np.amax(upper_spike_times)
+        )
+        last_lower_spike_index = np.where(
+            lower_spike_times == np.amax(lower_spike_times)
+        )
+        t_last = np.asarray(
+            [
+                lower_spike_times[last_lower_spike_index][0],
+                lower_spike_times[last_upper_spike_index],
+            ][0]
+        )
+        x_last = np.asarray(
+            [
+                lower_spike_positions[last_lower_spike_index][0],
+                lower_spike_positions[last_upper_spike_index],
+            ][0]
+        )
     return t_last, x_last
 
-def speed(my_dict,position_key=None,t_start=0,t_stop=0,x_start=0,x_stop=0):
+
+def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
     """
     Compute the velocity of a spike from rasterized data in a dictionary. The speed can be either positive or negative depending on the propagation direction.
 
@@ -457,41 +531,50 @@ def speed(my_dict,position_key=None,t_start=0,t_stop=0,x_start=0,x_stop=0):
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict['tstop']
-    if t_start==0:
-        if 'intra_stim_starts' in my_dict and my_dict['intra_stim_starts']!=[]:
-                t_start=my_dict['intra_stim_starts'][0]
-    if x_start==0:
-        x_stop=my_dict['L']
-    elif x_stop==0:
-        x_start=my_dict['L']
+        t_stop = my_dict["tstop"]
+    if t_start == 0:
+        if "intra_stim_starts" in my_dict and my_dict["intra_stim_starts"] != []:
+            t_start = my_dict["intra_stim_starts"][0]
+    if x_start == 0:
+        x_stop = my_dict["L"]
+    elif x_stop == 0:
+        x_start = my_dict["L"]
     # find the best raster plot
     if position_key == None:
-        if 'V_mem_filtered_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_filtered_raster'
-        elif 'V_mem_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_raster'
+        if "V_mem_filtered_raster_position" in my_dict:
+            good_key_prefix = "V_mem_filtered_raster"
+        elif "V_mem_raster_position" in my_dict:
+            good_key_prefix = "V_mem_raster"
         else:
             # there is no rasterized voltage, nothing to find
             return False
     else:
         good_key_prefix = my_key
     # get data only in time windows
-    sup_time_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
-    inf_time_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
+    sup_time_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
+    inf_time_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
     good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
-    sup_position_indexes = np.where(my_dict[good_key_prefix+'_x_position'][good_indexes_time]>=x_start)
-    inf_position_indexes = np.where(my_dict[good_key_prefix+'_x_position'][good_indexes_time]<=x_stop)
+    sup_position_indexes = np.where(
+        my_dict[good_key_prefix + "_x_position"][good_indexes_time] >= x_start
+    )
+    inf_position_indexes = np.where(
+        my_dict[good_key_prefix + "_x_position"][good_indexes_time] <= x_stop
+    )
     good_indexes_position = np.intersect1d(sup_position_indexes, inf_position_indexes)
-    good_indexes=np.intersect1d(good_indexes_position,good_indexes_time)
-    good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes]
-    good_spike_positions = my_dict[good_key_prefix+'_x_position'][good_indexes]
-    max_time=np.argmax(good_spike_times)
-    min_time=np.argmin(good_spike_times)
-    speed=(good_spike_positions[max_time]-good_spike_positions[min_time])*10**-3/(good_spike_times[max_time]-good_spike_times[min_time])
+    good_indexes = np.intersect1d(good_indexes_position, good_indexes_time)
+    good_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
+    good_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
+    max_time = np.argmax(good_spike_times)
+    min_time = np.argmin(good_spike_times)
+    speed = (
+        (good_spike_positions[max_time] - good_spike_positions[min_time])
+        * 10**-3
+        / (good_spike_times[max_time] - good_spike_times[min_time])
+    )
     return speed
 
-def block(my_dict,position_key=None,t_start=0,t_stop=0):
+
+def block(my_dict, position_key=None, t_start=0, t_stop=0):
     """
     check if an axon is blocked or not. The simulation has to include the test spike. This function will look for the test spike initiation and check the propagation
 
@@ -511,84 +594,107 @@ def block(my_dict,position_key=None,t_start=0,t_stop=0):
     flag 	: bool or None
         True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
     """
-    position_max=0
-    blocked_spike_positionlist=[]
+    position_max = 0
+    blocked_spike_positionlist = []
     if t_stop == 0:
-        t_stop = my_dict['tstop']
-    if t_start==0:
-        if 'intra_stim_starts' in my_dict and my_dict['intra_stim_starts']!=[]:
-                t_start=my_dict['intra_stim_starts'][0]
+        t_stop = my_dict["tstop"]
+    if t_start == 0:
+        if "intra_stim_starts" in my_dict and my_dict["intra_stim_starts"] != []:
+            t_start = my_dict["intra_stim_starts"][0]
 
     if position_key == None:
-        if 'V_mem_filtered_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_filtered_raster'
-        elif 'V_mem_raster_position' in my_dict:
-            good_key_prefix = 'V_mem_raster'
+        if "V_mem_filtered_raster_position" in my_dict:
+            good_key_prefix = "V_mem_filtered_raster"
+        elif "V_mem_raster_position" in my_dict:
+            good_key_prefix = "V_mem_raster"
         else:
             # there is no rasterized voltage, nothing to find
-            return False	
-    sup_time_indexes = np.where(my_dict[good_key_prefix+'_time']>t_start)
-    inf_time_indexes = np.where(my_dict[good_key_prefix+'_time']<t_stop)
+            return False
+    sup_time_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
+    inf_time_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
     good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
-    good_spike_times = my_dict[good_key_prefix+'_time'][good_indexes_time]
-    blocked_spike_positionlist = my_dict[good_key_prefix+'_x_position'][good_indexes_time]
-    if len(blocked_spike_positionlist)==0:
+    good_spike_times = my_dict[good_key_prefix + "_time"][good_indexes_time]
+    blocked_spike_positionlist = my_dict[good_key_prefix + "_x_position"][
+        good_indexes_time
+    ]
+    if len(blocked_spike_positionlist) == 0:
         return None
-    if 'intra_stim_positions' in my_dict:
-        if my_dict['intra_stim_positions']<my_dict['extracellular_electrode_x']:
-            position_max=max_spike_position(blocked_spike_positionlist,position_max,spike_begin='down')	
-                
-            if blocked_spike_positionlist[position_max]<9./10*my_dict['L']:
+    if "intra_stim_positions" in my_dict:
+        if my_dict["intra_stim_positions"] < my_dict["extracellular_electrode_x"]:
+            position_max = max_spike_position(
+                blocked_spike_positionlist, position_max, spike_begin="down"
+            )
+
+            if blocked_spike_positionlist[position_max] < 9.0 / 10 * my_dict["L"]:
                 return True
             else:
-                for i in range(position_max-1):				
-                    if blocked_spike_positionlist[i+1]-blocked_spike_positionlist[i]>my_dict['L']/5:
+                for i in range(position_max - 1):
+                    if (
+                        blocked_spike_positionlist[i + 1]
+                        - blocked_spike_positionlist[i]
+                        > my_dict["L"] / 5
+                    ):
                         return True
                 else:
                     return False
         else:
-            position_max=max_spike_position(blocked_spike_positionlist,position_max,spike_begin='up')
-            if min(blocked_spike_positionlist)>1./10*my_dict['L']:
+            position_max = max_spike_position(
+                blocked_spike_positionlist, position_max, spike_begin="up"
+            )
+            if min(blocked_spike_positionlist) > 1.0 / 10 * my_dict["L"]:
                 return True
             else:
-                for i in range(position_max-1):				
-                    if blocked_spike_positionlist[i]-blocked_spike_positionlist[i+1]>my_dict['L']/5:
+                for i in range(position_max - 1):
+                    if (
+                        blocked_spike_positionlist[i]
+                        - blocked_spike_positionlist[i + 1]
+                        > my_dict["L"] / 5
+                    ):
                         return True
                 else:
                     return False
     else:
-        print('intra_stim_positions is not in dictionnary')
+        print("intra_stim_positions is not in dictionnary")
 
-def max_spike_position(blocked_spike_positionlist,position_max,spike_begin='down'):
-    if spike_begin=='down':
-        while blocked_spike_positionlist[position_max+1]>=blocked_spike_positionlist[position_max] and position_max<(len(blocked_spike_positionlist)-2):
-            position_max=position_max+1
+
+def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    if spike_begin == "down":
+        while blocked_spike_positionlist[
+            position_max + 1
+        ] >= blocked_spike_positionlist[position_max] and position_max < (
+            len(blocked_spike_positionlist) - 2
+        ):
+            position_max = position_max + 1
         return position_max
     else:
-        while blocked_spike_positionlist[position_max+1]<=blocked_spike_positionlist[position_max] and position_max<(len(blocked_spike_positionlist)-2):
-            position_max=position_max+1
+        while blocked_spike_positionlist[
+            position_max + 1
+        ] <= blocked_spike_positionlist[position_max] and position_max < (
+            len(blocked_spike_positionlist) - 2
+        ):
+            position_max = position_max + 1
         return position_max
 
-@jit(nopython=True,fastmath=True)
+
+@jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
     """
     spike counting, just in time compiled. For internal use only.
     """
-    if len(onset_position)==0:
-        spike_number=0
+    if len(onset_position) == 0:
+        spike_number = 0
         return 0
     else:
-        spike_number=1
-        for i in range(len(onset_position)-1):
-            if onset_position[i]==min(onset_position):
-                if onset_position[i]==onset_position[i+1]:
-                    spike_number=spike_number+1
+        spike_number = 1
+        for i in range(len(onset_position) - 1):
+            if onset_position[i] == min(onset_position):
+                if onset_position[i] == onset_position[i + 1]:
+                    spike_number = spike_number + 1
     return spike_number
 
 
-
 def check_test_AP(results_sim):
-    '''
+    """
     Check if a test AP is correctely triggered during an axon simulation and if so return the\
     trigger time
 
@@ -601,31 +707,33 @@ def check_test_AP(results_sim):
     -------
     test_AP     : float or None
         time in ms of the first test AP during the simulation. None if no test AP found
-    '''
+    """
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
     if "intra_stim_starts" not in results_sim:
         return None
     else:
         mask = False
-        test_AP = results_sim["intra_stim_starts"] 
-        if (len(test_AP)):
+        test_AP = results_sim["intra_stim_starts"]
+        if len(test_AP):
             if is_iterable(test_AP):
                 test_AP = test_AP[0]
-            i_first_pos = np.where(results_sim['V_mem_raster_x_position']==0) 
+            i_first_pos = np.where(results_sim["V_mem_raster_x_position"] == 0)
             for i in i_first_pos[0]:
-                if results_sim['V_mem_raster_time'][i] >= test_AP-0.01 and\
-                    results_sim['V_mem_raster_time'][i] <= test_AP+0.7:
+                if (
+                    results_sim["V_mem_raster_time"][i] >= test_AP - 0.01
+                    and results_sim["V_mem_raster_time"][i] <= test_AP + 0.7
+                ):
                     mask = True
             if not mask:
                 test_AP = None
         else:
             test_AP = None
-        return(test_AP)
+        return test_AP
 
 
 def detect_start_extrastim(results_sim, threshold=None):
-    '''
+    """
     Returns the starting time of extracellular stimulation from axon simulation results
 
     Parameters
@@ -640,25 +748,25 @@ def detect_start_extrastim(results_sim, threshold=None):
     -------
     t_start     : list or float or None
         list of stimulation starting time in ms, float if only one stimulation and None if no stimulation
-    '''
+    """
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
     t_start = []
     if "extracellular_stimuli" in results_sim:
-        for i in range(len(results_sim['extracellular_stimuli'])):
-            s = results_sim['extracellular_stimuli'][i]
-            t = results_sim['extracellular_stimuli_t'][i]
+        for i in range(len(results_sim["extracellular_stimuli"])):
+            s = results_sim["extracellular_stimuli"][i]
+            t = results_sim["extracellular_stimuli_t"][i]
             if threshold is None:
                 t_start += [t[1]]
             else:
                 for i in reversed(range(len(s))):
-                    if abs(s[i])>threshold:
+                    if abs(s[i]) > threshold:
                         t_start += [t[i]]
-    if len(t_start)==0:
+    if len(t_start) == 0:
         t_start = None
-    elif len(t_start)==1:
-        t_start=t_start[0]
+    elif len(t_start) == 1:
+        t_start = t_start[0]
     return t_start
 
 
@@ -681,14 +789,14 @@ def extra_stim_properties(results_sim):
 
     electrode = {}
 
-    if 'extracellular_electrode_y' in results_sim:
-        electrode['x'] = results_sim['extracellular_electrode_x']
-        electrode['y'] = results_sim['extracellular_electrode_y']
-        electrode['z'] = results_sim['extracellular_electrode_z']
-        electrode['start'] = detect_start_extrastim(results_sim)
-        electrode['max amplitude'] = [max(s) for s in results_sim['extracellular_stimuli']]
-
-
+    if "extracellular_electrode_y" in results_sim:
+        electrode["x"] = results_sim["extracellular_electrode_x"]
+        electrode["y"] = results_sim["extracellular_electrode_y"]
+        electrode["z"] = results_sim["extracellular_electrode_z"]
+        electrode["start"] = detect_start_extrastim(results_sim)
+        electrode["max amplitude"] = [
+            max(s) for s in results_sim["extracellular_stimuli"]
+        ]
 
     return electrode
 
@@ -714,52 +822,61 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
-    ID = results_sim['ID']
+    ID = results_sim["ID"]
 
     # Axon parameter
     parameters = {}
 
-    if 'diameter' in results_sim:
-        parameters['diameter'] = results_sim['diameter']
+    if "diameter" in results_sim:
+        parameters["diameter"] = results_sim["diameter"]
 
-    if 'myelinated' in results_sim and results_sim['myelinated']:
-        parameters['node'] = len(results_sim['x_nodes'])
+    if "myelinated" in results_sim and results_sim["myelinated"]:
+        parameters["node"] = len(results_sim["x_nodes"])
 
-    if 'extracellular_electrode_y' in results_sim and \
-        len(results_sim['extracellular_electrode_y']) == 1:
-        parameters['distance electrod'] = distance_point2line(results_sim['y'], results_sim['z'],\
-            results_sim['extracellular_electrode_y'][0], results_sim['extracellular_electrode_z'][0])
-        if results_sim['myelinated']:
-            x_elec = results_sim['extracellular_electrode_x'][0]
-            elec_node = np.argmin(abs(results_sim['x_nodes'] - x_elec))
-            elec_ali = (results_sim['x_nodes'][elec_node] - x_elec) /\
-                (results_sim['x_nodes'][1] - results_sim['x_nodes'][0])
-            parameters['electrod node'] = int(elec_node)
-            parameters['electrod alignment'] = float(elec_ali)
+    if (
+        "extracellular_electrode_y" in results_sim
+        and len(results_sim["extracellular_electrode_y"]) == 1
+    ):
+        parameters["distance electrod"] = distance_point2line(
+            results_sim["y"],
+            results_sim["z"],
+            results_sim["extracellular_electrode_y"][0],
+            results_sim["extracellular_electrode_z"][0],
+        )
+        if results_sim["myelinated"]:
+            x_elec = results_sim["extracellular_electrode_x"][0]
+            elec_node = np.argmin(abs(results_sim["x_nodes"] - x_elec))
+            elec_ali = (results_sim["x_nodes"][elec_node] - x_elec) / (
+                results_sim["x_nodes"][1] - results_sim["x_nodes"][0]
+            )
+            parameters["electrod node"] = int(elec_node)
+            parameters["electrod alignment"] = float(elec_ali)
 
     # Check Block
     test_AP = check_test_AP(results_sim)
     if test_AP is None:
         block_state = None
     else:
-        if 'extracellular_electrode_x' not in results_sim:
-            results_sim['extracellular_electrode_x'] = 0
-        block_state = block(results_sim, t_start=test_AP-0.001)#, t_stop=test_AP+1) # Gerer le delay
+        if "extracellular_electrode_x" not in results_sim:
+            results_sim["extracellular_electrode_x"] = 0
+        block_state = block(
+            results_sim, t_start=test_AP - 0.001
+        )  # , t_stop=test_AP+1) # Gerer le delay
     # Check Onset Response
 
     onset_state = False
     t_start_stim = detect_start_extrastim(results_sim)
 
-    pos = results_sim['V_mem_raster_position']
-    if results_sim['myelinated']:
-        M = len(['x_nodes'])
+    pos = results_sim["V_mem_raster_position"]
+    if results_sim["myelinated"]:
+        M = len(["x_nodes"])
     else:
-        M = len(['x_rec'])
-    i_first_pos = np.where(pos==0)
-    i_last_pos = np.where(pos==M)
+        M = len(["x_rec"])
+    i_first_pos = np.where(pos == 0)
+    i_last_pos = np.where(pos == M)
 
     # Count Onset response
-    N_AP = (len(i_first_pos[0]) + len(i_last_pos[0]))/2
+    N_AP = (len(i_first_pos[0]) + len(i_last_pos[0])) / 2
     if test_AP is not None:
         if block_state:
             N_AP -= 0.5
@@ -769,18 +886,23 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
     if N_AP > 0:
         onset_state = True
 
-
-    axon_state = {'ID':ID, 'parameters':parameters, 'block_state':block_state,\
-        'onset_state':onset_state, 'onset number':N_AP}
+    axon_state = {
+        "ID": ID,
+        "parameters": parameters,
+        "block_state": block_state,
+        "onset_state": onset_state,
+        "onset number": N_AP,
+    }
     if save:
         save_axon_results_as_json(axon_state, saving_file)
 
     return axon_state
 
+
 #############################
 ## VISUALIZATION FUNCTIONS ##
 #############################
-def plot_Nav_states(ax,values,title=''):
+def plot_Nav_states(ax, values, title=""):
     """
     Plot the state machine for kinetic (Markov) Nav 1.1 to 1.9 values
 
@@ -790,47 +912,88 @@ def plot_Nav_states(ax,values,title=''):
         axes of the figure to work on
     values  : list, array, numpy array
     """
-    states = ['$I_1$','$I_2$','$C_1$','$C_2$','$O_1$','$O_2$']
+    states = ["$I_1$", "$I_2$", "$C_1$", "$C_2$", "$O_1$", "$O_2$"]
 
-    X = [-1,-3,0,1,0,3]
-    Y = [0,0,1,0,-1,0]
-    c = ['r','r','b','b','g','g']
+    X = [-1, -3, 0, 1, 0, 3]
+    Y = [0, 0, 1, 0, -1, 0]
+    c = ["r", "r", "b", "b", "g", "g"]
 
-    ax.set_xlim(-3.4,3.4)
-    ax.set_ylim(-1.5,1.5)
+    ax.set_xlim(-3.4, 3.4)
+    ax.set_ylim(-1.5, 1.5)
     for i in range(len(states)):
-        ax.scatter(X[i],Y[i],s=300 + values[i]*1450,c=c[i],alpha=0.4)
-        ax.text(X[i],Y[i],states[i],ha='center',va='center')
+        ax.scatter(X[i], Y[i], s=300 + values[i] * 1450, c=c[i], alpha=0.4)
+        ax.text(X[i], Y[i], states[i], ha="center", va="center")
     # paths
-    ax.arrow(-2.5,0.03,1,0,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(-2,0.2,'$I_2I_1$',ha='center',va='center',alpha=0.4)
-    ax.arrow(-1.5,-0.03,-1,0,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(-2,-0.2,'$I_1I_2$',ha='center',va='center',alpha=0.4)
+    ax.arrow(
+        -2.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(-2, 0.2, "$I_2I_1$", ha="center", va="center", alpha=0.4)
+    ax.arrow(
+        -1.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(-2, -0.2, "$I_1I_2$", ha="center", va="center", alpha=0.4)
 
-    ax.arrow(-0.83,0.25,0.5,0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(-0.9,0.6,'$I_1C_1$',ha='center',va='center',alpha=0.4)
-    ax.arrow(-0.22,0.75,-0.5,-0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(-0.45,0.25,'$C_1I_1$',ha='center',va='center',alpha=0.4)
+    ax.arrow(
+        -0.83, 0.25, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(-0.9, 0.6, "$I_1C_1$", ha="center", va="center", alpha=0.4)
+    ax.arrow(
+        -0.22,
+        0.75,
+        -0.5,
+        -0.5,
+        linewidth=1,
+        alpha=0.5,
+        head_width=0.02,
+        head_length=0.02,
+    )
+    ax.text(-0.45, 0.25, "$C_1I_1$", ha="center", va="center", alpha=0.4)
 
-    ax.arrow(0.72,0.25,-0.5,0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(0.9,0.6,'$C_1C_2$',ha='center',va='center',alpha=0.4)
-    ax.arrow(0.33,0.75,0.5,-0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(0.45,0.25,'$C_2C_1$',ha='center',va='center',alpha=0.4)
+    ax.arrow(
+        0.72, 0.25, -0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(0.9, 0.6, "$C_1C_2$", ha="center", va="center", alpha=0.4)
+    ax.arrow(
+        0.33, 0.75, 0.5, -0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(0.45, 0.25, "$C_2C_1$", ha="center", va="center", alpha=0.4)
 
-    ax.arrow(0.83,-0.25,-0.5,-0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(0.9,-0.6,'$C_2O_1$',ha='center',va='center',alpha=0.4)
-    ax.arrow(0.22,-0.75,0.5,0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(0.45,-0.25,'$O_1C_2$',ha='center',va='center',alpha=0.4)
+    ax.arrow(
+        0.83,
+        -0.25,
+        -0.5,
+        -0.5,
+        linewidth=1,
+        alpha=0.5,
+        head_width=0.02,
+        head_length=0.02,
+    )
+    ax.text(0.9, -0.6, "$C_2O_1$", ha="center", va="center", alpha=0.4)
+    ax.arrow(
+        0.22, -0.75, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(0.45, -0.25, "$O_1C_2$", ha="center", va="center", alpha=0.4)
 
-    ax.arrow(-0.33,-0.75,-0.5,0.5,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(-0.9,-0.6,'$O_1I_1$',ha='center',va='center',alpha=0.4)
+    ax.arrow(
+        -0.33,
+        -0.75,
+        -0.5,
+        0.5,
+        linewidth=1,
+        alpha=0.5,
+        head_width=0.02,
+        head_length=0.02,
+    )
+    ax.text(-0.9, -0.6, "$O_1I_1$", ha="center", va="center", alpha=0.4)
 
-    ax.arrow(1.5,0.03,1,0,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(2,0.2,'$C_20_2$',ha='center',va='center',alpha=0.4)
-    ax.arrow(2.5,-0.03,-1,0,linewidth=1,alpha=0.5,head_width=0.02, head_length=0.02)
-    ax.text(2,-0.2,'$O_2C_2$',ha='center',va='center',alpha=0.4)
+    ax.arrow(1.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02)
+    ax.text(2, 0.2, "$C_20_2$", ha="center", va="center", alpha=0.4)
+    ax.arrow(
+        2.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+    )
+    ax.text(2, -0.2, "$O_2C_2$", ha="center", va="center", alpha=0.4)
     # make axes to disappear
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_title(title)
-    ax.axis('off')
+    ax.axis("off")

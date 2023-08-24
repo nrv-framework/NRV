@@ -2,6 +2,7 @@ from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump
 from ..backend.NRV_Class import NRV_class, load_any
 
+
 class CostFunction(NRV_class):
     """
     A class to define cost from position input vector
@@ -23,7 +24,7 @@ class CostFunction(NRV_class):
             dt              : time step of the context (float)
             kwargs          : keys word arguments
         returns
-            results        : axon simulaiton results (dictionary) 
+            results        : axon simulaiton results (dictionary)
     residual            : funct
         function calculating a residual from a axon simulation results, parameters:
             results        : axon simulaiton results (dictionary)
@@ -48,12 +49,25 @@ class CostFunction(NRV_class):
         nothing will be saved,  by default None
 
     """
-    def __init__(self, static_context, context_modifier, residual, kwargs_gw={}, simulate_context = None,
-        kwargs_sw={}, kwargs_r={}, t_sim=100, dt=0.005, filter=None, saver=None, 
-        file_name='cost_saver.csv'):
+
+    def __init__(
+        self,
+        static_context,
+        context_modifier,
+        residual,
+        kwargs_gw={},
+        simulate_context=None,
+        kwargs_sw={},
+        kwargs_r={},
+        t_sim=100,
+        dt=0.005,
+        filter=None,
+        saver=None,
+        file_name="cost_saver.csv",
+    ):
         self.static_context = static_context
         self.context_modifier = context_modifier
-        #self.simulate_context = simulate_context
+        # self.simulate_context = simulate_context
         self.residual = residual
         self.kwargs_gw = kwargs_gw
         self.kwargs_sw = kwargs_sw
@@ -65,8 +79,8 @@ class CostFunction(NRV_class):
         self.file_name = file_name
 
     def simulate_context(self, context):
-        print('pioup')
-        results = context.simulate(t_sim = self.t_sim, loaded_footprints=True)
+        print("pioup")
+        results = context.simulate(t_sim=self.t_sim, loaded_footprints=True)
         return results
 
     def __call__(self, X):
@@ -87,7 +101,11 @@ class CostFunction(NRV_class):
 
         # Savings
         if self.saver is not None:
-            data = {'position':X, 'context':simulation_context, 'results':results, 'cost':cost}
+            data = {
+                "position": X,
+                "context": simulation_context,
+                "results": results,
+                "cost": cost,
+            }
             self.saver(data, file_name=self.file_name)
         return cost
-

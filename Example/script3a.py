@@ -7,7 +7,7 @@ y = 0
 z = 0
 d = 1
 L = 5000
-model = "HH" # Rattay_Aberham if not precised
+model = "HH"  # Rattay_Aberham if not precised
 
 axon1 = nrv.unmyelinated(y, z, d, L, model=model)
 
@@ -22,7 +22,7 @@ axon1.insert_I_Clamp(0, t_start, duration, amplitude)
 results = axon1.simulate(t_sim=20)
 del axon1
 
-nrv.rasterize(results,'V_mem')
+nrv.rasterize(results, "V_mem")
 unmyelinated_speed = nrv.speed(results, t_start=0)
 print(unmyelinated_speed)
 
@@ -31,8 +31,8 @@ print(unmyelinated_speed)
 y = 0
 z = 0
 d = 10
-L = nrv.get_length_from_nodes(d,21) # 5000
-model = "MRG" 
+L = nrv.get_length_from_nodes(d, 21)  # 5000
+model = "MRG"
 
 axon1 = nrv.myelinated(y, z, d, L, model=model)
 
@@ -47,6 +47,6 @@ axon1.insert_I_Clamp(0, t_start, duration, amplitude)
 results = axon1.simulate(t_sim=20)
 del axon1
 
-nrv.rasterize(results,'V_mem')
-myelinated_speed=nrv.speed(results, t_start=0)
+nrv.rasterize(results, "V_mem")
+myelinated_speed = nrv.speed(results, t_start=0)
 print(myelinated_speed)

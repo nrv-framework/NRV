@@ -3,8 +3,9 @@ from ..backend.file_handler import json_dump
 from ..backend.NRV_Class import NRV_class
 from .CostFunctions import CostFunction
 
+
 class Problem(NRV_class):
-    '''
+    """
     Problem Class
 
     A class to describe problems that should be optimized with the NRV Framework.
@@ -13,9 +14,10 @@ class Problem(NRV_class):
 
     This class is abstract and is not supposed to be used directly by the end user. NRV can
     handle two types of problems:
-        - problems where a geometric parameter can be optimized: please refer to ... 
+        - problems where a geometric parameter can be optimized: please refer to ...
         - problems where the waveform can be optimized: please refer to ...
-    '''
+    """
+
     def __init__(self):
         self._CostFunction = None
         self._Optimizer = None
@@ -23,12 +25,12 @@ class Problem(NRV_class):
     # Handling the CostFunction attribute
     @property
     def CostFunction(self):
-        '''
+        """
         Cost function of a Problem,
         the cost function should be a CosFunction object, it should return a scalar.
-        NRV function should be prefered'''
+        NRV function should be prefered"""
         return self._CostFunction
-    
+
     @CostFunction.setter
     def CostFunction(self, cost_function):
         # need to add a verification that the cost function is a scallar and so on
@@ -43,11 +45,11 @@ class Problem(NRV_class):
 
     @property
     def Optimizer(self):
-        '''
+        """
         Optimizer of the problem,
         the Optimizer should be an Optimizer object. It has reference to optimization
         methods and constraints
-        '''
+        """
         return self._Optimizer
 
     @Optimizer.setter
@@ -62,12 +64,9 @@ class Problem(NRV_class):
     def __call__(self):
         pass
 
-    #additional methods
+    # additional methods
     def context_and_cost(self, context_func, cost_func):
         self.CostFunction = CostFunction(context_func, cost_func)
 
     def autoset_optimizer(self):
         pass
-
-    
-    

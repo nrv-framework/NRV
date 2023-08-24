@@ -7,13 +7,13 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 ###################
 ## defaulf units ##
 ###################
-mV = 1			# default unit for Voltage is mV, as neuron
-ms = 1			# default unit for time is ms, as neuron
-um = 1			# default unit for length is um, as neuron
-uA = 1			# default unit for current is uA, UNLESS NEURON who is by default in nA
-S = 1			# default unit for conductance is S
-kHz = 1         # default unit for frequency is kHz
-uF = 1          # default unit for capacitance is uF
+mV = 1  # default unit for Voltage is mV, as neuron
+ms = 1  # default unit for time is ms, as neuron
+um = 1  # default unit for length is um, as neuron
+uA = 1  # default unit for current is uA, UNLESS NEURON who is by default in nA
+S = 1  # default unit for conductance is S
+kHz = 1  # default unit for frequency is kHz
+uF = 1  # default unit for capacitance is uF
 
 ######################
 ## voltage prefixes ##
@@ -74,6 +74,7 @@ nF = 1e-6 * uF
 ####  Usefull functions ####
 #############################
 
+
 def sci_round(number, digits=3):
-    power = "{:e}".format(number).split('e')[1]
+    power = "{:e}".format(number).split("e")[1]
     return round(number, -(int(power) - digits))

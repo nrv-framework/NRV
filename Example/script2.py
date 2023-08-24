@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 y = 0
 z = 0
 d = 10
-L = nrv.get_length_from_nodes(d,21)
-model = "MRG" 
+L = nrv.get_length_from_nodes(d, 21)
+model = "MRG"
 
 axon1 = nrv.myelinated(y, z, d, L, model=model)
 
@@ -25,20 +25,20 @@ del axon1
 ## Processing
 # Color Map
 plt.figure()
-map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')
-plt.xlabel('time (ms)')
-plt.ylabel('position (µm)')
+map = plt.pcolormesh(results["t"], results["x_rec"], results["V_mem"], shading="auto")
+plt.xlabel("time (ms)")
+plt.ylabel("position (µm)")
 cbar = plt.colorbar(map)
-cbar.set_label('membrane voltage (mV)')
-plt.savefig('figures/02_Color_Map.png')
+cbar.set_label("membrane voltage (mV)")
+plt.savefig("figures/02_Color_Map.png")
 
 # Raster plot
-nrv.rasterize(results,'V_mem')
+nrv.rasterize(results, "V_mem")
 plt.figure()
-plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'])
-plt.xlabel('time (ms)')
-plt.ylabel('position along the axon($\mu m$)')
-plt.xlim(0,t_sim)
-plt.ylim(0,results['L'])
-plt.savefig('figures/02_Raster_Plot.png')
+plt.scatter(results["V_mem_raster_time"], results["V_mem_raster_x_position"])
+plt.xlabel("time (ms)")
+plt.ylabel("position along the axon($\mu m$)")
+plt.xlim(0, t_sim)
+plt.ylim(0, results["L"])
+plt.savefig("figures/02_Raster_Plot.png")
 plt.show()

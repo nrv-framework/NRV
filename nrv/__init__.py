@@ -18,6 +18,7 @@ import os
 import inspect
 import platform
 
+
 # create a dummy object to locate frameworks path
 class DummyClass:
     pass
@@ -90,7 +91,7 @@ from .fmod.FEM.FENICS_model import *
 from .fmod.FEM.mesh_creator.MshCreator import *
 from .fmod.FEM.mesh_creator.NerveMshCreator import *
 from .fmod.FEM.mesh_creator.NRV_Msh import *
-from .fmod.FEM.fenics_utils.FEMSimulation import *    
+from .fmod.FEM.fenics_utils.FEMSimulation import *
 from .fmod.FEM.fenics_utils.SimParameters import *
 from .fmod.FEM.fenics_utils.SimResult import *
 

@@ -20,7 +20,10 @@ from ..backend.log_interface import rise_error, rise_warning, pass_info
 #########################  Loaders  ###########################
 ###############################################################
 
-def load_any_fascicle(data, extracel_context=False, intracel_context=False, rec_context=False):
+
+def load_any_fascicle(
+    data, extracel_context=False, intracel_context=False, rec_context=False
+):
     """
     generate any kind of fascicle from a dictionary or a json file
 
@@ -32,20 +35,28 @@ def load_any_fascicle(data, extracel_context=False, intracel_context=False, rec_
     synchronize_processes()
     if type(data) == str:
         fasc_dic = json_load(data)
-    else: 
+    else:
         fasc_dic = data
     fasc = fascicle()
-    fasc.load(fasc_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    fasc.load(
+        fasc_dic,
+        extracel_context=extracel_context,
+        intracel_context=intracel_context,
+        rec_context=rec_context,
+    )
     if extracel_context and rec_context:
-        return fasc , fasc.extra_stim, fasc.recorder
+        return fasc, fasc.extra_stim, fasc.recorder
     elif extracel_context:
-        return fasc , fasc.extra_stim
+        return fasc, fasc.extra_stim
     elif rec_context:
-        return fasc , fasc.recorder
+        return fasc, fasc.recorder
     else:
         return fasc
 
-def load_any_axon(data, extracel_context=False, intracel_context=False, rec_context=False):
+
+def load_any_axon(
+    data, extracel_context=False, intracel_context=False, rec_context=False
+):
     """
     generate any kind of axon from a dictionary or a json file
 
@@ -56,25 +67,30 @@ def load_any_axon(data, extracel_context=False, intracel_context=False, rec_cont
     """
     if type(data) == str:
         ax_dic = json_load(data)
-    else: 
+    else:
         ax_dic = data
 
     if ax_dic["myelinated"] is True:
         if ax_dic["thin"]:
-            ax = thin_myelinated(0,0,1,10)
+            ax = thin_myelinated(0, 0, 1, 10)
         else:
-            ax = myelinated(0,0,1,10)
+            ax = myelinated(0, 0, 1, 10)
     elif ax_dic["myelinated"] is False:
-        ax = unmyelinated(0,0,1,10)
+        ax = unmyelinated(0, 0, 1, 10)
     else:
-        ax = axon(0,0,1,10)
+        ax = axon(0, 0, 1, 10)
 
-    ax.load(ax_dic, extracel_context=extracel_context, intracel_context=intracel_context, rec_context=rec_context)
+    ax.load(
+        ax_dic,
+        extracel_context=extracel_context,
+        intracel_context=intracel_context,
+        rec_context=rec_context,
+    )
     if extracel_context and rec_context:
-        return ax , ax.extra_stim, ax.recorder
+        return ax, ax.extra_stim, ax.recorder
     elif extracel_context:
-        return ax , ax.extra_stim
+        return ax, ax.extra_stim
     elif rec_context:
-        return ax , ax.recorder
+        return ax, ax.recorder
     else:
         return ax

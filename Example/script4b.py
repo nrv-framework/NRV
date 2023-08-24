@@ -2,36 +2,36 @@ import nrv
 import matplotlib.pyplot as plt
 
 # axon def
-y = 0						# axon y position, in [um]
-z = 0						# axon z position, in [um]
-d = 10						# axon diameter position, in [um]
-L = nrv.get_length_from_nodes(d,21) 	# axon length, along x axis, in [um]
-axon1 = nrv.unmyelinated(y,z,d,L)
+y = 0  # axon y position, in [um]
+z = 0  # axon z position, in [um]
+d = 10  # axon diameter position, in [um]
+L = nrv.get_length_from_nodes(d, 21)  # axon length, along x axis, in [um]
+axon1 = nrv.unmyelinated(y, z, d, L)
 
 # electrode def
-x_elec = L/2				# electrode x position, in [um]
-y_elec = 500				# electrode y position, in [um]
-z_elec = 0					# electrode y position, in [um]
-E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
+x_elec = L / 2  # electrode x position, in [um]
+y_elec = 500  # electrode y position, in [um]
+z_elec = 0  # electrode y position, in [um]
+E1 = nrv.point_source_electrode(x_elec, y_elec, z_elec)
 
 # load material properties
-epineurium = nrv.load_material('endoneurium_bhadra')
+epineurium = nrv.load_material("endoneurium_bhadra")
 
 # stimulus def
 start = 1
 I_cathod = 1000
-I_anod = I_cathod/5
+I_anod = I_cathod / 5
 T_cathod = 60e-3
 T_inter = 40e-3
 stim1 = nrv.stimulus()
 stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
 
 plt.figure()
-plt.step(stim1.t, stim1.s,where='post',label='1')
-plt.xlabel('time (s)')
-plt.ylabel('stimulation current (uA)')
+plt.step(stim1.t, stim1.s, where="post", label="1")
+plt.xlabel("time (s)")
+plt.ylabel("stimulation current (uA)")
 plt.grid()
-plt.savefig('figures/04b_stim_conv.png')
+plt.savefig("figures/04b_stim_conv.png")
 
 # extracellular stimulation setup
 extra_stim = nrv.stimulation(epineurium)
@@ -45,21 +45,21 @@ del axon1
 
 # Color map
 plt.figure()
-map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')
-plt.xlabel('time (ms)')
-plt.ylabel('position (µm)')
+map = plt.pcolormesh(results["t"], results["x_rec"], results["V_mem"], shading="auto")
+plt.xlabel("time (ms)")
+plt.ylabel("position (µm)")
 cbar = plt.colorbar(map)
-cbar.set_label('membrane voltage (mV)')
-plt.savefig('figures/04b_Color_Map.png')
+cbar.set_label("membrane voltage (mV)")
+plt.savefig("figures/04b_Color_Map.png")
 
 # Raster plot
-nrv.rasterize(results,'V_mem')
+nrv.rasterize(results, "V_mem")
 plt.figure()
-plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'])
-plt.xlabel('time (ms)')
-plt.ylabel('position along the axon($\mu m$)')
-plt.xlim(0,t_sim)
-plt.ylim(0,results['L'])
-plt.savefig('figures/04b_Raster_Plot.png')
+plt.scatter(results["V_mem_raster_time"], results["V_mem_raster_x_position"])
+plt.xlabel("time (ms)")
+plt.ylabel("position along the axon($\mu m$)")
+plt.xlim(0, t_sim)
+plt.ylim(0, results["L"])
+plt.savefig("figures/04b_Raster_Plot.png")
 
 plt.show()

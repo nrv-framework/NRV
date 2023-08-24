@@ -12,20 +12,32 @@ from abc import abstractmethod
 from ..backend.log_interface import rise_error, rise_warning, pass_info
 from ..backend.file_handler import json_dump, json_load
 from ..backend.NRV_Class import NRV_class
+
 #############################
 ## sigma functions classes ##
 #############################
-spy_interp1D_kind = ['linear', 'nearest', 'nearest-up', 'zero', 'slinear', 'quadratic', 'cubic', 'previous', 'next']
+spy_interp1D_kind = [
+    "linear",
+    "nearest",
+    "nearest-up",
+    "zero",
+    "slinear",
+    "quadratic",
+    "cubic",
+    "previous",
+    "next",
+]
+
 
 class nrv_function(NRV_class):
     """
     Class containg all comon method of fonction used in nrv
     """
+
     @abstractmethod
     def __init__(self):
         super().__init__()
-        self.type = 'nrv_function'
-
+        self.type = "nrv_function"
 
     def __call__(self, *X):
         return self.call_method(*X)
@@ -34,8 +46,7 @@ class nrv_function(NRV_class):
     def call_method(self, X):
         return X
 
-    
-    def save(self, save=False, fname='nrv_function.json'):
+    def save(self, save=False, fname="nrv_function.json"):
         """
         Return feild function as dictionary and eventually save it as json file
 
@@ -52,7 +63,7 @@ class nrv_function(NRV_class):
             dictionary containing all information
         """
         ff_dic = {}
-        ff_dic['type'] = self.type
+        ff_dic["type"] = self.type
         if save:
             json_dump(ff_dic, fname)
         return ff_dic
@@ -68,37 +79,35 @@ class nrv_function(NRV_class):
         """
         if type(data) == str:
             ff_dic = json_load(data)
-        else: 
+        else:
             ff_dic = data
-        self.type = ff_dic['type']
-    
+        self.type = ff_dic["type"]
+
     def __compatible(self, b):
         if not callable(b):
             return True
-        elif 'dim' in self.__dir__() and 'dim' in b.__dir__():
+        elif "dim" in self.__dir__() and "dim" in b.__dir__():
             if self.dim == b.dim:
                 return True
         else:
             rise_warning("Type not compatible for operation", type(self), type(b))
             return False
 
-    
     def __neg__(self):
-        c_type = 'function_'+str(self.dim)+'D'
+        c_type = "function_" + str(self.dim) + "D"
         c = eval(c_type)()
         c.call_method = lambda *X: -self(*X)
         return c
 
     def __abs__(self):
-        c_type = 'function_'+str(self.dim)+'D'
+        c_type = "function_" + str(self.dim) + "D"
         c = eval(c_type)()
         c.call_method = lambda *X: abs(self(*X))
         return c
 
-
     def __add__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
                 c.call_method = lambda *X: self(*X) + b(*X)
@@ -108,27 +117,27 @@ class nrv_function(NRV_class):
 
     def __radd__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
-                c.call_method = lambda *X: b*(X) + self(*X)
+                c.call_method = lambda *X: b * (X) + self(*X)
             else:
                 c.call_method = lambda *X: b + self(*X)
             return c
 
     def __sub__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
                 c.call_method = lambda *X: self(*X) - b(*X)
             else:
                 c.call_method = lambda *X: self(*X) - b
             return c
-    
+
     def __rsub__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
                 c.call_method = lambda *X: b(*X) - self(*X)
@@ -138,50 +147,52 @@ class nrv_function(NRV_class):
 
     def __mul__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
                 c.call_method = lambda *X: self(*X) * b(*X)
             else:
                 c.call_method = lambda *X: self(*X) * b
             return c
-    
+
     def __rmul__(self, b):
         if self.__compatible(b):
-            c_type = 'function_'+str(self.dim)+'D'
+            c_type = "function_" + str(self.dim) + "D"
             c = eval(c_type)()
             if callable(b):
                 c.call_method = lambda *X: b(*X) * self(*X)
             else:
                 c.call_method = lambda *X: b * self(*X)
             return c
-    
 
 
 ###############################################################
 ####################### 1D functions ##########################
 ###############################################################
 
+
 class function_1D(nrv_function):
     """
     class containing function from IR to IR
     Such function can be call either on 1 value or on a ndarray (and applied on each value)
     """
+
     def __init__(self):
         super().__init__()
         self.type = "function_1D"
         self.dim = 1
 
-    #@staticmethod
+    # @staticmethod
     def call_method(self, X):
         # Composition with N dim function
         if isinstance(X, nrv_function):
-            c_type = 'function_'+str(X.dim)+'D'
+            c_type = "function_" + str(X.dim) + "D"
             c = eval(c_type)()
             c.call_method = lambda *x: self(X(*x))
             return c
         else:
             return None
+
 
 class gaussian(function_1D):
     def __init__(self, mu=0, sigma=1):
@@ -193,21 +204,22 @@ class gaussian(function_1D):
         self.type = "gaussian"
         self.mu = mu
         self.sigma = sigma
-    
+
     def call_method(self, X):
         res = super().call_method(X)
         if res is None:
-            res = np.exp(-((X - self.mu)/self.sigma)**2/2)#/(self.sigma*(2*np.pi)**0.5)
+            res = np.exp(
+                -(((X - self.mu) / self.sigma) ** 2) / 2
+            )  # /(self.sigma*(2*np.pi)**0.5)
         return res
-    
-class gate(function_1D):
-    def __init__(self, mu=0, sigma=1, kind='Rational', N=None):
-        """
 
-        """
+
+class gate(function_1D):
+    def __init__(self, mu=0, sigma=1, kind="Rational", N=None):
+        """ """
         super().__init__()
         self.type = "gate"
-        #self.kind = 
+        # self.kind =
         self.mu = mu
         self.sigma = sigma
         self.N = N
@@ -216,25 +228,30 @@ class gate(function_1D):
     def call_method(self, X):
         res = super().call_method(X)
         if res is None:
-            X_eff = (X-self.mu)/self.sigma
+            X_eff = (X - self.mu) / self.sigma
             if self.N is None:
-                res = (np.sign(X_eff + 0.5) - np.sign(X_eff - 0.5))/2
-            elif self.kind.lower() == 'rational':
-                res = 1/((2*X_eff)**(2*self.N)+1)
+                res = (np.sign(X_eff + 0.5) - np.sign(X_eff - 0.5)) / 2
+            elif self.kind.lower() == "rational":
+                res = 1 / ((2 * X_eff) ** (2 * self.N) + 1)
             else:
-                res = (erf((X_eff + (0.5* self.sigma)/self.mu)/self.N)\
-                    - erf((X_eff - (0.5* self.sigma)/self.mu)/self.N))/2
+                res = (
+                    erf((X_eff + (0.5 * self.sigma) / self.mu) / self.N)
+                    - erf((X_eff - (0.5 * self.sigma) / self.mu) / self.N)
+                ) / 2
         return res
-    
+
+
 ###############################################################
 ####################### 2D functions ##########################
-############################################################### 
+###############################################################
+
 
 class function_2D(nrv_function):
     """
     class containing function from IR^2 to IR
     Such function can be call either on 1 value or on a ndarray (and applied on each value)
     """
+
     def __init__(self):
         super().__init__()
         self.type = "function_2D"
@@ -247,12 +264,13 @@ class function_2D(nrv_function):
 
 ###############################################################
 ####################### ND functions ##########################
-############################################################### 
+###############################################################
 class function_ND(nrv_function):
     """
     class containing function from IR^n to IR
     Such function can be call either on 1 value or on a ndarray (and applied on each value)
     """
+
     def __init__(self):
         super().__init__()
         self.type = "function_ND"
@@ -262,17 +280,18 @@ class function_ND(nrv_function):
     def call_method(self, *X):
         return 1
 
+
 class sphere(function_ND):
-    '''
+    """
     Multi-dimensional Sphere function
-    '''
-    def __init__(self,Xc=None):
+    """
+
+    def __init__(self, Xc=None):
         super().__init__()
         self.type = "sphere"
         self.Xc = Xc
         if self.Xc is None:
             self.Xc = []
-
 
     def call_method(self, *X):
         Nc = len(self.Xc)
@@ -282,15 +301,25 @@ class sphere(function_ND):
                 xc = self.Xc[i]
             else:
                 xc = 0
-            res += (xi-xc)**2
+            res += (xi - xc) ** 2
         return res**0.5
+
 
 ###############################################################
 ####################### interpolation ######################
 ###############################################################
 class nrv_interp(nrv_function):
-    def __init__(self, X_values, Y_values, kind="linear", dx=0.01, interpolator=None, dxdy=None,\
-        scale=None, columns=[]):
+    def __init__(
+        self,
+        X_values,
+        Y_values,
+        kind="linear",
+        dx=0.01,
+        interpolator=None,
+        dxdy=None,
+        scale=None,
+        columns=[],
+    ):
         """
         Interpolator based on scipy.interpolate
         Parameters
@@ -298,12 +327,12 @@ class nrv_interp(nrv_function):
         X_values    : (N,) array_like
             A 1-D array of real values
         Y_values    :(…,N,…) array_like
-            A N-D array of real values. The length of y along the interpolation 
+            A N-D array of real values. The length of y along the interpolation
             axis must be equal to the length of x.
         kind        : str
             kind of interpolation which should be used, by default "linear"
             possible values:    - scipy interp1d kinds (see nrv.spy_interp1D_kind)
-                                - {'hermite', 'cardinal', 'catmull-rom'} for respective 
+                                - {'hermite', 'cardinal', 'catmull-rom'} for respective
                                   cubic spline interpollation
         dx
             if minimal distance between 2 consecutive points, by default 0.01
@@ -343,7 +372,6 @@ class nrv_interp(nrv_function):
         self.columns = columns
         self.__set_interp()
 
-
     def __set_interp(self):
         """
         Internal use only, set interpolator
@@ -353,68 +381,80 @@ class nrv_interp(nrv_function):
         self.update_interpolator()
 
     def __check_X_values(self, dx=None):
-        """
-
-        """
+        """ """
         S = self.X_values.argsort()
         self.X_values = self.X_values[S]
         self.Y_values = self.Y_values[S]
         if dx is not None:
             self.dx = dx
         for i, x in enumerate(self.X_values):
-            if i >0:
-                while x<self.X_values[i-1]:
+            if i > 0:
+                while x < self.X_values[i - 1]:
                     x += dx
                 self.X_values[i] = x
 
     def update_interpolator(self, kind=None, interpolator=None, dxdy=None, scale=None):
-        """
-        
-        """
+        """ """
         if kind is not None:
             self.kind = kind
 
         if interpolator is not None:
             self.interpolator = interpolator
         elif self.kind.lower() in spy_interp1D_kind:
-            self.interpolator = interp1d(self.X_values, self.Y_values, kind=self.kind, fill_value="extrapolate")
-        elif self.kind.lower() in ['hermite', 'cardinal', 'catmull-rom']:
-            if self.scale is None or self.kind == 'catmull-rom':
+            self.interpolator = interp1d(
+                self.X_values, self.Y_values, kind=self.kind, fill_value="extrapolate"
+            )
+        elif self.kind.lower() in ["hermite", "cardinal", "catmull-rom"]:
+            if self.scale is None or self.kind == "catmull-rom":
                 self.scale = 0.5
             if self.dxdy is None:
-                self.dxdy = np.array([(self.Y_values[1]-self.Y_values[0])/self.X_values[1]-self.X_values[0]]\
-                        + [(self.Y_values[k+2]-self.Y_values[k])/(self.X_values[k+2]-self.X_values[k]) for k in range(self.N_pts-2)]\
-                        + [(self.Y_values[-1]-self.Y_values[-2])/(self.X_values[-1]-self.X_values[-2])])
-            if self.kind.lower() == 'hermite' and dxdy is not None:
+                self.dxdy = np.array(
+                    [
+                        (self.Y_values[1] - self.Y_values[0]) / self.X_values[1]
+                        - self.X_values[0]
+                    ]
+                    + [
+                        (self.Y_values[k + 2] - self.Y_values[k])
+                        / (self.X_values[k + 2] - self.X_values[k])
+                        for k in range(self.N_pts - 2)
+                    ]
+                    + [
+                        (self.Y_values[-1] - self.Y_values[-2])
+                        / (self.X_values[-1] - self.X_values[-2])
+                    ]
+                )
+            if self.kind.lower() == "hermite" and dxdy is not None:
                 self.dxdy = dxdy
                 self.scale = 1
-            if self.kind.lower() == 'cardinal' and scale is not None:
+            if self.kind.lower() == "cardinal" and scale is not None:
                 self.scale = scale
-                    
-            self.interpolator = CubicHermiteSpline(self.X_values, self.Y_values, self.scale*self.dxdy)
-      
+
+            self.interpolator = CubicHermiteSpline(
+                self.X_values, self.Y_values, self.scale * self.dxdy
+            )
+
     def __call__(self, X):
         if self.columns == []:
             return self.interpolator(X)
         try:
             return self.interpolator(X[self.columns])
         except:
-            rise_warning('nrv_interpol: columns out of bound, intepolation done on the whole vector')
+            rise_warning(
+                "nrv_interpol: columns out of bound, intepolation done on the whole vector"
+            )
             return self.interpolator(X)
 
 
 class MeshCallBack(nrv_function):
-    """
+    """ """
 
-    """
-    def __init__(self,f=None, axis='x'):
+    def __init__(self, f=None, axis="x"):
         super().__init__()
-        self.type = 'MeshCallBack'
+        self.type = "MeshCallBack"
         self.f = None
-        self.axis = axis 
+        self.axis = axis
 
         self.set_function(f)
-
 
     def set_function(self, f=None):
         if f is None:
@@ -424,14 +464,14 @@ class MeshCallBack(nrv_function):
         elif isinstance(f, str):
             self.f = lambda x: eval(f)
         else:
-            rise_warning(type(f), 'Not recognized for MeshCallBack function')
-    
+            rise_warning(type(f), "Not recognized for MeshCallBack function")
+
     def __call__(self, dim, tag, x, y, z, lc):
         X = []
-        if 'x' in self.axis:
+        if "x" in self.axis:
             X += [x]
-        if 'y' in self.axis:
+        if "y" in self.axis:
             X += [y]
-        if 'z' in self.axis:
+        if "z" in self.axis:
             X += [z]
         return lc * self.f(*X)

@@ -38,20 +38,26 @@ block_state = block(sim_results, t_start=sim_results["intra_stim_starts"])
 ################################
 ## Save results in a csv file ##
 ################################
-if "in_nerve" in kwargs:        # Nerve Simulation
+if "in_nerve" in kwargs:  # Nerve Simulation
     file_object = open(save_path + "/block_summary.csv", "a")
     line = str(self.ID)
-else:                           # Fascicle Simulation
+else:  # Fascicle Simulation
     file_object = open(folder_name + "/block_summary.csv", "a")
     line = ""
 
 line += (
-    str(sim_results["ID"]) + "\t"
-    + str(sim_results["y"]) + "\t"
-    + str(sim_results["z"]) + "\t" 
-    + str(sim_results["diameter"]) + "\t"
-    + str(sim_results["myelinated"]) + "\t"
-    + str(block_state) + "\n"
+    str(sim_results["ID"])
+    + "\t"
+    + str(sim_results["y"])
+    + "\t"
+    + str(sim_results["z"])
+    + "\t"
+    + str(sim_results["diameter"])
+    + "\t"
+    + str(sim_results["myelinated"])
+    + "\t"
+    + str(block_state)
+    + "\n"
 )
 file_object.write(line)
 file_object.close()
