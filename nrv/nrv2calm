@@ -20,7 +20,7 @@ import subprocess
 import time
 import re
 
-import nrv
+#import nrv
 
 # test for possibility of parallel computing
 try :
