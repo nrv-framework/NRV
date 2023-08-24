@@ -226,7 +226,12 @@ class SimResult(NRV_class):
 
     def aline_V(self, res2):
         """
-        TO DO
+        Change the function space of the result to aline with the result of another SimResult
+
+        Parameters
+        ----------
+        res2 : SimResult
+            result to aline with
         """
         if is_sim_res(res2):
             if self.mesh_file == res2.mesh_file:
@@ -277,14 +282,18 @@ class SimResult(NRV_class):
     #####################
     ## special methods ##
     #####################
-
-    """
     def __abs__(self):
-        res = SimResult(mesh_file=self.mesh_file, V=self.V, domain=self.domain, elem=self.elem, comm=self.comm)
-        res.vout = df.project(abs(self.vout), self.V, solver_type=self.solver,\
-            preconditioner_type=self.preconditioner, form_compiler_parameters=self.compiler_parameters)
+        expr = Expression(abs(self.vout), self.V.element.interpolation_points())
+        res = SimResult(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
+        res.vout = Function(self.V)
+        self.vout.interpolate(expr)
         return res
-    """
 
     def __neg__(self):
         expr = Expression(-self.vout, self.V.element.interpolation_points())
