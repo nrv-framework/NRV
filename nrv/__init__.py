@@ -11,8 +11,8 @@ __copyright__ = "2023, Florian Kolbl"
 __license__ = "CeCILL"
 
 #####################################
-## check environnement variables   ##
-## check correct NRV configuration ##
+#  check environnement variables    #
+#  check correct NRV configuration  #
 #####################################
 import os
 import inspect
@@ -64,7 +64,7 @@ if not (
             )
     outfile.close()
 # create the environnement variable NRVPATH if it does not exist
-if not "NRVPATH" in os.environ:
+if  "NRVPATH" not in os.environ:
     os.environ["NRVPATH"] = nrv_path
 # change the permissions on nrv2calm
 if not os.access(nrv_path + "/nrv2calm", os.X_OK):
@@ -73,7 +73,7 @@ if not os.access(nrv_path + "/nrv2calm", os.X_OK):
     os.chmod(nrv_path + "/nrv2calm", mode)
 
 ######################
-## Public interface ##
+#  Public interface  #
 ######################
 from .backend import compileMods
 from .backend.parameters import *
