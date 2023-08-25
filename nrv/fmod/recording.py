@@ -213,6 +213,7 @@ class recording_point(NRV_class):
         sigma_xx,
         sigma_yy,
         sigma_zz,
+        myelinated=False,
     ):
         """
         Compute the footprint for Point Source approximation an anisotropic material
