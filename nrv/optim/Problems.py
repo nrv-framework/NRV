@@ -58,7 +58,8 @@ class Problem(NRV_class):
 
     @Optimizer.deleter
     def Optmizer(self):
-        self._Optimizer = None
+        # self._Optimizer = None
+        pass
 
     # Call method is where the magic happens
     def __call__(self):
