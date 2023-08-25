@@ -5,10 +5,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import os
 import logging
-import configparser
 import sys
 from icecream import ic
-from .MCore import *
+from .MCore import MCH
 from .parameters import parameters
 
 
