@@ -178,7 +178,7 @@ class fenics_material(material):
         mat_dic : dict
             dictionary containing all information
         """
-        mat_dic = super().save_material(save=False, fname=fname)
+        mat_dic = super().save()
         mat_dic["is_func"] = self.is_func
         mat_dic["sigma_func"] = self.sigma_func
         mat_dic["elem"] = self.elem
@@ -186,28 +186,6 @@ class fenics_material(material):
         if save:
             json_dump(mat_dic, fname)
         return mat_dic
-
-    def load(self, data):
-        """
-        Load all material properties from a dictionary or a json file
-
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing material information
-        """
-        if type(data) == str:
-            mat_dic = json_load(data)
-        else:
-            mat_dic = data
-        super().load_material(data)
-        self.is_func = mat_dic["is_func"]
-        self.sigma_func = mat_dic["sigma_func"]
-        self.is_func = mat_dic["is_func"]
-        self.sigma_func = mat_dic["sigma_func"]
-        self.elem = mat_dic["elem"]
-        self.UN = mat_dic["UN"]
-        self.update_fenics_sigma()
 
     def save_fenics_material(self, save=False, fname="fenics_material.json"):
         rise_warning("save_fenics_material is a deprecated method use save")
