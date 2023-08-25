@@ -447,7 +447,7 @@ class thin_myelinated(axon):
         else:  # should be a STIN
             self.STIN[-1].L = self.last_section_size
         # define the geometry of the axon
-        self._axon__define_shape()
+        self.__define_shape()
         # define the number of segments
         self.__set_Nseg()
         # get nodes positions
@@ -917,15 +917,6 @@ class thin_myelinated(axon):
                         else:
                             rec = neuron.h.Vector([0])
                         reclist.append(rec)
-                    elif sec_type == "FLUT":
-                        if key_FLUT is not None:
-                            rec = neuron.h.Vector().record(
-                                getattr(self.FLUT[sec_index](position), key_FLUT),
-                                sec=self.FLUT[sec_index],
-                            )
-                        else:
-                            rec = neuron.h.Vector([0])
-                        reclist.append(rec)
                     else:  # should be STIN
                         if key_STIN is not None:
                             rec = neuron.h.Vector().record(
@@ -986,11 +977,6 @@ class thin_myelinated(axon):
                         if key_MYSA is not None:
                             val[i, 0] = getattr(
                                 self.MYSA[sec_index](position), key_MYSA
-                            )[0]
-                    elif sec_type == "FLUT":
-                        if key_FLUT is not None:
-                            val[i, 0] = getattr(
-                                self.FLUT[sec_index](position), key_FLUT
                             )[0]
                     else:  # should be STIN
                         if key_STIN is not None:
