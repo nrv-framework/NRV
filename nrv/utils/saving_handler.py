@@ -75,10 +75,8 @@ def load_any_axon(
             ax = thin_myelinated(0, 0, 1, 10)
         else:
             ax = myelinated(0, 0, 1, 10)
-    elif ax_dic["myelinated"] is False:
-        ax = unmyelinated(0, 0, 1, 10)
     else:
-        ax = axon(0, 0, 1, 10)
+        ax = unmyelinated(0, 0, 1, 10)
 
     ax.load(
         ax_dic,
