@@ -64,7 +64,7 @@ if not (
             )
     outfile.close()
 # create the environnement variable NRVPATH if it does not exist
-if  "NRVPATH" not in os.environ:
+if "NRVPATH" not in os.environ:
     os.environ["NRVPATH"] = nrv_path
 # change the permissions on nrv2calm
 if not os.access(nrv_path + "/nrv2calm", os.X_OK):
