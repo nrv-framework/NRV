@@ -549,7 +549,7 @@ def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
             # there is no rasterized voltage, nothing to find
             return False
     else:
-        good_key_prefix = my_key
+        good_key_prefix = position_key
     # get data only in time windows
     sup_time_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
     inf_time_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
