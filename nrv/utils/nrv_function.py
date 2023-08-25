@@ -38,6 +38,7 @@ class nrv_function(NRV_class):
     def __init__(self):
         super().__init__()
         self.type = "nrv_function"
+        self.dim = 0
 
     def __call__(self, *X):
         return self.call_method(*X)
