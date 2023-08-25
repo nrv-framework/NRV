@@ -5,16 +5,14 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 from abc import ABCMeta, abstractmethod
 import numpy as np
-import sys
 from copy import deepcopy
 from numpy import iterable
 from .file_handler import json_dump, json_load
-from .parameters import parameters
-from .log_interface import rise_error, rise_warning, pass_info, pass_debug_info
+from .log_interface import pass_debug_info
 
 
 ########################################
-###########  check object  #############
+#           check object               #
 ########################################
 
 
@@ -41,7 +39,7 @@ def is_NRV_class_dict(x):
 
 
 ##########################################
-#########  check dictionaries  ###########
+#           check dictionaries           #
 ##########################################
 
 
@@ -114,7 +112,7 @@ class NRV_class(metaclass=ABCMeta):
         """
         key_dic = {}
         for key in self.__dict__:
-            if not key in blacklist:
+            if key not in blacklist:
                 if is_NRV_class(self.__dict__[key]):
                     key_dic[key] = self.__dict__[key].save(**kwargs)
                 elif is_NRV_class_list(self.__dict__[key]):
