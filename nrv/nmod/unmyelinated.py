@@ -163,7 +163,7 @@ class unmyelinated(axon):
         # implement neuron mechanisms
         self.__set_model(self.model)
         # define the geometry of the axon
-        self._axon__define_shape()
+        self.__define_shape()
         # define the number of segments
         self.__set_Nseg()
         # get nodes positions
