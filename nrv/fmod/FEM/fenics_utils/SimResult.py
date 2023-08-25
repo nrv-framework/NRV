@@ -283,7 +283,6 @@ class SimResult(NRV_class):
     ## special methods ##
     #####################
     def __abs__(self):
-        expr = Expression(abs(self.vout), self.V.element.interpolation_points())
         res = SimResult(
             mesh_file=self.mesh_file,
             V=self.V,
@@ -291,12 +290,13 @@ class SimResult(NRV_class):
             elem=self.elem,
             comm=self.comm,
         )
-        res.vout = Function(self.V)
-        self.vout.interpolate(expr)
+        if self.vout is not None:
+            expr = Expression(abs(self.vout), self.V.element.interpolation_points())
+            res.vout = Function(self.V)
+            self.vout.interpolate(expr)
         return res
 
     def __neg__(self):
-        expr = Expression(-self.vout, self.V.element.interpolation_points())
         res = SimResult(
             mesh_file=self.mesh_file,
             V=self.V,
@@ -304,8 +304,10 @@ class SimResult(NRV_class):
             elem=self.elem,
             comm=self.comm,
         )
-        res.vout = Function(self.V)
-        self.vout.interpolate(expr)
+        if self.vout is not None:
+            expr = Expression(- self.vout, self.V.element.interpolation_points())
+            res.vout = Function(self.V)
+            self.vout.interpolate(expr)
         return res
 
     def __add__(self, b):
