@@ -6,7 +6,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 import math
 import numpy as np
 from .axons import *
-from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.log_interface import rise_warning
 
 
 def get_Adelta_parameters(diameter):

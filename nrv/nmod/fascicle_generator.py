@@ -7,16 +7,14 @@ import faulthandler
 import os
 import math
 import numpy as np
+import matplotlib.pyplot as plt
+import numba
 from scipy import stats
 from scipy.stats import rv_continuous
 from scipy.optimize import curve_fit
 from scipy import spatial
-import matplotlib.pyplot as plt
-import numba
 
 from ..backend.log_interface import (
-    rise_error,
-    rise_warning,
     pass_info,
     progression_popup,
 )

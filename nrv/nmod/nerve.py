@@ -4,9 +4,8 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import numpy as np
-import matplotlib.pyplot as plt
-from ..backend.log_interface import rise_error, rise_warning, pass_info
 
+from ..backend.log_interface import rise_warning, pass_info
 from .fascicles import *
 from ..backend.NRV_Class import NRV_class
 

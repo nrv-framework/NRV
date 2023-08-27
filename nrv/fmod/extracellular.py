@@ -5,6 +5,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import faulthandler
 import numpy as np
+
 from .electrodes import *
 from .stimulus import *
 from .materials import *

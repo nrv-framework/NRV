@@ -1,4 +1,3 @@
-import json
 import numpy as np
 
 from ....backend.file_handler import json_load, json_dump, rmv_ext

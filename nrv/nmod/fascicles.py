@@ -7,20 +7,15 @@ import faulthandler
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from scipy import spatial
 
-# other NRV2 librairies
 from .axons import *
 from .unmyelinated import *
 from .myelinated import *
 from .thin_myelinated import *
 from .fascicle_generator import *
-
 from ..utils.cell.CL_postprocessing import *
-
 from ..fmod.extracellular import *
 from ..fmod.recording import *
-
 from ..backend.file_handler import *
 from ..backend.MCore import *
 from ..backend.log_interface import rise_error, rise_warning, pass_info

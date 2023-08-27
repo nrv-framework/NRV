@@ -5,10 +5,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 """
 import json
 import os
-import sys
 import ezdxf
 import numpy as np
-from .log_interface import rise_error, rise_warning, pass_info
+from .log_interface import rise_error, rise_warning
 
 ###################
 ## Miscalleneous ##

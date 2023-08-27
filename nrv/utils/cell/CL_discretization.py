@@ -16,7 +16,7 @@ todo:
 import numpy as np
 from scipy.optimize import minimize
 
-from ...backend.log_interface import rise_error, rise_warning, pass_info
+from ...backend.log_interface import rise_error, rise_warning
 
 calibrated_unmyelinated_models = ["Rattay_Aberham", "Sundt", "Tigerholm"]
 calibrated_myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]

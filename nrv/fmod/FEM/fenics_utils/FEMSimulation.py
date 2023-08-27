@@ -1,8 +1,7 @@
-import numpy as np
 import os
+import time
 from mpi4py import MPI
 from petsc4py.PETSc import ScalarType, Viewer
-import time
 
 from dolfinx.fem import (
     FunctionSpace,
@@ -26,7 +25,6 @@ from ufl import (
     MixedElement,
     Measure,
 )
-
 from .fenics_materials import *
 from .SimParameters import *
 from .SimResult import *

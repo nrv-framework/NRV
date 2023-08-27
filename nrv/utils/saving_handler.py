@@ -13,7 +13,6 @@ from ..fmod.electrodes import *
 from ..fmod.materials import *
 from ..fmod.stimulus import *
 from ..backend.MCore import *
-from ..backend.log_interface import rise_error, rise_warning, pass_info
 
 
 ###############################################################

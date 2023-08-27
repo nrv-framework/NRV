@@ -7,9 +7,8 @@ import faulthandler
 import matplotlib.pyplot as plt
 import os
 
-from ...backend.file_handler import json_dump, json_load, is_iterable
-from ...backend.log_interface import rise_error, rise_warning, pass_info
-
+from ...backend.file_handler import json_load
+from ...backend.log_interface import pass_info
 from ..cell.CL_postprocessing import *
 
 # enable faulthandler to ease 'segmentation faults' debug

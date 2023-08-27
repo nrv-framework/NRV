@@ -4,15 +4,13 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-from collections.abc import Iterable
-import matplotlib.pyplot as plt
 import numpy as np
-from pylab import argmin, argmax
+
+from collections.abc import Iterable
 from scipy import signal
 from numba import jit
 from ...backend.file_handler import json_dump, json_load, is_iterable
-from ...backend.log_interface import rise_error, rise_warning, pass_info
-from ...nmod.myelinated import get_MRG_parameters
+from ...backend.log_interface import rise_warning, pass_info
 from ..units import *
 
 # enable faulthandler to ease 'segmentation faults' debug

@@ -1,8 +1,8 @@
 import numpy as np
+import scipy
+import gmsh
 
 from mpi4py import MPI
-import scipy
-
 from dolfinx.fem import FunctionSpace, Function, Expression
 from dolfinx.io.gmshio import read_from_msh, model_to_mesh
 from dolfinx.io.utils import XDMFFile
@@ -12,10 +12,7 @@ from dolfinx.geometry import (
     compute_colliding_cells,
 )
 from dolfinx.mesh import create_cell_partitioner, GhostMode
-import gmsh
-
 from ..mesh_creator.MshCreator import *
-
 from ....backend.MCore import *
 from ....backend.file_handler import json_load, json_dump, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning, pass_info

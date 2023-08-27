@@ -5,10 +5,10 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import faulthandler
 import os
+import numpy as np
 from dolfinx.fem import Function, FunctionSpace, Constant
 from petsc4py.PETSc import ScalarType
 from ufl import as_tensor
-import numpy as np
 
 
 from ...materials import *

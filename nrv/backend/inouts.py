@@ -1,4 +1,4 @@
-from .log_interface import rise_error, rise_warning, pass_info
+from .log_interface import rise_warning
 
 
 def set_attributes(my_object, attributes_dict):

@@ -4,24 +4,20 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-import math
 import os
-import sys
 import time
 import traceback
-from scipy import optimize
 import numpy as np
-from abc import abstractmethod
+import neuron
 
+from abc import abstractmethod
 from ..fmod.extracellular import *
 from ..fmod.electrodes import *
 from ..fmod.recording import *
-
-from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.log_interface import rise_error, rise_warning
 from ..backend.file_handler import json_dump
 from ..backend.NRV_Class import NRV_class
 
-import neuron
 
 # Handling verbosity
 Verbose = True
