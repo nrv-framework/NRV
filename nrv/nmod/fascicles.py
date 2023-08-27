@@ -11,15 +11,14 @@ import os
 from .axons import *
 from .unmyelinated import *
 from .myelinated import *
-from .thin_myelinated import *
 from .fascicle_generator import *
 from ..utils.cell.CL_postprocessing import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..backend.file_handler import *
 from ..backend.MCore import *
-from ..backend.log_interface import rise_error, rise_warning, pass_info
-from ..backend.NRV_Class import NRV_class, load_any
+from ..backend.log_interface import rise_warning, pass_info
+from ..backend.NRV_Class import NRV_class
 
 # verbosity level
 verbose = True
@@ -85,8 +84,6 @@ class fascicle(NRV_class):
             axon ID, by default set to 0
         threshold       : int
             membrane voltage threshold for spike detection (mV), by default -40mV
-        Adelta_limit    : float
-            limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
         super().__init__()
         self.type = "fascicle"
@@ -139,7 +136,6 @@ class fascicle(NRV_class):
             "T": None,
             "threshold": -40,
         }
-        self.Adelta_limit = 1
         self.set_axons_parameters(**kwargs)
 
         # extra-cellular stimulation
@@ -880,8 +876,6 @@ class fascicle(NRV_class):
             self.unmyelinated_param["Nseg_per_sec"] = kwargs["unmyelinated_nseg"]
         if "myelinated_nseg_per_sec" in kwargs:
             self.myelinated_param["Nseg_per_sec"] = kwargs["myelinated_nseg_per_sec"]
-        if "Adelta_limit" in kwargs:
-            self.Adelta_limit = kwargs["self.Adelta_limit"]
 
     def get_axons_parameters(self, unmyelinated_only=False, myelinated_only=False):
         """
@@ -1253,26 +1247,14 @@ class fascicle(NRV_class):
                         **self.unmyelinated_param,
                     )
                 else:
-                    ## if myelinated, test the axons_diameter[k],
-                    ## if less than Adelta_limit -> A-delta model, else Myelinated
-                    if self.axons_diameter[k] < self.Adelta_limit:
-                        axon = thin_myelinated(
-                            self.axons_y[k],
-                            self.axons_z[k],
-                            round(self.axons_diameter[k], 2),
-                            self.L,
-                            ID=k,
-                            **self.myelinated_param,
-                        )
-                    else:
-                        axon = myelinated(
-                            self.axons_y[k],
-                            self.axons_z[k],
-                            round(self.axons_diameter[k], 2),
-                            self.L,
-                            ID=k,
-                            **self.myelinated_param,
-                        )
+                    axon = myelinated(
+                        self.axons_y[k],
+                        self.axons_z[k],
+                        round(self.axons_diameter[k], 2),
+                        self.L,
+                        ID=k,
+                        **self.myelinated_param,
+                    )
                 axon.attach_extracellular_stimulation(self.extra_stim)
                 footprints[k] = axon.get_electrodes_footprints_on_axon(
                     save_ftp_only=save_ftp_only, filename=filename
@@ -1345,15 +1327,10 @@ class fascicle(NRV_class):
             name of the folder to store results of the fascicle simulation.
         Unmyelinated_model  : str
             model for unmyelinated fibers, by default 'Rattay_Aberham'
-        Adelta_model        : str
-            model for A-delta thin myelinated fibers, by default'extended_Gaines'
         Myelinated_model    : str
             model for myelinated fibers, by default 'MRG'
         myelinated_seg_per_sec        : int
             number of segment per section for myelinated axons
-        Adelta_limit        : float
-            limit diameter between A-delta models (thin myelinated) and myelinated models for
-            axons. Overwritte the fascicle limit, if unnecessary, specify None. None by default
         PostProc_Filtering  : float, list, array, np.array
             value or iterable values for basic post proc filtering. If None specified, no filtering
             is performed
@@ -1367,7 +1344,7 @@ class fascicle(NRV_class):
             import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()
-        ## create folder and save fascicle config
+        # create folder and save fascicle config
         folder_name = save_path + "Fascicle_" + str(self.ID)
         if MCH.do_master_only_work():
             create_folder(folder_name)
@@ -1382,11 +1359,10 @@ class fascicle(NRV_class):
             kwargs["unmyelinated_nseg"] = self.unmyelinated_param["Nseg_per_sec"]
 
         self.set_axons_parameters(**kwargs)
-        #
         self.processes_status = ["computing" for _ in range(MCH.size)]
-        ## create ID for all axons
+        # create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
-        ###### FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)####
+        # FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)
         if (
             self.extra_stim is not None
             and loaded_footprints == False
@@ -1460,26 +1436,14 @@ class fascicle(NRV_class):
                                 **self.unmyelinated_param,
                             )
                         else:
-                            ## if myelinated, test the axons_diameter[k],
-                            ## if less than Adelta_limit -> A-delta model, else Myelinated
-                            if self.axons_diameter[k] < self.Adelta_limit:
-                                axon = thin_myelinated(
-                                    self.axons_y[k],
-                                    self.axons_z[k],
-                                    round(self.axons_diameter[k], 2),
-                                    self.L,
-                                    ID=k,
-                                    **self.myelinated_param,
-                                )
-                            else:
-                                axon = myelinated(
-                                    self.axons_y[k],
-                                    self.axons_z[k],
-                                    round(self.axons_diameter[k], 2),
-                                    self.L,
-                                    ID=k,
-                                    **self.myelinated_param,
-                                )
+                            axon = myelinated(
+                                self.axons_y[k],
+                                self.axons_z[k],
+                                round(self.axons_diameter[k], 2),
+                                self.L,
+                                ID=k,
+                                **self.myelinated_param,
+                            )
                         ## add extracellular stimulation
                         axon.attach_extracellular_stimulation(self.extra_stim)
                         ## add recording mechanism
@@ -1600,26 +1564,14 @@ class fascicle(NRV_class):
                         **self.unmyelinated_param,
                     )
                 else:
-                    ## if myelinated, test the axons_diameter[k],
-                    ## if less than Adelta_limit -> A-delta model, else Myelinated
-                    if self.axons_diameter[k] < self.Adelta_limit:
-                        axon = thin_myelinated(
-                            self.axons_y[k],
-                            self.axons_z[k],
-                            round(self.axons_diameter[k], 2),
-                            self.L,
-                            ID=k,
-                            **self.myelinated_param,
-                        )
-                    else:
-                        axon = myelinated(
-                            self.axons_y[k],
-                            self.axons_z[k],
-                            round(self.axons_diameter[k], 2),
-                            self.L,
-                            ID=k,
-                            **self.myelinated_param,
-                        )
+                    axon = myelinated(
+                        self.axons_y[k],
+                        self.axons_z[k],
+                        round(self.axons_diameter[k], 2),
+                        self.L,
+                        ID=k,
+                        **self.myelinated_param,
+                    )
                 ## add extracellular stimulation
                 if self.extra_stim is not None:
                     axon.attach_extracellular_stimulation(self.extra_stim)

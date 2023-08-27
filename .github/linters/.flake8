@@ -1,8 +1,11 @@
 [flake8]
 # allow unused imports in initialization
 per-file-ignores = 
-    __init__.py:F401
-    __init__.py:E402
+    __init__.py:F401,
+    __init__.py:E402,
     __init__.py:F403
 # allow double # in comments
-extend-ignore = E266
+extend-ignore = 
+    E266,
+    E203
+max-line-length = 120

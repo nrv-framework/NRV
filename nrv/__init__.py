@@ -100,7 +100,6 @@ from .fmod.FEM.fenics_utils.SimResult import *
 from .nmod.axons import *
 from .nmod.unmyelinated import *
 from .nmod.myelinated import *
-from .nmod.thin_myelinated import *
 from .nmod.fascicles import *
 from .nmod.fascicle_generator import *
 from .nmod.nerve import *
