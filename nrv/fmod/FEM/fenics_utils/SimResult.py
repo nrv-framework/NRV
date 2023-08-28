@@ -302,7 +302,7 @@ class SimResult(NRV_class):
             comm=self.comm,
         )
         if self.vout is not None:
-            expr = Expression(-self.vout, self.V.element.interpolation_points())
+            expr = Expression(-1*self.vout, self.V.element.interpolation_points())
             res.vout = Function(self.V)
             self.vout.interpolate(expr)
         return res

@@ -1,36 +1,35 @@
 import os
 import time
-from mpi4py import MPI
-from petsc4py.PETSc import ScalarType, Viewer
 
 from dolfinx.fem import (
-    FunctionSpace,
     Constant,
-    locate_dofs_topological,
-    dirichletbc,
     Function,
-    form,
+    FunctionSpace,
     assemble_scalar,
+    dirichletbc,
+    form,
+    locate_dofs_topological,
 )
 from dolfinx.fem.petsc import LinearProblem
 from dolfinx.io.utils import XDMFFile
+from mpi4py import MPI
+from petsc4py.PETSc import ScalarType, Viewer
 from ufl import (
+    FiniteElement,
+    Measure,
+    MixedElement,
     TestFunction,
     TrialFunction,
-    as_tensor,
-    nabla_grad,
-    inner,
     avg,
-    FiniteElement,
-    MixedElement,
-    Measure,
+    inner,
+    nabla_grad,
 )
+
+from ....backend.log_interface import pass_info, rise_error, rise_warning
+from ....utils.units import *
 from .fenics_materials import *
 from .SimParameters import *
 from .SimResult import *
-from ....utils.units import *
-from ....backend.log_interface import rise_error, rise_warning, pass_info
-
 
 # Lists of available solvers and conditioners
 # go to https://petsc4py.readthedocs.io/en/stable/manual/ksp/ for more info
