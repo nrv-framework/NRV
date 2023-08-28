@@ -21,6 +21,7 @@ import time
 import re
 
 # import nrv
+from nrv import backend
 
 # test for possibility of parallel computing
 try:
