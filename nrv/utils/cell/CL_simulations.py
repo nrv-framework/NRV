@@ -29,7 +29,6 @@ unmyelinated_models = [
     "Schild_97",
 ]
 myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]
-thin_myelinated_models = ["extended_Gaines", "RGK"]
 
 
 def firing_threshold_point_source(
@@ -270,10 +269,6 @@ def firing_threshold_point_source(
                 axon1 = myelinated(
                     y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
                 )
-        elif model in thin_myelinated_models:
-            axon1 = thin_myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
         else:
             rise_error("Error: Specified model is not recognized.")
         # extra-cellular stimulation
@@ -629,10 +624,6 @@ def para_firing_threshold(
             axon1 = myelinated(
                 y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
             )
-        elif model in thin_myelinated_models:
-            axon1 = thin_myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
         else:
             axon1 = myelinated(
                 y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
@@ -908,10 +899,6 @@ def blocking_threshold_point_source(
                 axon1 = myelinated(
                     y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
                 )
-        elif model in thin_myelinated_models:
-            axon1 = thin_myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
         else:
             if n_nodes > 0:
                 L = get_length_from_nodes(diameter, n_nodes)
@@ -1260,10 +1247,6 @@ def para_blocking_threshold(
             axon1 = unmyelinated(y, z, diameter, L, dt=dt, freq=f_dlambda, model=model)
         elif model in myelinated_models:
             axon1 = myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
-        elif model in thin_myelinated_models:
-            axon1 = thin_myelinated(
                 y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
             )
         else:

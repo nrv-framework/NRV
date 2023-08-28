@@ -296,6 +296,10 @@ class axon(NRV_class):
         ## recording mechanism
         self.record = False
         self.recorder = None
+        ## abstract parameters
+        self.x_rec = np.asarray([])
+        self.rec = "all"
+        self.node_index = None
 
     def __del__(self):
         for section in neuron.h.allsec():
@@ -1194,6 +1198,58 @@ class axon(NRV_class):
         t = np.array(self.timeVector)
         self.t_len = len(t)
         return t
+    
+    ###########################
+    ## Axon abstract methods ##
+    ###########################
+    @abstractmethod
+    def insert_I_Clamp(self):
+        pass
+
+    @abstractmethod
+    def insert_V_Clamp(self):
+        pass
+
+    @abstractmethod
+    def set_membrane_voltage_recorders(self):
+        pass
+
+    @abstractmethod
+    def set_membrane_current_recorders(self):
+        pass
+
+    @abstractmethod
+    def set_ionic_current_recorders(self):
+        pass
+
+    @abstractmethod
+    def set_conductance_recorders(self):
+        pass
+
+    @abstractmethod
+    def set_particules_values_recorders(self):
+        pass
+
+    @abstractmethod
+    def get_membrane_voltage(self):
+        pass
+
+    @abstractmethod
+    def get_membrane_current(self):
+        pass
+
+    @abstractmethod
+    def get_ionic_current(self):
+        pass
+
+    @abstractmethod
+    def get_conductance(self):
+        pass
+
+    @abstractmethod
+    def get_particules_values(self):
+        pass
+
 
 
 class axon_test(axon):

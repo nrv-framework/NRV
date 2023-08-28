@@ -7,7 +7,6 @@ from ..nmod.fascicles import *
 from ..nmod.axons import *
 from ..nmod.unmyelinated import *
 from ..nmod.myelinated import *
-from ..nmod.thin_myelinated import *
 from ..fmod.extracellular import *
 from ..fmod.electrodes import *
 from ..fmod.materials import *
@@ -70,10 +69,7 @@ def load_any_axon(
         ax_dic = data
 
     if ax_dic["myelinated"] is True:
-        if ax_dic["thin"]:
-            ax = thin_myelinated(0, 0, 1, 10)
-        else:
-            ax = myelinated(0, 0, 1, 10)
+        ax = myelinated(0, 0, 1, 10)
     else:
         ax = unmyelinated(0, 0, 1, 10)
 
