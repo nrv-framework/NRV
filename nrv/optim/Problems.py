@@ -64,8 +64,8 @@ class Problem(NRV_class):
         pass
 
     # additional methods
-    def context_and_cost(self, context_func, cost_func):
-        self.CostFunction = CostFunction(context_func, cost_func)
+    def context_and_cost(self, context_func, cost_func, residual):
+        self.CostFunction = CostFunction(context_func, cost_func, residual)
 
     def autoset_optimizer(self):
         pass
