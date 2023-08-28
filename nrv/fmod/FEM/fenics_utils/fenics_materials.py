@@ -13,8 +13,8 @@ from ufl import as_tensor
 
 from ...materials import *
 from ....utils.nrv_function import nrv_interp
-from ....backend.log_interface import rise_error, rise_warning, pass_info
-from ....backend.file_handler import json_dump, json_load, rmv_ext
+from ....backend.log_interface import rise_warning
+from ....backend.file_handler import json_dump, rmv_ext
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

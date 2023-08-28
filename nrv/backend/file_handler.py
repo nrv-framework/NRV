@@ -9,9 +9,9 @@ import ezdxf
 import numpy as np
 from .log_interface import rise_error, rise_warning
 
-###################
-## Miscalleneous ##
-###################
+#################
+# Miscalleneous #
+#################
 def is_iterable(some_stuff):
     """
     this function chels wether or not a variable contains an iterrable

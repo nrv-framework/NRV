@@ -4,8 +4,6 @@ import numpy as np
 import os
 import gmsh
 
-from dolfinx.io import gmshio
-
 
 from ....backend.file_handler import rmv_ext
 from ....backend.MCore import *

@@ -6,6 +6,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 import numpy as np
 import configparser
 import os
+import time
 
 from ...utils.units import V
 from ...backend.file_handler import rmv_ext
@@ -246,7 +247,7 @@ class FENICS_model(FEM_model):
         self.jstims = []
         self.j_electrode = {}
 
-        self.mesh_file_status = not self.mesh_file is None
+        self.mesh_file_status = self.mesh_file is not None
         self.is_sim_ready = False
         self.is_meshed = False
         self.is_computed = False
@@ -579,7 +580,7 @@ class FENICS_model(FEM_model):
             All potential for all paramtric sweeps (all electrodes in NRV2 models)\
             (line: electrode selection, column: potential)
         """
-        if self.is_computed == True:
+        if self.is_computed:
             t0 = time.time()
             line = [[x_, y, z] for x_ in x]
             if self.N_electrode == 1 or (E < self.N_electrode and E >= 0):

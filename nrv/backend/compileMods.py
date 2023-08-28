@@ -25,7 +25,7 @@ else:
     test_mods = False
     i = 0
     while (not test_mods) and i < len(ls):
-        test_mods = not "." in ls[i]
+        test_mods = "." not in ls[i]
         i += 1
 
     def NeuronCompile():

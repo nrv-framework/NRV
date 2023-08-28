@@ -1,9 +1,7 @@
-from cmath import phase
-
 from .NerveMshCreator import *
 from ...electrodes import *
 from ....nmod.fascicles import *
-from ....backend.log_interface import rise_error, rise_warning, pass_info
+from ....backend.log_interface import rise_warning
 from ....utils.units import *
 
 

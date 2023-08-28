@@ -4,7 +4,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 from abc import abstractmethod
-from ...backend.log_interface import rise_error, rise_warning, pass_info
+from ...backend.log_interface import pass_info
 from ...backend.NRV_Class import NRV_class
 
 ###############

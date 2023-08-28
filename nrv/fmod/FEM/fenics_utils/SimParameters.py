@@ -221,7 +221,7 @@ class SimParameters(NRV_class):
                 "neither mat_file or mat_perm set, set to default permitivity 1 S/m"
             )
 
-        if not mesh_domain in self.domains_list:
+        if mesh_domain not in self.domains_list:
             IDdom = self.__update_ID_list("domains", mesh_domain)
             self.domains_list[IDdom] = {
                 "mesh_domain": mesh_domain,
@@ -319,7 +319,7 @@ class SimParameters(NRV_class):
             )
 
         self.inbound = True
-        if not mesh_domain in self.inboundaries_list:
+        if mesh_domain not in self.inboundaries_list:
             IDibound = self.__update_ID_list("inbound", mesh_domain)
             self.inboundaries_list[IDibound] = {
                 "mesh_domain": mesh_domain,

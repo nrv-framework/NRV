@@ -1242,11 +1242,9 @@ class axon(NRV_class):
     def get_ionic_current(self):
         pass
 
-    @abstractmethod
     def get_conductance(self):
         pass
 
-    @abstractmethod
     def get_particules_values(self):
         pass
 
