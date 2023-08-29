@@ -3,16 +3,15 @@ NRV-Cellular Level simulations
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-from ..nmod.fascicles import *
-from ..nmod.axons import *
-from ..nmod.unmyelinated import *
-from ..nmod.myelinated import *
-from ..fmod.extracellular import *
+from ..backend.MCore import *
 from ..fmod.electrodes import *
+from ..fmod.extracellular import *
 from ..fmod.materials import *
 from ..fmod.stimulus import *
-from ..backend.MCore import *
-
+from ..nmod.axons import *
+from ..nmod.fascicles import *
+from ..nmod.myelinated import *
+from ..nmod.unmyelinated import *
 
 ###############################################################
 #########################  Loaders  ###########################

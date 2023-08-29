@@ -4,13 +4,14 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-import numpy as np
-
 from collections.abc import Iterable
-from scipy import signal
+
+import numpy as np
 from numba import jit
-from ...backend.file_handler import json_dump, json_load, is_iterable
-from ...backend.log_interface import rise_warning, pass_info
+from scipy import signal
+
+from ...backend.file_handler import is_iterable, json_dump, json_load
+from ...backend.log_interface import pass_info, rise_warning
 from ..units import *
 
 # enable faulthandler to ease 'segmentation faults' debug

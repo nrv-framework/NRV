@@ -3,13 +3,14 @@ NRV-nrv_function
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-import numpy as np
-
-from scipy.interpolate import interp1d, CubicHermiteSpline
-from scipy.special import erf
 from abc import abstractmethod
-from ..backend.log_interface import rise_warning
+
+import numpy as np
+from scipy.interpolate import CubicHermiteSpline, interp1d
+from scipy.special import erf
+
 from ..backend.file_handler import json_dump, json_load
+from ..backend.log_interface import rise_warning
 from ..backend.NRV_Class import NRV_class
 
 #############################

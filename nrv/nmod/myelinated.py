@@ -4,9 +4,11 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import math
+
 import numpy as np
-from .axons import *
+
 from ..backend.log_interface import rise_warning
+from .axons import *
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_g = np.asarray(

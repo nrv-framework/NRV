@@ -4,14 +4,15 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
+
 import numpy as np
-from .materials import *
-from ..utils.units import *
+
 from ..backend.file_handler import *
-from ..backend.log_interface import rise_error, rise_warning, pass_info
+from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import *
 from ..backend.NRV_Class import NRV_class
-
+from ..utils.units import *
+from .materials import *
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

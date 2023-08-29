@@ -1,8 +1,8 @@
-from .NerveMshCreator import *
-from ...electrodes import *
-from ....nmod.fascicles import *
 from ....backend.log_interface import rise_warning
+from ....nmod.fascicles import *
 from ....utils.units import *
+from ...electrodes import *
+from .NerveMshCreator import *
 
 
 def mesh_from_electrode(

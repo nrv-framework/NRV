@@ -7,17 +7,17 @@ import faulthandler
 import os
 import time
 import traceback
-import numpy as np
-import neuron
-
 from abc import abstractmethod
-from ..fmod.extracellular import *
-from ..fmod.electrodes import *
-from ..fmod.recording import *
-from ..backend.log_interface import rise_error, rise_warning
-from ..backend.file_handler import json_dump
-from ..backend.NRV_Class import NRV_class
 
+import neuron
+import numpy as np
+
+from ..backend.file_handler import json_dump
+from ..backend.log_interface import rise_error, rise_warning
+from ..backend.NRV_Class import NRV_class
+from ..fmod.electrodes import *
+from ..fmod.extracellular import *
+from ..fmod.recording import *
 
 # Handling verbosity
 Verbose = True
@@ -1198,7 +1198,7 @@ class axon(NRV_class):
         t = np.array(self.timeVector)
         self.t_len = len(t)
         return t
-    
+
     ###########################
     ## Axon abstract methods ##
     ###########################
@@ -1247,7 +1247,6 @@ class axon(NRV_class):
 
     def get_particules_values(self):
         pass
-
 
 
 class axon_test(axon):

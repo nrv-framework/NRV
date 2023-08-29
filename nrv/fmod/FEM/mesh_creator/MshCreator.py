@@ -1,15 +1,14 @@
-import os
 import math
-import numpy as np
 import os
-import gmsh
 
+import gmsh
+import numpy as np
 
 from ....backend.file_handler import rmv_ext
+from ....backend.log_interface import pass_info, rise_error, rise_warning
 from ....backend.MCore import *
-from ....backend.parameters import parameters
-from ....backend.log_interface import rise_error, rise_warning, pass_info
 from ....backend.NRV_Class import NRV_class
+from ....backend.parameters import parameters
 
 dir_path = os.environ["NRVPATH"] + "/_misc"
 

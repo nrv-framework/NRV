@@ -1,7 +1,7 @@
 import numpy as np
 
-from ....backend.file_handler import json_load, json_dump, rmv_ext
-from ....backend.log_interface import rise_error, rise_warning, pass_info
+from ....backend.file_handler import json_dump, json_load, rmv_ext
+from ....backend.log_interface import rise_error, rise_warning
 from ....backend.NRV_Class import NRV_class
 
 

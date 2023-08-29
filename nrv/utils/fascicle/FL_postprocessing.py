@@ -4,8 +4,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-import matplotlib.pyplot as plt
 import os
+
+import matplotlib.pyplot as plt
 
 from ...backend.file_handler import json_load
 from ...backend.log_interface import pass_info

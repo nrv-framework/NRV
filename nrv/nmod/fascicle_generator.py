@@ -4,20 +4,17 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-import os
 import math
-import numpy as np
+import os
+
 import matplotlib.pyplot as plt
 import numba
-from scipy import stats
-from scipy.stats import rv_continuous
+import numpy as np
+from scipy import spatial, stats
 from scipy.optimize import curve_fit
-from scipy import spatial
+from scipy.stats import rv_continuous
 
-from ..backend.log_interface import (
-    pass_info,
-    progression_popup,
-)
+from ..backend.log_interface import pass_info, progression_popup
 
 # WARNING:
 # no prompt message for numpy division by zeros: handled in the code !!!

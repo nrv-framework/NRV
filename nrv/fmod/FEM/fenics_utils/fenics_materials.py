@@ -5,16 +5,16 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 import faulthandler
 import os
+
 import numpy as np
-from dolfinx.fem import Function, FunctionSpace, Constant
+from dolfinx.fem import Constant, Function, FunctionSpace
 from petsc4py.PETSc import ScalarType
 from ufl import as_tensor
 
-
-from ...materials import *
-from ....utils.nrv_function import nrv_interp
-from ....backend.log_interface import rise_warning
 from ....backend.file_handler import json_dump, rmv_ext
+from ....backend.log_interface import rise_warning
+from ....utils.nrv_function import nrv_interp
+from ...materials import *
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

@@ -1,9 +1,8 @@
 from cmath import phase
 
-from .MshCreator import *
-from ....backend.log_interface import rise_error, rise_warning, pass_info
+from ....backend.log_interface import rise_error, rise_warning
 from ....utils.units import *
-
+from .MshCreator import *
 
 ENT_DOM_offset = {
     "Volume": 0,

@@ -4,7 +4,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import math
+
 import numpy as np
+
 from .axons import *
 
 

@@ -5,9 +5,9 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 """
 import numpy as np
 
-from ..backend.log_interface import rise_warning, pass_info
-from .fascicles import *
+from ..backend.log_interface import pass_info, rise_warning
 from ..backend.NRV_Class import NRV_class
+from .fascicles import *
 
 
 #################

@@ -1,3 +1,4 @@
+# pylint: skip-file
 """ NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
 
 # Meta information
@@ -21,6 +22,7 @@ import platform
 
 # create a dummy object to locate frameworks path
 class DummyClass:
+    """ Dummy class"""
     pass
 
 

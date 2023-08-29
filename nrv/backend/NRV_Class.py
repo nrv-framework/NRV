@@ -4,12 +4,13 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 from abc import ABCMeta, abstractmethod
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
 from numpy import iterable
+
 from .file_handler import json_dump, json_load
 from .log_interface import pass_debug_info
-
 
 ########################################
 #           check object               #

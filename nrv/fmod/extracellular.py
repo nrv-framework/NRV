@@ -4,22 +4,19 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
+
 import numpy as np
 
-from .electrodes import *
-from .stimulus import *
-from .materials import *
-from .FEM.FEM import *
-from .FEM.COMSOL_model import *
-from .FEM.FENICS_model import *
-from ..backend.MCore import *
 from ..backend.file_handler import *
-from ..backend.log_interface import (
-    rise_error,
-    rise_warning,
-    pass_info,
-)
-from ..backend.NRV_Class import NRV_class, load_any
+from ..backend.log_interface import rise_error, rise_warning
+from ..backend.MCore import *
+from ..backend.NRV_Class import NRV_class
+from .electrodes import *
+from .FEM.COMSOL_model import *
+from .FEM.FEM import *
+from .FEM.FENICS_model import *
+from .materials import *
+from .stimulus import *
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

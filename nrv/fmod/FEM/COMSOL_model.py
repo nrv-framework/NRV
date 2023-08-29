@@ -4,14 +4,15 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 
-import numpy as np
-import mph
 import configparser
 import os
 import time
 
-from ...utils.units import V
+import mph
+import numpy as np
+
 from ...backend.file_handler import rmv_ext
+from ...utils.units import V
 from .FEM import *
 
 # built in COMSOL models

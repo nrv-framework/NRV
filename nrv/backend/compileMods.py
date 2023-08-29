@@ -5,6 +5,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 
 import os
+
 from .log_interface import rise_warning
 
 # test if neuron correctly installed

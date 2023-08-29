@@ -5,21 +5,18 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 """
 import sys
 
-from ...nmod.axons import *
-from ...nmod.unmyelinated import *
-from ...nmod.myelinated import *
-
-from ...fmod.extracellular import *
+from ...backend.log_interface import pass_info, rise_error, rise_warning
+from ...backend.MCore import *
 from ...fmod.electrodes import *
+from ...fmod.extracellular import *
 from ...fmod.materials import *
 from ...fmod.stimulus import *
-
-from ...backend.MCore import *
-from ...backend.log_interface import rise_error, rise_warning, pass_info
-
+from ...nmod.axons import *
+from ...nmod.myelinated import *
+from ...nmod.unmyelinated import *
 from ..saving_handler import *
-from .CL_postprocessing import *
 from .CL_discretization import *
+from .CL_postprocessing import *
 
 unmyelinated_models = [
     "HH",

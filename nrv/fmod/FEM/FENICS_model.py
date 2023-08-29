@@ -3,18 +3,18 @@ NRV-FEM
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-import numpy as np
 import configparser
 import os
 import time
 
-from ...utils.units import V
-from ...backend.file_handler import rmv_ext
-from .FEM import *
+import numpy as np
 
-from .mesh_creator.NerveMshCreator import *
+from ...backend.file_handler import rmv_ext
+from ...utils.units import V
+from .FEM import *
 from .fenics_utils.FEMSimulation import *
 from .fenics_utils.SimResult import *
+from .mesh_creator.NerveMshCreator import *
 
 # built in FENICS models
 dir_path = os.environ["NRVPATH"] + "/_misc"

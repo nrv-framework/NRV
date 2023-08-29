@@ -1,7 +1,6 @@
-from ..backend.NRV_Class import NRV_class
-
 from abc import ABCMeta, abstractmethod
 
+from ..backend.NRV_Class import NRV_class
 
 # import pyswarms
 

@@ -1,21 +1,21 @@
+import gmsh
 import numpy as np
 import scipy
-import gmsh
-
-from mpi4py import MPI
-from dolfinx.fem import FunctionSpace, Function, Expression
-from dolfinx.io.gmshio import model_to_mesh
-from dolfinx.io.utils import XDMFFile
+from dolfinx.fem import Expression, Function, FunctionSpace
 from dolfinx.geometry import (
     BoundingBoxTree,
-    compute_collisions,
     compute_colliding_cells,
+    compute_collisions,
 )
-from ..mesh_creator.MshCreator import *
-from ....backend.MCore import *
+from dolfinx.io.gmshio import model_to_mesh
+from dolfinx.io.utils import XDMFFile
+from mpi4py import MPI
+
 from ....backend.file_handler import rmv_ext
 from ....backend.log_interface import rise_error, rise_warning
+from ....backend.MCore import *
 from ....backend.NRV_Class import NRV_class
+from ..mesh_creator.MshCreator import *
 
 
 ###############
@@ -301,7 +301,7 @@ class SimResult(NRV_class):
             comm=self.comm,
         )
         if self.vout is not None:
-            expr = Expression(-1*self.vout, self.V.element.interpolation_points())
+            expr = Expression(-1 * self.vout, self.V.element.interpolation_points())
             res.vout = Function(self.V)
             self.vout.interpolate(expr)
         return res

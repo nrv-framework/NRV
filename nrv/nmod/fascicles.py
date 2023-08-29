@@ -4,21 +4,22 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import faulthandler
-import numpy as np
-import matplotlib.pyplot as plt
 import os
 
-from .axons import *
-from .unmyelinated import *
-from .myelinated import *
-from .fascicle_generator import *
-from ..utils.cell.CL_postprocessing import *
+import matplotlib.pyplot as plt
+import numpy as np
+
+from ..backend.file_handler import *
+from ..backend.log_interface import pass_info, rise_warning
+from ..backend.MCore import *
+from ..backend.NRV_Class import NRV_class
 from ..fmod.extracellular import *
 from ..fmod.recording import *
-from ..backend.file_handler import *
-from ..backend.MCore import *
-from ..backend.log_interface import rise_warning, pass_info
-from ..backend.NRV_Class import NRV_class
+from ..utils.cell.CL_postprocessing import *
+from .axons import *
+from .fascicle_generator import *
+from .myelinated import *
+from .unmyelinated import *
 
 # verbosity level
 verbose = True
