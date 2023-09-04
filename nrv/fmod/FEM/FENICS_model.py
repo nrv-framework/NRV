@@ -383,7 +383,7 @@ class FENICS_model(FEM_model):
             self.sim.add_domain(
                 mesh_domain=ENT_DOM_offset["Nerve"], mat_pty=self.Epineurium_mat
             )
-            for i in range(self.N_fascicle):
+            for i in self.fascicles.keys():
                 self.sim.add_domain(
                     mesh_domain=ENT_DOM_offset["Fascicle"] + (2 * i),
                     mat_pty=self.Endoneurium_mat,

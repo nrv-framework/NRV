@@ -1,35 +1,16 @@
 import nrv
 import matplotlib.pyplot as plt
 
-#nrv.parameters.set_nrv_verbosity(4)
+# nrv.parameters.set_nrv_verbosity(4)
 test_num = 304
 fname = "./unitary_tests/figures/"+str(test_num)+"_nerve.json"
 nerve = nrv.nerve()
 nerve.set_ID(test_num)
-nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=1, y=-20, z=-60, intracel_context=True, rec_context=True)
-nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=3, z=65, intracel_context=True)
+nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=1, y=-20, z=-60)
+nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=3, z=65)
 nerve.fit_circular_contour()
 L = nerve.L
 
-
-
-##################################
-##### Intracellular context ######
-##################################
-position = 0.
-t_start = 1
-duration = 0.5
-amplitude = 4
-nerve.insert_I_Clamp(position, t_start, duration, amplitude)
-
-##################################
-####### recording context ########
-##################################
-testrec = nrv.recorder('endoneurium_bhadra')
-testrec.set_recording_point(L/4, 0, 100)
-testrec.set_recording_point(L/2, 0, 100)
-testrec.set_recording_point(3*L/4, 0, 100)
-nerve.attach_extracellular_recorder(testrec)
 ##################################
 ##### extracellular context ######
 ##################################
@@ -61,5 +42,6 @@ LIFE_stim.add_electrode(elec_1, stim1)
 nerve.attach_extracellular_stimulation(LIFE_stim)
 
 
-if nrv.MCH.do_master_only_work():
-    nerve.compute_electrodes_footprints()
+nerve.compute_electrodes_footprints()
+for fasc in nerve.fascicles.values():
+    print(fasc.ID, ": ", fasc.is_footprinted)
