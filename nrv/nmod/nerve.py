@@ -6,7 +6,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 import numpy as np
 
 from ..backend.log_interface import pass_info, rise_warning
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, load_any
 from .fascicles import *
 
 

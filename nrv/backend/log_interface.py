@@ -114,10 +114,10 @@ def rise_warning(*args, abort=False, **kwargs):
         if parameters.LOG_Status:
             logging.warning(war)
         if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL >= 2:
-            print(war)
+            print(bcolors.WARNING + war+ bcolors.ENDC)
             sys.stdout.flush()
         elif parameters.VERBOSITY_LEVEL >= 4:
-            print(war)
+            print(bcolors.WARNING + war+ bcolors.ENDC)
             sys.stdout.flush()
     if abort:
         sys.exit(0)

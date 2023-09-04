@@ -6,6 +6,8 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
+# sys used in an eval
+import sys
 import numpy as np
 from numpy import iterable
 

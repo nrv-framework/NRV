@@ -38,7 +38,7 @@ print('fascicle saved in '+ str(nrv.sci_round(t1-t0,2))+' s')
 t2 = time.time()
 fascicle_2, loadedrec = nrv.load_any_fascicle(fascicle_file, intracel_context=True, rec_context=True)
 print('fascicle loaded in '+ str(nrv.sci_round(t2-t1,2))+' s')
-print(loadedrec)
+print(nrv.is_recorder(loadedrec))
 
 
 # simulation
