@@ -1289,3 +1289,33 @@ class axon_test(axon):
             ID=0,
             threshold=-40,
         )
+
+    def insert_I_Clamp(self):
+        pass
+
+    def insert_V_Clamp(self):
+        pass
+
+    def set_membrane_voltage_recorders(self):
+        pass
+
+    def set_membrane_current_recorders(self):
+        pass
+
+    def set_ionic_current_recorders(self):
+        pass
+
+    def set_conductance_recorders(self):
+        pass
+
+    def set_particules_values_recorders(self):
+        pass
+
+    def get_membrane_voltage(self):
+        pass
+
+    def get_membrane_current(self):
+        pass
+
+    def get_ionic_current(self):
+        pass
