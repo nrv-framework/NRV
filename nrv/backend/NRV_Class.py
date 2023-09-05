@@ -145,7 +145,7 @@ class NRV_class(metaclass=ABCMeta):
         **kwargs : dict, optional
             Additional arguments to be passed to the load method of the NRV object
         """
-        if type(data) == str:
+        if isinstance(data, str):
             key_dic = json_load(data)
         else:
             key_dic = data
@@ -170,7 +170,7 @@ def load_any(data, **kwargs):
     Returns:
         _type_: _description_
     """
-    if type(data) == str:
+    if isinstance(data, str):
         key_dic = json_load(data)
     else:
         key_dic = data

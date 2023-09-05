@@ -28,7 +28,7 @@ class Mcore_handler:
         Flag    : bool
             should be true if mpi4py is installed, to be handled by user !
         """
-        super(Mcore_handler, self).__init__()
+        super().__init__()
         self.Flag = Flag
         if self.Flag:
             self.rank = comm.rank

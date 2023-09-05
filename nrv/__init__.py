@@ -22,7 +22,8 @@ import platform
 
 # create a dummy object to locate frameworks path
 class DummyClass:
-    """ Dummy class"""
+    """Dummy class"""
+
     pass
 
 
