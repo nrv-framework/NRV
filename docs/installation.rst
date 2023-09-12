@@ -54,6 +54,9 @@ The use of FenicsX for FEM computations have been repeatedely tested by NRV's co
 Installing NRV
 --------------
 
+Using pip
+^^^^^^^^^
+
 NRV can simply be installed with pip:
 :: 
 
@@ -69,13 +72,35 @@ if you already installed a previous version and want to upgrade to the very last
 
     pip install --upgrade --force-reinstall --ignore-installed git+https://github.com/fkolbl/NRV.git
 
-
-Testing installation
---------------------
-
 You should be now able to import nrv in your python shell:
 ::
 
     import nrv
 
 which should return to the prompt the number of processors used to launch the package. Be aware that on the first import of NRV, some files related to simulation of ion channel are automatically compiled by NEURON, you may see the results of the compilation (including warning, but no errors) on your prompt. 
+
+Using docker
+^^^^^^^^^^^^
+
+This method should be prefered as all dependencies are already setup. Note that in this configuration, COMSOL cannot be used. Assuming that docker is already installed, the first step is to pull the image:
+::
+
+    docker pull nrvframework/nrv
+
+You can then use create a new container using:
+::
+
+    docker run --rm -it nrvframwork/nrv
+
+where the --rm argument suppress the container once finished, and -it gives the interactive console. 
+A second image is available to use NRV in Jupyter notebooks:
+::
+
+    docker pull nrvframework/lab
+
+You can then creat a container using:
+::
+
+    docker run --rm -p 8888:8888 nrvframework/lab
+
+where the -p 8888:8888 maps the port to the local host. This should give you a link and token to load Jupyter from your browser.
