@@ -6,8 +6,6 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 
 import os
 
-from .log_interface import rise_warning
-
 # test if neuron correctly installed
 # warning: difficult as neuron can be 'mocked' on github and rtd for delploy and help
 try:
@@ -15,6 +13,8 @@ try:
 
     nrn_version = nrn.__version__  # this fails :)
 except AttributeError:
+    from .log_interface import rise_warning
+
     # no Neuron or fake neuron
     rise_warning(
         "No mods compiled as the environnement variable NRVPATH does not exist"
