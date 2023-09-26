@@ -163,7 +163,7 @@ class extracellular_context(NRV_class):
         self.electrodes = []
         self.reset_stimuli()
 
-    def synchronise_stimuli(self, snap_time=False):
+    def synchronise_stimuli(self, snap_time=False, dt_min=0.001):
         """
         Synchronise all stimuli before simulation. Copies of the stimuli are created with the global number of samples
         from merging all stimuli time samples. Original stimuli are not affected.
@@ -193,13 +193,12 @@ class extracellular_context(NRV_class):
                     # synchronise the pending one with the already synchronised and add it to synchronised stim
                     stimulus.insert_samples(self.synchronised_stimuli[0].t)
                     self.synchronised_stimuli.append(stimulus)
+            # if snap_time is true synchronised_stimuli overlaping points are removed
+            if snap_time:
+                for stim in self.synchronised_stimuli:
+                    stim.snap_time(dt_min)
             # anyway, take the first stimulus time serie as the global one
             self.global_time_serie = self.synchronised_stimuli[0].t
-        if snap_time:
-            for stim in self.stimuli:
-                print(min(np.diff(stim.t)))
-                stim.snap_time(0.001)
-                print(min(np.diff(stim.t)))
         self.synchronised = True
 
     def compute_vext(self, time_index):
