@@ -3,29 +3,18 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 
-
-#nrv.parameters.set_nrv_verbosity(4)
 L=10000
 d=10
-ax1 = nrv.myelinated(L=L, d=d)
 
 
-LIFE_stim = nrv.FEM_stimulation()
+stim = nrv.stimulation()
 # ### Simulation box size
-Outer_D = 5
-LIFE_stim.reshape_outerBox(Outer_D)
-#### Nerve and fascicle geometry
-Nerve_D = 250
-Fascicle_D = 220
-LIFE_stim.reshape_nerve(Nerve_D=Nerve_D, Length=L)
-LIFE_stim.reshape_fascicle(Fascicle_D)
-##### electrode and stimulus definition
 D = 25
 length = 1000
-y_c = 0
-z_c = 50
-x_1_offset = (L-length)/2
-elec_1 = nrv.LIFE_electrode('LIFE_1', D, length, x_1_offset, y_c, z_c)
+x_elec = 0				# electrode x position, in [um]
+y_elec = 100				# electrode y position, in [um]
+z_elec = 0					# electrode y position, in [um]
+elec_1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 # stimulus def
 freq = 10
 amp = 10
@@ -33,10 +22,14 @@ start = 0
 duration = 10
 stim1 = nrv.stimulus()
 stim1.sinus(start=start, duration=duration, amplitude=amp, freq=freq, dt=0.001)
-LIFE_stim.add_electrode(elec_1, stim1)
+stim.add_electrode(elec_1, stim1)
 
 x_2_offset = (length)/2
-elec_2 = nrv.LIFE_electrode('LIFE_1', D, length, x_2_offset, y_c, z_c)
+# electrode def
+x_elec = L/2				# electrode x position, in [um]
+y_elec = 100				# electrode y position, in [um]
+z_elec = 0					# electrode y position, in [um]
+elec_2 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 start = 0
 I_cathod = 40
 I_anod = I_cathod/5
@@ -44,22 +37,45 @@ T_cathod = 100e-3
 T_inter = 50e-3
 stim2 = nrv.stimulus()
 stim2.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
-LIFE_stim.add_electrode(elec_2, stim2)
+stim.add_electrode(elec_2, stim2)
+
+stim.synchronise_stimuli()
+
+print(len(stim.stimuli[0].t), len(stim.stimuli[1].t),  len(stim.synchronised_stimuli[1].t))
+print(min(np.diff(stim.global_time_serie)))
 
 
-plt.plot(LIFE_stim.stimuli[0].t[1:],np.diff(LIFE_stim.stimuli[0].t), '.-')
-#plt.plot(LIFE_stim.stimuli[1].t[1:],np.diff(LIFE_stim.stimuli[1].t), '.-')
-#plt.show()
-exit()
 
-ax1.attach_extracellular_stimulation(LIFE_stim)
+#nrv.parameters.set_nrv_verbosity(4)
+ax1 = nrv.myelinated(L=L, d=d)
+ax1.attach_extracellular_stimulation(stim)
+t0 = time.time()
+r1 = ax1.simulate(t_sim=3)
+t1 = time.time()
+del ax1
 
-print(ax1.extra_stim.stimuli[0].t, ax1.extra_stim.stimuli[1].t)
-print(min(abs(ax1.extra_stim.stimuli[0] -ax1.extra_stim.stimuli[1].t)))
+stim.synchronised = False
+stim.synchronised_stimuli = []
+stim.synchronise_stimuli(snap_time=True)
+
+print(len(stim.stimuli[0].t), len(stim.stimuli[1].t),  len(stim.synchronised_stimuli[1].t))
+print(min(np.diff(stim.global_time_serie)))
 
 #nerve.compute_electrodes_footprints()
-ax1.simulate(t_sim=50)
 
+#nrv.parameters.set_nrv_verbosity(4)
+ax2 = nrv.myelinated(L=L, d=d)
+ax2.attach_extracellular_stimulation(stim)
+t2 = time.time()
+r2 = ax2.simulate(t_sim=3)
+t3 = time.time()
 
+print('without snap : '+str(t1-t0)+' s')
+print('with snap : '+str(t3-t2)+' s')
 
+plt.figure()
+plt.plot(r1['t'], r1['V_mem'][len(r1['V_mem'])//2], label="without snap")
+plt.plot(r2['t'], r2['V_mem'][len(r2['V_mem'])//2], ':g', label="with snap")
+plt.legend()
+plt.savefig("./unitary_tests/figures/310_A.png")
 #plt.show()
