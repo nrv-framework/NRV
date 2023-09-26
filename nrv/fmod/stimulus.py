@@ -213,11 +213,11 @@ class stimulus(NRV_class):
         i_mask = [True for _ in range(len(self.t))]
         for i in range(len(self.t) - 1):
             j = 0
-            while i > j and not i_mask[i - j]:
-                j += 1
-            if self.t[i + 1] - self.t[i - j] < dt_min:
-                i_mask = False
-
+            if self.t[i + 1] - self.t[i] < dt_min:
+                while i > j and not i_mask[i - j]:
+                    j += 1
+                if self.t[i + 1] - self.t[i - j] < dt_min:
+                    i_mask[i + 1] = False
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
