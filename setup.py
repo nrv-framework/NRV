@@ -1,13 +1,9 @@
 from setuptools import setup
 from unittest.mock import MagicMock  # mock imports
 import sys
-import codecs
 import os
 
 here = os.path.abspath(os.path.dirname(__file__))
-
-with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
-    long_description = "\n" + fh.read()
 
 # This gets deployed when a new release is made by github actions
 VERSION = '{{VERSION_PLACEHOLDER}}'
@@ -69,10 +65,7 @@ setup(
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
-    long_description_content_type="text/markdown",
-    # long_description=long_description,
-    long_description="file: README.md",
-    
+
     # architecture
     packages=[
         "nrv",
