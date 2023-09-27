@@ -1,13 +1,6 @@
 # pylint: skip-file
 """ NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
 
-# Meta information
-__title__ = "NRV"
-__project__ = "NeuRon Virtualizer (NRV)"
-__version__ = "0.9.10"
-__date__ = "2023–07–23"
-__author__ = "Florian Kolbl"
-__contributors__ = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
 __copyright__ = "2023, Florian Kolbl"
 __license__ = "CeCILL"
 
