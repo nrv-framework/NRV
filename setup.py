@@ -70,7 +70,7 @@ setup(
     description=DESCRIPTION,
     url=PROJECT_URL,
     long_description_content_type="text/markdown",
-    long_description=long_description,
+    # long_description=long_description,
     long_description="file: README.md",
     
     # architecture
