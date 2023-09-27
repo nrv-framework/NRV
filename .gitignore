@@ -200,3 +200,5 @@ Thumbs.db
 # added by FK
 nrv/_misc/mods/x86_64/*
 nrv/_misc/log/NRV.log
+tests/unitary_tests/results/*
+tests/unitary_tests/figures/*
