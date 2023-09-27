@@ -1,10 +1,4 @@
 from setuptools import setup
-from unittest.mock import MagicMock  # mock imports
-import sys
-import os
-
-here = os.path.abspath(os.path.dirname(__file__))
-
 
 # CHANGEME VARS
 PACKAGE_NAME = 'nrv-py'
@@ -12,7 +6,7 @@ DESCRIPTION = 'NeuRon Virtualizer (NRV)'
 AUTHOR_NAME = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
 PROJECT_URL = "https://github.com/fkolbl/NRV"
 
-
+'''
 # prevent from unnistalled requierements for nrv import
 deps = (
     "mph",
@@ -53,10 +47,12 @@ deps = (
 )
 for package in deps:
     sys.modules[package] = MagicMock()
+'''
 
 setup(
     # meta infos
     name=PACKAGE_NAME,
+    version='{{VERSION_PLACEHOLDER}}',
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
