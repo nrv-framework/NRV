@@ -5,8 +5,6 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-# This gets deployed when a new release is made by github actions
-VERSION = '{{VERSION_PLACEHOLDER}}'
 
 # CHANGEME VARS
 PACKAGE_NAME = 'nrv-py'
@@ -56,12 +54,9 @@ deps = (
 for package in deps:
     sys.modules[package] = MagicMock()
 
-import nrv
-
 setup(
     # meta infos
     name=PACKAGE_NAME,
-    version=VERSION,
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
