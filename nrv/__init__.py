@@ -11,6 +11,7 @@ __license__ = "CeCILL"
 import os
 import inspect
 import platform
+import gmsh
 
 
 # create a dummy object to locate frameworks path
