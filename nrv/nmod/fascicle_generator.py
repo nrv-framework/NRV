@@ -71,7 +71,8 @@ def load_stat(stat_name):
     if f_in_librairy in stat_library:
         stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
     else:
-        stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
+        #stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
+        stat_file = np.genfromtxt(f_in_librairy, delimiter=",")
     diameters = stat_file[:, 0]
     presence = stat_file[:, 1]
     return diameters, presence
