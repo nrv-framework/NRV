@@ -13,7 +13,10 @@ for stat in myelinated_stats:
 	xspace1 = np.linspace(2,14,num=100)
 	plt.figure()
 	plt.step(diam,pres,where='post',label=stat)
-	plt.plot(xspace1, nrv.two_Gamma(xspace1, *popt1),label='identified')
+	if (len(popt1)>3):
+		plt.plot(xspace1, nrv.two_Gamma(xspace1, *popt1),label='identified')
+	else:
+		plt.plot(xspace1, nrv.one_Gamma(xspace1, *popt1),label='identified')
 	plt.legend()
 	plt.savefig('./unitary_tests/figures/51_'+stat+'.png')
 
