@@ -18,7 +18,7 @@ y_axons, z_axons, iteration, FVF, probed_iter = nrv.axon_packer(test_axons,Delta
 t = time.time() - start
 print('Packing performed in '+str(t)+' s')
 
-nrv.save_placed_axon_population('./unitary_tests/sources/53_test.ppop',test_axons, axons_type, y_axons, z_axons)
+nrv.save_placed_axon_population('./unitary_tests/results/53_test.ppop',test_axons, axons_type, y_axons, z_axons)
 
 # plot the Fiber Volme Fraction
 plt.figure()
