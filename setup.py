@@ -9,6 +9,7 @@ PROJECT_URL = "https://github.com/fkolbl/NRV"
 '''
 # prevent from unnistalled requierements for nrv import
 deps = (
+    "gmsh",
     "mph",
     "neuron",
     "icecream",
