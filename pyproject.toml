@@ -32,7 +32,7 @@ classifiers = [
     'Natural Language :: English']
 readme = 'pypi.md'
 requires-python = '>=3.6'
-dependencies = ['mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream','pyswarms']
+dependencies = ['gmsh','mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream','pyswarms']
 dynamic = ['version', 'description']
 
 [project.urls]

@@ -275,7 +275,7 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
             xdata=diameters,
             ydata=presence,
             bounds=(
-                [1, 0, 0, 1, 0, 0, 2],
+                [1, 2, 0, 1, 0, 0, 2],
                 [np.inf, 15, np.inf, np.inf, 15, np.inf, 14],
             ),
         )
