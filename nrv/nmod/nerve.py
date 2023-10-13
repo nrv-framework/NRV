@@ -777,5 +777,6 @@ class nerve(NRV_class):
                 save_path=folder_name,
                 postproc_script=postproc_script,
                 in_nerve=True,
+                **kwargs,
             )
         self.is_simulated = True
