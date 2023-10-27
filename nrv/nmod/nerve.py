@@ -7,6 +7,7 @@ import numpy as np
 
 from ..backend.log_interface import pass_info, rise_warning
 from ..backend.NRV_Class import NRV_class, load_any
+from ..fmod.stimulus import stimulus
 from .fascicles import *
 
 

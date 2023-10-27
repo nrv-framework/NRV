@@ -71,7 +71,7 @@ def load_stat(stat_name):
     if f_in_librairy in stat_library:
         stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
     else:
-        #stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
+        # stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
         stat_file = np.genfromtxt(f_in_librairy, delimiter=",")
     diameters = stat_file[:, 0]
     presence = stat_file[:, 1]
@@ -271,12 +271,12 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
     if myelinated:
-        if diameters[-1]<10:
+        if diameters[-1] < 10:
             popt1, pcov1 = curve_fit(
-            one_Gamma,
-            xdata=diameters,
-            ydata=presence,
-            bounds=([1, 0, 0], [np.inf, 10, np.inf]),
+                one_Gamma,
+                xdata=diameters,
+                ydata=presence,
+                bounds=([1, 0, 0], [np.inf, 10, np.inf]),
             )
             generator = nerve_gen_one_gamma()
             generator.set_bounds(dmin, dmax)
@@ -351,20 +351,20 @@ def create_axon_population(
         + " Unmyelinated"
     )
     # generate the myelinated axons
-    xspace1 = np.linspace(1,20,num=500)
-    if(len(M_popt)<4):
-       data = (one_Gamma(xspace1, *M_popt))
+    xspace1 = np.linspace(1, 20, num=500)
+    if len(M_popt) < 4:
+        data = one_Gamma(xspace1, *M_popt)
     else:
-        data = (two_Gamma(xspace1, *M_popt))
-    data = data/np.sum(data)
-    M_diam_list = np.random.choice(xspace1,M, p=data)
+        data = two_Gamma(xspace1, *M_popt)
+    data = data / np.sum(data)
+    M_diam_list = np.random.choice(xspace1, M, p=data)
     M_type = np.ones(M)
 
     # generate the unmyelinated axons
-    xspace1 = np.linspace(0.1,3,num=500)
-    data = (one_Gamma(xspace1, *U_popt))
-    data = data/np.sum(data)
-    U_diam_list = np.random.choice(xspace1,U, p=data)
+    xspace1 = np.linspace(0.1, 3, num=500)
+    data = one_Gamma(xspace1, *U_popt)
+    data = data / np.sum(data)
+    U_diam_list = np.random.choice(xspace1, U, p=data)
     U_type = np.zeros(U)
 
     shuffle_mask = np.random.permutation(N)
