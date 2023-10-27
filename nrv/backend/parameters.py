@@ -6,8 +6,10 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 import configparser
 import os
 
+from .NRV_Singleton import NRV_singleton
 
-class nrv_parameters:
+
+class nrv_parameters(metaclass=NRV_singleton):
     """
     A class for NRV parameters used to gather parameters
     """
@@ -81,6 +83,5 @@ class nrv_parameters:
 ###########################
 #   Parameter singleton   #
 ###########################
-# TO DO
 
 parameters = nrv_parameters()

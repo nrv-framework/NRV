@@ -26,10 +26,11 @@ from ufl import (
 )
 
 from ....backend.log_interface import pass_info, rise_error, rise_warning
-from ....utils.units import *
-from .fenics_materials import *
-from .SimParameters import *
-from .SimResult import *
+from ....backend.file_handler import rmv_ext
+from ....utils.units import S, V, m
+from .fenics_materials import load_fenics_material
+from .SimParameters import SimParameters
+from .SimResult import read_gmsh, SimResult
 
 # Lists of available solvers and conditioners
 # go to https://petsc4py.readthedocs.io/en/stable/manual/ksp/ for more info
@@ -92,6 +93,7 @@ pc_type_list = [
     "cholesky",
     "none",
     "shell",
+    "hypre",
 ]
 
 
@@ -618,7 +620,7 @@ class FEMSimulation(SimParameters):
         else:
             mixedvouts = self.mixedvout.split()
             for i in range(len(mixedvouts)):
-                self.mixedvouts[i].vector[:] = mixedvouts[i].vector[:]
+                self.mixedvouts[i].x.array[:] = mixedvouts[i].x.array
         self.vout = self.dg_problem.solve()
         return self.V_DG
 
@@ -647,8 +649,6 @@ class FEMSimulation(SimParameters):
         return self.result
 
     def get_timers(self):
-        # return self.assembling_timer, self.solving_timer
-        # !!! FIXME: no self.assembling_timer
         return self.solving_timer
 
     def visualize_mesh(self):
@@ -659,8 +659,8 @@ class FEMSimulation(SimParameters):
             do = self.ds
         elif dim == 3:
             do = self.dx
-        S = assemble_scalar(form(1 * do(dom_id)))
+        Surf = assemble_scalar(form(1 * do(dom_id)))
         if self.to_merge:
-            return assemble_scalar(form(self.vout * do(dom_id))) / S * V
+            return assemble_scalar(form(self.vout * do(dom_id))) / Surf * V
         else:
-            return assemble_scalar(form(self.vout[space] * do(dom_id))) / S * V
+            return assemble_scalar(form(self.vout[space] * do(dom_id))) / Surf * V

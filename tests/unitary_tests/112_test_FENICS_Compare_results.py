@@ -119,6 +119,6 @@ with io.XDMFFile(sim1.domain.comm, out_file, "w") as file:
 t4 = time.time()
 print('Substraction done in '+str(t4 - t3)+' s')
 
-print(sim1.vout.x.array[:])
-print(sim2.vout.x.array[:])
-print(not np.allclose(sim1.vout.x.array, sim2.vout.x.array))
+#print(sim1.vout.x.array[:])
+#print(sim2.vout.x.array[:])
+print(np.allclose(sim1.vout.x.array, sim2.vout.x.array))

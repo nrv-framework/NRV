@@ -14,7 +14,7 @@ from ufl import as_tensor
 from ....backend.file_handler import json_dump, rmv_ext
 from ....backend.log_interface import rise_warning
 from ....utils.nrv_function import nrv_interp
-from ...materials import *
+from ...materials import is_mat, load_material, material
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -56,7 +56,13 @@ def mat_from_interp(
     f_material  : str
         either material name if the material is in the NRV2 Librairy or path to the corresponding
         .mat material file
-    kwar
+    kwargs      : dict
+        interpolation k arguments (cf ....utils.nrv_function.nrv_interp)
+
+    Returns
+    -------
+    mat_obj     : fenics_material
+        Fenics material with conductivity function defined from the interpolation
     """
     sigma_func = nrv_interp(
         X,
@@ -85,6 +91,11 @@ def mat_from_csv(f_material, **kwargs):
     f_material  : str
         name of the .csv file
 
+    Returns
+    -------
+    mat_obj     : fenics_material
+        Fenics material with conductivity function defined from the interpolation from the
+        value of f_material file
     """
     fname = rmv_ext(f_material) + ".csv"
 
@@ -162,7 +173,7 @@ class fenics_material(material):
             self.sigma_zz = mat.sigma_zz
 
     ## Save and Load mehtods
-    def save(self, save=False, fname="material.json"):
+    def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):
         """
         Return material as dictionary and eventually save it as json file
 
@@ -178,14 +189,9 @@ class fenics_material(material):
         mat_dic : dict
             dictionary containing all information
         """
-        mat_dic = super().save()
-        mat_dic["is_func"] = self.is_func
-        mat_dic["sigma_func"] = self.sigma_func
-        mat_dic["elem"] = self.elem
-        mat_dic["UN"] = self.UN
-        if save:
-            json_dump(mat_dic, fname)
-        return mat_dic
+        bl = [i for i in blacklist]
+        bl += ["sigma_fen"]
+        return super().save(save=save, fname=fname, blacklist=bl, **kwargs)
 
     def save_fenics_material(self, save=False, fname="fenics_material.json"):
         rise_warning("save_fenics_material is a deprecated method use save")

@@ -339,6 +339,7 @@ class FEM_stimulation(extracellular_context):
         epi_mat="epineurium",
         ext_mat="saline",
         comsol=True,
+        Ncore=None,
     ):
         """
         Implement a FEM_based_stimulation object.
@@ -361,6 +362,7 @@ class FEM_stimulation(extracellular_context):
         self.model_fname = model_fname
         self.setup = False
         self.is_run = False
+        self.Ncore = Ncore
         ## get material properties and add to model
 
         if is_mat(endo_mat):
@@ -393,18 +395,18 @@ class FEM_stimulation(extracellular_context):
         self.comsol = comsol and not (model_fname is None)
         self.fenics = not self.comsol
         ## load model
-        if MCH.do_master_only_work():
-            if self.comsol:
-                self.model = COMSOL_model(self.model_fname)
+        if self.comsol:
+            if MCH.do_master_only_work():
+                self.model = COMSOL_model(self.model_fname, Ncore=self.Ncore)
             else:
-                self.model = FENICS_model()
+                # check that COMSOL is not turned OFF in order to continue
+                if not COMSOL_Status:
+                    rise_warning(
+                        "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
+                        abort=True,
+                    )
         else:
-            # check that COMSOL is not turned OFF in order to continue
-            if not COMSOL_Status:
-                rise_warning(
-                    "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
-                    abort=True,
-                )
+            self.model = FENICS_model(Ncore=self.Ncore)
 
     def __del__(self):
         if (
@@ -412,6 +414,17 @@ class FEM_stimulation(extracellular_context):
         ):  # added for safe del in case of COMSOL status turned OFF
             self.model.close()
             del self.model
+
+    def set_Ncore(self, N):
+        """
+        Set the number of cores to use for the FEM
+
+        Parameters
+        ----------
+        N       : int
+            Number of cores to set
+        """
+        self.model.set_Ncore(N=N)
 
     ## Save and Load mehtods
 
@@ -676,7 +689,7 @@ class FEM_stimulation(extracellular_context):
         """
         Set materials properties, build geometry and mesh if not already done and solve the FEM model all in one.
         """
-        if MCH.do_master_only_work():
+        if MCH.do_master_only_work() or self.model.is_multi_proc:
             if not self.setup:
                 self.setup_FEM()
             if not self.is_run:
@@ -698,8 +711,9 @@ class FEM_stimulation(extracellular_context):
         ID          : int
             ID of the axon
         """
-        # test if the model is not solve and run simulation
-        if MCH.do_master_only_work():
+
+        if MCH.do_master_only_work() or (self.fenics and self.model.is_multi_proc):
+            # test if the model is not solve and run simulation
             if not self.model.is_computed:
                 self.run_model()
             # get all potentials

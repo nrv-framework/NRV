@@ -564,7 +564,6 @@ class nerve(NRV_class):
                 )
 
     ## Context handeling methods
-
     def clear_context(
         self, extracel_context=True, intracel_context=True, rec_context=True
     ):
@@ -717,12 +716,15 @@ class nerve(NRV_class):
             self.set_axons_parameters(**kwargs)
 
             if self.is_extra_stim:
-                if MCH.do_master_only_work() and is_FEM_extra_stim(self.extra_stim):
-                    self.extra_stim.run_model()
+                mp_computation = False
+                if is_FEM_extra_stim(self.extra_stim):
+                    mp_computation = (
+                        self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
+                    )
+                    if MCH.do_master_only_work() or mp_computation:
+                        self.extra_stim.run_model()
                 for fasc in self.fascicles.values():
                     fasc.compute_electrodes_footprints()
-                if MCH.do_master_only_work() and is_FEM_extra_stim(self.extra_stim):
-                    del self.extra_stim.model
             self.is_footprinted = True
 
     ## SIMULATION
