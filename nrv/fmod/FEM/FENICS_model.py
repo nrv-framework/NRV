@@ -110,12 +110,8 @@ class FENICS_model(FEM_model):
         # Mcore attributes
         if self.Ncore is None:
             self.Ncore = FENICS_Ncores
-        self.is_multi_proc = self.Ncore > 1 and not MCH.is_alone()
-        if self.is_multi_proc:
-            self.comm = MPI.COMM_WORLD
-        else:
-            self.comm = MPI.COMM_SELF
-
+        self.comm = None
+        self.set_Ncore(self.Ncore)
         if comm != "default":
             self.comm = comm
         self.rank = rank
@@ -198,6 +194,21 @@ class FENICS_model(FEM_model):
     #############################
     ## Access model parameters ##
     #############################
+    def set_Ncore(self, N):
+        """
+        Set the number of cores to use for the FEM
+
+        Parameters
+        ----------
+        N       : int
+            Number of cores to set
+        """
+        super().set_Ncore(N)
+        if self.is_multi_proc:
+            self.comm = MPI.COMM_WORLD
+        else:
+            self.comm = MPI.COMM_SELF
+
     def get_parameters(self):
         """
         Get the  all the parameters in the model as a python dictionary.
