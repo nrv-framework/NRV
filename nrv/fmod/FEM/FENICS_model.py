@@ -587,7 +587,6 @@ class FENICS_model(FEM_model):
                 self.sim_res[-1].vout.label = "E" + str(E)
             self.is_computed = True
             self.solving_timer += time.time() - t0
-        self.save_results(True)
 
     ######################
     ## results handling ##
