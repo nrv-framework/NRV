@@ -675,6 +675,28 @@ class unmyelinated(axon):
                 (self.g_naleak_reclist, "_ref_gnaleak_leak"),
                 (self.g_kleak_reclist, "_ref_gkleak_leak"),
             )
+        else:
+            self.g_naf_reclist = neuron.h.List()
+            self.g_nas_reclist = neuron.h.List()
+            self.g_kd_reclist = neuron.h.List()
+            self.g_ka_reclist = neuron.h.List()
+            self.g_kds_reclist = neuron.h.List()
+            self.g_kca_reclist = neuron.h.List()
+            self.g_can_reclist = neuron.h.List()
+            self.g_cat_reclist = neuron.h.List()
+            sup_key = ""
+            if self.model == "Schild_97":
+                sup_key = "97mean"
+            self.__set_recorders_with_key(
+                (self.g_naf_reclist, "_ref_g_naf"+sup_key),
+                (self.g_nas_reclist, "_ref_g_nas"+sup_key),
+                (self.g_kd_reclist, "_ref_g_kd"),
+                (self.g_ka_reclist, "_ref_g_ka"),
+                (self.g_kds_reclist, "_ref_g_kds"),
+                (self.g_kca_reclist, "_ref_g_kca"),
+                (self.g_can_reclist, "_ref_g_can"),
+                (self.g_cat_reclist, "_ref_g_cat"),
+            )
 
     def get_membrane_conductance(self):
         """
@@ -702,6 +724,16 @@ class unmyelinated(axon):
             results += [self.__get_recorders_from_list(self.g_h_reclist)]
             results += [self.__get_recorders_from_list(self.g_naleak_reclist)]
             results += [self.__get_recorders_from_list(self.g_kleak_reclist)]
+        else:
+            results += [self.__get_recorders_from_list(self.g_naf_reclist)]
+            results += [self.__get_recorders_from_list(self.g_nas_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kd_reclist)]
+            results += [self.__get_recorders_from_list(self.g_ka_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kds_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kca_reclist)]
+            results += [self.__get_recorders_from_list(self.g_can_reclist)]
+            results += [self.__get_recorders_from_list(self.g_cat_reclist)]
+
         return results
 
     def set_particules_values_recorders(self):

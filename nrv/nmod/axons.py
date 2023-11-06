@@ -864,11 +864,16 @@ class axon(NRV_class):
                             axon_sim["g_kleak"],
                         ) = self.get_ionic_conductance()
                     else:
-                        rise_warning(
-                            "g_ions recorder not implemented for "
-                            + self.model
-                            + " model "
-                        )
+                        (
+                            axon_sim["g_naf"],
+                            axon_sim["g_nas"],
+                            axon_sim["g_kd"],
+                            axon_sim["g_ka"],
+                            axon_sim["g_kds"],
+                            axon_sim["g_kca"],
+                            axon_sim["g_can"],
+                            axon_sim["g_cat"],
+                        ) = self.get_ionic_conductance()
                 else:
                     if self.model == "MRG":
                         (

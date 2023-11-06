@@ -4,9 +4,9 @@
 
 : Neuron Block creates mechanism
 	NEURON {
-		   SUFFIX naf97mean						:Sets suffix of mechanism for insertion into models
-		   USEION na READ ena WRITE ina		:Lays out which NEURON variables will be used/modified by file
-		   RANGE gbar, ena, ina, shiftnaf	:Allows variables to be modified in hoc and collected in vectors
+		   SUFFIX naf97mean							:Sets suffix of mechanism for insertion into models
+		   USEION na READ ena WRITE ina			:Lays out which NEURON variables will be used/modified by file
+		   RANGE gbar, ena, ina, shiftnaf, g	:Allows variables to be modified in hoc and collected in vectors
 
 	}
 
