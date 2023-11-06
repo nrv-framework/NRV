@@ -850,6 +850,19 @@ class axon(NRV_class):
                         axon_sim["g_na"] = g_na_ax
                         axon_sim["g_k"] = g_k_ax
                         axon_sim["g_l"] = g_l_ax
+                    elif self.model == "Tigerholm":
+                        (
+                            axon_sim["g_nav17"],
+                            axon_sim["g_nav18"],
+                            axon_sim["g_nav19"],
+                            axon_sim["g_kA"],
+                            axon_sim["g_kM"],
+                            axon_sim["g_kdr"],
+                            axon_sim["g_kna"],
+                            axon_sim["g_h"],
+                            axon_sim["g_naleak"],
+                            axon_sim["g_kleak"],
+                        ) = self.get_ionic_conductance()
                     else:
                         rise_warning(
                             "g_ions recorder not implemented for "

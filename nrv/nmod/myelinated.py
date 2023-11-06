@@ -997,7 +997,7 @@ class myelinated(axon):
     ##############################
     ## Result recording methods ##
     ##############################
-    def _set_recorders_with_key(
+    def __set_recorders_with_key(
         self,
         reclist,
         key=None,
@@ -1086,7 +1086,7 @@ class myelinated(axon):
                             rec = neuron.h.Vector([0])
                         reclist.append(rec)
 
-    def _get_recorders_from_list(self, reclist):
+    def __get_recorders_from_list(self, reclist):
         """
         Convert reclist in np.array To automate methods set_recorder. For internal use only.
         Parameters
@@ -1155,13 +1155,13 @@ class myelinated(axon):
         """
         self.vreclist = neuron.h.List()
         key = "_ref_v"
-        self._set_recorders_with_key(self.vreclist, key)
+        self.__set_recorders_with_key(self.vreclist, key)
 
     def get_membrane_voltage(self):
         """
         get the membrane voltage at the end of simulation. For internal use only.
         """
-        return self._get_recorders_from_list(self.vreclist)
+        return self.__get_recorders_from_list(self.vreclist)
 
     def set_membrane_current_recorders(self):
         """
@@ -1169,13 +1169,13 @@ class myelinated(axon):
         """
         self.ireclist = neuron.h.List()
         key = "_ref_i_membrane"
-        self._set_recorders_with_key(self.ireclist, key)
+        self.__set_recorders_with_key(self.ireclist, key)
 
     def get_membrane_current(self):
         """
         get the membrane current at the end of simulation. For internal use only.
         """
-        return self._get_recorders_from_list(self.ireclist)
+        return self.__get_recorders_from_list(self.ireclist)
 
     def set_ionic_current_recorders(self):
         """
@@ -1183,19 +1183,19 @@ class myelinated(axon):
         """
         if self.model == "MRG":
             self.ina_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.ina_reclist, single_mod=False, key_node="_ref_ina_axnode"
             )
             self.inap_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.inap_reclist, single_mod=False, key_node="_ref_inap_axnode"
             )
             self.ik_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.ik_reclist, single_mod=False, key_node="_ref_ik_axnode"
             )
             self.il_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.il_reclist, single_mod=False, key_node="_ref_il_axnode"
             )
         else:  # should be Gaines, motor or sensory
@@ -1204,17 +1204,17 @@ class myelinated(axon):
             else:
                 key_mod = "_sensory"
             self.ina_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.ina_reclist, single_mod=False, key_node="_ref_ina_node" + key_mod
             )
 
             self.inap_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.inap_reclist, single_mod=False, key_node="_ref_inap_node" + key_mod
             )
 
             self.ik_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.ik_reclist,
                 single_mod=False,
                 key_node="_ref_ik_node" + key_mod,
@@ -1224,7 +1224,7 @@ class myelinated(axon):
             )
 
             self.ikf_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.ikf_reclist,
                 single_mod=False,
                 key_node="_ref_ikf_node" + key_mod,
@@ -1234,7 +1234,7 @@ class myelinated(axon):
             )
 
             self.iq_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.iq_reclist,
                 single_mod=False,
                 key_MYSA="_ref_iq_mysa" + key_mod,
@@ -1243,7 +1243,7 @@ class myelinated(axon):
             )
 
             self.il_reclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.il_reclist,
                 single_mod=False,
                 key_node="_ref_il_node" + key_mod,
@@ -1257,13 +1257,13 @@ class myelinated(axon):
         get the ionic channels currents at the end of simulation. For internal use only.
         """
         results = []
-        results += [self._get_recorders_from_list(self.ina_reclist)]
-        results += [self._get_recorders_from_list(self.inap_reclist)]
-        results += [self._get_recorders_from_list(self.ik_reclist)]
+        results += [self.__get_recorders_from_list(self.ina_reclist)]
+        results += [self.__get_recorders_from_list(self.inap_reclist)]
+        results += [self.__get_recorders_from_list(self.ik_reclist)]
         if self.model == "Gaines_motor" or self.model == "Gaines_sensory":
-            results += [self._get_recorders_from_list(self.ikf_reclist)]
-            results += [self._get_recorders_from_list(self.iq_reclist)]
-        results += [self._get_recorders_from_list(self.il_reclist)]
+            results += [self.__get_recorders_from_list(self.ikf_reclist)]
+            results += [self.__get_recorders_from_list(self.iq_reclist)]
+        results += [self.__get_recorders_from_list(self.il_reclist)]
         return results
 
     def set_particules_values_recorders(self):
@@ -1272,19 +1272,19 @@ class myelinated(axon):
         """
         if self.model == "MRG":
             self.mreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.mreclist, single_mod=False, key_node="_ref_m_axnode"
             )
             self.mpreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.mpreclist, single_mod=False, key_node="_ref_mp_axnode"
             )
             self.hreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.hreclist, single_mod=False, key_node="_ref_h_axnode"
             )
             self.sreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.sreclist, single_mod=False, key_node="_ref_s_axnode"
             )
 
@@ -1295,22 +1295,22 @@ class myelinated(axon):
                 key_mod = "_sensory"
 
             self.mreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.mreclist, single_mod=False, key_node="_ref_m_node" + key_mod
             )
 
             self.mpreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.mpreclist, single_mod=False, key_node="_ref_mp_node" + key_mod
             )
 
             self.hreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.hreclist, single_mod=False, key_node="_ref_h_node" + key_mod
             )
 
             self.sreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.sreclist,
                 single_mod=False,
                 key_node="_ref_s_node" + key_mod,
@@ -1320,7 +1320,7 @@ class myelinated(axon):
             )
 
             self.nreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.nreclist,
                 single_mod=False,
                 key_node="_ref_n_node" + key_mod,
@@ -1330,7 +1330,7 @@ class myelinated(axon):
             )
 
             self.qreclist = neuron.h.List()
-            self._set_recorders_with_key(
+            self.__set_recorders_with_key(
                 self.qreclist,
                 single_mod=False,
                 key_MYSA="_ref_q_mysa" + key_mod,
@@ -1343,13 +1343,13 @@ class myelinated(axon):
         get the particules values at the end of simulation. For internal use only.
         """
         results = []
-        results += [self._get_recorders_from_list(self.mreclist)]
-        results += [self._get_recorders_from_list(self.mpreclist)]
-        results += [self._get_recorders_from_list(self.hreclist)]
-        results += [self._get_recorders_from_list(self.sreclist)]
+        results += [self.__get_recorders_from_list(self.mreclist)]
+        results += [self.__get_recorders_from_list(self.mpreclist)]
+        results += [self.__get_recorders_from_list(self.hreclist)]
+        results += [self.__get_recorders_from_list(self.sreclist)]
         if self.model == "Gaines_motor" or self.model == "Gaines_sensory":
-            results += [self._get_recorders_from_list(self.nreclist)]
-            results += [self._get_recorders_from_list(self.qreclist)]
+            results += [self.__get_recorders_from_list(self.nreclist)]
+            results += [self.__get_recorders_from_list(self.qreclist)]
         return results
 
     def set_conductance_recorders(self):

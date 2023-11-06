@@ -6,7 +6,7 @@
 NEURON {
 	SUFFIX nav1p8
 	USEION na READ ena WRITE ina
- 	RANGE gbar, ena, ina, celsiusT
+ 	RANGE gbar, ena, ina, celsiusT, g
 }
 
 UNITS {

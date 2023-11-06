@@ -1,17 +1,19 @@
 import nrv
 import matplotlib.pyplot as plt
+import numpy as np
 
+model='Tigerholm'
 y = 0
 z = 0
 d = 1
 L = 5000
-
+Nrec = 100
 t_start = 1
 duration = 0.5
 amplitude = 2
 
 # test 1: 1 section stim in middle
-axon1 = nrv.unmyelinated(y,z,d,L,model='Tigerholm',dt=0.001,Nrec=100)
+axon1 = nrv.unmyelinated(y,z,d,L,model=model,dt=0.001,Nrec=Nrec)
 axon1.insert_I_Clamp(0.5, t_start, duration, amplitude)
 results = axon1.simulate(t_sim=10,record_I_ions=True, record_particles=True)
 print(axon1.T == 37)
@@ -63,6 +65,82 @@ axs[2].plot(results['t'], results['w_kna'][25],label='w_kna')
 axs[2].plot(results['t'], results['ns_h'][25],label='ns_h')
 axs[2].plot(results['t'], results['nf_h'][25],label='nf_h')
 plt.savefig('./unitary_tests/figures/35_C.png')
+del results
 
+# test 2: gmem for stim in left side
+cm = 1 * 1e-6 # F
+gnabar_hh = 0.120
+gkbar_hh = 0.036
+gl_hh = 0.0003
+
+axon2 = nrv.unmyelinated(y,z,d,L,model=model,dt=0.001,Nrec=Nrec)
+axon2.insert_I_Clamp(0, t_start, duration, amplitude)
+results = axon2.simulate(t_sim=10, record_particles=True, record_g_ions=True, record_g_mem=True)
+print(axon2.T == 37)
+del axon2
+
+#### Check results
+"""gna_hh = gnabar_hh*np.multiply(np.power(results['m'],3),results['h'])
+gk_hh = gkbar_hh*np.power(results['n'],4)
+
+gm = gna_hh + gk_hh + gl_hh  # en S.cm-2
+
+### !! delay of dt between particle rec and conductance rec ###
+print(np.allclose(gna_hh[:,:-1],results['g_na'][:,1:]))
+print(np.allclose(gk_hh[:,:-1],results['g_k'][:,1:]))
+print(np.allclose(gm[:,:-1],results['g_mem'][:,1:]))"""
+fig2, ax1 = plt.subplots()
+ax1.set_xlabel('time (ms)')
+
+ax1.plot(results['t'],results['V_mem'][Nrec//2]-results['V_mem'][Nrec//2][0], 'k',label='Vmem variation')
+ax1.set_ylabel('Mem. Voltage (mV)')
+ax2 = ax1.twinx()
+ax1.legend(loc=2)
+
+ax2.plot(results['t'], results['g_nav17'][Nrec//2]*1000, label='$g_{nav17}$')
+ax2.plot(results['t'], results['g_nav18'][Nrec//2]*1000, label='$g_{nav18}$')
+ax2.plot(results['t'], results['g_nav19'][Nrec//2]*1000, label='$g_{nav19}$')
+ax2.plot(results['t'], results['g_kA'][Nrec//2]*1000, label='$g_{kA}$')
+ax2.plot(results['t'], results['g_kM'][Nrec//2]*1000, label='$g_{kM}$')
+ax2.plot(results['t'], results['g_kdr'][Nrec//2]*1000, label='$g_{kdr}$')
+ax2.plot(results['t'], results['g_kna'][Nrec//2]*1000, label='$g_{kna}$')
+ax2.plot(results['t'], results['g_h'][Nrec//2]*1000, label='$g_{h}$')
+ax2.plot(results['t'], results['g_naleak'][Nrec//2]*1000, label='$g_{naleak}$')
+ax2.plot(results['t'], results['g_kleak'][Nrec//2]*1000, label='$g_{kleak}$')
+ax2.plot(results['t'], results['g_mem'][Nrec//2]*1000, label='$g_{mem}$')
+ax2.set_ylabel('conductance ($mS.cm^{-2}$)')
+ax2.legend()
+fig2.savefig('./unitary_tests/figures/35_D.png')
+
+fc = results['g_mem']/(2*np.pi*nrv.cm)
+
+plt.figure(figsize=(9,7))
+plt.subplot(3,1,1)
+plt.plot(results['t'],results['V_mem'][Nrec//2])
+plt.xlabel('time (ms)')
+plt.ylabel('Mem. Voltage (mV)')
+plt.axvspan(0.35, 0.52, alpha=0.25, color='red',label='de-')
+plt.axvspan(0.52, 0.9, alpha=0.25, color='blue',label='re-')
+plt.axvspan(0.9, 2.5, alpha=0.25, color='green',label='hyper-')
+plt.grid()
+plt.legend(title = 'polarisation')
+plt.subplot(3,1,2)
+plt.semilogy(results['t'],results['g_mem'][Nrec//2])
+plt.xlabel('time (ms)')
+plt.ylabel('$g_m$ ($mS\cdot cm^{-2}$)')
+plt.axvspan(0.35, 0.52, alpha=0.25, color='red')
+plt.axvspan(0.52, 0.9, alpha=0.25, color='blue')
+plt.axvspan(0.9, 2.5, alpha=0.25, color='green')
+plt.grid()
+plt.subplot(3,1,3)
+plt.semilogy(results['t'],fc[Nrec//2])
+plt.xlabel('time (ms)')
+plt.ylabel('$f_{mem}$ ($Hz$)')
+plt.axvspan(0.35, 0.52, alpha=0.25, color='red')
+plt.axvspan(0.52, 0.9, alpha=0.25, color='blue')
+plt.axvspan(0.9, 2.5, alpha=0.25, color='green')
+plt.grid()
+plt.tight_layout()
+plt.savefig('./unitary_tests/figures/35_E.png')
 
 #plt.show()
