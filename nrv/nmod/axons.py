@@ -893,8 +893,8 @@ class axon(NRV_class):
                             g_na_ax,
                             g_nap_ax,
                             g_k_ax,
-                            g_kf_ax,
                             g_l_ax,
+                            g_kf_ax,
                             g_q_ax,
                         ) = self.get_ionic_conductance()
                         axon_sim["g_na"] = g_na_ax

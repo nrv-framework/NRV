@@ -522,10 +522,7 @@ class unmyelinated(axon):
     ##############################
     ## Result recording methods ##
     ##############################
-    def __set_recorders_with_key(
-        self,
-        *args
-    ):
+    def __set_recorders_with_key(self, *args):
         """
         To automate the methods set_recorder. For internal use only.
         Parameters
@@ -537,13 +534,14 @@ class unmyelinated(axon):
             for pos in self.rec_position_list[k]:
                 for t in args:
                     ref = t[1]
-                    #print(dir(self.unmyelinated_sections[k](pos)))
-                    #print(ref, getattr(self.unmyelinated_sections[k](pos),ref))
+                    # print(dir(self.unmyelinated_sections[k](pos)))
+                    # print(ref, getattr(self.unmyelinated_sections[k](pos),ref))
                     rec = neuron.h.Vector().record(
-                        getattr(self.unmyelinated_sections[k](pos),ref),
+                        getattr(self.unmyelinated_sections[k](pos), ref),
                         sec=self.unmyelinated_sections[k],
                     )
                     t[0].append(rec)
+
     def __get_recorders_from_list(self, reclist):
         """
         Convert reclist in np.array To automate methods set_recorder. For internal use only.
@@ -599,18 +597,18 @@ class unmyelinated(axon):
             self.i_k_reclist = neuron.h.List()
             self.i_l_reclist = neuron.h.List()
             self.__set_recorders_with_key(
-                (self.i_na_reclist,"_ref_nai"),
-                (self.i_k_reclist ,"_ref_ki"),
-                (self.i_l_reclist,"_ref_i_pas"),
+                (self.i_na_reclist, "_ref_nai"),
+                (self.i_k_reclist, "_ref_ki"),
+                (self.i_l_reclist, "_ref_i_pas"),
             )
         else:
             self.i_na_reclist = neuron.h.List()
             self.i_k_reclist = neuron.h.List()
             self.i_ca_reclist = neuron.h.List()
             self.__set_recorders_with_key(
-                (self.i_na_reclist,"_ref_nai"),
-                (self.i_k_reclist ,"_ref_ki"),
-                (self.i_ca_reclist,"_ref_cai"),
+                (self.i_na_reclist, "_ref_nai"),
+                (self.i_k_reclist, "_ref_ki"),
+                (self.i_ca_reclist, "_ref_cai"),
             )
 
     def get_ionic_current(self):
@@ -636,21 +634,21 @@ class unmyelinated(axon):
             self.g_l_reclist = neuron.h.List()
             if self.model == "HH":
                 self.__set_recorders_with_key(
-                    (self.g_na_reclist,"_ref_gna_hh"),
-                    (self.g_k_reclist,"_ref_gk_hh"),
-                    (self.g_l_reclist,"_ref_gl_hh"),
+                    (self.g_na_reclist, "_ref_gna_hh"),
+                    (self.g_k_reclist, "_ref_gk_hh"),
+                    (self.g_l_reclist, "_ref_gl_hh"),
                 )
             elif self.model == "Rattay_Aberham":
                 self.__set_recorders_with_key(
-                    (self.g_na_reclist,"_ref_gna_RattayAberham"),
-                    (self.g_k_reclist,"_ref_gk_RattayAberham"),
-                    (self.g_l_reclist,"_ref_gl_RattayAberham"),
+                    (self.g_na_reclist, "_ref_gna_RattayAberham"),
+                    (self.g_k_reclist, "_ref_gk_RattayAberham"),
+                    (self.g_l_reclist, "_ref_gl_RattayAberham"),
                 )
             else:
                 self.__set_recorders_with_key(
-                    (self.g_na_reclist,"_ref_gna_nahh"),
-                    (self.g_k_reclist,"_ref_gkdr_borgkdr"),
-                    (self.g_l_reclist,"_ref_g_pas"),
+                    (self.g_na_reclist, "_ref_gna_nahh"),
+                    (self.g_k_reclist, "_ref_gkdr_borgkdr"),
+                    (self.g_l_reclist, "_ref_g_pas"),
                 )
         elif self.model == "Tigerholm":
             self.g_nav17_reclist = neuron.h.List()
@@ -688,8 +686,8 @@ class unmyelinated(axon):
             if self.model == "Schild_97":
                 sup_key = "97mean"
             self.__set_recorders_with_key(
-                (self.g_naf_reclist, "_ref_g_naf"+sup_key),
-                (self.g_nas_reclist, "_ref_g_nas"+sup_key),
+                (self.g_naf_reclist, "_ref_g_naf" + sup_key),
+                (self.g_nas_reclist, "_ref_g_nas" + sup_key),
                 (self.g_kd_reclist, "_ref_g_kd"),
                 (self.g_ka_reclist, "_ref_g_ka"),
                 (self.g_kds_reclist, "_ref_g_kds"),
@@ -740,28 +738,28 @@ class unmyelinated(axon):
         """
         Prepare the particule value recording. For internal use only.
         """
-        
+
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.hhmreclist = neuron.h.List()
             self.hhnreclist = neuron.h.List()
             self.hhhreclist = neuron.h.List()
             if self.model == "HH":
                 self.__set_recorders_with_key(
-                    (self.hhmreclist,"_ref_m_hh"),
-                    (self.hhnreclist,"_ref_n_hh"),
-                    (self.hhhreclist,"_ref_h_hh"),
+                    (self.hhmreclist, "_ref_m_hh"),
+                    (self.hhnreclist, "_ref_n_hh"),
+                    (self.hhhreclist, "_ref_h_hh"),
                 )
             elif self.model == "Rattay_Aberham":
                 self.__set_recorders_with_key(
-                    (self.hhmreclist,"_ref_m_RattayAberham"),
-                    (self.hhnreclist,"_ref_n_RattayAberham"),
-                    (self.hhhreclist,"_ref_h_RattayAberham"),
+                    (self.hhmreclist, "_ref_m_RattayAberham"),
+                    (self.hhnreclist, "_ref_n_RattayAberham"),
+                    (self.hhhreclist, "_ref_h_RattayAberham"),
                 )
             else:
                 self.__set_recorders_with_key(
-                    (self.hhmreclist,"_ref_m_nahh"),
-                    (self.hhnreclist,"_ref_n_borgkdr"),
-                    (self.hhhreclist,"_ref_h_nahh"),
+                    (self.hhmreclist, "_ref_m_nahh"),
+                    (self.hhnreclist, "_ref_n_borgkdr"),
+                    (self.hhhreclist, "_ref_h_nahh"),
                 )
         elif self.model == "Tigerholm":
             # NAV 1.8
@@ -792,24 +790,24 @@ class unmyelinated(axon):
             self.nf_h_reclist = neuron.h.List()
 
             self.__set_recorders_with_key(
-                (self.m_nav18_reclist,"_ref_m_nav1p8"),
-                (self.h_nav18_reclist,"_ref_h_nav1p8"),
-                (self.s_nav18_reclist,"_ref_s_nav1p8"),
-                (self.u_nav18_reclist,"_ref_u_nav1p8"),
-                (self.m_nav19_reclist,"_ref_m_nav1p9"),
-                (self.h_nav19_reclist,"_ref_h_nav1p9"),
-                (self.s_nav19_reclist,"_ref_s_nav1p9"),
-                (self.m_nattxs_reclist,"_ref_m_nattxs"),
-                (self.h_nattxs_reclist,"_ref_h_nattxs"),
-                (self.s_nattxs_reclist,"_ref_s_nattxs"),
-                (self.n_kdr_reclist,"_ref_n_kdrTiger"),
-                (self.m_kf_reclist,"_ref_m_kf"),
-                (self.h_kf_reclist,"_ref_h_kf"),
-                (self.ns_ks_reclist,"_ref_ns_ks"),
-                (self.nf_ks_reclist,"_ref_nf_ks"),
-                (self.w_kna_reclist,"_ref_w_kna"),
-                (self.ns_h_reclist,"_ref_ns_h"),
-                (self.nf_h_reclist,"_ref_nf_h"),
+                (self.m_nav18_reclist, "_ref_m_nav1p8"),
+                (self.h_nav18_reclist, "_ref_h_nav1p8"),
+                (self.s_nav18_reclist, "_ref_s_nav1p8"),
+                (self.u_nav18_reclist, "_ref_u_nav1p8"),
+                (self.m_nav19_reclist, "_ref_m_nav1p9"),
+                (self.h_nav19_reclist, "_ref_h_nav1p9"),
+                (self.s_nav19_reclist, "_ref_s_nav1p9"),
+                (self.m_nattxs_reclist, "_ref_m_nattxs"),
+                (self.h_nattxs_reclist, "_ref_h_nattxs"),
+                (self.s_nattxs_reclist, "_ref_s_nattxs"),
+                (self.n_kdr_reclist, "_ref_n_kdrTiger"),
+                (self.m_kf_reclist, "_ref_m_kf"),
+                (self.h_kf_reclist, "_ref_h_kf"),
+                (self.ns_ks_reclist, "_ref_ns_ks"),
+                (self.nf_ks_reclist, "_ref_nf_ks"),
+                (self.w_kna_reclist, "_ref_w_kna"),
+                (self.ns_h_reclist, "_ref_ns_h"),
+                (self.nf_h_reclist, "_ref_nf_h"),
             )
         else:  # should be both Schild_94 or Schild_97
             # High Threshold long lasting Ca
@@ -830,17 +828,17 @@ class unmyelinated(axon):
             self.x_kds_reclist = neuron.h.List()
             self.y1_kds_reclist = neuron.h.List()
             self.__set_recorders_with_key(
-                (self.d_can_reclist,"_ref_d_can"),
-                (self.f1_can_reclist,"_ref_f1_can"),
-                (self.f2_can_reclist,"_ref_f2_can"),
-                (self.d_cat_reclist,"_ref_d_cat"),
-                (self.f_cat_reclist,"_ref_f_cat"),
-                (self.p_ka_reclist,"_ref_p_ka"),
-                (self.q_ka_reclist,"_ref_q_ka"),
-                (self.c_kca_reclist,"_ref_c_kca"),
-                (self.n_kd_reclist,"_ref_n_kd"),
-                (self.x_kds_reclist,"_ref_x_kds"),
-                (self.y1_kds_reclist,"_ref_y1_kds"),
+                (self.d_can_reclist, "_ref_d_can"),
+                (self.f1_can_reclist, "_ref_f1_can"),
+                (self.f2_can_reclist, "_ref_f2_can"),
+                (self.d_cat_reclist, "_ref_d_cat"),
+                (self.f_cat_reclist, "_ref_f_cat"),
+                (self.p_ka_reclist, "_ref_p_ka"),
+                (self.q_ka_reclist, "_ref_q_ka"),
+                (self.c_kca_reclist, "_ref_c_kca"),
+                (self.n_kd_reclist, "_ref_n_kd"),
+                (self.x_kds_reclist, "_ref_x_kds"),
+                (self.y1_kds_reclist, "_ref_y1_kds"),
             )
             if self.model == "Schild_94":
                 # Fast Na
@@ -851,11 +849,11 @@ class unmyelinated(axon):
                 self.m_nas_reclist = neuron.h.List()
                 self.h_nas_reclist = neuron.h.List()
                 self.__set_recorders_with_key(
-                    (self.m_naf_reclist,"_ref_m_naf"),
-                    (self.h_naf_reclist,"_ref_h_naf"),
-                    (self.l_naf_reclist,"_ref_l_naf"),
-                    (self.m_nas_reclist,"_ref_m_nas"),
-                    (self.h_nas_reclist,"_ref_h_nas"),
+                    (self.m_naf_reclist, "_ref_m_naf"),
+                    (self.h_naf_reclist, "_ref_h_naf"),
+                    (self.l_naf_reclist, "_ref_l_naf"),
+                    (self.m_nas_reclist, "_ref_m_nas"),
+                    (self.h_nas_reclist, "_ref_h_nas"),
                 )
             else:  # should be Schild_94
                 # Fast Na
@@ -865,10 +863,10 @@ class unmyelinated(axon):
                 self.m_nas_reclist = neuron.h.List()
                 self.h_nas_reclist = neuron.h.List()
                 self.__set_recorders_with_key(
-                    (self.m_naf_reclist,"_ref_m_naf97mean"),
-                    (self.h_naf_reclist,"_ref_h_naf97mean"),
-                    (self.m_nas_reclist,"_ref_m_nas97mean"),
-                    (self.h_nas_reclist,"_ref_h_nas97mean"),
+                    (self.m_naf_reclist, "_ref_m_naf97mean"),
+                    (self.h_naf_reclist, "_ref_h_naf97mean"),
+                    (self.m_nas_reclist, "_ref_m_nas97mean"),
+                    (self.h_nas_reclist, "_ref_h_nas97mean"),
                 )
 
     def get_particles_values(self):

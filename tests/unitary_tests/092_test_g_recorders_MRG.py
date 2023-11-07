@@ -36,10 +36,11 @@ gks_mrg = gksbar_mrg*results['s']
 gm = gnaf_mrg + gnap_mrg + gks_mrg + gl_mrg  # en S.cm-2
 rm = 1/gm 
 
-print(np.allclose(gnaf_mrg,results['g_na']))
-print(np.allclose(gnap_mrg,results['g_nap']))
-print(np.allclose(gks_mrg,results['g_k']))
-print(np.allclose(gm,results['g_mem']))
+print(np.allclose(gnaf_mrg[:,:-1],results['g_na'][:,1:]))
+print(np.allclose(gnap_mrg[:,:-1],results['g_nap'][:,1:]))
+print(np.allclose(gks_mrg[:,:-1],results['g_k'][:,1:]))
+print(np.allclose(gm[:,:-1],results['g_mem'][:,1:]))
+
 
 ##### Plots results
 mid_node = 5
