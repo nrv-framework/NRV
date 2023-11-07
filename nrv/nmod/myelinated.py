@@ -1373,7 +1373,7 @@ class myelinated(axon):
             self.__set_recorders_with_key(
                 self.gl_reclist, single_mod=False, key_node="_ref_gl_axnode"
             )
-            if not  self.rec == "nodes":
+            if not self.rec == "nodes":
                 self.gi_reclist = neuron.h.List()
                 self.__set_recorders_with_key(
                     self.gi_reclist,
@@ -1381,8 +1381,8 @@ class myelinated(axon):
                     key_MYSA="_ref_g_pas",
                     key_FLUT="_ref_g_pas",
                     key_STIN="_ref_g_pas",
-            )
-        else:   # should be Gaines motor or sensory
+                )
+        else:  # should be Gaines motor or sensory
             self.gkf_reclist = neuron.h.List()
             self.gq_reclist = neuron.h.List()
             if self.model == "Gaines_motor":
@@ -1423,7 +1423,7 @@ class myelinated(axon):
                 key_FLUT="_ref_gkf_flut" + key_mod,
                 key_STIN="_ref_gkf_stin" + key_mod,
             )
-            if not  self.rec == "nodes":
+            if not self.rec == "nodes":
                 self.__set_recorders_with_key(
                     self.gq_reclist,
                     single_mod=False,
