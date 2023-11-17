@@ -1140,24 +1140,20 @@ class myelinated(axon):
                     i += 1
                     if sec_type == "node":
                         if key_node is not None:
-                            val[i] = getattr(self.node[sec_index](position), key_node)[
-                                0
-                            ]
+                            v = getattr(self.node[sec_index](position), key_node)[0]
                     elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            val[i] = getattr(self.MYSA[sec_index](position), key_MYSA)[
-                                0
-                            ]
+                            v = getattr(self.MYSA[sec_index](position), key_MYSA)[0]
                     elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            val[i] = getattr(self.FLUT[sec_index](position), key_FLUT)[
-                                0
-                            ]
+                            v = getattr(self.FLUT[sec_index](position), key_FLUT)[0]
                     else:  # should be STIN
                         if key_STIN is not None:
-                            val[i] = getattr(self.STIN[sec_index](position), key_STIN)[
-                                0
-                            ]
+                            v = getattr(self.STIN[sec_index](position), key_STIN)[0]
+                    if isinstance(v, float):
+                        val[i] = v
+                    else:   # needed for xc, xg, xraxial (see if it can be simplify)
+                        val[i] = v[0]
         return val
 
     def set_membrane_voltage_recorders(self):

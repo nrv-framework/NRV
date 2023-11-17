@@ -1016,6 +1016,35 @@ def compute_f_mem(results):
     results["f_mem"] = f_mem * MHz
     return results["f_mem"]
 
+def get_myeline_properties(results):
+    """
+    compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
+    NB: The frequency is computed in [kHz]
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    f_mem              : np.ndarray
+        value of the cutoff frequency of the axon's membrane
+    """
+    if not results["myelinated"] or results["rec"] == "node":
+        rise_warning("No myeline in the axon simulated, None returned")
+        return None
+
+    ax = generate_axon_from_results(results)
+    results["g_mye"] = ax.get_myeline_conductance()
+    results["c_mye"] = ax.get_myeline_capacitance()
+    results["f_mye"] = results["g_mye"] / (2 * np.pi * results["c_mye"])
+
+    # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
+    # * [MHz] to convert to [kHz]
+    results["f_mem"] *= MHz
+    return results["f_mem"]
+
 
 #############################
 ## VISUALIZATION FUNCTIONS ##
