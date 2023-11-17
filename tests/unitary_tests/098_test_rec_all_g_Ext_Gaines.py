@@ -5,115 +5,101 @@ import nrv
 import numpy as np
 import matplotlib.pyplot as plt
 
-gnafbar_mrg = 3.0 # S.cm-2
-gnapbar_mrg = 0.01 # S.cm-2
-gksbar_mrg = 0.08  # S.cm-2
-gl_mrg = 0.007  # S.cm-2
-cm=1 * 1e-6 # F
+expected_seq = ['node', 'MYSA', 'FLUT', 'STIN', 'STIN', 'STIN', 'STIN', 'STIN', 'FLUT', 'MYSA', 'node', 'MYSA', 'FLUT']
+i_plot, j_plot = (4,7)
+N_plot = i_plot * j_plot
 
 ## Test1
-
-Nseg=2
+# Ax pty
+Nseg=1
 y = 0
 z = 0
-d = 6
-L = nrv.get_length_from_nodes(d, 3)
+d = 10
+L = nrv.get_length_from_nodes(d, 10)
+t_sim = 10
+node_shift = 0
 
-axon1 = nrv.myelinated(y,z,d,L,dt=0.005,rec='all', Nseg_per_sec=Nseg-1,model='Gaines_motor')
-#print(axon1.rec_position_list)
-total = 0
-for positions in axon1.rec_position_list:
-	total += len(positions)
-#print(total)
-print(total == len(axon1.x_rec))
-
+# Iclamp pty
 t_start = 1
 duration = 0.1
 amplitude = 2
-axon1.insert_I_Clamp_node(1, t_start, duration, amplitude)
 
-t_sim=5
-results = axon1.simulate(t_sim=t_sim, record_V_mem=False, record_g_mem=True, record_g_ions=True)
+axon_mrg = nrv.myelinated(y,z,d,L,dt=0.005,rec='all', Nseg_per_sec=Nseg,model='MRG', node_shift=node_shift)
+axon_mrg.insert_I_Clamp_node(1, t_start, duration, amplitude)
+res_mrg = axon_mrg.simulate(t_sim=t_sim, record_g_mem=True, record_g_ions=True)
+del axon_mrg
 
-C = len(axon1.x_rec)//2
-seq_types = axon1.axon_path_type
-seq_index = axon1.axon_path_index
+axon_motor = nrv.myelinated(y,z,d,L,dt=0.005,rec='all', Nseg_per_sec=Nseg,model='Gaines_motor', node_shift=node_shift)
+axon_motor.insert_I_Clamp_node(1, t_start, duration, amplitude)
+res_motor = axon_motor.simulate(t_sim=t_sim, record_g_mem=True, record_g_ions=True)
+del axon_motor
+
+axon_sensory = nrv.myelinated(y,z,d,L,dt=0.005,rec='all', Nseg_per_sec=Nseg,model='Gaines_sensory', node_shift=node_shift)
+axon_sensory.insert_I_Clamp_node(1, t_start, duration, amplitude)
+res_sensory = axon_sensory.simulate(t_sim=t_sim, record_g_mem=True, record_g_ions=True)
+del axon_sensory
+
+nrv.compute_f_mem(res_mrg)
+nrv.compute_f_mem(res_motor)
+nrv.compute_f_mem(res_sensory)
+
+seq_types_mrg = res_mrg['sequence']
+seq_types_motor = res_motor['sequence']
+seq_types_sensory = res_sensory['sequence']
+print(seq_types_motor[:11], res_motor['Nsec'])
+
+C = nrv.find_central_node_index(res_motor)
 print(C)
 
-print(len(axon1.x_rec), 2*len(axon1.axon_path_type), len(axon1.axon_path_index), len(axon1.rec_position_list))
-print(axon1.axon_path_type)
-print(axon1.axon_path_index)
-print(axon1.rec_position_list)
-del axon1
 
+fig1 = plt.figure(1, figsize=(20, 8))
+fig2 = plt.figure(2, figsize=(20, 8))
+fig3 = plt.figure(3, figsize=(20, 8))
+for i in range(N_plot):
+    x =  i + C
 
+    plt.figure(1)
+    plt.subplot(i_plot, j_plot,i+1)
+    plt.plot(res_mrg['t'],res_mrg['V_mem'][x],label='MRG')
+    plt.plot(res_motor['t'],res_motor['V_mem'][x],label='motor')
+    plt.plot(res_sensory['t'],res_sensory['V_mem'][x],label='sensory')
+    plt.title(str(x)+": "+nrv.get_index_myelinated_sequence(res_motor, x))
 
-plt.figure(figsize=(14, 10))
-plt.subplot(2,2,1)
-map = plt.pcolormesh(results['t'], results['x_rec'], results['g_mem'] ,shading='auto')
-plt.ylabel('position (µm)')
-cbar = plt.colorbar(map)
-cbar.set_label('g membrane (mV)')
-plt.tight_layout()
+    plt.figure(2)
+    ax = plt.subplot(i_plot, j_plot,i+1)
+    plt.plot(res_mrg['t'],res_mrg['g_mem'][x],label='MRG')
+    plt.plot(res_motor['t'],res_motor['g_mem'][x],label='motor')
+    plt.plot(res_sensory['t'],res_sensory['g_mem'][x],label='sensory')
+    plt.title(str(x)+": "+nrv.get_index_myelinated_sequence(res_motor, x))
+    ax.ticklabel_format(scilimits=[-1, 1], useMathText=True)
 
+    plt.figure(3)
+    ax = plt.subplot(i_plot, j_plot,i+1)
+    plt.plot(res_mrg['t'],res_mrg['f_mem'][x],label='MRG')
+    plt.plot(res_motor['t'],res_motor['f_mem'][x],label='motor')
+    plt.plot(res_sensory['t'],res_sensory['f_mem'][x],label='sensory')
+    plt.title(str(x)+": "+nrv.get_index_myelinated_sequence(res_motor, x))
+    ax.ticklabel_format(scilimits=[-1, 1], useMathText=True)
 
-plt.subplot(2,2,2)
-map = plt.pcolormesh(results['t'], results['x_rec'], results['g_nap'] ,shading='auto')
-cbar = plt.colorbar(map)
-cbar.set_label('g_nap(mV)')
+plt.figure(1)
+fig1.legend(['MRG', 'motor', 'sensory'])
+fig1.tight_layout()
+fig1.savefig('./unitary_tests/figures/98_A.png')
 
-plt.subplot(2,2,3)
-map = plt.pcolormesh(results['t'], results['x_rec'], results['g_k'] ,shading='auto')
-plt.xlabel('time (ms)')
-plt.ylabel('position (µm)')
-cbar = plt.colorbar(map)
-cbar.set_label('g_k (mV)')
+plt.figure(2)
+fig2.legend(['MRG', 'motor', 'sensory'])
+fig2.tight_layout()
+fig2.savefig('./unitary_tests/figures/98_B.png')
 
-plt.subplot(2,2,4)
-map = plt.pcolormesh(results['t'], results['x_rec'], results['g_q'] ,shading='auto')
-plt.xlabel('time (ms)')
+plt.figure(3)
+fig3.legend(['MRG', 'motor', 'sensory'])
+fig3.tight_layout()
+fig3.savefig('./unitary_tests/figures/98_C.png')
 
-cbar = plt.colorbar(map)
-cbar.set_label('g_q (mV)')
-plt.savefig('./unitary_tests/figures/97_A.png')
-
-plt.figure(figsize=(15, 8))
-
-for i in range(8):
-    x = C+i
-    plt.subplot(2,4,i+1)
-    plt.plot(results['t'],results['g_na'][x],label='g_na')
-    plt.plot(results['t'],results['g_nap'][x],label='g_nap')
-    plt.plot(results['t'],results['g_k'][x],label='g_k')
-    plt.plot(results['t'],results['g_kf'][x],label='g_kf')
-    plt.plot(results['t'],results['g_l'][x],label='g_l')
-    plt.plot(results['t'],results['g_q'][x],label='g_q')
-
-    plt.plot(results['t'],results['g_mem'][x],label='g_mem', color='k')
-    print(seq_types[(x-1)//Nseg])
-    plt.title(seq_types[(x-1)//Nseg]+''+str(seq_index[(x-1)//Nseg]))
-    plt.legend()
-plt.tight_layout()
-plt.savefig('./unitary_tests/figures/97_B.png')
-
-
-plt.figure(figsize=(15, 8))
-seq = [0, 1, 2, 3, 11, 10, 9, 8]
-for i in range(8):
-    x = C+seq[i]*2
-    plt.subplot(2,4,i+1)
-    plt.plot(results['t'],results['g_na'][x],label='g_na')
-    plt.plot(results['t'],results['g_nap'][x],label='g_nap')
-    plt.plot(results['t'],results['g_k'][x],label='g_k')
-    plt.plot(results['t'],results['g_kf'][x],label='g_kf')
-    plt.plot(results['t'],results['g_l'][x],label='g_l')
-    plt.plot(results['t'],results['g_q'][x],label='g_q')
-
-    plt.plot(results['t'],results['g_mem'][x],label='g_mem', color='k')
-    print(seq_types[(x-1)//Nseg])
-    plt.title(seq_types[(x-1)//Nseg]+''+str(seq_index[(x-1)//Nseg]))
-    plt.legend()
-plt.tight_layout()
-plt.savefig('./unitary_tests/figures/97_C.png')
-
+print(len(seq_types_motor))
+print(len(res_motor['x_rec']))
+print(np.shape(res_sensory['V_mem']))
+print(np.shape(res_motor['g_mem']))
 #plt.show()
+
+

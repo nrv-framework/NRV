@@ -36,6 +36,7 @@ class unmyelinated(axon):
         T=None,
         ID=0,
         threshold=-40,
+        **kwarks,
     ):
         """
         initialisation of an unmyelinted axon
@@ -110,6 +111,7 @@ class unmyelinated(axon):
             T=T,
             ID=ID,
             threshold=threshold,
+            **kwarks,
         )
         self.Nsec = Nsec
         self.Nrec = Nrec
@@ -528,19 +530,36 @@ class unmyelinated(axon):
         Parameters
         ----------
         *args    : list(tuple)
-            list of tuple containing a rec list to set and the corresonding referenc in .mod file
+            list of tuple containing a rec list to set and the corresonding key to access
+            NB: keys should be str such as "_ref_xxx_yyy" where xxx is the variable to access
+            and yyy the .mod file suffix if the variable is in one
         """
         for k in range(self.Nsec):
             for pos in self.rec_position_list[k]:
                 for t in args:
-                    ref = t[1]
+                    key = t[1]
                     # print(dir(self.unmyelinated_sections[k](pos)))
-                    # print(ref, getattr(self.unmyelinated_sections[k](pos),ref))
+                    # print(key, getattr(self.unmyelinated_sections[k](pos),key))
                     rec = neuron.h.Vector().record(
-                        getattr(self.unmyelinated_sections[k](pos), ref),
+                        getattr(self.unmyelinated_sections[k](pos), key),
                         sec=self.unmyelinated_sections[k],
                     )
                     t[0].append(rec)
+
+    def __get_var_from_mod(
+        self, key
+    ):
+        """
+        return a column with value in every recording point of a constant from a mod. For internal use only.
+        """
+        val = np.zeros((len(self.x_rec)))
+        i = 0
+        for k in range(self.Nsec):
+            for pos in self.rec_position_list[k]:
+                #print(getattr(self.unmyelinated_sections[k](pos), key)[0])
+                val[i] = getattr(self.unmyelinated_sections[k](pos), key)[0]
+                i += 1
+        return val
 
     def __get_recorders_from_list(self, reclist):
         """
@@ -555,7 +574,6 @@ class unmyelinated(axon):
         val         : np.array
             array of every recorded value for all rec point and time
         """
-
         dim = (self.Nrec, self.t_len)
         val = np.zeros(dim)
         for k in range(dim[0]):
@@ -699,12 +717,14 @@ class unmyelinated(axon):
     def get_membrane_conductance(self):
         """
         get the membrane voltage at the end of simulation. For internal use only.
+        NB: [S/cm^{2}] (see Neuron unit)
         """
         return sum(self.get_ionic_conductance())
 
     def get_ionic_conductance(self):
         """
-        get the membrane voltage at the end of simulation. For internal use only.
+        get the membrane conductance at the end of simulation. For internal use only.
+        NB: [S/cm^{2}] (see Neuron unit)
         """
         results = []
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
@@ -731,8 +751,14 @@ class unmyelinated(axon):
             results += [self.__get_recorders_from_list(self.g_kca_reclist)]
             results += [self.__get_recorders_from_list(self.g_can_reclist)]
             results += [self.__get_recorders_from_list(self.g_cat_reclist)]
-
         return results
+
+    def get_membrane_capacitance(self):
+        """
+        get the membrane capacitance
+        NB: [uF/cm^{2}] (see Neuron unit)
+        """
+        return self.__get_var_from_mod('_ref_cm')
 
     def set_particules_values_recorders(self):
         """

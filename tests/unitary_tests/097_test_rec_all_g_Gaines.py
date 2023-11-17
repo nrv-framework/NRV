@@ -91,7 +91,7 @@ for i in range(8):
 
     plt.plot(results['t'],results['g_mem'][x],label='g_mem', color='k')
     print(seq_types[(x-1)//Nseg])
-    plt.title(seq_types[(x-1)//Nseg]+''+str(seq_index[(x-1)//Nseg]))
+    plt.title(seq_types[(x-1)//Nseg]+' '+str(seq_index[(x-1)//Nseg]))
     plt.legend()
 plt.tight_layout()
 plt.savefig('./unitary_tests/figures/97_B.png')
@@ -111,7 +111,7 @@ for i in range(8):
 
     plt.plot(results['t'],results['g_mem'][x],label='g_mem', color='k')
     print(seq_types[(x-1)//Nseg])
-    plt.title(seq_types[(x-1)//Nseg]+''+str(seq_index[(x-1)//Nseg]))
+    plt.title(seq_types[(x-1)//Nseg]+' '+str(seq_index[(x-1)//Nseg]))
     plt.legend()
 plt.tight_layout()
 plt.savefig('./unitary_tests/figures/97_C.png')

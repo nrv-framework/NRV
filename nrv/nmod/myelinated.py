@@ -144,6 +144,7 @@ class myelinated(axon):
         T=None,
         ID=0,
         threshold=-40,
+        **kwargs,
     ):
         """
         initialisation of a myelinted axon
@@ -219,6 +220,7 @@ class myelinated(axon):
             T=T,
             ID=ID,
             threshold=threshold,
+            **kwargs,
         )
         self.myelinated = True
         self.thin = False
@@ -1109,18 +1111,27 @@ class myelinated(axon):
             val[k, :] = np.asarray(reclist[k])
         return val
 
-    def _get_var_from_mod(
-        self, key_node=None, key_MYSA=None, key_FLUT=None, key_STIN=None
+    def __get_var_from_mod(
+        self,
+        key=None,
+        single_mod=True,
+        key_node=None,
+        key_MYSA=None,
+        key_FLUT=None,
+        key_STIN=None,
     ):
         """
         return a column with value in every recording point of a constant from a mod. For internal use only.
         """
+        if single_mod:
+            key_node, key_MYSA, key_FLUT, key_STIN = key, key, key, key
+
         if self.rec == "nodes":
-            val = np.zeros((len(self.node), 1))
+            val = np.zeros(len(self.node))
             if key_node is not None:
-                val[:, 0] = getattr(self.node[0](0.5), key_node)[0]
+                val[:] = getattr(self.node[0](0.5), key_node)[0]
         else:
-            val = np.zeros((len(self.x_rec), 1))
+            val = np.zeros((len(self.x_rec)))
             i = -1
             for k in range(len(self.axon_path_type)):
                 sec_type = self.axon_path_type[k]
@@ -1129,24 +1140,24 @@ class myelinated(axon):
                     i += 1
                     if sec_type == "node":
                         if key_node is not None:
-                            val[i, 0] = getattr(
-                                self.node[sec_index](position), key_node
-                            )[0]
+                            val[i] = getattr(self.node[sec_index](position), key_node)[
+                                0
+                            ]
                     elif sec_type == "MYSA":
                         if key_MYSA is not None:
-                            val[i, 0] = getattr(
-                                self.MYSA[sec_index](position), key_MYSA
-                            )[0]
+                            val[i] = getattr(self.MYSA[sec_index](position), key_MYSA)[
+                                0
+                            ]
                     elif sec_type == "FLUT":
                         if key_FLUT is not None:
-                            val[i, 0] = getattr(
-                                self.FLUT[sec_index](position), key_FLUT
-                            )[0]
+                            val[i] = getattr(self.FLUT[sec_index](position), key_FLUT)[
+                                0
+                            ]
                     else:  # should be STIN
                         if key_STIN is not None:
-                            val[i, 0] = getattr(
-                                self.STIN[sec_index](position), key_STIN
-                            )[0]
+                            val[i] = getattr(self.STIN[sec_index](position), key_STIN)[
+                                0
+                            ]
         return val
 
     def set_membrane_voltage_recorders(self):
@@ -1459,6 +1470,27 @@ class myelinated(axon):
         get the total membrane conductance at the end of simulation. For internal use only.
         """
         return sum(self.get_ionic_conductance())
+
+    def get_membrane_capacitance(self):
+        """
+        get the membrane capacitance
+        NB: [uF/cm^{2}] (see Neuron unit)
+        """
+        return self.__get_var_from_mod("_ref_cm")
+
+    def get_myeline_conductance(self):
+        """
+        get the membrane capacitance
+        NB: [S/cm^{2}] (see Neuron unit)
+        """
+        return self.__get_var_from_mod("_ref_xg")
+
+    def get_myeline_capacitance(self):
+        """
+        get the membrane capacitance
+        NB: [uF/cm^{2}] (see Neuron unit)
+        """
+        return self.__get_var_from_mod("_ref_xc")
 
     def set_Nav_recorders(self):
         """

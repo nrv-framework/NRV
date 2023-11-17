@@ -222,6 +222,7 @@ class axon(NRV_class):
         T=None,
         ID=0,
         threshold=-40,
+        **kwarks,
     ):
         """
         initialisation of the axon,
@@ -300,6 +301,9 @@ class axon(NRV_class):
         self.x_rec = np.asarray([])
         self.rec = "all"
         self.node_index = None
+        ## required for generate_axon_from_results
+        if "diameter" in kwarks:
+            self.d = kwarks["diameter"]
 
     def __del__(self):
         for section in neuron.h.allsec():
@@ -634,12 +638,14 @@ class axon(NRV_class):
         axon_sim["dt"] = self.dt
         axon_sim["tstop"] = self.t_sim
         # myelinated specific parameters
-        if self.myelinated == True:
+        if self.myelinated:
             axon_sim["rec"] = self.rec
             axon_sim["x_nodes"] = self.x_nodes
             axon_sim["sequence"] = self.axon_path_type
             axon_sim["index"] = self.axon_path_index
             axon_sim["rec_pos_list"] = self.rec_position_list
+        else:
+            axon_sim["Nrec"] = self.Nrec
         # saving intra-cellular stimulation parameters
         axon_sim["intra_stim_positions"] = self.intra_current_stim_positions
         axon_sim["intra_stim_starts"] = self.intra_current_stim_starts
@@ -1260,7 +1266,10 @@ class axon(NRV_class):
     def get_ionic_current(self):
         pass
 
-    def get_conductance(self):
+    def get_membrane_conductance(self):
+        pass
+
+    def get_membrane_capacitance(self):
         pass
 
     def get_particules_values(self):
