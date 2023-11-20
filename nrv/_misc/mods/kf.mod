@@ -6,7 +6,7 @@
 NEURON {
 	SUFFIX kf
 	USEION k READ ek WRITE ik
-	RANGE gbar, ek, ik
+	RANGE gbar, ek, ik, g
 	RANGE tau_m, minf, hinf,tau_h,m,h, celsiusT
 }
 

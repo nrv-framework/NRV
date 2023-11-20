@@ -4,7 +4,7 @@
 NEURON {
        SUFFIX nattxs
        USEION na READ ena WRITE ina
-       RANGE gbar, ena, ina, celsiusT, Tshift
+       RANGE gbar, ena, ina, celsiusT, Tshift, g
 
 }
 

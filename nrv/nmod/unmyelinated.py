@@ -36,6 +36,7 @@ class unmyelinated(axon):
         T=None,
         ID=0,
         threshold=-40,
+        **kwarks,
     ):
         """
         initialisation of an unmyelinted axon
@@ -110,6 +111,7 @@ class unmyelinated(axon):
             T=T,
             ID=ID,
             threshold=threshold,
+            **kwarks,
         )
         self.Nsec = Nsec
         self.Nrec = Nrec
@@ -522,49 +524,87 @@ class unmyelinated(axon):
     ##############################
     ## Result recording methods ##
     ##############################
+    def __set_recorders_with_key(self, *args):
+        """
+        To automate the methods set_recorder. For internal use only.
+        Parameters
+        ----------
+        *args    : list(tuple)
+            list of tuple containing a rec list to set and the corresonding key to access
+            NB: keys should be str such as "_ref_xxx_yyy" where xxx is the variable to access
+            and yyy the .mod file suffix if the variable is in one
+        """
+        for k in range(self.Nsec):
+            for pos in self.rec_position_list[k]:
+                for t in args:
+                    key = t[1]
+                    # print(dir(self.unmyelinated_sections[k](pos)))
+                    # print(key, getattr(self.unmyelinated_sections[k](pos),key))
+                    rec = neuron.h.Vector().record(
+                        getattr(self.unmyelinated_sections[k](pos), key),
+                        sec=self.unmyelinated_sections[k],
+                    )
+                    t[0].append(rec)
+
+    def __get_var_from_mod(
+        self, key
+    ):
+        """
+        return a column with value in every recording point of a constant from a mod. For internal use only.
+        """
+        val = np.zeros((len(self.x_rec)))
+        i = 0
+        for k in range(self.Nsec):
+            for pos in self.rec_position_list[k]:
+                #print(getattr(self.unmyelinated_sections[k](pos), key)[0])
+                val[i] = getattr(self.unmyelinated_sections[k](pos), key)[0]
+                i += 1
+        return val
+
+    def __get_recorders_from_list(self, reclist):
+        """
+        Convert reclist in np.array To automate methods set_recorder. For internal use only.
+        Parameters
+        ----------
+        reclist     : neuron.h.List
+            List in witch the reccorders are saved
+
+        Returns
+        -------
+        val         : np.array
+            array of every recorded value for all rec point and time
+        """
+        dim = (self.Nrec, self.t_len)
+        val = np.zeros(dim)
+        for k in range(dim[0]):
+            val[k, :] = np.asarray(reclist[k])
+        return val
+
     def set_membrane_voltage_recorders(self):
         """
         Prepare the membrane voltage recording. For internal use only.
         """
         self.vreclist = neuron.h.List()
-        for k in range(self.Nsec):
-            for pos in self.rec_position_list[k]:
-                vrec = neuron.h.Vector().record(
-                    self.unmyelinated_sections[k](pos)._ref_v,
-                    sec=self.unmyelinated_sections[k],
-                )
-                self.vreclist.append(vrec)
+        self.__set_recorders_with_key((self.vreclist, "_ref_v"))
 
     def get_membrane_voltage(self):
         """
         get the membrane voltage at the end of simulation. For internal use only.
         """
-        vax = np.zeros((self.Nrec, self.t_len))
-        for k in range(self.Nrec):
-            vax[k, :] = np.asarray(self.vreclist[k])
-        return vax
+        return self.__get_recorders_from_list(self.vreclist)
 
     def set_membrane_current_recorders(self):
         """
         Prepare the membrane current recording. For internal use only.
         """
         self.ireclist = neuron.h.List()
-        for k in range(self.Nsec):
-            for pos in self.rec_position_list[k]:
-                i_mem_rec = neuron.h.Vector().record(
-                    self.unmyelinated_sections[k](pos)._ref_i_membrane,
-                    sec=self.unmyelinated_sections[k],
-                )
-                self.ireclist.append(i_mem_rec)
+        self.__set_recorders_with_key((self.ireclist, "_ref_i_membrane"))
 
     def get_membrane_current(self):
         """
         get the membrane current at the end of simulation. For internal use only.
         """
-        iax = np.zeros((self.Nrec, self.t_len))
-        for k in range(self.Nrec):
-            iax[k, :] = np.asarray(self.ireclist[k])
-        return iax
+        return self.__get_recorders_from_list(self.ireclist)
 
     def set_ionic_current_recorders(self):
         """
@@ -574,217 +614,179 @@ class unmyelinated(axon):
             self.i_na_reclist = neuron.h.List()
             self.i_k_reclist = neuron.h.List()
             self.i_l_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    i_na_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_nai,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    i_k_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_ki,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    i_l_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_i_pas,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.i_na_reclist.append(i_na_rec)
-                    self.i_k_reclist.append(i_k_rec)
-                    self.i_l_reclist.append(i_l_rec)
+            self.__set_recorders_with_key(
+                (self.i_na_reclist, "_ref_nai"),
+                (self.i_k_reclist, "_ref_ki"),
+                (self.i_l_reclist, "_ref_i_pas"),
+            )
         else:
             self.i_na_reclist = neuron.h.List()
             self.i_k_reclist = neuron.h.List()
             self.i_ca_reclist = neuron.h.List()
-            self.i_l_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    i_na_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_nai,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    i_k_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_ki,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    i_ca_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_cai,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.i_na_reclist.append(i_na_rec)
-                    self.i_k_reclist.append(i_k_rec)
-                    self.i_ca_reclist.append(i_ca_rec)
+            self.__set_recorders_with_key(
+                (self.i_na_reclist, "_ref_nai"),
+                (self.i_k_reclist, "_ref_ki"),
+                (self.i_ca_reclist, "_ref_cai"),
+            )
 
     def get_ionic_current(self):
         """
         get the ionic currents at the end of simulation. For internal use only.
         """
+        results = []
+        results += [self.__get_recorders_from_list(self.i_na_reclist)]
+        results += [self.__get_recorders_from_list(self.i_k_reclist)]
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
-            i_na_ax = np.zeros((self.Nrec, self.t_len))
-            i_k_ax = np.zeros((self.Nrec, self.t_len))
-            i_l_ax = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                i_na_ax[k, :] = np.asarray(self.i_na_reclist[k])
-                i_k_ax[k, :] = np.asarray(self.i_k_reclist[k])
-                i_l_ax[k, :] = np.asarray(self.i_l_reclist[k])
-            results = [i_na_ax, i_k_ax, i_l_ax]
+            results += [self.__get_recorders_from_list(self.i_l_reclist)]
         else:
-            i_na_ax = np.zeros((self.Nrec, self.t_len))
-            i_k_ax = np.zeros((self.Nrec, self.t_len))
-            i_ca_ax = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                i_na_ax[k, :] = np.asarray(self.i_na_reclist[k])
-                i_k_ax[k, :] = np.asarray(self.i_k_reclist[k])
-                i_ca_ax[k, :] = np.asarray(self.i_ca_reclist[k])
-            results = [i_na_ax, i_k_ax, i_ca_ax]
+            results += [self.__get_recorders_from_list(self.i_ca_reclist)]
         return results
 
     def set_conductance_recorders(self):
         """
-        Prepare the membrane voltage recording. For internal use only.
+        Prepare the membrane conductance recording. For internal use only.
         """
-        if self.model == "HH":
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.g_na_reclist = neuron.h.List()
             self.g_k_reclist = neuron.h.List()
             self.g_l_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    g_na_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gna_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    g_k_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gk_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    g_l_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gl_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.g_na_reclist.append(g_na_rec)
-                    self.g_k_reclist.append(g_k_rec)
-                    self.g_l_reclist.append(g_l_rec)
-        elif self.model == "Rattay_Aberham":
-            self.g_na_reclist = neuron.h.List()
-            self.g_k_reclist = neuron.h.List()
-            self.g_l_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    g_na_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gna_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    g_k_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gk_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    g_l_rec = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_gl_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.g_na_reclist.append(g_na_rec)
-                    self.g_k_reclist.append(g_k_rec)
-                    self.g_l_reclist.append(g_l_rec)
+            if self.model == "HH":
+                self.__set_recorders_with_key(
+                    (self.g_na_reclist, "_ref_gna_hh"),
+                    (self.g_k_reclist, "_ref_gk_hh"),
+                    (self.g_l_reclist, "_ref_gl_hh"),
+                )
+            elif self.model == "Rattay_Aberham":
+                self.__set_recorders_with_key(
+                    (self.g_na_reclist, "_ref_gna_RattayAberham"),
+                    (self.g_k_reclist, "_ref_gk_RattayAberham"),
+                    (self.g_l_reclist, "_ref_gl_RattayAberham"),
+                )
+            else:
+                self.__set_recorders_with_key(
+                    (self.g_na_reclist, "_ref_gna_nahh"),
+                    (self.g_k_reclist, "_ref_gkdr_borgkdr"),
+                    (self.g_l_reclist, "_ref_g_pas"),
+                )
+        elif self.model == "Tigerholm":
+            self.g_nav17_reclist = neuron.h.List()
+            self.g_nav18_reclist = neuron.h.List()
+            self.g_nav19_reclist = neuron.h.List()
+            self.g_kA_reclist = neuron.h.List()
+            self.g_kM_reclist = neuron.h.List()
+            self.g_kdr_reclist = neuron.h.List()
+            self.g_kna_reclist = neuron.h.List()
+            self.g_h_reclist = neuron.h.List()
+            self.g_naleak_reclist = neuron.h.List()
+            self.g_kleak_reclist = neuron.h.List()
+            self.__set_recorders_with_key(
+                (self.g_nav17_reclist, "_ref_g_nattxs"),
+                (self.g_nav18_reclist, "_ref_g_nav1p8"),
+                (self.g_nav19_reclist, "_ref_g_nav1p9"),
+                (self.g_kA_reclist, "_ref_g_ks"),
+                (self.g_kM_reclist, "_ref_g_kf"),
+                (self.g_kdr_reclist, "_ref_g_kdrTiger"),
+                (self.g_kna_reclist, "_ref_g_kna"),
+                (self.g_h_reclist, "_ref_g_h"),
+                (self.g_naleak_reclist, "_ref_gnaleak_leak"),
+                (self.g_kleak_reclist, "_ref_gkleak_leak"),
+            )
         else:
-            pass
+            self.g_naf_reclist = neuron.h.List()
+            self.g_nas_reclist = neuron.h.List()
+            self.g_kd_reclist = neuron.h.List()
+            self.g_ka_reclist = neuron.h.List()
+            self.g_kds_reclist = neuron.h.List()
+            self.g_kca_reclist = neuron.h.List()
+            self.g_can_reclist = neuron.h.List()
+            self.g_cat_reclist = neuron.h.List()
+            sup_key = ""
+            if self.model == "Schild_97":
+                sup_key = "97mean"
+            self.__set_recorders_with_key(
+                (self.g_naf_reclist, "_ref_g_naf" + sup_key),
+                (self.g_nas_reclist, "_ref_g_nas" + sup_key),
+                (self.g_kd_reclist, "_ref_g_kd"),
+                (self.g_ka_reclist, "_ref_g_ka"),
+                (self.g_kds_reclist, "_ref_g_kds"),
+                (self.g_kca_reclist, "_ref_g_kca"),
+                (self.g_can_reclist, "_ref_g_can"),
+                (self.g_cat_reclist, "_ref_g_cat"),
+            )
 
     def get_membrane_conductance(self):
         """
         get the membrane voltage at the end of simulation. For internal use only.
+        NB: [S/cm^{2}] (see Neuron unit)
         """
-        g_mem_rec = []
-        if self.model in ["HH", "Rattay_Aberham"]:
-            g_mem_rec = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                g_mem_rec[k, :] = (
-                    np.asarray(self.g_na_reclist[k])
-                    + np.asarray(self.g_k_reclist[k])
-                    + np.asarray(self.g_l_reclist[k])
-                )
-        return g_mem_rec
+        return sum(self.get_ionic_conductance())
 
     def get_ionic_conductance(self):
         """
-        get the membrane voltage at the end of simulation. For internal use only.
+        get the membrane conductance at the end of simulation. For internal use only.
+        NB: [S/cm^{2}] (see Neuron unit)
         """
         results = []
-        if self.model in ["HH", "Rattay_Aberham"]:
-            g_na_rec = np.zeros((self.Nrec, self.t_len))
-            g_k_rec = np.zeros((self.Nrec, self.t_len))
-            g_l_rec = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                g_na_rec[k, :] = np.asarray(self.g_na_reclist[k])
-                g_k_rec[k, :] = np.asarray(self.g_k_reclist[k])
-                g_l_rec[k, :] = np.asarray(self.g_l_reclist[k])
-            results = [g_na_rec, g_k_rec, g_l_rec]
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
+            results += [self.__get_recorders_from_list(self.g_na_reclist)]
+            results += [self.__get_recorders_from_list(self.g_k_reclist)]
+            results += [self.__get_recorders_from_list(self.g_l_reclist)]
+        elif self.model == "Tigerholm":
+            results += [self.__get_recorders_from_list(self.g_nav17_reclist)]
+            results += [self.__get_recorders_from_list(self.g_nav18_reclist)]
+            results += [self.__get_recorders_from_list(self.g_nav19_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kA_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kM_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kdr_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kna_reclist)]
+            results += [self.__get_recorders_from_list(self.g_h_reclist)]
+            results += [self.__get_recorders_from_list(self.g_naleak_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kleak_reclist)]
+        else:
+            results += [self.__get_recorders_from_list(self.g_naf_reclist)]
+            results += [self.__get_recorders_from_list(self.g_nas_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kd_reclist)]
+            results += [self.__get_recorders_from_list(self.g_ka_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kds_reclist)]
+            results += [self.__get_recorders_from_list(self.g_kca_reclist)]
+            results += [self.__get_recorders_from_list(self.g_can_reclist)]
+            results += [self.__get_recorders_from_list(self.g_cat_reclist)]
         return results
+
+    def get_membrane_capacitance(self):
+        """
+        get the membrane capacitance
+        NB: [uF/cm^{2}] (see Neuron unit)
+        """
+        return self.__get_var_from_mod('_ref_cm')
 
     def set_particules_values_recorders(self):
         """
         Prepare the particule value recording. For internal use only.
         """
-        if self.model == "HH":
+
+        if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.hhmreclist = neuron.h.List()
             self.hhnreclist = neuron.h.List()
             self.hhhreclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    hhm = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhn = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_n_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhh = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_hh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.hhmreclist.append(hhm)
-                    self.hhnreclist.append(hhn)
-                    self.hhhreclist.append(hhh)
-        elif self.model == "Rattay_Aberham":
-            self.hhmreclist = neuron.h.List()
-            self.hhnreclist = neuron.h.List()
-            self.hhhreclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    hhm = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhn = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_n_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhh = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_RattayAberham,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.hhmreclist.append(hhm)
-                    self.hhnreclist.append(hhn)
-                    self.hhhreclist.append(hhh)
-        elif self.model == "Sundt":
-            self.hhmreclist = neuron.h.List()
-            self.hhnreclist = neuron.h.List()
-            self.hhhreclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    hhm = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_nahh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhn = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_n_borgkdr,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    hhh = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_nahh,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.hhmreclist.append(hhm)
-                    self.hhnreclist.append(hhn)
-                    self.hhhreclist.append(hhh)
+            if self.model == "HH":
+                self.__set_recorders_with_key(
+                    (self.hhmreclist, "_ref_m_hh"),
+                    (self.hhnreclist, "_ref_n_hh"),
+                    (self.hhhreclist, "_ref_h_hh"),
+                )
+            elif self.model == "Rattay_Aberham":
+                self.__set_recorders_with_key(
+                    (self.hhmreclist, "_ref_m_RattayAberham"),
+                    (self.hhnreclist, "_ref_n_RattayAberham"),
+                    (self.hhhreclist, "_ref_h_RattayAberham"),
+                )
+            else:
+                self.__set_recorders_with_key(
+                    (self.hhmreclist, "_ref_m_nahh"),
+                    (self.hhnreclist, "_ref_n_borgkdr"),
+                    (self.hhhreclist, "_ref_h_nahh"),
+                )
         elif self.model == "Tigerholm":
             # NAV 1.8
             self.m_nav18_reclist = neuron.h.List()
@@ -812,106 +814,27 @@ class unmyelinated(axon):
             # Hyperpolarization channel
             self.ns_h_reclist = neuron.h.List()
             self.nf_h_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    # NAV 1.8
-                    m_nav18 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_nav1p8,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    h_nav18 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_nav1p8,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    s_nav18 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_s_nav1p8,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    u_nav18 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_u_nav1p8,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.m_nav18_reclist.append(m_nav18)
-                    self.h_nav18_reclist.append(h_nav18)
-                    self.s_nav18_reclist.append(s_nav18)
-                    self.u_nav18_reclist.append(u_nav18)
-                    # NAV 1.9
-                    m_nav19 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_nav1p9,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    h_nav19 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_nav1p9,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    s_nav19 = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_s_nav1p9,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.m_nav19_reclist.append(m_nav19)
-                    self.h_nav19_reclist.append(h_nav19)
-                    self.s_nav19_reclist.append(s_nav19)
-                    # NATTX - sensitive
-                    m_nattxs = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_nattxs,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    h_nattxs = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_nattxs,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    s_nattxs = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_s_nattxs,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.m_nattxs_reclist.append(m_nattxs)
-                    self.h_nattxs_reclist.append(h_nattxs)
-                    self.s_nattxs_reclist.append(s_nattxs)
-                    # K delayed rectifier
-                    n_kdr = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_n_kdrTiger,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.n_kdr_reclist.append(n_kdr)
-                    # K fast channel
-                    m_kf = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_m_kf,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    h_kf = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_h_kf,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.m_kf_reclist.append(m_kf)
-                    self.h_kf_reclist.append(h_kf)
-                    # K slow channel
-                    ns_ks = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_ns_ks,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    nf_ks = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_nf_ks,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.ns_ks_reclist.append(ns_ks)
-                    self.nf_ks_reclist.append(nf_ks)
-                    # Sodium dependent K channel
-                    w_kna = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_w_kna,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.w_kna_reclist.append(w_kna)
-                    # Hyperpolarization channel
-                    ns_h = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_ns_h,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    nf_h = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_nf_h,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.ns_h_reclist.append(ns_h)
-                    self.nf_h_reclist.append(nf_h)
+
+            self.__set_recorders_with_key(
+                (self.m_nav18_reclist, "_ref_m_nav1p8"),
+                (self.h_nav18_reclist, "_ref_h_nav1p8"),
+                (self.s_nav18_reclist, "_ref_s_nav1p8"),
+                (self.u_nav18_reclist, "_ref_u_nav1p8"),
+                (self.m_nav19_reclist, "_ref_m_nav1p9"),
+                (self.h_nav19_reclist, "_ref_h_nav1p9"),
+                (self.s_nav19_reclist, "_ref_s_nav1p9"),
+                (self.m_nattxs_reclist, "_ref_m_nattxs"),
+                (self.h_nattxs_reclist, "_ref_h_nattxs"),
+                (self.s_nattxs_reclist, "_ref_s_nattxs"),
+                (self.n_kdr_reclist, "_ref_n_kdrTiger"),
+                (self.m_kf_reclist, "_ref_m_kf"),
+                (self.h_kf_reclist, "_ref_h_kf"),
+                (self.ns_ks_reclist, "_ref_ns_ks"),
+                (self.nf_ks_reclist, "_ref_nf_ks"),
+                (self.w_kna_reclist, "_ref_w_kna"),
+                (self.ns_h_reclist, "_ref_ns_h"),
+                (self.nf_h_reclist, "_ref_nf_h"),
+            )
         else:  # should be both Schild_94 or Schild_97
             # High Threshold long lasting Ca
             self.d_can_reclist = neuron.h.List()
@@ -930,69 +853,19 @@ class unmyelinated(axon):
             # Slowly inactivated K
             self.x_kds_reclist = neuron.h.List()
             self.y1_kds_reclist = neuron.h.List()
-            for k in range(self.Nsec):
-                for pos in self.rec_position_list[k]:
-                    # High Threshold long lasting Ca
-                    d_can = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_d_can,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    f1_can = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_f1_can,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    f2_can = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_f2_can,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.d_can_reclist.append(d_can)
-                    self.f1_can_reclist.append(f1_can)
-                    self.f2_can_reclist.append(f2_can)
-                    # Low Threshold transient Ca
-                    d_cat = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_d_cat,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    f_cat = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_f_cat,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.d_cat_reclist.append(d_cat)
-                    self.f_cat_reclist.append(f_cat)
-                    # Early Transient Outward K
-                    p_ka = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_p_ka,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    q_ka = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_q_ka,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.p_ka_reclist.append(p_ka)
-                    self.q_ka_reclist.append(q_ka)
-                    # Ca activated K
-                    c_kca = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_c_kca,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.c_kca_reclist.append(c_kca)
-                    # Delayed rectifier K
-                    n_kd = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_n_kd,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.n_kd_reclist.append(n_kd)
-                    # Slowly inactivated K
-                    x_kds = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_x_kds,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    y1_kds = neuron.h.Vector().record(
-                        self.unmyelinated_sections[k](pos)._ref_y1_kds,
-                        sec=self.unmyelinated_sections[k],
-                    )
-                    self.x_kds_reclist.append(x_kds)
-                    self.y1_kds_reclist.append(y1_kds)
+            self.__set_recorders_with_key(
+                (self.d_can_reclist, "_ref_d_can"),
+                (self.f1_can_reclist, "_ref_f1_can"),
+                (self.f2_can_reclist, "_ref_f2_can"),
+                (self.d_cat_reclist, "_ref_d_cat"),
+                (self.f_cat_reclist, "_ref_f_cat"),
+                (self.p_ka_reclist, "_ref_p_ka"),
+                (self.q_ka_reclist, "_ref_q_ka"),
+                (self.c_kca_reclist, "_ref_c_kca"),
+                (self.n_kd_reclist, "_ref_n_kd"),
+                (self.x_kds_reclist, "_ref_x_kds"),
+                (self.y1_kds_reclist, "_ref_y1_kds"),
+            )
             if self.model == "Schild_94":
                 # Fast Na
                 self.m_naf_reclist = neuron.h.List()
@@ -1001,35 +874,13 @@ class unmyelinated(axon):
                 # Slow Na
                 self.m_nas_reclist = neuron.h.List()
                 self.h_nas_reclist = neuron.h.List()
-                for k in range(self.Nsec):
-                    for pos in self.rec_position_list[k]:
-                        # Fast Na
-                        m_naf = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_m_naf,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        h_naf = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_h_naf,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        l_naf = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_l_naf,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        self.m_naf_reclist.append(m_naf)
-                        self.h_naf_reclist.append(h_naf)
-                        self.l_naf_reclist.append(l_naf)
-                        # Slow Na
-                        m_nas = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_m_nas,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        h_nas = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_h_nas,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        self.m_nas_reclist.append(m_nas)
-                        self.h_nas_reclist.append(h_nas)
+                self.__set_recorders_with_key(
+                    (self.m_naf_reclist, "_ref_m_naf"),
+                    (self.h_naf_reclist, "_ref_h_naf"),
+                    (self.l_naf_reclist, "_ref_l_naf"),
+                    (self.m_nas_reclist, "_ref_m_nas"),
+                    (self.h_nas_reclist, "_ref_h_nas"),
+                )
             else:  # should be Schild_94
                 # Fast Na
                 self.m_naf_reclist = neuron.h.List()
@@ -1037,172 +888,58 @@ class unmyelinated(axon):
                 # Slow Na
                 self.m_nas_reclist = neuron.h.List()
                 self.h_nas_reclist = neuron.h.List()
-                for k in range(self.Nsec):
-                    for pos in self.rec_position_list[k]:
-                        # Fast Na
-                        m_naf = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_m_naf97mean,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        h_naf = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_h_naf97mean,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        self.m_naf_reclist.append(m_naf)
-                        self.h_naf_reclist.append(h_naf)
-                        # Slow Na
-                        m_nas = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_m_nas97mean,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        h_nas = neuron.h.Vector().record(
-                            self.unmyelinated_sections[k](pos)._ref_h_nas97mean,
-                            sec=self.unmyelinated_sections[k],
-                        )
-                        self.m_nas_reclist.append(m_nas)
-                        self.h_nas_reclist.append(h_nas)
+                self.__set_recorders_with_key(
+                    (self.m_naf_reclist, "_ref_m_naf97mean"),
+                    (self.h_naf_reclist, "_ref_h_naf97mean"),
+                    (self.m_nas_reclist, "_ref_m_nas97mean"),
+                    (self.h_nas_reclist, "_ref_h_nas97mean"),
+                )
 
     def get_particles_values(self):
         """
         get the particules values at the end of simulation. For internal use only.
         """
+        results = []
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
-            m_ax = np.zeros((self.Nrec, self.t_len))
-            n_ax = np.zeros((self.Nrec, self.t_len))
-            h_ax = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                m_ax[k, :] = np.asarray(self.hhmreclist[k])
-                n_ax[k, :] = np.asarray(self.hhnreclist[k])
-                h_ax[k, :] = np.asarray(self.hhhreclist[k])
-            results = [m_ax, n_ax, h_ax]
+            results += [self.__get_recorders_from_list(self.hhmreclist)]
+            results += [self.__get_recorders_from_list(self.hhnreclist)]
+            results += [self.__get_recorders_from_list(self.hhhreclist)]
         elif self.model in ["Tigerholm"]:
-            m_nav18_ax = np.zeros((self.Nrec, self.t_len))
-            h_nav18_ax = np.zeros((self.Nrec, self.t_len))
-            s_nav18_ax = np.zeros((self.Nrec, self.t_len))
-            u_nav18_ax = np.zeros((self.Nrec, self.t_len))
-            m_nav19_ax = np.zeros((self.Nrec, self.t_len))
-            h_nav19_ax = np.zeros((self.Nrec, self.t_len))
-            s_nav19_ax = np.zeros((self.Nrec, self.t_len))
-            m_nattxs_ax = np.zeros((self.Nrec, self.t_len))
-            h_nattxs_ax = np.zeros((self.Nrec, self.t_len))
-            s_nattxs_ax = np.zeros((self.Nrec, self.t_len))
-            n_kdr_ax = np.zeros((self.Nrec, self.t_len))
-            m_kf_ax = np.zeros((self.Nrec, self.t_len))
-            h_kf_ax = np.zeros((self.Nrec, self.t_len))
-            ns_ks_ax = np.zeros((self.Nrec, self.t_len))
-            nf_ks_ax = np.zeros((self.Nrec, self.t_len))
-            w_kna_ax = np.zeros((self.Nrec, self.t_len))
-            ns_h_ax = np.zeros((self.Nrec, self.t_len))
-            nf_h_ax = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                m_nav18_ax[k, :] = np.asarray(self.m_nav18_reclist[k])
-                h_nav18_ax[k, :] = np.asarray(self.h_nav18_reclist[k])
-                s_nav18_ax[k, :] = np.asarray(self.s_nav18_reclist[k])
-                u_nav18_ax[k, :] = np.asarray(self.u_nav18_reclist[k])
-                m_nav19_ax[k, :] = np.asarray(self.m_nav19_reclist[k])
-                h_nav19_ax[k, :] = np.asarray(self.h_nav19_reclist[k])
-                s_nav19_ax[k, :] = np.asarray(self.s_nav19_reclist[k])
-                m_nattxs_ax[k, :] = np.asarray(self.m_nattxs_reclist[k])
-                h_nattxs_ax[k, :] = np.asarray(self.h_nattxs_reclist[k])
-                s_nattxs_ax[k, :] = np.asarray(self.s_nattxs_reclist[k])
-                n_kdr_ax[k, :] = np.asarray(self.n_kdr_reclist[k])
-                m_kf_ax[k, :] = np.asarray(self.m_kf_reclist[k])
-                h_kf_ax[k, :] = np.asarray(self.h_kf_reclist[k])
-                ns_ks_ax[k, :] = np.asarray(self.ns_ks_reclist[k])
-                nf_ks_ax[k, :] = np.asarray(self.nf_ks_reclist[k])
-                w_kna_ax[k, :] = np.asarray(self.w_kna_reclist[k])
-                ns_h_ax[k, :] = np.asarray(self.ns_h_reclist[k])
-                nf_h_ax[k, :] = np.asarray(self.nf_h_reclist[k])
-            results = [
-                m_nav18_ax,
-                h_nav18_ax,
-                s_nav18_ax,
-                u_nav18_ax,
-                m_nav19_ax,
-                h_nav19_ax,
-                s_nav19_ax,
-                m_nattxs_ax,
-                h_nattxs_ax,
-                s_nattxs_ax,
-                n_kdr_ax,
-                m_kf_ax,
-                h_kf_ax,
-                ns_ks_ax,
-                nf_ks_ax,
-                w_kna_ax,
-                ns_h_ax,
-                nf_h_ax,
-            ]
+            results += [self.__get_recorders_from_list(self.m_nav18_reclist)]
+            results += [self.__get_recorders_from_list(self.h_nav18_reclist)]
+            results += [self.__get_recorders_from_list(self.s_nav18_reclist)]
+            results += [self.__get_recorders_from_list(self.u_nav18_reclist)]
+            results += [self.__get_recorders_from_list(self.m_nav19_reclist)]
+            results += [self.__get_recorders_from_list(self.h_nav19_reclist)]
+            results += [self.__get_recorders_from_list(self.s_nav19_reclist)]
+            results += [self.__get_recorders_from_list(self.m_nattxs_reclist)]
+            results += [self.__get_recorders_from_list(self.h_nattxs_reclist)]
+            results += [self.__get_recorders_from_list(self.s_nattxs_reclist)]
+            results += [self.__get_recorders_from_list(self.n_kdr_reclist)]
+            results += [self.__get_recorders_from_list(self.m_kf_reclist)]
+            results += [self.__get_recorders_from_list(self.h_kf_reclist)]
+            results += [self.__get_recorders_from_list(self.ns_ks_reclist)]
+            results += [self.__get_recorders_from_list(self.nf_ks_reclist)]
+            results += [self.__get_recorders_from_list(self.w_kna_reclist)]
+            results += [self.__get_recorders_from_list(self.ns_h_reclist)]
+            results += [self.__get_recorders_from_list(self.nf_h_reclist)]
+
         else:  # should be "Schild_94" or "Schild_97"
-            d_can_ax = np.zeros((self.Nrec, self.t_len))
-            f1_can_ax = np.zeros((self.Nrec, self.t_len))
-            f2_can_ax = np.zeros((self.Nrec, self.t_len))
-            d_cat_ax = np.zeros((self.Nrec, self.t_len))
-            f_cat_ax = np.zeros((self.Nrec, self.t_len))
-            p_ka_ax = np.zeros((self.Nrec, self.t_len))
-            q_ka_ax = np.zeros((self.Nrec, self.t_len))
-            c_kca_ax = np.zeros((self.Nrec, self.t_len))
-            n_kd_ax = np.zeros((self.Nrec, self.t_len))
-            x_kds_ax = np.zeros((self.Nrec, self.t_len))
-            y1_kds_ax = np.zeros((self.Nrec, self.t_len))
-            m_naf_ax = np.zeros((self.Nrec, self.t_len))
-            h_naf_ax = np.zeros((self.Nrec, self.t_len))
-            m_nas_ax = np.zeros((self.Nrec, self.t_len))
-            h_nas_ax = np.zeros((self.Nrec, self.t_len))
-            for k in range(self.Nrec):
-                d_can_ax[k, :] = np.asarray(self.d_can_reclist[k])
-                f1_can_ax[k, :] = np.asarray(self.f1_can_reclist[k])
-                f2_can_ax[k, :] = np.asarray(self.f2_can_reclist[k])
-                d_cat_ax[k, :] = np.asarray(self.d_cat_reclist[k])
-                f_cat_ax[k, :] = np.asarray(self.f_cat_reclist[k])
-                p_ka_ax[k, :] = np.asarray(self.p_ka_reclist[k])
-                q_ka_ax[k, :] = np.asarray(self.q_ka_reclist[k])
-                c_kca_ax[k, :] = np.asarray(self.c_kca_reclist[k])
-                n_kd_ax[k, :] = np.asarray(self.n_kd_reclist[k])
-                x_kds_ax[k, :] = np.asarray(self.x_kds_reclist[k])
-                y1_kds_ax[k, :] = np.asarray(self.y1_kds_reclist[k])
-                m_naf_ax[k, :] = np.asarray(self.m_naf_reclist[k])
-                h_naf_ax[k, :] = np.asarray(self.h_naf_reclist[k])
-                m_nas_ax[k, :] = np.asarray(self.m_nas_reclist[k])
-                h_nas_ax[k, :] = np.asarray(self.h_nas_reclist[k])
-            if self.model == "Schild_97":
-                results = [
-                    d_can_ax,
-                    f1_can_ax,
-                    f2_can_ax,
-                    d_cat_ax,
-                    f_cat_ax,
-                    p_ka_ax,
-                    q_ka_ax,
-                    c_kca_ax,
-                    n_kd_ax,
-                    x_kds_ax,
-                    y1_kds_ax,
-                    m_naf_ax,
-                    h_naf_ax,
-                    m_nas_ax,
-                    h_nas_ax,
-                ]
-            else:  # should be "Schild 94"
-                l_naf_ax = np.zeros((self.Nrec, self.t_len))
-                for k in range(self.Nrec):
-                    l_naf_ax[k, :] = np.asarray(self.l_naf_reclist[k])
-                results = [
-                    d_can_ax,
-                    f1_can_ax,
-                    f2_can_ax,
-                    d_cat_ax,
-                    f_cat_ax,
-                    p_ka_ax,
-                    q_ka_ax,
-                    c_kca_ax,
-                    n_kd_ax,
-                    x_kds_ax,
-                    y1_kds_ax,
-                    m_naf_ax,
-                    h_naf_ax,
-                    l_naf_ax,
-                    m_nas_ax,
-                    h_nas_ax,
-                ]
+            results += [self.__get_recorders_from_list(self.d_can_reclist)]
+            results += [self.__get_recorders_from_list(self.f1_can_reclist)]
+            results += [self.__get_recorders_from_list(self.f2_can_reclist)]
+            results += [self.__get_recorders_from_list(self.d_cat_reclist)]
+            results += [self.__get_recorders_from_list(self.f_cat_reclist)]
+            results += [self.__get_recorders_from_list(self.p_ka_reclist)]
+            results += [self.__get_recorders_from_list(self.q_ka_reclist)]
+            results += [self.__get_recorders_from_list(self.c_kca_reclist)]
+            results += [self.__get_recorders_from_list(self.n_kd_reclist)]
+            results += [self.__get_recorders_from_list(self.x_kds_reclist)]
+            results += [self.__get_recorders_from_list(self.y1_kds_reclist)]
+            results += [self.__get_recorders_from_list(self.m_naf_reclist)]
+            results += [self.__get_recorders_from_list(self.h_naf_reclist)]
+            results += [self.__get_recorders_from_list(self.m_nas_reclist)]
+            results += [self.__get_recorders_from_list(self.h_nas_reclist)]
+            if self.model == "Schild_94":
+                results += [self.__get_recorders_from_list(self.l_naf_reclist)]
         return results

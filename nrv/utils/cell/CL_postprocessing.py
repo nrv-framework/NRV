@@ -11,8 +11,10 @@ from numba import jit
 from scipy import signal
 
 from ...backend.file_handler import is_iterable, json_dump, json_load
-from ...backend.log_interface import pass_info, rise_warning
+from ...backend.log_interface import pass_info, rise_warning, rise_error
 from ..units import *
+from ...nmod.unmyelinated import unmyelinated
+from ...nmod.myelinated import myelinated
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -174,6 +176,27 @@ def remove_non_NoR_zones(my_dict, key):
         rise_warning(
             "Warning, remove_non_NoR_zones only applicable to membrane voltage or current"
         )
+
+
+def generate_axon_from_results(results):
+    """
+    generate a blank axon with the same dimensions as in the results
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    ax              : unmyelinated or myelinated
+        blank axon with the same dimensions as in the results
+    """
+    if not results["myelinated"]:
+        ax = unmyelinated(**results)
+    else:
+        ax = myelinated(**results)
+    return ax
 
 
 ############################
@@ -896,6 +919,131 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
         save_axon_results_as_json(axon_state, saving_file)
 
     return axon_state
+
+
+##############################
+## Axon properties function ##
+##############################
+
+
+def get_index_myelinated_sequence(results, n):
+    """
+    Returns the sequence
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    n_center              : int
+        value of the cutoff frequency of the axon's membrane
+    """
+    if not results["myelinated"] or results["rec"] == "node":
+        return "node"
+    else:
+        if n > len(results["x_rec"]):
+            rise_warning("index not in axon")
+        # +1 required because nbr of computation point = nbr seg/sec + 1
+        # see if it's a bug
+        Nseg_per_sec = results["Nseg_per_sec"] + 1
+        N_sec_type = 11
+        seq_types = results["sequence"]
+        if n == 0:
+            return seq_types[0]
+        else:
+            return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
+
+
+def find_central_node_index(results):
+    """
+    Returns the index of the closer node from the center from a dictionnary results
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    n_center              : int
+        value of the cutoff frequency of the axon's membrane
+    """
+    n_center = len(results["x_rec"]) // 2
+    if not results["myelinated"] or results["rec"] == "node":
+        return n_center
+    else:
+        for i in range(n_center):
+            if get_index_myelinated_sequence(results, n_center + i) == "node":
+                return n_center + i
+            elif get_index_myelinated_sequence(results, n_center - i) == "node":
+                return n_center - i
+    rise_warning("No node found in the axon")
+    return n_center
+
+
+def compute_f_mem(results):
+    """
+    compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
+    NB: The frequency is computed in [kHz]
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    f_mem              : np.ndarray
+        value of the cutoff frequency of the axon's membrane
+    """
+
+    if "g_mem" not in results:
+        rise_warning("f_mem cannot be computed computed without membrane conductivity")
+        return None
+    if "f_mem" not in results:
+        ax = generate_axon_from_results(results)
+        results["c_mem"] = ax.get_membrane_capacitance()
+        del ax
+    N_x, N_t = np.shape(results["g_mem"])
+    f_mem = np.zeros((N_x, N_t))
+    for i_t in range(N_t):
+        f_mem[:, i_t] = results["g_mem"][:, i_t] / (2 * np.pi * results["c_mem"])
+
+    # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
+    # * [MHz] to convert to [kHz]
+    results["f_mem"] = f_mem * MHz
+    return results["f_mem"]
+
+def get_myeline_properties(results):
+    """
+    compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
+    NB: The frequency is computed in [kHz]
+
+    Parameters
+    ----------
+    results_sim     : dict
+        results of axon.simulate method
+
+    Returns
+    -------
+    f_mem              : np.ndarray
+        value of the cutoff frequency of the axon's membrane
+    """
+    if not results["myelinated"] or results["rec"] == "node":
+        rise_warning("No myeline in the axon simulated, None returned")
+        return None
+
+    ax = generate_axon_from_results(results)
+    results["g_mye"] = ax.get_myeline_conductance()
+    results["c_mye"] = ax.get_myeline_capacitance()
+    results["f_mye"] = results["g_mye"] / (2 * np.pi * results["c_mye"])
+
+    # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
+    # * [MHz] to convert to [kHz]
+    results["f_mem"] *= MHz
+    return results["f_mem"]
 
 
 #############################

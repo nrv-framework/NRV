@@ -222,6 +222,7 @@ class axon(NRV_class):
         T=None,
         ID=0,
         threshold=-40,
+        **kwarks,
     ):
         """
         initialisation of the axon,
@@ -300,6 +301,9 @@ class axon(NRV_class):
         self.x_rec = np.asarray([])
         self.rec = "all"
         self.node_index = None
+        ## required for generate_axon_from_results
+        if "diameter" in kwarks:
+            self.d = kwarks["diameter"]
 
     def __del__(self):
         for section in neuron.h.allsec():
@@ -634,12 +638,14 @@ class axon(NRV_class):
         axon_sim["dt"] = self.dt
         axon_sim["tstop"] = self.t_sim
         # myelinated specific parameters
-        if self.myelinated == True:
+        if self.myelinated:
             axon_sim["rec"] = self.rec
             axon_sim["x_nodes"] = self.x_nodes
             axon_sim["sequence"] = self.axon_path_type
             axon_sim["index"] = self.axon_path_index
             axon_sim["rec_pos_list"] = self.rec_position_list
+        else:
+            axon_sim["Nrec"] = self.Nrec
         # saving intra-cellular stimulation parameters
         axon_sim["intra_stim_positions"] = self.intra_current_stim_positions
         axon_sim["intra_stim_starts"] = self.intra_current_stim_starts
@@ -850,12 +856,30 @@ class axon(NRV_class):
                         axon_sim["g_na"] = g_na_ax
                         axon_sim["g_k"] = g_k_ax
                         axon_sim["g_l"] = g_l_ax
+                    elif self.model == "Tigerholm":
+                        (
+                            axon_sim["g_nav17"],
+                            axon_sim["g_nav18"],
+                            axon_sim["g_nav19"],
+                            axon_sim["g_kA"],
+                            axon_sim["g_kM"],
+                            axon_sim["g_kdr"],
+                            axon_sim["g_kna"],
+                            axon_sim["g_h"],
+                            axon_sim["g_naleak"],
+                            axon_sim["g_kleak"],
+                        ) = self.get_ionic_conductance()
                     else:
-                        rise_warning(
-                            "g_ions recorder not implemented for "
-                            + self.model
-                            + " model "
-                        )
+                        (
+                            axon_sim["g_naf"],
+                            axon_sim["g_nas"],
+                            axon_sim["g_kd"],
+                            axon_sim["g_ka"],
+                            axon_sim["g_kds"],
+                            axon_sim["g_kca"],
+                            axon_sim["g_can"],
+                            axon_sim["g_cat"],
+                        ) = self.get_ionic_conductance()
                 else:
                     if self.model == "MRG":
                         (
@@ -875,8 +899,8 @@ class axon(NRV_class):
                             g_na_ax,
                             g_nap_ax,
                             g_k_ax,
-                            g_kf_ax,
                             g_l_ax,
+                            g_kf_ax,
                             g_q_ax,
                         ) = self.get_ionic_conductance()
                         axon_sim["g_na"] = g_na_ax
@@ -1242,7 +1266,10 @@ class axon(NRV_class):
     def get_ionic_current(self):
         pass
 
-    def get_conductance(self):
+    def get_membrane_conductance(self):
+        pass
+
+    def get_membrane_capacitance(self):
         pass
 
     def get_particules_values(self):

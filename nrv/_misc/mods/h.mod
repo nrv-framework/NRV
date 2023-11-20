@@ -6,7 +6,7 @@ NEURON {
 	SUFFIX h
 	USEION k READ ek, ko, ki WRITE ik
         USEION na READ ena, nao, nai WRITE ina
-	RANGE gbar, ena, ik, ina, ek, ekna, celsiusT
+	RANGE gbar, ena, ik, ina, ek, ekna, celsiusT, g
 }
 
 UNITS {

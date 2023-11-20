@@ -9,7 +9,7 @@ gnafbar_mrg = 3.0 # S.cm-2
 gnapbar_mrg = 0.01 # S.cm-2
 gksbar_mrg = 0.08  # S.cm-2
 gl_mrg = 0.007  # S.cm-2
-cm=1 * 1e-6 # F
+cm=2# uF/cm-2
 
 y = 0
 z = 0
@@ -34,12 +34,18 @@ gnap_mrg = gnapbar_mrg*np.power(results['mp'],3)
 gks_mrg = gksbar_mrg*results['s']
 
 gm = gnaf_mrg + gnap_mrg + gks_mrg + gl_mrg  # en S.cm-2
-rm = 1/gm 
+rm = 1/gm
+fc = gm/(2*np.pi*cm) * nrv.MHz
 
-print(np.allclose(gnaf_mrg,results['g_na']))
-print(np.allclose(gnap_mrg,results['g_nap']))
-print(np.allclose(gks_mrg,results['g_k']))
-print(np.allclose(gm,results['g_mem']))
+print(np.allclose(gnaf_mrg[:,:-1],results['g_na'][:,1:]))
+print(np.allclose(gnap_mrg[:,:-1],results['g_nap'][:,1:]))
+print(np.allclose(gks_mrg[:,:-1],results['g_k'][:,1:]))
+print(np.allclose(gm[:,:-1],results['g_mem'][:,1:]))
+
+
+nrv.compute_f_mem(results)
+
+print(np.allclose(fc[:,:-1], results['f_mem'][:,1:]))
 
 ##### Plots results
 mid_node = 5
@@ -60,8 +66,6 @@ ax2.set_ylabel('conductance ($mS.cm^{-2}$)')
 ax2.legend()
 plt.savefig('./unitary_tests/figures/92_A.png')
 
-fc = results['g_mem']/(2*np.pi*cm)
-
 plt.figure(figsize=(9,7))
 plt.subplot(3,1,1)
 plt.plot(results['t'],results['V_mem'][mid_node])
@@ -75,7 +79,7 @@ plt.xlabel('time (ms)')
 plt.ylabel('$g_m$ ($mS\cdot cm^{-2}$)')
 plt.grid()
 plt.subplot(3,1,3)
-plt.semilogy(results['t'],fc[mid_node])
+plt.semilogy(results['t'],results['f_mem'][mid_node])
 plt.xlabel('time (ms)')
 plt.ylabel('$f_{mem}$ ($Hz$)')
 plt.grid()

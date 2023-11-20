@@ -8,7 +8,7 @@ NEURON {
        SUFFIX nav1p9
        :NONSPECIFIC_CURRENT i
        USEION na  READ ena WRITE ina
-       RANGE gbar, ena, slow_inact, m, h, s, gate, ina
+       RANGE gbar, ena, slow_inact, m, h, s, gate, ina, g
        RANGE tau_m, tau_h, tau_s, celsiusT, NGFshift1p9
        : if slow_inact=1 then ultra-slow inactivation is included
 }
