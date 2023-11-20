@@ -1,8 +1,11 @@
 from cmath import phase
+import numpy as np
 
+from ....backend.NRV_Class import NRV_class
 from ....backend.log_interface import rise_error, rise_warning
-from ....utils.units import *
-from .MshCreator import *
+from ....utils.units import mm
+from ....backend.file_handler import rmv_ext
+from .MshCreator import MshCreator, pi
 
 ENT_DOM_offset = {
     "Volume": 0,
@@ -127,6 +130,62 @@ class NerveMshCreator(MshCreator):
         param["electrodes"] = self.electrodes
         return param
 
+    def save(
+        self,
+        fname="nervemshcreator.json",
+        save=True,
+        mshfname=None,
+        blacklist=[],
+        **kwargs,
+    ):
+        """
+        Return extracellular context as dictionary and eventually save it as json file
+        NB: caution, first argument is fname to match with MshCreator.save arguments
+
+        Parameters
+        ----------
+        save    : bool
+            if True, save in json files
+        fname   : str
+            Path and Name of the saving file, by default "extracel_context.json"
+
+        Returns
+        -------
+        context_dic : dict
+            dictionary containing all information
+        """
+        blacklist += [
+            "model",
+        ]
+        if self.is_generated and save:
+            if mshfname is None:
+                mshfname = rmv_ext(fname) + ".msh"
+            super().save(fname=mshfname, generate=False)
+        fname = rmv_ext(fname) + ".json"
+        return NRV_class.save(
+            self, save=save, fname=fname, blacklist=blacklist, **kwargs
+        )
+
+    def load(self, data, mshfname=None, blacklist={}, **kwargs):
+        """
+        Generic loading method for NRV class instance
+
+        Parameters
+        ----------
+        data : dict
+            Dictionary containing the NRV object
+        blacklist : dict, optional
+            Dictionary containing the keys to be excluded from the load
+        **kwargs : dict, optional
+            Additional arguments to be passed to the load method of the NRV object
+        """
+        NRV_class.load(self, data, **kwargs)
+        self.electrodes = {int(k): v for k, v in self.electrodes.items()}
+        self.fascicles = {int(k): v for k, v in self.fascicles.items()}
+        self.axons = {int(k): v for k, v in self.axons.items()}
+        if self.is_generated and self.file != "":
+            super().load(self.file)
+
     def compute_mesh(self):
         """
         Compute mesh geometry, domains and resolution and then generate the mesh
@@ -168,33 +227,34 @@ class NerveMshCreator(MshCreator):
         Compute the mesh geometry
 
         """
-        if self.is_outer:
-            self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Outer_D / 2)
-            if self.default_res["Outerbox_tresholded"]:
-                self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
-        self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
-        for i in self.fascicles:
-            fascicle = self.fascicles[i]
-            self.add_cylinder(
-                0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["D"] / 2
-            )
+        if not self.is_geo:
+            if self.is_outer:
+                self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Outer_D / 2)
+                if self.default_res["Outerbox_tresholded"]:
+                    self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
+            self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
+            for i in self.fascicles:
+                fascicle = self.fascicles[i]
+                self.add_cylinder(
+                    0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["D"] / 2
+                )
 
-        for i in self.axons:
-            axon = self.axons[i]
-            self.add_cylinder(0, axon["y_c"], axon["z_c"], self.L, axon["D"] / 2)
-        for i in self.electrodes:
-            electrode = self.electrodes[i]
-            if "CUFF MP" in electrode["type"]:
-                self.add_CUFF_MP(ID=i, **electrode["kwargs"])
-            elif "CUFF MEA" in electrode["type"]:
-                self.add_CUFF_MEA(ID=i, **electrode["kwargs"])
-            elif "CUFF" in electrode["type"]:
-                self.add_CUFF(ID=i, **electrode["kwargs"])
-            elif "LIFE" in electrode["type"]:
-                self.add_LIFE(ID=i, **electrode["kwargs"])
+            for i in self.axons:
+                axon = self.axons[i]
+                self.add_cylinder(0, axon["y_c"], axon["z_c"], self.L, axon["D"] / 2)
+            for i in self.electrodes:
+                electrode = self.electrodes[i]
+                if "CUFF MP" in electrode["type"]:
+                    self.add_CUFF_MP(ID=i, **electrode["kwargs"])
+                elif "CUFF MEA" in electrode["type"]:
+                    self.add_CUFF_MEA(ID=i, **electrode["kwargs"])
+                elif "CUFF" in electrode["type"]:
+                    self.add_CUFF(ID=i, **electrode["kwargs"])
+                elif "LIFE" in electrode["type"]:
+                    self.add_LIFE(ID=i, **electrode["kwargs"])
 
-        self.fragment(verbose=False)
-        self.is_geo = True
+            self.fragment(verbose=False)
+            self.is_geo = True
 
     def reshape_outerBox(self, Outer_D=None, res="default", tresholded_res=None):
         """
@@ -386,7 +446,7 @@ class NerveMshCreator(MshCreator):
     def compute_domains(self):
         if not self.is_geo:
             rise_error("compute geometry before domain")
-        else:
+        elif not self.is_dom:
             self.__link_entity_domains(2)
             self.__link_entity_domains(3)
             self.compute_entity_domain()
@@ -737,8 +797,8 @@ class NerveMshCreator(MshCreator):
 
     def compute_res(self):
         if not self.is_dom and self.is_geo:
-            rise_error("compute geometry before domain")
-        else:
+            rise_error("compute geometry and domain before resolution")
+        elif not self.is_refined:
             self.res = max(self.default_res.values())
             fields = []
 
@@ -1102,8 +1162,11 @@ class NerveMshCreator(MshCreator):
         if size is None:
             s = pi * self.Nerve_D * 4 / (5 * N)
             size = (s, s)
-        elif not isinstance(size, tuple):
+        elif not np.iterable(size):
             size = (size, size)
+        elif len(size) != 2:
+            size = (size[0], size[0])
+
         self.add_CUFF_MP(
             ID=ID,
             N=N,

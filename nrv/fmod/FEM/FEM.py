@@ -5,7 +5,8 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 from abc import abstractmethod
 
-from ...backend.log_interface import pass_info
+from ...backend.MCore import MCH
+from ...backend.log_interface import pass_info, rise_warning
 from ...backend.NRV_Class import NRV_class
 
 ###############
@@ -34,6 +35,7 @@ class FEM_model(NRV_class):
         """
         super().__init__()
         self.Ncore = Ncore
+        self.is_multi_proc = False
         self.type = "FEM"
 
         # Timmers
@@ -48,7 +50,23 @@ class FEM_model(NRV_class):
 
     def get_timers(self, verbose=False):
         """
-        TO BE COMPLETED
+        Returns the timers of each step of the FEM computation
+
+        Parameters
+        ----------
+        verbose     : bool
+            if true, timer are also passed to the log and the terminal (if verbosity level > 2)
+
+        Returns
+        -------
+        meshing_timer   : float
+            time spent to mesh the FEM problem, in s
+        preparing_timer   : float
+            time spent to mesh the prepare (i.e. generating variab connecting to the server), in s
+        solving_timer   : float
+            time spent to mesh the FEM problem, in s
+        total_timer   : float
+            time spent to mesh the FEM problem, in s
         """
         pass_info("mesh done in " + str(self.meshing_timer) + " s")
         pass_info("simulation prepared in " + str(self.preparing_timer) + " s")
@@ -62,3 +80,20 @@ class FEM_model(NRV_class):
         )
         pass_info("total duration " + str(total_timer) + " s")
         return self.meshing_timer, self.preparing_timer, self.solving_timer, total_timer
+
+    def set_Ncore(self, N):
+        """
+        Set the number of cores to use for the FEM
+
+        Parameters
+        ----------
+        N       : int
+            Number of cores to set
+        """
+        self.Ncore = N
+        if self.Ncore > MCH.size:
+            rise_warning(
+                "MCH size is " + str(MCH.size) + " cannot set FEM on more processes"
+            )
+            self.Ncore = MCH.size
+        self.is_multi_proc = self.Ncore > 1

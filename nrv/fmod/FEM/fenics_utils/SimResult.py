@@ -13,9 +13,12 @@ from mpi4py import MPI
 
 from ....backend.file_handler import rmv_ext
 from ....backend.log_interface import rise_error, rise_warning
-from ....backend.MCore import *
+from ....backend.MCore import MCH, synchronize_processes
 from ....backend.NRV_Class import NRV_class
-from ..mesh_creator.MshCreator import *
+from ..mesh_creator.MshCreator import (
+    is_MshCreator,
+    clear_gmsh,
+)
 
 
 ###############
@@ -65,26 +68,27 @@ def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
         The MPI communicator to use for mesh creation
     rank            : tupple (str, int)
         The rank the Gmsh model is initialized on
+    gdim            : int
+        dimension of the mesh, by default 3
 
     Returns
     -------
     output  :  tuple(3)
         (domain, cell_tag, facet_tag)
     """
-    if comm.rank == rank:
-        if isinstance(mesh, str):
-            mesh_file = rmv_ext(mesh) + ".msh"
-            clear_gmsh()
-            gmsh.initialize()
-            gmsh.option.setNumber("General.Verbosity", 2)
-            gmsh.model.add("Mesh from file")
-            gmsh.merge(mesh_file)
-            output = model_to_mesh(gmsh.model, comm=comm, rank=rank, gdim=gdim)
-            gmsh.finalize()
-        elif is_MshCreator(mesh):
-            output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
-        else:
-            rise_error("mesh should be either a filename or a MeshCreator")
+    if isinstance(mesh, str):
+        mesh_file = rmv_ext(mesh) + ".msh"
+        clear_gmsh()
+        gmsh.initialize()
+        gmsh.option.setNumber("General.Verbosity", 2)
+        gmsh.model.add("Mesh from file")
+        gmsh.merge(mesh_file)
+        output = model_to_mesh(gmsh.model, comm=comm, rank=rank, gdim=gdim)
+        gmsh.finalize()
+    elif is_MshCreator(mesh):
+        output = model_to_mesh(mesh.model, comm=comm, rank=rank, gdim=gdim)
+    else:
+        rise_error("mesh should be either a filename or a MeshCreator")
     return output
 
 
@@ -242,36 +246,70 @@ class SimResult(NRV_class):
         else:
             rise_error("Mesh function alinment must be done with SimResult")
 
-    def eval(self, X):
+    def eval(self, X, is_multi_proc=False):
         """
         Eval the result field at X position
         """
         N = len(X)
         to_round = False
-        tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
-        cells_candidates = compute_collisions(tree, X)
-        cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         cells = []
+        points_on_proc = []
+        tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
+        # Find cells whose bounding-box collide with the the points
+        cells_candidates = compute_collisions(tree, X)
+        # Choose one of the cells that contains the point
+        cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):
             cell = cells_colliding.links(i)
-            if len(cell) == 0:
-                if i == N - 1 and i > 0:
-                    to_round = True
-                else:
-                    rise_warning(
-                        X[i], " not found in mesh, value of ", X[i - 1], " reused"
-                    )
-                cells += [cells[-1]]
+            if is_multi_proc:
+                if len(cell) > 0:
+                    points_on_proc.append(X[i])
+                    cells.append(cells_colliding.links(i)[0])
             else:
-                cells += [cell[0]]
+                if len(cell) == 0:
+                    if i == N - 1 and i > 0:
+                        to_round = True
+                    else:
+                        rise_warning(
+                            X[i], " not found in mesh, value of ", X[i - 1], " reused"
+                        )
+                    cells += [cells[-1]]
+                else:
+                    cells += [cell[0]]
 
-        values = self.vout.eval(X, cells)
-        if N > 1:
-            values = values[:, 0]
+        if is_multi_proc:
+            points_on_proc = np.array(points_on_proc, dtype=np.float64)
+            s_values = self.vout.eval(points_on_proc, cells)
+            if len(points_on_proc) > 0:
+                m_values = np.concatenate((points_on_proc.T, s_values.T)).T
+            else:
+                m_values = np.array([])
+            m_values = self.comm.gather(m_values.tolist(), root=0)
+            if MCH.do_master_only_work():
+                val = []
+                for i in range(len(m_values)):
+                    for j in range(len(m_values[i])):
+                        val += [m_values[i][j]]
+                val = np.array(val)
+                values = np.empty((N), dtype="float64")
+                for i, p in enumerate(X):
+                    i_p = np.where((np.isclose(val[:, :3], p)).all(axis=1))[0]
+                    if len(i_p > 0):
+                        values[i] = val[i_p[0], 3]
+                    else:
+                        values[i] = values[i - 1]
+            else:
+                values = np.empty((N), dtype="float64")
+            synchronize_processes()
+            self.comm.Bcast(values, root=0)
+        else:
+            values = self.vout.eval(X, cells)
+            if N > 1:
+                values = values[:, 0]
         if to_round:
             X_1 = X[-1]
             X_1[0] = round(X_1[0], 1)
-            value_1 = self.eval([X_1])
+            value_1 = self.eval([X_1], is_multi_proc=is_multi_proc)
             values[-1] = value_1[0]
         return values
 

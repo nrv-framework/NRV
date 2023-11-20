@@ -6,7 +6,6 @@ import numpy as np
 
 from ....backend.file_handler import rmv_ext
 from ....backend.log_interface import pass_info, rise_error, rise_warning
-from ....backend.MCore import *
 from ....backend.NRV_Class import NRV_class
 from ....backend.parameters import parameters
 
@@ -629,7 +628,7 @@ class MshCreator(NRV_class):
             self.model.mesh.generate(self.D)
             self.is_generated = True
 
-    def save(self, fname):
+    def save(self, fname, generate=True):
         """
         Save mesh in fname in ".msh"
 
@@ -638,10 +637,23 @@ class MshCreator(NRV_class):
         fname    : str
             path and name of saving file. If ends with ".msh" only save in ".msh" file
         """
-        self.generate()
+        if generate == True:
+            self.generate()
         fname = rmv_ext(fname)
         gmsh.write(fname + ".msh")
         self.file = fname
+
+    def load(self, fname):
+        """
+        load mesh from ".msh" file
+        """
+        if ".msh" not in fname:
+            fname += ".msh"
+        if not os.path.isfile(fname):
+            rise_warning(fname + " not found: Mesh could not be loaded")
+        else:
+            gmsh.merge(fname)
+            self.file = fname
 
     def visualize(self, fname=None):
         if fname is None:

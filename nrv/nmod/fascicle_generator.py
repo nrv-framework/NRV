@@ -71,7 +71,8 @@ def load_stat(stat_name):
     if f_in_librairy in stat_library:
         stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
     else:
-        stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
+        # stat_file = np.genfromtxt(dir_path + "/stats/" + f_in_librairy, delimiter=",")
+        stat_file = np.genfromtxt(f_in_librairy, delimiter=",")
     diameters = stat_file[:, 0]
     presence = stat_file[:, 1]
     return diameters, presence
@@ -339,32 +340,22 @@ def create_axon_population(
         + " Unmyelinated"
     )
     # generate the myelinated axons
-    pass_info("... generating the myelinated axons diameters, this may take a while")
-    # M_diam_list = M_gen.rvs(1,size = M)
-    M_diam_list = []
-    max_diam_value = M_gen.b - 0.01 * (M_gen.b - M_gen.a)
-    for k in range(M):
-        progression_popup(k, M, begin_message="\t axon ", endl="\r")
-        prov_diam = M_gen.rvs(1, size=1)[0]
-        while prov_diam > max_diam_value:
-            # definitely non ideal, but rv_continuous has a tendency of generating diameters
-            # at the max value, this while prevent from such accumulation
-            prov_diam = M_gen.rvs(1, size=1)[0]
-        M_diam_list.append(prov_diam)
+    xspace1 = np.linspace(1, 20, num=500)
+    if len(M_popt) < 4:
+        data = one_Gamma(xspace1, *M_popt)
+    else:
+        data = two_Gamma(xspace1, *M_popt)
+    data = data / np.sum(data)
+    M_diam_list = np.random.choice(xspace1, M, p=data)
     M_type = np.ones(M)
+
     # generate the unmyelinated axons
-    pass_info("... generating the unmyelinated axons diameters, this may take a while")
-    U_diam_list = []
-    max_diam_value = U_gen.b - 0.01 * (U_gen.b - U_gen.a)
-    for k in range(U):
-        print("\t axon " + f"{k+1}" + "/" + str(U), end="\r")
-        prov_diam = U_gen.rvs(1, size=1)[0]
-        while prov_diam > max_diam_value:  # same as for myelinated...
-            prov_diam = U_gen.rvs(1, size=1)[0]
-        U_diam_list.append(prov_diam)
+    xspace1 = np.linspace(0.1, 3, num=500)
+    data = one_Gamma(xspace1, *U_popt)
+    data = data / np.sum(data)
+    U_diam_list = np.random.choice(xspace1, U, p=data)
     U_type = np.zeros(U)
-    # final shuffle between unmyelinated and myelinated
-    pass_info("... performing a shuffle on myelinated and unmyelinated axons")
+
     shuffle_mask = np.random.permutation(N)
     axons_diameters = np.concatenate((M_diam_list, U_diam_list))
     axons_type = np.concatenate((M_type, U_type))

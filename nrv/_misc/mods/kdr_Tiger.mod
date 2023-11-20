@@ -5,7 +5,7 @@
 NEURON {
 	SUFFIX kdrTiger
 	USEION k READ ek WRITE ik
-	RANGE gbar, ena, ik,ek, celsiusT
+	RANGE gbar, ena, ik,ek, celsiusT, g
 }
 
 UNITS {

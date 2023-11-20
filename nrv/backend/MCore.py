@@ -4,6 +4,7 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 import numpy as np
+from .NRV_Singleton import NRV_singleton
 
 try:
     import mpi4py.MPI as mpi
@@ -14,7 +15,7 @@ except ImportError:
     MCore_Flag = False
 
 
-class Mcore_handler:
+class Mcore_handler(metaclass=NRV_singleton):
     """
     Class to handle parallel processing (cores, no threads) in NRV2
     """

@@ -7,7 +7,7 @@ import faulthandler
 
 import numpy as np
 
-from ..backend.file_handler import *
+from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.NRV_Class import NRV_class
 

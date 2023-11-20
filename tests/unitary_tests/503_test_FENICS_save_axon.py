@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 ## extracellular context ##
 ###########################
 nrv.parameters.set_nrv_verbosity(2)
-test_stim = nrv.FEM_stimulation(comsol=False)
+test_stim = nrv.FEM_stimulation()
 ### Simulation box size
 Outer_D = 5
 test_stim.reshape_outerBox(Outer_D)

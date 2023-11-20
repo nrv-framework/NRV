@@ -12,6 +12,8 @@ import mph
 import numpy as np
 
 from ...backend.file_handler import rmv_ext
+from ...backend.MCore import MCH
+from ...backend.log_interface import rise_warning
 from ...utils.units import V
 from .FEM import *
 
@@ -63,8 +65,7 @@ class COMSOL_model(FEM_model):
             # self.model_path = fname
             if self.Ncore is None:
                 self.Ncore = COMSOL_Ncores
-            else:
-                self.Ncore = Ncore
+            self.is_multi_proc = self.Ncore > 1 and not MCH.is_alone()
             self.handle_server = handle_server
             # start client and server
             pass_info("Starting COMSOL server/client, this may take few seconds")

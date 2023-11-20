@@ -8,13 +8,16 @@ import os
 import time
 
 import numpy as np
+from mpi4py import MPI
 
 from ...backend.file_handler import rmv_ext
-from ...utils.units import V
-from .FEM import *
-from .fenics_utils.FEMSimulation import *
-from .fenics_utils.SimResult import *
-from .mesh_creator.NerveMshCreator import *
+from ...utils.units import V, mm
+from ...backend.MCore import MCH, synchronize_processes
+from .fenics_utils.FEMSimulation import FEMSimulation
+
+from .FEM import FEM_model
+from .fenics_utils.SimResult import save_sim_res_list
+from .mesh_creator.NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
 
 # built in FENICS models
 dir_path = os.environ["NRVPATH"] + "/_misc"
@@ -27,7 +30,7 @@ machine_config = configparser.ConfigParser()
 config_fname = dir_path + "/NRV.ini"
 machine_config.read(config_fname)
 
-FENICS_Ncores = machine_config.get("FENICS", "FENICS_CPU")
+FENICS_Ncores = int(machine_config.get("FENICS", "FENICS_CPU"))
 FENICS_Status = machine_config.get("FENICS", "FENICS_STATUS") == "True"
 
 fem_verbose = True
@@ -44,7 +47,7 @@ class FENICS_model(FEM_model):
         Ncore=None,
         handle_server=False,
         elem=None,
-        comm=MPI.COMM_SELF,
+        comm="default",
         rank=0,
     ):
         """
@@ -105,7 +108,12 @@ class FENICS_model(FEM_model):
         self.sim_res = []
 
         # Mcore attributes
-        self.comm = comm
+        if self.Ncore is None:
+            self.Ncore = FENICS_Ncores
+        self.comm = None
+        self.set_Ncore(self.Ncore)
+        if comm != "default":
+            self.comm = comm
         self.rank = rank
 
         # Status
@@ -186,6 +194,21 @@ class FENICS_model(FEM_model):
     #############################
     ## Access model parameters ##
     #############################
+    def set_Ncore(self, N):
+        """
+        Set the number of cores to use for the FEM
+
+        Parameters
+        ----------
+        N       : int
+            Number of cores to set
+        """
+        super().set_Ncore(N)
+        if self.is_multi_proc:
+            self.comm = MPI.COMM_WORLD
+        else:
+            self.comm = MPI.COMM_SELF
+
     def get_parameters(self):
         """
         Get the  all the parameters in the model as a python dictionary.
@@ -214,20 +237,28 @@ class FENICS_model(FEM_model):
         param["Istim"] = self.Istim
         return param
 
-    def __update_parameters(self):
+    def __update_parameters(self, bcast=False):
         """
         Internal use only: updates all the parameters from the mesh
+
+        Parameters
+        ----------
+        bcast       : bool
+            if true the parameters are updated on all process
         """
-        param = self.mesh.get_parameters()
-        self.L = param["L"]
-        self.y_c = param["y_c"]
-        self.z_c = param["z_c"]
-        self.Outer_D = param["Outer_D"]
-        self.Nerve_D = param["Nerve_D"]
-        self.N_fascicle = param["N_fascicle"]
-        self.fascicles = param["fascicles"]
-        self.N_electrode = param["N_electrode"]
-        self.electrodes = param["electrodes"]
+        if MCH.do_master_only_work():
+            if bcast:
+                self.__update_parameters(bcast=False)
+                param = self.get_parameters()
+            else:
+                param = self.mesh.get_parameters()
+        else:
+            param = None
+        if bcast:
+            param = MCH.master_broadcasts_array_to_all(param)
+        if MCH.do_master_only_work() ^ bcast:
+            for key in param:
+                self.__dict__[key] = param[key]
 
     def reset_parameters(self):
         """
@@ -253,13 +284,16 @@ class FENICS_model(FEM_model):
         self.is_computed = False
         del self.mesh
         if not self.mesh_file_status:
-            self.mesh = NerveMshCreator(
-                Length=self.L,
-                Outer_D=self.Outer_D,
-                Nerve_D=self.Nerve_D,
-                y_c=self.y_c,
-                z_c=self.z_c,
-            )
+            if MCH.do_master_only_work:
+                self.mesh = NerveMshCreator(
+                    Length=self.L,
+                    Outer_D=self.Outer_D,
+                    Nerve_D=self.Nerve_D,
+                    y_c=self.y_c,
+                    z_c=self.z_c,
+                )
+            else:
+                self.mesh = None
 
     #####################
     ## customize model ##
@@ -362,18 +396,22 @@ class FENICS_model(FEM_model):
         """
         TO BE WRITTEN
         """
-        if self.comm is not None:
+        if comm is not None:
             self.comm = comm
-        if self.rank is not None:
+        if rank is not None:
             self.rank = rank
-
-        if self.is_meshed and not self.is_sim_ready:
+        if not self.is_meshed:
+            self.build_and_mesh()
+        if not self.is_sim_ready and (MCH.do_master_only_work() or self.is_multi_proc):
             t0 = time.time()
             # SETTING DOMAINS
             # del self.mesh
-            # sim = FEMSimulation(mesh_file=self.mesh_file, elem=self.elem, comm=self.comm, rank=self.rank)
             self.sim = FEMSimulation(
-                mesh_file=self.mesh_file, mesh=self.mesh, elem=self.elem
+                mesh_file=self.mesh_file,
+                mesh=self.mesh,
+                elem=self.elem,
+                comm=self.comm,
+                rank=self.rank,
             )
             # Outerbox domain
             self.sim.add_domain(
@@ -423,8 +461,11 @@ class FENICS_model(FEM_model):
                     variable=E_var,
                     mesh_domain_3D=mesh_domain_3D,
                 )
+            # set a parallelizable preconditionner if sim solve on multiple precesses
+            if self.is_multi_proc:
+                self.sim.set_solver_opt(pc_type="hypre")
             self.is_sim_ready = True
-        self.preparing_timer += time.time() - t0
+            self.preparing_timer += time.time() - t0
 
     def set_materials(
         self,
@@ -528,8 +569,11 @@ class FENICS_model(FEM_model):
                     D=self.default_electrode["D"],
                     res=self.default_electrode["res"],
                 )
-            self.__update_parameters()
-            self.mesh.compute_mesh()
+            self.__update_parameters(bcast=self.is_multi_proc)
+            if MCH.do_master_only_work():
+                self.mesh.compute_mesh()
+            if self.is_multi_proc:
+                synchronize_processes()
             self.is_meshed = True
             self.mesh.get_info(verbose=True)
             self.meshing_timer += time.time() - t0
@@ -584,11 +628,11 @@ class FENICS_model(FEM_model):
             t0 = time.time()
             line = [[x_, y, z] for x_ in x]
             if self.N_electrode == 1 or (E < self.N_electrode and E >= 0):
-                potentials = self.sim_res[E].eval(line) * V
+                potentials = self.sim_res[E].eval(line, self.is_multi_proc) * V
             else:
                 potentials = []
                 for E in range(self.N_electrode):
-                    potentials += [self.sim_res[E].eval(line)]
+                    potentials += [self.sim_res[E].eval(line, self.is_multi_proc)]
                 potentials = np.transpose(np.array(potentials) * V)
             self.access_res_timer += time.time() - t0
             return potentials

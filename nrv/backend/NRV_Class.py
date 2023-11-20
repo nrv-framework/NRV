@@ -98,7 +98,7 @@ class NRV_class(metaclass=ABCMeta):
         """
         pass_debug_info(self.nrv_type, " deleted")
 
-    def save(self, save=False, fname="nrv_save.json", blacklist={}, **kwargs):
+    def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         """
         Generic saving method for NRV class instance
 

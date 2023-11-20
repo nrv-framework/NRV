@@ -86,6 +86,33 @@ def create_folder(foldername, access_rights=0o755):
 #######################
 ## JSON related code ##
 #######################
+def check_json_fname(fname):
+    """
+    Add ".json" extension is missing at the end of the file name and check if it exists.
+
+    Parameters
+    ----------
+    fname    : str
+        name of the file
+
+    Retruns
+    -------
+    fname    : str
+        name of the file with the ".json" extension added if required
+
+    Errors
+    ------
+    NRV_Error
+        rised if fname does not exist
+    """
+    if fname[-5:] != ".json":
+        fname += ".json"
+    if os.path.isfile(fname):
+        return fname
+    else:
+        rise_error(fname + " not found cannot be load")
+
+
 def json_dump(results, filename):
     """
     save stuff as a json file
@@ -115,7 +142,7 @@ def json_load(filename):
     results : dictionary
         stuff from file
     """
-    with open(filename, "r") as file_to_read:
+    with open(check_json_fname(filename), "r") as file_to_read:
         results = json.load(file_to_read)
     return results
 

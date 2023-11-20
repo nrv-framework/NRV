@@ -6,7 +6,7 @@
 	NEURON {
 		   SUFFIX can							:Sets suffix of mechanism for insertion into models
 		   USEION ca READ cao, cai WRITE ica	:Lays out which NEURON variables will be used/modified by file
-		   RANGE gbar, ecan, ica, shiftcan		:Allows variables to be modified in hoc and collected in vectors
+		   RANGE gbar, ecan, ica, shiftcan, g	:Allows variables to be modified in hoc and collected in vectors
 
 	}
 

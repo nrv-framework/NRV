@@ -7,12 +7,11 @@ import faulthandler
 
 import numpy as np
 
-from ..backend.file_handler import *
 from ..backend.log_interface import rise_error, rise_warning
-from ..backend.MCore import *
+from ..backend.MCore import MCH, synchronize_processes
 from ..backend.NRV_Class import NRV_class
-from ..utils.units import *
-from .materials import *
+from ..utils.units import cm, m
+from .materials import load_material
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
