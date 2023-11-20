@@ -53,7 +53,6 @@ for package in deps:
 setup(
     # meta infos
     name=PACKAGE_NAME,
-    version='{{VERSION_PLACEHOLDER}}',
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
@@ -104,6 +103,7 @@ setup(
     ],
     # dependencies
     install_requires=[
+        "gmsh",
         "mph",
         "numpy",
         "scipy",

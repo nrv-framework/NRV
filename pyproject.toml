@@ -2,7 +2,8 @@
 [build-system]
 requires = [
     "setuptools>=42",
-    "wheel"
+    "wheel", 
+    "versioningit",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -11,7 +12,8 @@ name = 'nrv-py'
 authors = [{name='Florian Kolbl - Roland Giraud - Louis Regnacq - Thomas Couppey'}]
 license = {file='License.txt'}
 keywords = ['neuronal simulation', 'computer simulation', 'neurosciences',
-            'multiphysics', 'Neuron', 'Comsol']
+            'multiphysics', 'Neuron']
+dynamic = ["version"]
 classifiers = [
     'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
     'Development Status :: 5 - Production/Stable',
@@ -30,7 +32,7 @@ classifiers = [
     'Natural Language :: English']
 readme = 'pypi.md'
 requires-python = '>=3.6'
-dependencies = ['mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream','pyswarms']
+dependencies = ['gmsh','mph', 'numpy','scipy','neuron','matplotlib','numba','ezdxf','icecream','pyswarms']
 dynamic = ['version', 'description']
 
 [project.urls]
@@ -43,3 +45,13 @@ dev = [
     'Sphinx >= 6.1',
     'Furo',
 ]
+
+[tool.versioningit]
+
+[tool.versioningit.vcs]
+# The method key:
+method = "git"  # <- The method name
+
+# Parameters to pass to the method:
+match = ["v*"]
+default-tag = "0.0.1"

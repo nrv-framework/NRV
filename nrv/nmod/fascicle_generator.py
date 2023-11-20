@@ -271,29 +271,18 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
     if myelinated:
-        if diameters[-1] < 10:
-            popt1, pcov1 = curve_fit(
-                one_Gamma,
-                xdata=diameters,
-                ydata=presence,
-                bounds=([1, 0, 0], [np.inf, 10, np.inf]),
-            )
-            generator = nerve_gen_one_gamma()
-            generator.set_bounds(dmin, dmax)
-            generator.configure(*popt1)
-        else:
-            popt1, pcov1 = curve_fit(
-                two_Gamma,
-                xdata=diameters,
-                ydata=presence,
-                bounds=(
-                    [1, 2, 0, 1, 0, 0, 2],
-                    [np.inf, 15, np.inf, np.inf, 15, np.inf, 14],
-                ),
-            )
-            generator = nerve_gen_two_gamma()
-            generator.set_bounds(dmin, dmax)
-            generator.configure(*popt1)
+        popt1, pcov1 = curve_fit(
+            two_Gamma,
+            xdata=diameters,
+            ydata=presence,
+            bounds=(
+                [1, 2, 0, 1, 0, 0, 2],
+                [np.inf, 15, np.inf, np.inf, 15, np.inf, 14],
+            ),
+        )
+        generator = nerve_gen_two_gamma()
+        generator.set_bounds(dmin, dmax)
+        generator.configure(*popt1)
     else:
         popt1, pcov1 = curve_fit(
             one_Gamma,
