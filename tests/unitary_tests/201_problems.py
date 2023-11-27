@@ -1,13 +1,11 @@
 import nrv
-import nrv
+import numpy as np
 
-def my_nerve_context(X):
-    return X
 
-def my_cost(results):
-    return 1
+my_cost = nrv.sphere()
 
 test_prob = nrv.Problem()
-test_prob.context_and_cost(my_nerve_context, my_cost)
 
-print(test_prob.compute_cost(1)==1)
+test_prob.costfunction = my_cost
+print(test_prob.compute_cost(0) == my_cost(np.array([0,1,0])))
+#print(test_prob.compute_cost(np.array([1,0])==[1,0]))

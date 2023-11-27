@@ -112,3 +112,5 @@ from .utils.fascicle.FL_postprocessing import *
 from .optim.CostFunctions import *
 from .optim.Optimizers import *
 from .optim.Problems import *
+from .optim.optim_utils.ContextModifier import *
+from .optim.optim_utils.CostEvaluation import *

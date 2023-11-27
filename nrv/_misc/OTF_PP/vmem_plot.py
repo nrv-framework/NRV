@@ -25,5 +25,5 @@ fig_name = folder_name + "/Vmem_axon_" + str(k) + ".pdf"
 plt.savefig(fig_name)
 plt.close()
 
-nrv.remove_key(sim_results, "V_mem", verbose=verbose)
-nrv.remove_key(sim_results, "V_mem_filtered", verbose=verbose)
+nrv.remove_key(sim_results, "V_mem", verbose=self.verbose)
+nrv.remove_key(sim_results, "V_mem_filtered", verbose=self.verbose)

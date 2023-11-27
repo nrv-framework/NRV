@@ -58,14 +58,3 @@ for E in range(N_elec):
     V2 = round(sim2.get_domain_potential(101+2*E), 2)
     print(V1, V2, V1 -V2)
 print('FEM solved in '+str(t2 - t1)+' s')
-
-
-
-
-
-
-
-
-
-
-

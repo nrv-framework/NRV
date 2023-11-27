@@ -27,7 +27,7 @@ parser.add_argument("-l", "--list", dest="LIST_TEST",type=int, nargs="?",default
 parser.add_argument("-u", "--unitary_tests", action="store_true", dest="UNIT_TEST",help="Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only")
 parser.add_argument("-s", "--syntax", action="store_true", dest="SYNTAX_TEST",help="Lint nvr syntax source code")
 parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="launches even potentially failing tests due to third party softwares such as COMSOL")
-parser.add_argument("-t", "--target", dest="TARGET", type=int, nargs="+" ,default=0, help="The number of the tests to simulate")
+parser.add_argument("-t", "--target", dest="TARGET", type=str, nargs="+" ,default='0', help="ID of the tests to simulate, if a digit is replaced by '_' all the tests")
 parser.add_argument("-F", "--fenics", action="store_true", dest="FENICS_TESTS",help="Launch all and only FEniCS related tests")
 parser.add_argument("-C", "--comsol", action="store_true", dest="COMSOL_TESTS",help="Launch all and only COMSOL related tests")
 parser.add_argument("-p", "--python", action="store_true", dest="FORCE_PYTHON",help="Forces Python as interpreted instead of nrv2calm")
@@ -108,11 +108,42 @@ if __name__ == "__main__":
     else:
         args.LIST_TEST = False
 
-        
+
 
     if args.TARGET:
+        N = len(args.TARGET)
+        offset = 0
+        ########################################
+        ## add the corresponding tests if "_" ##
+        ########################################
+        for i in range(N):
+            argt = args.TARGET[i+offset]
+            if "_" in argt:
+                arg_offset = 1
+                new_argt = [argt]
+                if argt[-1] == "_":
+                    new_argt = [argt[:-1]+str(i) for i in range(10)]
+                    arg_offset *= 10
+                if len(new_argt[0]) > 2:
+                    if new_argt[0][-2] == "_":
+                        old_argt = new_argt
+                        new_argt = []
+                        for arg in old_argt:
+                            new_argt += [arg[:-2]+str(i)+arg[-1] for i in range(10)]
+                        arg_offset *= 10
+                if len(new_argt[0]) > 3:
+                    if new_argt[0][-3] == "_":
+                        old_argt = new_argt
+                        new_argt = []
+                        for arg in old_argt:
+                            new_argt += [arg[:-3]+str(i)+arg[-2:] for i in range(10)]
+                        arg_offset *= 10
+                args.TARGET = args.TARGET[:i+offset] + new_argt + args.TARGET[i+offset+1:]
+                offset += arg_offset
+
+        print("TARGETED:", *args.TARGET)
         for argt in args.TARGET:
-            target_script_key = f"{argt:03}"
+            target_script_key = f"{int(argt):03}"
             ###################################
             ## clean the test/figures folder ##
             ###################################
@@ -120,7 +151,10 @@ if __name__ == "__main__":
                 f_fig = [unit_test_figures+f for f in os.listdir(unit_test_figures) if\
                     "00"+f[:1]==target_script_key or "0"+f[:2]==target_script_key or f[:3]==target_script_key]
                 for f in f_fig:
-                    os.remove(f)
+                    if os.path.isdir(f):
+                        shutil.rmtree(unit_test_figures)
+                    else:
+                        os.remove(f)
             if not os.path.exists(unit_test_figures):
                 os.makedirs(unit_test_figures)
             if os.path.exists(unit_test_results):
@@ -137,6 +171,9 @@ if __name__ == "__main__":
             if not os.path.exists(unit_test_results+"outputs/"):
                 os.makedirs(unit_test_results+"outputs/") 
 
+            ###############################
+            ## launch the targated tests ##
+            ###############################
             nrv_cmd = "nrv2calm "
             if sys.platform == "darwin":
                 python_cmd = "python3 "

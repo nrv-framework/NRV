@@ -14,7 +14,7 @@ import numpy as np
 
 from ..backend.file_handler import json_dump
 from ..backend.log_interface import rise_error, rise_warning
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
@@ -194,7 +194,7 @@ def rotate_list(l, n):
 #############################
 ## Generic class for axons ##
 #############################
-class axon(NRV_class):
+class axon(NRV_simulable):
     """
     Axon is a generic object to describe an axonal fiber,
     (soma and interconnection are not taken into account, all axons are independant from others)
@@ -309,6 +309,12 @@ class axon(NRV_class):
         for section in neuron.h.allsec():
             section = None
         super().__del__()
+
+    def __clear_reclists(self):
+        keys = list(self.__dict__.keys())
+        for key in keys:
+            if 'reclist' in key:
+                del self.__dict__[key]
 
     def save(
         self,
@@ -513,17 +519,17 @@ class axon(NRV_class):
         """
         Change the stimulus of the ID_elec electrods
 
-        Input:
-        ------
+        Parameters:
+        ----------
             ID_elec  : int
-                ID of the elecrtrod which require to be changed
-            stimulus : stimulus
-                New stimulus values
-
+                ID of the electrode which should be changed
+            stimulus  : stimulus
+                New stimulus to set
         """
-        self.extra_stim.stimuli[ID_elec] = stimulus
-        self.extra_stim.synchronised_stimuli = []
-        self.extra_stim.synchronised = False
+        if self.extra_stim is not None:
+            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+        else:
+            rise_warning("Cannot be changed: no extrastim in the axon")
 
     def get_electrodes_footprints_on_axon(
         self, save_ftp_only=False, filename="electrodes_footprint.ftpt"
@@ -578,14 +584,7 @@ class axon(NRV_class):
 
     def simulate(
         self,
-        t_sim=2e1,
-        record_V_mem=True,
-        record_I_mem=False,
-        record_I_ions=False,
-        record_particles=False,
-        record_g_mem=False,
-        record_g_ions=False,
-        loaded_footprints=None,
+        **kwargs,
     ):
         """
         Simulates the axon using neuron framework
@@ -594,17 +593,17 @@ class axon(NRV_class):
         ----------
         t_sim               : float
             total simulation time (ms), by default 20 ms
-        record_V_mem        : bool
+        self.record_V_mem        : bool
             if true, the membrane voltage is recorded, set to True by default
                 see unmyelinated/myelinated to see where recording occur
                 results stored with the key "V_mem"
-        record_I_mem        : bool
+        self.record_I_mem        : bool
             if true, the membrane current is recorded, set to False by default
-        record_I_ions       : bool
+        self.record_I_ions       : bool
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
-        loaded_footprints           :dict or bool
+        self.loaded_footprints           :dict or bool
         Dictionnary composed of extracellular footprint array, the keys are int value
         of the corresponding electrode ID, if None, footprints calculated during the simulation,
         set to None by default
@@ -613,117 +612,22 @@ class axon(NRV_class):
         axon_sim    : dictionnary
             all informations on neuron, segment position and all simulation results
         """
-        self.t_sim = t_sim
-        # dictionnary for results
-        # general parameters
-        axon_sim = {}
-        axon_sim["x"] = self.x
-        axon_sim["y"] = self.y
-        axon_sim["z"] = self.z
-        axon_sim["diameter"] = self.d
-        axon_sim["L"] = self.L
-        axon_sim["myelinated"] = self.myelinated
-        axon_sim["model"] = self.model
-        axon_sim["T"] = self.T
-        axon_sim["ID"] = self.ID
-        axon_sim["freq"] = self.freq
-        axon_sim["freq_min"] = self.freq_min
-        axon_sim["mesh_shape"] = self.mesh_shape
-        axon_sim["alpha_max"] = self.alpha_max
-        axon_sim["d_lambda"] = self.d_lambda
-        axon_sim["v_init"] = self.v_init
-        axon_sim["threshold"] = self.threshold
-        axon_sim["Nsec"] = self.Nsec
-        axon_sim["Nseg_per_sec"] = self.Nseg_per_sec
-        axon_sim["dt"] = self.dt
-        axon_sim["tstop"] = self.t_sim
-        # myelinated specific parameters
-        if self.myelinated:
-            axon_sim["rec"] = self.rec
-            axon_sim["x_nodes"] = self.x_nodes
-            axon_sim["sequence"] = self.axon_path_type
-            axon_sim["index"] = self.axon_path_index
-            axon_sim["rec_pos_list"] = self.rec_position_list
-        else:
-            axon_sim["Nrec"] = self.Nrec
-        # saving intra-cellular stimulation parameters
-        axon_sim["intra_stim_positions"] = self.intra_current_stim_positions
-        axon_sim["intra_stim_starts"] = self.intra_current_stim_starts
-        axon_sim["intra_stim_durations"] = self.intra_current_stim_durations
-        axon_sim["intra_stim_amplitudes"] = self.intra_current_stim_amplitudes
-        # saving extra-cellular stimulation
-        if self.extra_stim != None:
-            if is_analytical_extra_stim(self.extra_stim):
-                # save material
-                axon_sim["extracellular_context"] = "analytical"
-                axon_sim["extracellular_material"] = self.extra_stim.material.name
-                # save electrode positions
-                electrodes_x = []
-                electrodes_y = []
-                electrodes_z = []
-                for elec in self.extra_stim.electrodes:
-                    electrodes_x.append(elec.x)
-                    electrodes_y.append(elec.y)
-                    electrodes_z.append(elec.z)
-                axon_sim["extracellular_electrode_x"] = electrodes_x
-                axon_sim["extracellular_electrode_y"] = electrodes_y
-                axon_sim["extracellular_electrode_z"] = electrodes_z
-                # save stimuli
-                stimuli_list = []
-                stimuli_time_list = []
-                for stim in self.extra_stim.stimuli:
-                    stimuli_list.append(stim.s)
-                    stimuli_time_list.append(stim.t)
-                axon_sim["extracellular_stimuli"] = stimuli_list
-                axon_sim["extracellular_stimuli_t"] = stimuli_time_list
-            else:
-                axon_sim["extracellular_context"] = "FEM"
-                axon_sim["model_name"] = self.extra_stim.model_fname
-                axon_sim["endoneurium_material"] = self.extra_stim.endoneurium.name
-                axon_sim["perineurium_material"] = self.extra_stim.perineurium.name
-                axon_sim["epineurium_material"] = self.extra_stim.epineurium.name
-                axon_sim["external_material"] = self.extra_stim.external_material.name
-                # save electrode positions
-                electrodes_x = []
-                electrodes_type = []
-                electrodes_y = []
-                electrodes_z = []
-                for electrode in self.extra_stim.electrodes:
-                    if is_CUFF_electrode(electrode):
-                        electrodes_x.append(electrode.x_center)
-                        electrodes_y.append(0)
-                        electrodes_z.append(0)
-                        electrodes_type.append("CUFF")
-                    else:
-                        if is_LIFE_electrode(electrode):
-                            electrodes_x.append(electrode.x + electrode.length / 2)
-                            electrodes_type.append("LIFE")
-                        electrodes_y.append(electrode.y)
-                        electrodes_z.append(electrode.z)
-                axon_sim["extracellular_electrode_type"] = electrodes_type
-                axon_sim["extracellular_electrode_x"] = electrodes_x
-                axon_sim["extracellular_electrode_y"] = electrodes_y
-                axon_sim["extracellular_electrode_z"] = electrodes_z
-                # save stimuli
-                stimuli_list = []
-                stimuli_time_list = []
-                for stimulus in self.extra_stim.stimuli:
-                    stimuli_list.append(stimulus.s)
-                    stimuli_time_list.append(stimulus.t)
-                axon_sim["extracellular_stimuli"] = stimuli_list
-                axon_sim["extracellular_stimuli_t"] = stimuli_time_list
-
+        axon_sim = super().simulate(**kwargs)
+        axon_sim['diameter'] =self.d
+        axon_sim['tstop'] =self.t_sim
+        axon_sim.update(self.__add_extrastim_to_res())
+        t_sim = self.t_sim
         # set recorders arrays - KEEP THIS CODE BEFORE INITIALISATION
         self.__set_time_recorder()
-        if record_V_mem:
+        if self.record_V_mem:
             self.set_membrane_voltage_recorders()
-        if record_I_mem or self.record:
+        if self.record_I_mem or self.record:
             self.set_membrane_current_recorders()
-        if record_I_ions:
+        if self.record_I_ions:
             self.set_ionic_current_recorders()
-        if record_g_mem or record_g_ions:
+        if self.record_g_mem or self.record_g_ions:
             self.set_conductance_recorders()
-        if record_particles:
+        if self.record_particles:
             self.set_particules_values_recorders()
             if hasattr(self, "Markov_Nav_modeled_NoR"):
                 self.set_Nav_recorders()
@@ -755,19 +659,18 @@ class axon(NRV_class):
                 x, y, z = self.__get_allseg_positions()
                 self.extra_stim.synchronise_stimuli()
 
-                if loaded_footprints is None:
+                if self.loaded_footprints is None:
                     if self.footprints is None:
                         self.get_electrodes_footprints_on_axon()
-                elif loaded_footprints:
+                elif self.loaded_footprints:
                     if self.footprints is None:
                         rise_warning(
                             "no loaded footprints: computation will be done anyway"
                         )
                         self.get_electrodes_footprints_on_axon()
-                elif not loaded_footprints:
+                elif not self.loaded_footprints:
                     self.get_electrodes_footprints_on_axon()
                 self.extra_stim.set_electrodes_footprints(self.footprints)
-
                 # compute the minimum time between stimuli changes, checks it"s not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
                 if Delta_T_min < self.dt:
@@ -843,13 +746,13 @@ class axon(NRV_class):
             axon_sim["x_rec"] = self.x_rec
             if self.myelinated and self.rec != "nodes":
                 axon_sim["node_index"] = self.node_index
-            if record_V_mem:
+            if self.record_V_mem:
                 axon_sim["V_mem"] = self.get_membrane_voltage()
-            if record_I_mem or self.record:
+            if self.record_I_mem or self.record:
                 axon_sim["I_mem"] = self.get_membrane_current()
-            if record_g_mem:
+            if self.record_g_mem:
                 axon_sim["g_mem"] = self.get_membrane_conductance()
-            if record_g_ions:
+            if self.record_g_ions:
                 if not self.myelinated:
                     if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
                         g_na_ax, g_k_ax, g_l_ax = self.get_ionic_conductance()
@@ -915,7 +818,7 @@ class axon(NRV_class):
                             + self.model
                             + " model "
                         )
-            if record_I_ions:
+            if self.record_I_ions:
                 if not self.myelinated:
                     if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
                         I_na_ax, I_k_ax, I_l_ax = self.get_ionic_current()
@@ -967,7 +870,7 @@ class axon(NRV_class):
                         axon_sim["I_na"] = I_na_ax
                         axon_sim["I_k"] = I_k_ax
                         axon_sim["I_l"] = I_l_ax
-            if record_particles:
+            if self.record_particles:
                 if not self.myelinated:
                     if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
                         m_ax, n_ax, h_ax = self.get_particles_values()
@@ -1199,6 +1102,7 @@ class axon(NRV_class):
                 + axon_sim["Error_from_prompt"]
             )
             axon_sim["Neuron_t_max"] = neuron.h.t
+        self.__clear_reclists()
         return axon_sim
 
     ##############################
@@ -1222,6 +1126,80 @@ class axon(NRV_class):
         t = np.array(self.timeVector)
         self.t_len = len(t)
         return t
+
+    ##############################
+    ## Result handleling method ##
+    ##############################
+    def __add_extrastim_to_res(self):
+        """
+        
+        """
+        axon_sim = {}
+        axon_sim["intra_stim_positions"] = self.intra_current_stim_positions
+        axon_sim["intra_stim_starts"] = self.intra_current_stim_starts
+        axon_sim["intra_stim_durations"] = self.intra_current_stim_durations
+        axon_sim["intra_stim_amplitudes"] = self.intra_current_stim_amplitudes
+        if self.extra_stim != None:
+            if is_analytical_extra_stim(self.extra_stim):
+                # save material
+                axon_sim["extracellular_context"] = "analytical"
+                axon_sim["extracellular_material"] = self.extra_stim.material.name
+                # save electrode positions
+                electrodes_x = []
+                electrodes_y = []
+                electrodes_z = []
+                for elec in self.extra_stim.electrodes:
+                    electrodes_x.append(elec.x)
+                    electrodes_y.append(elec.y)
+                    electrodes_z.append(elec.z)
+                axon_sim["extracellular_electrode_x"] = electrodes_x
+                axon_sim["extracellular_electrode_y"] = electrodes_y
+                axon_sim["extracellular_electrode_z"] = electrodes_z
+                # save stimuli
+                stimuli_list = []
+                stimuli_time_list = []
+                for stim in self.extra_stim.stimuli:
+                    stimuli_list.append(stim.s)
+                    stimuli_time_list.append(stim.t)
+                axon_sim["extracellular_stimuli"] = stimuli_list
+                axon_sim["extracellular_stimuli_t"] = stimuli_time_list
+            else:
+                axon_sim["extracellular_context"] = "FEM"
+                axon_sim["model_name"] = self.extra_stim.model_fname
+                axon_sim["endoneurium_material"] = self.extra_stim.endoneurium.name
+                axon_sim["perineurium_material"] = self.extra_stim.perineurium.name
+                axon_sim["epineurium_material"] = self.extra_stim.epineurium.name
+                axon_sim["external_material"] = self.extra_stim.external_material.name
+                # save electrode positions
+                electrodes_x = []
+                electrodes_type = []
+                electrodes_y = []
+                electrodes_z = []
+                for electrode in self.extra_stim.electrodes:
+                    if is_CUFF_electrode(electrode):
+                        electrodes_x.append(electrode.x_center)
+                        electrodes_y.append(0)
+                        electrodes_z.append(0)
+                        electrodes_type.append("CUFF")
+                    else:
+                        if is_LIFE_electrode(electrode):
+                            electrodes_x.append(electrode.x + electrode.length / 2)
+                            electrodes_type.append("LIFE")
+                        electrodes_y.append(electrode.y)
+                        electrodes_z.append(electrode.z)
+                axon_sim["extracellular_electrode_type"] = electrodes_type
+                axon_sim["extracellular_electrode_x"] = electrodes_x
+                axon_sim["extracellular_electrode_y"] = electrodes_y
+                axon_sim["extracellular_electrode_z"] = electrodes_z
+                # save stimuli
+                stimuli_list = []
+                stimuli_time_list = []
+                for stimulus in self.extra_stim.stimuli:
+                    stimuli_list.append(stimulus.s)
+                    stimuli_time_list.append(stimulus.t)
+                axon_sim["extracellular_stimuli"] = stimuli_list
+                axon_sim["extracellular_stimuli_t"] = stimuli_time_list
+        return axon_sim
 
     ###########################
     ## Axon abstract methods ##

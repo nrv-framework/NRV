@@ -254,6 +254,30 @@ class extracellular_context(NRV_class):
         for electrode in self.electrodes:
             electrode.clear_footprint()
 
+    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+        """
+        Change the stimulus of the ID_elec electrods
+
+        Parameters:
+        ----------
+            ID_elec  : int
+                ID of the electrode which should be changed
+            stimulus  : stimulus
+                New stimulus to set
+        """
+        if ID_elec < len(self.stimuli):
+            self.stimuli[ID_elec] = stimulus
+            self.synchronised_stimuli = []
+            self.synchronised = False
+        else:
+            rise_warning(
+                "Only",
+                len(self.stimuli),
+                "electrode in extracellular_context:",
+                ID_elec,
+                "is not too big",
+            )
+
 
 class stimulation(extracellular_context):
     """

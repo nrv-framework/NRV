@@ -1,5 +1,5 @@
 nrv.rasterize(sim_results, "V_mem")
-nrv.remove_key(sim_results, "V_mem", verbose=verbose)
+nrv.remove_key(sim_results, "V_mem", verbose=self.verbose)
 
 plt.figure()
 plt.scatter(sim_results["V_mem_raster_time"], sim_results["V_mem_raster_x_position"])

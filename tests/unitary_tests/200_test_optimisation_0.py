@@ -1,12 +1,11 @@
-import sources.optobjectives as oobj
+import nrv.utils.nrv_function as oobj
 import numpy as np
 import matplotlib.pyplot as plt
 
 ############################################################
 # test identity
 print('\t ... testing identity function')
-print(oobj.Id(1,2,3) == (1,2,3))
-
+print(oobj.Id()(1,2,3) == (1,2,3))
 ############################################################
 # test Rosenbock
 print('\t ... testing Rosenbock function')
@@ -17,7 +16,7 @@ y = np.linspace(-2,2,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.rosenbock(x[i], y[j])
+        z[i, j] = oobj.rosenbock()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, np.log10(z) ,shading='auto')
@@ -40,7 +39,7 @@ y = np.linspace(-5.12,5.12,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.rastrigin(x[i], y[j])
+        z[i, j] = oobj.rastrigin()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, z ,shading='auto')
@@ -63,7 +62,7 @@ y = np.linspace(-5,5,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.sphere(x[i], y[j])
+        z[i, j] = oobj.sphere()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, z ,shading='auto')
@@ -87,7 +86,7 @@ y = np.linspace(-5.,5.,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.ackley(x[i], y[j])
+        z[i, j] = oobj.ackley()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, z ,shading='auto')
@@ -110,7 +109,7 @@ y = np.linspace(-4.5,4.5,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.beale(x[i], y[j])
+        z[i, j] = oobj.beale()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, np.log10(z) ,shading='auto')
@@ -133,7 +132,7 @@ y = np.linspace(-3.,1.,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.goldstein_price(x[i], y[j])
+        z[i, j] = oobj.goldstein_price()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, np.log10(z) ,shading='auto')
@@ -156,7 +155,7 @@ y = np.linspace(-10.,10.,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.booth(x[i], y[j])
+        z[i, j] = oobj.booth()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, np.log10(z) ,shading='auto')
@@ -179,7 +178,7 @@ y = np.linspace(-4,6.,N_points)
 z = np.zeros((N_points, N_points))
 for i in range(N_points):
     for j in range(N_points):
-        z[i, j] = oobj.bukin6(x[i], y[j])
+        z[i, j] = oobj.bukin6()(x[i], y[j])
 
 plt.figure()
 map = plt.pcolormesh(x, y, np.log10(z) ,shading='auto')

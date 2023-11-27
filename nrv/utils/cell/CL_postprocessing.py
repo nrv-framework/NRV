@@ -15,6 +15,7 @@ from ...backend.log_interface import pass_info, rise_warning, rise_error
 from ..units import *
 from ...nmod.unmyelinated import unmyelinated
 from ...nmod.myelinated import myelinated
+from ...backend.NRV_Class import load_any
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
@@ -100,6 +101,7 @@ def load_simulation_from_json(filename):
         name of the file where axons simulations are saved
     """
     results = json_load(filename)
+
     # convert iterables to numpy arrays
     int_iterables = [
         "node_index",
@@ -110,7 +112,7 @@ def load_simulation_from_json(filename):
         "V_mem_filtered_raster_time_index",
     ]
     for key, value in results.items():
-        if is_iterable(value):
+        if is_iterable(value) and not isinstance(results[key],dict):
             if key in int_iterables:
                 results[key] = np.asarray(value, dtype=np.int16)
             else:
@@ -119,7 +121,7 @@ def load_simulation_from_json(filename):
                 elif isinstance(value[0], str):
                     results[key] = value
                 else:
-                    if key in "rec_pos_list":
+                    if key in "rec_position_list":
                         results[key] = value
                     else:
                         results[key] = np.asarray(value, dtype=np.float32)
@@ -277,7 +279,7 @@ def rasterize(
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
     if t_stop == 0:
-        t_stop = int(my_dict["tstop"] / my_dict["dt"])
+        t_stop = int(my_dict["t_sim"] / my_dict["dt"])
     else:
         t_stop = int(t_stop / my_dict["dt"])
     if threshold == 0:
@@ -382,7 +384,7 @@ def find_spike_origin(
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict["tstop"]
+        t_stop = my_dict["t_sim"]
     # find the best raster plot
     if my_key == None:
         if "V_mem_filtered_raster_position" in my_dict:
@@ -451,7 +453,7 @@ def find_spike_last_occurance(
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict["tstop"]
+        t_stop = my_dict["t_sim"]
     # find the best raster plot
     if my_key == None:
         if "V_mem_filtered_raster_position" in my_dict:
@@ -553,7 +555,7 @@ def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
     """
     # define max timing if not already defined
     if t_stop == 0:
-        t_stop = my_dict["tstop"]
+        t_stop = my_dict["t_sim"]
     if t_start == 0:
         if "intra_stim_starts" in my_dict and my_dict["intra_stim_starts"] != []:
             t_start = my_dict["intra_stim_starts"][0]
@@ -619,7 +621,7 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
     position_max = 0
     blocked_spike_positionlist = []
     if t_stop == 0:
-        t_stop = my_dict["tstop"]
+        t_stop = my_dict["t_sim"]
     if t_start == 0:
         if "intra_stim_starts" in my_dict and my_dict["intra_stim_starts"] != []:
             t_start = my_dict["intra_stim_starts"][0]
@@ -924,8 +926,6 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
 ##############################
 ## Axon properties function ##
 ##############################
-
-
 def get_index_myelinated_sequence(results, n):
     """
     Returns the sequence
@@ -949,7 +949,7 @@ def get_index_myelinated_sequence(results, n):
         # see if it's a bug
         Nseg_per_sec = results["Nseg_per_sec"] + 1
         N_sec_type = 11
-        seq_types = results["sequence"]
+        seq_types = results["axon_path_type"]
         if n == 0:
             return seq_types[0]
         else:

@@ -19,4 +19,4 @@ for key in sim_results:
         removable_keys += [key]
 
 for key in removable_keys:
-    nrv.remove_key(sim_results, key, verbose=verbose)
+    nrv.remove_key(sim_results, key, verbose=self.verbose)

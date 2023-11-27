@@ -1,4 +1,5 @@
 from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Simulable import NRV_simulable
 
 
 class CostFunction(NRV_class):
@@ -23,20 +24,20 @@ class CostFunction(NRV_class):
             kwargs          : keys word arguments
         returns
             results        : axon simulaiton results (dictionary)
-    residual            : funct
-        function calculating a residual from a axon simulation results, parameters:
+    cost_evaluation            : funct
+        function calculating a cost from a axon simulation results, parameters:
             results        : axon simulaiton results (dictionary)
             kwargs          : keys word arguments
         returns
-            cost              : residual value (float)
+            cost              : cost evaluation value (float)
     kwargs_gw           : dict
         key word arguments of context_modifier function, by default {}
     kwargs_sw           : dict
         key word arguments of simulate_context function, by default {}
     kwargs_r            : dict
-        key word arguments of residual function, by default {}
+        key word arguments of cost_evaluation function, by default {}
     t_sim           : float
-        time of the simulation on wich the residual will be calculated in ms (ms), by default 100ms
+        time of the simulation on wich the cost will be calculated in ms (ms), by default 100ms
     dt              : float
         simulation time stem for neuron (ms), by default 1us
     part_filter         : funct or None
@@ -50,35 +51,56 @@ class CostFunction(NRV_class):
 
     def __init__(
         self,
-        static_context,
+        static_context:NRV_simulable,
         context_modifier,
-        residual,
+        cost_evaluation,
+        simulation=None,
         kwargs_gw={},
-        simulate_context=None,
         kwargs_sw={},
         kwargs_r={},
-        t_sim=100,
-        dt=0.005,
+        t_sim=None,
+        dt=None,
         filter=None,
         saver=None,
         file_name="cost_saver.csv",
     ):
+        super().__init__()
+        #
         self.static_context = static_context
         self.context_modifier = context_modifier
-        # self.simulate_context = simulate_context
-        self.residual = residual
+        self.cost_evaluation = cost_evaluation
         self.kwargs_gw = kwargs_gw
+        self.simulation = simulation
         self.kwargs_sw = kwargs_sw
         self.kwargs_r = kwargs_r
-        self.t_sim = t_sim
-        self.dt = dt
         self.filter = filter
         self.saver = saver
         self.file_name = file_name
+        
+        if t_sim is not None:
+            self.kwargs_gw['t_sim'] = t_sim
+            self.kwargs_sw['t_sim'] = t_sim
+            self.kwargs_r['t_sim'] = t_sim
+        if dt is not None:
+            self.kwargs_gw['dt'] = dt
+            self.kwargs_sw['dt'] = dt
+            self.kwargs_r['dt'] = dt
 
-    def simulate_context(self, context):
-        print("pioup")
-        results = context.simulate(t_sim=self.t_sim, loaded_footprints=True)
+        self.simulation_context = None
+        self.results = None
+        self.cost = None
+
+    def __clear_results(self):
+        del self.simulation_context
+        del self.results
+        self.simulation_context = None
+        self.results = None
+
+    def simulate_context(self):
+        if callable(self.simulation):
+            results = self.simulation(self.simulation_context, **self.kwargs_sw)
+        if self.simulation is None:
+            results = self.simulation_context(**self.kwargs_sw)
         return results
 
     def __call__(self, X):
@@ -89,21 +111,22 @@ class CostFunction(NRV_class):
             X_ = X
 
         # Interpolation
-        simulation_context = self.context_modifier(X_, self.static_context)
+        self.simulation_context = self.context_modifier(X_, self.static_context, **self.kwargs_gw)
 
         # Simulation
-        results = self.simulate_context(simulation_context)
+        self.results = self.simulate_context()
 
         # Cost calculation
-        cost = self.residual(results, **self.kwargs_r)
+        self.cost = self.cost_evaluation(self.results, **self.kwargs_r)
 
         # Savings
         if self.saver is not None:
             data = {
                 "position": X,
-                "context": simulation_context,
-                "results": results,
-                "cost": cost,
+                "context": self.simulation_context,
+                "results": self.results,
+                "cost": self.cost,
             }
             self.saver(data, file_name=self.file_name)
-        return cost
+        self.__clear_results()
+        return self.cost

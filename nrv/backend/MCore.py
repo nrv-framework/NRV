@@ -157,6 +157,28 @@ class Mcore_handler(metaclass=NRV_singleton):
             data = comm.bcast(data, root=0)
         return data
 
+    def gather_jobs(self, partial_result):
+        """
+        Gather the jobs performed by all instances to the master
+
+        Parameters
+        ----------
+        partial_result  : np.array
+            individual result from an instance
+
+        Returns
+        -------
+        result  : np.array
+            global array if master or alone, else None
+        """
+        if self.is_alone():
+            final_result = partial_result
+        else:
+            final_result = comm.gather(partial_result, root=0)
+            if not self.is_master():
+                final_result = None
+        return final_result
+
     def gather_jobs_as_array(self, partial_result):
         """
         Gather the jobs performed by all instances to the master

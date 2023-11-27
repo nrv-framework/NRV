@@ -1,6 +1,6 @@
 import nrv
 import time
-
+#nrv.parameters.set_nrv_verbosity(4)
 t0 = time.time()
 source_file = './unitary_tests/sources/56_fasc.json'
 Ntest = 124

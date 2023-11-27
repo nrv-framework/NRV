@@ -61,7 +61,8 @@ fascicle_1.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/', verbose=F
 DIR = './unitary_tests/figures/Fascicle_'+str(ID)+'/'
 fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular_state.json")
 
-fig, ax = plt.subplots(figsize=(8,8))
-nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
-plt.savefig("./unitary_tests/figures/70_A.png")
+if nrv.MCH.do_master_only_work():
+    fig, ax = plt.subplots(figsize=(8,8))
+    nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
+    plt.savefig("./unitary_tests/figures/70_A.png")
 

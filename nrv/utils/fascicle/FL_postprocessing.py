@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 from ...backend.file_handler import json_load
 from ...backend.log_interface import pass_info
+from ...fmod.electrodes import is_FEM_electrode
 from ..cell.CL_postprocessing import *
 
 # enable faulthandler to ease 'segmentation faults' debug
@@ -94,11 +95,73 @@ def rm_sim_dir(dir_path, verbose=True):
         pass_info("Folder not found in the directory", verbose=verbose)
 
 
+def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinated=False,\
+    index=True):
+    """
+    internal use, Return index in the time scale or time of the start and stop of
+    a Compound Action Potentiel 
+
+    Parameters
+    ----------
+    Voltage : list(float)
+        list of voltage value
+    t     : list(float)
+        list of time value
+    t_stim : float
+        time of the stimulation (to skip the stimulation artefact)
+    stim_duration     : list(float)
+        list of time value
+    tol : float
+        absolute tolerence in Volt
+    index     : bool
+        if true the time index is returned, else the time value
+    """
+    i_start_unm, i_stop_unm = 0, 0
+    i_start_m, i_stop_m = 0, 0
+    dt = t[1] - t[0]
+    offset = int((t_stim + stim_duration)/dt)+1
+
+    S = Voltage
+    N = len(S) - offset
+
+    for i in range(N-1):
+        if i_start_unm == 0 and S[i+offset]- S[-1] > tol:
+            i_start_unm = i+offset
+        if i_stop_unm == 0 and abs(S[len(S)-i-1])- abs(S[-1]) > tol:
+            i_stop_unm = len(S) - i - 1
+
+    if myelinated is False: 
+        i_max = i_start_unm + np.argmax(Voltage[i_start_unm:i_stop_unm])
+        i_min = i_start_unm + np.argmin(Voltage[i_start_unm:i_stop_unm])
+        if index:
+            return i_start_unm, i_max, i_min, i_stop_unm
+        else:
+            return t[i_start_unm], t[i_max], t[i_min], t[i_stop_unm]
+    else:
+        ## No unmyelinated CAP found
+        if i_start_unm == 0:
+            i_stop_m = i_stop_unm
+            for i in range(N-1):
+                if i_start_m == 0 and abs(S[i+offset])-abs(S[-1])> tol:
+                    i_start_m = i+offset
+        else:
+            N = i_start_unm - offset
+            for i in range(N-1):
+                if i_start_m == 0 and abs(S[i+offset])- abs(S[-1]) > tol:
+                    i_start_m = i+offset
+                if i_stop_m == 0 and abs(S[i_start_unm-i-1])- abs(S[-1]) > tol:
+                    i_stop_m = i_start_unm - i - 1
+        i_max = np.argmax(Voltage[offset:])
+        i_min = i_start_m + np.argmin(Voltage[i_start_m:i_stop_m])
+
+        if index:
+            return i_start_m, i_max, i_min, i_stop_m
+        else:
+            return t[i_start_m], t[i_max], t[i_min], t[i_stop_m]
+
 #############################
 ##### Result processing #####
 #############################
-
-
 def fascicular_state(
     dir_path,
     save=False,
@@ -121,13 +184,13 @@ def fascicular_state(
     Returns
     -------
     facsicular_state       : dict
-
     """
 
     fascicular = json_load(dir_path + "00_Fascicle_config.json")
     facsicular_state = {"-1": fascicular}
-
-    for file in ls_axons_results(dir_path):
+    N_ax = fascicular["N"]
+    for i in range(N_ax):
+        file = "sim_axon_"+ str(i) + ".json"
         if "extra_stim" not in facsicular_state["-1"]:
             facsicular_state["-1"]["extra_stim"] = extra_stim_properties(
                 dir_path + file
@@ -235,5 +298,16 @@ def plot_fasc_state(
             axes.text(fasc["axons_y"][k], fasc["axons_z"][k], str(k))
     ## plot electrode(s) if existings
     if "extra_stim" in fasc:
-        electrode = fasc["extra_stim"]
-        axes.scatter(electrode["y"], electrode["z"], color="red")
+        extra_stim = load_any(fasc["extra_stim"])
+        for electrode in extra_stim.electrodes:
+            if electrode.type == "LIFE":
+                circles.append(
+                    plt.Circle(
+                        (electrode.y, electrode.z),
+                        electrode.D / 2,
+                        color="gold",
+                        fill=True,
+                    )
+                )
+            elif not is_FEM_electrode(electrode):
+                axes.scatter(electrode.y, electrode.z, color="gold")

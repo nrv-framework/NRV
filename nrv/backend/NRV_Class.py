@@ -98,6 +98,7 @@ class NRV_class(metaclass=ABCMeta):
         """
         pass_debug_info(self.nrv_type, " deleted")
 
+
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         """
         Generic saving method for NRV class instance
@@ -160,6 +161,13 @@ class NRV_class(metaclass=ABCMeta):
                 else:
                     self.__dict__[key] = key_dic[key]
 
+    def set_parameters(self,**kawrgs):
+        for key in kawrgs:
+            if key in self.__dict__:
+                self.__dict__[key] = kawrgs[key]
+
+    def get_parameters(self):
+        return self.__dict__
 
 def load_any(data, **kwargs):
     """loads an object of any kind from a json file

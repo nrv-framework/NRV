@@ -30,15 +30,15 @@ for key in removable_keys:
 ####################################
 if len(sim_results["V_mem_raster_position"]) == 0:
     # no spike
-    spike = 0
+    sim_results['spike'] = 0
 else:
-    spike = 1
+    sim_results['spike'] = 1
 
 ################################
 ## Save results in a csv file ##
 ################################
 if "in_nerve" in kwargs:  # Nerve Simulation
-    file_object = open(save_path + "/spike_summary.csv", "a")
+    file_object = open(self.save_path + "/spike_summary.csv", "a")
     line = str(self.ID)
 else:  # Fascicle Simulation
     file_object = open(folder_name + "/spike_summary.csv", "a")
@@ -56,7 +56,7 @@ line += (
     + "\t"
     + str(sim_results["myelinated"])
     + "\t"
-    + str(spike)
+    + str(sim_results['spike'])
     + "\n"
 )
 

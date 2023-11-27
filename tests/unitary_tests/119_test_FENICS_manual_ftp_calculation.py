@@ -88,8 +88,8 @@ V21 = res1.eval(ax2)
 V12 = res2.eval(ax1)
 V22 = res2.eval(ax2)
 
-print(np.allclose(V11, V12))
-print(np.allclose(V21, V22))
+print(not np.allclose(V11, V12))
+print(not np.allclose(V21, V22))
 print(max(V11-V12))
 print(max(V21-V22))
 

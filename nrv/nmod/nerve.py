@@ -6,7 +6,8 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
 import numpy as np
 
 from ..backend.log_interface import pass_info, rise_warning
-from ..backend.NRV_Class import NRV_class, load_any
+from ..backend.NRV_Class import load_any
+from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.stimulus import stimulus
 from .fascicles import *
 
@@ -14,7 +15,7 @@ from .fascicles import *
 #################
 ## Nerve class ##
 #################
-class nerve(NRV_class):
+class nerve(NRV_simulable):
     """A nerve in NRV is defined as:
         - a list of fascicles
         - a list of materials
@@ -49,6 +50,14 @@ class nerve(NRV_class):
             limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
         super().__init__()
+
+        # to add to a fascicle/nerve common mother class
+        self.save_path=""
+        self.verbose=False
+        self.postproc_script="default"
+        self.return_parameters_only = True
+        self.loaded_footprints = True
+
         self.type = "nerve"
         self.L = Length
         self.D = Diameter
@@ -133,6 +142,7 @@ class nerve(NRV_class):
         rec_context=False,
         fascicles_context=True,
         save=True,
+        _fasc_save=False,
         blacklist=[],
     ):
         """
@@ -188,6 +198,7 @@ class nerve(NRV_class):
             intracel_context=intracel_context,
             extracel_context=extracel_context,
             rec_context=rec_context,
+            _fasc_save=_fasc_save,
         )
 
     def load(
@@ -660,19 +671,21 @@ class nerve(NRV_class):
         for i, elec in enumerate(stimulation.electrodes):
             self.extra_stim.add_electrode(elec, stimulation.stimuli[i])
 
-    def change_stimulus_from_elecrode(self, ID_elec: int, stimulus: stimulus):
+    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
-        Parameters
+        Parameters:
         ----------
             ID_elec  : int
-
+                ID of the electrode which should be changed
+            stimulus  : stimulus
+                New stimulus to set
         """
         if self.extra_stim is not None:
-            self.extra_stim.stimuli[ID_elec] = stimulus
-            self.extra_stim.synchronised_stimuli = []
-            self.extra_stim.synchronised = False
+            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+        else:
+            rise_warning("Cannot be changed: no extrastim in the nerve")
 
     # RECORDING MECHANIMS
     def attach_extracellular_recorder(self, rec: recorder):
@@ -708,6 +721,18 @@ class nerve(NRV_class):
             if self.recorder is not None:
                 fasc.attach_extracellular_recorder(self.recorder)
 
+    def __set_fascicles_simulation_parameters(self):
+        for fasc in self.fascicles.values():
+            fasc.t_sim=self.t_sim
+            fasc.record_V_mem=self.record_V_mem
+            fasc.record_I_mem=self.record_I_mem,
+            fasc.record_I_ions=self.record_I_ions
+            fasc.record_g_mem=self.record_g_mem
+            fasc.record_g_ions=self.record_g_ions
+            fasc.record_particles=self.record_particles
+            fasc.postproc_script=self.postproc_script
+
+
     def compute_electrodes_footprints(self, **kwargs):
         """
         compute electrodes footprints
@@ -731,15 +756,6 @@ class nerve(NRV_class):
     ## SIMULATION
     def simulate(
         self,
-        t_sim=2e1,
-        record_V_mem=True,
-        record_I_mem=False,
-        record_I_ions=False,
-        record_g_mem=False,
-        record_g_ions=False,
-        record_particles=False,
-        save_path="",
-        postproc_script="default",
         **kwargs,
     ):
         """
@@ -755,7 +771,11 @@ class nerve(NRV_class):
         Keep aware of what is really implemented, ensure configuration and simulation protocol is correctly designed.
         """
         pass_info("Starting nerve simulation")
-        folder_name = save_path + "Nerve_" + str(self.ID) + "/"
+        nerve_sim = super().simulate(**kwargs)
+        self.__set_fascicles_simulation_parameters()
+        if not MCH.do_master_only_work():
+            nerve_sim = {}
+        folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
         if MCH.do_master_only_work():
             create_folder(folder_name)
             config_filename = folder_name + "/00_Nerve_config.json"
@@ -767,19 +787,13 @@ class nerve(NRV_class):
         self.compute_electrodes_footprints(**kwargs)
         synchronize_processes()
         # Simulate all fascicles
+        fasc_kwargs = kwargs
+        fasc_kwargs["save_path"] = folder_name
         for fasc in self.fascicles.values():
             pass_info("...simulating fascicle " + str(fasc.ID))
-            fasc.simulate(
-                t_sim=t_sim,
-                record_V_mem=record_V_mem,
-                record_I_mem=record_I_mem,
-                record_I_ions=record_I_ions,
-                record_g_mem=record_g_mem,
-                record_g_ions=record_g_ions,
-                record_particles=record_particles,
-                save_path=folder_name,
-                postproc_script=postproc_script,
+            nerve_sim[fasc.ID] = fasc.simulate(
                 in_nerve=True,
-                **kwargs,
+                **fasc_kwargs,
             )
         self.is_simulated = True
+        return nerve_sim

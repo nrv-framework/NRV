@@ -5,19 +5,19 @@ import time
 
 #nrv.parameters.set_nrv_verbosity(4)
 test_num = 506
-DIR = './unitary_tests/'
-fasc_file = DIR + 'figures/506_fascicle_1.json'
+DIR = "./unitary_tests/"
+fasc_file = DIR + "figures/506_fascicle_1.json"
 
 ##########################
 ## Fascicle declaration ##
 ##########################
-N = 130
+N = 30
 t0 = time.time()
 axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
 
 
 t1 = time.time()
-print('Population of '+str(N)+' axons generated in '+str(t1 - t0)+' s')
+print("Population of "+str(N)+" axons generated in "+str(t1 - t0)+" s")
 
 
 D = 500				# diameter, in um
@@ -26,12 +26,12 @@ L = 10000 			# length, in um
 fascicle_1 = nrv.fascicle(ID=test_num)
 fascicle_1.define_length(L)
 fascicle_1.define_circular_contour(D)
-fascicle_1.fill_with_population(axons_diameters, axons_type, Delta=0.4)
+fascicle_1.fill_with_population(axons_diameters, axons_type, Delta=4)
 fascicle_1.fit_circular_contour(Delta = 0.1)
 fascicle_1.generate_random_NoR_position()
 t2 = time.time()
 
-print('Filled fascicle generated in '+str(t2 - t1)+' s')
+print("Filled fascicle generated in "+str(t2 - t1)+" s")
 
 
 ##################################
@@ -46,7 +46,7 @@ fascicle_1.insert_I_Clamp(position, t_start, duration, amplitude)
 ##################################
 ####### recording context ########
 ##################################
-testrec = nrv.recorder('endoneurium_bhadra')
+testrec = nrv.recorder("endoneurium_bhadra")
 testrec.set_recording_point(L/4, 0, 100)
 testrec.set_recording_point(L/2, 0, 100)
 testrec.set_recording_point(3*L/4, 0, 100)
@@ -69,7 +69,7 @@ length_1 = 1000
 y_c_1 = 0
 z_c_1 = 0
 x_1_offset = (L-length_1)/2
-elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
+elec_1 = nrv.LIFE_electrode("LIFE_1", D_1, length_1, x_1_offset, y_c_1, z_c_1)
 # stimulus def
 start = 1
 I_cathod = 40
@@ -82,7 +82,7 @@ LIFE_stim.add_electrode(elec_1, stim1)
 fascicle_1.attach_extracellular_stimulation(LIFE_stim)
 
 t3 = time.time()
-print('Context generated in '+str(t3 - t2)+' s')
+print("Context generated in "+str(t3 - t2)+" s")
 
 ########################
 ## Save/Load Fascicle ##
@@ -94,10 +94,10 @@ fascicle_2 = nrv.load_any(fasc_file,extracel_context=True,intracel_context=True,
 
 
 t4 = time.time()
-print('fascicle saved in '+str(t4 - t0)+' s')
-fascicle_2.simulate(t_sim=5, save_path='./unitary_tests/figures/', verbose=True)
+print("fascicle saved in "+str(t4 - t0)+" s")
+fascicle_2.simulate(t_sim=5, save_path="./unitary_tests/figures/", verbose=True)
 t5 = time.time()
-print('Total time '+str(t5 - t0)+' s')
+print("Total time "+str(t5 - t0)+" s")
 loaded_rec = fascicle_2.recorder
 
 print(loaded_rec.t is not None)
@@ -108,10 +108,10 @@ if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(6,6))
     fascicle_2.plot(fig, ax, num=True)
 
-    DIR_fasc = './unitary_tests/figures/Fascicle_'+str(test_num)+'/'
-    plt.savefig(DIR+ 'figures/506_A.png')
+    DIR_fasc = "./unitary_tests/figures/Fascicle_"+str(test_num)+"/"
+    plt.savefig(DIR+ "figures/506_A.png")
 
-    fasc_state = nrv.fascicular_state(DIR_fasc, save=True, saving_file=DIR+"70_Facsicular_state.json")
+    fasc_state = nrv.fascicular_state(DIR_fasc, save=True, saving_file=DIR_fasc+"506_Facsicular_state.json")
     fig, ax = plt.subplots(figsize=(8,8))
     nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
     plt.savefig("./unitary_tests/figures/506_B.png")
@@ -121,8 +121,8 @@ if nrv.MCH.do_master_only_work():
     for k in range(len(loaded_rec.recording_points)):
         axs.append(plt.subplot(3,1,k+1))
         axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording)
-        axs[k].set_xlabel('time (ms)')
-        axs[k].set_ylabel('elec. '+str(k)+' potential (mV)')
+        axs[k].set_xlabel("time (ms)")
+        axs[k].set_ylabel("elec. "+str(k)+" potential (mV)")
         axs[k].grid()
     plt.tight_layout()
-    plt.savefig('./unitary_tests/figures/506_C.png')
+    plt.savefig("./unitary_tests/figures/506_C.png")

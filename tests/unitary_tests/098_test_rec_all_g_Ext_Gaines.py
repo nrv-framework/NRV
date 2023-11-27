@@ -46,9 +46,9 @@ nrv.get_myeline_properties(res_mrg)
 nrv.get_myeline_properties(res_motor)
 nrv.get_myeline_properties(res_sensory)
 
-seq_types_mrg = res_mrg['sequence']
-seq_types_motor = res_motor['sequence']
-seq_types_sensory = res_sensory['sequence']
+seq_types_mrg = res_mrg['axon_path_type']
+seq_types_motor = res_motor['axon_path_type']
+seq_types_sensory = res_sensory['axon_path_type']
 print(seq_types_motor[:11], res_motor['Nsec'])
 
 C = nrv.find_central_node_index(res_motor)

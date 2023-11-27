@@ -35,14 +35,14 @@ for key in removable_keys:
 ## check if the axon fired or not ##
 ####################################
 ax_state = axon_state(sim_results, save=False)
-N_AP = ax_state["onset number"]
+sim_results["N_AP"] = ax_state["onset number"]
 # print(N_AP)
 
 ################################
 ## Save results in a csv file ##
 ################################
 if "in_nerve" in kwargs:  # Nerve Simulation
-    file_object = open(save_path + "/onset_summary.csv", "a")
+    file_object = open(self.save_path + "/onset_summary.csv", "a")
     line = str(self.ID)
 else:  # Fascicle Simulation
     file_object = open(folder_name + "/onset_summary.csv", "a")
@@ -60,7 +60,7 @@ line += (
     + "\t"
     + str(sim_results["myelinated"])
     + "\t"
-    + str(N_AP)
+    + str(sim_results["N_AP"])
     + "\n"
 )
 file_object.write(line)

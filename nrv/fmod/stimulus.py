@@ -322,6 +322,10 @@ class stimulus(NRV_class):
     def __ne__(self, b):  # self != b
         return not self == b
 
+
+    def integrate(self):
+        return np.trapz(self.s, x=self.t)
+
     #######################
     ## signal generators ##
     #######################
