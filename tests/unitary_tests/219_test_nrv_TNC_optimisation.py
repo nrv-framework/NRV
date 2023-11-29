@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 ## Cost function definition
-N_test = "215"
+N_test = "219"
 figdir = "./unitary_tests/figures/" + N_test + "_"
 
 fnam1 = "./unitary_tests/results/json/" + N_test + "_optim1.json"
@@ -32,21 +32,21 @@ my_cost1 = nrv.CostFunction(
 
 # Problem definition
 test_prob = nrv.Problem(save_problem_results=True, problem_fname=fnam1)
-test_prob.optimizer = nrv.PSO_optimizer()
+
 bounds = (
     (0, 1000),
     (0.01, 0.25),
 )
-pso_kwargs = {
-    "dimensions" : 2,
-    "maxiter" : 3,
-    "n_particles" : 3,
-    "opt_type" : "global",
-    "bounds" : bounds,
-}
+test_prob.optimizer = nrv.scipy_optimizer(method="TNC")
 
+cg_kwargs = {
+    "dimensions": 2,
+    "bounds": bounds,
+    "maxiter": 2,
+    "option": {"disp": True}
+}
 test_prob.costfunction = my_cost1
-res = test_prob(**pso_kwargs)
+res = test_prob(**cg_kwargs)
 
 if nrv.MCH.do_master_only_work():
     print(res.x)

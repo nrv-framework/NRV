@@ -16,9 +16,8 @@ my_cost2 = rosenbock()
 test_prob.optimizer = nrv.scipy_optimizer(method="Powell")
 
 cg_kwargs = {
-    "dimensions" :2,
-    "x0": [100, 10],
-    "maxiter":10,
+    "dimensions" : 2,
+    "maxiter":2,
 }
 
 test_prob.costfunction = my_cost1

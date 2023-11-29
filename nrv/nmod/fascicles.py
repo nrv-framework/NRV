@@ -1493,7 +1493,7 @@ class fascicle(NRV_simulable):
         if not MCH.do_master_only_work():
             fasc_sim = sim_results({})
         # disable the result storage only if results are fully return
-        # To use with cation caution (mostly for optimisatino)
+        # To use with caution (mostly for optimisatino)
         if not self.save_results:
             if self.return_parameters_only:
                 rise_warning(
@@ -1621,6 +1621,9 @@ class fascicle(NRV_simulable):
                 except:
                     data = {"rank": MCH.rank, "status": "error"}
                     MCH.send_data_to_master(data)
+                    rise_error(
+                        traceback.format_exc()
+                    )
                 # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:

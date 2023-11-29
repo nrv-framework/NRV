@@ -43,8 +43,7 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
 class scipy_optimizer(Optimizer):
     def __init__(
         self,
-        dimensions=None,
-        method="CG",
+        method=None,
         x0=None,
         args=(),
         jac=None,
@@ -56,9 +55,12 @@ class scipy_optimizer(Optimizer):
         callback=None,
         maxiter = None,
         options=None,
+        dimension=None,
     ):
-        super().__init__("scipy_"+method)
-        self.dimensions = dimensions
+        if method is None:
+            super().__init__("scipy_default")
+        else:
+            super().__init__("scipy_"+method)
         self.x0 = x0
         self.args = args
         self.scipy_method = method
@@ -70,26 +72,40 @@ class scipy_optimizer(Optimizer):
         self.tol = tol
         self.callback = callback
         self.options = options or {}
+        self.dimensions = dimension
         if maxiter is not None: 
             self.options["maxiter"] = maxiter
 
-    def __update_dimensiions(self, results):
+    def __update_dimensions(self, results):
         """
         
         """
+        if self.bounds is None:
+            if self.dimensions is not None:
+                self.bounds = [(None, None) for _ in range(self.dimensions)]
         if self.x0 is None:
-            if self.dimensions is None:
-                rise_error("scipy optimizer: at least x0 or dimensions should be initiate")
+            if self.bounds is None:
+                rise_error("scipy optimizer: at least x0 or boundaries should be initiate")
             else:
-                self.x0 = np.random.rand(self.dimensions)
+                self.dimensions = len(self.bounds)
+                self.x0 = []
+                
+                for i in range(self.dimensions):
+                    min, max = self.bounds[i]
+                    if min is None:
+                        min = np.finfo(np.float32).min
+                    if max is None:
+                        max = np.finfo(np.float32).max
+                    self.x0 += [np.random.uniform(min, max)]
                 results["x0"] = self.x0
         else:
             self.dimensions = len(self.x0)
             results["dimensions"] = self.dimensions
 
+
     def minimize(self, f, **kwargs):
         results = super().minimize(f, **kwargs)
-        self.__update_dimensiions(results)
+        self.__update_dimensions(results)
         results["cost_history"] = []
         results["position_history"] = []
 

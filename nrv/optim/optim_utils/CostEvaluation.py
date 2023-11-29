@@ -128,5 +128,4 @@ class recrutement_count_CE(CostEvaluation):
             # nerve simulation
             for i in range(len(results["fascicles_IDs"])):
                 cost += self.count_fascicle_activation(results["fascicle"+str(i)])
-
         return cost
