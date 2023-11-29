@@ -12,7 +12,7 @@ import numpy as np
 from ..backend.file_handler import *
 from ..backend.log_interface import pass_info, rise_warning
 from ..backend.MCore import MCH, synchronize_processes
-from ..backend.NRV_Simulable import NRV_simulable
+from ..backend.NRV_Simulable import NRV_simulable, sim_results
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.cell.CL_postprocessing import *
@@ -93,6 +93,7 @@ class fascicle(NRV_simulable):
         self.postproc_script="default"
         self.return_parameters_only = True
         self.loaded_footprints = True
+        self.save_results = True
 
         self.config_filename = ""
         self.type = "fascicle"
@@ -1414,7 +1415,7 @@ class fascicle(NRV_simulable):
             else:
                 axon_ftpt = False
 
-        sim_results = axon.simulate(
+        axon_sim = axon.simulate(
             t_sim=self.t_sim,
             record_V_mem=self.record_V_mem,
             record_I_mem=self.record_I_mem,
@@ -1425,7 +1426,7 @@ class fascicle(NRV_simulable):
             loaded_footprints=axon_ftpt,
         )
         del axon
-        return sim_results
+        return axon_sim
 
     def simulate(
         self,
@@ -1474,17 +1475,38 @@ class fascicle(NRV_simulable):
             performed, and all postprocessing have to be handled by user. The specified script
             can access global and local variables. Can also be key word ('Vmem_plot' or 'scarter')
             to use script saved in OTF_PP folder, use with caution
+        return_parameters_only        : bool
+            if True the results of axon simulations are integrated into fasc_sim return after simulation
+            use with caution: can increase a lot computational memory
+        save_results                  : bool
+            if False disable the result storage
+            can only be False if return_parameters_only is False
+
+        Return
+        ------
+            fasc_sim    : sim_results
+                results of the simulation
         """
         if self.postproc_script is not None:
             import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         fasc_sim = super().simulate(**kwargs)
         if not MCH.do_master_only_work():
-            fasc_sim = {}
+            fasc_sim = sim_results({})
+        # disable the result storage only if results are fully return
+        # To use with cation caution (mostly for optimisatino)
+        if not self.save_results:
+            if self.return_parameters_only:
+                rise_warning(
+                    "Fascicle's simulation parameters are misused",
+                    "results are neither saved or return", 
+                    "save anyway")
+                self.save_results = True
+
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if MCH.do_master_only_work():
+        if MCH.do_master_only_work() and self.save_results:
             create_folder(folder_name)
             self.config_filename = folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
@@ -1573,7 +1595,7 @@ class fascicle(NRV_simulable):
                 ## SLAVES ##
                 try:
                     for k in this_core_mask:
-                        sim_results = self.__sim_axon(k,is_master_slave)
+                        axon_sim = self.__sim_axon(k,is_master_slave)
                         # postprocessing and data reduction
                         # (cannot be added to __sim.axon beceause nrv would not be global anymore)
                         if self.postproc_script.lower() in OTF_PP_library:
@@ -1585,18 +1607,16 @@ class fascicle(NRV_simulable):
                         with open(self.postproc_script) as f:
                             code = compile(f.read(), self.postproc_script, "exec")
                             exec(code, globals(), locals())
-                        ## store results
-                        ax_fname = "sim_axon_" + str(k) + ".json"
-                        #save_axon_results_as_json(sim_results, folder_name + "/" + ax_fname)
-                        sim_results.save(save=True, fname=folder_name + "/" + ax_fname)
+                        if self.save_results:
+                            ## store results
+                            ax_fname = "sim_axon_" + str(k) + ".json"
+                            #save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
+                            axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                         if not self.return_parameters_only:
-                            fasc_sim.update(sim_results)
+                            fasc_sim.update({"axon"+str(k):axon_sim})
                     data = {"rank": MCH.rank, "status": "success"}
                     MCH.send_data_to_master(data)
                 except KeyboardInterrupt:
-                    rise_error(
-                        "\n Caught KeyboardInterrupt, simulation stoped by user, stopping process..."
-                    )
                     raise KeyboardInterrupt
                 except:
                     data = {"rank": MCH.rank, "status": "error"}
@@ -1616,7 +1636,7 @@ class fascicle(NRV_simulable):
             for k in this_core_mask:
                 if MCH.is_alone() and self.verbose:
                     pass_info("\t Axon " + f"{k+1}" + "/" + str(self.N), end="\r")
-                sim_results = self.__sim_axon(k, is_master_slave)
+                axon_sim = self.__sim_axon(k, is_master_slave)
                 # postprocessing and data reduction
                 # (cannot be added to __sim.axon beceause nrv would not be global anymore)
                 if self.postproc_script.lower() in OTF_PP_library:
@@ -1627,11 +1647,12 @@ class fascicle(NRV_simulable):
                     code = compile(f.read(), self.postproc_script, "exec")
                     exec(code, globals(), locals())
                 ## store results
-                ax_fname = "sim_axon_" + str(k) + ".json"
-                #save_axon_results_as_json(sim_results, folder_name + "/" + ax_fname)
-                sim_results.save(save=True, fname=folder_name + "/" + ax_fname)
+                if self.save_results:
+                    ax_fname = "sim_axon_" + str(k) + ".json"
+                    #save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
+                    axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                 if not self.return_parameters_only:
-                    fasc_sim.update({str(k):sim_results})
+                    fasc_sim.update({"axon"+str(k):axon_sim})
             # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:

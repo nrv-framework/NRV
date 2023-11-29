@@ -16,14 +16,12 @@ class NRV_results(NRV_class, dict):
         if context is None:
             context = {}
         elif is_NRV_class(context):
-            context.save(save=False).pop("nrv_type")
-            self.update()
-        else:
-            if "nrv_type" in context:
-                context.pop("nrv_type")
+            context.save(save=False)
+
+        if "nrv_type" in context:
+            context["result_type"] = context.pop("nrv_type")
         self.update(context)
         self.__sync()
-
 
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):

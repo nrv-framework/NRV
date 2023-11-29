@@ -147,6 +147,22 @@ class Mcore_handler(metaclass=NRV_singleton):
         data    : np.array
             variable broadcasted in all instances
         """
+        return self.master_broadcasts_to_all(var)
+
+    def master_broadcasts_to_all(self, var):
+        """
+        Broadcast an array to all instances of the process (share jobs performed by the master only)
+
+        Parameters
+        ----------
+        var : np.array or dict
+            variable to broadcast, from the master only, esle None
+
+        Returns
+        -------
+        data    : np.array or dict
+            variable broadcasted in all instances
+        """
         if self.is_alone():
             data = var
         else:
@@ -163,19 +179,23 @@ class Mcore_handler(metaclass=NRV_singleton):
 
         Parameters
         ----------
-        partial_result  : np.array
+        partial_result  : dict
             individual result from an instance
 
         Returns
         -------
-        result  : np.array
-            global array if master or alone, else None
+        result  : dict
+            global dict if master or alone, else None
         """
         if self.is_alone():
             final_result = partial_result
         else:
-            final_result = comm.gather(partial_result, root=0)
-            if not self.is_master():
+            list_results = comm.gather(partial_result, root=0)
+            if self.is_master():
+                final_result = list_results[0]
+                for i in range(1, len(list_results)):
+                    final_result.update(list_results[i])
+            else:
                 final_result = None
         return final_result
 

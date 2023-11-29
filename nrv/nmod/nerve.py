@@ -791,7 +791,7 @@ class nerve(NRV_simulable):
         fasc_kwargs["save_path"] = folder_name
         for fasc in self.fascicles.values():
             pass_info("...simulating fascicle " + str(fasc.ID))
-            nerve_sim[fasc.ID] = fasc.simulate(
+            nerve_sim["fascicle"+str(fasc.ID)] = fasc.simulate(
                 in_nerve=True,
                 **fasc_kwargs,
             )

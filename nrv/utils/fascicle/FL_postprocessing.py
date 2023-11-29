@@ -39,6 +39,23 @@ def ls_axons_results(dir_path):
     list_files = [file for file in os.listdir(dir_path) if file[0:9] == "sim_axon_"]
     return list_files
 
+def ls_csv(dir_path):
+    """
+    return list of axons simulation result files
+
+    Parameters
+    ----------
+    dir_path     : str
+        path the results directory
+
+    Returns
+    -------
+    files        :list of str
+        list of axons result files
+    """
+    list_files = [file for file in os.listdir(dir_path) if file[-4:] == ".csv"]
+    return list_files
+
 
 def rm_file(file_path, verbose=True):
     """
@@ -68,32 +85,42 @@ def rm_sim_dir(dir_path, verbose=True):
         pass information when file is deleted
     """
     if os.path.exists(dir_path):
+        # messaging saying folder not empty
+        if os.path.exists(
+            dir_path + "00_Fascicle_config.json",
+        ):
+            rm_file(dir_path + "00_Fascicle_config.json", verbose)
+
+        for file in ls_axons_results(dir_path)+ls_csv(dir_path):
+            rm_file(dir_path + file, verbose)
         # checking whether the folder is empty or not
         if len(os.listdir(dir_path)) == 0:
-            # removing the file using the os.remove() method
             os.rmdir(dir_path)
             pass_info("folowing folder removed :" + dir_path, verbose=verbose)
         else:
-            # messaging saying folder not empty
-            if os.path.exists(
-                dir_path + "00_Fascicle_config.json",
-            ):
-                rm_file(dir_path + "00_Fascicle_config.json", verbose)
-
-            for file in ls_axons_results(dir_path):
-                rm_file(dir_path + file, verbose)
-            if len(os.listdir(dir_path)) == 0:
-                os.rmdir(dir_path)
-                pass_info("folowing folder removed :" + dir_path, verbose=verbose)
-            else:
-                pass_info(
-                    "Folder contains files or folders which cannot be deleted",
-                    verbose=verbose,
-                )
+            os.rmdir(dir_path)
+            pass_info(
+                "Folder contains files or folders which cannot be deleted",
+                verbose=verbose,
+            )
     else:
         # file not found message
         pass_info("Folder not found in the directory", verbose=verbose)
 
+def rm_sim_dir_from_results(results, verbose=True):
+    """
+    Delete directory
+    Warning: use with caution deleted files cannot be recovered
+
+    Parameters
+    ----------
+    file_path : str
+        path and name of the file to remove
+    verbose     : str
+        pass information when file is deleted
+    """
+    fasc_dir = results["save_path"] + "Fascicle_" +str(results["ID"]) + "/"
+    rm_sim_dir(dir_path=fasc_dir, verbose=verbose)
 
 def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinated=False,\
     index=True):

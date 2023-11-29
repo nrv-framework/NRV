@@ -1,4 +1,4 @@
-nrv.rasterize(sim_results, "V_mem")
+nrv.rasterize(axon_sim, "V_mem")
 
 
 list_keys = [
@@ -14,9 +14,9 @@ list_keys = [
 ]
 
 removable_keys = []
-for key in sim_results:
+for key in axon_sim:
     if not key in list_keys:
         removable_keys += [key]
 
 for key in removable_keys:
-    nrv.remove_key(sim_results, key, verbose=self.verbose)
+    nrv.remove_key(axon_sim, key, verbose=self.verbose)

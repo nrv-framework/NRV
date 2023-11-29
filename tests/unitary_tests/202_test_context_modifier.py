@@ -2,19 +2,18 @@ import nrv
 import matplotlib.pyplot as plt
 import numpy as np
 
-def stimulus_generator(X, **kwargs):
-    stim = nrv.stimulus()
-    start = X[0]
-    I_cathod = X[1]
-    I_anod = I_cathod/5
-    T_cathod = 60e-3
-    T_inter = 40e-3
-    stim.biphasic_pulse(start,  I_cathod, T_cathod, I_anod, T_inter)
-    return stim
+def plot_stim(stim, t_stop=None, N_plot=1000):
+    stim = nrv.load_any(stim)
+    if t_stop is None:
+        t_stop = stim.t[-1]
+    stim2 = nrv.stimulus()
+    stim2.s = np.zeros(N_plot)
+    stim2.t = np.linspace(0, t_stop, N_plot)
+    stim2 += stim
+    plt.plot(stim2.t, stim2.s)
+test_stim_CM = nrv.cathodic_stimulus_CM(start="0", I_cathod="1")
 
-test_stim_CM = nrv.stimulus_CM(stim_gen=stimulus_generator)
-
-
+t_sim=5
 static_context = "./unitary_tests/sources/202_axon.json"
 X = np.array([
     [1, 1],
@@ -32,12 +31,12 @@ plt.figure(2)
 for i, x in enumerate(X):
     print(x)
     ax = test_stim_CM(x, static_context)
-    results = ax(t_sim=5)
+    results = ax(t_sim=t_sim)
     del ax
 
 
     plt.figure(1)
-    plt.plot(results['extra_stim']['stimuli'][0]['t'], results['extra_stim']['stimuli'][0]['s'], '.')
+    plot_stim(results['extra_stim']['stimuli'][0], t_stop=t_sim)
     plt.figure(2)
     plt.subplot(2,3,i+1)
     map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')

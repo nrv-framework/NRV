@@ -68,12 +68,11 @@ class NRV_simulable(NRV_class):
 
     def simulate(self, **kwargs) -> sim_results:
         self.set_parameters(**kwargs)
-        results = sim_results(
-                self.save(
+        context = self.save(
                 save=False,
                 extracel_context=self.extracel_status(),
                 intracel_context=self.intracel_status(),
                 rec_context=self.rec_status(),
             )
-        )
+        results = sim_results(context)
         return results

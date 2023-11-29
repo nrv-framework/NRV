@@ -84,9 +84,9 @@ class charge_quantity_CE(CostEvaluation):
         return cost
 
 class recrutement_count_CE(CostEvaluation):
-    def __init__(self, id_elec=None, dt_res=0.0001):
+    def __init__(self,):
         """
-        Create a callable object which returne the charge injected
+        Create a callable object which returns the number of activated fibre in the results
 
         Parameters
         ----------
@@ -100,14 +100,33 @@ class recrutement_count_CE(CostEvaluation):
         """
         super().__init__()
 
-    def count_activation(self, results:sim_results):
+    def count_axon_activation(self, results:sim_results):
+        if len(results["V_mem_raster_position"]) == 0:
+            # no spike
+            return 0
+        else:
+            return 1
+
+    
+    def count_fascicle_activation(self, results:sim_results):
         cpt = 0
         for i in range(results['N']):
-            cpt += results[str(i)]
+            cpt += results["axon"+str(i)]["spike"]
         return cpt
+
 
     def call_method(self, results:sim_results, **kwargs) -> float:
         """
         Returns the spike number from a simulation result
         """
-        self.count_activation(results)
+        cost = 0
+        if "myelinated" in results["result_type"]:
+            cost = self.count_axon_activation(results)
+        elif results["result_type"] == "fascicle":
+            cost = self.count_fascicle_activation(results)
+        else:
+            # nerve simulation
+            for i in range(len(results["fascicles_IDs"])):
+                cost += self.count_fascicle_activation(results["fascicle"+str(i)])
+
+        return cost

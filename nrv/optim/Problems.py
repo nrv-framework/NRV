@@ -1,8 +1,16 @@
 import numpy as np
+import faulthandler
 
 from ..backend.NRV_Class import NRV_class
+from ..backend.MCore import MCH, synchronize_processes
+from ..backend.log_interface import rise_error, pass_debug_info
 from .CostFunctions import CostFunction
 from .Optimizers import Optimizer
+
+import sys
+
+# enable faulthandler to ease 'segmentation faults' debug
+faulthandler.enable()
 
 
 def cost_function_swarm_from_particle(cost_function_part, **kwargs):
@@ -45,14 +53,21 @@ class Problem(NRV_class):
         - problems where the waveform can be optimized: please refer to ...
     """
 
-    def __init__(self, cost_function:CostFunction = None, optimizer:Optimizer =None):
+    def __init__(
+        self,
+        cost_function:CostFunction=None,
+        optimizer:Optimizer=None,
+        save_problem_results=False,
+        problem_fname="optim.json"):
         super().__init__()
         self._CostFunction = cost_function
         self._Optimizer = optimizer
         # For cases where optimisation is done on a swarm(groupe) of particle
         self.swarm_optimizer = False
         self._SwarmCostFunction = None
-
+        self.save_problem_results = save_problem_results
+        self.problem_fname = problem_fname
+    
     # Handling the CostFunction attribute
     @property
     def costfunction(self):
@@ -96,14 +111,63 @@ class Problem(NRV_class):
 
     # Call method is where the magic happens
     def __call__(self, **kwargs):
-        if not self.swarm_optimizer:
-            results = self._Optimizer(self._CostFunction, **kwargs)
+        if MCH.do_master_only_work():
+            try:
+                kwargs = self.__update_saving_parameters(**kwargs)
+                if not self.swarm_optimizer:
+                    results = self._Optimizer(self._CostFunction, **kwargs)
+                else:
+                    self._SwarmCostFunction = cost_function_swarm_from_particle(self._CostFunction)
+                    results = self._Optimizer(self._SwarmCostFunction, **kwargs)
+                MCH.master_broadcasts_to_all({"status":"Completed"})
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
+            except:
+                MCH.master_broadcasts_to_all({"status":"Error"})
+            
+        elif self.__check_MCore_CostFunction():
+            self.__wait_for_simulation()
         else:
-            self._SwarmCostFunction = cost_function_swarm_from_particle(self._CostFunction)
-            results = self._Optimizer(self._SwarmCostFunction, **kwargs)
-        return results
+            pass
+        if MCH.do_master_only_work():
+            if self.save_problem_results:
+                results.save(save=True, fname=self.problem_fname)
+            return results
+        else:
+            return None
+
+    # Mcore handeling
+    def __check_MCore_CostFunction(self):
+        return getattr(self._CostFunction, "_MCore_CostFunction", False)
+
+    def __wait_for_simulation(self):
+        slave_status = {"status": "Wait"}
+        try:
+            while slave_status["status"] == "Wait":
+                slave_status = MCH.master_broadcasts_to_all(slave_status)
+                pass_debug_info(MCH.rank, slave_status)
+                sys.stdout.flush()
+                if slave_status["status"]=="Simulate":
+                    self._CostFunction(slave_status["X"])
+                    slave_status["status"] = "Wait"
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        pass_debug_info(MCH.rank, slave_status)
+        sys.stdout.flush()
 
     # additional methods
+    def __update_saving_parameters(self, **kwargs):
+        """
+        internal use only: update the results saving parameters
+        and remove the corresponding keys from kwargs
+        """
+        if "save_problem_results" in kwargs:
+            self.save_problem_results = kwargs.pop("save_problem_results")
+        if "problem_fname" in kwargs:
+            self.problem_fname = kwargs.pop("problem_fname")
+        return kwargs
+
+
     def context_and_cost(self, context_func, cost_func, residual):
         self.CostFunction = CostFunction(context_func, cost_func, residual)
 
