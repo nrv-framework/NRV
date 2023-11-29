@@ -13,7 +13,7 @@ test_prob = nrv.Problem(save_problem_results=True)
 
 my_cost1 = sphere()
 my_cost2 = rosenbock()
-test_prob.optimizer = nrv.scipy_optimizer(method="Powell")
+test_prob.optimizer = nrv.scipy_optimizer(method=None)
 
 cg_kwargs = {
     "dimensions" :2,
