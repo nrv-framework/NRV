@@ -136,6 +136,8 @@ class scipy_optimizer(Optimizer):
         results["best_position"]= res.x
         
         results.update(res)
+        # hess_inv cannot be converted to json
+        del results["hess_inv"]
         results["status"] = "Completed"
         return results
 

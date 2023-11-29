@@ -1,5 +1,6 @@
 import numpy as np
 import faulthandler
+import traceback
 
 from ..backend.NRV_Class import NRV_class
 from ..backend.MCore import MCH, synchronize_processes
@@ -124,6 +125,7 @@ class Problem(NRV_class):
                 raise KeyboardInterrupt
             except:
                 MCH.master_broadcasts_to_all({"status":"Error"})
+                rise_error(traceback.format_exc())
             
         elif self.__check_MCore_CostFunction():
             self.__wait_for_simulation()
@@ -153,7 +155,6 @@ class Problem(NRV_class):
         except KeyboardInterrupt:
             raise KeyboardInterrupt
         pass_debug_info(MCH.rank, slave_status)
-        sys.stdout.flush()
 
     # additional methods
     def __update_saving_parameters(self, **kwargs):
