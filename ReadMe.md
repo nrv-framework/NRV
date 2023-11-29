@@ -1,3 +1,9 @@
+[![PyPI version](https://badge.fury.io/py/nrv-py.svg)](https://badge.fury.io/py/nrv-py)
+[![Documentation Status](https://readthedocs.org/projects/nrv/badge/?version=latest)](https://nrv.readthedocs.io/en/master/?badge=master)
+[![License: CeCill](https://img.shields.io/badge/Licence-CeCill-blue )](https://github.com/fkolbl/NRV/blob/master/Licence.txt)
+<!---[![DOI](xxxx)](xxx)-->
+<!---[![Build Status](xxxx)](xxx)-->
+
 # NRV
 *Python librairy for Peripheral Nervous System stimulation modeling*
 
