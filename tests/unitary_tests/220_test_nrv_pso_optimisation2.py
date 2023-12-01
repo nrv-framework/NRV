@@ -10,9 +10,25 @@ figdir = "./unitary_tests/figures/" + N_test + "_"
 
 fnam1 = "./unitary_tests/results/json/" + N_test + "_optim1.json"
 
-t_sim=5
+t_sim = 6
+t_end = t_sim-2
+t_bound = (0, t_end)
+I_bound = (-500, 0)
+
+
 static_context = "./unitary_tests/sources/200_fascicle_1.json"
-test_stim_CM = nrv.biphasic_stimulus_CM(start=0.1, I_cathod="0", T_cathod="1")
+
+kwrgs_interp = {
+    "dt": 0.005,
+    "amp_start": 0,
+    "amp_stop": 0,
+    "intertype": "Spline",
+    "bounds": I_bound,
+    "fixed_order": False,
+    "t_end": t_end,
+    }
+test_stim_CM = nrv.stimulus_CM(interpolator=nrv.interpolate_2pts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
+
 costR = nrv.recrutement_count_CE()
 costC = nrv.charge_quantity_CE()
 cost_evaluation = (15 - costR) + 0.01*costC
@@ -33,14 +49,11 @@ my_cost1 = nrv.CostFunction(
 # Problem definition
 test_prob = nrv.Problem(save_problem_results=True, problem_fname=fnam1)
 test_prob.optimizer = nrv.PSO_optimizer()
-bounds = (
-    (0, 1000),
-    (0.01, 0.25),
-)
+bounds = (t_bound, I_bound, t_bound, I_bound)
 pso_kwargs = {
-    "dimensions" : 2,
-    "maxiter" : 3,
-    "n_particles" : 3,
+    "dimensions" : 4,
+    "maxiter" : 2,
+    "n_particles" : 2,
     "opt_type" : "global",
     "bounds" : bounds,
 }

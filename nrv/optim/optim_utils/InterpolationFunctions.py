@@ -11,7 +11,6 @@ import scipy.signal as sig
 ####################################################################
 
 ## interpolation
-
 def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
     save=False, filename="interpolate.dat", save_scale=False):
 

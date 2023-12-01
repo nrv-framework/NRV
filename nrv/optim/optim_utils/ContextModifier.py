@@ -71,7 +71,6 @@ class stimulus_CM(ContextModifier):
         self.stim_gen = stim_gen
         self.stim_gen_kwargs = stim_gen_kwargs
         for key in kwargs:
-            print(key)
             self.intrep_kwargs[key] = kwargs[key]
             self.stim_gen_kwargs[key] = kwargs[key]
 
@@ -109,7 +108,7 @@ class stimulus_CM(ContextModifier):
         return local_sim
 
 
-class cathodic_stimulus_CM(stimulus_CM):
+class biphasic_stimulus_CM(stimulus_CM):
     def __init__(
         self,
         stim_ID=0,
@@ -117,12 +116,12 @@ class cathodic_stimulus_CM(stimulus_CM):
         I_cathod = 100,
         T_cathod = 60e-3,
         T_inter = 40e-3,
+        I_anod = None,
         stim_gen=None,
         stim_gen_kwargs={},
         extracel_context=True,
         intracel_context=False,
         rec_context=False,
-        **kwargs,
     ):
         """
         
@@ -134,12 +133,12 @@ class cathodic_stimulus_CM(stimulus_CM):
             extracel_context=extracel_context,
             intracel_context=intracel_context,
             rec_context=rec_context
-            **kwargs,
         )
         self.start = start
         self.I_cathod = I_cathod
         self.T_cathod = T_cathod
         self.T_inter = T_inter
+        self.I_anod = I_anod
 
     def __set_values(self, X):
         N_X = len(X)
@@ -172,6 +171,9 @@ class cathodic_stimulus_CM(stimulus_CM):
         else:
             stim = stimulus()
             start, I_cathod, T_cathod, T_inter = self.__set_values(X_interp)
-            I_anod = I_cathod/5
+            if self.I_anod is None:
+                I_anod = I_cathod/5
+            else:
+                I_anod = self.I_anod
             stim.biphasic_pulse(start,  I_cathod, T_cathod, I_anod, T_inter)
             return stim
