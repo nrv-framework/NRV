@@ -13,9 +13,9 @@ fnam1 = "./unitary_tests/results/json/" + N_test + "_optim1.json"
 t_sim=5
 static_context = "./unitary_tests/sources/200_fascicle_1.json"
 test_stim_CM = nrv.biphasic_stimulus_CM(start=0.1, I_cathod="0", T_cathod="1")
-costR = nrv.recrutement_count_CE()
+costR = nrv.recrutement_count_CE(reverse=True)
 costC = nrv.charge_quantity_CE()
-cost_evaluation = (15 - costR) + 0.01*costC
+cost_evaluation = costR + 0.01*costC
 kwarg_sim = {
     "return_parameters_only":False,
     "save_results":False,

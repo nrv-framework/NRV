@@ -84,21 +84,31 @@ class charge_quantity_CE(CostEvaluation):
         return cost
 
 class recrutement_count_CE(CostEvaluation):
-    def __init__(self,):
+    """
+    Callable object which returns the number of activated fibre in the results
+
+    Parameters
+    ----------
+    results     : dict
+        output of an axon simulation using Markov model for at least a node
+
+    Returns
+    -------
+    cost        :int
+        number of spike in the v_mem part
+    """
+    def __init__(self,reverse=False):
         """
         Create a callable object which returns the number of activated fibre in the results
 
         Parameters
         ----------
-        results     : dict
+        reverse     : bool
             output of an axon simulation using Markov model for at least a node
 
-        Returns
-        -------
-        cost        :int
-            number of spike in the v_mem part
         """
         super().__init__()
+        self.reverse = reverse
 
     def count_axon_activation(self, results:sim_results):
         if len(results["V_mem_raster_position"]) == 0:
@@ -111,7 +121,10 @@ class recrutement_count_CE(CostEvaluation):
     def count_fascicle_activation(self, results:sim_results):
         cpt = 0
         for i in range(results['N']):
-            cpt += results["axon"+str(i)]["spike"]
+            if self.reverse:
+                cpt += 1-results["axon"+str(i)]["spike"]
+            else:
+                cpt += results["axon"+str(i)]["spike"]
         return cpt
 
 
