@@ -45,7 +45,6 @@ def is_NRV_class_dict(x):
 #           check dictionaries           #
 ##########################################
 
-
 def is_NRV_object_dict(x):
     return is_NRV_dict(x) or is_NRV_dict_list(x) or is_NRV_dict_dict(x)
 

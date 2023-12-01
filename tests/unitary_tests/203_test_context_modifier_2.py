@@ -3,28 +3,31 @@ import nrv
 import matplotlib.pyplot as plt
 import numpy as np
 
-def stimulus_generator(X, **kwargs):
-    stim = nrv.stimulus()
-    start = X[0]
-    I_cathod = X[1]
-    I_anod = I_cathod/5
-    T_cathod = 60e-3
-    T_inter = 40e-3
-    stim.biphasic_pulse(start,  I_cathod, T_cathod, I_anod, T_inter)
-    return stim
+t_sim=7
 
-test_stim_CM = nrv.stimulus_CM(stim_gen=stimulus_generator)
+
+kwrgs_interp = {
+    "dt": 0.005,
+    "amp_start": 0,
+    "amp_stop": 0,
+    "intertype": "Spline",
+    "bounds": (0, 0),
+    "fixed_order": False,
+    "t_end": t_sim-1,
+    }
+test_stim_CM = nrv.stimulus_CM(interpolator=nrv.interpolate_2pts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
 
 
 static_context = "./unitary_tests/sources/202_axon.json"
 X = np.array([
-    [1, 1],
-    [1, 20],
-    [1, 40],
-    [1, 60],
-    [1, 80],
-    [1, 100],
+    [1, -.1, 4, .1],
+    [1, -20, 4, .1],
+    [1, -40, 4, .1],
+    [1, -60, 4, .1],
+    [.5, -20, 1, .1],
+    [.5, -20, 4, .1],
 ])
+
 
 results = []
 # simulate the axon
@@ -33,12 +36,13 @@ plt.figure(2)
 for i, x in enumerate(X):
     print(x)
     ax = test_stim_CM(x, static_context)
-    results = ax(t_sim=5)
+    results = ax(t_sim=t_sim)
     del ax
 
 
     plt.figure(1)
-    plt.plot(results['extra_stim']['stimuli'][0]['t'], results['extra_stim']['stimuli'][0]['s'], '.')
+    results.plot_stim(0, t_stop=t_sim)
+    plt.plot(x[::2], x[1::2], 'ok')
     plt.figure(2)
     plt.subplot(2,3,i+1)
     map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')
@@ -49,7 +53,7 @@ for i, x in enumerate(X):
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 plt.figure(1)
-plt.savefig('./unitary_tests/figures/202_A.png')
+plt.savefig('./unitary_tests/figures/203_A.png')
 plt.figure(2)
-plt.savefig('./unitary_tests/figures/202_B.png')
+plt.savefig('./unitary_tests/figures/203_B.png')
 #plt.show()

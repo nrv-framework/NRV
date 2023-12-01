@@ -36,7 +36,7 @@ for i, x in enumerate(X):
 
 
     plt.figure(1)
-    plot_stim(results['extra_stim']['stimuli'][0], t_stop=t_sim)
+    results.plot_stim(0, t_stop=t_sim)
     plt.figure(2)
     plt.subplot(2,3,i+1)
     map = plt.pcolormesh(results['t'], results['x_rec'], results['V_mem'] ,shading='auto')

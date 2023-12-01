@@ -55,6 +55,7 @@ class stimulus_CM(ContextModifier):
             extracel_context=True,
             intracel_context=False,
             rec_context=False,
+            **kwargs,
         ):
         """
             i
@@ -69,6 +70,10 @@ class stimulus_CM(ContextModifier):
         self.intrep_kwargs = intrep_kwargs
         self.stim_gen = stim_gen
         self.stim_gen_kwargs = stim_gen_kwargs
+        for key in kwargs:
+            print(key)
+            self.intrep_kwargs[key] = kwargs[key]
+            self.stim_gen_kwargs[key] = kwargs[key]
 
     def interpolate(self, X):
         if self.interpolator is not None:
@@ -88,10 +93,16 @@ class stimulus_CM(ContextModifier):
             stim.t = np.linspace(0, t_sim, N)
         return stim
 
+    def __update_t_sim(self, local_sim):
+        if "t_sim" not in self.stim_gen_kwargs:
+            if "t_sim" in self.intrep_kwargs:
+                self.stim_gen_kwargs["t_sim"] = self.intrep_kwargs["t_sim"]
+            else:
+                self.stim_gen_kwargs["t_sim"] = local_sim.t_sim
+
     def __call__(self, X, static_sim:NRV_simulable, **kwargs) -> NRV_simulable:
         local_sim = super().__call__(X, static_sim, **kwargs)
-        t_sim = local_sim.t_sim
-        self.stim_gen_kwargs["t_sim"] = t_sim
+        self.__update_t_sim(local_sim)
         X_inter = self.interpolate(X)
         stim = self.stimulus_generator(X_inter)
         local_sim.extra_stim.change_stimulus_from_elecrode(self.stim_ID, stim)
@@ -100,18 +111,19 @@ class stimulus_CM(ContextModifier):
 
 class cathodic_stimulus_CM(stimulus_CM):
     def __init__(
-            self,
-            stim_ID=0,
-            start = 1,
-            I_cathod = 100,
-            T_cathod = 60e-3,
-            T_inter = 40e-3,
-            stim_gen=None,
-            stim_gen_kwargs={},
-            extracel_context=True,
-            intracel_context=False,
-            rec_context=False,
-        ):
+        self,
+        stim_ID=0,
+        start = 1,
+        I_cathod = 100,
+        T_cathod = 60e-3,
+        T_inter = 40e-3,
+        stim_gen=None,
+        stim_gen_kwargs={},
+        extracel_context=True,
+        intracel_context=False,
+        rec_context=False,
+        **kwargs,
+    ):
         """
         
         """
@@ -122,6 +134,7 @@ class cathodic_stimulus_CM(stimulus_CM):
             extracel_context=extracel_context,
             intracel_context=intracel_context,
             rec_context=rec_context
+            **kwargs,
         )
         self.start = start
         self.I_cathod = I_cathod

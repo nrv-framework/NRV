@@ -3,12 +3,44 @@ Access and modify NRV Parameters
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-from .NRV_Class import NRV_class
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+from .NRV_Class import NRV_class, load_any
 from .NRV_Results import NRV_results
+from .log_interface import rise_warning
+from ..fmod.stimulus import stimulus
 
 class sim_results(NRV_results):
     def __init__(self, context=None):
         super().__init__(context)
+
+    def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
+        """
+        Plot one or several stimulis of the simulation extra-cellular context 
+        """
+        if 'extra_stim' not in self:
+            rise_warning('No extracellular stimulation to be plotted')
+        else:
+            if IDs is None:
+                IDs = [i for i in range(len(self['extra_stim']['stimuli']))]
+            elif not np.iterable(IDs):
+                IDs = [int(IDs)]
+            for i in IDs:
+                stim = load_any(self['extra_stim']['stimuli'][i])
+                if t_stop is None:
+                    t_stop = stim.t[-1]
+                stim2 = stimulus()
+                stim2.s = np.zeros(N_pts)
+                stim2.t = np.linspace(0, t_stop, N_pts)
+                stim2 += stim
+                if ax is None:
+                    plt.plot(stim2.t, stim2.s, **fig_kwargs)
+                else:
+                    ax.plot(stim2.t, stim2.s, **fig_kwargs)
+
+
 
 
 class NRV_simulable(NRV_class):

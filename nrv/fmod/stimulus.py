@@ -546,3 +546,6 @@ class stimulus(NRV_class):
         slope = (ampstart - ampmax) / (tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
+
+
+
