@@ -231,6 +231,16 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
         t_end = t_sim
     X1 = [position[0],position[1]]
     X2 = [position[2],position[3]]
+
+    if X1[0] < dt:
+        X1[0] += dt
+    elif X1[0] > t_end-(4*dt):
+        X1[0] -= 4*dt
+    if X2[0] < dt:
+        X2[0] += dt
+    elif X2[0] > t_end-(4*dt):
+        X2[0] -= 4*dt
+
     if fixed_order:
         X2 = [position[0]+position[2]+2*dt, position[3]]
     elif abs(X1[0] - X2[0]) < 2*dt:
@@ -262,5 +272,3 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
         plt.plot(T, waveform)
         plt.scatter(t,x)
     return waveform
-
-

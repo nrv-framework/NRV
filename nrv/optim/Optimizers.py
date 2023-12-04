@@ -384,4 +384,3 @@ class PSO_optimizer(Optimizer):
                     json.dump(results, outfile)
 
         return results
-
