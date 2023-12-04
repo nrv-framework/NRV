@@ -10,7 +10,6 @@ class optim_results(NRV_results):
     ############################
     ##    plotting methods    ##
     ############################
-    
     def plot_cost_history(self, fig=None , ax=None, xylabel=True, label=None):
         if ax is None:
             plt.plot(self.cost_history, label=label)

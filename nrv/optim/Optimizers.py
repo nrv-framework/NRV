@@ -56,6 +56,7 @@ class scipy_optimizer(Optimizer):
         maxiter = None,
         options=None,
         dimension=None,
+        normalize=False,
     ):
         if method is None:
             super().__init__("scipy_default")
@@ -72,9 +73,12 @@ class scipy_optimizer(Optimizer):
         self.tol = tol
         self.callback = callback
         self.options = options or {}
+        self.maxiter = maxiter
         self.dimensions = dimension
-        if maxiter is not None: 
-            self.options["maxiter"] = maxiter
+        self.normalize = normalize
+        self.scale_translation = None
+        self.scale_homothety = None
+        self.scaled_bounds = None
 
     def __update_dimensions(self, results):
         """
@@ -102,14 +106,32 @@ class scipy_optimizer(Optimizer):
             self.dimensions = len(self.x0)
             results["dimensions"] = self.dimensions
 
+    def __normalize_bound(self, results):
+        self.scale_translation = np.zeros(self.dimensions)
+        self.scale_homothety =  np.ones(self.dimensions)
+        if not self.normalize:
+            self.scaled_bounds = self.bounds
+        else:
+            self.scaled_bounds = []
+            for i, bd in enumerate(self.bounds):
+                self.scaled_bounds += [(0,1)]
+                self.scale_translation[i] = bd[0]
+                self.scale_homothety[i] = bd[1] - bd[0]
+        results['scale_translation'] = self.scale_translation
+        results['scale_homothety'] = self.scale_homothety
+        results['scaled_bounds'] = self.scaled_bounds
 
     def minimize(self, f, **kwargs):
         results = super().minimize(f, **kwargs)
+        if self.maxiter is not None: 
+            self.options["maxiter"] = self.maxiter
         self.__update_dimensions(results)
+        self.__normalize_bound(results)
         results["cost_history"] = []
         results["position_history"] = []
 
         def f_history(x):
+            x = (results['scale_homothety'] * x) + results['scale_translation']
             c = f(x)
             results["position_history"].append([x])
             results["cost_history"].append(c)
@@ -124,20 +146,23 @@ class scipy_optimizer(Optimizer):
             jac= self.jac,
             hess= self.hess,
             hessp= self.hessp,
-            bounds= self.bounds,
+            bounds= self.scaled_bounds,
             constraints= self.constraints,
             tol= self.tol,
             callback= self.callback,
             options= self.options,
         )
+        res.x = (results['scale_homothety'] * res.x) + results['scale_translation']
+
         t_opt = perf_counter()-t0
         results["optimization_time"] = t_opt
         results["best_cost"] = res.fun
         results["best_position"]= res.x
-        
+
         results.update(res)
         # hess_inv cannot be converted to json
-        del results["hess_inv"]
+        if "hess_inv" in results:
+            del results["hess_inv"]
         results["status"] = "Completed"
         return results
 
