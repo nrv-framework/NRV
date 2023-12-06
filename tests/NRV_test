@@ -50,11 +50,11 @@ if __name__ == "__main__":
         python_cmd = "python3 "
     else:
         python_cmd = "python3 "
-        
+
     launcher = nrv_cmd
     if args.FORCE_PYTHON:
         launcher = python_cmd
-        
+
     if args.DEP_TEST:
         ###############################
         ## test neurnon installation ##
@@ -108,9 +108,7 @@ if __name__ == "__main__":
     else:
         args.LIST_TEST = False
 
-
-
-    if args.TARGET:
+    if args.TARGET != '0':
         N = len(args.TARGET)
         offset = 0
         ########################################
@@ -186,7 +184,8 @@ if __name__ == "__main__":
                     test_out = os.system(launcher+unit_test_folder+test)
                     print("test exited with value ", test_out)
                     break
-        
+    else:
+        args.TARGET = False
     
     if args.UNIT_TEST or (not args.DEP_TEST and not args.LIST_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
         ###################################
