@@ -193,7 +193,6 @@ class MshCreator(NRV_class):
         else:
             if bd:
                 return self.faces, self.faces_com
-
         return self.faces
 
     def get_res(self):
@@ -215,7 +214,6 @@ class MshCreator(NRV_class):
         ----------
         new_res     :float
             global resolution to set the object
-
         """
         self.res = new_res
 

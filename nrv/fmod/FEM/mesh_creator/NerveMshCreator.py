@@ -45,22 +45,22 @@ class NerveMshCreator(MshCreator):
     """
 
     def __init__(
-        self, Length=10000, Outer_D=5, Nerve_D=4000, y_c=0, z_c=0, ver_level=2
+        self, Length=10000, Outer_D=5, Nerve_D=4000, y_c=0, z_c=0, ver_level=2,
     ):
         """
         initialisation of the NerveMshCreator
 
         Parameters
         ----------
-        Length          : nerve
+        Length          : float
             Nerve length in um, by default 10000
-        Outer_D         : int(1,2,3)
+        Outer_D         : float
             Outer box diameter in mm, by default 5
-        Nerve_D         : int(1,2,3)
+        Nerve_D         : float
             Nerve diameter in um, by default 4000
-        y_c             : int(1,2,3)
+        y_c             : float
             y-axis position of the Nerve center, by default 0
-        z_c             : int(1,2,3)
+        z_c             : float
             z-axis position of the Nerve center, by default 0
         ver_level       : int(0,1,2,3,4,5,99)
             verbosity level of gmsh (see MshCreator.set_verbosity), by default 2

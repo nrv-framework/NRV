@@ -318,7 +318,6 @@ class PSO_optimizer(Optimizer):
             if not self.options or len(self.options) <5:
                 self.options = {"c1": 0.5, "c2": 0.5, "w":0.5, "k" : 5, "p" : 2}
             topology = Ring(static=self.static)
-
         # Check number of pcu
         else:
             if not self.options:

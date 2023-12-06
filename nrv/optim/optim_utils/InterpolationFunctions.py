@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline, interp1d
 import scipy.signal as sig
 
-
+from ...backend.log_interface import rise_warning
 
 
 ####################################################################
@@ -13,7 +13,6 @@ import scipy.signal as sig
 ## interpolation
 def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
     save=False, filename="interpolate.dat", save_scale=False):
-
     """
     Creates a vector with values determined by intertype interpolation of X and Y
     The size of the output is determined by scale which can be the number of points
@@ -195,7 +194,7 @@ def second_order_response(position, t_sim=100, dt=0.005, amplitude=1, save=False
     return waveform
 
 def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
-    bounds=(0, 0), fixed_order=False, t_end=None, save=False, filename="interpolate_2pts.dat", 
+    bounds=(0, 0), fixed_order=False, t_end=None, save=False, fname="interpolate_2pts.dat", 
     save_scale=False, **kwargs):
 
     """
@@ -227,39 +226,106 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
     waveform     : np.ndarray
         waveform generated from position
     """
+    rise_warning("DeprecationWarning: use interpolate_Npts rather than interpolate_2pts")
+    return interpolate_Npts(
+        position=position,
+        t_sim=t_sim,
+        dt=dt,
+        amp_start=amp_start,
+        amp_stop=amp_stop,
+        intertype=intertype,
+        bounds=bounds,
+        fixed_order=fixed_order,
+        t_end=t_end,
+        save=save,
+        fname=fname,
+        save_scale=save_scale,
+        **kwargs,
+    )
+
+
+def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
+    bounds=(0, 0), fixed_order=False, t_end=None, save=False, fname="interpolate_2pts.dat", 
+    save_scale=False, strict_bounds=True, **kwargs):
+
+    """
+    genarte a waveform from a particle position using interpolate where the position
+    values are the coordonnate of two points which should be reached by the output waveform
+
+    Parameters
+    ----------
+    position    : array
+        particle position in 4 dimensions where the first two are the coordonate of the first point
+        the last two are the coordonate of the second, syntax: X = (time, amplitude)
+    t_sim       : float
+        simulation time (ms), by default 100
+    dt          : float
+        time step of the simulation (ms), by default 0.005
+    intertype   : str
+        type of interpolation perform, by default 'Spline'
+        type possibly:
+                'Spline'                : Cubic spline interpolation
+    bounds      : tupple
+        limit range of the interpolation, if both equal no limit, by default (0,0)
+    save        : bool
+        save or not the output in a .dat file, by default False
+    filename    : str
+        name of the file on wich the output should be saved, by default 'interpolate_2pts.dat'
+    strict_bounds    :bool
+        if True values out of bound will be set to closer bound
+
+    Returns
+    -------
+    waveform     : np.ndarray
+        waveform generated from position
+    """
     if t_end is None:
         t_end = t_sim
-    X1 = [position[0],position[1]]
-    X2 = [position[2],position[3]]
-
-    if X1[0] < dt:
-        X1[0] += dt
-    elif X1[0] > t_end-(4*dt):
-        X1[0] -= 4*dt
-    if X2[0] < dt:
-        X2[0] += dt
-    elif X2[0] > t_end-(4*dt):
-        X2[0] -= 4*dt
+    N_dim = len(position)//2
+    X = np.array([[position[2*k], position[2*k+1]] for k in range(N_dim)], dtype=float)
+    for i in range(N_dim):
+        if X[i, 0] < dt:
+            X[i, 0] += 2*dt
+        elif X[i, 0] > t_end-(4*dt):
+            X[i, 0] -= 4*dt
 
     if fixed_order:
-        X2 = [position[0]+position[2]+2*dt, position[3]]
-    elif abs(X1[0] - X2[0]) < 2*dt:
-        X2[0] = X1[0]+2*dt
-        X1[1] = (X1[1]+ X2[1])/2
-        X2[1] =  X1[1]
-    elif X1[0] > X2[0]:
-        X1, X2 = X2, X1
-
+        rise_warning(NotImplemented, "fixed_order not NotImplemented")
+        fixed_order=False
+    if fixed_order:
+        pass
+    else:
+        I = np.argsort(X[:,0])
+        X = X[I]
+        for i in range(N_dim):
+            for j in range(i, N_dim):
+                if X[i,0] + dt > X[j,0]:
+                    X[j,0] = X[j,0] + 2*dt
 
     if intertype.lower() == "spline":
-        t = [0, dt, X1[0], X1[0]+dt, X2[0], X2[0]+dt, t_end-dt, t_end]
-        x = [amp_start, amp_start, X1[1], X1[1], X2[1], X2[1], amp_stop, amp_stop]
+        t = np.concatenate([[0, dt], X[:,0], X[:,0]+dt, [t_end-dt, t_end]])
+        x = np.concatenate([[amp_start, amp_start], X[:,1], X[:,1],[amp_stop, amp_stop]])
     else:
-        t = [0, X1[0], X2[0], t_end]
-        x = [amp_start, X1[1], X2[1], amp_stop]
+        t = np.concatenate([0, X[:,0], t_end])
+        x = np.concatenate([amp_start, X[:,1], amp_stop])
+    I = np.argsort(t)
+    t = t[I]
+    x = x[I]
+    mask = [True for _ in t]
+    for i in range(len(t)-1):
+        if mask[i]:
+            for j in range(i+1, len(t)):
+                if t[i]+dt > t[j]:
+                    mask[j] = False
+    t = t[mask]
+    x = x[mask]
+    if strict_bounds:
+        bds = bounds
+    else:
+        bds = (0,0)
 
-    waveform = interpolate(y=x, x=t, scale=int(t_end/dt)+1, intertype=intertype, bounds=bounds,
-        save=save, filename=filename, save_scale=save_scale)
+    waveform = interpolate(y=x, x=t, scale=int(t_end/dt)+1, intertype=intertype, bounds=bds,
+        save=False, save_scale=save_scale)
 
     if t_end < t_sim:
         dif = int((t_sim - t_end)/dt)
@@ -268,7 +334,8 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
         waveform = waveform[:int(t_sim/dt)+1]
     if save:
         T = np.linspace(0, t_sim, int(t_sim/dt)+1)
-        plt.figure()
+        fig = plt.figure()
         plt.plot(T, waveform)
         plt.scatter(t,x)
+        fig.savefig(fname)
     return waveform
