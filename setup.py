@@ -1,10 +1,14 @@
 from setuptools import setup
+from pathlib import Path
+
 
 # CHANGEME VARS
 PACKAGE_NAME = 'nrv-py'
 DESCRIPTION = 'NeuRon Virtualizer (NRV)'
 AUTHOR_NAME = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
 PROJECT_URL = "https://github.com/fkolbl/NRV"
+this_directory = Path(__file__).parent
+long_description = (this_directory / "ReadMe.md").read_text()
 
 '''
 # prevent from unnistalled requierements for nrv import
@@ -57,7 +61,7 @@ setup(
     description=DESCRIPTION,
     url=PROJECT_URL,
     version="0.9.13",
-    long_description=open('ReadMe.md', 'r').read(),
+    long_description=long_description,
     long_description_content_type='text/markdown',
 
     # architecture
