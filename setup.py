@@ -56,6 +56,7 @@ setup(
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
+    version="0.9.13",
 
     # architecture
     packages=[
@@ -98,8 +99,21 @@ setup(
     include_package_data=True,
     # classifiers
     classifiers=[
-        "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
+        'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX :: Linux',
+        'Operating System :: MacOS :: MacOS X',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: Bio-Informatics',
+        'Topic :: Scientific/Engineering :: Medical Science Apps.',
+        'Natural Language :: English',
     ],
     # dependencies
     install_requires=[
