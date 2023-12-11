@@ -3,6 +3,8 @@
 
 __copyright__ = "2023, Florian Kolbl"
 __license__ = "CeCILL"
+__version__ = "0.9.12"
+__title__ = "NeuRon Virtualizer"
 
 #####################################
 #  check environnement variables    #

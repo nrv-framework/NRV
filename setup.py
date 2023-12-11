@@ -56,7 +56,7 @@ setup(
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
-    version="0.9.13",
+    version="0.9.12",
 
     # architecture
     packages=[
