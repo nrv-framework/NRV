@@ -57,7 +57,7 @@ setup(
     description=DESCRIPTION,
     url=PROJECT_URL,
     version="0.9.13",
-    long_description=open('README.md', 'r').read(),
+    long_description=open('ReadMe.md', 'r').read(),
     long_description_content_type='text/markdown',
 
     # architecture
