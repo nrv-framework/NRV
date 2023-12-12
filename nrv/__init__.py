@@ -3,8 +3,11 @@
 
 __copyright__ = "2023, Florian Kolbl"
 __license__ = "CeCILL"
-__version__ = "0.9.14"
+__version__ = "0.9.15"
 __title__ = "NeuRon Virtualizer"
+__authors__ = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
+__contributors__ = __authors__
+__project__ = "NeuRon Virtualizer (NRV)"
 
 #####################################
 #  check environnement variables    #
