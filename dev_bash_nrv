@@ -1,4 +1,0 @@
-export PYTHONPATH="${PWD}:$PYTHONPATH"
-export PATH="$PWD/nrv:$PATH"
-export NRVPATH="${PWD}/nrv"
-chmod +x "${NRVPATH}/nrv2calm"
