@@ -1,7 +1,9 @@
 name: Publish Python 🐍 distributions 📦 to PyPI
 
 on:
-  release
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
 
 jobs:
   deploy:
