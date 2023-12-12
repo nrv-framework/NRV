@@ -2,7 +2,7 @@
 
 All notable changes to NRV are sumed up in this file.
 
-## [0.9.15] - 2023-12-12
+## [0.9.16] - 2023-12-12
 
 ### Added
 
