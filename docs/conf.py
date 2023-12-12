@@ -12,7 +12,9 @@ deps = ('mph', 'neuron', 'icecream', 'numba', 'mpi4py', 'scipy',
         'scipy.interpolate', 'scipy.special', 'dolfinx.io.gmshio', 'dolfinx.geometry',
         'dolfinx.mesh', 'numpy.linalg',  'matplotlib', 'matplotlib.pyplot', 'numpy.core', 
         'numpy.core._multiarray_umath', 'matplotlib._path', 'scipy.stats', 'scipy.optimize',
-        'matplotlib.pylab', 'pylab', 'scipy.spatial', 'scipy.sparse', 'scipy.sparse.csgraph', 'scipy.signal')
+        'matplotlib.pylab', 'pylab', 'scipy.spatial', 'scipy.sparse', 'scipy.sparse.csgraph', 
+        'scipy.signal',
+        'pyswarms', 'pyswarms.utils', 'pyswarms.backend.topology')
 for package in deps:
     sys.modules[package] = MagicMock()
 
