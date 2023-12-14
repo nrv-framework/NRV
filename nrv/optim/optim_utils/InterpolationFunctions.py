@@ -4,6 +4,7 @@ from scipy.interpolate import CubicSpline, interp1d
 import scipy.signal as sig
 
 from ...backend.log_interface import rise_warning
+from ...utils.nrv_function import nrv_interp
 
 
 ####################################################################
@@ -12,40 +13,7 @@ from ...backend.log_interface import rise_warning
 
 ## interpolation
 def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
-    save=False, filename="interpolate.dat", save_scale=False):
-    """
-    Creates a vector with values determined by intertype interpolation of X and Y
-    The size of the output is determined by scale which can be the number of points
-    of the interpolation or the array of the point on whitch the interpollation
-    should be calculated
-
-    Parameters
-    ----------
-    y           : array
-        Vector of value to interpolate
-    x           : array
-        Vector of value on which interpolate if [] will be set to an array from 1
-        to Y lenght, by default []
-    scale       : int or array
-        depending of the type either the size of the interpolated array or the
-        values on which it should be calculated
-    intertype   : str
-        type of interpolation perform, by default 'Spline'
-        type possibly:
-                'spline'                : Cubic spline interpolation
-                'linear'                : linear interpolation
-    bounds      : tupple
-        limit range of the interpolation, if both equal no limit,by default (0,0)
-    save        : bool
-        save or not the output in a .dat file, by default False
-    filename    : str
-        name of the file on wich the output should be saved, by default 'interpolate.dat'
-
-    Returns
-    -------
-    y_scale     : np.ndarray
-        result of the interpolation
-    """
+    save=False, filename="interpolate.dat", save_scale=False, kwargs_interp={}):
     y_scale = []
 
     if len(x) == 0:
@@ -59,11 +27,9 @@ def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
         x_scale = np.linspace(x[0],x[-1],(1/100)*(len(x)-1)+1)
 
     if intertype.lower() == "spline":
-        y_interpol = CubicSpline(x,y)
-        y_scale = y_interpol(x_scale)
-    elif intertype.lower() == "linear":
-        y_interpol = interp1d(x,y)
-        y_scale = y_interpol(x_scale)
+        intertype =  "catmull-rom"
+    y_interpol = nrv_interp(x, y, kind=intertype.lower(), **kwargs_interp)
+    y_scale = y_interpol(x_scale)
 
     if bounds[0] != bounds[1]:
         for i in range(len(y_scale)):
@@ -84,6 +50,7 @@ def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
             file.close()
         np.set_printoptions(threshold=10)
     return y_scale
+
 
 def interpolate_part(position, t_sim=100, t_end=None, dt=0.005, intertype="Spline", bounds=(0, 0), save=False,
     filename="interpolate_part.dat", save_scale=False):
@@ -246,7 +213,7 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
 
 def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
     bounds=(0, 0), fixed_order=False, t_end=None, save=False, fname="interpolate_2pts.dat", 
-    save_scale=False, strict_bounds=True, **kwargs):
+    plot=False, save_scale=False, generatefigure=True, strict_bounds=True, kwargs_interp={}, **kwargs):
 
     """
     genarte a waveform from a particle position using interpolate where the position
@@ -279,16 +246,24 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
     waveform     : np.ndarray
         waveform generated from position
     """
-    if t_end is None:
-        t_end = t_sim
-    N_dim = len(position)//2
-    X = np.array([[position[2*k], position[2*k+1]] for k in range(N_dim)], dtype=float)
-    for i in range(N_dim):
-        if X[i, 0] < dt:
-            X[i, 0] += 2*dt
-        elif X[i, 0] > t_end-(4*dt):
-            X[i, 0] -= 4*dt
 
+    n_dim = len(position)
+    n_pts = n_dim//2
+    X = np.array([[position[2*k], position[2*k+1]] for k in range(n_pts)], dtype=float)
+
+    # if odd number of dimention the last scalar is use to set t_end
+    if n_dim%2 == 1:
+        t_end = max(position[-1], (n_pts + 2) * dt)
+        X[:, 0] *= t_end
+    elif t_end is None:
+        t_end = t_sim
+
+
+    for i in range(n_pts):
+        if X[i, 0] < dt:
+            X[i, 0] += dt
+        elif X[i, 0] > t_end-(n_pts*dt):
+            X[i, 0] -= n_pts*dt
     if fixed_order:
         rise_warning(NotImplemented, "fixed_order not NotImplemented")
         fixed_order=False
@@ -297,26 +272,23 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
     else:
         I = np.argsort(X[:,0])
         X = X[I]
-        for i in range(N_dim):
-            for j in range(i, N_dim):
+        for i in range(n_pts):
+            for j in range(i+1, n_pts):
                 if X[i,0] + dt > X[j,0]:
-                    X[j,0] = X[j,0] + 2*dt
+                    X[j,0] = X[j,0] + dt
 
-    if intertype.lower() == "spline":
-        t = np.concatenate([[0, dt], X[:,0], X[:,0]+dt, [t_end-dt, t_end]])
-        x = np.concatenate([[amp_start, amp_start], X[:,1], X[:,1],[amp_stop, amp_stop]])
-    else:
-        t = np.concatenate([0, X[:,0], t_end])
-        x = np.concatenate([amp_start, X[:,1], amp_stop])
+    t = np.concatenate([[0], X[:,0], [t_end]])
+    x = np.concatenate([[amp_start], X[:,1], [amp_stop]])
+
     I = np.argsort(t)
     t = t[I]
     x = x[I]
     mask = [True for _ in t]
-    for i in range(len(t)-1):
+    """for i in range(len(t)-1):
         if mask[i]:
             for j in range(i+1, len(t)):
                 if t[i]+dt > t[j]:
-                    mask[j] = False
+                    mask[j] = False"""
     t = t[mask]
     x = x[mask]
     if strict_bounds:
@@ -325,17 +297,19 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
         bds = (0,0)
 
     waveform = interpolate(y=x, x=t, scale=int(t_end/dt)+1, intertype=intertype, bounds=bds,
-        save=False, save_scale=save_scale)
+        save=False, save_scale=save_scale, **kwargs_interp)
 
     if t_end < t_sim:
         dif = int((t_sim - t_end)/dt)
         waveform = np.concatenate((waveform, amp_stop * np.ones(dif)))
     elif t_end > t_sim:
         waveform = waveform[:int(t_sim/dt)+1]
-    if save:
-        T = np.linspace(0, t_sim, int(t_sim/dt)+1)
-        fig = plt.figure()
+    if save or plot:
+        T = np.linspace(0, t_sim, len(waveform))
+        if generatefigure:
+            plt.figure()
         plt.plot(T, waveform)
         plt.scatter(t,x)
-        fig.savefig(fname)
+        if save:
+            plt.savefig(fname)
     return waveform

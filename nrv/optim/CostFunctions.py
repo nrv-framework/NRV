@@ -84,6 +84,7 @@ class CostFunction(NRV_class):
         self.cost = None
 
         self._MCore_CostFunction = False
+        self.keep_results = False
         self.__check_cost_function()
 
     def __clear_results(self):
@@ -141,7 +142,8 @@ class CostFunction(NRV_class):
                     "cost": self.cost,
                 }
                 self.saver(data, file_name=self.file_name)
-            self.__clear_results()
+            if not self.keep_results:
+                self.__clear_results()
             return self.cost
         else:
             return 0

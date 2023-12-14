@@ -1,9 +1,10 @@
 import nrv
 from nrv.utils.nrv_function import sphere, rosenbock, rastrigin
-
+import numpy as np
 import matplotlib.pyplot as plt
 
-N_test = "210"
+np.random.seed(10)
+N_test = "221"
 figdir = "./unitary_tests/figures/" + N_test + "_"
 
 fnam1 = "./unitary_tests/results/json/" + N_test + "_optim_sphere.json"
@@ -18,9 +19,9 @@ my_cost3 = rastrigin()
 test_prob.optimizer = nrv.PSO_optimizer()
 
 pso_kwargs = {
-    "dimensions" : 4,
+    "dimensions" : 2,
     "maxiter" : 100,
-    "n_particles" : 20,
+    "n_particles" : 10,
     "opt_type" : "local",
 }
 
@@ -28,8 +29,11 @@ test_prob.costfunction = my_cost1
 print(test_prob.compute_cost(1)==1)
 res1 = test_prob(problem_fname=fnam1, **pso_kwargs)
 print(res1.x)
-
-
+print(res1.stabilization_it())
+print(res1.findbestpart())
+res1.plot_cost_history(generatefigure=True)
+plt.show()
+exit()
 test_prob.costfunction = my_cost2
 print(test_prob.compute_cost(1)==0)
 res2 = test_prob(problem_fname=fnam2, **pso_kwargs)

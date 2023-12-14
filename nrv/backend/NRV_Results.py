@@ -3,7 +3,24 @@ Access and modify NRV Parameters
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
-from .NRV_Class import NRV_class, abstractmethod, is_NRV_class
+from .NRV_Class import NRV_class, abstractmethod, is_NRV_class, load_any
+from .file_handler import json_load
+
+def generate_results(obj: str,**kwargs):
+    """
+    generate the proper results object depending of the obj simulated
+
+    Parameters
+    ----------
+    obj      : any
+    """
+    nrv_obj = load_any(obj)
+    if "nrv_type" in nrv_obj.__dict__():
+        nrv_type = nrv_obj.nrv_type
+        if "myelinated" in nrv_type:
+            nrv_type = ""
+        return eval('sys.modules["nrv"].' + nrv_type + "_results")(context=obj)
+
 
 
 class NRV_results(NRV_class, dict):
@@ -30,6 +47,14 @@ class NRV_results(NRV_class, dict):
 
 
     def load(self, data, blacklist=[], **kwargs):
+        if isinstance(data, str):
+            key_dic = json_load(data)
+        else:
+            key_dic = data
+        for key, item in key_dic.items():
+            if key not in self.__dict__:
+                self.__dict__[key] = item
+
         super().load(data, blacklist, **kwargs)
         self.__sync()
 
