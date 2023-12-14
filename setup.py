@@ -83,6 +83,7 @@ setup(
         "nrv.fmod.FEM.mesh_creator",
         "nrv.nmod",
         "nrv.optim",
+        "nrv.optim.optim_utils",
         "nrv.utils",
         "nrv.utils.cell",
         "nrv.utils.fascicle",
@@ -131,6 +132,7 @@ setup(
         "numba",
         "ezdxf",
         "icecream",
+        "pyswarms",
     ],  # external packages as dependencies
     python_requires=">=3.9",
 )
