@@ -253,7 +253,7 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
 
     # if odd number of dimention the last scalar is use to set t_end
     if n_dim%2 == 1:
-        t_end = max(position[-1], (n_pts + 2) * dt)
+        t_end = max(position[-1], 2 * n_pts * dt)
         X[:, 0] *= t_end
     elif t_end is None:
         t_end = t_sim
