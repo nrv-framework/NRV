@@ -18,6 +18,7 @@ from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
+from ..utils.units import sci_round
 
 # Handling verbosity
 Verbose = True
@@ -673,7 +674,7 @@ class axon(NRV_simulable):
                 self.extra_stim.set_electrodes_footprints(self.footprints)
                 # compute the minimum time between stimuli changes, checks it"s not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
-                if Delta_T_min < self.dt:
+                if sci_round(Delta_T_min, 5) <  sci_round(self.dt, 5):
                     ## WARNING: the stimulus is over sampled compared to the neuron dt:
                     if Delta_T_min / self.dt < 1:  # HERE!! FOr dt test only
                         # if the stimulus minimal change time is more than 10% of user specified dt, change it to avoid problem

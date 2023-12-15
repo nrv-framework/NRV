@@ -878,9 +878,9 @@ class fascicle(NRV_simulable):
                     rise_warning(kwargs[key], " is not an implemented axon model")
             else:
                 if not myelinated_only and key in self.unmyelinated_param:
-                    self.unmyelinated_param["model"] = kwargs[key]
+                    self.unmyelinated_param[key] = kwargs[key]
                 if not unmyelinated_only and key in self.myelinated_param:
-                    self.myelinated_param["model"] = kwargs[key]
+                    self.myelinated_param[key] = kwargs[key]
 
         ## Specific keys
         if "unmyelinated_nseg" in kwargs:
