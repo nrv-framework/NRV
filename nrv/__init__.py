@@ -19,59 +19,19 @@ import platform
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 
-
 # create a dummy object to locate frameworks path
 class DummyClass:
     """Dummy class"""
 
     pass
 
-
 nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
 root_path = nrv_path.replace("/nrv/", "")
-# check the PATH with os.environ['PATH'], modify bash/zsh profile
-current_PATH = os.environ["PATH"]
-'''
-conf_file = ".bashrc"
-if platform.system() == "Darwin":
-    # for MacOsX platforms
-    conf_file = ".zshrc"
-if not (
-    nrv_path + ":" in current_PATH
-    or ":" + nrv_path in current_PATH
-    or "/nrv:" in current_PATH
-):
-    with open(os.path.expanduser("~/" + conf_file), "r") as outfile:
-        # test if bash/zsh profile already modified
-        Flag = False
-        lines = outfile.readlines()
-        for line in lines:
-            if "NRV setup" in line:
-                Flag = True
-    outfile.close()
-    with open(os.path.expanduser("~/" + conf_file), "a") as outfile:
-        # modify or suggest user to source it
-        if not Flag:
-            # in this case, thte bash/zsh profile is not modified yet,
-            # # then do it
-            outfile.write("\n\n\n# >>>>> NRV setup >>>>>\n")
-            outfile.write('export PATH="' + nrv_path + ':$PATH"\n')
-            outfile.write("# <<<<< NRV setup <<<<<\n")
-            print(
-                conf_file
-                + " file modified, please source or restart console to be able to used nrv2calm"
-            )
-        # ask to source bash/zsh profile
-        else:
-            print(
-                "Please restart console to be able to use nrv2calm or source your own bash/zsh profile"
-            )
-    outfile.close()
-'''
 # create the environnement variable NRVPATH if it does not exist
 if "NRVPATH" not in os.environ:
     os.environ["NRVPATH"] = nrv_path
-# change the permissions on nrv2calm
+
+# change the permissions on nrv2calm --> shouldn't be needed anymore
 '''
 if not os.access(nrv_path + "/nrv2calm", os.X_OK):
     mode = os.stat(nrv_path + "/nrv2calm").st_mode
