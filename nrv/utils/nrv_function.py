@@ -211,7 +211,7 @@ class function_2D(nrv_function):
         self.f_type = "function_2D"
         self.dim = 2
 
-    #@staticmethod
+    @staticmethod
     def call_method(self, X):
         return 1
 
@@ -285,7 +285,7 @@ class function_ND(nrv_function):
         self.f_type = "function_ND"
         self.dim = "N"
 
-    #@staticmethod
+    @staticmethod
     def call_method(self, *X):
         return 1
 

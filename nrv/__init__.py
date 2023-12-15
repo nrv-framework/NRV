@@ -31,6 +31,7 @@ nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
 root_path = nrv_path.replace("/nrv/", "")
 # check the PATH with os.environ['PATH'], modify bash/zsh profile
 current_PATH = os.environ["PATH"]
+'''
 conf_file = ".bashrc"
 if platform.system() == "Darwin":
     # for MacOsX platforms
@@ -66,15 +67,17 @@ if not (
                 "Please restart console to be able to use nrv2calm or source your own bash/zsh profile"
             )
     outfile.close()
+'''
 # create the environnement variable NRVPATH if it does not exist
 if "NRVPATH" not in os.environ:
     os.environ["NRVPATH"] = nrv_path
 # change the permissions on nrv2calm
+'''
 if not os.access(nrv_path + "/nrv2calm", os.X_OK):
     mode = os.stat(nrv_path + "/nrv2calm").st_mode
     mode |= (mode & 0o444) >> 2  # copy R bits to X
     os.chmod(nrv_path + "/nrv2calm", mode)
-
+'''
 ######################
 #  Public interface  #
 ######################

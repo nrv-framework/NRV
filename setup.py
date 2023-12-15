@@ -135,4 +135,5 @@ setup(
         "pyswarms",
     ],  # external packages as dependencies
     python_requires=">=3.9",
+    scripts=['./nrv/nrv2calm']        #script
 )
