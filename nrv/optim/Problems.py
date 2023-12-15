@@ -4,7 +4,7 @@ import traceback
 
 from ..backend.NRV_Class import NRV_class
 from ..backend.MCore import MCH, synchronize_processes
-from ..backend.log_interface import rise_error, pass_debug_info
+from ..backend.log_interface import rise_error, pass_debug_info, set_log_level
 from .CostFunctions import CostFunction
 from .Optimizers import Optimizer
 
@@ -131,6 +131,7 @@ class Problem(NRV_class):
             self.__wait_for_simulation()
         else:
             pass
+        set_log_level("INFO")
         if MCH.do_master_only_work():
             if self.save_problem_results:
                 results.save(save=True, fname=self.problem_fname)
@@ -145,6 +146,7 @@ class Problem(NRV_class):
     def __wait_for_simulation(self):
         slave_status = {"status": "Wait"}
         try:
+            set_log_level("WARNING")
             while slave_status["status"] == "Wait":
                 slave_status = MCH.master_broadcasts_to_all(slave_status)
                 pass_debug_info(MCH.rank, slave_status)

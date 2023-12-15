@@ -15,7 +15,7 @@ import scipy.optimize as scpopt
 
 from ..backend.NRV_Class import NRV_class
 from ..backend.parameters import parameters
-from ..backend.log_interface import rep_nrv, rise_error
+from ..backend.log_interface import set_log_level, rise_error
 from .optim_utils.optim_results import optim_results
 
 dir_path = os.environ["NRVPATH"] + "/_misc"
@@ -356,8 +356,7 @@ class PSO_optimizer(Optimizer):
             optimizer = ps.single.general_optimizer.GeneralOptimizerPSO(n_particles=self.n_particles,
                 dimensions=self.dimensions, options=self.options, oh_strategy=self.oh_strategy, bounds=psbounds, ftol=ftol,
                 ftol_iter=self.ftol_iter, init_pos=self.init_pos, bh_strategy=self.bh_strategy, topology=topology)
-            optimizer.rep = rep_nrv
-            optimizer.rep._load_defaults()
+            optimizer.rep = set_log_level("WARNING", clear_log_file=True)
             # Perform optimization
             t0 = perf_counter()
             cost, pos = optimizer.optimize(f_swarm, iters=self.maxiter, n_processes=self.n_processes,

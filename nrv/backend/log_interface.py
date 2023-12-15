@@ -16,7 +16,6 @@ from pyswarms.utils import Reporter
 
 
 
-
 class bcolors:
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
@@ -28,13 +27,25 @@ class bcolors:
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
+def init_reporter():
+    rep_nrv = Reporter(log_path=dir_path + "/log/NRV.log")
+    rep_nrv._default_config['handlers']['default']['level']= 'CRITICAL'
+    rep_nrv._default_config['formatters']['standard']['format']= "%(asctime)s - %(message)s"
+    rep_nrv._load_defaults()
+    os.remove("report.log")
+    return rep_nrv
+
+def set_log_level(level, clear_log_file=False):
+    if clear_log_file:
+        os.remove("report.log")
+    if level is not None:
+        rep_nrv._default_config["loggers"][""]["level"] = level
+        rep_nrv._load_defaults()
+    return rep_nrv
+
 
 dir_path = os.environ["NRVPATH"] + "/_misc"
-
-rep_nrv = Reporter(log_path=dir_path + "/log/NRV.log")
-rep_nrv._default_config['handlers']['default']['level']= 'CRITICAL'
-rep_nrv._default_config['formatters']['standard']['format']= "%(asctime)s - %(message)s"
-rep_nrv._load_defaults()
+rep_nrv = init_reporter()
 
 
 """
