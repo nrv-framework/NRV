@@ -212,7 +212,7 @@ def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
 
 
 def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
-    bounds=(0, 0), fixed_order=False, t_end=None, save=False, fname="interpolate_2pts.dat", 
+    bounds=(0, 0), fixed_order=False, t_end=None, t_shift = None, save=False, fname="interpolate_2pts.dat", 
     plot=False, save_scale=False, generatefigure=True, strict_bounds=True, kwargs_interp={}, **kwargs):
 
     """
@@ -283,14 +283,7 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
     I = np.argsort(t)
     t = t[I]
     x = x[I]
-    mask = [True for _ in t]
-    """for i in range(len(t)-1):
-        if mask[i]:
-            for j in range(i+1, len(t)):
-                if t[i]+dt > t[j]:
-                    mask[j] = False"""
-    t = t[mask]
-    x = x[mask]
+
     if strict_bounds:
         bds = bounds
     else:
@@ -299,6 +292,10 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
     waveform = interpolate(y=x, x=t, scale=int(t_end/dt)+1, intertype=intertype, bounds=bds,
         save=False, save_scale=save_scale, **kwargs_interp)
 
+    if t_shift is not None:
+        dif = int(t_shift/dt)
+        waveform = np.concatenate((amp_start * np.ones(dif), waveform))
+        t_end += t_shift
     if t_end < t_sim:
         dif = int((t_sim - t_end)/dt)
         waveform = np.concatenate((waveform, amp_stop * np.ones(dif)))
