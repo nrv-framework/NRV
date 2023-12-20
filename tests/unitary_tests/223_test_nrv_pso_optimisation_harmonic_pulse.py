@@ -45,14 +45,14 @@ test_prob.optimizer = nrv.PSO_optimizer()
 amp_bounds = (10,500)
 relative_amp_bounds = (0,1)
 phase_bounds = (np.pi,0)
-n_tones = 1
+n_tones = 3
 bounds = bound_generator(amp_bounds,relative_amp_bounds,phase_bounds,n_tones)
 
 
 pso_kwargs = {
     "dimensions" : 1+n_tones*2,
-    "maxiter" : 3,
-    "n_particles" : 3,
+    "maxiter" : 15,
+    "n_particles" : 10,
     "opt_type" : "global",
     "bounds" : bounds,
 }

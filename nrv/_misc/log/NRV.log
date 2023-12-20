@@ -589,3 +589,90 @@
   @numba.jit(fastmath=True, cache=True)
 
 2023-12-19 18:04:04,257 - No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+2023-12-19 18:12:21,897 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:12:24,841 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:12:24,841 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:12:24,848 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:13:10,168 - No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+2023-12-19 18:13:27,449 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:13:30,485 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:13:30,486 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:13:30,486 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:29:02,976 - No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+2023-12-19 18:29:47,028 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:29:49,600 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:29:49,600 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:29:49,603 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-19 18:44:01,255 - No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+2023-12-20 11:54:38,811 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 11:54:53,931 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 11:56:06,151 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:00:30,772 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:04:30,946 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:05:05,312 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:05:31,775 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:05:53,859 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:12:10,237 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:13:21,722 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 12:18:08,585 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 13:57:55,228 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 16:24:06,232 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 16:24:22,320 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 16:25:30,759 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
+2023-12-20 16:48:28,842 - /Users/louisregnacq/Library/CloudStorage/Dropbox/Work/Model/NRV/nrv/nmod/fascicle_generator.py:712: NumbaDeprecationWarning: [1mThe 'nopython' keyword argument was not supplied to the 'numba.jit' decorator. The implicit default value for this argument is currently False, but it will be changed to True in Numba 0.59.0. See https://numba.readthedocs.io/en/stable/reference/deprecation.html#deprecation-of-object-mode-fall-back-behaviour-when-using-jit for details.[0m
+  @numba.jit(fastmath=True, cache=True)
+
