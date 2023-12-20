@@ -217,3 +217,46 @@ class harmonic_stimulus_CM(stimulus_CM):
                             amp_list = self.amp_list,phase_list=self.phase_list, dt = self.dt
                             )
         return(stim)
+    
+class harmonic_stimulus_with_pw_CM(stimulus_CM):
+    def __init__(
+        self,
+        stim_ID=0,
+        start = 1,
+        amplitude = 100,
+        t_pulse = 60e-3,
+        dt = 0,
+        stim_gen=None,
+        stim_gen_kwargs={},
+        extracel_context=True,
+        intracel_context=False,
+        rec_context=False
+    ):
+        super().__init__(
+            stim_ID = stim_ID,
+            stim_gen = stim_gen,
+            stim_gen_kwargs = stim_gen_kwargs,
+            extracel_context=extracel_context,
+            intracel_context=intracel_context,
+            rec_context=rec_context
+        )
+        self.start = start
+        self.amplitude = amplitude
+        self.t_pulse = t_pulse
+        self.dt = dt
+
+    def stimulus_generator(self, X_interp)->stimulus:
+        self.amplitude = X_interp[0]
+        self.t_pulse = X_interp[1]
+        N = (len(X_interp)-2)//2
+        self.amp_list = []
+        self.phase_list = []
+
+        for k in range(N):
+            self.amp_list.append(X_interp[2*k+2])
+            self.phase_list.append(X_interp[2*k+3])
+        stim = stimulus()
+        stim.harmonic_pulse(start = self.start,t_pulse = self.t_pulse,amplitude = self.amplitude,
+                            amp_list = self.amp_list,phase_list=self.phase_list, dt = self.dt
+                            )
+        return(stim)
