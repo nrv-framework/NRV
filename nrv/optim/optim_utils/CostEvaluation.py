@@ -101,7 +101,8 @@ class stim_energy_CE(CostEvaluation):
         N_pts = int((t_max-t_min)//self.dt_res)
         stim_.t = np.linspace(t_min, t_max, N_pts)
         set_common_time_series(stim, stim_)
-        return abs(stim**2).integrate()
+        stim.s = stim.s*stim.s
+        return abs(stim).integrate()
 
     def call_method(self, results:sim_results, **kwargs) -> float:
         """
