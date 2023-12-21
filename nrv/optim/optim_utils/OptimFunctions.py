@@ -1,14 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.interpolate import CubicSpline, interp1d
-import scipy.signal as sig
+import csv
 
+from ...backend.file_handler import rmv_ext
 from ...backend.log_interface import rise_warning
 from ...utils.nrv_function import nrv_interp
 
 
 ####################################################################
-################# generate_waveform functions ######################
+################# generate waveform functions ######################
 ####################################################################
 
 ## interpolation
@@ -52,9 +52,8 @@ def interpolate(y, x=[], scale=4, intertype="Spline", bounds=(0, 0),
     return y_scale
 
 
-def interpolate_part(position, t_sim=100, t_end=None, dt=0.005, intertype="Spline", bounds=(0, 0), save=False,
+def interpolate_amp(position, t_sim=100, t_end=None, dt=0.005, intertype="Spline", bounds=(0, 0), save=False,
     filename="interpolate_part.dat", save_scale=False):
-
     """
     genarte a waveform from a particle position using interpolate where the position
     values are the output waveform amplitudes at regular times
@@ -100,116 +99,6 @@ def interpolate_part(position, t_sim=100, t_end=None, dt=0.005, intertype="Splin
         waveform = waveform[:int(t_sim/dt)+1]
 
     return waveform
-
-
-
-## 2nd order filter response
-
-def second_order_response(position, t_sim=100, dt=0.005, amplitude=1, save=False,
-    filename="tesecond_order_responsest.dat"):
-    """
-    genarte a waveform from a particle position using interpolate where the position
-    values are the coordonnate of two points where 
-
-    Parameters
-    ----------
-    position    : array
-        particle position in 2 dimensions, the first one is the filter half pseudo-perdiod
-        the second is the 1st overflow fraction
-    t_sim       : float
-        simulation time (ms), by default 100
-    dt          : float
-        time step of the simulation (ms), by default 0.005
-    amplitude   :float
-        final amplitude of the waveform.
-    save        : bool
-        save or not the output in a .dat file, by default False
-    filename    : str
-        name of the file on wich the output should be saved, by default 'second_order_response.dat'
-
-    Returns
-    -------
-    waveform     : np.ndarray
-        waveform generated from position
-    """
-    T0, D= position[0],position[1]
-    if D > 0: 
-        w0 = np.pi/T0
-        m = (1/(1+(np.pi/np.log(D))**2))**0.5
-        wn = w0 / ((1-m**2)**0.5)
-    else:
-        wn = 1
-        m = T0/(6*wn)
-    G = 1.
-    # KHFC parameters
-    waveform_duration = 100
-
-    # waveform computation
-    H_waveform = sig.lti([G], [1/wn**2, 2*m/wn, 1])
-    T = np.linspace(0,waveform_duration, num=int(t_sim/dt))
-    t, waveform = sig.step(H_waveform, T=T)
-
-    waveform = np.append(waveform, G)
-    waveform *= amplitude
-
-    if save:
-        fig = plt.figure()
-        fig.plot(waveform, T)
-        fig.suptitle("Waveform gernrated using second order filter response")
-        plt.savefig(filename)
-
-    return waveform
-
-def interpolate_2pts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
-    bounds=(0, 0), fixed_order=False, t_end=None, save=False, fname="interpolate_2pts.dat", 
-    save_scale=False, **kwargs):
-
-    """
-    genarte a waveform from a particle position using interpolate where the position
-    values are the coordonnate of two points which should be reached by the output waveform
-
-    Parameters
-    ----------
-    position    : array
-        particle position in 4 dimensions where the first two are the coordonate of the first point
-        the last two are the coordonate of the second, syntax: X = (time, amplitude)
-    t_sim       : float
-        simulation time (ms), by default 100
-    dt          : float
-        time step of the simulation (ms), by default 0.005
-    intertype   : str
-        type of interpolation perform, by default 'Spline'
-        type possibly:
-                'Spline'                : Cubic spline interpolation
-    bounds      : tupple
-        limit range of the interpolation, if both equal no limit, by default (0,0)
-    save        : bool
-        save or not the output in a .dat file, by default False
-    filename    : str
-        name of the file on wich the output should be saved, by default 'interpolate_2pts.dat'
-
-    Returns
-    -------
-    waveform     : np.ndarray
-        waveform generated from position
-    """
-    rise_warning("DeprecationWarning: use interpolate_Npts rather than interpolate_2pts")
-    return interpolate_Npts(
-        position=position,
-        t_sim=t_sim,
-        dt=dt,
-        amp_start=amp_start,
-        amp_stop=amp_stop,
-        intertype=intertype,
-        bounds=bounds,
-        fixed_order=fixed_order,
-        t_end=t_end,
-        save=save,
-        fname=fname,
-        save_scale=save_scale,
-        **kwargs,
-    )
-
 
 def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, intertype="Spline",
     bounds=(0, 0), fixed_order=False, t_end=None, t_shift = None, save=False, fname="interpolate_2pts.dat", 
@@ -310,3 +199,30 @@ def interpolate_Npts(position, t_sim=100, dt=0.005, amp_start=0, amp_stop=1, int
         if save:
             plt.savefig(fname)
     return waveform
+
+####################################################################
+########################### savers #################################
+####################################################################
+
+def cost_position_saver(data, file_name='document.csv'):
+    """
+    Simple saver which can be used in a CostFunction to save the cost
+    and position in a .csv file (see .Optim.CostFunction)
+
+    Parameters
+    ----------
+    data        : dict
+        dict containing the keys 'cost' and 'position'
+    file_name:
+        name of the saving file.
+        NB: if missing, extension ".csv" will be add at the end of the file
+    """
+    save = [str(data['cost'])]
+    position = data['position']
+    fname = rmv_ext(file_name) + ".csv"
+    dim = len(position)
+    for i in range(dim):
+        save += [position[i]]
+    with open(fname,'a', newline='') as fd:
+        writer = csv.writer(fd)
+        writer.writerow(save)

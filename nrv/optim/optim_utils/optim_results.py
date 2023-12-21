@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter, FFMpegWriter
-from .InterpolationFunctions import interpolate_Npts
+from .OptimFunctions import interpolate_Npts
 import numpy as np
 
 from ...backend.NRV_Results import NRV_results
@@ -102,4 +102,3 @@ class optim_results(NRV_results):
             plt.xscale('log')
         if ylog:
             plt.yscale('log')
-        plt.title("Cost history")
