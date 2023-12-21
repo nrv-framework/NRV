@@ -44,17 +44,14 @@ class raster_count_CE(CostEvaluation):
 class charge_quantity_CE(CostEvaluation):
     def __init__(self, id_elec=None, dt_res=0.0001):
         """
-        Create a callable object which returne the charge injected
+        Create a callable object which return the charge injected
 
         Parameters
         ----------
-        results     : dict
-            output of an axon simulation using Markov model for at least a node
 
         Returns
         -------
-        cost        :int
-            number of spike in the v_mem part
+
         """
         super().__init__()
         self.id_elec = id_elec
@@ -70,7 +67,6 @@ class charge_quantity_CE(CostEvaluation):
 
     def call_method(self, results:sim_results, **kwargs) -> float:
         """
-        Returns the spike number from a simulation result
         """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
@@ -82,6 +78,48 @@ class charge_quantity_CE(CostEvaluation):
         for i in self.id_elec:
             cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
         return cost
+
+class stim_energy_CE(CostEvaluation):
+    def __init__(self, id_elec=None, dt_res=0.0001):
+        """
+        Create a callable object which return a value proportionnal to the stimulus energy, assuming Zelec is a constant
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        super().__init__()
+        self.id_elec = id_elec
+        self.dt_res = dt_res
+
+    def compute_stimulus_cost(self, stim:stimulus):
+        stim_ = stimulus()
+        t_min, t_max = stim.t[0], stim.t[-1]
+        N_pts = int((t_max-t_min)//self.dt_res)
+        stim_.t = np.linspace(t_min, t_max, N_pts)
+        set_common_time_series(stim, stim_)
+        stim.s = stim.s*stim.s
+        return abs(stim).integrate()
+
+    def call_method(self, results:sim_results, **kwargs) -> float:
+        """
+        """
+        extra_stim = load_any(results["extra_stim"])
+        N_elec = len(extra_stim.stimuli)
+        cost = 0
+        if self.id_elec is None:
+            self.id_elec = [k for k in range(N_elec)]
+        elif isinstance(self.id_elec, int):
+            self.id_elec = [self.id_elec]
+        for i in self.id_elec:
+            cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
+        return cost
+
+
+
 
 class recrutement_count_CE(CostEvaluation):
     """
