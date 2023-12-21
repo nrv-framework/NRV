@@ -51,7 +51,7 @@ nrv.fmod.stimulus module
    :members:
    :undoc-members:
    :show-inheritance:
-   
+
 nrv.fmod.FEM module
 ------------------------
 .. automodule:: nrv.fmod.FEM.rst

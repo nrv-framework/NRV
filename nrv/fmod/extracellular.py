@@ -259,7 +259,7 @@ class extracellular_context(NRV_class):
         Change the stimulus of the ID_elec electrods
 
         Parameters:
-        ----------
+        -----------
             ID_elec  : int
                 ID of the electrode which should be changed
             stimulus  : stimulus

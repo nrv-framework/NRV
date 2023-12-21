@@ -219,18 +219,18 @@ class MshCreator(NRV_class):
 
     def set_verbosity(self, i=None):
         """
-        from gmsh: Level of information printed on the terminal and the message console\
-            
+        from gmsh: Level of information printed on the terminal and the message console.
+
         Parameters
         ----------
         i     : int (1, 2, 3, 4, 5 or 99)
-            0: silent except for fatal errors
-            1: +errors
-            2: +warnings
-            3: +direct
-            4: +information
-            5: +status
-            99: +debug
+            - 0, silent except for fatal errors
+            - 1, +errors
+            - 2, +warnings
+            - 3, +direct
+            - 4, +information
+            - 5, +status
+            - 99, +debug
         """
         if i is None:
             i = parameters.VERBOSITY_LEVEL
