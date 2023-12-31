@@ -15,7 +15,8 @@ import scipy.optimize as scpopt
 
 from ..backend.NRV_Class import NRV_class
 from ..backend.parameters import parameters
-from ..backend.log_interface import set_log_level, rise_error
+from ..backend.log_interface import set_log_level, rise_error, rise_warning
+from ..backend.MCore import MCH
 from .optim_utils.optim_results import optim_results
 
 dir_path = os.environ["NRVPATH"] + "/_misc"
@@ -261,6 +262,7 @@ class PSO_optimizer(Optimizer):
         self.options = options
         self.maxiter = maxiter
         self.n_processes = n_processes
+        self.ncore = MCH.size
         self.bounds = bounds
         self.init_pos = init_pos
         self.print_time = print_time
@@ -291,7 +293,28 @@ class PSO_optimizer(Optimizer):
             max_bound = max(self.bounds) * np.ones(self.dimensions)
             min_bound = min(self.bounds) * np.ones(self.dimensions)
             return (min_bound, max_bound)
-    
+
+    def __mproc_handeling(self):
+        if not MCH.is_alone():
+            # prevent using MPI and multprocessing at the same time
+            # MPI: parralize inside the cost function
+            # multiprocessing: parralellize the swarm 
+            # (!!enhancement: do the latter with MPI parralellizing cost_function_swarm_from_particle)
+            if self.n_processes is not None:
+                rise_warning(
+                    "multiprocessing and MPI should not be mixed",
+                    "n_processes set to None",
+                )
+                self.n_processes = None
+        elif self.n_processes != None and self.n_processes > cpu_count()-1:
+            answer = input("Number of process higher than number of cpu\n"+
+                "continue with one process (Y/n)\n")
+            if answer == "Y":
+                self.n_processes = None
+            else:
+                print("Terminated")
+                return(False)
+
     def minimize(self, f_swarm, **kwargs):
         """
         Perform a Particle swarm optimization
@@ -304,6 +327,7 @@ class PSO_optimizer(Optimizer):
         kwargs                  : dict
             containing parameters to change to class (PSO_optimizer.__init__)
         """
+        self.__mproc_handeling()
         results = super().minimize(f_swarm, **kwargs)
 
         verbose = parameters.get_nrv_verbosity() > 2
@@ -323,15 +347,6 @@ class PSO_optimizer(Optimizer):
             if not self.options:
                 self.options = {"c1": 0.5, "c2": 0.5, "w":0.5}
             topology = Star()
-
-        if self.n_processes != None and self.n_processes > cpu_count()-1:
-            answer = input("Number of process higher than number of cpu\n"+
-                "continue with one process (Y/n)\n")
-            if answer == "Y":
-                self.n_processes = None
-            else:
-                print("Terminated")
-                return(False)
 
         # Initialize results directory
         if self.opt_type.lower()!="global":

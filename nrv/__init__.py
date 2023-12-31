@@ -120,4 +120,4 @@ from .optim.Optimizers import *
 from .optim.Problems import *
 from .optim.optim_utils.ContextModifier import *
 from .optim.optim_utils.CostEvaluation import *
-from .optim.optim_utils.InterpolationFunctions import *
+from .optim.optim_utils.OptimFunctions import *

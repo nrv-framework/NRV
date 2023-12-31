@@ -2,6 +2,7 @@
 import nrv
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 N_test = "215"
 figdir = "./unitary_tests/figures/" + N_test + "_"
@@ -36,12 +37,12 @@ X4 = [0, -20, 0, -40, 0, -45, 0, -30, 0, -30, 0, -30]
 nrv.interpolate_Npts(position=X4, strict_bounds=True, save=True, fname=figdir + "D.png", **kwrgs_interp)
 
 X = [t_end, 0, t_end, -500]
-nrv.interpolate_2pts(position=X, save=True, fname=figdir + "E.png", **kwrgs_interp)
+nrv.interpolate_Npts(position=X, save=True, fname=figdir + "E.png", **kwrgs_interp)
 
 # Spline 2pts
 
 
-dt = 0.001
+dt = 0.005
 t_sim = 1
 t_end = 0.5
 I_max_abs = 100
@@ -69,15 +70,14 @@ bounds = [t_bound, I_bound, t_bound, I_bound, (0.01,0.5)]
 plt.figure()
 for i in range(10):
     X = np.array([np.random.uniform(low=bounds[k][0], high=bounds[k][1]) for k in range(len(bounds))])
-    print(X)
+    #print(X)
     waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
 plt.savefig(figdir + "F.png")
-bounds = [t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, (0.01,0.5)]
+bounds = [t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, (0.01,0.5)]
 
-plt.figure()
-for i in range(10):
+
+for i in tqdm(range(100000)):
     X = np.array([np.random.uniform(low=bounds[k][0], high=bounds[k][1]) for k in range(len(bounds))])
-    print(X)
-    waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
-plt.savefig(figdir + "G.png")
+    waveform2 = nrv.interpolate_Npts(X, plot=False, generatefigure=False, **kwrgs_interp)
+
 #plt.show()
