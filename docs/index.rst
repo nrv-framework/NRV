@@ -17,11 +17,14 @@ NRV has been developped by contributors from the CELL research group at the Labo
    :maxdepth: 2
    :caption: Contents:
 
+   introduction
    installation
    quickstart 
    scientific
    examples
+   devcorner
    modules
+
 
 
 Indices and tables

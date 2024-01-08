@@ -60,7 +60,7 @@ setup(
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
-    version="0.9.20",
+    version="0.9.21",
     long_description=long_description,
     long_description_content_type='text/markdown',
     # architecture
@@ -135,4 +135,5 @@ setup(
         "pyswarms",
     ],  # external packages as dependencies
     python_requires=">=3.9",
+    scripts=['./nrv/nrv2calm',"./test/NRV_test"]        #script
 )

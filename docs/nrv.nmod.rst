@@ -44,14 +44,6 @@ nrv.nmod.nerve module
    :undoc-members:
    :show-inheritance:
 
-nrv.nmod.thin\_myelinated module
---------------------------------
-
-.. automodule:: nrv.nmod.thin_myelinated
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nrv.nmod.unmyelinated module
 ----------------------------
 
