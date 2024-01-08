@@ -6,7 +6,8 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 from .NRV_Class import NRV_class, abstractmethod, is_NRV_class, load_any
 from .file_handler import json_load
 
-def generate_results(obj: str,**kwargs):
+
+def generate_results(obj: str, **kwargs):
     """
     generate the proper results object depending of the obj simulated
 
@@ -22,11 +23,11 @@ def generate_results(obj: str,**kwargs):
         return eval('sys.modules["nrv"].' + nrv_type + "_results")(context=obj)
 
 
-
 class NRV_results(NRV_class, dict):
     """
     Results class for NRV
     """
+
     @abstractmethod
     def __init__(self, context=None):
         super().__init__()
@@ -40,11 +41,9 @@ class NRV_results(NRV_class, dict):
         self.update(context)
         self.__sync()
 
-
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         self.__sync()
         return super().save(save, fname, blacklist, **kwargs)
-
 
     def load(self, data, blacklist=[], **kwargs):
         if isinstance(data, str):
@@ -57,7 +56,6 @@ class NRV_results(NRV_class, dict):
 
         super().load(data, blacklist, **kwargs)
         self.__sync()
-
 
     def __setitem__(self, key, value):
         if not key == "nrv_type":
@@ -75,7 +73,7 @@ class NRV_results(NRV_class, dict):
         """
         self.__dict__.update(__m, **kwargs)
         super().update(__m, **kwargs)
-    
+
     def __sync(self):
         self.update(self.__dict__)
-        self.pop('__NRVObject__')
+        self.pop("__NRVObject__")

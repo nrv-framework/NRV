@@ -1152,7 +1152,7 @@ class myelinated(axon):
                             v = getattr(self.STIN[sec_index](position), key_STIN)[0]
                     if isinstance(v, float):
                         val[i] = v
-                    else:   # needed for xc, xg, xraxial (see if it can be simplify)
+                    else:  # needed for xc, xg, xraxial (see if it can be simplify)
                         val[i] = v[0]
         return val
 

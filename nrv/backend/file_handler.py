@@ -60,6 +60,30 @@ def rmv_ext(fname):
     return fname
 
 
+def generate_new_fname(fname):
+    """
+    Prevent overwriting existing files.
+    if the filename exists, add a number or add one to the number at the end of
+    the filename
+
+    Parameters
+    ----------
+    fname : str
+        name of the file to check
+    """
+    if os.path.isfile(fname):
+        for i in range(len(fname)):
+            if fname[-i - 1] == ".":
+                try:
+                    fname = (
+                        fname[: -i - 2] + str(1 + int(fname[-i - 2])) + fname[-i - 1 :]
+                    )
+                except:
+                    fname = fname[: -i - 1] + "0" + fname[-i - 1 :]
+        return generate_new_fname(fname)
+    return fname
+
+
 #####################################
 ## Folder and archive related code ##
 #####################################

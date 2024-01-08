@@ -11,7 +11,11 @@ from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import MCH
 from ..backend.NRV_Class import NRV_class
-from .electrodes import is_analytical_electrode, is_FEM_electrode, check_electrodes_overlap
+from .electrodes import (
+    is_analytical_electrode,
+    is_FEM_electrode,
+    check_electrodes_overlap,
+)
 from .FEM.COMSOL_model import COMSOL_model, COMSOL_Status
 from .FEM.FENICS_model import FENICS_model
 from .materials import load_material, is_mat

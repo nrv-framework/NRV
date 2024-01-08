@@ -546,9 +546,7 @@ class unmyelinated(axon):
                     )
                     t[0].append(rec)
 
-    def __get_var_from_mod(
-        self, key
-    ):
+    def __get_var_from_mod(self, key):
         """
         return a column with value in every recording point of a constant from a mod. For internal use only.
         """
@@ -556,7 +554,7 @@ class unmyelinated(axon):
         i = 0
         for k in range(self.Nsec):
             for pos in self.rec_position_list[k]:
-                #print(getattr(self.unmyelinated_sections[k](pos), key)[0])
+                # print(getattr(self.unmyelinated_sections[k](pos), key)[0])
                 val[i] = getattr(self.unmyelinated_sections[k](pos), key)[0]
                 i += 1
         return val
@@ -758,7 +756,7 @@ class unmyelinated(axon):
         get the membrane capacitance
         NB: [uF/cm^{2}] (see Neuron unit)
         """
-        return self.__get_var_from_mod('_ref_cm')
+        return self.__get_var_from_mod("_ref_cm")
 
     def set_particules_values_recorders(self):
         """

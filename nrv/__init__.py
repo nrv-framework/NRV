@@ -16,6 +16,7 @@ __project__ = "NeuRon Virtualizer (NRV)"
 import os
 import inspect
 import platform
+
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 
@@ -83,4 +84,4 @@ from .optim.Optimizers import *
 from .optim.Problems import *
 from .optim.optim_utils.ContextModifier import *
 from .optim.optim_utils.CostEvaluation import *
-from .optim.optim_utils.InterpolationFunctions import *
+from .optim.optim_utils.OptimFunctions import *

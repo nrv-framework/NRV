@@ -31,14 +31,11 @@ res1 = test_prob(problem_fname=fnam1, **pso_kwargs)
 print(res1.x)
 print(res1.stabilization_it())
 print(res1.findbestpart())
-res1.plot_cost_history(generatefigure=True)
-plt.show()
-exit()
+
 test_prob.costfunction = my_cost2
 print(test_prob.compute_cost(1)==0)
 res2 = test_prob(problem_fname=fnam2, **pso_kwargs)
 print(res2.x)
-
 
 test_prob.costfunction = my_cost3
 print(test_prob.compute_cost(1)==0)
@@ -49,7 +46,7 @@ print(res3.x)
 plt.figure()
 res1.plot_cost_history(label="sphere")
 res2.plot_cost_history(label="rosenbock")
-res2.plot_cost_history(label="rastrigin")
+res3.plot_cost_history(label="rastrigin")
 plt.legend()
 plt.savefig(figdir+"A.png")
 

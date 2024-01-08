@@ -7,7 +7,7 @@ import faulthandler
 
 import numpy as np
 
-from ..backend.log_interface import pass_info, rise_warning
+from ..backend.log_interface import pass_info, rise_warning, rise_error
 from ..backend.NRV_Class import NRV_class
 
 # enable faulthandler to ease "segmentation faults" debug
@@ -322,7 +322,6 @@ class stimulus(NRV_class):
     def __ne__(self, b):  # self != b
         return not self == b
 
-
     def integrate(self):
         return np.trapz(self.s, x=self.t)
 
@@ -444,8 +443,73 @@ class stimulus(NRV_class):
             s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
             self.concatenate(s, t, t_shift=0)
         else:
-            t = np.linspace(start, start + duration, num=Nb_points)
+            t = np.linspace(0, duration, num=Nb_points)
             s = amplitude * np.sin(2 * np.pi * freq * t + phase) + offset
+            t = np.linspace(start, start + duration, num=Nb_points)  # add start
+            self.concatenate(s, t, t_shift=0)
+
+    def harmonic_pulse(self, start, t_pulse, amplitude, amp_list, phase_list, dt=0):
+        """
+        Create a pulse waveform based on N harmonic
+
+        Parameters
+        ----------
+        start       : float
+            starting time of the waveform, in ms
+        t_pulse      : float
+            pulse duration, in ms
+        amplitude   : float
+            final amplitude of the pulse, in uA
+            WARNING: always positive, the user give here the absolute value
+        amp_list    : list
+            list of relative sine amplitude, between 0 and 1
+        phase_list  : list
+            list of sine pulse phases
+        dt          : float
+            sampling time period to generate the sinusoidal shape. If equal to 0,
+            dt is automatically set to match 100 samples per sinusoid period by default set to 0
+        """
+        if len(amp_list) != len(phase_list):
+            rise_error("amp_list and phase_list must be of same length")
+        n_sine = len(amp_list)
+        freq = 1 / (2 * t_pulse)
+        if dt == 0:
+            dt = 1 / (n_sine * freq * 100)
+
+        elif freq > (1.0 / (2 * dt)):
+            rise_warning(
+                "dt too low in stimulus creation, Shannon criterion not respected"
+            )
+        Nb_points = int(t_pulse / dt)
+
+        # create the signal
+        freq_harmonic = freq
+        if start == 0:
+            t = np.linspace(dt, t_pulse, num=Nb_points - 1)
+            self.s[0] = 0
+            s = 0
+            for i in range(n_sine):
+                self.s[0] += amp_list[i] * np.sin(phase_list[i])
+                s += amp_list[i] * np.sin(
+                    2 * np.pi * freq_harmonic * t + phase_list[i] - np.pi
+                )
+                freq_harmonic = freq * (i + 2)
+            s = s - np.max(s)  # shift s to avoid any postive values
+            s = s * amplitude / np.max(np.abs(s))  # rescale s to finale amp
+            s[-1] = 0
+            self.concatenate(s, t, t_shift=0)
+        else:
+            t = np.linspace(0, t_pulse, num=Nb_points)
+            s = 0
+            for i in range(n_sine):
+                s += amp_list[i] * np.sin(
+                    2 * np.pi * freq_harmonic * t + phase_list[i] - np.pi
+                )
+                freq_harmonic = freq * (i + 2)
+            s = s - np.max(s)  # shift s to avoid any postive values
+            s = s * amplitude / np.max(np.abs(s))  # rescale s to finale amp
+            s[-1] = 0
+            t = np.linspace(start, start + t_pulse, num=Nb_points)
             self.concatenate(s, t, t_shift=0)
 
     def square(self, start, duration, freq, amplitude, offset, dt):
@@ -546,6 +610,3 @@ class stimulus(NRV_class):
         slope = (ampstart - ampmax) / (tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
-
-
-

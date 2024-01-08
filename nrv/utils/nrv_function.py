@@ -211,64 +211,87 @@ class function_2D(nrv_function):
         self.f_type = "function_2D"
         self.dim = 2
 
+
     @staticmethod
     def call_method(self, X):
         return 1
 
-class  ackley(function_2D):
+
+class ackley(function_2D):
     """
     Bi-dimensional Ackley function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, x: np.array, y: np.array)-> np.array:
-        return -20*np.exp(-0.2*np.sqrt(0.5*(x**2+y**2))) \
-            - np.exp(0.5*(np.cos(2*np.pi*x)+np.cos(2*np.pi*y))) \
-            + np.e + 20
+    def call_method(self, x: np.array, y: np.array) -> np.array:
+        return (
+            -20 * np.exp(-0.2 * np.sqrt(0.5 * (x**2 + y**2)))
+            - np.exp(0.5 * (np.cos(2 * np.pi * x) + np.cos(2 * np.pi * y)))
+            + np.e
+            + 20
+        )
 
-class  beale(function_2D):
+
+class beale(function_2D):
     """
     Bi-dimensional Beale function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, x: np.array, y: np.array)-> np.array:
-        return (1.5 - x + x*y)**2\
-            + (2.25 - x + x*y**2)**2\
-            + (2.625 - x + x*y**3)**2
+    def call_method(self, x: np.array, y: np.array) -> np.array:
+        return (
+            (1.5 - x + x * y) ** 2
+            + (2.25 - x + x * y**2) ** 2
+            + (2.625 - x + x * y**3) ** 2
+        )
 
-class  goldstein_price(function_2D):
+
+class goldstein_price(function_2D):
     """
     Bi-dimensional Goldstein function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, x: np.array, y: np.array)-> np.array:
-        return (1 + (x + y + 1)**2 * (19 - 14*x + 3*x**2 - 14*y + 6*x*y + 3*y**2))\
-            * (30 + (2*x - 3*y)**2 *(18 - 32*x + 12*x**2 + 48*y - 36*x*y + 27*y**2))
+    def call_method(self, x: np.array, y: np.array) -> np.array:
+        return (
+            1
+            + (x + y + 1) ** 2
+            * (19 - 14 * x + 3 * x**2 - 14 * y + 6 * x * y + 3 * y**2)
+        ) * (
+            30
+            + (2 * x - 3 * y) ** 2
+            * (18 - 32 * x + 12 * x**2 + 48 * y - 36 * x * y + 27 * y**2)
+        )
 
-class  booth(function_2D):
+
+class booth(function_2D):
     """
     Bi-dimensional Booth function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, x: np.array, y: np.array)-> np.array:
-        return (x + 2*y - 7)**2 + (2*x + y - 5)**2
+    def call_method(self, x: np.array, y: np.array) -> np.array:
+        return (x + 2 * y - 7) ** 2 + (2 * x + y - 5) ** 2
 
-class  bukin6(function_2D):
+
+class bukin6(function_2D):
     """
     Bi-dimensional Booth function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, x: np.array, y: np.array)-> np.array:
-        return 100*np.sqrt(np.abs(y - 0.01*x**2)) + 0.01*np.abs(x+10)
+    def call_method(self, x: np.array, y: np.array) -> np.array:
+        return 100 * np.sqrt(np.abs(y - 0.01 * x**2)) + 0.01 * np.abs(x + 10)
 
 
 ###############################################################
@@ -285,53 +308,59 @@ class function_ND(nrv_function):
         self.f_type = "function_ND"
         self.dim = "N"
 
+
     @staticmethod
     def call_method(self, *X):
         return 1
 
-class Id(function_ND):
-    """
 
-    """
+class Id(function_ND):
+    """ """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, *x: np.array)-> np.array:
-        if len(x)==1 and np.iterable(x[0]):
+    def call_method(self, *x: np.array) -> np.array:
+        if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
         return x
 
-class  rosenbock(function_ND):
+
+class rosenbock(function_ND):
     """
-        Multi-dimensional Rosenbock function
+    Multi-dimensional Rosenbock function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, *x: np.array)-> np.array:
-        if len(x)==1 and np.iterable(x[0]):
+    def call_method(self, *x: np.array) -> np.array:
+        if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
         result = 0
         for i in range(1, len(x)):
-            result += 100*(x[i] - x[i-1]**2)**2 + (1-x[i-1])**2
+            result += 100 * (x[i] - x[i - 1] ** 2) ** 2 + (1 - x[i - 1]) ** 2
         return result
 
-class  rastrigin(function_ND):
+
+class rastrigin(function_ND):
     """
     Multi-dimensional Rastrigin function
     """
+
     def __init__(self):
         super().__init__()
 
-    def call_method(self, *x: np.array)-> np.array:
-        if len(x)==1 and np.iterable(x[0]):
+    def call_method(self, *x: np.array) -> np.array:
+        if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
-        A = 10.
+        A = 10.0
         n = len(x)
-        result = A*n
+        result = A * n
         for xi in x:
-            result += xi**2 - A*np.cos(2*np.pi*xi)
+            result += xi**2 - A * np.cos(2 * np.pi * xi)
         return result
+
 
 class sphere(function_ND):
     """
@@ -345,7 +374,7 @@ class sphere(function_ND):
             self.Xc = []
 
     def call_method(self, *X):
-        if len(X)==1 and np.iterable(X[0]):
+        if len(X) == 1 and np.iterable(X[0]):
             X = X[0]
         Nc = len(self.Xc)
         res = 0
@@ -356,6 +385,7 @@ class sphere(function_ND):
                 xc = 0
             res += (xi - xc) ** 2
         return res**0.5
+
 
 ###########################################################
 ####################  CostEvaluation  #####################

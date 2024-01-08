@@ -4,7 +4,7 @@ import traceback
 
 from ..backend.NRV_Class import NRV_class
 from ..backend.MCore import MCH, synchronize_processes
-from ..backend.log_interface import rise_error, pass_debug_info
+from ..backend.log_interface import rise_error, pass_debug_info, set_log_level
 from .CostFunctions import CostFunction
 from .Optimizers import Optimizer
 
@@ -30,15 +30,18 @@ def cost_function_swarm_from_particle(cost_function_part, **kwargs):
     part        : np.ndarray
         vector of values of the part in the len_part dimension
     """
+
     def cost_function_swarm(swarm):
         L = len(swarm)
         costs = np.zeros((L))
         for i in range(L):
             particle = swarm[i][:]
             costs[i] = cost_function_part(particle, **kwargs)
-            #print("part=", particle, "c=", costs[i] )
+            # print("part=", particle, "c=", costs[i] )
         return costs
+
     return cost_function_swarm
+
 
 class Problem(NRV_class):
     """
@@ -56,10 +59,11 @@ class Problem(NRV_class):
 
     def __init__(
         self,
-        cost_function:CostFunction=None,
-        optimizer:Optimizer=None,
+        cost_function: CostFunction = None,
+        optimizer: Optimizer = None,
         save_problem_results=False,
-        problem_fname="optim.json"):
+        problem_fname="optim.json",
+    ):
         super().__init__()
         self._CostFunction = cost_function
         self._Optimizer = optimizer
@@ -68,7 +72,7 @@ class Problem(NRV_class):
         self._SwarmCostFunction = None
         self.save_problem_results = save_problem_results
         self.problem_fname = problem_fname
-    
+
     # Handling the CostFunction attribute
     @property
     def costfunction(self):
@@ -79,7 +83,7 @@ class Problem(NRV_class):
         return self._CostFunction
 
     @costfunction.setter
-    def costfunction(self, cf:CostFunction):
+    def costfunction(self, cf: CostFunction):
         # need to add a verification that the cost function is a scallar and so on
         self._CostFunction = cf
 
@@ -101,7 +105,7 @@ class Problem(NRV_class):
         return self._Optimizer
 
     @optimizer.setter
-    def optimizer(self, optim:Optimizer):
+    def optimizer(self, optim: Optimizer):
         self._Optimizer = optim
         self.swarm_optimizer = self._Optimizer.swarm_optimizer
 
@@ -118,19 +122,22 @@ class Problem(NRV_class):
                 if not self.swarm_optimizer:
                     results = self._Optimizer(self._CostFunction, **kwargs)
                 else:
-                    self._SwarmCostFunction = cost_function_swarm_from_particle(self._CostFunction)
+                    self._SwarmCostFunction = cost_function_swarm_from_particle(
+                        self._CostFunction
+                    )
                     results = self._Optimizer(self._SwarmCostFunction, **kwargs)
-                MCH.master_broadcasts_to_all({"status":"Completed"})
+                MCH.master_broadcasts_to_all({"status": "Completed"})
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except:
-                MCH.master_broadcasts_to_all({"status":"Error"})
+                MCH.master_broadcasts_to_all({"status": "Error"})
                 rise_error(traceback.format_exc())
-            
+
         elif self.__check_MCore_CostFunction():
             self.__wait_for_simulation()
         else:
             pass
+        set_log_level("INFO")
         if MCH.do_master_only_work():
             if self.save_problem_results:
                 results.save(save=True, fname=self.problem_fname)
@@ -145,11 +152,12 @@ class Problem(NRV_class):
     def __wait_for_simulation(self):
         slave_status = {"status": "Wait"}
         try:
+            set_log_level("WARNING")
             while slave_status["status"] == "Wait":
                 slave_status = MCH.master_broadcasts_to_all(slave_status)
                 pass_debug_info(MCH.rank, slave_status)
                 sys.stdout.flush()
-                if slave_status["status"]=="Simulate":
+                if slave_status["status"] == "Simulate":
                     self._CostFunction(slave_status["X"])
                     slave_status["status"] = "Wait"
         except KeyboardInterrupt:
@@ -168,10 +176,8 @@ class Problem(NRV_class):
             self.problem_fname = kwargs.pop("problem_fname")
         return kwargs
 
-
     def context_and_cost(self, context_func, cost_func, residual):
         self.CostFunction = CostFunction(context_func, cost_func, residual)
 
     def autoset_optimizer(self):
         pass
-

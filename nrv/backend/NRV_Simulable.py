@@ -12,23 +12,24 @@ from .NRV_Results import NRV_results
 from .log_interface import rise_warning
 from ..fmod.stimulus import stimulus
 
+
 class sim_results(NRV_results):
     def __init__(self, context=None):
         super().__init__(context)
 
     def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
         """
-        Plot one or several stimulis of the simulation extra-cellular context 
+        Plot one or several stimulis of the simulation extra-cellular context
         """
-        if 'extra_stim' not in self:
-            rise_warning('No extracellular stimulation to be plotted')
+        if "extra_stim" not in self:
+            rise_warning("No extracellular stimulation to be plotted")
         else:
             if IDs is None:
-                IDs = [i for i in range(len(self['extra_stim']['stimuli']))]
+                IDs = [i for i in range(len(self["extra_stim"]["stimuli"]))]
             elif not np.iterable(IDs):
                 IDs = [int(IDs)]
             for i in IDs:
-                stim = load_any(self['extra_stim']['stimuli'][i])
+                stim = load_any(self["extra_stim"]["stimuli"][i])
                 if t_stop is None:
                     t_stop = stim.t[-1]
                 stim2 = stimulus()
@@ -41,12 +42,9 @@ class sim_results(NRV_results):
                     ax.plot(stim2.t, stim2.s, **fig_kwargs)
 
 
-
-
 class NRV_simulable(NRV_class):
-    """
-    
-    """
+    """ """
+
     def __init__(
         self,
         t_sim=2e1,
@@ -80,7 +78,10 @@ class NRV_simulable(NRV_class):
 
     def intracel_status(self):
         if "intra_current_stim" in self.__dict__:
-            if self.__dict__["intra_current_stim"] != [] and self.__dict__["intra_current_stim"] is not None:
+            if (
+                self.__dict__["intra_current_stim"] != []
+                and self.__dict__["intra_current_stim"] is not None
+            ):
                 return True
         elif "intra_voltage_stim" in self.__dict__:
             if self.__dict__["intra_voltage_stim"] is not None:
@@ -101,10 +102,10 @@ class NRV_simulable(NRV_class):
     def simulate(self, **kwargs) -> sim_results:
         self.set_parameters(**kwargs)
         context = self.save(
-                save=False,
-                extracel_context=self.extracel_status(),
-                intracel_context=self.intracel_status(),
-                rec_context=self.rec_status(),
-            )
+            save=False,
+            extracel_context=self.extracel_status(),
+            intracel_context=self.intracel_status(),
+            rec_context=self.rec_status(),
+        )
         results = sim_results(context)
         return results

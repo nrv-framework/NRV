@@ -18,6 +18,7 @@ from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
+from ..utils.units import sci_round
 
 # Handling verbosity
 Verbose = True
@@ -313,7 +314,7 @@ class axon(NRV_simulable):
     def __clear_reclists(self):
         keys = list(self.__dict__.keys())
         for key in keys:
-            if 'reclist' in key:
+            if "reclist" in key:
                 del self.__dict__[key]
 
     def save(
@@ -613,8 +614,8 @@ class axon(NRV_simulable):
             all informations on neuron, segment position and all simulation results
         """
         axon_sim = super().simulate(**kwargs)
-        axon_sim['diameter'] =self.d
-        axon_sim['tstop'] =self.t_sim
+        axon_sim["diameter"] = self.d
+        axon_sim["tstop"] = self.t_sim
         axon_sim.update(self.__add_extrastim_to_res())
         t_sim = self.t_sim
         # set recorders arrays - KEEP THIS CODE BEFORE INITIALISATION
@@ -673,7 +674,7 @@ class axon(NRV_simulable):
                 self.extra_stim.set_electrodes_footprints(self.footprints)
                 # compute the minimum time between stimuli changes, checks it"s not smaller than the computation dt, if so, there should be a warning to the user
                 Delta_T_min = np.amin(np.diff(self.extra_stim.global_time_serie))
-                if Delta_T_min < self.dt:
+                if sci_round(Delta_T_min, 5) < sci_round(self.dt, 5):
                     ## WARNING: the stimulus is over sampled compared to the neuron dt:
                     if Delta_T_min / self.dt < 1:  # HERE!! FOr dt test only
                         # if the stimulus minimal change time is more than 10% of user specified dt, change it to avoid problem
@@ -1131,9 +1132,7 @@ class axon(NRV_simulable):
     ## Result handleling method ##
     ##############################
     def __add_extrastim_to_res(self):
-        """
-        
-        """
+        """ """
         axon_sim = {}
         axon_sim["intra_stim_positions"] = self.intra_current_stim_positions
         axon_sim["intra_stim_starts"] = self.intra_current_stim_starts
