@@ -15,7 +15,7 @@ kwrgs_interp = {
     "fixed_order": False,
     "t_end": t_sim-1,
     }
-test_stim_CM = nrv.stimulus_CM(interpolator=nrv.interpolate_2pts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
+test_stim_CM = nrv.stimulus_CM(interpolator=nrv.interpolate_Npts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
 
 
 static_context = "./unitary_tests/sources/202_axon.json"

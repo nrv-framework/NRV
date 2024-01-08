@@ -51,8 +51,8 @@ bounds = bound_generator(amp_bounds,relative_amp_bounds,phase_bounds,n_tones)
 
 pso_kwargs = {
     "dimensions" : 1+n_tones*2,
-    "maxiter" : 15,
-    "n_particles" : 10,
+    "maxiter" : 2,
+    "n_particles" : 2,
     "opt_type" : "global",
     "bounds" : bounds,
 }
@@ -67,4 +67,4 @@ if nrv.MCH.do_master_only_work():
     plt.legend()
     plt.savefig(figdir+"A.png")
 
-plt.show()
+#plt.show()

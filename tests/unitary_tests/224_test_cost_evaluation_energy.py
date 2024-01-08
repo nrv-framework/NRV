@@ -32,7 +32,7 @@ stim2.s = np.zeros(N_plot)
 stim2.t = np.linspace(0, t_sim, N_plot)
 stim2 += stim
 plt.plot(stim2.t, stim2.s)
-plt.savefig('./unitary_tests/figures/202_A.png')
+plt.savefig('./unitary_tests/figures/224_A.png')
 
 
 

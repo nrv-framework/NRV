@@ -112,7 +112,7 @@ def load_simulation_from_json(filename):
         "V_mem_filtered_raster_time_index",
     ]
     for key, value in results.items():
-        if is_iterable(value) and not isinstance(results[key],dict):
+        if is_iterable(value) and not isinstance(results[key], dict):
             if key in int_iterables:
                 results[key] = np.asarray(value, dtype=np.int16)
             else:
@@ -1015,6 +1015,7 @@ def compute_f_mem(results):
     # * [MHz] to convert to [kHz]
     results["f_mem"] = f_mem * MHz
     return results["f_mem"]
+
 
 def get_myeline_properties(results):
     """

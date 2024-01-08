@@ -52,9 +52,9 @@ class nerve(NRV_simulable):
         super().__init__()
 
         # to add to a fascicle/nerve common mother class
-        self.save_path=""
-        self.verbose=False
-        self.postproc_script="default"
+        self.save_path = ""
+        self.verbose = False
+        self.postproc_script = "default"
         self.return_parameters_only = True
         self.loaded_footprints = True
 
@@ -723,15 +723,14 @@ class nerve(NRV_simulable):
 
     def __set_fascicles_simulation_parameters(self):
         for fasc in self.fascicles.values():
-            fasc.t_sim=self.t_sim
-            fasc.record_V_mem=self.record_V_mem
-            fasc.record_I_mem=self.record_I_mem,
-            fasc.record_I_ions=self.record_I_ions
-            fasc.record_g_mem=self.record_g_mem
-            fasc.record_g_ions=self.record_g_ions
-            fasc.record_particles=self.record_particles
-            fasc.postproc_script=self.postproc_script
-
+            fasc.t_sim = self.t_sim
+            fasc.record_V_mem = self.record_V_mem
+            fasc.record_I_mem = (self.record_I_mem,)
+            fasc.record_I_ions = self.record_I_ions
+            fasc.record_g_mem = self.record_g_mem
+            fasc.record_g_ions = self.record_g_ions
+            fasc.record_particles = self.record_particles
+            fasc.postproc_script = self.postproc_script
 
     def compute_electrodes_footprints(self, **kwargs):
         """
@@ -791,7 +790,7 @@ class nerve(NRV_simulable):
         fasc_kwargs["save_path"] = folder_name
         for fasc in self.fascicles.values():
             pass_info("...simulating fascicle " + str(fasc.ID))
-            nerve_sim["fascicle"+str(fasc.ID)] = fasc.simulate(
+            nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
                 in_nerve=True,
                 **fasc_kwargs,
             )

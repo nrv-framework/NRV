@@ -2,6 +2,7 @@ from ..backend.NRV_Class import NRV_class, load_any
 from ..backend.NRV_Simulable import NRV_simulable
 from ..backend.MCore import MCH, synchronize_processes
 
+
 class CostFunction(NRV_class):
     """
     A class to define cost from position input vector
@@ -95,10 +96,7 @@ class CostFunction(NRV_class):
 
     def __check_cost_function(self):
         static_contect = load_any(self.static_context)
-        if (
-            not MCH.is_alone() and
-            static_contect.nrv_type in ["fascicle","nerve"]
-        ):
+        if not MCH.is_alone() and static_contect.nrv_type in ["fascicle", "nerve"]:
             self._MCore_CostFunction = True
         del static_contect
 
@@ -114,7 +112,7 @@ class CostFunction(NRV_class):
     def __call__(self, X):
         # Broadcasting to slave wich are waiting for simulation
         if MCH.do_master_only_work() and self._MCore_CostFunction:
-            slave_status = {"status": "Simulate", "X":X}
+            slave_status = {"status": "Simulate", "X": X}
             MCH.master_broadcasts_array_to_all(slave_status)
         if self._MCore_CostFunction:
             synchronize_processes()
@@ -126,7 +124,9 @@ class CostFunction(NRV_class):
             X_ = X
 
         # Interpolation
-        self.simulation_context = self.context_modifier(X_, self.static_context, **self.kwargs_CM)
+        self.simulation_context = self.context_modifier(
+            X_, self.static_context, **self.kwargs_CM
+        )
 
         # Simulation
         self.results = self.simulate_context()

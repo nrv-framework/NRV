@@ -16,6 +16,7 @@ __project__ = "NeuRon Virtualizer (NRV)"
 import os
 import inspect
 import platform
+
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 

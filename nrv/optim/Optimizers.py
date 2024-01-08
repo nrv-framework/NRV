@@ -23,13 +23,14 @@ dir_path = os.environ["NRVPATH"] + "/_misc"
 dir_path + "/log/NRV.log"
 # mymodule.py
 
+
 class Optimizer(NRV_class, metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, method=None):
         super().__init__()
         self._method = method
         self.swarm_optimizer = False
-    
+
     def minimize(self, f, **kwargs):
         self.set_parameters(**kwargs)
         results = optim_results(self.save(save=False))
@@ -37,8 +38,8 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
         results["status"] = "Processing"
         return results
 
-    def __call__(self, f,**kwargs: Any) -> optim_results:
-        return self.minimize(f,**kwargs)
+    def __call__(self, f, **kwargs: Any) -> optim_results:
+        return self.minimize(f, **kwargs)
 
 
 class scipy_optimizer(Optimizer):
@@ -54,7 +55,7 @@ class scipy_optimizer(Optimizer):
         constraints=(),
         tol=None,
         callback=None,
-        maxiter = None,
+        maxiter=None,
         options=None,
         dimension=None,
         normalize=False,
@@ -62,7 +63,7 @@ class scipy_optimizer(Optimizer):
         if method is None:
             super().__init__("scipy_default")
         else:
-            super().__init__("scipy_"+method)
+            super().__init__("scipy_" + method)
         self.x0 = x0
         self.args = args
         self.scipy_method = method
@@ -82,19 +83,19 @@ class scipy_optimizer(Optimizer):
         self.scaled_bounds = None
 
     def __update_dimensions(self, results):
-        """
-        
-        """
+        """ """
         if self.bounds is None:
             if self.dimensions is not None:
                 self.bounds = [(None, None) for _ in range(self.dimensions)]
         if self.x0 is None:
             if self.bounds is None:
-                rise_error("scipy optimizer: at least x0 or boundaries should be initiate")
+                rise_error(
+                    "scipy optimizer: at least x0 or boundaries should be initiate"
+                )
             else:
                 self.dimensions = len(self.bounds)
                 self.x0 = []
-                
+
                 for i in range(self.dimensions):
                     min, max = self.bounds[i]
                     if min is None:
@@ -109,22 +110,22 @@ class scipy_optimizer(Optimizer):
 
     def __normalize_bound(self, results):
         self.scale_translation = np.zeros(self.dimensions)
-        self.scale_homothety =  np.ones(self.dimensions)
+        self.scale_homothety = np.ones(self.dimensions)
         if not self.normalize:
             self.scaled_bounds = self.bounds
         else:
             self.scaled_bounds = []
             for i, bd in enumerate(self.bounds):
-                self.scaled_bounds += [(0,1)]
+                self.scaled_bounds += [(0, 1)]
                 self.scale_translation[i] = bd[0]
                 self.scale_homothety[i] = bd[1] - bd[0]
-        results['scale_translation'] = self.scale_translation
-        results['scale_homothety'] = self.scale_homothety
-        results['scaled_bounds'] = self.scaled_bounds
+        results["scale_translation"] = self.scale_translation
+        results["scale_homothety"] = self.scale_homothety
+        results["scaled_bounds"] = self.scaled_bounds
 
     def minimize(self, f, **kwargs):
         results = super().minimize(f, **kwargs)
-        if self.maxiter is not None: 
+        if self.maxiter is not None:
             self.options["maxiter"] = self.maxiter
         self.__update_dimensions(results)
         self.__normalize_bound(results)
@@ -132,7 +133,7 @@ class scipy_optimizer(Optimizer):
         results["position_history"] = []
 
         def f_history(x):
-            x = (results['scale_homothety'] * x) + results['scale_translation']
+            x = (results["scale_homothety"] * x) + results["scale_translation"]
             c = f(x)
             results["position_history"].append([x])
             results["cost_history"].append(c)
@@ -141,24 +142,24 @@ class scipy_optimizer(Optimizer):
         t0 = perf_counter()
         res = scpopt.minimize(
             fun=f_history,
-            x0= self.x0,
-            args= self.args,
-            method= self.scipy_method,
-            jac= self.jac,
-            hess= self.hess,
-            hessp= self.hessp,
-            bounds= self.scaled_bounds,
-            constraints= self.constraints,
-            tol= self.tol,
-            callback= self.callback,
-            options= self.options,
+            x0=self.x0,
+            args=self.args,
+            method=self.scipy_method,
+            jac=self.jac,
+            hess=self.hess,
+            hessp=self.hessp,
+            bounds=self.scaled_bounds,
+            constraints=self.constraints,
+            tol=self.tol,
+            callback=self.callback,
+            options=self.options,
         )
-        res.x = (results['scale_homothety'] * res.x) + results['scale_translation']
+        res.x = (results["scale_homothety"] * res.x) + results["scale_translation"]
 
-        t_opt = perf_counter()-t0
+        t_opt = perf_counter() - t0
         results["optimization_time"] = t_opt
         results["best_cost"] = res.fun
-        results["best_position"]= res.x
+        results["best_position"] = res.x
 
         results.update(res)
         # hess_inv cannot be converted to json
@@ -166,6 +167,7 @@ class scipy_optimizer(Optimizer):
             del results["hess_inv"]
         results["status"] = "Completed"
         return results
+
 
 class PSO_optimizer(Optimizer):
     def __init__(
@@ -277,15 +279,15 @@ class PSO_optimizer(Optimizer):
         self.comment = comment
 
     def __nrv2pyswarms_bounds(self):
-        if np.size(self.bounds)==2*self.dimensions:
-            if isinstance(self.bounds[0], tuple) and np.size(self.bounds[0])==2:
+        if np.size(self.bounds) == 2 * self.dimensions:
+            if isinstance(self.bounds[0], tuple) and np.size(self.bounds[0]) == 2:
                 max_bound = np.zeros(self.dimensions)
                 min_bound = np.zeros(self.dimensions)
                 for i, bd in enumerate(self.bounds):
                     max_bound[i] = max(bd)
                     min_bound[i] = min(bd)
                 return (min_bound, max_bound)
-        if np.size(self.bounds)>2:
+        if np.size(self.bounds) > 2:
             return self.bounds
         elif self.bounds[0] == self.bounds[1]:
             return None
@@ -298,7 +300,7 @@ class PSO_optimizer(Optimizer):
         if not MCH.is_alone():
             # prevent using MPI and multprocessing at the same time
             # MPI: parralize inside the cost function
-            # multiprocessing: parralellize the swarm 
+            # multiprocessing: parralellize the swarm
             # (!!enhancement: do the latter with MPI parralellizing cost_function_swarm_from_particle)
             if self.n_processes is not None:
                 rise_warning(
@@ -306,14 +308,16 @@ class PSO_optimizer(Optimizer):
                     "n_processes set to None",
                 )
                 self.n_processes = None
-        elif self.n_processes != None and self.n_processes > cpu_count()-1:
-            answer = input("Number of process higher than number of cpu\n"+
-                "continue with one process (Y/n)\n")
+        elif self.n_processes != None and self.n_processes > cpu_count() - 1:
+            answer = input(
+                "Number of process higher than number of cpu\n"
+                + "continue with one process (Y/n)\n"
+            )
             if answer == "Y":
                 self.n_processes = None
             else:
                 print("Terminated")
-                return(False)
+                return False
 
     def minimize(self, f_swarm, **kwargs):
         """
@@ -338,21 +342,21 @@ class PSO_optimizer(Optimizer):
         # create pyswarms bounds
         psbounds = self.__nrv2pyswarms_bounds()
 
-        if self.opt_type.lower()=="local":
-            if not self.options or len(self.options) <5:
-                self.options = {"c1": 0.5, "c2": 0.5, "w":0.5, "k" : 5, "p" : 2}
+        if self.opt_type.lower() == "local":
+            if not self.options or len(self.options) < 5:
+                self.options = {"c1": 0.5, "c2": 0.5, "w": 0.5, "k": 5, "p": 2}
             topology = Ring(static=self.static)
         # Check number of pcu
         else:
             if not self.options:
-                self.options = {"c1": 0.5, "c2": 0.5, "w":0.5}
+                self.options = {"c1": 0.5, "c2": 0.5, "w": 0.5}
             topology = Star()
 
         # Initialize results directory
-        if self.opt_type.lower()!="global":
-            results["optimization_parameters"]["static"]=self.static
+        if self.opt_type.lower() != "global":
+            results["optimization_parameters"]["static"] = self.static
 
-        if self.comment is not None: 
+        if self.comment is not None:
             results["comment"] = self.comment
 
         if self.save_results:
@@ -368,22 +372,42 @@ class PSO_optimizer(Optimizer):
 
         try:
             # Call instance of PSO
-            optimizer = ps.single.general_optimizer.GeneralOptimizerPSO(n_particles=self.n_particles,
-                dimensions=self.dimensions, options=self.options, oh_strategy=self.oh_strategy, bounds=psbounds, ftol=ftol,
-                ftol_iter=self.ftol_iter, init_pos=self.init_pos, bh_strategy=self.bh_strategy, topology=topology)
+            optimizer = ps.single.general_optimizer.GeneralOptimizerPSO(
+                n_particles=self.n_particles,
+                dimensions=self.dimensions,
+                options=self.options,
+                oh_strategy=self.oh_strategy,
+                bounds=psbounds,
+                ftol=ftol,
+                ftol_iter=self.ftol_iter,
+                init_pos=self.init_pos,
+                bh_strategy=self.bh_strategy,
+                topology=topology,
+            )
             optimizer.rep = set_log_level("WARNING", clear_log_file=True)
             # Perform optimization
             t0 = perf_counter()
-            cost, pos = optimizer.optimize(f_swarm, iters=self.maxiter, n_processes=self.n_processes,
-                verbose=verbose)
-            t_opt = perf_counter()-t0
+            cost, pos = optimizer.optimize(
+                f_swarm,
+                iters=self.maxiter,
+                n_processes=self.n_processes,
+                verbose=verbose,
+            )
+            t_opt = perf_counter() - t0
 
             pos_history = np.array(optimizer.pos_history)
-            self.nit = np.shape(pos_history[:,0,:])[0]
+            self.nit = np.shape(pos_history[:, 0, :])[0]
 
             if self.print_time:
-                print("the cumputing time for ", self.nit, " iterations and ", self.n_particles,
-                    " particles is : ",t_opt,"s")
+                print(
+                    "the cumputing time for ",
+                    self.nit,
+                    " iterations and ",
+                    self.n_particles,
+                    " particles is : ",
+                    t_opt,
+                    "s",
+                )
 
             # Save results
             results["nit"] = self.nit
@@ -401,8 +425,8 @@ class PSO_optimizer(Optimizer):
             velocity_history = np.array(optimizer.velocity_history)
             pos_history = np.array(optimizer.pos_history)
             for i in range(self.n_particles):
-                results["position"+str(i+1)] = pos_history[:,i,:].tolist()
-                results["velocity"+str(i+1)] = velocity_history[:,i,:].tolist()
+                results["position" + str(i + 1)] = pos_history[:, i, :].tolist()
+                results["velocity" + str(i + 1)] = velocity_history[:, i, :].tolist()
             if self.save_results:
                 with open(self.saving_file, "w") as outfile:
                     json.dump(results, outfile)

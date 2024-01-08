@@ -22,7 +22,6 @@ from .myelinated import *
 from .unmyelinated import *
 
 
-
 # Parallel computing options
 if not MCH.is_alone():
     fg_verbose = False
@@ -88,9 +87,9 @@ class fascicle(NRV_simulable):
         super().__init__()
 
         # to add to a fascicle/nerve common mother class
-        self.save_path=""
-        self.verbose=False
-        self.postproc_script="default"
+        self.save_path = ""
+        self.verbose = False
+        self.postproc_script = "default"
         self.return_parameters_only = True
         self.loaded_footprints = True
         self.save_results = True
@@ -1142,7 +1141,6 @@ class fascicle(NRV_simulable):
         else:
             rise_warning("Cannot be changed: no extrastim in the fascicle")
 
-
     def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
         """
         Insert a IC clamp stimulation
@@ -1431,7 +1429,7 @@ class fascicle(NRV_simulable):
     def simulate(
         self,
         PostProc_Filtering=None,
-        save_V_mem = False,
+        save_V_mem=False,
         **kwargs,
     ):
         """
@@ -1498,8 +1496,9 @@ class fascicle(NRV_simulable):
             if self.return_parameters_only:
                 rise_warning(
                     "Fascicle's simulation parameters are misused",
-                    "results are neither saved or return", 
-                    "save anyway")
+                    "results are neither saved or return",
+                    "save anyway",
+                )
                 self.save_results = True
 
         if len(self.NoR_relative_position) == 0:
@@ -1580,6 +1579,7 @@ class fascicle(NRV_simulable):
                         i for i, x in enumerate(self.processes_status) if x == "error"
                     ]
                     errors_ax = [i for i, x in enumerate(this_core_mask) if x == False]
+                    rise_warning(errors_ax)
                     if len(errors_ax) > 0:
                         rise_warning(
                             "an issue occured during the simulation in rank: ",
@@ -1587,6 +1587,7 @@ class fascicle(NRV_simulable):
                             "\nThe following axons could not be computed: ",
                             errors_ax,
                         )
+
                     self.processes_status[data["rank"]]
                     self.processes_status[0] = ["error"]
                 else:
@@ -1595,11 +1596,13 @@ class fascicle(NRV_simulable):
                 ## SLAVES ##
                 try:
                     for k in this_core_mask:
-                        axon_sim = self.__sim_axon(k,is_master_slave)
+                        axon_sim = self.__sim_axon(k, is_master_slave)
                         # postprocessing and data reduction
                         # (cannot be added to __sim.axon beceause nrv would not be global anymore)
                         if self.postproc_script.lower() in OTF_PP_library:
-                            self.postproc_script = OTF_PP_path + self.postproc_script.lower()
+                            self.postproc_script = (
+                                OTF_PP_path + self.postproc_script.lower()
+                            )
                         elif self.postproc_script.lower() + ".py" in OTF_PP_library:
                             self.postproc_script = (
                                 OTF_PP_path + self.postproc_script.lower() + ".py"
@@ -1610,10 +1613,10 @@ class fascicle(NRV_simulable):
                         if self.save_results:
                             ## store results
                             ax_fname = "sim_axon_" + str(k) + ".json"
-                            #save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
+                            # save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
                             axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                         if not self.return_parameters_only:
-                            fasc_sim.update({"axon"+str(k):axon_sim})
+                            fasc_sim.update({"axon" + str(k): axon_sim})
                     data = {"rank": MCH.rank, "status": "success"}
                     MCH.send_data_to_master(data)
                 except KeyboardInterrupt:
@@ -1621,10 +1624,9 @@ class fascicle(NRV_simulable):
                 except:
                     data = {"rank": MCH.rank, "status": "error"}
                     MCH.send_data_to_master(data)
-                    rise_error(
-                        traceback.format_exc()
-                    )
+                    rise_warning(traceback.format_exc())
                 # sum up all recorded extracellular potential if applicable
+
             synchronize_processes()
             if self.record:
                 self.recorder.gather_all_recordings(master_computed=False)
@@ -1645,17 +1647,19 @@ class fascicle(NRV_simulable):
                 if self.postproc_script.lower() in OTF_PP_library:
                     self.postproc_script = OTF_PP_path + self.postproc_script.lower()
                 elif self.postproc_script.lower() + ".py" in OTF_PP_library:
-                    self.postproc_script = OTF_PP_path + self.postproc_script.lower() + ".py"
+                    self.postproc_script = (
+                        OTF_PP_path + self.postproc_script.lower() + ".py"
+                    )
                 with open(self.postproc_script) as f:
                     code = compile(f.read(), self.postproc_script, "exec")
                     exec(code, globals(), locals())
                 ## store results
                 if self.save_results:
                     ax_fname = "sim_axon_" + str(k) + ".json"
-                    #save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
+                    # save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
                     axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                 if not self.return_parameters_only:
-                    fasc_sim.update({"axon"+str(k):axon_sim})
+                    fasc_sim.update({"axon" + str(k): axon_sim})
             # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:

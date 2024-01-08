@@ -27,17 +27,17 @@ class raster_count_CE(CostEvaluation):
         """
         super().__init__()
 
-    def call_method(self, results:sim_results, **kwargs) -> float:
+    def call_method(self, results: sim_results, **kwargs) -> float:
         """
         Returns the spike number from a simulation result
         """
-        if 'V_mem_raster_position' not in results:
+        if "V_mem_raster_position" not in results:
             rasterize(results, "V_mem")
-        pos = results['V_mem_raster_position']
-        M = len(results['x_rec']) - 1  # pos starts at 0
-        i_first_pos = np.where(pos==0)
-        i_last_pos = np.where(pos==M)
-        cost = (len(i_first_pos[0]) + len(i_last_pos[0]))/2
+        pos = results["V_mem_raster_position"]
+        M = len(results["x_rec"]) - 1  # pos starts at 0
+        i_first_pos = np.where(pos == 0)
+        i_last_pos = np.where(pos == M)
+        cost = (len(i_first_pos[0]) + len(i_last_pos[0])) / 2
         return cost
 
 
@@ -57,17 +57,16 @@ class charge_quantity_CE(CostEvaluation):
         self.id_elec = id_elec
         self.dt_res = dt_res
 
-    def compute_stimulus_cost(self, stim:stimulus):
+    def compute_stimulus_cost(self, stim: stimulus):
         stim_ = stimulus()
         t_min, t_max = stim.t[0], stim.t[-1]
-        N_pts = int((t_max-t_min)//self.dt_res)
+        N_pts = int((t_max - t_min) // self.dt_res)
         stim_.t = np.linspace(t_min, t_max, N_pts)
         set_common_time_series(stim, stim_)
         return abs(stim).integrate()
 
-    def call_method(self, results:sim_results, **kwargs) -> float:
-        """
-        """
+    def call_method(self, results: sim_results, **kwargs) -> float:
+        """ """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0
@@ -78,6 +77,7 @@ class charge_quantity_CE(CostEvaluation):
         for i in self.id_elec:
             cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
         return cost
+
 
 class stim_energy_CE(CostEvaluation):
     def __init__(self, id_elec=None, dt_res=0.0001):
@@ -95,18 +95,17 @@ class stim_energy_CE(CostEvaluation):
         self.id_elec = id_elec
         self.dt_res = dt_res
 
-    def compute_stimulus_cost(self, stim:stimulus):
+    def compute_stimulus_cost(self, stim: stimulus):
         stim_ = stimulus()
         t_min, t_max = stim.t[0], stim.t[-1]
-        N_pts = int((t_max-t_min)//self.dt_res)
+        N_pts = int((t_max - t_min) // self.dt_res)
         stim_.t = np.linspace(t_min, t_max, N_pts)
         set_common_time_series(stim, stim_)
-        stim.s = stim.s*stim.s
+        stim.s = stim.s * stim.s
         return abs(stim).integrate()
 
-    def call_method(self, results:sim_results, **kwargs) -> float:
-        """
-        """
+    def call_method(self, results: sim_results, **kwargs) -> float:
+        """ """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0
@@ -117,8 +116,6 @@ class stim_energy_CE(CostEvaluation):
         for i in self.id_elec:
             cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
         return cost
-
-
 
 
 class recrutement_count_CE(CostEvaluation):
@@ -135,7 +132,8 @@ class recrutement_count_CE(CostEvaluation):
     cost        :int
         number of spike in the v_mem part
     """
-    def __init__(self,reverse=False):
+
+    def __init__(self, reverse=False):
         """
         Create a callable object which returns the number of activated fibre in the results
 
@@ -148,25 +146,23 @@ class recrutement_count_CE(CostEvaluation):
         super().__init__()
         self.reverse = reverse
 
-    def count_axon_activation(self, results:sim_results):
+    def count_axon_activation(self, results: sim_results):
         if len(results["V_mem_raster_position"]) == 0:
             # no spike
             return 0
         else:
             return 1
 
-    
-    def count_fascicle_activation(self, results:sim_results):
+    def count_fascicle_activation(self, results: sim_results):
         cpt = 0
-        for i in range(results['N']):
+        for i in range(results["N"]):
             if self.reverse:
-                cpt += 1-results["axon"+str(i)]["spike"]
+                cpt += 1 - results["axon" + str(i)]["spike"]
             else:
-                cpt += results["axon"+str(i)]["spike"]
+                cpt += results["axon" + str(i)]["spike"]
         return cpt
 
-
-    def call_method(self, results:sim_results, **kwargs) -> float:
+    def call_method(self, results: sim_results, **kwargs) -> float:
         """
         Returns the spike number from a simulation result
         """
@@ -178,5 +174,5 @@ class recrutement_count_CE(CostEvaluation):
         else:
             # nerve simulation
             for i in range(len(results["fascicles_IDs"])):
-                cost += self.count_fascicle_activation(results["fascicle"+str(i)])
+                cost += self.count_fascicle_activation(results["fascicle" + str(i)])
         return cost

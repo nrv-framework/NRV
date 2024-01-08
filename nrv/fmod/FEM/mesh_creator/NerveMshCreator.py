@@ -45,7 +45,13 @@ class NerveMshCreator(MshCreator):
     """
 
     def __init__(
-        self, Length=10000, Outer_D=5, Nerve_D=4000, y_c=0, z_c=0, ver_level=2,
+        self,
+        Length=10000,
+        Outer_D=5,
+        Nerve_D=4000,
+        y_c=0,
+        z_c=0,
+        ver_level=2,
     ):
         """
         initialisation of the NerveMshCreator

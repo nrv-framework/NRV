@@ -15,7 +15,6 @@ from .parameters import parameters
 from pyswarms.utils import Reporter
 
 
-
 class bcolors:
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
@@ -27,14 +26,18 @@ class bcolors:
     BOLD = "\033[1m"
     UNDERLINE = "\033[4m"
 
+
 def init_reporter():
     rep_nrv = Reporter(log_path=dir_path + "/log/NRV.log")
-    rep_nrv._default_config['handlers']['default']['level']= 'CRITICAL'
-    rep_nrv._default_config['formatters']['standard']['format']= "%(asctime)s - %(message)s"
+    rep_nrv._default_config["handlers"]["default"]["level"] = "CRITICAL"
+    rep_nrv._default_config["formatters"]["standard"][
+        "format"
+    ] = "%(asctime)s - %(message)s"
     rep_nrv._load_defaults()
     if MCH.do_master_only_work() and os.path.isfile("report.log"):
         os.remove("report.log")
     return rep_nrv
+
 
 def set_log_level(level, clear_log_file=False):
     if clear_log_file and MCH.do_master_only_work() and os.path.isfile("report.log"):
@@ -91,7 +94,7 @@ def rise_error(*args, out=1, **kwargs):
     if MCH.is_alone():
         if parameters.LOG_Status:
             rep_nrv.log(message, lvl=logging.ERROR)
-            #logger.error(message, lvl=logging.ERROR)
+            # logger.error(message, lvl=logging.ERROR)
         if verbose and parameters.VERBOSITY_LEVEL >= 1:
             print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
     else:
@@ -105,7 +108,7 @@ def rise_error(*args, out=1, **kwargs):
         )
         if parameters.LOG_Status:
             rep_nrv.log(err, lvl=logging.ERROR)
-            #logger.error(err, lvl=logging.ERROR)
+            # logger.error(err, lvl=logging.ERROR)
         if parameters.VERBOSITY_LEVEL >= 1:
             print(err)
             sys.stdout.flush()
@@ -135,8 +138,8 @@ def rise_warning(*args, abort=False, **kwargs):
         message += str(arg)
     if MCH.is_alone():
         if parameters.LOG_Status:
-            rep_nrv.log("NRV DEBUG: " + message,lvl=logging.DEBUG)
-            #logger.warning("NRV WARNING: " + message)
+            rep_nrv.log("NRV DEBUG: " + message, lvl=logging.DEBUG)
+            # logger.warning("NRV WARNING: " + message)
         if verbose and parameters.VERBOSITY_LEVEL >= 2:
             print(bcolors.WARNING + "NRV WARNING: " + message + bcolors.ENDC)
     else:
@@ -149,8 +152,8 @@ def rise_warning(*args, abort=False, **kwargs):
             + str(MCH.size)
         )
         if parameters.LOG_Status:
-            rep_nrv.log(war,lvl=logging.DEBUG)
-            #logger.warning(war)
+            rep_nrv.log(war, lvl=logging.DEBUG)
+            # logger.warning(war)
         if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL >= 2:
             print(bcolors.WARNING + war + bcolors.ENDC)
             sys.stdout.flush()
@@ -179,8 +182,8 @@ def pass_info(*args, **kwargs):
         message += str(arg)
     if MCH.is_alone():
         if parameters.LOG_Status:
-            rep_nrv.log("NRV DEBUG: " + message,lvl=logging.INFO)
-            #logger.info("NRV DEBUG: " + message)
+            rep_nrv.log("NRV DEBUG: " + message, lvl=logging.INFO)
+            # logger.info("NRV DEBUG: " + message)
         if verbose and parameters.VERBOSITY_LEVEL >= 3:
             print("NRV INFO: " + message)
     else:
@@ -193,8 +196,8 @@ def pass_info(*args, **kwargs):
             + str(MCH.size)
         )
         if parameters.LOG_Status:
-            rep_nrv.log(inf,lvl=logging.INFO)
-            #logger.info(inf)
+            rep_nrv.log(inf, lvl=logging.INFO)
+            # logger.info(inf)
         if parameters.VERBOSITY_LEVEL >= 4:
             print(inf)
             sys.stdout.flush()
@@ -218,8 +221,8 @@ def pass_debug_info(*args, **kwargs):
         message += str(arg)
     if MCH.is_alone():
         if parameters.LOG_Status and parameters.VERBOSITY_LEVEL >= 4:
-            rep_nrv.log("NRV DEBUG: " + message,lvl=logging.DEBUG)
-            #logger.info("NRV DEBUG: " + message)
+            rep_nrv.log("NRV DEBUG: " + message, lvl=logging.DEBUG)
+            # logger.info("NRV DEBUG: " + message)
         if verbose and parameters.VERBOSITY_LEVEL >= 4:
             print("NRV DEBUG: " + message)
     else:
@@ -232,8 +235,8 @@ def pass_debug_info(*args, **kwargs):
             + str(MCH.size)
         )
         if parameters.LOG_Status:
-            rep_nrv.log(inf,lvl=logging.DEBUG)
-            #logger.info(inf)
+            rep_nrv.log(inf, lvl=logging.DEBUG)
+            # logger.info(inf)
         if parameters.VERBOSITY_LEVEL >= 4:
             print(inf)
             sys.stdout.flush()

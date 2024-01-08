@@ -1,2 +1,2 @@
-nrv.rasterize(sim_results,'V_mem')
+nrv.rasterize(axon_sim,'V_mem')
 print('Custom PP accessed')
