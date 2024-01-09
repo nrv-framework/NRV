@@ -3,7 +3,7 @@
 
 __copyright__ = "2023, Florian Kolbl"
 __license__ = "CeCILL"
-__version__ = "0.9.22"
+__version__ = "0.9.23"
 __title__ = "NeuRon Virtualizer"
 __authors__ = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
 __contributors__ = __authors__
