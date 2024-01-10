@@ -33,7 +33,7 @@ for i in range(10):
     plt.step(test_stim.t, test_stim.s,where='post')
     print(X)
    # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
-plt.savefig('./unitary_tests/figures/312_single_tone.png')
+plt.savefig('./unitary_tests/figures/509_A.png')
 
 plt.figure()
 n_tones = 2
@@ -46,7 +46,7 @@ for i in range(10):
     plt.step(test_stim.t, test_stim.s,where='post')
     print(X)
    # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
-plt.savefig('./unitary_tests/figures/312_dual_tones.png')
+plt.savefig('./unitary_tests/figures/509_B.png')
 
 plt.figure()
 n_tones = 3
@@ -59,7 +59,7 @@ for i in range(10):
     plt.step(test_stim.t, test_stim.s,where='post')
     print(X)
    # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
-plt.savefig('./unitary_tests/figures/312_three_tones.png')
+plt.savefig('./unitary_tests/figures/509_C.png')
 
 plt.figure()
 n_tones = 7
@@ -72,5 +72,5 @@ for i in range(10):
     plt.step(test_stim.t, test_stim.s,where='post')
     print(X)
    # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
-plt.savefig('./unitary_tests/figures/312_seven_tones.png')
+plt.savefig('./unitary_tests/figures/509_D.png')
 #plt.show()
