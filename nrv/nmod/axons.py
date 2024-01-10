@@ -605,9 +605,9 @@ class axon(NRV_simulable):
         record_particules   : bool
             if true, the marticule states are recorded, set to False by default
         self.loaded_footprints           :dict or bool
-        Dictionnary composed of extracellular footprint array, the keys are int value
-        of the corresponding electrode ID, if None, footprints calculated during the simulation,
-        set to None by default
+            Dictionnary composed of extracellular footprint array, the keys are int value
+            of the corresponding electrode ID, if None, footprints calculated during the simulation,
+            set to None by default
 
         Returns
         -------

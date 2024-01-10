@@ -1129,7 +1129,7 @@ class fascicle(NRV_simulable):
         """
         Change the stimulus of the ID_elec electrods
 
-        parameters:
+        Parameters
         ----------
             ID_elec  : int
                 ID of the electrode which should be changed

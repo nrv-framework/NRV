@@ -52,25 +52,23 @@ dir_path = os.environ["NRVPATH"] + "/_misc"
 rep_nrv = init_reporter()
 
 
-"""
-!! ISSUE:
-Compatibility between logging and pyswarms when pyswarms is imported (not used necessarily)
-all messages log are also printed
+# !! ISSUE:
+# Compatibility between logging and pyswarms when pyswarms is imported (not used necessarily)
+# all messages log are also printed
 
-!! TEMPORARY SOLUTION
-Using a pyswarms reporter to log messages 
-see old code commented 
+# !! TEMPORARY SOLUTION
+# Using a pyswarms reporter to log messages
+# see old code commented
 
-logger = logging.getLogger()
+# logger = logging.getLogger()
 
-# logging config
-logging.basicConfig(
-    filename=dir_path + "/log/NRV.log",
-    level=logging.INFO,
-    format="%(asctime)s %(message)s",
-    datefmt="%m/%d/%Y %I:%M:%S %p",
-)
-"""
+# # logging config
+# logging.basicConfig(
+#     filename=dir_path + "/log/NRV.log",
+#     level=logging.INFO,
+#     format="%(asctime)s %(message)s",
+#     datefmt="%m/%d/%Y %I:%M:%S %p",
+# )
 
 
 def rise_error(*args, out=1, **kwargs):
