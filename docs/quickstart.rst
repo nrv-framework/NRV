@@ -144,3 +144,21 @@ A more realistic example: a simple nerve with a LIFE electrode
 ==============================================================
 
 currently writting it!
+
+A Deeper review of simulable objects: Axons, Fascicles and nerves
+=================================================================
+
+currently writting it!
+
+Generating simple to complex stimuli
+====================================
+
+currently writting it!
+
+Exhaustive list of electrodes and associated geometries
+=======================================================
+
+currently writting it!
+
+
+
