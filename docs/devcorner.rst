@@ -95,7 +95,7 @@ The *NRV_test* file is a script that act as a test launcher. It should be called
 
 This script can test the install and dependencies, test he syntax and trigger linters or launch unitary tests. The following options are possitle:
   - "-d", "--dependances": Check NEURON and COMSOL installation
-  - "-l", "--list": Print the name of all unitary tests
+  - "-l", "--list": Print the name of all unitary tests, an optianal interger can be added to arguments to specify the number of columns used to print
   - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all thest should be True, numerical values for debug only
   - "-s", "--syntax": Lint nvr syntax source code
   - "-a", "--all": launches even potentially failing tests due to third party softwares such as COMSOL
@@ -105,13 +105,60 @@ This script can test the install and dependencies, test he syntax and trigger li
   - "-p", "--python": Forces Python as interpreted instead of *nrv2calm*
 
 Note that runing all scripts without errors and with all prints set to 'True' (no 'False') is a neccessary condition for a PR to be accepted.
+If errors occured, the list of faild tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
 
 All code sources for the unitary tests can be found in the *tests/unitary_tests/* folder. Tests are organized in groups and subgroups as follows:
 
-+------------------------+-----------------+-----------------------------+
-| Starting Number        | Ending Number   | Function tested             |
-+========================+=================+=============================+
-| body row 1, column 1   | column 2        |                    column 3 |
-+------------------------+-----------------+-----------------------------+
-| body row 2             |                 |                             |
-+------------------------+-----------------+-----------------------------+
+.. list-table:: Tests functionalities
+    :widths: 10 10 50
+    :header-rows: 1
+    :align: center
+
+    *   - Starting Number
+        - Ending Number
+        - Function tested
+    *   - 001
+        - 001
+        - General architecture
+    *   - 002
+        - 041
+        - Basic functionalities: axon models simulation intracellular contextual and analytical extracellular context
+    *   - 050
+        - 059
+        - Fascicular related functions and basic multiprocessing functionalities
+    *   - 060
+        - 065
+        - COMSOL FEM model
+    *   - 066
+        - 071
+        - Various
+    *   - 072
+        - 079
+        - Save and load functionalities: electrode footprints, axon, fascicle
+    *   - 080
+        - 083
+        - Analytical recorders
+    *   - 084
+        - 087
+        - Save and load contexts and recorders
+    *   - 088
+        - 089
+        - Various functions
+    *   - 090
+        - 099
+        - Conductivity recorders
+    *   - 100
+        - 145
+        - FEniCS FEM models and GMSH meshes creator functions
+    *   - 150
+        - 151
+        - Compare FEniCS and COMSOL FEM models
+    *   - 200
+        - 225
+        - Optimization functions
+    *   - 300
+        - 306
+        - Nerve functions
+    *   - 500
+        - 509
+        - Various functions

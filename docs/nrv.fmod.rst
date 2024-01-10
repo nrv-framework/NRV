@@ -52,13 +52,6 @@ nrv.fmod.stimulus module
    :undoc-members:
    :show-inheritance:
 
-nrv.fmod.FEM module
-------------------------
-.. automodule:: nrv.fmod.FEM.rst
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
