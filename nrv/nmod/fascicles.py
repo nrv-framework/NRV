@@ -1115,7 +1115,7 @@ class fascicle(NRV_simulable):
         """
         attach a extracellular context of simulation for an axon.
 
-        parameters:
+        Parameters
         ----------
             stimulation  : stimulation object, see Extracellular.stimulation help for more details
         """

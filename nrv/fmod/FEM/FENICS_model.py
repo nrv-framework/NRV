@@ -477,6 +477,9 @@ class FENICS_model(FEM_model):
     ):
         """
         Set material files for any domain
+
+        Parameters
+        ----------
         Outer_mat       :str
             Outer box material fname if None not changed, by default None
         Epineurium_mat      :str

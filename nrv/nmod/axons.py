@@ -520,7 +520,7 @@ class axon(NRV_simulable):
         """
         Change the stimulus of the ID_elec electrods
 
-        Parameters:
+        Parameters
         ----------
             ID_elec  : int
                 ID of the electrode which should be changed
@@ -608,6 +608,7 @@ class axon(NRV_simulable):
         Dictionnary composed of extracellular footprint array, the keys are int value
         of the corresponding electrode ID, if None, footprints calculated during the simulation,
         set to None by default
+
         Returns
         -------
         axon_sim    : dictionnary

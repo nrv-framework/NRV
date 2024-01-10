@@ -69,7 +69,8 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(message)s",
     datefmt="%m/%d/%Y %I:%M:%S %p",
-)"""
+)
+"""
 
 
 def rise_error(*args, out=1, **kwargs):

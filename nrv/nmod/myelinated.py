@@ -30,7 +30,7 @@ def get_MRG_parameters(diameter):
     Original parameters are listed and used if the input diameter is in the list,
     parameters are interpolated if the diameter is not in the original list.
 
-    Attributes
+    Parameters
     ----------
     diameter    : float
         diameter of the unmylinated axon to implement, in um
@@ -97,7 +97,7 @@ def get_length_from_nodes(diameter, nodes):
     Function to compute the length of a myelinated axon to get the correct number of Nodes of Ranvier
     For Myelinated models only (not compatible with A delta thin myelinated models)
 
-    Attributes
+    Parameters
     ----------
     diameter    : float
         diameter of the axon in um
