@@ -19,7 +19,7 @@ print(my_model.get_parameters())
 print(my_model.Perineurium_thickness)
 t = time.time()
 print("mesh built in : "+str(t-t0))
-my_model.save(mesh_file)
+my_model.mesh.save(mesh_file)
 #my_model.get_meshes()
 
 my_model.solve()

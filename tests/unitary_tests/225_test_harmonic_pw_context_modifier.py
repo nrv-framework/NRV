@@ -64,4 +64,4 @@ plt.savefig('./unitary_tests/figures/222_A.png')
 plt.figure(2)
 plt.savefig('./unitary_tests/figures/222_B.png')
 
-plt.show()
+#plt.show()
