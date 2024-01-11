@@ -421,7 +421,7 @@ class recorder(NRV_class):
         Returns
         -------
         """
-        return self.recording_points == []
+        return self.recording_points is []
 
     def translate(self, x=None, y=None, z=None):
         """

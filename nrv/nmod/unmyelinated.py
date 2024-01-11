@@ -257,7 +257,7 @@ class unmyelinated(axon):
         x = []
         for sec in self.unmyelinated_sections:
             for seg in sec.allseg():
-                if x == []:
+                if x is []:
                     x.append(seg.x * (sec.L) + x_offset)
                 else:
                     x_seg = seg.x * (sec.L) + x_offset

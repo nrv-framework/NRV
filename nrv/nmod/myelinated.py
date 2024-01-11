@@ -530,7 +530,7 @@ class myelinated(axon):
                 if connect_to_type == "FLUT" and self.paranodes2 != 0:
                     self.STIN[-1].connect(self.FLUT[-1], 1, 0)
 
-        if self.node == []:
+        if self.node is []:
             rise_warning(
                 "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n"
             )
@@ -705,7 +705,7 @@ class myelinated(axon):
 
         !!! TO USE WITH CAUTION !!!
         """
-        if list_of_nodes == []:
+        if list_of_nodes is []:
             list_of_nodes = np.arange(self.axonnodes)
         if self.model == "MRG":
             for NoR in list_of_nodes:
@@ -855,7 +855,7 @@ class myelinated(axon):
             if sec_type == "node":
                 x_nodes.append(x_offset + self.node[sec_index].L / 2)
                 for seg in self.node[sec_index].allseg():
-                    if x == []:
+                    if x is []:
                         x.append(seg.x * (self.node[sec_index].L) + x_offset)
                         nodes_index.append(0)
                         self.rec_position_list[-1].append(seg.x)
@@ -868,7 +868,7 @@ class myelinated(axon):
                 x_offset += self.node[sec_index].L
             elif sec_type == "MYSA":
                 for seg in self.MYSA[sec_index].allseg():
-                    if x == []:
+                    if x is []:
                         x.append(seg.x * (self.MYSA[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
@@ -879,7 +879,7 @@ class myelinated(axon):
                 x_offset += self.MYSA[sec_index].L
             elif sec_type == "FLUT":
                 for seg in self.FLUT[sec_index].allseg():
-                    if x == []:
+                    if x is []:
                         x.append(seg.x * (self.FLUT[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
@@ -890,7 +890,7 @@ class myelinated(axon):
                 x_offset += self.FLUT[sec_index].L
             else:  # should be STIN
                 for seg in self.STIN[sec_index].allseg():
-                    if x == []:
+                    if x is []:
                         x.append(seg.x * (self.STIN[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:

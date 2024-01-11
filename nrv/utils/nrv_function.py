@@ -532,7 +532,7 @@ class nrv_interp(nrv_function):
             )
 
     def __call__(self, X):
-        if self.columns == []:
+        if self.columns is []:
             return self.interpolator(X)
         try:
             return self.interpolator(X[self.columns])

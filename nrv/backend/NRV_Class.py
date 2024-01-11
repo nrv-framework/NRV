@@ -155,7 +155,7 @@ class NRV_class(metaclass=ABCMeta):
                     self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
-                elif key_dic[key] == []:
+                elif key_dic[key] is []:
                     self.__dict__[key] = eval(self.__dict__[key].__class__.__name__)()
                 else:
                     self.__dict__[key] = key_dic[key]

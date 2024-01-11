@@ -167,7 +167,7 @@ class SimParameters(NRV_class):
         else:
             rise_error("_update_ID_list failed due to unknow list type")
 
-        if IDlist == []:
+        if IDlist is []:
             if ID is None:
                 IDlist = [1]
             else:
