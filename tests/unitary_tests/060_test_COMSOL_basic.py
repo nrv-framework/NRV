@@ -27,7 +27,8 @@ my_model.export(path='./unitary_tests/figures/60_')
 del my_model
 
 plt.figure()
-plt.plot(x, V)
+plt.plot(x, V[:,0])
+plt.plot(x, V[:,1])
 plt.xlabel('position (um)')
 plt.ylabel('extracellular potential (mV)')
 plt.savefig('./unitary_tests/figures/60_A.png')

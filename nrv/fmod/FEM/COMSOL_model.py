@@ -216,7 +216,8 @@ class COMSOL_model(FEM_model):
         ]
         Voltage = self.model.evaluate(COMSOL_expressions) * V
         self.access_res_timer += time.time() - t0
-        return np.asarray(Voltage)
+        # transpose to be consistent check if no BUG generated
+        return np.asarray(Voltage).T
 
     def export(self, path=""):
         """
