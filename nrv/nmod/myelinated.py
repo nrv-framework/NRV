@@ -8,6 +8,7 @@ import math
 import numpy as np
 
 from ..backend.log_interface import rise_warning
+from ..backend.NRV_Class import is_empty_iterable
 from .axons import *
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
@@ -530,7 +531,7 @@ class myelinated(axon):
                 if connect_to_type == "FLUT" and self.paranodes2 != 0:
                     self.STIN[-1].connect(self.FLUT[-1], 1, 0)
 
-        if self.node is []:
+        if is_empty_iterable(self.node):
             rise_warning(
                 "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n"
             )
@@ -705,7 +706,7 @@ class myelinated(axon):
 
         !!! TO USE WITH CAUTION !!!
         """
-        if list_of_nodes is []:
+        if is_empty_iterable(list_of_nodes):
             list_of_nodes = np.arange(self.axonnodes)
         if self.model == "MRG":
             for NoR in list_of_nodes:
@@ -855,7 +856,7 @@ class myelinated(axon):
             if sec_type == "node":
                 x_nodes.append(x_offset + self.node[sec_index].L / 2)
                 for seg in self.node[sec_index].allseg():
-                    if x is []:
+                    if is_empty_iterable(x):
                         x.append(seg.x * (self.node[sec_index].L) + x_offset)
                         nodes_index.append(0)
                         self.rec_position_list[-1].append(seg.x)
@@ -868,7 +869,7 @@ class myelinated(axon):
                 x_offset += self.node[sec_index].L
             elif sec_type == "MYSA":
                 for seg in self.MYSA[sec_index].allseg():
-                    if x is []:
+                    if is_empty_iterable(x):
                         x.append(seg.x * (self.MYSA[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
@@ -879,7 +880,7 @@ class myelinated(axon):
                 x_offset += self.MYSA[sec_index].L
             elif sec_type == "FLUT":
                 for seg in self.FLUT[sec_index].allseg():
-                    if x is []:
+                    if is_empty_iterable(x):
                         x.append(seg.x * (self.FLUT[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:
@@ -890,7 +891,7 @@ class myelinated(axon):
                 x_offset += self.FLUT[sec_index].L
             else:  # should be STIN
                 for seg in self.STIN[sec_index].allseg():
-                    if x is []:
+                    if is_empty_iterable(x):
                         x.append(seg.x * (self.STIN[sec_index].L) + x_offset)
                         self.rec_position_list[-1].append(seg.x)
                     else:

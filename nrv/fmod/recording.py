@@ -9,7 +9,7 @@ import numpy as np
 
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import MCH, synchronize_processes
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, is_empty_iterable
 from ..utils.units import cm, m
 from .materials import load_material
 
@@ -421,7 +421,7 @@ class recorder(NRV_class):
         Returns
         -------
         """
-        return self.recording_points is []
+        return is_empty_iterable(self.recording_points)
 
     def translate(self, x=None, y=None, z=None):
         """

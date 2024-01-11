@@ -75,6 +75,23 @@ def is_NRV_dict_dict(x):
         return True
     return False
 
+######################################
+#       numpy compatibility          #
+######################################
+
+def is_empty_iterable(x):
+    """
+    
+    """
+    if not np.iterable(x):
+        return False
+    if len(x) == 0:
+        return True
+    return False
+
+######################################
+#            NRV Class               #
+######################################
 
 class NRV_class(metaclass=ABCMeta):
     """
@@ -155,7 +172,7 @@ class NRV_class(metaclass=ABCMeta):
                     self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
-                elif key_dic[key] is []:
+                elif is_empty_iterable(key_dic[key]):
                     self.__dict__[key] = eval(self.__dict__[key].__class__.__name__)()
                 else:
                     self.__dict__[key] = key_dic[key]

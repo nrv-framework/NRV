@@ -10,7 +10,7 @@ import numpy as np
 from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import MCH
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, is_empty_iterable
 from .electrodes import (
     is_analytical_electrode,
     is_FEM_electrode,
@@ -118,7 +118,7 @@ class extracellular_context(NRV_class):
         bool
             True if a simulation is empty, else False
         """
-        return self.electrodes is []
+        return is_empty_iterable(self.electrodes)
 
     def translate(self, x=None, y=None, z=None):
         """
@@ -147,7 +147,7 @@ class extracellular_context(NRV_class):
         stimulus    : stimulus object
             see Stimulus.py or stimulus object help for further details
         """
-        if self.electrodes is []:
+        if is_empty_iterable(self.electrodes):
             self.electrodes.append(electrode)
             self.stimuli.append(stimulus)
         else:
@@ -320,7 +320,7 @@ class stimulation(extracellular_context):
             see Stimulus.py or stimulus object help for further details
         """
         if is_analytical_electrode(electrode):
-            if self.electrodes is []:
+            if is_empty_iterable(self.electrodes):
                 self.electrodes.append(electrode)
                 self.stimuli.append(stimulus)
             else:
@@ -627,7 +627,7 @@ class FEM_stimulation(extracellular_context):
         else:
             if is_FEM_electrode(electrode):
                 if not electrode.is_multipolar:
-                    if not self.electrodes is []:
+                    if not is_empty_iterable(self.electrodes):
                         electrode.set_ID_number(self.electrodes[-1].get_ID_number() + 1)
                     self.electrodes.append(electrode)
                     self.electrodes_label.append(electrode.label)
@@ -641,7 +641,7 @@ class FEM_stimulation(extracellular_context):
                         )
                         stimuli = [stimulus for k in range(electrode.N_contact)]
                     for E in range(electrode.N_contact):
-                        if not self.electrodes is []:
+                        if not is_empty_iterable(self.electrodes):
                             electrode.set_ID_number(
                                 self.electrodes[-1].get_ID_number() + 1
                             )

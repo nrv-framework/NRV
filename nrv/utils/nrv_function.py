@@ -11,7 +11,7 @@ from scipy.special import erf
 
 from ..backend.file_handler import json_dump, json_load
 from ..backend.log_interface import rise_warning
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, is_empty_iterable
 
 #############################
 ## sigma functions classes ##
@@ -532,7 +532,7 @@ class nrv_interp(nrv_function):
             )
 
     def __call__(self, X):
-        if self.columns is []:
+        if is_empty_iterable(self.columns):
             return self.interpolator(X)
         try:
             return self.interpolator(X[self.columns])

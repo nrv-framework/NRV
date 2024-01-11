@@ -8,6 +8,7 @@ import math
 import numpy as np
 
 from .axons import *
+from ..backend.NRV_Class import is_empty_iterable
 
 
 class unmyelinated(axon):
@@ -257,7 +258,7 @@ class unmyelinated(axon):
         x = []
         for sec in self.unmyelinated_sections:
             for seg in sec.allseg():
-                if x is []:
+                if is_empty_iterable(x):
                     x.append(seg.x * (sec.L) + x_offset)
                 else:
                     x_seg = seg.x * (sec.L) + x_offset

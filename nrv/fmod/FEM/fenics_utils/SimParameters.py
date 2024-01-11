@@ -2,7 +2,7 @@ import numpy as np
 
 from ....backend.file_handler import json_dump, json_load, rmv_ext
 from ....backend.log_interface import rise_error, rise_warning
-from ....backend.NRV_Class import NRV_class
+from ....backend.NRV_Class import NRV_class, is_empty_iterable
 
 
 def is_sim_param(X):
@@ -167,7 +167,7 @@ class SimParameters(NRV_class):
         else:
             rise_error("_update_ID_list failed due to unknow list type")
 
-        if IDlist is []:
+        if is_empty_iterable(IDlist):
             if ID is None:
                 IDlist = [1]
             else:
