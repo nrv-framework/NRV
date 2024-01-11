@@ -27,7 +27,7 @@ material_library = os.listdir(dir_path + "/comsol_templates/")
 machine_config = configparser.ConfigParser()
 config_fname = dir_path + "/NRV.ini"
 machine_config.read(config_fname)
-COMSOL_Ncores = machine_config.get("COMSOL", "COMSOL_CPU")
+COMSOL_Ncores = int(machine_config.get("COMSOL", "COMSOL_CPU"))
 COMSOL_Status = machine_config.get("COMSOL", "COMSOL_STATUS") == "True"
 
 fem_verbose = True
