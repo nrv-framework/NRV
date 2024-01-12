@@ -59,7 +59,7 @@ if nrv.COMSOL_Status:
     axon1 = nrv.myelinated(y,z,d,L,rec='all')
     axon1.attach_extracellular_stimulation(test_stim)
 
-    footprints = axon1.get_electrodes_footprints_on_axon(save=True, filename="./unitary_tests/figures/072_electrodes_footprints_on_axon.json")
+    footprints = axon1.get_electrodes_footprints_on_axon(save_ftp_only=True, filename="./unitary_tests/figures/072_electrodes_footprints_on_axon.json")
 
     # simulate the axon
     results = axon1.simulate(t_sim=10, loaded_footprints=footprints)
