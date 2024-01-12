@@ -60,7 +60,7 @@ setup(
     author=AUTHOR_NAME,
     description=DESCRIPTION,
     url=PROJECT_URL,
-    version="0.9.29",
+    version="0.9.30",
     long_description=long_description,
     long_description_content_type='text/markdown',
     # architecture
