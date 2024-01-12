@@ -4,7 +4,7 @@
 <!---[![DOI](xxxx)](xxx)-->
 <!---[![Build Status](xxxx)](xxx)-->
 
-<img src="docs/images/logo.png" alt="NRV" width="50%" height="auto">
+<img src="docs/images/logo.png" alt="NRV" width="50%" height="auto" class="center">
 
 # NRV
 *Python librairy for Peripheral Nervous System stimulation modeling*
