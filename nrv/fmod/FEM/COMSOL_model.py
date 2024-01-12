@@ -55,9 +55,11 @@ class COMSOL_model(FEM_model):
             t0 = time.time()
             super().__init__(Ncore=Ncore)
             self.type = "COMSOL"
-
             self.model_path = fname
             f_in_librairy = rmv_ext(str(fname)) + ".mph"
+            self.__has_client = False
+            self.__has_server = False
+
             if f_in_librairy in material_library:
                 self.fname = dir_path + "/comsol_templates/" + f_in_librairy
             else:
@@ -71,9 +73,11 @@ class COMSOL_model(FEM_model):
             pass_info("Starting COMSOL server/client, this may take few seconds")
             if self.handle_server:
                 self.server = mph.Server(cores=self.Ncore)
+                self.__has_server = True
             else:
                 self.server = None
             self.client = mph.start(cores=self.Ncore)
+            self.__has_client = True
             self.client.caching(True)
             pass_info("... loading the COMSOL model")
             self.model = self.client.load(self.fname)
@@ -105,11 +109,19 @@ class COMSOL_model(FEM_model):
         """
         Close the FEM simulation and the COMSOL link
         """
-        # self.client.disconnect()
-        del self.client
-        if self.handle_server:
+        if self.__has_client:
+            self.client.disconnect()
+            del self.client
+            self.__has_client = False
+        print(self.handle_server or self.__has_server)
+        if self.handle_server or self.__has_server:
             self.server.stop()
             del self.server
+            self.__has_server = False
+
+    def __del__(self):
+        self.close()
+        super().__del__()
 
     #############################
     ## Access model parameters ##

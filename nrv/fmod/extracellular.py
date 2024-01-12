@@ -432,15 +432,9 @@ class FEM_stimulation(extracellular_context):
                         "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
                         abort=True,
                     )
+                self.model = None
         else:
             self.model = FENICS_model(Ncore=self.Ncore)
-
-    def __del__(self):
-        if (
-            MCH.do_master_only_work() and COMSOL_Status and self.comsol
-        ):  # added for safe del in case of COMSOL status turned OFF
-            self.model.close()
-            del self.model
 
     def set_Ncore(self, N):
         """

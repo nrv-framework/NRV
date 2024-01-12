@@ -75,23 +75,25 @@ def is_NRV_dict_dict(x):
         return True
     return False
 
+
 ######################################
 #       numpy compatibility          #
 ######################################
 
+
 def is_empty_iterable(x):
-    """
-    
-    """
+    """ """
     if not np.iterable(x):
         return False
     if len(x) == 0:
         return True
     return False
 
+
 ######################################
 #            NRV Class               #
 ######################################
+
 
 class NRV_class(metaclass=ABCMeta):
     """
@@ -114,6 +116,9 @@ class NRV_class(metaclass=ABCMeta):
         Destructor for NRV class
         """
         pass_debug_info(self.nrv_type, " deleted")
+        keys = list(self.__dict__.keys())
+        for key in keys:
+            del self.__dict__[key]
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         """
