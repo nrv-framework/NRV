@@ -4,6 +4,8 @@
 <!---[![DOI](xxxx)](xxx)-->
 <!---[![Build Status](xxxx)](xxx)-->
 
+![NRV](docs/images/logo.png?raw=true)
+
 # NRV
 *Python librairy for Peripheral Nervous System stimulation modeling*
 
