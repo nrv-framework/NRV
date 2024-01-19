@@ -151,10 +151,15 @@ class function_1D(nrv_function):
 
 
 class gaussian(function_1D):
+    r"""
+    gaussian function define as:
+
+    .. math::
+
+    f(x) = e^{-\frac{(x-\mu)^2}{2*\sigma^2}}
+    """
     def __init__(self, mu=0, sigma=1):
         """
-        gaussian function define as:
-        f(x) = e^{-\frac{(x-\mu)^2}{2*\sigma^2}}
         """
         super().__init__()
         self.mu = mu
