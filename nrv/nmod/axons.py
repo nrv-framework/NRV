@@ -66,7 +66,7 @@ def d_lambda_rule(L, d_lambda, f, sec):
     """
     computes the d_lambda rule for a sections and returns the number of segments.
 
-    Attributes
+    Parameters
     ----------
     L           : int
         length of the section (um)
@@ -90,7 +90,7 @@ def create_Nseg_freq_shape(N_sec, shape, freq, freq_min, alpha_max):
     creates a vector with the size of N_sec, a number of section to create an axon,
     and creates a shape of frequency to use with the d-lambda rule along the axon.
 
-    Attributes
+    Parameters
     ----------
     Nsec        : int
         the number of sections that will be used to implement the axon
@@ -178,7 +178,7 @@ def rotate_list(l, n):
     """
     rotate a list with a defined number of indexes to shift
 
-    Attributes
+    Parameters
     ----------
     l   : list
         list to rotate

@@ -605,9 +605,9 @@ class FEM_stimulation(extracellular_context):
 
         Parameters
         ----------
-        electrode   : electrode object
+        electrode   : electrode
             see Electrode.py or electrode object help for further details
-        stimulus    : stimulus object or list[stimulus]
+        stimulus    : stimulus or list[stimulus]
             see Stimulus.py or stimulus object help for further details, for Multipolar electrode:
             if stimulus a list of situmulus one stimulus set for each active site
             else

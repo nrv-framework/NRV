@@ -49,7 +49,7 @@ Installing NRV
 Using pip
 ^^^^^^^^^
 
-NRV can simply be installed with pip:
+NRV can simply be installed with pip (`nrv-py <https://pypi.org/project/nrv-py/>`_):
 :: 
 
     pip install nrv-py

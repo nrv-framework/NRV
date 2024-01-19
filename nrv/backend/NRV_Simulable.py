@@ -1,7 +1,6 @@
 """
-Access and modify NRV Parameters
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+Module containing a base class for all classes which can be simulated: ``nerve``, ``fascicle``, ``myelinated``
+
 """
 import numpy as np
 import matplotlib.pyplot as plt

@@ -91,3 +91,7 @@ pygments_style = "friendly"  # syntax highlight style in light mode
 pygments_dark_style = "stata-dark"  # syntax highlight style in dark mode
 html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
+
+# Sources options
+autodoc_member_order = 'bysource' # keep the order of class and function source files
+#                                   (thus don't use alphabetical order)
