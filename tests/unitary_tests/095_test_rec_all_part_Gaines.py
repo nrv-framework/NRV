@@ -1,9 +1,6 @@
 import nrv
 import matplotlib.pyplot as plt
 
-import nrv
-import numpy as np
-import matplotlib.pyplot as plt
 
 gnafbar_mrg = 3.0 # S.cm-2
 gnapbar_mrg = 0.01 # S.cm-2
