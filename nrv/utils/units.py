@@ -2,25 +2,35 @@ r"""
 The ``units`` module handles conversion to and from the default nrv units.
 Several functions are included to simplify the use of these units.
 
-The default nrv units are:
+The folowing table details the default units used in NRV and the lists of units available for conversion:
     .. list-table::
-        :widths: 10 10
         :align: left
+        :header-rows: 1
 
+        *   - Category
+            - Default
+            - Existing
         *   - Voltage
             - mV
+            - uV, V
         *   - Time
             - ms
+            - us, s, minute, hour, day
         *   - Length
             - um
+            - mm, cm, dm, m
         *   - Currents
             - uA
+            - nA, mA, A
         *   - Conductance
             - S
+            - kS, mS, uS
         *   - Frequency
             - kHz
+            - Hz, MHz, GHz
         *   - Capacitance
             - uF
+            - F, mF, pF, nF
 
 """
 import numpy as np
@@ -97,7 +107,7 @@ nF = 1e-6 * uF
 
 def print_default_nrv_unit():
     """
-    Print all the defaults units in nrv
+    Print all the default units in nrv.
     """
     print(
         "Voltage: mV",
@@ -109,27 +119,28 @@ def print_default_nrv_unit():
         "\nCapacitance: uF",
     )
 
+
 def from_nrv_unit(value, unit):
     """
-    Convert a quantity ``value`` from the standard nrv units to ``unit``
+    Convert a quantity ``value`` from the default nrv units to ``unit``.
 
     Parameters
     ----------
     value:      int, float, list or np.ndarray
-        value or values wich should be converted
+        value or values wich should be converted.
     unit:     int or str
-        unit from which value should be converted, see example
+        unit from which value should be converted, see example.
 
     Returns
     -------
     int, float, list or np.ndarray
-        rounded value or values, with the same type and shape than ``value``
+        rounded value or values, with the same type and shape than ``value``.
 
     Example
     -------
-    Here are three ways of converting 4530um (default unit) into 4.53mm
+    Here are three ways of converting 4530um (default unit) into 4.53mm:
 
-        >>> import nrv 
+        >>> import nrv
         >>> val_default = 4530 # um
         >>> val_default / nrv.mm
         4.53
@@ -151,25 +162,25 @@ def from_nrv_unit(value, unit):
 
 def to_nrv_unit(value, unit):
     """
-    Convert a quantity ``value`` from unit to the standard nrv ``unit``
+    Convert a quantity ``value`` from unit to the default nrv ``unit``.
 
     Parameters
     ----------
     value:      int, float, list or np.ndarray
-        value or values wich should be converted
+        value or values wich should be converted.
     unit:     int or str
-        unit to which value should be converted, see example
+        unit to which value should be converted, see examples.
 
     Returns
     -------
     int, float, list or np.ndarray
-        rounded value or values, with the same type and shape than ``value``
+        rounded value or values, with the same type and shape than ``value``.
 
     Example
     -------
-    Here are three ways of converting 0.12 MHz into the default unit of the corresponding nrv (kHz)
+    Here are three ways of converting 0.12 MHz into the default unit of the corresponding nrv (kHz):
 
-        >>> import nrv 
+        >>> import nrv
         >>> val_MHz = 0.12 # MHz
         >>> val_MHz * nrv.MHz
         120.0
@@ -178,8 +189,8 @@ def to_nrv_unit(value, unit):
         >>> nrv.to_nrv_unit(val_MHz, "MHz")
         120.0
 
-    Here's how to convert a ``list`` or ``np.array`` of values in seconds
-    to milliseconds (nrv's default unit)
+    Here is how to convert a ``list`` or ``np.array`` of values in seconds
+    to milliseconds (nrv's default unit):
 
         >>> import numpy as np
         >>> vals_s = [[1, 2, 3], [4, 5, 6]]  # s
@@ -203,19 +214,19 @@ def to_nrv_unit(value, unit):
 
 def sci_round(value, digits=3):
     """
-    Rounds one or several values to ``digits`` significant digits
+    Rounds one or several values to ``digits`` significant digits.
 
     Parameters
     ----------
     value:      int, float, list or np.ndarray
-        value or values wich should be rounded
+        value or values wich should be rounded.
     digits:     int
-        number of significant digits to keep
+        number of significant digits to keep.
 
     Returns
     -------
     int, float, list or np.ndarray
-        rounded value or values, with the same type and shape than ``value``
+        rounded value or values, with the same type and shape than ``value``.
     """
     if np.iterable(value):
         cp_value = deepcopy(value)
