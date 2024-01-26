@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.MshCreator` handling.
+"""
 import math
 import os
 

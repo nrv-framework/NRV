@@ -1,5 +1,5 @@
 """
-NRV-:class:`.myelinated` handling
+NRV-:class:`.myelinated` handling.
 """
 import math
 

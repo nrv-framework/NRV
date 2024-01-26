@@ -2,7 +2,7 @@
 import nrv
 import matplotlib.pyplot as plt
 
-nrv.parameters.set_nrv_verbosity(4)
+#nrv.parameters.set_nrv_verbosity(4)
 # axon def
 y = 0						# axon y position, in [um]
 z = 0						# axon z position, in [um]

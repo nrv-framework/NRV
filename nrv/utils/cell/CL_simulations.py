@@ -1,7 +1,5 @@
 """
-NRV-Cellular Level simulations
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-Cellular Level simulations.
 """
 import sys
 

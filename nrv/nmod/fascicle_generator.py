@@ -1,5 +1,5 @@
 """
-NRV-fascicule generator usefull functions
+NRV-fascicule generator usefull functions.
 """
 import faulthandler
 import math

@@ -1,7 +1,5 @@
 """
-NRV-Cellular Level postprocessing
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-Cellular Level postprocessing.
 """
 import faulthandler
 from collections.abc import Iterable

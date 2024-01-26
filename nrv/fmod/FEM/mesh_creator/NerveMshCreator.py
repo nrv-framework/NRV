@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.NerveMshCreator` handling.
+"""
 from cmath import phase
 import numpy as np
 

@@ -1,13 +1,14 @@
 """
-Access and modify NRV Parameters
+Access and modify NRV Parameters.
 """
 import configparser
 import os
+# issue #38 See if this should be kept or not
 try:
     from dolfinx import __version__ as vdolfinx
 except:
     vdolfinx = "0.7.0"
-
+# issue #38 ############
 from .NRV_Singleton import NRV_singleton
 
 
@@ -22,8 +23,9 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         self.dir_path = os.environ["NRVPATH"] + "/_misc"
         self.config_fname = self.dir_path + "/NRV.ini"
+        # See if this should be kept or not
         self.vdolfinx = self.__extract_vertion(vdolfinx)
-
+        # ############
         self.load()
 
     def save(self):
@@ -82,6 +84,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         self.GMSH_Ncores = n
 
+        # issue #38 See if this should be kept or not
     def __extract_vertion(self, v: str) -> tuple:
         """
         internal use only: convert library version from str to tuple
@@ -104,7 +107,7 @@ class nrv_parameters(metaclass=NRV_singleton):
             if vt[i] != self.vdolfinx[i]:
                 return vt[i] <= self.vdolfinx[i]
         return True
-
+        # issue #38 ############
 
 ###########################
 #   Parameter singleton   #

@@ -19,6 +19,23 @@ nrv.nmod.axons module
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members:
+
+nrv.nmod.unmyelinated module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: nrv.nmod.unmyelinated
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+nrv.nmod.myelinated module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: nrv.nmod.myelinated
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 nrv.nmod.fascicle\_generator module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,14 +53,6 @@ nrv.nmod.fascicles module
    :undoc-members:
    :show-inheritance:
 
-nrv.nmod.myelinated module
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: nrv.nmod.myelinated
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 nrv.nmod.nerve module
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -52,10 +61,3 @@ nrv.nmod.nerve module
    :undoc-members:
    :show-inheritance:
 
-nrv.nmod.unmyelinated module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. automodule:: nrv.nmod.unmyelinated
-   :members:
-   :undoc-members:
-   :show-inheritance:

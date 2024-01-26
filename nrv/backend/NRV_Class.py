@@ -300,7 +300,7 @@ class NRV_class(metaclass=ABCMeta):
         Parameters
         ----------
         ***kwargs
-            Key arguments containing one or multiple parameters to set. 
+            Key arguments containing one or multiple parameters to set.
             
         Examples
         --------
@@ -308,7 +308,11 @@ class NRV_class(metaclass=ABCMeta):
 
         >>> import nrv
         >>> ax = nrv.myelinated()
-        >>> ax.set_parameters(d=6, L=10000)
+        >>> ax.d
+        10
+        >>> ax.set_parameters(d=6, L=1000)
+        >>> ax.d
+        6
         """
         for key in kawrgs:
             if key in self.__dict__:

@@ -1,7 +1,7 @@
 """
-NRV-compileMods
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-compileMods.
+
+Contains functions called after the installation to compile neuron .mod files
 """
 
 import os

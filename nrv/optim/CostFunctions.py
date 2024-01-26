@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.CostFunction` handling.
+"""
 from ..backend.NRV_Class import NRV_class, load_any
 from ..backend.NRV_Simulable import NRV_simulable
 from ..backend.MCore import MCH, synchronize_processes

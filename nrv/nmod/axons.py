@@ -1,5 +1,5 @@
 """
-NRV-:class:`.axon` handling
+NRV-:class:`.axon` handling.
 """
 import faulthandler
 import os

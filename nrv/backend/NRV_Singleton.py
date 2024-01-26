@@ -1,7 +1,5 @@
 """
-Access and modify NRV Parameters
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`NRV_singleton` handling.
 """
 
 # from .log_interface import rise_warning

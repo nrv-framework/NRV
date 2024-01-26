@@ -1,5 +1,5 @@
 """
-NRV-:class:`.nerve` handling
+NRV-:class:`.nerve` handling.
 """
 import numpy as np
 

@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.FEMSimulation` handling.
+"""
 import os
 import time
 import numpy as np

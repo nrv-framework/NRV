@@ -1,5 +1,5 @@
 """
-NRV-:class:`.SimResult` handling
+NRV-:class:`.SimResult` handling.
 """
 
 import gmsh
@@ -20,7 +20,7 @@ from ..mesh_creator.MshCreator import (
     is_MshCreator,
     clear_gmsh,
 )
-
+# issue #38 See if this should be kept or not
 # Not ideal but requiered because of changes in dolfinx
 dfx_utd = parameters.check_dolfinx_version("0.7.0")
 if dfx_utd:
@@ -35,7 +35,7 @@ else:
     compute_colliding_cells,
     compute_collisions,
     )
-
+# issue #38 ############
 
 ###############
 ## Functions ##
@@ -87,12 +87,14 @@ def save_sim_res_list(sim_res_list, fname, vtxtype=True, dt=1.):
             vcp.x.array[:] = sim_res_list[i].vout.x.array
             vtxf.write(i * dt)
         vtxf.close()
+    # issue #38 See if this should be kept or not
     else:
         fname = rmv_ext(fname) + ".xdmf"
         xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
         xdmf.write_mesh(sim_res_list[0].domain)
         for i in range(N_list):
             xdmf.write_function(sim_res_list[i].vout, i * dt)
+    # issue #38 ############
 
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
@@ -304,10 +306,12 @@ class SimResult(NRV_class):
             tree = bb_tree(self.domain, self.domain.geometry.dim)
             # Find cells whose bounding-box collide with the the points
             cells_candidates = compute_collisions_points(tree, X)
+            # issue #38 See if this should be kept or not
         else:
             tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
             # Find cells whose bounding-box collide with the the points
             cells_candidates = compute_collisions(tree, X)
+            # issue #38 ############
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):

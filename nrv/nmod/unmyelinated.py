@@ -1,5 +1,5 @@
 """
-NRV-:class:`.unmyelinated` handling
+NRV-:class:`.unmyelinated` handling.
 """
 import math
 

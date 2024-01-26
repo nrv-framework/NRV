@@ -1,5 +1,5 @@
 """
-NRV-:class:`.fascicle` handling
+NRV-:class:`.fascicle` handling.
 """
 import faulthandler
 import os

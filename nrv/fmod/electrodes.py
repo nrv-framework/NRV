@@ -1,7 +1,5 @@
 """
-NRV-electrodes
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.electrode` handling.
 """
 import faulthandler
 

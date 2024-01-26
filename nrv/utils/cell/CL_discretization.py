@@ -1,7 +1,5 @@
 """
-NRV-Cellular Level discretization methods
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-Cellular Level discretization methods.
 
 
 todo:

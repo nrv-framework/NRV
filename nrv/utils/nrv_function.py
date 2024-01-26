@@ -1,7 +1,5 @@
 """
-NRV-nrv_function
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`nrv_function` handling.
 """
 from abc import abstractmethod
 

@@ -1,7 +1,5 @@
 """
-NRV-I/O File Handler
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-I/O File Handler.
 """
 import json
 import os

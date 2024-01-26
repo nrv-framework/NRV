@@ -1,48 +1,80 @@
 """
-Module containing a base class for all classes which can be simulated: ``nerve``, ``fascicle``, ``myelinated``
+NRV-:class:`.NRV_simulable` handling.
 
+A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`)
 """
-import numpy as np
-import matplotlib.pyplot as plt
 
 
-from .NRV_Class import NRV_class, load_any
-from .NRV_Results import NRV_results
-from .log_interface import rise_warning
-from ..fmod.stimulus import stimulus
+from .NRV_Class import NRV_class
+from .NRV_Results import sim_results
 
 
-class sim_results(NRV_results):
-    def __init__(self, context=None):
-        super().__init__(context)
+def is_NRV_simulable(x):
+    """
+    Check if the object x is a :class:`.NRV_simulable`.
 
-    def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
-        """
-        Plot one or several stimulis of the simulation extra-cellular context
-        """
-        if "extra_stim" not in self:
-            rise_warning("No extracellular stimulation to be plotted")
-        else:
-            if IDs is None:
-                IDs = [i for i in range(len(self["extra_stim"]["stimuli"]))]
-            elif not np.iterable(IDs):
-                IDs = [int(IDs)]
-            for i in IDs:
-                stim = load_any(self["extra_stim"]["stimuli"][i])
-                if t_stop is None:
-                    t_stop = stim.t[-1]
-                stim2 = stimulus()
-                stim2.s = np.zeros(N_pts)
-                stim2.t = np.linspace(0, t_stop, N_pts)
-                stim2 += stim
-                if ax is None:
-                    plt.plot(stim2.t, stim2.s, **fig_kwargs)
-                else:
-                    ax.plot(stim2.t, stim2.s, **fig_kwargs)
+    Parameters
+    ----------
+    x   : any
+        object to check.
 
+    Returns
+    -------
+    bool
+    """
+    return isinstance(x, NRV_simulable)
+
+def simulable(x):
+    """
+    Check if the object x is a :class:`.NRV_simulable`.
+
+    Parameters
+    ----------
+    x   : any
+        object to check.
+
+    Returns
+    -------
+    bool
+    """
+    return isinstance(x, NRV_simulable)
 
 class NRV_simulable(NRV_class):
-    """ """
+    """
+    Generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`).
+    This class gather commun features to all the simulable object, in particular the :func:`.NRV_simulable.simulate` method.
+    
+    Note
+    ----
+    -   All NRV_simulable instance are callable object. When called, the instance :func:`.NRV_simulable.simulate` method is called.
+
+    Parameters
+    ----------
+    t_sim : float
+        duration of the simulation in `ms`
+    dt : float
+        Time step of the simulation in `ms`
+    record_V_mem : bool
+        if true, the membrane voltage of each cell is recorded, by default True
+    record_I_mem : bool
+        if true, the membrane current of each cell is recorded, by default False
+    record_I_ions : bool
+        if true, the ionic currents of each cell are recorded, by default False
+    record_particles : bool
+        if true, the marticule states of each cell are recorded, by default False
+    record_g_mem : bool
+        if true, the membrane coductivity of each cell is recorded, by default False
+    record_g_ions : bool
+        if true, the ionic conductivities of each cell are recorded, by default False
+    loaded_footprints : bool
+        Dictionnary composed of extracellular footprint array, the keys are int value
+        of the corresponding electrode ID, if None, footprints calculated during the simulation,
+        set to None by default
+
+    Note
+    ----
+    -   All the above parameters can either be set when the instance is initialized, or later in the script.
+    """
 
     def __init__(
         self,
@@ -69,6 +101,13 @@ class NRV_simulable(NRV_class):
         self.dt = dt
 
     def extracel_status(self):
+        """
+        Check if an extracellular context is attached to the instance
+
+        Returns
+        -------
+        bool
+        """
         if "extra_stim" in self.__dict__:
             if self.__dict__["extra_stim"] is not None:
                 return True
@@ -76,6 +115,13 @@ class NRV_simulable(NRV_class):
             return False
 
     def intracel_status(self):
+        """
+        Check if an intracellular context is attached to the instance
+
+        Returns
+        -------
+        bool
+        """
         if "intra_current_stim" in self.__dict__:
             if (
                 self.__dict__["intra_current_stim"] != []
@@ -89,6 +135,13 @@ class NRV_simulable(NRV_class):
             return False
 
     def rec_status(self):
+        """
+        Check if a recording context is attached to the instance
+
+        Returns
+        -------
+        bool
+        """
         if "recorder" in self.__dict__:
             if self.__dict__["recorder"] is not None:
                 return True
@@ -99,6 +152,22 @@ class NRV_simulable(NRV_class):
         return self.simulate(**kwds)
 
     def simulate(self, **kwargs) -> sim_results:
+        """
+        Generic start of the simulate method. At this level the method does only two things:
+
+        -   update instance attribues from the kwargs
+        -   generate the sim_results dictionary
+
+        Parameters
+        ----------
+        **kwargs
+            Key arguments containing one or multiple parameters to set.
+
+        Returns
+        -------
+        sim_results:
+            Empty results containing only the simulation parameters.
+        """
         self.set_parameters(**kwargs)
         context = self.save(
             save=False,

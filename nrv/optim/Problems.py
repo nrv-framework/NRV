@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.Problem` handling.
+"""
 import numpy as np
 import faulthandler
 import traceback

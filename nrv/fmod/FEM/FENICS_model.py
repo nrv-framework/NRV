@@ -1,7 +1,5 @@
 """
-NRV-FEM
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.FENICS_model` handling.
 """
 import configparser
 import os

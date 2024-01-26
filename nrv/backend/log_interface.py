@@ -1,7 +1,7 @@
 """
-log_interface handling
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+log_interface handling.
+
+For the moment, the log interface is managed using the pyswarms reporter class to avoid interference between loggers.
 """
 import logging
 import os

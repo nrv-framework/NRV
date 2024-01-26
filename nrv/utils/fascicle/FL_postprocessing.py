@@ -1,7 +1,5 @@
 """
-NRV-Cellular Level postprocessing
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-Facsiclular Level postprocessing.
 """
 import faulthandler
 import os

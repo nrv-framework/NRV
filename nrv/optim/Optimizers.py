@@ -1,3 +1,6 @@
+"""
+NRV-:class:`.Optimizer` handling.
+"""
 from abc import ABCMeta, abstractmethod
 import os
 from typing import Any
