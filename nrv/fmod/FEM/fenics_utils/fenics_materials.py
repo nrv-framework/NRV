@@ -1,7 +1,5 @@
 """
-NRV-fenics_materials
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-fenics_materials class handling.
 """
 import faulthandler
 import os
@@ -48,8 +46,8 @@ def mat_from_interp(
     X, Y, kind="linear", dx=0.01, interpolator=None, dxdy=None, scale=None, columns=0
 ):
     """
-    Return a fenics material with a conductivity space function define as the nrv_interp of X and Y
-    (see nrv_function for more details)
+    Return a fenics material with a conductivity space function define as the 
+    :class:`~nrv.utils.nrv_function.nrv_interp` of X and Y
 
     Parameters
     ----------
@@ -57,7 +55,7 @@ def mat_from_interp(
         either material name if the material is in the NRV2 Librairy or path to the corresponding
         .mat material file
     kwargs      : dict
-        interpolation k arguments (cf ....utils.nrv_function.nrv_interp)
+        interpolation k arguments (see :class:`~nrv.utils.nrv_function.nrv_interp`)
 
     Returns
     -------
@@ -83,8 +81,8 @@ def mat_from_interp(
 
 def mat_from_csv(f_material, **kwargs):
     """
-    Return a fenics material with a conductivity space function define as the nrv_interp from the
-    value of a .csv file
+    Return a fenics material with a conductivity space function define as the 
+    :class:`~nrv.utils.nrv_function.nrv_interp` from the value of a .csv file
 
     Parameters
     ----------
@@ -146,15 +144,19 @@ def load_fenics_material(X, **kwargs):
 ####################
 class fenics_material(material):
     """
-    a class for material material more suited for the FEM solving with fenics
-    Inherit from material class. see material for further detail
+    A class of materials better suited to FEM resolution with fenics.
+    It allows material parameters to be updated dynamically between FEM simulations,
+    which reduces calculation speed and memory consumption.
+
+    parameters
+    ----------
+    mat     :material
+        generate the fenics material from mat attribute
     """
 
     def __init__(self, mat=None):
         """
         initialisation of the fenics_material
-        mat     :material
-            generate the fenics material from mat attribute
         """
         super().__init__()
         self.is_func = False
@@ -253,6 +255,22 @@ class fenics_material(material):
         return self.sigma_fen
 
     def update_fenics_sigma(self, domain=None, elem=None, UN=None, id=None):
+        """
+        Update sigma value of a material in fenics FEM simulation.
+        Allow to reuse the same material when FEM_simulation object is solved multiple times.
+
+        Parameters
+        ----------
+        domain      : dolfinx.mesh.Mesh or None
+            mesh domain of the FEM simulation
+        elem        : tupple (str, int)
+            element type, element order, by default None
+        UN          : int or None
+            unit factor to use for to scale the material value,
+            if None, keep the UN attribute of the instance
+        id          :
+            ID to use to name the ufl object
+        """
         if id is None:
             name = ""
         else:
@@ -261,9 +279,12 @@ class fenics_material(material):
             self.elem = elem
         if UN is not None:
             self.UN = UN
+        # First declaration in fenics model (Sigma value has not been set into model)
         if self.sigma_fen is None:
+            # isotropic material: sigma set as a cst
             if self.is_isotropic():
                 self.sigma_fen = Constant(domain, ScalarType(self.sigma * self.UN))
+            # constant anisotropic material: sigma set as a tensor
             elif not self.is_func:
                 self.sigma_fen = as_tensor(
                     [
@@ -272,6 +293,8 @@ class fenics_material(material):
                         [0, 0, self.sigma_zz * self.UN],
                     ]
                 )
+            # function defined anisotropic material: sigma set as a product of a
+            # function and a constant (unit coeficient)
             else:
                 unit = Constant(domain, ScalarType(self.UN))
                 Q = FunctionSpace(domain, self.elem)
@@ -279,10 +302,12 @@ class fenics_material(material):
                 self.sigma_fen.interpolate(self.sigma_func)
                 self.sigma_fen.name = "f" + name
                 self.sigma_fen = self.sigma_fen * unit
+        # Sigma value has already been set into fencis FEM model
         else:
+            # isotropic material: sigma set as a constant
             if self.is_isotropic():
                 self.sigma_fen.value = self.sigma * self.UN
-
+            # constant anisotropic material: sigma set as a tensor
             elif not self.is_func:
                 self.sigma_fen = as_tensor(
                     [
@@ -291,6 +316,14 @@ class fenics_material(material):
                         [0, 0, self.sigma_zz * self.UN],
                     ]
                 )
+            # function defined anisotropic material: sigma set as a
+            # product of a function and a constant (unit coeficient)
             else:
-                self.sigma_fen.ufl_operands[0].interpolate(self.sigma_func)
-                self.sigma_fen.ufl_operands[1].value = self.UN
+                # test required because after version "0.6.0" of dolfinx, ufl_operands
+                # are sorted by constant then function regardless the order of creation
+                if isinstance(self.sigma_fen.ufl_operands[0], Constant):
+                    self.sigma_fen.ufl_operands[0].value = self.UN
+                    self.sigma_fen.ufl_operands[1].interpolate(self.sigma_func)
+                else:
+                    self.sigma_fen.ufl_operands[0].interpolate(self.sigma_func)
+                    self.sigma_fen.ufl_operands[1].value = self.UN

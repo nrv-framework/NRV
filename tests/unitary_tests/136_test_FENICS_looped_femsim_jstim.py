@@ -28,28 +28,28 @@ for i_elec in range(N_elec):
     param.add_boundary(mesh_domain=101 + (2*i_elec), btype='Neuman', value=None, variable='E'+str(i_elec))
 
 
-data = param.save_SimParameters()
+data = param.save()
 jstim = 20
 
 ## Test modify domain FEM
 
 sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim1.prepare_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
+sim1.setup_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
 sim1.solve()
 E11_ref = round(sim1.get_domain_potential(101), 6)
 
 
 sim2 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim2.prepare_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
+sim2.setup_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
 sim2.solve()
 E12_ref = round(sim2.get_domain_potential(101), 6)
 print(E11_ref, E12_ref)
 
 sim3 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim3.prepare_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
+sim3.setup_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
 sim3.solve()
 E11 = round(sim3.get_domain_potential(101), 6)
-sim3.prepare_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
+sim3.setup_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
 sim3.solve()
 E12 = round(sim3.get_domain_potential(101), 6)
 
@@ -61,25 +61,25 @@ print(E12_ref == E12)
 # With ibound
 param.add_inboundary(mesh_domain=13,mat_pty="perineurium", thickness=5, in_domains=[12, 1000])
 
-data = param.save_SimParameters()
+data = param.save()
 
 sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim1.prepare_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
+sim1.setup_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
 sim1.solve()
 E11_ref = round(sim1.get_domain_potential(101), 6)
 
 
 sim2 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim2.prepare_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
+sim2.setup_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
 sim2.solve()
 E12_ref = round(sim2.get_domain_potential(101), 6)
 print(E11_ref, E12_ref)
 
 sim3 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim3.prepare_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
+sim3.setup_sim(E0=jstim, E1=0, E2=-jstim, E3=0)
 sim3.solve()
 E11 = round(sim3.get_domain_potential(101), 6)
-sim3.prepare_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
+sim3.setup_sim(E0=-jstim, E1=0, E2=jstim, E3=0)
 sim3.solve()
 E12 = round(sim3.get_domain_potential(101), 6)
 

@@ -1,7 +1,5 @@
 """
-NRV-fascicles
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.fascicle` handling
 """
 import faulthandler
 import os
@@ -59,30 +57,30 @@ def is_fascicle(object):
 class fascicle(NRV_simulable):
     """
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
+
+    Parameters
+    ----------
+    dt              : float
+        simulation time stem for Neuron (ms), by default 1us
+    Nseg_per_sec    : float
+        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
+    freq            : float
+        frequency of the d-lambda rule (Hz), by default 100Hz
+    freq_min        : float
+        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
+    v_init          : float
+        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
+    T               : float
+        temperature (C), specify None for automatic model choice of temperature
+    ID              : int
+        axon ID, by default set to 0
+    threshold       : int
+        membrane voltage threshold for spike detection (mV), by default -40mV
     """
 
     def __init__(self, ID=0, **kwargs):
         """
         Instrantation of a Fascicle
-
-        Parameters
-        ----------
-        dt              : float
-            simulation time stem for Neuron (ms), by default 1us
-        Nseg_per_sec    : float
-            number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-        freq            : float
-            frequency of the d-lambda rule (Hz), by default 100Hz
-        freq_min        : float
-            minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-        v_init          : float
-            initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-        T               : float
-            temperature (C), specify None for automatic model choice of temperature
-        ID              : int
-            axon ID, by default set to 0
-        threshold       : int
-            membrane voltage threshold for spike detection (mV), by default -40mV
         """
         super().__init__()
 
@@ -163,7 +161,7 @@ class fascicle(NRV_simulable):
         self.recorder = None
         # Simulation status
         self.is_simulated = False
-        self.processes_status = ["preparing" for _ in range(MCH.size)]
+        self.processes_status = ["setup" for _ in range(MCH.size)]
 
     ## save/load methods
     def save(
@@ -1084,7 +1082,7 @@ class fascicle(NRV_simulable):
                 axes.set_xlim(0, self.L)
                 plt.tight_layout()
 
-    ## Context handeling methods
+    ## Context handling methods
     def clear_context(
         self, extracel_context=True, intracel_context=True, rec_context=True
     ):

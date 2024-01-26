@@ -4,7 +4,7 @@ import time
 ## Results mesh_files
 mesh_file = "./unitary_tests/results/mesh/117_mesh"
 fig_file = "./unitary_tests/figures/117_A.png"
-out_file = "./unitary_tests/results/outputs/117_res.xdmf"
+out_file = "./unitary_tests/results/outputs/117_res"
 
 ## Mesh creation
 if nrv.MCH.do_master_only_work():
@@ -64,7 +64,7 @@ param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='_jstim
 
 
 
-data = param.save_SimParameters()
+data = param.save()
 
 mxd_dom = param.get_mixedspace_domain()
 mxd_mf = param.get_mixedspace_mat_pty()
@@ -80,7 +80,7 @@ sod_14 = param.get_space_of_domain(14)
 
 sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 2))
 jstim = 20
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 
 
 

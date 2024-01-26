@@ -1,24 +1,40 @@
+"""
+NRV-:class:`.SimResult` handling
+"""
+
 import gmsh
 import numpy as np
 import scipy
 from dolfinx.fem import Expression, Function, FunctionSpace
-from dolfinx.geometry import (
-    BoundingBoxTree,
-    compute_colliding_cells,
-    compute_collisions,
-)
 from dolfinx.io.gmshio import model_to_mesh
-from dolfinx.io.utils import XDMFFile
+from dolfinx.io.utils import XDMFFile, VTXWriter, VTKFile
 from mpi4py import MPI
+
 
 from ....backend.file_handler import rmv_ext
 from ....backend.log_interface import rise_error, rise_warning
+from ....backend.parameters import parameters
 from ....backend.MCore import MCH, synchronize_processes
 from ....backend.NRV_Class import NRV_class
 from ..mesh_creator.MshCreator import (
     is_MshCreator,
     clear_gmsh,
 )
+
+# Not ideal but requiered because of changes in dolfinx
+dfx_utd = parameters.check_dolfinx_version("0.7.0")
+if dfx_utd:
+    from dolfinx.geometry import (
+    bb_tree,
+    compute_colliding_cells,
+    compute_collisions_points,
+    )
+else:
+    from dolfinx.geometry import (
+    BoundingBoxTree,
+    compute_colliding_cells,
+    compute_collisions,
+    )
 
 
 ###############
@@ -41,16 +57,42 @@ def is_sim_res(result):
     return isinstance(result, SimResult)
 
 
-def save_sim_res_list(sim_res_list, fname, dt=1):
+def save_sim_res_list(sim_res_list, fname, vtxtype=True, dt=1.):
+    r"""
+    save a list of SimResults in a .bp folder which can be open with PrarView
+
+    Parameters
+    ----------
+    sim_res_list : list(SimResult)
+        list of :class:`.SimResult` to be saved
+    fname : str
+        File name and path
+    ftype : str 
+        - if True .bp folder, else saved in a .xdmf file.
+    dt : float
+        time step between each results
+
+    Warning
+    -------
+    For this function to work dolfinx and ParaView must be up to date: 
+        -   dolfinx \\(\\geq\\) 0.8.0
+        -   ParaView \\(\\geq\\) 5.12.0
     """
-    save a list of SimResults in a xdmf file
-    """
-    fname = rmv_ext(fname) + ".xdmf"
-    N_list = len(sim_res_list)
-    xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
-    xdmf.write_mesh(sim_res_list[0].domain)
-    for E in range(N_list):
-        xdmf.write_function(sim_res_list[E].vout, E * dt)
+    if vtxtype and dfx_utd:
+        fname = rmv_ext(fname) + ".bp"
+        N_list = len(sim_res_list)
+        vcp = sim_res_list[0].vout
+        vtxf = VTXWriter(sim_res_list[0].domain.comm, fname, vcp)
+        for i in range(N_list):
+            vcp.x.array[:] = sim_res_list[i].vout.x.array
+            vtxf.write(i * dt)
+        vtxf.close()
+    else:
+        fname = rmv_ext(fname) + ".xdmf"
+        xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
+        xdmf.write_mesh(sim_res_list[0].domain)
+        for i in range(N_list):
+            xdmf.write_function(sim_res_list[i].vout, i * dt)
 
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
@@ -153,7 +195,6 @@ class SimResult(NRV_class):
         super().__init__()
         self.type = "simresult"
         self.mesh_file = mesh_file
-
         self.domain = domain
         self.V = V
         self.elem = elem
@@ -175,9 +216,14 @@ class SimResult(NRV_class):
             self.vout = vout
         self.comm = comm
 
-    def save(self, file, ftype="xdmf", overwrite=True):
-        if ftype == "xdmf":
-            fname = rmv_ext(file) + ".xdmf"
+    def save(self, file, ftype="vtx", overwrite=True, t=0.0):
+        fname = rmv_ext(file)
+        if ftype.lower() == "vtx" and dfx_utd:
+            fname += ".bp"
+            with VTXWriter(self.domain.comm, fname, self.vout, "bp4") as f:
+                f.write(t)
+        elif ftype == "xdmf":
+            fname += ".xdmf"
             with XDMFFile(self.comm, fname, "w") as file:
                 if not overwrite:
                     file.parameters.update(
@@ -187,7 +233,7 @@ class SimResult(NRV_class):
                     file.write_mesh(self.domain)
                 file.write_function(self.vout)
         else:
-            fname = rmv_ext(file) + ".sres"
+            fname += ".sres"
             mdict = {
                 "mesh_file": self.mesh_file,
                 "element": self.elem,
@@ -207,7 +253,7 @@ class SimResult(NRV_class):
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict["vout"]
 
-    def save_sim_result(self, file, ftype="xdmf", overwrite=True):
+    def save_sim_result(self, file, ftype="vtx", overwrite=True):
         rise_warning("save_sim_result is a deprecated method use save")
         self.save(file=file, ftype=ftype, overwrite=overwrite)
 
@@ -254,9 +300,14 @@ class SimResult(NRV_class):
         to_round = False
         cells = []
         points_on_proc = []
-        tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
-        # Find cells whose bounding-box collide with the the points
-        cells_candidates = compute_collisions(tree, X)
+        if dfx_utd:
+            tree = bb_tree(self.domain, self.domain.geometry.dim)
+            # Find cells whose bounding-box collide with the the points
+            cells_candidates = compute_collisions_points(tree, X)
+        else:
+            tree = BoundingBoxTree(self.domain, self.domain.geometry.dim)
+            # Find cells whose bounding-box collide with the the points
+            cells_candidates = compute_collisions(tree, X)
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):

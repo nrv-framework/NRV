@@ -1,10 +1,12 @@
 """
 Access and modify NRV Parameters
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
 """
 import configparser
 import os
+try:
+    from dolfinx import __version__ as vdolfinx
+except:
+    vdolfinx = "0.7.0"
 
 from .NRV_Singleton import NRV_singleton
 
@@ -20,6 +22,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         self.dir_path = os.environ["NRVPATH"] + "/_misc"
         self.config_fname = self.dir_path + "/NRV.ini"
+        self.vdolfinx = self.__extract_vertion(vdolfinx)
 
         self.load()
 
@@ -78,6 +81,29 @@ class nrv_parameters(metaclass=NRV_singleton):
         set gmsh core number
         """
         self.GMSH_Ncores = n
+
+    def __extract_vertion(self, v: str) -> tuple:
+        """
+        internal use only: convert library version from str to tuple
+        """
+        ip1 = v.find(".")
+        ip2 = v[ip1+1:].find(".") + ip1+1
+        return (int(v[:ip1]), int(v[ip1+1:ip2]), int(v[ip2+1:]))
+
+    def check_dolfinx_version(self, v: str) -> bool:
+        """
+        Return True if dolfinx version is higher or equal than version v
+
+        Parameters
+        ----------
+        v   : str
+            version to compare
+        """
+        vt = self.__extract_vertion(v)
+        for i in range(3):
+            if vt[i] != self.vdolfinx[i]:
+                return vt[i] <= self.vdolfinx[i]
+        return True
 
 
 ###########################

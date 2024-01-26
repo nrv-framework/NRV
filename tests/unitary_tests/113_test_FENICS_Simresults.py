@@ -5,7 +5,7 @@ import time
 
 ## Results mesh_files
 mesh_file = "./unitary_tests/results/mesh/113_mesh"
-out_file = "./unitary_tests/results/outputs/113_simfile.xdmf"
+out_file = "./unitary_tests/results/outputs/113_simfile"
 
 ## Mesh creation
 is_mesh = False
@@ -58,13 +58,13 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
 param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 #print(data)
 sim1 = nrv.FEMSimulation(data=data)
 
 
 jstim = 20
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 
 res1 = sim1.solve_and_save_sim(out_file)
 
@@ -89,10 +89,10 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
 param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 #print(data)
 sim2 = nrv.FEMSimulation(data=data)
-sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim2.setup_sim(jstim=jstim, _jstim=-jstim)
 
 res2 = sim2.solve()
 
@@ -101,7 +101,7 @@ print('FEM 2 solved in '+str(t3 - t2)+' s')
 
 ## third FEM Simulation 
 sim3 = nrv.FEMSimulation(data=data)
-sim3.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim3.setup_sim(jstim=jstim, _jstim=-jstim)
 res3 = sim3.solve()
 
 t4 = time.time()

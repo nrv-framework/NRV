@@ -7,7 +7,7 @@ import numpy as np
 mesh_file = "./unitary_tests/results/mesh/112_mesh"
 out_file1 = "./unitary_tests/results/outputs/112_simfile1"
 out_file2 = "./unitary_tests/results/outputs/112_simfile2"
-out_file = "./unitary_tests/results/outputs/112_simfile.xdmf"
+out_file = "./unitary_tests/results/outputs/112_simfile"
 
 ## Mesh creation
 is_mesh = False
@@ -55,13 +55,13 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
 param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 print(data)
 sim1 = nrv.FEMSimulation(data=data)
 
 
 jstim = 20
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 
 
 sim1.solve_and_save_sim(out_file1)
@@ -86,13 +86,13 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
 param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 print(data)
 sim2 = nrv.FEMSimulation(data=data)
 
 
 jstim = 20
-sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim2.setup_sim(jstim=jstim, _jstim=-jstim)
 
 
 sim2.solve_and_save_sim(out_file2)

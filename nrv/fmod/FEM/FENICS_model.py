@@ -465,7 +465,7 @@ class FENICS_model(FEM_model):
             if self.is_multi_proc:
                 self.sim.set_solver_opt(pc_type="hypre")
             self.is_sim_ready = True
-            self.preparing_timer += time.time() - t0
+            self.setup_timer += time.time() - t0
 
     def set_materials(
         self,
@@ -596,7 +596,7 @@ class FENICS_model(FEM_model):
                         self.j_electrode[i_elec] = self.jstims[E]
                     else:
                         self.j_electrode[i_elec] = 0
-                self.sim.prepare_sim(**self.j_electrode)
+                self.sim.setup_sim(**self.j_electrode)
                 self.sim_res += [self.sim.solve()]
                 self.sim_res[-1].vout.label = "E" + str(E)
             self.is_computed = True

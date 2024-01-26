@@ -1,7 +1,5 @@
 """
-NRV-myelinated
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.myelinated` handling
 """
 import math
 
@@ -123,6 +121,61 @@ class myelinated(axon):
     """
     Myelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
+
+    Parameters
+    ----------
+    y               : float
+        y coordinate for the axon, in um
+    z               : float
+        z coordinate for the axon, in um
+    d               : float
+        axon diameter, in um
+    L               : float
+        axon length along the x axins, in um
+    model           : str
+        choice of conductance double-cable based model, possibly:
+            "MRG"           : see [1] for details
+            "Gaines_motor"  : Gaines motor model, see [2]
+            "Gaines_sensory": Gaines sensory model, see [2]
+    dt              : float
+        computation step for simulations, in ms. By default equal to 1 us
+    node_shift      : float
+        shift of the first node of Ranvier to zeros, as a fraction of internode length (0<= node_shift < 1)
+    Nseg_per_sec    : int
+        Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
+    freq            : float
+        Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
+    freq_min        : float
+        Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
+    mesh_shape      : str
+        Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
+            "pyramidal"         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
+            "sigmoid"           -> same a befor with sigmoid increase instead of linear
+            "plateau"           -> sale as pyramidal except the max frequency is holded on a central plateau
+            "plateau_sigmoid"   -> same as previous with sigmoid increase
+    alpha_max       : float
+        Proportion of the axon set to the maximum frequency for plateau shapes, by default set to 0.3
+    d_lambda        : float
+        value of d-lambda for the dlambda rule
+    rec             : str
+        recording zones for the membrane potential, eiter:
+            "nodes" -> record only at the nodes of Ranvier
+        or
+            "all" -> all computation points in nodes of Ranvier and over myelin
+    v_init          : float
+        Initial value of the membrane voltage in mV, set None to get an automatically model attributed value
+    T               : gloat
+        temperature in C, set None to get an automatically model attributed value
+    ID              : int
+        axon ID, by default set to 0,
+    threshold       : float
+        voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing library for further help
+
+    Note
+    ----
+    scientific sources for models:
+    [1] McIntyre CC, Richardson AG, and Grill WM. Modeling the excitability of mammalian nerve fibers: influence of afterpotentials on the recovery cycle. Journal of Neurophysiology 87:995-1006, 2002.
+    [2] Gaines, J. L., Finn, K. E., Slopsema, J. P., Heyboer, L. A.,  Polasek, K. H. (2018). A model of motor and sensory axon activation in the median nerve using surface electrical stimulation. Journal of computational neuroscience, 45(1), 29-43.
     """
 
     def __init__(
@@ -149,61 +202,6 @@ class myelinated(axon):
     ):
         """
         initialisation of a myelinted axon
-
-        Parameters
-        ----------
-        y               : float
-            y coordinate for the axon, in um
-        z               : float
-            z coordinate for the axon, in um
-        d               : float
-            axon diameter, in um
-        L               : float
-            axon length along the x axins, in um
-        model           : str
-            choice of conductance double-cable based model, possibly:
-                "MRG"           : see [1] for details
-                "Gaines_motor"  : Gaines motor model, see [2]
-                "Gaines_sensory": Gaines sensory model, see [2]
-        dt              : float
-            computation step for simulations, in ms. By default equal to 1 us
-        node_shift      : float
-            shift of the first node of Ranvier to zeros, as a fraction of internode length (0<= node_shift < 1)
-        Nseg_per_sec    : int
-            Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
-        freq            : float
-            Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
-        freq_min        : float
-            Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
-        mesh_shape      : str
-            Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
-                "pyramidal"         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
-                "sigmoid"           -> same a befor with sigmoid increase instead of linear
-                "plateau"           -> sale as pyramidal except the max frequency is holded on a central plateau
-                "plateau_sigmoid"   -> same as previous with sigmoid increase
-        alpha_max       : float
-            Proportion of the axon set to the maximum frequency for plateau shapes, by default set to 0.3
-        d_lambda        : float
-            value of d-lambda for the dlambda rule
-        rec             : str
-            recording zones for the membrane potential, eiter:
-                "nodes" -> record only at the nodes of Ranvier
-            or
-                "all" -> all computation points in nodes of Ranvier and over myelin
-        v_init          : float
-            Initial value of the membrane voltage in mV, set None to get an automatically model attributed value
-        T               : gloat
-            temperature in C, set None to get an automatically model attributed value
-        ID              : int
-            axon ID, by default set to 0,
-        threshold       : float
-            voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing library for further help
-
-        Note
-        ----
-        scientific sources for models:
-        [1] McIntyre CC, Richardson AG, and Grill WM. Modeling the excitability of mammalian nerve fibers: influence of afterpotentials on the recovery cycle. Journal of Neurophysiology 87:995-1006, 2002.
-        [2] Gaines, J. L., Finn, K. E., Slopsema, J. P., Heyboer, L. A.,  Polasek, K. H. (2018). A model of motor and sensory axon activation in the median nerve using surface electrical stimulation. Journal of computational neuroscience, 45(1), 29-43.
         """
         super().__init__(
             y,
@@ -1159,7 +1157,7 @@ class myelinated(axon):
 
     def set_membrane_voltage_recorders(self):
         """
-        Prepare the membrane voltage recording. For internal use only.
+        setup the membrane voltage recording. For internal use only.
         """
         self.v_reclist = neuron.h.List()
         key = "_ref_v"
@@ -1173,7 +1171,7 @@ class myelinated(axon):
 
     def set_membrane_current_recorders(self):
         """
-        Prepare the membrane current recording. For internal use only.
+        setup the membrane current recording. For internal use only.
         """
         self.i_reclist = neuron.h.List()
         key = "_ref_i_membrane"
@@ -1187,7 +1185,7 @@ class myelinated(axon):
 
     def set_ionic_current_recorders(self):
         """
-        Prepare the ionic channels current recording. For internal use only.
+        setup the ionic channels current recording. For internal use only.
         """
         if self.model == "MRG":
             self.ina_reclist = neuron.h.List()
@@ -1276,7 +1274,7 @@ class myelinated(axon):
 
     def set_particules_values_recorders(self):
         """
-        Prepare the particules current recording. For internal use only.
+        setup the particules current recording. For internal use only.
         """
         if self.model == "MRG":
             self.m_reclist = neuron.h.List()
@@ -1362,7 +1360,7 @@ class myelinated(axon):
 
     def set_conductance_recorders(self):
         """
-        Prepare the ionic channels conductance recording. For internal use only.
+        setup the ionic channels conductance recording. For internal use only.
         """
         self.gna_reclist = neuron.h.List()
         self.gnap_reclist = neuron.h.List()
@@ -1491,7 +1489,7 @@ class myelinated(axon):
 
     def set_Nav_recorders(self):
         """
-        Prepare the markov model recording. For internal use only.
+        setup the markov model recording. For internal use only.
         """
         # Nav1.1 variables
         self.I_nav11_reclist = neuron.h.List()

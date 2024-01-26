@@ -1,5 +1,5 @@
 """
-log_interface handeling
+log_interface handling
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """

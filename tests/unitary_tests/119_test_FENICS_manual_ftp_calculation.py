@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 ## Results mesh_files
 mesh_file = "./unitary_tests/results/mesh/119_mesh"
 fig_file = "./unitary_tests/figures/119_A.png"
-out_file = "./unitary_tests/results/outputs/119_res.xdmf"
+out_file = "./unitary_tests/results/outputs/119_res"
 
 
 ## Mesh creation
@@ -33,7 +33,7 @@ mesh.compute_mesh()
 
 mesh.save(mesh_file)
 #mesh.visualize()
-print(mesh.get_parameters())
+#print(mesh.get_parameters())
 
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
@@ -52,10 +52,10 @@ sim1.add_domain(mesh_domain=12,mat_file="endoneurium_ranck")
 sim1.add_boundary(mesh_domain=1, btype='Dirichlet', value=0, variable=None)
 sim1.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim', mesh_domain_3D=12)
 
-data = sim1.save_SimParameters()
+data = sim1.save()
 
 jstim = 20e-3
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 res1 = sim1.solve_and_save_sim(out_file)
 
 
@@ -68,7 +68,7 @@ print('FEM solved in '+str(t3 - t2)+' s')
 sim2 = nrv.FEMSimulation(data=data, mesh=mesh, elem=('Lagrange', 2))
 
 sim2.add_inboundary(mesh_domain=13,mat_file="perineurium", thickness=0.005, in_domains=[12])
-sim2.prepare_sim(jstim=jstim)
+sim2.setup_sim(jstim=jstim)
 res2 = sim2.solve_and_save_sim(out_file)
 
 t4 = time.time()

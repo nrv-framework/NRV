@@ -249,7 +249,7 @@ class SimParameters(NRV_class):
             set the condition to the value
         variable        : str
             name of a python variable from which the boundary value should be taken.
-            NB: variable should be place as kwarg in prepare_sim see examples
+            NB: variable should be place as kwarg in setup_sim see examples
         mesh_domain_3D  : int
             ID of the mesh of corresponding volume, by default 0
             NB: Most of the time 0 except for LIFE electrode, must be set to the corresponding fascicle)

@@ -1,7 +1,5 @@
 """
-NRV-unmyelinated
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.unmyelinated` handling
 """
 import math
 
@@ -15,6 +13,60 @@ class unmyelinated(axon):
     """
     Unmyelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
+
+    Parameters
+    ----------
+    y               : float
+        y coordinate for the axon, in um
+    z               : float
+        z coordinate for the axon, in um
+    d               : float
+        axon diameter, in um
+    L               : float
+        axon length along the x axins, in um
+    model           : str
+        choice of conductance based model, possibly:
+            "HH"                : original squid giant axon model, warning - low temperature model, not adapted to mamalian modeling
+            "Rattay_Aberham"    : Rattay Aberham model, see [1] for details
+            "Sundt"             : Sundt model, see [1] for details
+            "Tigerholm"         : Tigerholm model, see [1] for details
+            "Schild_94"         : Schild 1994 model, see [1] for details
+            "Schild_97"         : Schild 1997 model, see [1] for details
+    dt              : float
+        computation step for simulations, in ms. By default equal to 1 us
+    Nrec            : int
+        Number of points along the axon to record for simulation results. Between 0 and the number of segment, if set to 0, all segments are recorded
+    Nsec            : int
+        Number of sections in the axon, by default 1. Usefull to create umnyelinated axons with a variable segment density
+    Nseg_per_sec    : int
+        Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
+    freq            : float
+        Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
+    freq_min        : float
+        Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
+    mesh_shape      : str
+        Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
+            "pyramidal"         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
+            "sigmoid"           -> same a befor with sigmoid increase instead of linear
+            "plateau"           -> sale as pyramidal except the max frequency is holded on a central plateau
+            "plateau_sigmoid"   -> same as previous with sigmoid increase
+    alpha_max       : float
+        Proportion of the axon set to the maximum frequency for plateau shapes, by default set to 0.3
+    d_lambda        : float
+        value of d-lambda for the dlambda rule,
+    v_init          : float
+        Initial value of the membrane voltage in mV, set None to get an automatically model attributed value
+    T               : float
+        temperature in C, set None to get an automatically model attributed value
+    ID              : int
+        axon ID, by default set to 0,
+    threshold       : float
+        voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing files for further help
+
+    Note
+    ----
+    reference [1] corresponds to:
+        Pelot, N. A., Catherall, D. C., Thio, B. J., Titus, N. D., Liang, E. D., Henriquez, C. S., & Grill, W. M. (2021). Excitation properties of computational models of unmyelinated peripheral axons. Journal of neurophysiology, 125(1), 86-104.
     """
 
     def __init__(
@@ -41,60 +93,6 @@ class unmyelinated(axon):
     ):
         """
         initialisation of an unmyelinted axon
-
-        Parameters
-        ----------
-        y               : float
-            y coordinate for the axon, in um
-        z               : float
-            z coordinate for the axon, in um
-        d               : float
-            axon diameter, in um
-        L               : float
-            axon length along the x axins, in um
-        model           : str
-            choice of conductance based model, possibly:
-                "HH"                : original squid giant axon model, warning - low temperature model, not adapted to mamalian modeling
-                "Rattay_Aberham"    : Rattay Aberham model, see [1] for details
-                "Sundt"             : Sundt model, see [1] for details
-                "Tigerholm"         : Tigerholm model, see [1] for details
-                "Schild_94"         : Schild 1994 model, see [1] for details
-                "Schild_97"         : Schild 1997 model, see [1] for details
-        dt              : float
-            computation step for simulations, in ms. By default equal to 1 us
-        Nrec            : int
-            Number of points along the axon to record for simulation results. Between 0 and the number of segment, if set to 0, all segments are recorded
-        Nsec            : int
-            Number of sections in the axon, by default 1. Usefull to create umnyelinated axons with a variable segment density
-        Nseg_per_sec    : int
-            Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
-        freq            : float
-            Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
-        freq_min        : float
-            Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
-        mesh_shape      : str
-            Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
-                "pyramidal"         -> min frequencies on both sides and linear increase up to the middle at the maximum frequency
-                "sigmoid"           -> same a befor with sigmoid increase instead of linear
-                "plateau"           -> sale as pyramidal except the max frequency is holded on a central plateau
-                "plateau_sigmoid"   -> same as previous with sigmoid increase
-        alpha_max       : float
-            Proportion of the axon set to the maximum frequency for plateau shapes, by default set to 0.3
-        d_lambda        : float
-            value of d-lambda for the dlambda rule,
-        v_init          : float
-            Initial value of the membrane voltage in mV, set None to get an automatically model attributed value
-        T               : float
-            temperature in C, set None to get an automatically model attributed value
-        ID              : int
-            axon ID, by default set to 0,
-        threshold       : float
-            voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing files for further help
-
-        Note
-        ----
-        reference [1] corresponds to:
-            Pelot, N. A., Catherall, D. C., Thio, B. J., Titus, N. D., Liang, E. D., Henriquez, C. S., & Grill, W. M. (2021). Excitation properties of computational models of unmyelinated peripheral axons. Journal of neurophysiology, 125(1), 86-104.
         """
         super().__init__(
             y,
@@ -581,7 +579,7 @@ class unmyelinated(axon):
 
     def set_membrane_voltage_recorders(self):
         """
-        Prepare the membrane voltage recording. For internal use only.
+        setup the membrane voltage recording. For internal use only.
         """
         self.vreclist = neuron.h.List()
         self.__set_recorders_with_key((self.vreclist, "_ref_v"))
@@ -594,7 +592,7 @@ class unmyelinated(axon):
 
     def set_membrane_current_recorders(self):
         """
-        Prepare the membrane current recording. For internal use only.
+        setup the membrane current recording. For internal use only.
         """
         self.ireclist = neuron.h.List()
         self.__set_recorders_with_key((self.ireclist, "_ref_i_membrane"))
@@ -607,7 +605,7 @@ class unmyelinated(axon):
 
     def set_ionic_current_recorders(self):
         """
-        Prepare the ionic currents recording. For internal use only.
+        setup the ionic currents recording. For internal use only.
         """
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.i_na_reclist = neuron.h.List()
@@ -643,7 +641,7 @@ class unmyelinated(axon):
 
     def set_conductance_recorders(self):
         """
-        Prepare the membrane conductance recording. For internal use only.
+        setup the membrane conductance recording. For internal use only.
         """
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:
             self.g_na_reclist = neuron.h.List()
@@ -761,7 +759,7 @@ class unmyelinated(axon):
 
     def set_particules_values_recorders(self):
         """
-        Prepare the particule value recording. For internal use only.
+        setup the particule value recording. For internal use only.
         """
 
         if self.model in ["HH", "Rattay_Aberham", "Sundt"]:

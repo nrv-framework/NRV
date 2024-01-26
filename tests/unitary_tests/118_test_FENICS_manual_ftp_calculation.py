@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 ## Results mesh_files
 mesh_file = "./unitary_tests/results/mesh/118_mesh"
 fig_file = "./unitary_tests/figures/118_A.png"
-out_file = "./unitary_tests/results/outputs/118_res.xdmf"
+out_file = "./unitary_tests/results/outputs/118_res"
 
 
 ## Mesh creation
@@ -26,8 +26,7 @@ mesh.add_electrode(elec_type="LIFE", x_c=L/2, y_c=0, z_c=0, length=1000, D=25, r
 mesh.compute_mesh()
 
 mesh.save(mesh_file)
-
-print(mesh.get_parameters())
+#print(mesh.get_parameters())
 
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
@@ -49,11 +48,11 @@ sim1.add_inboundary(mesh_domain=11,mat_file="perineurium", thickness=0.005, in_d
 sim1.add_boundary(mesh_domain=1, btype='Dirichlet', value=0, variable=None)
 sim1.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim', mesh_domain_3D=0)
 
-data = sim1.save_SimParameters()
+data = sim1.save()
 
 Istim = 1
 jstim = Istim / (np.pi * 1000 * 25e-3)
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 res1 = sim1.solve_and_save_sim(out_file)
 
 

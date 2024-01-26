@@ -54,12 +54,12 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
 param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 #print(data)
 sim1 = nrv.FEMSimulation(data=data)
 
 jstim = 20
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 res1 = sim1.solve()
 
 ## Check result savings
@@ -73,5 +73,4 @@ print(res1==res2)
 
 
 res1.save(out_file2)
-res1.save(out_file2, ftype="xdmf")
 print('res2 saved')

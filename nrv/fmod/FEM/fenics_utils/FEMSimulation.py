@@ -1,5 +1,6 @@
 import os
 import time
+import numpy as np
 
 from dolfinx.fem import (
     Constant,
@@ -11,7 +12,6 @@ from dolfinx.fem import (
     locate_dofs_topological,
 )
 from dolfinx.fem.petsc import LinearProblem
-from dolfinx.io.utils import XDMFFile
 from mpi4py import MPI
 from petsc4py.PETSc import ScalarType, Viewer
 from ufl import (
@@ -98,16 +98,44 @@ pc_type_list = [
 
 
 class FEMSimulation(SimParameters):
-    """
+    r"""
     Class usefull to solve the Static/Quasi-Static electrical current problem using FEM with
     FEniCSx algorithms (https://fenicsproject.org).
 
-    / add equation /
+    .. math::
+
+        \nabla \mathbf{j}(\mathbf{r}) = 0
+
+    .. math::
+
+        \mathbf{j}(\mathbf{r}) = \mathbf{\sigma} (\mathbf{r}) \nabla V (\mathbf{r}), \forall \mathbf{r} \in \Omega
+
+    Where \\(\\Omega\\) is the simulation space, \\(\\bf{j}\\) the the current density and \\(V\\) the electrical potential
 
     The problem parameters (domains and boundaries condition) can be define using SimParameters methods
-    Contains methods to prepare the matrix sytstem, to solve it and to access the results.
+    Contains methods to setup the matrix sytstem, to solve it and to access the results.
 
-    Inherit from SimParameters class. see SimParameters for further detail
+    Parameters
+    ----------
+    D               : int
+        dim of the mesh, by default 3
+        NB: only 3 is implemented
+    mesh_file       : str
+        mesh directory and file name: by default ""
+    mesh            : None or MshCreator
+        if not None, (MshCreator) from which the mesh sould be used, by default None
+    data            : str, dict or SimParameters
+        if not None, load SimParameters attribute from data, by default None
+    elem            :tupple (str, int)
+        if None, ("Lagrange", 1), else (element type, element order), by default None
+    ummesh          : bool
+        if True the scale of mesh space dimensions should be (um), else (m), by default True
+        Usefull to link the update materials conductivity as in NRV conductivities are in S/m
+        but NerveMshCreator space scale is um)
+    comm            : int
+        The MPI communicator to use for mesh creation, by default MPI.COMM_SELF
+    rank            : int
+        The rank the Gmsh model is initialized on, by default 0
     """
 
     def __init__(
@@ -122,31 +150,7 @@ class FEMSimulation(SimParameters):
         rank=0,
     ):
         """
-        initialisation of the FEMSimulation:
-
-        Parameters
-        ----------
-        D               : int
-            dim of the mesh, by default 3
-            NB: only 3 is implemented
-        mesh_file       : str
-            mesh directory and file name: by default ""
-        mesh            : None or MshCreator
-            if not None, MshCreator from which the mesh sould be used, by default None
-            (see MshCreator and NerveMshCreator for more details)
-        data            : str, dict or SimParameters
-            if not None, load SimParameters attribute from data, by default None
-            (see SimParameters.load)
-        elem            :tupple (str, int)
-            if None, ("Lagrange", 1), else (element type, element order), by default None
-        ummesh          : bool
-            if True the scale of mesh space dimensions should be (um), else (m), by default True
-            Usefull to link the update materials conductivity as in NRV conductivities are in S/m
-            but NerveMshCreator space scale is um)
-        comm            : int
-            The MPI communicator to use for mesh creation, by default MPI.COMM_SELF
-        rank            : int
-            The rank the Gmsh model is initialized on, by default 0
+        initialisation of the FEMSimulation
         """
         super().__init__(D=D, mesh_file=mesh_file, data=data)
         if elem is not None:
@@ -225,7 +229,7 @@ class FEMSimulation(SimParameters):
         self.bilinear_form_status = False
         self.jump_status = False
         self.linear_form_status = False
-        self.prepared_status = False
+        self.setup_status = False
         self.solve_status = False
         self.to_merge = True
 
@@ -252,7 +256,7 @@ class FEMSimulation(SimParameters):
             mat_perm,
             ID,
         )
-        if self.prepared_status:
+        if self.setup_status:
             if mesh_domain in self.mat_map:
                 mat = load_fenics_material(mat_pty)
                 self.mat_map[mesh_domain].load_from_mat(mat)
@@ -266,7 +270,7 @@ class FEMSimulation(SimParameters):
         self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None
     ):
         super().add_domain(mesh_domain, mat_pty, mat_file, mat_perm, ID)
-        if self.prepared_status:
+        if self.setup_status:
             if mesh_domain in self.mat_map:
                 mat = load_fenics_material(mat_pty)
                 self.mat_map[mesh_domain].load_from_mat(mat)
@@ -277,12 +281,12 @@ class FEMSimulation(SimParameters):
                 )
 
     #####################################################
-    ############ Prepare the matrix sytstem #############
+    ############ setup the matrix sytstem #############
     #####################################################
 
-    def prepare_sim(self, **kwargs):
+    def setup_sim(self, **kwargs):
         """
-        Prepare Bilinear form, Linear form and boundary conditions using paramters and kwargs
+        setup Bilinear form, Linear form and boundary conditions using paramters and kwargs
         to set the variable defined Neumann boundary conditions (see SimParameters.add_boundary)
         If FEMSimulation already defined, can be used to modify variable defined NBC
         """
@@ -311,10 +315,10 @@ class FEMSimulation(SimParameters):
                     self.__set_linear_form()
                 # NEUMANN BOUNDARY CONDITIONS
                 self.__set_neumann_BC()
-            self.prepared_status = True
+            self.setup_status = True
             self.solving_timer += time.time() - t0
         else:
-            rise_warning("no parameters are set, Sim can not be prepared")
+            rise_warning("no parameters are set, Sim can not be setup")
 
     def __init_domain(self):
         """
@@ -417,7 +421,7 @@ class FEMSimulation(SimParameters):
         """
         internal use only: set the bilinear form a(vout, u) from the parameters
         """
-        pass_info("FEN4NRV: preparing the bilinear form")
+        pass_info("FEN4NRV: setup the bilinear form")
         self.__set_material_map()
         for i_space in range(self.Nspace):
             for i_domain in self.domains_list:
@@ -492,7 +496,7 @@ class FEMSimulation(SimParameters):
         """
         internal use only: set the linear form L(u) from the parameters
         """
-        pass_info("FEN4NRV: preparing the linear form")
+        pass_info("FEN4NRV: setup the linear form")
         # Check if quicker without
         c_0 = Constant(self.domain, ScalarType(0.0))
         if not self.inbound:
@@ -639,13 +643,8 @@ class FEMSimulation(SimParameters):
     def solve_and_save_sim(self, filename, save=True):
         if not self.solve_status:
             self.solve()
-
         fname = rmv_ext(filename)
-        if not (fname == filename or fname + ".xdmf" == filename):
-            rise_warning("Extension of solution will be save in xdmf files")
-        with XDMFFile(self.domain.comm, fname + ".xdmf", "w") as file:
-            file.write_mesh(self.domain)
-            file.write_function(self.vout)
+        self.result.save(fname)
         return self.result
 
     def get_timers(self):

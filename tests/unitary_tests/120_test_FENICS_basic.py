@@ -14,9 +14,9 @@ print("FEniCS model created in : "+str(t-t0))
 
 my_model.reshape_outerBox(5.5)
 my_model.build_and_mesh()
-print(my_model.get_parameters())
+#print(my_model.get_parameters())
 
-print(my_model.Perineurium_thickness)
+print(my_model.Perineurium_thickness == {0: 5})
 t = time.time()
 print("mesh built in : "+str(t-t0))
 my_model.mesh.save(mesh_file)

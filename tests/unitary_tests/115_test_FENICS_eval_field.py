@@ -9,7 +9,7 @@ from dolfinx import geometry
 ## Results mesh_files
 mesh_file = "./unitary_tests/results/mesh/115_mesh"
 fig_file = "./unitary_tests/figures/115_A.png"
-out_file = "./unitary_tests/results/outputs/115_res.xdmf"
+out_file = "./unitary_tests/results/outputs/115_res"
 
 
 ## Mesh creation
@@ -58,16 +58,16 @@ del mesh
 param = nrv.SimParameters(D=3, mesh_file=mesh_file)
 param.add_domain(mesh_domain=100,mat_file="material_1")
 param.add_domain(mesh_domain=101,mat_file="material_2")
-param.add_domain(mesh_domain=102,mat_file="silicone")
+param.add_domain(mesh_domain=102,mat_pty=100)
 
 param.add_boundary(mesh_domain=11, btype='Dirichlet', value=0, variable=None)
 param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim')
 
-data = param.save_SimParameters()
+data = param.save()
 sim1 = nrv.FEMSimulation(data=data)
 
 jstim = 1
-sim1.prepare_sim(jstim=jstim)
+sim1.setup_sim(jstim=jstim)
 t1 = time.time()
 print('start timer')
 
@@ -75,22 +75,26 @@ res1 = sim1.solve()
 
 t2 = time.time()
 print('solved in '+str(t2 - t1)+' s')
-res1.save_sim_result(out_file)
-res1.save_sim_result(out_file, ftype='xdmf')
+res1.save(out_file)
 print('res1 saved')
 
 N = 100
 x = np.linspace(0, L, N)
 X = [(k, 0, 0) for k in x]
 
-mesh = nrv.domain_from_meshfile(mesh_file)  
-tree = geometry.BoundingBoxTree(mesh, mesh.geometry.dim)
-cells_candidates = geometry.compute_collisions(tree, X)
-cells_colliding = geometry.compute_colliding_cells(mesh, cells_candidates, X)
+mesh = nrv.domain_from_meshfile(mesh_file)
 
+try:
+    tree = geometry.bb_tree(mesh, mesh.geometry.dim)
+    cells_candidates = geometry.compute_collisions_points(tree, X)
+except:
+    tree = geometry.BoundingBoxTree(mesh, mesh.geometry.dim)
+    cells_candidates = geometry.compute_collisions(tree, X)
+
+cells_colliding = geometry.compute_colliding_cells(mesh, cells_candidates, X)
 cells = [cells_colliding.links(i)[0] for i in range(N)]
 
-u_x1 = res1.vout.eval(X, cells)
+u_x1 = res1.vout.eval(X, cells)[:,0]
 u_x = res1.eval(X)
 
 print(np.allclose(u_x, u_x1))

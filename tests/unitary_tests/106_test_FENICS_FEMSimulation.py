@@ -1,7 +1,7 @@
 import nrv
 import time
 
-out_file = './unitary_tests/results/outputs/106_simfile.xdmf'
+out_file = './unitary_tests/results/outputs/106_simfile'
 
 param = nrv.SimParameters(D=3, mesh_file="unitary_tests/sources/3cylinder")
 """
@@ -22,7 +22,7 @@ sim1 = nrv.FEMSimulation(elem=('Lagrange', 1), data=data)
 
 
 jstim = 1
-sim1.prepare_sim(jstim=jstim)
+sim1.setup_sim(jstim=jstim)
 t1 = time.time()
 sim1.solve_and_save_sim(out_file)
 

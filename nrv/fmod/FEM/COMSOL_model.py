@@ -84,7 +84,7 @@ class COMSOL_model(FEM_model):
             # self.client.caching(True)
             # source
             self.fname = fname
-            self.preparing_timer += time.time() - t0
+            self.setup_timer += time.time() - t0
         else:
             ## COMSOL TURNED OFF, no error, but only a warning and no computation (exit)
             rise_warning(

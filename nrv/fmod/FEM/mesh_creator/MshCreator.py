@@ -43,7 +43,7 @@ def clear_gmsh():
 
 class MshCreator(NRV_class):
     """
-    Class handeling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html)
+    Class handling the creation of a gmsh mesh (https://gmsh.info/doc/texinfo/gmsh.html)
     Contains methodes dealing with the mesh geometries, physical domains and feilds
     """
 

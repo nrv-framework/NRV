@@ -145,7 +145,7 @@ class Problem(NRV_class):
         else:
             return None
 
-    # Mcore handeling
+    # Mcore handling
     def __check_MCore_CostFunction(self):
         return getattr(self._CostFunction, "_MCore_CostFunction", False)
 

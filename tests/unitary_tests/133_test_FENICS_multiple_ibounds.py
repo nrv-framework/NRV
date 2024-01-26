@@ -36,12 +36,12 @@ param.add_boundary(mesh_domain=101 + Eref, btype='Dirichlet', value=0, variable=
 param.add_boundary(mesh_domain=101 + E_, btype='Neuman', value=None, variable='jstim', ID=1)
 param.add_boundary(mesh_domain=101 + E, btype='Neuman', value=None, variable='_jstim', ID=2)
 
-data = param.save_SimParameters()
+data = param.save()
 
 
 sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
 jstim = 20
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 
 res = sim1.solve_and_save_sim("./unitary_tests/results/outputs/133_results1")
 
@@ -49,11 +49,11 @@ res = sim1.solve_and_save_sim("./unitary_tests/results/outputs/133_results1")
 param.add_inboundary(mesh_domain=1001,mat_file=0.01, thickness=0.05, in_domains=[1000])
 sim2 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
 jstim = 20
-sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim2.setup_sim(jstim=jstim, _jstim=-jstim)
 
 res -= sim2.solve_and_save_sim("./unitary_tests/results/outputs/133_results2")
 
-res.save_sim_result("./unitary_tests/results/outputs/133_results", ftype="xdmf")
+res.save("./unitary_tests/results/outputs/133_results")
 t2 = time.time()
 for E in range(N_elec):
     V1 = round(sim1.get_domain_potential(101+2*E), 2)

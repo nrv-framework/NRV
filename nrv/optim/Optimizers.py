@@ -296,7 +296,7 @@ class PSO_optimizer(Optimizer):
             min_bound = min(self.bounds) * np.ones(self.dimensions)
             return (min_bound, max_bound)
 
-    def __mproc_handeling(self):
+    def __mproc_handling(self):
         if not MCH.is_alone():
             # prevent using MPI and multprocessing at the same time
             # MPI: parralize inside the cost function
@@ -331,7 +331,7 @@ class PSO_optimizer(Optimizer):
         kwargs                  : dict
             containing parameters to change to class (PSO_optimizer.__init__)
         """
-        self.__mproc_handeling()
+        self.__mproc_handling()
         results = super().minimize(f_swarm, **kwargs)
 
         verbose = parameters.get_nrv_verbosity() > 2

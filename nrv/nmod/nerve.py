@@ -1,7 +1,5 @@
 """
-NRV-Nerves
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.nerve` handling
 """
 import numpy as np
 
@@ -16,38 +14,41 @@ from .fascicles import *
 ## Nerve class ##
 #################
 class nerve(NRV_simulable):
-    """A nerve in NRV is defined as:
-        - a list of fascicles
-        - a list of materials
-        - a kind of extracellular context (analytical or FEM based)
+    """
+    A nerve in NRV is defined as:
+        - a list of :class:`.fascicle`
+        - an `analytical` :class:`~nrv.fmod.extracellular.stimulation` or a :class:`~nrv.fmod.extracellular.FEM_stimulation` context
 
-    a nerve can be instrumented by adding couples of electrodes+stimulus
+    A nerve can be instrumented by adding couples of electrodes+stimulus
+
+    The extracellular context of the nerve is automatically generated from the context of its
+    fascicles and an optional context added directly to the nerve.
+
+    Parameters
+    ----------
+    dt              : float
+        simulation time stem for Neuron (ms), by default 1us
+    Nseg_per_sec    : float
+        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
+    freq            : float
+        frequency of the d-lambda rule (Hz), by default 100Hz
+    freq_min        : float
+        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
+    v_init          : float
+        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
+    T               : float
+        temperature (C), specify None for automatic model choice of temperature
+    ID              : int
+        axon ID, by default set to 0
+    threshold       : int
+        membrane voltage threshold for spike detection (mV), by default -40mV
+    Adelta_limit    : float
+        limit diameter between A-delta models (thin myelinated) and myelinated models for axons
     """
 
     def __init__(self, Length=10000, Diameter=100, Outer_D=5, ID=0, **kwargs):
         """
         Instanciates an empty nerve.
-
-        Parameters
-        ----------
-        dt              : float
-            simulation time stem for Neuron (ms), by default 1us
-        Nseg_per_sec    : float
-            number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-        freq            : float
-            frequency of the d-lambda rule (Hz), by default 100Hz
-        freq_min        : float
-            minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-        v_init          : float
-            initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-        T               : float
-            temperature (C), specify None for automatic model choice of temperature
-        ID              : int
-            axon ID, by default set to 0
-        threshold       : int
-            membrane voltage threshold for spike detection (mV), by default -40mV
-        Adelta_limit    : float
-            limit diameter between A-delta models (thin myelinated) and myelinated models for axons
         """
         super().__init__()
 
@@ -406,7 +407,7 @@ class nerve(NRV_simulable):
         """
         pass
 
-    ## Fascicles handeling methods
+    ## Fascicles handling methods
     def get_fascicles(self, ID_only=False):
         if ID_only:
             return self.fascicles_IDs
@@ -477,7 +478,7 @@ class nerve(NRV_simulable):
 
         fasc.clear_context(intracel_context=False)
 
-    ## Axons handeling method
+    ## Axons handling method
     def set_axons_parameters(
         self, unmyelinated_only=False, myelinated_only=False, **kwargs
     ):
@@ -575,7 +576,7 @@ class nerve(NRV_simulable):
                     num=num,
                 )
 
-    ## Context handeling methods
+    ## Context handling methods
     def clear_context(
         self, extracel_context=True, intracel_context=True, rec_context=True
     ):

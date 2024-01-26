@@ -30,7 +30,7 @@ param.add_boundary(mesh_domain=101 + E_, btype='Neuman', value=None, variable='j
 param.add_boundary(mesh_domain=101 + E, btype='Neuman', value=None, variable='_jstim', ID=2)
 param.add_inboundary(mesh_domain=13,mat_pty="perineurium", thickness=5, in_domains=[12, 1000])
 
-data = param.save_SimParameters()
+data = param.save()
 jstim = 20
 
 
@@ -40,7 +40,7 @@ jstim = 20
 ## Test modify domain FEM
 
 sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 sim1.solve()
 E1_ref = round(sim1.get_domain_potential(101), 6)
 
@@ -48,7 +48,7 @@ param.add_domain(mesh_domain=12,mat_pty=fname1)
 param.add_domain(mesh_domain=2,mat_pty=100)
 param.add_inboundary(mesh_domain=13,mat_pty=0.003, thickness=5, in_domains=[12, 1000])
 sim2 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim2.setup_sim(jstim=jstim, _jstim=-jstim)
 sim2.solve()
 E2_ref = round(sim2.get_domain_potential(101), 6)
 
@@ -57,7 +57,7 @@ param.add_domain(mesh_domain=12,mat_pty=fname0)
 param.add_domain(mesh_domain=2,mat_pty=1)
 param.add_inboundary(mesh_domain=13,mat_pty="perineurium", thickness=5, in_domains=[12, 1000])
 sim3 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
-sim3.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim3.setup_sim(jstim=jstim, _jstim=-jstim)
 sim3.solve()
 E1 = round(sim3.get_domain_potential(101), 6)
 print(E1_ref == E1)
@@ -65,7 +65,7 @@ sim3.add_domain(mesh_domain=12,mat_pty=fname1)
 sim3.add_domain(mesh_domain=2,mat_pty=100)
 sim3.add_inboundary(mesh_domain=13,mat_pty=0.003, thickness=5, in_domains=[12, 1000])
 
-sim3.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim3.setup_sim(jstim=jstim, _jstim=-jstim)
 sim3.solve()
 E2 = round(sim3.get_domain_potential(101), 6)
 
@@ -77,14 +77,14 @@ print(E2_ref == E2)
 # With ibound
 
 param.add_domain(mesh_domain=12,mat_pty=1000)
-sim1 = nrv.FEMSimulation(data=param.save_SimParameters(), elem=('Lagrange', 1))
-sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim1 = nrv.FEMSimulation(data=param.save(), elem=('Lagrange', 1))
+sim1.setup_sim(jstim=jstim, _jstim=-jstim)
 sim1.solve()
 E1_ref = round(sim1.get_domain_potential(101), 6)
 
 param.add_domain(mesh_domain=12,mat_pty=0.01)
-sim2 = nrv.FEMSimulation(data=param.save_SimParameters(), elem=('Lagrange', 1))
-sim2.prepare_sim(jstim=jstim, _jstim=-jstim)
+sim2 = nrv.FEMSimulation(data=param.save(), elem=('Lagrange', 1))
+sim2.setup_sim(jstim=jstim, _jstim=-jstim)
 sim2.solve()
 E2_ref = round(sim2.get_domain_potential(101), 6)
 
@@ -95,11 +95,11 @@ while test and i < ilim/2:
     i+=1
     print(" "+str(i)+ "/"+str(ilim//2), end="\r")
     sim1.add_domain(mesh_domain=12,mat_pty=1000)
-    #sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+    #sim1.setup_sim(jstim=jstim, _jstim=-jstim)
     sim1.solve()
     test = (E1_ref == round(sim1.get_domain_potential(101), 6))
     sim1.add_domain(mesh_domain=12,mat_pty=0.01)
-    #sim1.prepare_sim(jstim=jstim, _jstim=-jstim)
+    #sim1.setup_sim(jstim=jstim, _jstim=-jstim)
     sim1.solve()
     test = test and (E2_ref == round(sim1.get_domain_potential(101), 6))
 print()

@@ -67,7 +67,7 @@ sim1 = nrv.FEMSimulation(data=data)
 
 
 jstim = 1
-sim1.prepare_sim(jstim=jstim)
+sim1.setup_sim(jstim=jstim)
 #sim1.assemble()
 t1 = time.time()
 print('start timer')

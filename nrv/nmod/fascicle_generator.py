@@ -1,7 +1,5 @@
 """
-NRV-fascicule generator
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-fascicule generator usefull functions
 """
 import faulthandler
 import math

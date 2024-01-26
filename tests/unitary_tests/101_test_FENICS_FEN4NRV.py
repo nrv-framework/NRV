@@ -5,7 +5,7 @@ import time
 
 
 mesh_file = "./unitary_tests/results/mesh/101_mesh.msh"
-out_file = './unitary_tests/results/outputs/101_simfile.xdmf'
+out_file = './unitary_tests/results/outputs/101_simfile'
 mesh = nrv.MshCreator(D=3)
 nrv.gmsh.logger.start()
 
@@ -109,7 +109,7 @@ sim1.add_domain(mesh_domain=2,mat_file=0.0001)
 sim1.add_boundary(mesh_domain=3, btype='Dirichlet', value=0)
 sim1.add_boundary(mesh_domain=0, btype='Neuman', value=10)
 
-sim1.prepare_sim()
+sim1.setup_sim()
 t1 = time.time()
 sim1.solve_and_save_sim(out_file)
 

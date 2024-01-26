@@ -1,7 +1,5 @@
 """
-NRV-axons
-Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
-(c) ETIS - University Cergy-Pontoise - CNRS
+NRV-:class:`.axon` handling
 """
 import faulthandler
 import os
@@ -19,9 +17,6 @@ from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.units import sci_round
-
-# Handling verbosity
-Verbose = True
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -45,11 +40,6 @@ myelinated_models = [
     "Gaines_motor",
     "Gaines_sensory",
 ]
-thin_myelinated_models = [
-    "Extended_Gaines",
-    "RGK",
-]
-
 
 ##############################
 ## Usefull Neuron functions ##
@@ -64,6 +54,7 @@ def purge_neuron():
 
 def d_lambda_rule(L, d_lambda, f, sec):
     """
+    :meta private:
     computes the d_lambda rule for a sections and returns the number of segments.
 
     Parameters
@@ -197,12 +188,45 @@ def rotate_list(l, n):
 #############################
 class axon(NRV_simulable):
     """
-    Axon is a generic object to describe an axonal fiber,
-    (soma and interconnection are not taken into account, all axons are independant from others)
-    From user perspective, call myelinated, unmylinated or thin_myelinated classes for robust code. All axons
-    are supposed to be along the x-axis, as Neuron would do when creatnig a basic longitudinal geometry.
+    A generic object to describe an axonal fiber
+    (soma and interconnection are not taken into account, all axons are independant from others).
 
-    WARNING: do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
+    Note
+    ----
+    -   :class:`axon` is an abstract class so it cannot be used directly. From the user's point of view,
+        only the child classes :class:`.myelinated` and :class:`.unmyelinated` should be used.
+    -   All axons are assumed to be along the x-axis, as Neuron would do when creatnig a basic longitudinal geometry.
+
+    Parameters
+    ----------
+    y               : float
+        y-axis coordinate of the axon (um)
+    z               : float
+        z-axis coordinate of the axon (um)
+    d               : float
+        axon diameter (um)
+    L               : float
+        axon length (um)
+    dt              : float
+        simulation time stem for Neuron (ms), by default 1us
+    Nseg_per_sec    : float
+        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
+    freq            : float
+        frequency of the d-lambda rule (Hz), by default 100Hz
+    freq_min        : float
+        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
+    v_init          : float
+        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
+    T               : float
+        temperature (C), specify None for automatic model choice of temperature
+    ID              : int
+        axon ID, by default set to 0
+    threshold       : int
+        membrane voltage threshold for spike detection (mV), by default -40mV
+
+    WARNING
+    -------
+    do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
     """
 
     @abstractmethod
@@ -227,33 +251,6 @@ class axon(NRV_simulable):
     ):
         """
         initialisation of the axon,
-
-        Parameters
-        ----------
-        y               : float
-            y-axis coordinate of the axon (um)
-        z               : float
-            z-axis coordinate of the axon (um)
-        d               : float
-            axon diameter (um)
-        L               : float
-            axon length (um)
-        dt              : float
-            simulation time stem for Neuron (ms), by default 1us
-        Nseg_per_sec    : float
-            number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-        freq            : float
-            frequency of the d-lambda rule (Hz), by default 100Hz
-        freq_min        : float
-            minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-        v_init          : float
-            initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-        T               : float
-            temperature (C), specify None for automatic model choice of temperature
-        ID              : int
-            axon ID, by default set to 0
-        threshold       : int
-            membrane voltage threshold for spike detection (mV), by default -40mV
         """
         super().__init__()
         self.type = "axon"
@@ -657,7 +654,7 @@ class axon(NRV_simulable):
             #### THIS IS WHERE SIMULATION IS HANDLED ##
             ###########################################
             if self.extra_stim is not None:
-                # prepare extracellular stimulation
+                # setup extracellular stimulation
                 x, y, z = self.__get_allseg_positions()
                 self.extra_stim.synchronise_stimuli()
 
@@ -1206,57 +1203,96 @@ class axon(NRV_simulable):
     ###########################
     @abstractmethod
     def insert_I_Clamp(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def insert_V_Clamp(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def set_membrane_voltage_recorders(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def set_membrane_current_recorders(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def set_ionic_current_recorders(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def set_conductance_recorders(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def set_particules_values_recorders(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def get_membrane_voltage(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def get_membrane_current(self):
+        """
+        :meta private:
+        """
         pass
 
     @abstractmethod
     def get_ionic_current(self):
+        """
+        :meta private:
+        """
         pass
 
     def get_membrane_conductance(self):
+        """
+        :meta private:
+        """
         pass
 
     def get_membrane_capacitance(self):
+        """
+        :meta private:
+        """
         pass
 
     def get_particules_values(self):
+        """
+        :meta private:
+        """
         pass
 
 
 class axon_test(axon):
     """
-    TO DO
+    :meta private:
     """
 
     def __init__(

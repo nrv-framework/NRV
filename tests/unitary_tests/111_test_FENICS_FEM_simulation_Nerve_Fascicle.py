@@ -61,14 +61,14 @@ param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0)
 param.add_boundary(mesh_domain=103, btype='Neuman', value=jstim)
 param.add_boundary(mesh_domain=107, btype='Neuman', value=-jstim)
 
-data = param.save_SimParameters()
+data = param.save()
 
 #print(data)
 sim1 = nrv.FEMSimulation(data=data, mesh=mesh, elem=('Lagrange', 1))
 
 sim1.set_solver_opt(ksp_type=None, pc_type='ilu')
 
-sim1.prepare_sim()
+sim1.setup_sim()
 sim1.solve_and_save_sim(out_file)
 
 t3 = time.time()
