@@ -15,7 +15,6 @@ for i in range(4):
     fascicles[i].axons_type = np.asarray([1])
     fascicles[i].axons_y = np.asarray([0])
     fascicles[i].axons_z = np.asarray([0])
-    fascicles[i].N = 1 
 
 
 # launch sim with

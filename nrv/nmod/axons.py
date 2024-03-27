@@ -247,12 +247,12 @@ class axon(NRV_simulable):
         T=None,
         ID=0,
         threshold=-40,
-        **kwarks,
+        **kwargs,
     ):
         """
         initialisation of the axon,
         """
-        super().__init__()
+        super().__init__(**kwargs)
         self.type = "axon"
         ## Given by user
         self.x = []
@@ -300,8 +300,8 @@ class axon(NRV_simulable):
         self.rec = "all"
         self.node_index = None
         ## required for generate_axon_from_results
-        if "diameter" in kwarks:
-            self.d = kwarks["diameter"]
+        if "diameter" in kwargs:
+            self.d = kwargs["diameter"]
 
     def __del__(self):
         for section in neuron.h.allsec():

@@ -1,8 +1,8 @@
 import nrv
 
-out_file = './unitary_tests/results/outputs/105_SimParameters.json'
+out_file = './unitary_tests/results/outputs/105_FEMParameters.json'
 
-param = nrv.SimParameters(D=3, mesh_file="./unitary_tests/sources/3cylinder")
+param = nrv.FEMParameters(D=3, mesh_file="./unitary_tests/sources/3cylinder")
 param.add_domain(mesh_domain=0,mat_file="M1.mat")
 param.add_domain(mesh_domain=100,mat_file="M1.mat")
 param.add_domain(mesh_domain=200,mat_file="M1.mat", ID=5)
@@ -18,7 +18,7 @@ param.add_boundary(mesh_domain=22, btype='Neuman', value=None, variable='jstim',
 p2 = param.save(save=False)
 #print(p2)
 
-param2 = nrv.SimParameters(data=out_file)
+param2 = nrv.FEMParameters(data=out_file)
 p3 = param2.save(save=False)
 #print(p3)
 

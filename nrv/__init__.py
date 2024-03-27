@@ -60,8 +60,11 @@ from .fmod.FEM.mesh_creator.MshCreator import *
 from .fmod.FEM.mesh_creator.NerveMshCreator import *
 from .fmod.FEM.mesh_creator.NRV_Msh import *
 from .fmod.FEM.fenics_utils.FEMSimulation import *
-from .fmod.FEM.fenics_utils.SimParameters import *
-from .fmod.FEM.fenics_utils.SimResult import *
+from .fmod.FEM.fenics_utils.FEMParameters import *
+from .fmod.FEM.fenics_utils.FEMResults import *
+from .fmod.FEM.fenics_utils.fenics_materials import *
+from .fmod.FEM.fenics_utils.f_materials import *
+from .fmod.FEM.fenics_utils.layered_materials import *
 
 ########################################################
 
@@ -71,6 +74,13 @@ from .nmod.myelinated import *
 from .nmod.fascicles import *
 from .nmod.fascicle_generator import *
 from .nmod.nerve import *
+
+from .nmod.results.axons_results import *
+from .nmod.results.unmyelinated_results import *
+from .nmod.results.myelinated_results import *
+from .nmod.results.fascicles_results import *
+from .nmod.results.nerve_results import *
+
 
 from .utils.saving_handler import *
 from .utils.nrv_function import *
@@ -85,3 +95,6 @@ from .optim.Problems import *
 from .optim.optim_utils.ContextModifier import *
 from .optim.optim_utils.CostEvaluation import *
 from .optim.optim_utils.OptimFunctions import *
+
+
+from .eit.Protocol import simple_pyeit_protocol

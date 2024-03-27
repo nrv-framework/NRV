@@ -5,6 +5,7 @@ import os
 import time
 import numpy as np
 
+from dolfinx import default_scalar_type
 from dolfinx.fem import (
     Constant,
     Function,
@@ -26,14 +27,15 @@ from ufl import (
     avg,
     inner,
     nabla_grad,
+    CellDiameter,
 )
 
 from ....backend.log_interface import pass_info, rise_error, rise_warning
 from ....backend.file_handler import rmv_ext
 from ....utils.units import S, V, m
-from .fenics_materials import load_fenics_material
-from .SimParameters import SimParameters
-from .SimResult import read_gmsh, SimResult
+from .fenics_materials import fenics_material
+from .FEMParameters import FEMParameters
+from .FEMResults import read_gmsh, FEMResults
 
 # Lists of available solvers and conditioners
 # go to https://petsc4py.readthedocs.io/en/stable/manual/ksp/ for more info
@@ -100,7 +102,7 @@ pc_type_list = [
 ]
 
 
-class FEMSimulation(SimParameters):
+class FEMSimulation(FEMParameters):
     r"""
     Class usefull to solve the Static/Quasi-Static electrical current problem using FEM with
     FEniCSx algorithms (https://fenicsproject.org).
@@ -115,7 +117,7 @@ class FEMSimulation(SimParameters):
 
     Where \\(\\Omega\\) is the simulation space, \\(\\bf{j}\\) the the current density and \\(V\\) the electrical potential
 
-    The problem parameters (domains and boundaries condition) can be define using SimParameters methods
+    The problem parameters (domains and boundaries condition) can be define using FEMParameters methods
     Contains methods to setup the matrix sytstem, to solve it and to access the results.
 
     Parameters
@@ -127,8 +129,8 @@ class FEMSimulation(SimParameters):
         mesh directory and file name: by default ""
     mesh            : None or MshCreator
         if not None, (MshCreator) from which the mesh sould be used, by default None
-    data            : str, dict or SimParameters
-        if not None, load SimParameters attribute from data, by default None
+    data            : str, dict or FEMParameters
+        if not None, load FEMParameters attribute from data, by default None
     elem            :tupple (str, int)
         if None, ("Lagrange", 1), else (element type, element order), by default None
     ummesh          : bool
@@ -210,6 +212,7 @@ class FEMSimulation(SimParameters):
         self.cg_problem = None
         self.dg_problem = None
         self.u = None
+        self.v = None
         self.mixedvout = None
         self.vout = None
         self.result = None
@@ -227,6 +230,7 @@ class FEMSimulation(SimParameters):
 
         self.data_status = True
         self.domain_status = False
+        self.material_map_satus = False
         self.dirichlet_BC_status = False
         self.neumann_BC_status = False
         self.bilinear_form_status = False
@@ -261,8 +265,7 @@ class FEMSimulation(SimParameters):
         )
         if self.setup_status:
             if mesh_domain in self.mat_map:
-                mat = load_fenics_material(mat_pty)
-                self.mat_map[mesh_domain].load_from_mat(mat)
+                self.mat_map[mesh_domain].update_mat(mat_pty)
             else:
                 rise_warning(
                     "Domain not added: new domain cannot be added between 2 simulations,\
@@ -275,8 +278,7 @@ class FEMSimulation(SimParameters):
         super().add_domain(mesh_domain, mat_pty, mat_file, mat_perm, ID)
         if self.setup_status:
             if mesh_domain in self.mat_map:
-                mat = load_fenics_material(mat_pty)
-                self.mat_map[mesh_domain].load_from_mat(mat)
+                self.mat_map[mesh_domain].update_mat(mat_pty)
             else:
                 rise_warning(
                     "Domain not added: new domain cannot be added between 2 simulations,\
@@ -290,7 +292,7 @@ class FEMSimulation(SimParameters):
     def setup_sim(self, **kwargs):
         """
         setup Bilinear form, Linear form and boundary conditions using paramters and kwargs
-        to set the variable defined Neumann boundary conditions (see SimParameters.add_boundary)
+        to set the variable defined Neumann boundary conditions (see FEMParameters.add_boundary)
         If FEMSimulation already defined, can be used to modify variable defined NBC
         """
         t0 = time.time()
@@ -307,7 +309,7 @@ class FEMSimulation(SimParameters):
                 if not self.dirichlet_BC_status:
                     self.__set_dirichlet_BC()
                 # DEFINING THE VARIATIONAL PROBLEM
-                self.mixedvout = TrialFunction(self.V)
+                self.v = TrialFunction(self.V)
                 self.u = TestFunction(self.V)
                 # defining the bilinear form a(vout,u)
                 if not self.bilinear_form_status:
@@ -382,7 +384,7 @@ class FEMSimulation(SimParameters):
         """
         internal use only: set the Neuman boundary condition from parameters or update
         variable between to simulation
-        NB: Only variable NBC (see SimParameters.add_boundary) can be changed between simulations
+        NB: Only variable NBC (see FEMParameters.add_boundary) can be changed between simulations
         """
         if not self.neumann_BC_status:
             for i_bound in self.boundaries_list:
@@ -428,19 +430,23 @@ class FEMSimulation(SimParameters):
         self.__set_material_map()
         for i_space in range(self.Nspace):
             for i_domain in self.domains_list:
-                dom = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
+                i_mat = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
                 if self.a is None:
-                    self.a = self.__get_static_component(i_domain, dom, i_space)
+                    self.a = self.__get_static_component(i_domain, i_mat, i_space)
                 else:
-                    self.a += self.__get_static_component(i_domain, dom, i_space)
+                    self.a += self.__get_static_component(i_domain, i_mat, i_space)
         if self.inbound:
             self.__set_jump()
         self.bilinear_form_status = True
 
     def __get_static_component(self, i_dom, i_mat, i_space):
-        """
+        r"""
         Set a static componnent of the bimlinear form:
-        a = ∇v[i_space] x 𝜎[i_mat]∇u[i_space] dx(i_dom)
+
+        .. math::
+
+            a = \nablav[i_{space}] \sigma[i_mat] \nabla u[i_{space}] dx(i_{dom})
+
         Parameters
         ----------
         i_dom    : int
@@ -452,12 +458,12 @@ class FEMSimulation(SimParameters):
         """
         if not self.inbound:
             return inner(
-                nabla_grad(self.mixedvout),
+                nabla_grad(self.v),
                 self.mat_map[i_mat].sigma_fen * nabla_grad(self.u),
             ) * self.dx(i_dom)
         else:
             return inner(
-                nabla_grad(self.mixedvout[i_space]),
+                nabla_grad(self.v[i_space]),
                 self.mat_map[i_mat].sigma_fen * nabla_grad(self.u[i_space]),
             ) * self.dx(i_dom)
 
@@ -470,7 +476,7 @@ class FEMSimulation(SimParameters):
             local_thickness = Constant(
                 self.domain, ScalarType(self.inboundaries_list[i_ibound]["thickness"])
             )
-            jmp_v = avg(self.mixedvout[out_space]) - avg(self.mixedvout[in_space])
+            jmp_v = avg(self.v[out_space]) - avg(self.v[in_space])
             jmp_u = avg(self.u[out_space]) - avg(self.u[in_space])
             self.a += (
                 self.mat_map[i_ibound].sigma_fen
@@ -485,15 +491,17 @@ class FEMSimulation(SimParameters):
         """
         internal use only: build a dictionnary mat_map containing a material for every domain and layer
         """
-        if self.mat_unit == "S/um":
-            UN = S / m
-        else:
-            UN = 1
-        for dom, pty in self.mat_pty_map.items():
-            self.mat_map[dom] = load_fenics_material(pty)
-            self.mat_map[dom].update_fenics_sigma(
-                domain=self.domain, elem=self.elem, UN=UN, id=dom
-            )
+        if not self.material_map_satus:
+            if self.mat_unit == "S/um":
+                UN = S / m
+            else:
+                UN = 1
+            for dom, pty in self.mat_pty_map.items():
+                self.mat_map[dom] = fenics_material(pty)
+                self.mat_map[dom].update_fenics_sigma(
+                    domain=self.domain, elem=self.elem, UN=UN, id=dom
+                )
+            self.material_map_satus = True
 
     def __set_linear_form(self):
         """
@@ -572,16 +580,17 @@ class FEMSimulation(SimParameters):
             if true modify the existing sim_res value, else create a new one. by default False
         Returns
         -------
-        self.results    : SimResult
-            SimResult containing the result of the resulting field of the FEM simulation
+        self.results    : FEMResults
+            FEMResults containing the result of the resulting field of the FEM simulation
         """
         t0 = time.time()
         pass_info("FEN4NRV: solving electrical potential")
         if self.cg_problem is None:
+            self.mixedvout = Function(self.V)
             self.cg_problem = LinearProblem(
                 self.a, self.L, bcs=self.bcs, petsc_options=self.petsc_opt
             )
-        self.mixedvout = self.cg_problem.solve()
+        self.mixedvout.x.array[:] = self.cg_problem.solve().x.array
         self.solve_status = True
 
         if self.inbound and self.to_merge:
@@ -591,7 +600,7 @@ class FEMSimulation(SimParameters):
             V_sol = self.V
 
         # return simulation result
-        self.result = SimResult()
+        self.result = FEMResults()
         if not overwrite:
             vout = Function(V_sol)
             vout.x.array[:] = self.vout.x.array[:]
@@ -615,12 +624,12 @@ class FEMSimulation(SimParameters):
             self.V_DG = FunctionSpace(
                 self.domain, ("Discontinuous Lagrange", self.elem[1])
             )
-            u, v = TrialFunction(self.V_DG), TestFunction(self.V_DG)
-            adg = u * v * self.dx
+            u_, v_ = TrialFunction(self.V_DG), TestFunction(self.V_DG)
+            adg = u_ * v_ * self.dx
             Ldg = 0
             for i_domain in self.domainsID:
                 i_space = self.get_space_of_domain(i_domain)
-                Ldg += v * self.mixedvout[i_space] * self.dx(i_domain)
+                Ldg += v_ * self.mixedvout[i_space] * self.dx(i_domain)
             self.dg_problem = LinearProblem(
                 adg, Ldg, bcs=[], petsc_options=self.petsc_opt
             )
@@ -630,6 +639,45 @@ class FEMSimulation(SimParameters):
                 self.mixedvouts[i].x.array[:] = mixedvouts[i].x.array
         self.vout = self.dg_problem.solve()
         return self.V_DG
+
+    def compute_conductance(self, order=None):
+        self.__init_domain()
+        self.__set_material_map()
+        V_sigma = self.V
+        od = order or self.elem[1]
+        V_sigma = FunctionSpace(
+            self.domain, ("DG", od)
+        )
+        sigma_out = []
+        for i_space in range(self.Nspace):
+            sigma = Function(V_sigma)
+            for i_domain in self.domainsID:
+                dom_cells = self.subdomains.find(i_domain)
+                dom_dofs = locate_dofs_topological(V_sigma, self.domain.topology.dim, dom_cells)
+                i_mat = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
+                mat = self.mat_map[i_mat].mat
+                if mat.is_isotropic():
+                    val = np.full_like(dom_dofs, mat.sigma, dtype=default_scalar_type)
+                elif not mat.is_func:
+                    #val = mat.sigma_fen.value
+                    _sig = sum(mat.sigma ** 2) ** 0.5
+                    val = np.full_like(dom_dofs, _sig, dtype=default_scalar_type)
+                elif mat.is_func:
+                    sig_ = Function(V_sigma)
+                    sig_.interpolate(mat.sigma_func)
+                    val = sig_.x.array[dom_dofs]
+                sigma.x.array[dom_dofs] = val
+            self.sigma_results = FEMResults()
+            self.sigma_results.set_sim_result(
+                mesh_file=self.mesh_file,
+                domain=self.domain,
+                elem=self.multi_elem,
+                V=V_sigma,
+                vout=sigma,
+                comm=self.domain.comm,
+            )
+            sigma_out += [self.sigma_results]
+        return sigma_out
 
     #####################################################
     ################ Access the results #################

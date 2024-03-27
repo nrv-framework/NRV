@@ -8,7 +8,7 @@ N_elec = 4
 N_ax = 1
 
 
-param = nrv.SimParameters(D=3, mesh_file=filename)
+param = nrv.FEMParameters(D=3, mesh_file=filename)
 param.add_domain(mesh_domain=0,mat_pty="saline")
 param.add_domain(mesh_domain=2,mat_pty="epineurium")
 param.add_domain(mesh_domain=12,mat_pty="endoneurium_bhadra")

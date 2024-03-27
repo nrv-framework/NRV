@@ -9,6 +9,7 @@ from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import MCH
 from ..backend.NRV_Class import NRV_class, is_empty_iterable
+from ..utils.misc import get_perineurial_thickness
 from .electrodes import (
     is_analytical_electrode,
     is_FEM_electrode,
@@ -536,7 +537,7 @@ class FEM_stimulation(extracellular_context):
                 )
 
     def reshape_fascicle(
-        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"
+        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=None, res="default"
     ):
         """
         Reshape a fascicle of the FEM simulation
@@ -557,6 +558,7 @@ class FEM_stimulation(extracellular_context):
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
         if MCH.do_master_only_work():
+            p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
             if self.comsol:
                 if ID is None:
                     self.model.set_parameter("Fascicle_D", str(Fascicle_D) + "[um]")
@@ -573,7 +575,7 @@ class FEM_stimulation(extracellular_context):
                         "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
                     )
                 self.model.set_parameter(
-                    "Perineurium_thickness", str(Perineurium_thickness) + "[um]"
+                    "Perineurium_thickness", str(p_th) + "[um]"
                 )
             else:
                 self.model.reshape_fascicle(
@@ -581,7 +583,7 @@ class FEM_stimulation(extracellular_context):
                     y_c=y_c,
                     z_c=z_c,
                     ID=ID,
-                    Perineurium_thickness=Perineurium_thickness,
+                    Perineurium_thickness=p_th,
                     res=res,
                 )
 

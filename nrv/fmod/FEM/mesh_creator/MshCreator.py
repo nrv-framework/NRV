@@ -73,8 +73,10 @@ class MshCreator(NRV_class):
         self.faces_com = []
         self.faces_bd = []
 
-        self.N_domains = 0
-        self.domains = []
+        self.id_domains = np.array([], dtype=int)
+        self.dim_domains = np.array([], dtype=int)
+        self.name_domain = []
+
         self.file = ""
 
         self.Nfeild = 0
@@ -104,7 +106,6 @@ class MshCreator(NRV_class):
     #####################
     ## special methods ##
     #####################
-
     def get_obj(self):
         """
         update and return list of mesh entities
@@ -360,11 +361,11 @@ class MshCreator(NRV_class):
         Parameters
         ----------
         x       : float
-            x position of the first face center
+            x position of the x-min face center
         y       : float
-            y position of the first face center
+            y position of the x-min face center
         z       : float
-            z position of the first face center
+            z position of the x-min face center
         L       : float
             Cylinder length along x
         R       : float
@@ -390,6 +391,47 @@ class MshCreator(NRV_class):
         else:
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
+
+    def add_cone(self, x=0, y=0, z=0, L=5, R1=1, R2=0):
+        """
+        add a x-oriented cone to mesh entities
+
+        Parameters
+        ----------
+        x       : float
+            x position of the x-min face center.
+        y       : float
+            y position of the x-min face center.
+        z       : float
+            z position of the x-min face center.
+        L       : float
+            Cone length along x.
+        R1       : float
+            Cone x-min face radius.
+        R2       : float
+            Cone x-max face radius.
+
+        Returns
+        -------
+        cone    : int
+            id of the added object
+        """
+        if self.D == 3:
+            parameters = {"x": x, "y": y, "z": z, "L": L, "R1": R1, "R2":R2}
+            cone = self.model.occ.addCone(x, y, z, L, 0, 0, R1, R2)
+            self.model.occ.synchronize()
+            bounds = self.model.getEntities(dim=2)[-3:]
+            self.entities[cone] = {
+                "type": "cone",
+                "parameters": parameters,
+                "bounds": bounds,
+                "dim": 3,
+            }
+            return cone
+        else:
+            rise_warning("Not added : add_cylinder requiere 3D mesh")
+            return None
+
 
     def rotate(self, volume, angle, x=0, y=0, z=0, ax=0, ay=0, az=0, rad=True):
         """
@@ -486,11 +528,30 @@ class MshCreator(NRV_class):
         if dim is None:
             dim = max([self.entities[k]["dim"] for k in obj_IDs])
         self.model.addPhysicalGroup(dim, obj_IDs, phys_ID)
-
         if name is None:
-            name = "domain " + str(self.N_domains)
+            name = "domain " + str(self.n_domains)
+        self.id_domains = np.append(self.id_domains, phys_ID)
+        self.dim_domains = np.append(self.dim_domains, dim)
+        self.name_domain += [name]
 
-        self.domains += (dim, phys_ID, name)
+    @property
+    def n_domains(self):
+        return len(self.id_domains)
+
+    @property
+    def domains_1D(self):
+        I = np.where(self.dim_domains==1)
+        return self.id_domains[I]
+
+    @property
+    def domains_2D(self):
+        I = np.where(self.dim_domains==2)
+        return self.id_domains[I]
+
+    @property
+    def domains_3D(self):
+        I = np.where(self.dim_domains==3)
+        return self.id_domains[I]
 
     ##############################################################################################
     #######################################   feilds methods  ####################################
@@ -624,8 +685,6 @@ class MshCreator(NRV_class):
                 gmsh.option.setNumber("Mesh.CharacteristicLengthMax", self.res)
 
             self.model.occ.synchronize()
-
-            # print("nt:", gmsh.option.getNumber("General.NumThreads"))
             self.model.mesh.generate(self.D)
             self.is_generated = True
 

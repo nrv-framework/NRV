@@ -106,7 +106,6 @@ class fascicle(NRV_simulable):
         self.z_vertices = np.array([])
         self.A = 0
         # axonal content
-        self.N = 0
         self.axons_diameter = np.array([])
         self.axons_type = np.array([])
         self.axons_y = np.array([])
@@ -301,6 +300,21 @@ class fascicle(NRV_simulable):
         )
 
     ## Fascicle property method
+    @property
+    def n_ax(self):
+        """
+        Number of axons in the fascicle
+        """
+        return len(self.axons_diameter)
+
+    @property
+    def N(self):
+        rise_warning(
+            "DeprecationWarnin: ",
+            "fascicle.N property is obsolete use fascicle.n_ax instead"
+        )
+        return self.n_ax
+
     def set_ID(self, ID):
         """
         set the ID of the fascicle
@@ -558,7 +572,6 @@ class fascicle(NRV_simulable):
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
 
     def fill_with_population(
         self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55
@@ -642,7 +655,6 @@ class fascicle(NRV_simulable):
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
 
     def fill_with_placed_population(
         self,
@@ -718,7 +730,6 @@ class fascicle(NRV_simulable):
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
 
     ## Move methods
     def translate_axons(self, y, z):
@@ -841,8 +852,7 @@ class fascicle(NRV_simulable):
                 + str(len(colapse))
                 + " axons will be removed from the fascicle"
             )
-        self.N -= len(colapse)
-        pass_info(self.N, "axons remaining")
+        pass_info(self.n_ax, "axons remaining")
         self.axons_diameter = self.axons_diameter[mask]
         self.axons_type = self.axons_type[mask]
         self.axons_y = self.axons_y[mask]
@@ -911,7 +921,6 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
@@ -924,7 +933,6 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             # almost useless but here for coherence
             self.NoR_relative_position = self.NoR_relative_position[mask]
@@ -942,7 +950,6 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             # almost useless but here for coherence
             self.NoR_relative_position = self.NoR_relative_position[mask]
@@ -976,7 +983,7 @@ class fascicle(NRV_simulable):
             )
             ## plot axons
             circles = []
-            for k in range(self.N):
+            for k in range(self.n_ax):
                 if self.axons_type[k] == 1:  # myelinated
                     circles.append(
                         plt.Circle(
@@ -1011,7 +1018,7 @@ class fascicle(NRV_simulable):
             for circle in circles:
                 axes.add_patch(circle)
             if num:
-                for k in range(self.N):
+                for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
 
     def plot_x(
@@ -1040,7 +1047,7 @@ class fascicle(NRV_simulable):
                     max(self.axons_diameter.flatten()),
                 ]
                 polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
-                for k in range(self.N):
+                for k in range(self.n_ax):
                     relative_pos = self.NoR_relative_position[k]
                     d = round(self.axons_diameter.flatten()[k], 2)
                     if self.axons_type.flatten()[k] == 0.0:
@@ -1074,11 +1081,11 @@ class fascicle(NRV_simulable):
                     for electrode in self.extra_stim.electrodes:
                         if not is_FEM_electrode(electrode):
                             axes.plot(
-                                electrode.x * np.ones(2), [0, self.N - 1], color="gold"
+                                electrode.x * np.ones(2), [0, self.n_ax - 1], color="gold"
                             )
                 axes.set_xlabel("x (um)")
                 axes.set_ylabel("axon ID")
-                axes.set_yticks(np.arange(self.N))
+                axes.set_yticks(np.arange(self.n_ax))
                 axes.set_xlim(0, self.L)
                 plt.tight_layout()
 
@@ -1206,7 +1213,7 @@ class fascicle(NRV_simulable):
         # also generated for unmyelinated but the meaningless value won't be used
         self.NoR_relative_position = []
 
-        for i in range(self.N):
+        for i in range(self.n_ax):
             if self.axons_type.flatten()[i] == 0.0:
                 self.NoR_relative_position += [0.0]
             else:
@@ -1638,7 +1645,7 @@ class fascicle(NRV_simulable):
                 pass_info("Simulating axons in fascicle " + str(self.ID))
             for k in this_core_mask:
                 if MCH.is_alone() and self.verbose:
-                    pass_info("\t Axon " + f"{k+1}" + "/" + str(self.N), end="\r")
+                    pass_info(f"\t Axon {k+1}/{self.n_ax}", end="\r")
                 axon_sim = self.__sim_axon(k, is_master_slave)
                 # postprocessing and data reduction
                 # (cannot be added to __sim.axon beceause nrv would not be global anymore)

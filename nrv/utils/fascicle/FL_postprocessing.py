@@ -213,7 +213,7 @@ def fascicular_state(
 
     fascicular = json_load(dir_path + "00_Fascicle_config.json")
     facsicular_state = {"-1": fascicular}
-    N_ax = fascicular["N"]
+    N_ax = len(fascicular["axons_diameter"])
     for i in range(N_ax):
         file = "sim_axon_"+ str(i) + ".json"
         if "extra_stim" not in facsicular_state["-1"]:

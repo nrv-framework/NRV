@@ -1,0 +1,2 @@
+--- Bugs in NRV, please consider reported errors before simulations
+--- list of failed tests : 218_test_nrv_Nelder-Mead_optimisation.py, 219_test_nrv_TNC_optimisation.py, 220_test_nrv_pso_optimisation2.py,  506_test_FENICS_fascicle_save_load_allcontext.py]

@@ -36,9 +36,13 @@ nF_0 = nrv_eval0(X)
 nrv_eval1 = nrv.nrv_interp(X1, Y1, 'cardinal',scale=0.5, dx=dx, columns=1)
 nF_1 = nrv_eval1(X)
 
+nrv_eval2 = 0.5*(nrv_eval1 + max(Y0)) +min(Y0)
+nF_2 = nrv_eval2(X)
+
 
 plt.plot(Y, nF_0)
 plt.plot(Y, nF_1)
+plt.plot(Y, nF_2)
 plt.legend()
 plt.savefig('./unitary_tests/figures/131_A.png')
 #plt.show()

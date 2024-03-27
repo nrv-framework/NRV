@@ -55,7 +55,7 @@ del mesh
 # FEM Simulation
 
 ## Sim parameters
-param = nrv.SimParameters(D=3, mesh_file=mesh_file)
+param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
 param.add_domain(mesh_domain=100,mat_file="material_1")
 param.add_domain(mesh_domain=101,mat_file="material_2")
 param.add_domain(mesh_domain=102,mat_pty=100)

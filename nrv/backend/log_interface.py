@@ -88,8 +88,13 @@ def rise_error(*args, out=1, **kwargs):
         verbose = kwargs["verbose"]
 
     message = ""
+    error = None
     for arg in args:
-        message += str(arg)
+        print(type(arg), isinstance(arg, Exception))
+        if isinstance(arg, type) and isinstance(arg(), Exception):
+            error = arg
+        else:
+            message += str(arg)
     if MCH.is_alone():
         if parameters.LOG_Status:
             rep_nrv.log(message, lvl=logging.ERROR)
@@ -113,6 +118,8 @@ def rise_error(*args, out=1, **kwargs):
             sys.stdout.flush()
     if out == 0:
         out = 1
+    if not error is None:
+        raise error(message)
     sys.exit(out)
 
 

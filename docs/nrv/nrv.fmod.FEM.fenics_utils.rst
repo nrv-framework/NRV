@@ -20,18 +20,18 @@ nrv.fmod.FEM.fenics\_utils.FEMSimulation module
    :undoc-members:
    :show-inheritance:
 
-nrv.fmod.FEM.fenics\_utils.SimParameters module
+nrv.fmod.FEM.fenics\_utils.FEMParameters module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: nrv.fmod.FEM.fenics_utils.SimParameters
+.. automodule:: nrv.fmod.FEM.fenics_utils.FEMParameters
    :members:
    :undoc-members:
    :show-inheritance:
 
-nrv.fmod.FEM.fenics\_utils.SimResult module
+nrv.fmod.FEM.fenics\_utils.FEMResults module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: nrv.fmod.FEM.fenics_utils.SimResult
+.. automodule:: nrv.fmod.FEM.fenics_utils.FEMResults
    :members:
    :undoc-members:
    :show-inheritance:

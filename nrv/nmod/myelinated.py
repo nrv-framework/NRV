@@ -187,7 +187,7 @@ class myelinated(axon):
         model="MRG",
         dt=0.001,
         node_shift=0,
-        Nseg_per_sec=0,
+        Nseg_per_sec=1,
         freq=100,
         freq_min=0,
         mesh_shape="plateau_sigmoid",
@@ -781,15 +781,15 @@ class myelinated(axon):
                     n.nseg = Nseg
                     self.node_Nseg += Nseg
                 for m in self.MYSA:
-                    Nseg = Nseg = d_lambda_rule(m.L, self.d_lambda, self.freq, m)
+                    Nseg = d_lambda_rule(m.L, self.d_lambda, self.freq, m)
                     m.nseg = Nseg
                     self.MYSA_Nseg += Nseg
                 for f in self.FLUT:
-                    Nseg = Nseg = d_lambda_rule(f.L, self.d_lambda, self.freq, f)
+                    Nseg = d_lambda_rule(f.L, self.d_lambda, self.freq, f)
                     f.nseg = Nseg
                     self.FLUT_Nseg += Nseg
                 for s in self.STIN:
-                    Nseg = Nseg = d_lambda_rule(s.L, self.d_lambda, self.freq, s)
+                    Nseg = d_lambda_rule(s.L, self.d_lambda, self.freq, s)
                     s.nseg = Nseg
                     self.STIN_Nseg += Nseg
             else:

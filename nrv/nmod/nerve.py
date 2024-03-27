@@ -75,7 +75,6 @@ class nerve(NRV_simulable):
         self.z_vertices = np.array([])
 
         # Fascicular content
-        self.N_ax = 0
         self.fascicles_IDs = []
         self.fascicles = {}
 
@@ -263,6 +262,23 @@ class nerve(NRV_simulable):
         )
 
     ## Nerve property method
+    @property
+    def n_fasc(self):
+        return len(self.fascicles)
+
+    def get_n_ax(self, id_fasc=None):
+        n = 0
+        if id_fasc is None:
+            id_fasc = self.fascicles.keys()
+        elif not np.iterable(id_fasc):
+            id_fasc = [id_fasc]
+        for i_fasc in id_fasc:
+            if i_fasc in self.fascicles:
+                fasc = self.fascicles[i_fasc]
+                n += fasc.n_ax
+        return n
+    n_ax = property(get_n_ax)
+
     def set_ID(self, ID):
         """
         set the ID of the fascicle
@@ -455,7 +471,7 @@ class nerve(NRV_simulable):
                 self.__merge_fascicular_context(self.fascicles[fasc.ID])
                 self.fascicles[fasc.ID].define_length(self.L)
 
-    def __check_fascicle_overlap(self, fasc):
+    def __check_fascicle_overlap(self, fasc:fascicle):
         for fasc_i in self.fascicles.values():
             dist_yz = (fasc.y_grav_center - fasc_i.y_grav_center) ** 2 + (
                 fasc.z_grav_center - fasc_i.z_grav_center
@@ -505,9 +521,9 @@ class nerve(NRV_simulable):
                     rise_warning(kwargs[key], " is not an implemented axon model")
             else:
                 if not myelinated_only and key in self.unmyelinated_param:
-                    self.unmyelinated_param["model"] = kwargs[key]
+                    self.unmyelinated_param[key] = kwargs[key]
                 if not unmyelinated_only and key in self.myelinated_param:
-                    self.myelinated_param["model"] = kwargs[key]
+                    self.myelinated_param[key] = kwargs[key]
 
         ## Specific keys
         if "unmyelinated_nseg" in kwargs:
@@ -733,6 +749,9 @@ class nerve(NRV_simulable):
             fasc.record_particles = self.record_particles
             fasc.postproc_script = self.postproc_script
 
+
+
+    # Footprint and mesh
     def compute_electrodes_footprints(self, **kwargs):
         """
         compute electrodes footprints
@@ -752,6 +771,7 @@ class nerve(NRV_simulable):
                 for fasc in self.fascicles.values():
                     fasc.compute_electrodes_footprints()
             self.is_footprinted = True
+
 
     ## SIMULATION
     def simulate(

@@ -10,64 +10,17 @@ from scipy import signal
 
 from ...backend.file_handler import is_iterable, json_dump, json_load
 from ...backend.log_interface import pass_info, rise_warning, rise_error
-from ..units import *
+from ...backend.NRV_Class import load_any
+from ..units import MHz
+from ..misc import distance_point2line
 from ...nmod.unmyelinated import unmyelinated
 from ...nmod.myelinated import myelinated
-from ...backend.NRV_Class import load_any
+
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
 
-#############################
-## miscellaneous functions ##
-#############################
-def distance_point2point(x_1, y_1, x_2=0, y_2=0):
-    """
-    Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
-
-    Parameters
-    ----------
-    x_1 : float
-        first point x coordinate,
-    y_1 : float
-        firstpoint y coordinate,
-    x_2 : float
-        second point x coordinate, by default 0
-    y_2 : float
-        second point y coordinate, , by default 0
-
-    Returns
-    --------
-    d : float
-        distance between the point and the orthogonal projection of (x_p,y_p) on it
-    """
-    d = ((x_1 - x_2) ** 2 + (y_1 - y_2) ** 2) ** 0.5
-    return d
-
-
-def distance_point2line(x_p, y_p, a, b):
-    """
-    Computes the distance between a point (x_p,y_p) and a line defined as y=a*x+b
-
-    Parameters
-    ----------
-    x_p : float
-        point x coordinate,
-    y_p : float
-        point y coordinate,
-    a   : float
-        line direction coeefficient
-    b   : float
-        line y for x = 0
-
-    Returns
-    --------
-    d : float
-        distance between the point and the orthogonal projection of (x_p,y_p) on it
-    """
-    d = np.abs(a * x_p - y_p + b) / (np.sqrt(a**2 + 1))
-    return d
 
 
 #####################################

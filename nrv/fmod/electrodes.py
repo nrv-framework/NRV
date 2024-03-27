@@ -395,7 +395,7 @@ class LIFE_electrode(FEM_electrode):
                 y_c=self.y,
                 z_c=self.z,
                 length=self.length,
-                D=self.D,
+                d=self.D,
                 is_volume=self.is_volume,
                 res=res,
             )

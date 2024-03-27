@@ -22,7 +22,7 @@ if not is_mesh:
     mesh.reshape_outerBox(res=2000)
     mesh.reshape_nerve(res=500)
 
-    mesh.reshape_fascicle(D=2000, y_c=1000, z_c=0, ID=1, res=100)
+    mesh.reshape_fascicle(d=2000, y_c=1000, z_c=0, ID=1, res=100)
 
 
     mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=L/2, y_c=0, z_c=0, size=size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
@@ -38,7 +38,7 @@ else:
     t1 = time.time()
 
 # FEM Simulation
-param = nrv.SimParameters(D=3, mesh_file=mesh_file)
+param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
 param.add_domain(mesh_domain=0,mat_file="saline")
 param.add_domain(mesh_domain=2,mat_file="epineurium")
 param.add_domain(mesh_domain=12,mat_file="silicone")
@@ -65,7 +65,7 @@ res1 = sim1.solve()
 ## Check result savings
 res1.save(out_file1, ftype='res')
 print('res1 saved')
-res2 = nrv.SimResult()
+res2 = nrv.FEMResults()
 res2.load(out_file1)
 print('res1 loaded')
 

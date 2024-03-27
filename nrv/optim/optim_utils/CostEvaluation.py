@@ -155,7 +155,7 @@ class recrutement_count_CE(CostEvaluation):
 
     def count_fascicle_activation(self, results: sim_results):
         cpt = 0
-        for i in range(results["N"]):
+        for i in range(len(results["axons_diameter"])):
             if self.reverse:
                 cpt += 1 - results["axon" + str(i)]["spike"]
             else:

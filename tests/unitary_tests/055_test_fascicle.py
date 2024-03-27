@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 
 
 # parameters for the test fascicle
-D = 25				# diameter, in um
+d = 25				# diameter, in um
 L = 10000 			# length, in um
 
 fascicle_1 = nrv.fascicle()
 fascicle_1.define_length(L)
-fascicle_1.define_circular_contour(D)
+fascicle_1.define_circular_contour(d)
 fascicle_1.fill()
 
 if nrv.MCH.do_master_only_work():

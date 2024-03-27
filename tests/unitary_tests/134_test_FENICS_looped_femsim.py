@@ -1,5 +1,6 @@
 import nrv
-import time
+from time import perf_counter
+import matplotlib.pyplot as plt
 
 nrv.parameters.set_nrv_verbosity(2)
 
@@ -9,7 +10,7 @@ fname0 = './unitary_tests/sources/131_0.csv'
 fname1 = './unitary_tests/sources/131_1.csv'
 
 
-param = nrv.SimParameters(D=3, mesh_file=filename)
+param = nrv.FEMParameters(D=3, mesh_file=filename)
 param.add_domain(mesh_domain=0,mat_pty="saline")
 param.add_domain(mesh_domain=2,mat_pty=1)
 param.add_domain(mesh_domain=12,mat_pty=fname0)
@@ -20,7 +21,7 @@ for i_elec in range(N_elec):
     param.add_domain(mesh_domain=100+(2*i_elec),mat_pty=1)
 
 
-t1 = time.time()
+
 E = 0
 E_ = 4
 Eref = 2
@@ -85,9 +86,10 @@ sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 1))
 
 i = 0 
 test = True
+t = []
+t_1 = perf_counter() 
 while test and i < ilim:
     i+=1
-
     print(" "+str(i)+ "/"+str(ilim), end="\r")
     sim1.add_domain(mesh_domain=12,mat_pty=1000)
 
@@ -97,7 +99,16 @@ while test and i < ilim:
     sim1.add_domain(mesh_domain=12,mat_pty=0.01)
     sim1.setup_sim(jstim=jstim, _jstim=-jstim)
     sim1.solve()
+    t_n = perf_counter()
+    t += [t_n - t_1]
+    t_1 = t_n
     test = test and (E2_ref == round(sim1.get_domain_potential(101), 6))
 print()
 print(E1_ref != E2_ref)
 print(test)
+
+plt.figure()
+plt.plot(t)
+plt.savefig("./unitary_tests/figures/134_A.png")
+
+#plt.show()

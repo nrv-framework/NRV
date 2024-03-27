@@ -59,8 +59,8 @@ mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2
 mesh.set_chara_blen()
 mesh.reshape_outerBox(res=Nerve_D/10)
 mesh.reshape_nerve(res=fasc_D[0]/10)
-mesh.reshape_fascicle(D=fasc_D[0], y_c=fasc_y_c[0], z_c=fasc_z_c[0], res=fasc_D[0]/10)
-mesh.reshape_fascicle(D=fasc_D[1], y_c=fasc_y_c[1], z_c=fasc_z_c[1], res=fasc_D[1]/10)
+mesh.reshape_fascicle(d=fasc_D[0], y_c=fasc_y_c[0], z_c=fasc_z_c[0], res=fasc_D[0]/10)
+mesh.reshape_fascicle(d=fasc_D[1], y_c=fasc_y_c[1], z_c=fasc_z_c[1], res=fasc_D[1]/10)
 
 mesh.refinement_callback(meshSizeCallback2)
 mesh.compute_mesh()

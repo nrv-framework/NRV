@@ -11,7 +11,7 @@ fasc_file = DIR + "figures/506_fascicle_1.json"
 ##########################
 ## Fascicle declaration ##
 ##########################
-N = 30
+N = 17
 t0 = time.time()
 axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
 
@@ -20,13 +20,13 @@ t1 = time.time()
 print("Population of "+str(N)+" axons generated in "+str(t1 - t0)+" s")
 
 
-D = 500				# diameter, in um
+d = 500				# diameter, in um
 L = 10000 			# length, in um
 
 fascicle_1 = nrv.fascicle(ID=test_num)
 fascicle_1.define_length(L)
-fascicle_1.define_circular_contour(D)
-fascicle_1.fill_with_population(axons_diameters, axons_type, Delta=4)
+fascicle_1.define_circular_contour(d)
+fascicle_1.fill_with_population(axons_diameters, axons_type, Delta=5)
 fascicle_1.fit_circular_contour(Delta = 0.1)
 fascicle_1.generate_random_NoR_position()
 t2 = time.time()

@@ -9,7 +9,7 @@ d=10
 
 stim = nrv.stimulation()
 # ### Simulation box size
-D = 25
+d = 25
 length = 1000
 x_elec = 0				# electrode x position, in [um]
 y_elec = 100				# electrode y position, in [um]

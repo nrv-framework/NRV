@@ -3,9 +3,12 @@ NRV-:class:`.NerveMshCreator` handling.
 """
 from cmath import phase
 import numpy as np
+from math import log10, floor
 
-from ....backend.NRV_Class import NRV_class
+from ....backend.NRV_Class import NRV_class, load_any
 from ....backend.log_interface import rise_error, rise_warning
+from ....backend.MCore import MCH
+#from ....nmod.myelinated import myelinated
 from ....utils.units import mm
 from ....backend.file_handler import rmv_ext
 from .MshCreator import MshCreator, pi
@@ -195,14 +198,15 @@ class NerveMshCreator(MshCreator):
         if self.is_generated and self.file != "":
             super().load(self.file)
 
-    def compute_mesh(self):
+    def compute_mesh(self, master_only=True):
         """
         Compute mesh geometry, domains and resolution and then generate the mesh
         """
-        self.compute_geo()
-        self.compute_domains()
-        self.compute_res()
-        self.generate()
+        if  MCH.do_master_only_work() or not master_only:
+            self.compute_geo()
+            self.compute_domains()
+            self.compute_res()
+            self.generate()
 
     def set_gnd_facet(self, outfacet=None, lfacet=None, rfacet=None):
         """
@@ -242,15 +246,14 @@ class NerveMshCreator(MshCreator):
                 if self.default_res["Outerbox_tresholded"]:
                     self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
             self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
-            for i in self.fascicles:
-                fascicle = self.fascicles[i]
-                self.add_cylinder(
-                    0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["D"] / 2
-                )
 
+            for fascicle in self.fascicles.values():
+                self.add_cylinder(
+                    0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["d"] / 2
+                )
             for i in self.axons:
-                axon = self.axons[i]
-                self.add_cylinder(0, axon["y_c"], axon["z_c"], self.L, axon["D"] / 2)
+                self.add_axon(i)
+
             for i in self.electrodes:
                 electrode = self.electrodes[i]
                 if "CUFF MP" in electrode["type"]:
@@ -326,13 +329,13 @@ class NerveMshCreator(MshCreator):
         if self.default_res["Nerve"] > self.Nerve_D / 5:
             self.default_res["Nerve"] = self.Nerve_D / 5
 
-    def reshape_fascicle(self, D, y_c=0, z_c=0, ID=None, res="default"):
+    def reshape_fascicle(self, d, y_c=0, z_c=0, ID=None, res="default"):
         """
         Reshape a fascicle of the FEM simulation
 
         Parameters
         ----------
-        Fascicle_D  : float
+        d  : float
             Fascicle diameter, in um
         y_c         : float
             Fascicle center y-coodinate in um, 0 by default
@@ -350,13 +353,13 @@ class NerveMshCreator(MshCreator):
 
         if res == "default":
             res = self.default_res["Fascicle"]
-        if D / 5 < res:
-            res = D / 5
+        if d / 5 < res:
+            res = d / 5
 
         self.fascicles[ID] = {
             "y_c": y_c,
             "z_c": z_c,
-            "D": D,
+            "d": d,
             "res": res,
             "face": None,
             "volume": None,
@@ -378,13 +381,13 @@ class NerveMshCreator(MshCreator):
             del self.fascicles[ID]
             self.N_fascicle -= 1
 
-    def reshape_axon(self, D, y_c=0, z_c=0, ID=None, res="default"):
+    def reshape_axon(self, d, y=0, z=0, ID=None, myelinated=False, res="default", res_node="default",**kwargs):
         """
         Reshape a axon of the FEM simulation
 
         Parameters
         ----------
-        Fascicle_D  : float
+        d  : float
             Fascicle diameter, in um
         y_c         : float
             Fascicle center y-coodinate in um, 0 by default
@@ -402,17 +405,22 @@ class NerveMshCreator(MshCreator):
 
         if res == "default":
             res = self.default_res["Axon"]
-        if D / 3 < res:
-            res = D / 3
+        if d / 3 < res:
+            res = d / 3
+        if res_node == "default":
+            res_node = res / 3
 
-        self.axons[ID] = {
-            "y_c": y_c,
-            "z_c": z_c,
-            "D": D,
+        self.axons[ID] = kwargs
+        self.axons[ID].update({
+            "y": y,
+            "z": z,
+            "d": d,
+            "myelinated": myelinated,
             "res": res,
-            "face": None,
-            "volume": None,
-        }
+            "res_node": res_node,
+            "face": [],
+            "volume": [],
+        })
 
     def add_electrode(self, elec_type, ID=None, res="default", **kwargs):
         """ """
@@ -439,12 +447,12 @@ class NerveMshCreator(MshCreator):
             res = self.default_res["Electrode"]
 
         if "LIFE" in elec_type:
-            if "D" in kwargs:
-                D = kwargs["D"]
+            if "d" in kwargs:
+                d = kwargs["d"]
             else:
-                D = 25
-            if D / 3 < res:
-                res = D / 3
+                d = 25
+            if d / 3 < res:
+                res = d / 3
 
         self.electrodes[ID] = {"type": elec_type, "res": res, "kwargs": kwargs}
 
@@ -456,8 +464,8 @@ class NerveMshCreator(MshCreator):
         if not self.is_geo:
             rise_error("compute geometry before domain")
         elif not self.is_dom:
-            self.__link_entity_domains(2)
-            self.__link_entity_domains(3)
+            self.__link_entity_domains(dim=2)
+            self.__link_entity_domains(dim=3)
             self.compute_entity_domain()
             self.is_dom = True
 
@@ -526,15 +534,55 @@ class NerveMshCreator(MshCreator):
         # Already computed
         status_test = fascicle[dim_key] is None
         # test good diameter
-        size_test = np.allclose([dx, dy, dz], [self.L, fascicle["D"], fascicle["D"]])
+        size_test = np.allclose([dx, dy, dz], [self.L, fascicle["d"], fascicle["d"]])
         # test center of mass in fascicle
         com_test = np.allclose(
             com,
             (self.L / 2, fascicle["y_c"], fascicle["z_c"]),
             rtol=1,
-            atol=fascicle["D"] / 2,
+            atol=fascicle["d"] / 2,
         )
         return status_test and size_test and com_test
+
+
+    def __is_axon_node(self, ID, dx, dy, dz, com, dim_key):
+        """
+        Internal use only: check if volume is axon ID or face is external face of axon ID
+
+        Parameters
+        ----------
+        ID          :int
+            ID of axon to test
+        dx          : float
+            length along x of the entity boundbox
+        dy          : float
+            length along y of the entity boundbox
+        dz          : float
+            length along z of the entity boundbox
+        com         : tupple(float)
+            entity Center of Mass
+        dim_key     :"face" or "volume"
+            element type
+        """
+        axon = self.axons[ID]
+        # Already computed
+        if not axon["myelinated"]:
+            return False
+        
+        # test good diameter
+        size_test = np.allclose([dx, dy, dz], [axon["node_l"], axon["node_d"], axon["node_d"]])
+
+        # test first and last node
+        if "first_node_l" in axon and not size_test:
+            size_test = np.allclose([dx, dy, dz], [axon["first_node_l"], axon["node_d"], axon["node_d"]])
+        if "last_node_l" in axon and not size_test:
+            size_test = np.allclose([dx, dy, dz], [axon["last_node_l"], axon["node_d"], axon["node_d"]])
+
+        # test center of mass in axon
+        com_test = np.allclose(
+            com[1:], (axon["y"], axon["z"])
+        )
+        return size_test and com_test
 
     def __is_axon(self, ID, dx, dy, dz, com, dim_key):
         """
@@ -557,12 +605,13 @@ class NerveMshCreator(MshCreator):
         """
         axon = self.axons[ID]
         # Already computed
-        status_test = axon[dim_key] is None
+        status_test = True#axon[dim_key] is None
         # test good diameter
-        size_test = np.allclose([dx, dy, dz], [self.L, axon["D"], axon["D"]])
+        size_test = np.allclose([dy, dz], [axon["d"], axon["d"]])
+        size_test &= not np.isclose(dx, 0)
         # test center of mass in axon
         com_test = np.allclose(
-            com, (self.L / 2, axon["y_c"], axon["z_c"]), rtol=1, atol=axon["D"] / 2
+            com[1:], (axon["y"], axon["z"]), atol=axon["d"] / 2
         )
         return status_test and size_test and com_test
 
@@ -650,13 +699,13 @@ class NerveMshCreator(MshCreator):
             return False
         # test good diameter
         size_test = np.allclose(
-            [dx, dy, dz], [elec_kwargs["length"], elec_kwargs["D"], elec_kwargs["D"]]
+            [dx, dy, dz], [elec_kwargs["length"], elec_kwargs["d"], elec_kwargs["d"]]
         )
         # test center of mass in LIFE
         com_test = np.allclose(
             com,
             (elec_kwargs["x_c"], elec_kwargs["y_c"], elec_kwargs["z_c"]),
-            atol=elec_kwargs["D"] / 2,
+            atol=elec_kwargs["d"] / 2,
         )
         return size_test and com_test
 
@@ -699,8 +748,11 @@ class NerveMshCreator(MshCreator):
                     self.fascicles[j][key] = entities[i][1]
 
             for j in self.axons:
-                if self.__is_axon(j, bd_x, bd_y, bd_z, ent_com[i], key):
-                    self.axons[j][key] = entities[i][1]
+                if self.__is_axon_node(j, bd_x, bd_y, bd_z, ent_com[i], key):
+                    node_id = int(ent_com[i][0] // self.axons[j]["deltax"])
+                    self.axons[j]["nodes_"+key][node_id] = [entities[i][1]]
+                elif self.__is_axon(j, bd_x, bd_y, bd_z, ent_com[i], key):
+                    self.axons[j][key] += [entities[i][1]]
 
             for j in self.electrodes:
                 r_c = (
@@ -764,11 +816,22 @@ class NerveMshCreator(MshCreator):
             else:
                 rise_warning("Too much Fascicles: " + str(j) + " not added")
 
-        for j in self.axons:
+        for j, ax in self.axons.items():
             id_ph = ENT_DOM_offset["Axon"] + (2 * j)
-            self.add_domains(obj_IDs=self.axons[j]["volume"], phys_ID=id_ph, dim=3)
+            self.add_domains(obj_IDs=ax["volume"], phys_ID=id_ph, dim=3)
             id_ph += ENT_DOM_offset["Surface"]
-            self.add_domains(obj_IDs=self.axons[j]["face"], phys_ID=id_ph, dim=2)
+            self.add_domains(obj_IDs=ax["face"], phys_ID=id_ph, dim=2)
+            # adding one physical domain by node
+            if ax["myelinated"]:
+                for i_node in range(len(ax["nodes_volume"])):
+                    node_id = 2 * i_node
+                    n = floor(log10(node_id+1)+1)
+                    ax_id = (ENT_DOM_offset["Axon"] + (2 * j)) * 10**n
+                    id_ph = node_id + ax_id
+                    self.add_domains(obj_IDs=ax["nodes_volume"][i_node], phys_ID=id_ph, dim=3)
+                    id_ph += ENT_DOM_offset["Surface"]
+                    self.add_domains(obj_IDs=ax["nodes_face"][i_node], phys_ID=id_ph, dim=2)
+
 
         for j in self.electrodes:
             id_ph = ENT_DOM_offset["Electrode"] + (2 * j)
@@ -825,8 +888,7 @@ class NerveMshCreator(MshCreator):
                 )
             ]
             # Facsicle fields
-            for j in self.fascicles:
-                fascicle = self.fascicles[j]
+            for fascicle in self.fascicles.values():
                 fields += [
                     self.refine_entities(
                         ent_ID=fascicle["volume"],
@@ -837,21 +899,11 @@ class NerveMshCreator(MshCreator):
                     )
                 ]
             # Axon fields
-            for j in self.axons:
-                axon = self.axons[j]
-                fields += [
-                    self.refine_entities(
-                        ent_ID=axon["volume"],
-                        res_in=axon["res"],
-                        dim=3,
-                        res_out=None,
-                        IncludeBoundary=True,
-                    )
-                ]
-            # Electrodes fields
-            for j in self.electrodes:
-                electrode = self.electrodes[j]
+            for axon in self.axons.values():
+                fields += self.__refine_axon(axon)
 
+            # Electrodes fields
+            for electrode in self.electrodes.values():
                 if electrode["type"] in ["CUFF MEA", "CUFF MP"]:
                     for ID_EA in range(electrode["kwargs"]["N"]):
                         fields += [
@@ -873,9 +925,37 @@ class NerveMshCreator(MshCreator):
                             IncludeBoundary=True,
                         )
                     ]
-
             self.refine_min(fields)
             self.is_refined = True
+
+    def __refine_axon(self, axon):
+        """
+        
+        """
+        # First set the field for unmyelinated axon or myeline
+        fields = [
+            self.refine_entities(
+                ent_ID=axon["volume"],
+                res_in=axon["res"],
+                dim=3,
+                res_out=None,
+                IncludeBoundary=True,
+            )
+        ]
+        # Then set the field for myelinated axon nodes
+        if axon["myelinated"]:
+            for i in range(len(axon["nodes_volume"])):
+                fields += [
+                    self.refine_entities(
+                        ent_ID=axon["nodes_volume"][i],
+                        res_in=axon["res_node"],
+                        dim=3,
+                        res_out=None,
+                        IncludeBoundary=True,
+                    )
+                ]
+        return fields
+
 
     def __refine_Outer_box(self, alpha=0.1):
         """ """
@@ -904,12 +984,90 @@ class NerveMshCreator(MshCreator):
             ]
         return field
 
-    ####################################################################################################
-    ###################################   electrodes definition  #######################################
-    ####################################################################################################
+    ################################################################
+    ############## complex volumes adding methods ##################
+    ################################################################
+    def add_axon(self, ID):
+        """
+        Add an axon to the mesh.
+
+        Note
+        ----
+         - if the axon is unmyelinated this method add only a cylinder to the mesh
+        
+        Parameters
+        ----------
+        """
+        axon = self.axons[ID]
+        res_min = axon["res_node"]
+        if not axon["myelinated"]:
+            self.add_cylinder(0, axon["y"], axon["z"], self.L, axon["d"]/2)
+        else:
+            axon.update({
+                "L": self.L,
+                "rec":"all",
+                "N_seg_per_sec":True,
+                "__NRVObject__":True,
+                "nrv_type":"myelinated",
+            })
+            # Ideally it would be easier to use: ax = myelinated(**axon)
+            # But myelinated cannot be imported without causing an import loop
+            ax = load_any(data=axon)
+            x = ax.first_section_size
+            init_l = 0
+            n_nodes = 0
+            for sec in ax.axon_path_type[1:-1]:
+                if sec == "node":
+                    r_sec = ax.nodeD/2
+                    l_sec = ax.nodelength
+                    n_nodes += 1
+                else:
+                    r_sec = ax.d/2
+                    if sec == "MYSA":
+                        l_sec = ax.paralength1
+                    elif sec == "FLUT":
+                        l_sec = ax.paralength2
+                    elif sec == "STIN":
+                        l_sec = ax.interlength
+
+                # mrege the first (last) section with the next (previous) when it is too small
+                if  abs(x - l_sec) < res_min:
+                    init_l += l_sec
+                    ax.axon_path_type.pop(0)
+                    x += l_sec
+                elif abs(self.L - (l_sec + x)) < res_min:
+                    ax.axon_path_type.pop(-1)
+                else:
+                    self.add_cylinder(x, ax.y, ax.z, l_sec, r_sec)
+                    x += l_sec
+            # adding first section
+            if ax.axon_path_type[0] == "node":
+                r_sec = ax.nodeD/2
+                n_nodes += 1
+                self.axons[ID]["first_node_l"] = ax.first_section_size + init_l
+            else:
+                r_sec = ax.d/2
+            self.add_cylinder(0, ax.y, ax.z, ax.first_section_size + init_l, r_sec)
+            # adding first section
+            if ax.axon_path_type[-1] == "node":
+                r_sec = ax.nodeD/2
+                n_nodes += 1
+                self.axons[ID]["last_node_l"] = self.L-x
+            else:
+                r_sec = ax.d/2
+            self.add_cylinder(x, ax.y, ax.z, self.L-x, r_sec)
+
+            self.axons[ID]["node_d"] = ax.nodeD
+            self.axons[ID]["node_l"] = ax.nodelength
+            self.axons[ID]["deltax"] = ax.deltax
+            self.axons[ID]["n_nodes"] = n_nodes
+            self.axons[ID]["nodes_volume"] = [None for _ in range(n_nodes)]
+            self.axons[ID]["nodes_face"] = [None for _ in range(n_nodes)]
+            del ax
+
 
     def add_LIFE(
-        self, ID=None, x_c=0, y_c=0, z_c=0, length=1000, D=25, is_volume=False
+        self, ID=None, x_c=0, y_c=0, z_c=0, length=1000, d=25, is_volume=False
     ):
         """
         Add LIFE electrode to the mesh
@@ -926,7 +1084,7 @@ class NerveMshCreator(MshCreator):
             z-position of the LIFE center in um, by default 0
         length      :float
             length of the LIFE electrod in um, by default 1000
-        D           :float
+        d           :float
             diameter of the LIFE electrod in um, by default 25
         is_volume   : bool
             if True in cylinder of the LIFE is kept on the mesh
@@ -940,7 +1098,7 @@ class NerveMshCreator(MshCreator):
         x_active = x_c - length / 2
         y_active = y_c
         z_active = z_c
-        self.add_cylinder(x_active, y_active, z_active, length, D / 2)
+        self.add_cylinder(x_active, y_active, z_active, length, d / 2)
 
     def add_CUFF(
         self,
