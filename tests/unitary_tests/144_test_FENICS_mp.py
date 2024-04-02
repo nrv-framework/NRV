@@ -49,9 +49,7 @@ fascicle_2 = nrv.load_any(fascicle_1.save(save=False))
 fascicle_1.compute_electrodes_footprints()
 
 if nrv.MCH.do_master_only_work():
-    nrv.parameters.set_nrv_verbosity(4)
-    fascicle_1.extra_stim.model.get_timers(verbose=True)
-    nrv.parameters.set_nrv_verbosity(2)
+    _, _, _, t_fem = fascicle_1.extra_stim.model.get_timers(verbose=False)
 del fascicle_1
 
 
@@ -68,11 +66,11 @@ fascicle_2.set_ID(Ntest*10+1)
 fascicle_2.attach_extracellular_stimulation(stim2)
 fascicle_2.compute_electrodes_footprints()
 if nrv.MCH.do_master_only_work():
-    nrv.parameters.set_nrv_verbosity(4)
-    fascicle_2.extra_stim.model.get_timers(verbose=True)
-    nrv.parameters.set_nrv_verbosity(2)
+    _, _, _, t_fem_mp = fascicle_2.extra_stim.model.get_timers(verbose=False)
+    n_proc = fascicle_2.extra_stim.model.Ncore
+    print(f"Single proc simulation : {t_fem} s\n {n_proc}-proc simulation:{t_fem_mp} s")
+
 
 #fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_excited')
-t1 = time.time()
+
 nrv.synchronize_processes()
-print('simulation done in ' + str(t1-t0))

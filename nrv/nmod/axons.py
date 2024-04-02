@@ -1089,10 +1089,10 @@ class axon(NRV_simulable):
                 self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
 
         except KeyboardInterrupt:
-            """rise_error(
-                "\n Caught KeyboardInterrupt, simulation stoped by user, stopping process..."
-            )"""
-            raise KeyboardInterrupt
+            rise_error(
+                KeyboardInterrupt,
+                "\n Caught KeyboardInterrupt, simulation stoped by user, stopping process...",
+            )
         except:
             axon_sim["Simulation_state"] = "Unsuccessful"
             axon_sim["Error_from_prompt"] = traceback.format_exc()

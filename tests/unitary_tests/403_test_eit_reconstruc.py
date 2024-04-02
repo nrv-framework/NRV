@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import sys
 
-import pyeit.eit.bp as bp
 import pyeit.eit.jac as jac
 import pyeit.eit.protocol as protocol
 import pyeit.mesh as mesh
@@ -25,6 +24,8 @@ def check_sim_dom(sim:nrv.FEMSimulation, mesh:nrv.NerveMshCreator):
 test_num = "403"
 mesh_file = f"./unitary_tests/results/mesh/{test_num}_mesh"
 sim_file = "./unitary_tests/results/outputs/" + test_num + "_simres"
+fig_file = f"./unitary_tests/figures/{test_num}_"
+
 dir_res = "./unitary_tests/figures/"
 ## Generate the nerve 
 t_sim, dt = 10, 0.005
@@ -118,9 +119,11 @@ if nrv.MCH.do_master_only_work():
     plt.figure()
     plt.plot(V)
     plt.plot(V1)
+    plt.savefig(fig_file+"A.png")
 
 
-    prot = nrv.simple_pyeit_protocol(n_elec=n_elec, inj_offset=e_offset)-1
+
+    prot = nrv.pyeit_protocol(n_elec=n_elec, inj_offset=e_offset)-1
     v0 = []
     v1 = []
     for inj, rec in prot:
@@ -152,6 +155,8 @@ if nrv.MCH.do_master_only_work():
     fig.colorbar(im)
     #plt.savefig(DIR_res+"reconstruction.png", dpi=500)
     plt.tight_layout()
+    plt.savefig(fig_file+"B.png")
+
     #plt.show()
 
 

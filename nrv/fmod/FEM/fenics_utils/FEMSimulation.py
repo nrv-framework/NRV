@@ -528,7 +528,7 @@ class FEMSimulation(FEMParameters):
         return self.petsc_opt
 
     def set_solver_opt(
-        self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None
+        self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None, **kwargs,
     ):
         """
         set krylov solver options
@@ -563,6 +563,13 @@ class FEMSimulation(FEMParameters):
             self.petsc_opt["ksp_atol"] = ksp_atol
         if ksp_max_it is not None:
             self.petsc_opt["ksp_max_it"] = ksp_max_it
+        for key in kwargs:
+            if "pc" in key and self.petsc_opt["pc_type"] in key:
+                self.petsc_opt[key] = kwargs[key]
+            elif "ksp" in key and self.petsc_opt["ksp_type"] in key:
+                self.petsc_opt[key] = kwargs[key]
+            else:
+                rise_warning(key + " is not a valid solver option not set")
 
     def set_result_merging(self, to_merge=None):
         if isinstance(to_merge, bool):

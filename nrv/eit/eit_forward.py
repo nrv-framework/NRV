@@ -1,14 +1,16 @@
 from ..backend.NRV_Class import NRV_class
+from ..backend.log_interface import rise_error
 
 
 
-class eit(NRV_class):
+class eit_forward(NRV_class):
     """
     Class allowing to simulate Electircal Impedance Tomography in a nerve
     """
-    def __init__():
-        _nerve = None
-        _protocol = None
+    def __init__(self):
+        super().__init__()
+        self._nerve = None
+        self._protocol = None
 
     @property
     def nerve(self):
@@ -34,4 +36,7 @@ class eit(NRV_class):
     @protocol.deleter
     def protocol(self, p):
         self._protocol = None
+
+    def simulate():
+        rise_error(NotImplementedError)
 

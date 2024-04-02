@@ -97,4 +97,4 @@ from .optim.optim_utils.CostEvaluation import *
 from .optim.optim_utils.OptimFunctions import *
 
 
-from .eit.Protocol import simple_pyeit_protocol
+from .eit.Protocol import pyeit_protocol

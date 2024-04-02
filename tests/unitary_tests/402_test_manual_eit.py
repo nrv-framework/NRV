@@ -20,6 +20,8 @@ def check_sim_dom(sim:nrv.FEMSimulation, mesh:nrv.NerveMshCreator):
 test_num = "169"
 mesh_file = f"./unitary_tests/results/mesh/{test_num}_mesh"
 sim_file = "./unitary_tests/results/outputs/" + test_num + "_simres"
+fig_file = f"./unitary_tests/figures/{test_num}_"
+
 dir_res = "./unitary_tests/figures/"
 ## Generate the nerve 
 t_sim, dt = 10, 0.005
@@ -122,8 +124,6 @@ if nrv.MCH.do_master_only_work():
 
 
     sim1.add_domain(mesh_domain=10,mat_pty=1.2)
-
-
     V1 = np.zeros((n_elec, n_elec))
     dV1 = np.zeros((n_elec, n_elec))
     for i_patern in tqdm(range(n_elec)):
