@@ -1,6 +1,6 @@
-====================================
-Generating simple to complex stimuli
-====================================
+=======
+Stimuli
+=======
 
 currently writting it!
 

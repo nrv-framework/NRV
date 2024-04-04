@@ -1,5 +1,8 @@
-=================================================================
-A Deeper review of simulable objects: Axons, Fascicles and nerves
-=================================================================
+=================
+Simulable objects
+=================
 
-From the user perspective, Simulable objects in NRV includes: axons fibers, fascicles and whole nerves. Any NRV simulation is triggered using a common method called *simulate()*. 
+In NRV, all simulations can be launched by objects that have a physiological meaning:
+
+1. **axons** or individual fibers. These fibers can be mylinated or unmyelinated and few models are already implemented.
+2. **fascicles**: containing one or several axons. 

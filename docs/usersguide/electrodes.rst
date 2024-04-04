@@ -1,5 +1,5 @@
-=======================================================
-Exhaustive list of electrodes and associated geometries
-=======================================================
+==========
+Electrodes
+==========
 
 currently writting it!
