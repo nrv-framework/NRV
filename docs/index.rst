@@ -19,8 +19,9 @@ NRV has been developped by contributors from the CELL research group at the Labo
 
    introduction
    installation
-   quickstart 
    scientific
+   tutorials
+   usersguide
    examples
    devcorner
    modules
