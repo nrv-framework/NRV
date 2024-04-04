@@ -1174,7 +1174,7 @@ class axon(NRV_simulable):
                 electrodes_z = []
                 for electrode in self.extra_stim.electrodes:
                     if is_CUFF_electrode(electrode):
-                        electrodes_x.append(electrode.x_center)
+                        electrodes_x.append(electrode.x)
                         electrodes_y.append(0)
                         electrodes_z.append(0)
                         electrodes_type.append("CUFF")
