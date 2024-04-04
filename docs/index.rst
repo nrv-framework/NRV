@@ -23,9 +23,8 @@ NRV has been developped by contributors from the CELL research group at the Labo
    tutorials
    usersguide
    examples
-   devcorner
    modules
-
+   devcorner
 
 
 Indices and tables

@@ -1,5 +1,5 @@
-nrv package
-===========
+nrv Framework
+=============
 
 Module contents
 ---------------
