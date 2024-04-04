@@ -97,18 +97,20 @@ def load_material(f_material):
 def compute_effective_conductivity(sigma:float, epsilon:float, freq:float)->float:
     r"""
     return the effective conductivity of the material.
-
     Two cases are psooible:
-            - purely conductive material (when both `epsilon` or `freq` are set)
-            .. math:: \sigma_{eff} = \sigma
-            - dielectric material at a fixe frequency:
-            .. math:: \sigma_{eff} = |\sigma+2j\pif\epsilon_0\epsilon_r|
+    
+        - purely conductive material (when both `epsilon` or `freq` are set)
+
+        .. math:: \sigma_{eff} = \sigma
+
+        - dielectric material at a fixe frequency:
+
+        .. math:: \sigma_{eff} = |\sigma+2j\pi f\epsilon_0\epsilon_r|
 
     Parameters
     ----------
     sigma   : float
         conductivity
-
     """
     if epsilon is None or freq is None :
         return sigma

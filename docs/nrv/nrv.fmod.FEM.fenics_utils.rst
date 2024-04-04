@@ -29,7 +29,7 @@ nrv.fmod.FEM.fenics\_utils.FEMParameters module
    :show-inheritance:
 
 nrv.fmod.FEM.fenics\_utils.FEMResults module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: nrv.fmod.FEM.fenics_utils.FEMResults
    :members:
