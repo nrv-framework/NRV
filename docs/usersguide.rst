@@ -17,20 +17,60 @@ Before going furthern, it worths to mention that NRV is designed using Oriented-
 * Python is by nature object oriented, and actions such as simulation, condifugration are naturally described and attached to main object.
 
 Objects in NRV all inherit from an abstract class (called ``NRV_Class``) tha give them two spcial properties:
+
 1. All objects can be saved as dictionary or in json files, so that any simulation, optimization problem or any implementation in general can be saved.
 2. All objects can be described using a dictionary or a json file.
 
 these two points and their consequences on syntax are described hereafter.
 
-Note on object instantation
-===========================
-
-*to be written*
 
 Note on object saving
 =====================
 
-*to be written*
+As express above all classes inheriting from ``NRV_Class`` can be saved and loaded in python dictionary or json files. 
+Let's see bellow a first example showing how to save a simple `unmyelinated` axon object.
+
+::
+
+    y = 0                       # axon y position, in [um]
+    z = 0                       # axon z position, in [um]
+    d = 1                       # axon diameter, in [um]
+    L = 5000                    # axon length, along x axis, in [um]
+    axon1 = nrv.unmyelinated(y,z,d,L)
+
+    ax_dict = axon1.save()
+
+This code first create an unmyelinated axon as seen in ``(first-steps-into-nrv-a-simple-axon)``. Then a python dictionary containing all this axon properties is generated in ``ax_dict``. To prevent the creation of unwanted files, the save method of most of ``NRV_Class`` object does not save this dictionary into a `.json` file by defaults. 
+
+To actually save the axon properties in a `.json` file, a `save`argument has to be set to ``True`` as bellow.
+
+::
+
+    filename = "ax_file.json"
+    ax_dict = axon1.save(save=True, fname=filename)
+
+Note that the ``save`` method impose the extension of the file to be `json`. It is then not necessary to precise it in the filename and in the case where the filename does not and with `json`, this suffix is automatically added.
+
+This ``save`` method comes together with a ``load`` method which allow to load the data of the instance from a python dictionary or a `json` file
+
+
+::
+
+    del axon1
+
+    axon2 = nrv.unmyelinated()
+    axon2.load(ax_dict)
+    print(axon2.L == L)
+
+    del axon2
+    axon3 = nrv.unmyelinated()
+    axon3.load(filename)
+    print(axon3.L == L)
+
+
+Note on object instantiation
+============================
+
 
 Chapters of the User's Guide
 ============================
