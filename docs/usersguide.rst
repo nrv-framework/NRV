@@ -21,13 +21,13 @@ Objects in NRV all inherit from an abstract class (called ``NRV_Class``) tha giv
 1. All objects can be saved as dictionary or in json files, so that any simulation, optimization problem or any implementation in general can be saved.
 2. All objects can be described using a dictionary or a json file.
 
-these two points and their consequences on syntax are described hereafter.
+These two points and their consequences on syntax are described hereafter.
 
 
 Note on object saving
 =====================
 
-As express above all classes inheriting from ``NRV_Class`` can be saved and loaded in python dictionary or json files. 
+As express above all classes inheriting from ``NRV_Class`` can be saved and loaded in python dictionary or `json` files. 
 Let's see bellow a first example showing how to save a simple `unmyelinated` axon object.
 
 ::
@@ -51,8 +51,9 @@ To actually save the axon properties in a `.json` file, a `save`argument has to 
 
 Note that the ``save`` method impose the extension of the file to be `json`. It is then not necessary to precise it in the filename and in the case where the filename does not and with `json`, this suffix is automatically added.
 
-This ``save`` method comes together with a ``load`` method which allow to load the data of the instance from a python dictionary or a `json` file
+This ``save`` method comes together with a ``load`` method which allow to load the data of the instance from a python dictionary or a `json` file.
 
+In the example below the axon is respectively generated from the dictionary and the file saved earlier.
 
 ::
 
@@ -70,6 +71,47 @@ This ``save`` method comes together with a ``load`` method which allow to load t
 
 Note on object instantiation
 ============================
+
+The save/load generic methods allow the possibility to instantiate a ``NRV_Class`` object from different ways.
+
+- From the class (the python way):
+
+::
+
+    axon1 = nrv.unmyelinated(y,z,d,L)
+    assert axon1.L == L
+    del axon1
+
+- From the class (the dictionary way):
+
+::
+
+    axon1 = nrv.unmyelinated(**ax_dict)
+    assert axon1.L == L
+    del axon1
+
+- From a `json` file (the json way):
+
+::
+
+    axon1 = nrv.unmyelinated()
+    axon1.load(filename)
+    assert axon1.L == L
+    del axon1
+
+- From anything (the easy way):
+
+::
+
+    axon1 = nrv.load_any(ax_dict)
+    assert axon1.L == L
+    del axon1
+
+    axon1 = nrv.load_any(filename)
+    assert axon1.L == L
+    del axon1
+
+
 
 
 Chapters of the User's Guide
