@@ -15,8 +15,23 @@ Axons
 
 The ``axon`` class is abstract, meaning that the end user cannot directly instanciate an axon. Instead, two class exists and are accessible for the end-user for mylinated and unmylinated fibers.
 
+generic parameters for all axons are defined by default and can be changed, as both unmylinated and mylinated axons inherit from them
+
 However, for the end-user, some usefull methods are innherited by both unmylinated and mylinated fibers:
-* bla1
+* the ``simulate`` method that compute the membrane voltage and internal state variables.
+    .. list-table:: Arguments of simulate method
+       :widths: 15 25 50
+       :header-rows: 1
+
+       * - Parameter
+         - Type
+         - Comment
+       * - t_sim
+         - float
+         - Comment
+
+
+
 * bla2
 
 Unmyelinated axons
