@@ -600,7 +600,7 @@ class axon(NRV_simulable):
         self.record_I_ions       : bool
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
-            if true, the marticule states are recorded, set to False by default
+            if true, the particule states are recorded, set to False by default
         self.loaded_footprints           :dict or bool
             Dictionnary composed of extracellular footprint array, the keys are int value
             of the corresponding electrode ID, if None, footprints calculated during the simulation,
