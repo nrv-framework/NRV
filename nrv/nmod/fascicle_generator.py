@@ -4,13 +4,13 @@ NRV-fascicule generator usefull functions.
 import faulthandler
 import math
 import os
+from tqdm import tqdm
 
 import matplotlib.pyplot as plt
-import numba
+from itertools import combinations
 import numpy as np
-from scipy import spatial, stats
 from scipy.optimize import curve_fit
-from scipy.stats import rv_continuous
+from scipy.stats import rv_continuous, gamma
 
 from ..backend.log_interface import pass_info, progression_popup
 
@@ -95,7 +95,7 @@ def one_Gamma(x, a1, beta1, c1):
     ----
     location of the gamma pdf function is fixed to 0.2, diameters will be interpolated above this minimal value.
     """
-    return c1 * (stats.gamma.pdf(x, a1, scale=1 / beta1, loc=0.2))
+    return c1 * (gamma.pdf(x, a1, scale=1 / beta1, loc=0.2))
 
 
 def two_Gamma(x, a1, beta1, c1, a2, beta2, c2, transition):
@@ -125,8 +125,8 @@ def two_Gamma(x, a1, beta1, c1, a2, beta2, c2, transition):
     ----
     location of the gamma pdf first function is fixed to 2, diameters will be interpolated above this minimal value. This corresponds to the minimal A-delta diamter tolerated value.
     """
-    return c1 * (stats.gamma.pdf(x, a1, scale=1 / beta1, loc=2)) + c2 * (
-        stats.gamma.pdf(x, a2, scale=1 / beta2, loc=transition)
+    return c1 * (gamma.pdf(x, a1, scale=1 / beta1, loc=2)) + c2 * (
+        gamma.pdf(x, a2, scale=1 / beta2, loc=transition)
     )
 
 
@@ -171,7 +171,7 @@ class nerve_gen_one_gamma(rv_continuous):
         """
         overwritting the pdf to custom law, same definition as one_Gamma described upper.
         """
-        return self.c1 * (stats.gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=0.2))
+        return self.c1 * (gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=0.2))
 
 
 class nerve_gen_two_gamma(rv_continuous):
@@ -228,9 +228,9 @@ class nerve_gen_two_gamma(rv_continuous):
         overwritting the pdf to custom law, same definition as two_Gamma described upper.
         """
         return self.c1 * (
-            stats.gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=2)
+            gamma.pdf(x, self.a1, scale=1 / self.beta1, loc=2)
         ) + self.c2 * (
-            stats.gamma.pdf(x, self.a2, scale=1 / self.beta2, loc=self.transition)
+            gamma.pdf(x, self.a2, scale=1 / self.beta2, loc=self.transition)
         )
 
 
@@ -523,19 +523,147 @@ def load_axon_population(f_name):
 #############################################
 #############################################
 #############################################
-def axon_packer(
-    diameters,
-    Delta=0,
-    y_gc=0,
-    z_gc=0,
-    max_iter=20000,
-    probe=100,
-    monitor=False,
-    monitoring_Folder="",
-    monitoring_Niter=100,
-    v_att=0.01,
-    v_rep=0.1,
-):
+def init_packing( 
+        diam: np.array,
+        delta: np.float32,
+        y_gc: np.float32,             
+        z_gc: np.float32,
+        ) -> np.array:
+    """
+    Initialize Axon packing Algorithm - Internal use Only
+    """
+    Naxon = len(diam)
+    ids = np.arange(Naxon)         #get IDs of each axons
+    max_diam = np.max(diam) # get max axon diameter
+
+    #Vector of initial velocity
+    velocity= np.zeros([2,Naxon])
+
+    ### create an initial square grid with the population of axons
+    N_init = np.int32(np.ceil(np.sqrt(Naxon)) ** 2)
+    N_side = np.int32(np.sqrt(N_init))
+    size_init = np.sqrt(N_init * (max_diam + delta) ** 2)
+    grid_size = (size_init / 2) - (size_init / (2 * N_side))
+    grid = np.linspace(-grid_size,grid_size,num=N_side,endpoint=True)
+    y_axons = np.tile(grid, N_side) + y_gc
+    z_axons = np.repeat(grid, N_side) + z_gc
+
+    ### remove unwanted places
+    N_remove = N_init - Naxon
+    ind_to_delete = np.random.choice(len(y_axons), size=N_remove, replace=False)
+    y_axons = np.delete(y_axons, ind_to_delete)
+    z_axons = np.delete(z_axons, ind_to_delete)
+
+    #Define position vector:
+    pos = np.array([y_axons, z_axons])
+
+    #Position of center of gravity
+    gc = np.array([y_gc,z_gc])
+
+    return(pos,velocity,gc,ids)
+
+def get_axon_combinaisons(ids: np.array)->np.array:
+    """
+    get all possible combinaison of axons IDs = n(n-1)/2 - Internal use only
+    """
+    return(np.asarray(list(combinations(ids,2))))
+
+"""def get_axon_interdistance(
+        pos: np.array,
+        ids_pairs: np.array
+    )-> np.array:
+    
+    Compute the distance between each pair of axons - Internal use only
+    @Note: The sqrt could probably be omitted  to increase speed
+    
+    #get the pairs of y and z positions of all axons
+    y_pairs = np.array([pos[0][ids_pairs[:,0]], pos[0][ids_pairs[:,1]]]).T  #we get the y,z position of each combinaison
+    z_pairs = np.array([pos[1][ids_pairs[:,0]], pos[1][ids_pairs[:,1]]]).T
+    #we get the dy and dz combinaison 
+    dy_pairs = np.diff(y_pairs, axis=1).ravel()
+    dz_pairs = np.diff(z_pairs, axis=1).ravel()
+    #We return the position.
+    return(np.sqrt(dz_pairs**2 + dy_pairs**2))"""
+
+def get_axon_inter_radius(
+        diam: np.array,
+        ids_pairs:  np.array
+    )-> np.array:
+    """
+    return the inter-radis of each pair of axons - Internal use only
+    """
+    diam_pair = np.array([diam[ids_pairs[:,0]], diam[ids_pairs[:,1]]]).T  #we get the diameter of each combinaison
+    return(np.abs(np.sum(diam_pair, axis=1).ravel())/2)
+
+def get_delta_pairs(pos:np.array, ids_pairs:np.array)-> np.array:
+    """
+    Evaluate the (z,y) distance of each axons pairs
+    """
+    return np.diff(np.array([pos[ids_pairs[:,0]], pos[ids_pairs[:,1]]]).T, axis=1).ravel()
+
+def get_deltad_pairs(pos:np.array, ids_pairs:np.array)-> np.array:
+    """
+    Evaluate the eucledian distance coordinate of each axons pairs - Internal use only
+    @Note: The sqrt could probably be omitted to increase speed
+    """
+    return np.sqrt(get_delta_pairs(pos[0], ids_pairs)**2 + get_delta_pairs(pos[1], ids_pairs)**2)
+
+def get_gravity_dr(pos:np.array,gc:np.array,Naxons:np.int32) -> np.array:
+    """
+    Evaluate the (z,y) distance to the gravity center of each axons - Internal use only
+    """
+    return((np.ones([2,Naxons]).T * gc).T - pos)     
+
+def get_gravity_dist(pos:np.array,gc:np.array,Naxons:np.int32) -> np.array:
+    """
+    Evaluate the eucledian distance to the gravity center of each axons - Internal use only
+    @Note: The sqrt could probably be omitted to increase speed
+    """
+    return(np.sqrt(np.sum((get_gravity_dr(pos,gc,Naxons).T - gc) ** 2,axis = 1)+1e-10))   
+
+def compute_attraction_v(pos:np.array,gc:np.array,Naxons:np.int32,v_att:np.float32)-> np.array:
+    """
+    Evaluate the attraction velocity for every axons - Internal use only
+    """
+    return(v_att*get_gravity_dr(pos,gc,Naxons)/get_gravity_dist(pos,gc,Naxons))
+
+def compute_repulsion_v(pos1:np.array, pos2:np.array,v_rep:np.float32)-> np.array:
+    """
+    Evaluate the repulsion velocity for the colliding axons only - Internal use only
+    """
+    vnew = v_rep* (pos1-pos2)                        
+    return vnew, -vnew
+
+def get_colliding_ids(pos:np.array,id_pairs:np.array,diam_pairs:np.array,delta:np.float32)-> np.array:
+    """ 
+    get ids of colliding axons - Internal use only
+    """
+    return(id_pairs[get_deltad_pairs(pos, id_pairs) < (diam_pairs+delta)])
+
+def update_axon_packing(pos:np.array,
+                        id_pairs:np.array,
+                        diam_pairs:np.array,
+                        gc: np.array,
+                        v_att:np.float32,
+                        v_rep:np.float32,
+                        delta:np.float32,
+                        Naxon:np.int32)->np.array:
+    """ 
+    Update the axon array position by 1 increment - Internal use only
+    """
+
+    velocity = compute_attraction_v(pos,gc,Naxon,v_att)
+    ic = get_colliding_ids(pos,id_pairs,diam_pairs,delta)
+    velocity[:,ic[:,0]], velocity[:,ic[:,1]] = compute_repulsion_v(pos[:,ic[:,0]], pos[:,ic[:,1]],v_rep)
+    return(pos + velocity)   
+
+def axon_packer(diameters: np.array,
+                 delta: np.array,
+                 n_iter: np.int32 = 25000,
+                 v_att: np.float32 = 0.01,
+                 v_rep: np.float32 = 0.1,
+                 y_gc:np.float32 = 0,
+                 z_gc:np.float32 = 0,):
     """
     Axon Packing algorithm: this operation takes a vector of diameter (random population) and places it at best. The used algorithm is largely based on [1]
 
@@ -543,26 +671,19 @@ def axon_packer(
     ----------
     diameters           : np.array
         Array containing all the diameters of the axon population to pack
-    Delta               : float
+    delta               : float
         minimal inter-axon distance to respect before considering collision, in um
-    y_gc                : float
-        y coordinate of the gravity center for the packing, in um
-    z_gc                : float
-        z coordinate of the gravity center for the packing, in um
-    max_iter            : int
-        Max. number of iterations
-    probe               : int
-        Number of iterations between two Fiber Volume Fraction probing
-    monitor             : bool
-        if True, the packing process will be monitored and some steps are plotted and saved
-    monitoring_Folder   : str
-        in case of monitoring, folder where the images of the packing process are stored
-    monitoring_Niter    : str
-        in case of monitoring, number of iterations between two monitoring images
+    n_iter            : int
+        Number of iterations
     v_att               : float
         vector norm for attraction velocity, in um per iteration
     v_rep               : float
         vector norm for repulsion velocity, in um per iteration
+    y_gc                : float
+        y coordinate of the gravity center for the packing, in um
+    z_gc                : float
+        z coordinate of the gravity center for the packing, in um
+
 
     Returns
     -------
@@ -570,13 +691,6 @@ def axon_packer(
         Array containing the y coordinates of axons, in um
     z_axons         : np.array
         Array containing the z coordinates of axons, in um
-    iteration       : int
-        number of iterations performed
-    FVF             : np.array
-        probed values for the Fiber Volume Fraction
-    probed_iter     : np.array
-        index of the FVF probed iterations
-
     Note
     ----
     - scientific reference
@@ -584,272 +698,22 @@ def axon_packer(
     - dev Note
         the algorithm perform a fixed number of iteration, the code could evoluate to tke into account the FVF convergence, however this value depends on the range on number of axons.
     """
-    N = len(diameters)
-    max_diam = max(diameters)
-    ##########
-    ## INIT ##
-    ##########
-    ### create an initial square grid with the population of axons
-    N_init = int(math.ceil(np.sqrt(N)) ** 2)
-    N_side = int(np.sqrt(N_init))
-    size_init = np.sqrt(N_init * (max_diam + Delta) ** 2)
-    placement_vector = np.linspace(
-        -((size_init / 2) - (size_init / (2 * N_side))),
-        ((size_init / 2) - (size_init / (2 * N_side))),
-        num=N_side,
-        endpoint=True,
-    )
-    y_axons = np.tile(placement_vector, N_side) + y_gc
-    z_axons = np.repeat(placement_vector, N_side) + z_gc
-    ### remove unwanted places
-    N_remove = N_init - N
-    ind_to_delete = np.random.choice(len(y_axons), size=N_remove, replace=False)
-    y_axons = np.delete(y_axons, ind_to_delete)
-    z_axons = np.delete(z_axons, ind_to_delete)
-    ### compute total total fiber surface and evaluate surface for FVF computation
-    ax_areas = np.power(diameters / 2, 2) * np.pi
-    A_axons = np.sum(ax_areas)
-    size_monitor_square = np.sqrt(A_axons * 1.4)
-    monitor_area = A_axons * 1.4
-    FVF = []
-    probed_iter = []
-    if fg_verbose:
-        pass_info("Axon Packer: initial grid computed...")
-    if monitor:
-        plot_situation(
-            diameters, y_axons, z_axons, size_init, title="Init", y_gc=y_gc, z_gc=z_gc
-        )
-        f_name = monitoring_Folder + "Packer_0.png"
-        plt.savefig(f_name)
-        plt.close()
-    ################
-    ## ITERATIONS ##
-    ################
-    if fg_verbose:
-        pass_info("Axon Packer: Begining iterations")
-    iteration = 0
-    while iteration < max_iter:
-        iteration += 1
-        if fg_verbose:
-            progression_popup(
-                iteration - 1, max_iter, begin_message="\t iteration ", endl="\r"
-            )
-            # print('\t iteration ' + f"{iteration}" + '/' + str(max_iter), end="\r")
-        # compute P matrix
-        P = compute_P_matrix(diameters, y_axons, z_axons, Delta, N)
-        # P = compute_P_fast(diameters, y_axons, z_axons, Delta)
-        # check overlap
-        colapse = np.argwhere(P < 0)
-        all_colapsed_ind = np.unique(colapse)
-        # compute velocity, initialy consider that all velocities are attraction
-        v_y, v_z = compute_attraction_velocities(y_axons, z_axons, y_gc, z_gc, N, v_att)
-        #### prevent from division by 0 in the upper line
-        np.nan_to_num(v_y, copy=False, nan=0.0)
-        np.nan_to_num(v_z, copy=False, nan=0.0)
-        v_y[all_colapsed_ind] = 0  # neutralize velocity where should be repulsion
-        v_z[all_colapsed_ind] = 0  # same
-        # compute velocities for colapsing cases
-        v_y, v_z = handle_collisions(
-            y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_rep
-        )
-        # compute new positions
-        y_axons, z_axons = update_positions(y_axons, z_axons, v_y, v_z)
-        # compute FVF
-        if iteration % probe == 0:
-            # removing axons too much to the left
-            ax_left_pts = y_axons - diameters / 2
-            FVF_mask = np.argwhere(ax_left_pts > (-size_monitor_square / 2 + y_gc))
-            # removing axons too much to the right
-            ax_right_pts = y_axons + diameters / 2
-            FVF_mask = np.intersect1d(
-                FVF_mask, np.argwhere(ax_right_pts < (size_monitor_square / 2 + y_gc))
-            )
-            # removing the axons that are too high
-            ax_up_pts = z_axons + diameters / 2
-            FVF_mask = np.intersect1d(
-                FVF_mask, np.argwhere(ax_up_pts < (size_monitor_square / 2 + z_gc))
-            )
-            # removing the axons that are too low
-            ax_down_pts = z_axons - diameters / 2
-            FVF_mask = np.intersect1d(
-                FVF_mask, np.argwhere(ax_down_pts > (-size_monitor_square / 2 + z_gc))
-            )
-            FVF.append(np.sum(ax_areas[FVF_mask]) / monitor_area)
-            probed_iter.append(iteration)
-        # monitoring
-        if (iteration) % monitoring_Niter == 0 and monitor:
-            plot_situation(
-                diameters,
-                y_axons,
-                z_axons,
-                size_init,
-                title=str(iteration) + " Iterations",
-                y_gc=y_gc,
-                z_gc=z_gc,
-            )
-            f_name = monitoring_Folder + "Packer_" + str(iteration) + ".png"
-            plt.savefig(f_name)
-            plt.close()
-    pass_info("Axon Packer: Iterations done")
-    if monitor:
-        plot_situation(
-            diameters,
-            y_axons,
-            z_axons,
-            size_init,
-            title=str(iteration) + " Iterations",
-            y_gc=y_gc,
-            z_gc=z_gc,
-        )
-        f_name = monitoring_Folder + "Packer_final.png"
-        plt.savefig(f_name)
-        plt.close()
-    return y_axons, z_axons, iteration, np.asarray(FVF), np.asarray(probed_iter)
+    pass_info("Axon packing initiated. This might take a while...")
+    pos,velocity,gc,ids= init_packing(diameters,delta,y_gc,z_gc)
+    id_pairs = get_axon_combinaisons(ids)
+    diam_pair = get_axon_inter_radius(diameters,id_pairs)
+    Naxon = len(pos[0])
+    for _ in tqdm(range (n_iter)):
+        pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
+    y_axons = pos[0].copy()
+    z_axons = pos[1].copy()
+    pass_info("Packing done!")
+    return y_axons, z_axons
 
-
-@numba.jit(fastmath=True, cache=True)
-def compute_attraction_velocities(y_axons, z_axons, y_gc, z_gc, N, v_att):
+#plot fascicle
+def plot_fascicle(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
     """
-    Computes attraction velocity for axon packing. Just in time compiled to speed up. For internal use only.
-    """
-    dy = np.ones(N) * y_gc - y_axons
-    dz = np.ones(N) * z_gc - z_axons
-    dist = np.sqrt((y_axons - y_gc) ** 2 + (z_axons - z_gc) ** 2)
-    v_y = v_att * dy / dist
-    v_z = v_att * dz / dist  # same
-    return v_y, v_z
-
-
-@numba.njit(fastmath=True, cache=True)
-def compute_P_matrix(diameters, y_axons, z_axons, Delta, N):
-    """
-    Computes the proximity matrix for axon packing. Just in time compiled to speed up. For internal use only.
-    """
-    P = np.zeros((N, N))
-    for i in range(N):
-        for j in range(i + 1, N):
-            # P[i, j] = np.sqrt((y_axons[i] - y_axons[j])**2 + (z_axons[i] - z_axons[j])**2) -\
-            # ((diameters[i] + diameters[j])/2 + Delta)
-            # not hmogeneous to a distance, but work the same at the end and one square root less to compute...
-            P[i, j] = (
-                (y_axons[i] - y_axons[j]) ** 2 + (z_axons[i] - z_axons[j]) ** 2
-            ) - ((diameters[i] + diameters[j]) / 2 + Delta) ** 2
-    return P
-
-
-def compute_P_fast(diameters, y_axons, z_axons, Delta):
-    """
-    Compyte the proximity matrix for axon packing. Based on numpy and scipy. Slower (just a bit) than JIT version on dev. For internal use only
-    """
-    points = np.column_stack((y_axons, z_axons))
-    N = len(diameters)
-    diams = np.tile(diameters, (N, 1))
-    # diams = diameters.repeat(N).reshape((-1, N))
-    P = spatial.distance.cdist(points, points, "euclidean") - (
-        (diams + np.transpose(diams)) * (1 / 2) + np.ones((N, N)) * Delta
-    )
-    np.fill_diagonal(P, 0)
-    return np.triu(P)
-
-
-@numba.njit(fastmath=True, cache=True)
-def handle_collisions(y_axons, z_axons, v_y, v_z, all_colapsed_ind, colapse, v_rep):
-    """
-    Handle collisions between axons for axon packing. Just in time compiled (doble loop...). For internal use only.
-    """
-    for k in all_colapsed_ind:
-        sum_y = 0
-        sum_z = 0
-        for i in range(len(colapse)):
-            duplet = colapse[i]
-            if k == duplet[0]:
-                sum_y += y_axons[k] - y_axons[duplet[1]]
-                sum_z += z_axons[k] - z_axons[duplet[1]]
-            elif k == duplet[1]:
-                sum_y += y_axons[k] - y_axons[duplet[0]]
-                sum_z += z_axons[k] - z_axons[duplet[0]]
-        if sum_y == 0 and sum_z == 0:
-            sum_y = 1e-12
-            sum_z = 1e-12
-        v_y[k] = v_rep * (sum_y / (np.sqrt(sum_y**2 + sum_z**2)))
-        v_z[k] = v_rep * (sum_z / (np.sqrt(sum_y**2 + sum_z**2)))
-    return v_y, v_z
-
-
-@numba.njit(fastmath=True, cache=True)
-def update_positions(y_axons, z_axons, v_y, v_z):
-    """
-    Compute new positions considering velicities for axon packing. Just in time compiled to speed up. For internal use only.
-    """
-    return y_axons + v_y, z_axons + v_z
-
-
-def delete_collisions(axons_diameters, axons_type, y_axons, z_axons, Delta=0):
-    """
-    Delete collision cases in a placed population. In case of a detected collision, the axon or smaller diameter is removed.
-
-    Parameters
-    ----------
-    axons_diameters : np.array
-        array containing the axons diameters
-    axons_type      : np.array
-        array containing the axons type ('1' for myelinated, '0' for unmyelinated)
-    y_axons         : np.array
-        y coordinate of the axons to store, in um
-    z_axons         : np.array
-        z coordinate of the axons to store, in um
-    Delta           : float
-        space between axon fibers under which collision is considered, in um
-
-    Returns
-    -------
-    new_axons_diameters : np.array
-        array containing the axons diameters without collisions
-    new_axons_type      : np.array
-        array containing the axons type ('1' for myelinated, '0' for unmyelinated)
-    new_y_axons     : np.array
-        y coordinate of the axons to store, in um
-    new_z_axons     : np.array
-        z coordinate of the axons to store, in um
-    """
-    N = len(axons_diameters)
-    P = compute_P_matrix(axons_diameters, y_axons, z_axons, Delta, N)
-    colapse = np.argwhere(P < 0)
-    flag_Collision = colapse.size != 0
-
-    while flag_Collision:
-        # checking which axons to delete
-        ind_to_delete = []
-        handled_collisions = []
-        for collision in colapse:
-            if (collision[0] not in handled_collisions) and (
-                collision[1] not in handled_collisions
-            ):
-                handled_collisions.append(collision[0])
-                handled_collisions.append(collision[1])
-                if axons_diameters[collision[0]] < axons_diameters[collision[1]]:
-                    ind_to_delete.append(collision[0])
-                else:
-                    ind_to_delete.append(collision[1])
-        # deleting problematic axons
-        mask = np.ones(N, dtype=bool)
-        mask[ind_to_delete] = False
-        axons_diameters = axons_diameters[mask]
-        axons_type = axons_type[mask]
-        y_axons = y_axons[mask]
-        z_axons = z_axons[mask]
-        N = len(axons_diameters)
-        # check if there are remaing collisions
-        P = compute_P_matrix(axons_diameters, y_axons, z_axons, Delta, N)
-        colapse = np.argwhere(P < 0)
-        flag_Collision = colapse.size != 0
-
-    return axons_diameters, axons_type, y_axons, z_axons
-
-
-def plot_situation(diameters, y_axons, z_axons, size, title=None, y_gc=0, z_gc=0):
-    """
-    Discplay a population of axons. Doesn't return but declares a matplotlib figure
+    Display a population of axons. 
 
     Parameters
     ----------
@@ -859,29 +723,41 @@ def plot_situation(diameters, y_axons, z_axons, size, title=None, y_gc=0, z_gc=0
         y coordinate of the axons to display, in um
     z_axons     : np.array
         z coordinate of the axons to display, in um
+    ax          : matplotlib.axes
+        (sub-) plot of the matplotlib figure
     size        : float
         size of the window as a square side, in um
+    axon_type   : np.array
+        type of the axon (Myelinated = 1; Unmyelinated = 0) - Optionnal
     title       : str
-        title of the figure
+        title of the figure`ù
     y_gc        : float
         y coordinate of the gravity, in um
     z_gc        : float
         z coordinate of the gravity, in um
     """
-    circles = []
-    for k in range(len(diameters)):
-        circles.append(
-            plt.Circle(
-                (y_axons[k], z_axons[k]), diameters[k] / 2, color="r", fill=False
-            )
-        )
-    fig, ax = plt.subplots(figsize=(8, 8))
-    for circle in circles:
-        ax.add_patch(circle)
-    if title is not None:
-        plt.title(title)
-    plt.xlim(-size / 2 + y_gc, size / 2 + y_gc)
-    plt.ylim(-size / 2 + z_gc, size / 2 + z_gc)
+    if (axon_type is None):
+        for k in range(len(diameters)):
+            ax.add_patch(plt.Circle((y_axons[k], z_axons[k]), diameters[k] / 2, color="r", fill=True))
+    else:
+        # plot the final results, with distinction between un- and myelinated axons
+        myelinated_mask = np.argwhere(axon_type == 1)
+        y_myelinated = y_axons[myelinated_mask]
+        z_myelinated = z_axons[myelinated_mask]
+        M_diam_list = diameters[myelinated_mask]
+        for k in range(len(y_myelinated)):
+                ax.add_patch(plt.Circle((y_myelinated[k], z_myelinated[k]), M_diam_list[k]/2, color='r',fill=True))
+
+
+        unmyelinated_mask = np.argwhere(axon_type == 0) 
+        y_unmyelinated = y_axons[unmyelinated_mask]
+        z_unmyelinated = z_axons[unmyelinated_mask]
+        U_diam_list = diameters[unmyelinated_mask]
+        for k in range(len(y_unmyelinated)):
+                ax.add_patch(plt.Circle((y_unmyelinated[k], z_unmyelinated[k]), U_diam_list[k]/2, color='b',fill=True))
+
+    ax.set_xlim(-size / 2 + y_gc, size / 2 + y_gc)
+    ax.set_ylim(-size / 2 + z_gc, size / 2 + z_gc)
 
 
 def save_placed_axon_population(

@@ -522,21 +522,15 @@ class fascicle(NRV_simulable):
                 save_axon_population(
                     pop_fname, axons_diameter, axons_type, comment=None
                 )
-            pass_info("Axon Packing is starting")
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
+            axons_y, axons_z, = axon_packer(
                 axons_diameter,
-                Delta=0.1,
+                delta=0.1,
                 y_gc=self.y_grav_center,
                 z_gc=self.z_grav_center,
-                max_iter=20000,
-                monitor=False,
+                n_iter=20000,
             )
-            # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                axons_diameter, axons_type, axons_y, axons_z
-            )
+
             N = len(axons_diameter)
-            pass_info("... Axon Packing done")
             # check if axons are inside the fascicle
             inside_axons = (
                 np.power(axons_y - self.y_grav_center, 2)
@@ -605,21 +599,14 @@ class fascicle(NRV_simulable):
                 save_axon_population(
                     ppop_fname, axons_diameter, axons_type, comment=None
                 )
-            pass_info("Axon Packing is starting")
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
+            axons_y, axons_z = axon_packer(
                 axons_diameter,
-                Delta=Delta,
+                delta=Delta,
                 y_gc=self.y_grav_center,
                 z_gc=self.z_grav_center,
-                max_iter=20000,
-                monitor=False,
-            )
-            # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                axons_diameter, axons_type, axons_y, axons_z
+                n_iter=20000
             )
             N = len(axons_diameter)
-            pass_info("... Axon Packing done")
             # check if axons are inside the fascicle
             inside_axons = (
                 np.power(axons_y - self.y_grav_center, 2)
