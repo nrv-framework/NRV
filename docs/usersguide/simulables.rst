@@ -365,7 +365,84 @@ he complete list of tunable parameters for unmyelinated axons is:
      - -40
      - voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing files for further help
 
-Again, for the end-user, four specific methods for intracelullar stimulation myelinated axons are available
+Again, for the end-user, four specific methods for intracelullar stimulation myelinated axons are available:
+
+* ``insert_I_Clamp_node``, for which the current clamp is directly applied at a node-of-Ranvier, given its number
+
+    .. list-table:: Arguments of current clamp at a node method
+       :widths: 15 25 50
+       :header-rows: 1
+
+       * - Parameter
+         - Type
+         - Comment
+       * - index
+         - int
+         - node number of the node to stimulate
+       * - t_start
+         - float
+         - starting time, in ms
+       * - duration
+         - float
+         - duration of the pulse, in ms
+       * - amplitude
+         - float
+         - amplitude of the pulse (nA)
+
+* ``insert_I_Clamp``, for which the current clamp is applied in the fiber with a normalized position
+
+    .. list-table:: Arguments of current clamp method
+       :widths: 15 25 50
+       :header-rows: 1
+
+       * - Parameter
+         - Type
+         - Comment
+       * - position
+         - float
+         - relative position over the axon
+       * - t_start
+         - float
+         - starting time, in ms
+       * - duration
+         - float
+         - duration of the pulse, in ms
+       * - amplitude
+         - float
+         - amplitude of the pulse (nA)
+
+* ``insert_V_Clamp_node``, for which the voltage clamp is directly applied at a node-of-Ranvier, given its number
+
+    .. list-table:: Arguments of voltage clamp method
+       :widths: 15 25 50
+       :header-rows: 1
+
+       * - Parameter
+         - Type
+         - Comment
+       * - index
+         - index
+         - node number of the node to stimulate
+       * - stimulus
+         - ``Stimulus object``
+         - stimulus for the clamp, see corresponding page for more information
+
+* ``insert_V_Clamp``,  for which the voltage clamp is applied in the fiber with a normalized position
+
+    .. list-table:: Arguments of voltage clamp method
+       :widths: 15 25 50
+       :header-rows: 1
+
+       * - Parameter
+         - Type
+         - Comment
+       * - position
+         - float
+         - relative position over the axon
+       * - stimulus
+         - ``Stimulus object``
+         - stimulus for the clamp, see corresponding page for more information
+
 
 Fascicles
 =========

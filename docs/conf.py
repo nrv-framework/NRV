@@ -5,6 +5,10 @@ from unittest.mock import MagicMock  # mock imports
 
 sys.path.insert(0, os.path.abspath(".."))
 
+html_css_files = [
+    'custom.css',
+]
+
 # prevent from unnistalled requierements for nrv
 deps = (
     "mph",

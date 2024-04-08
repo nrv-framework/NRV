@@ -122,5 +122,6 @@ Chapters of the User's Guide
    usersguide/simulables
    usersguide/stimuli
    usersguide/electrodes
+   usersguide/postproc
 
 
