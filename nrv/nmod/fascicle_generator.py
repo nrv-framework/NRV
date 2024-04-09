@@ -691,6 +691,7 @@ def axon_packer(diameters: np.array,
         Array containing the y coordinates of axons, in um
     z_axons         : np.array
         Array containing the z coordinates of axons, in um
+        
     Note
     ----
     - scientific reference
@@ -730,7 +731,7 @@ def plot_fascicle(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0,
     axon_type   : np.array
         type of the axon (Myelinated = 1; Unmyelinated = 0) - Optionnal
     title       : str
-        title of the figure`ù
+        title of the figure
     y_gc        : float
         y coordinate of the gravity, in um
     z_gc        : float
