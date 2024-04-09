@@ -9,6 +9,7 @@ NRV is designed to be accessible to a user with a limited knowledge of the pytho
 
    tutorials/first_steps
    tutorials/realistic_example
+   tutorials/optim_example
 
 
 

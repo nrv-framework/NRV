@@ -18,7 +18,7 @@ The folowing table details the default units used in NRV and the lists of units 
             - us, s, minute, hour, day
         *   - Length
             - um
-            - mm, cm, dm, m
+            - nm, mm, cm, dm, m
         *   - Currents
             - uA
             - nA, mA, A
@@ -73,6 +73,7 @@ GHz = 1e6 * kHz
 #####################
 ## length prefixes ##
 #####################
+nm = 1e-3 * um
 mm = 1e3 * um
 cm = 1e1 * mm
 dm = 1e1 * cm

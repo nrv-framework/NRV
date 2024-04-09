@@ -589,7 +589,7 @@ class fascicle(NRV_simulable):
             total_ax_area = 0
             for diam in axons_diameter:
                 total_ax_area += np.pi * ((diam / 2) ** 2)
-            if self.A * FVF > total_ax_area:
+            if self.A * FVF > total_ax_area and self.D is not None:
                 rise_warning(
                     "Warning: the specified population maybe too small to fill the current fascicle"
                 )
@@ -608,16 +608,18 @@ class fascicle(NRV_simulable):
             )
             N = len(axons_diameter)
             # check if axons are inside the fascicle
-            inside_axons = (
-                np.power(axons_y - self.y_grav_center, 2)
-                + np.power(axons_z - self.z_grav_center, 2)
-                - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-            )
-            axons_to_keep = np.argwhere(inside_axons < 0)
-            axons_diameter = axons_diameter[axons_to_keep]
-            axons_type = axons_type[axons_to_keep]
-            axons_y = axons_y[axons_to_keep]
-            axons_z = axons_z[axons_to_keep]
+            if self.D is not None:
+                inside_axons = (
+                    np.power(axons_y - self.y_grav_center, 2)
+                    + np.power(axons_z - self.z_grav_center, 2)
+                    - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
+                )
+                axons_to_keep = np.argwhere(inside_axons < 0)
+
+                axons_diameter = axons_diameter[axons_to_keep]
+                axons_type = axons_type[axons_to_keep]
+                axons_y = axons_y[axons_to_keep]
+                axons_z = axons_z[axons_to_keep]
             N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
@@ -682,7 +684,7 @@ class fascicle(NRV_simulable):
                 )
                 N = len(axons_diameter)
             # check if axons are inside the fascicle
-            if check_inside:
+            if check_inside and self.D is not None:
                 inside_axons = (
                     np.power(axons_y - self.y_grav_center, 2)
                     + np.power(axons_z - self.z_grav_center, 2)
@@ -1113,7 +1115,7 @@ class fascicle(NRV_simulable):
         """
         if is_extra_stim(stimulation):
             self.extra_stim = stimulation
-        # remove everlaping axons
+        # remove overlaping axons
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
 

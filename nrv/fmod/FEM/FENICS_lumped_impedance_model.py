@@ -143,7 +143,7 @@ class FENICS_lumped_impedance_model(FENICS_model):
         self.Axoplasmic_mat = Axoplasmic_mat or self.Axoplasmic_mat
 
     def set_axon_membrane(id, gmem_pty):
-        
+        pass
 
     ###################
     ## Use the model ##

@@ -75,6 +75,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
+    "sphinx.ext.intersphinx",
 ]
 
 templates_path = ["_templates"]

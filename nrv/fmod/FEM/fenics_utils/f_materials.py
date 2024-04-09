@@ -38,7 +38,6 @@ class f_material(material):
         initialisation of the fenics_material
         """
         super().__init__()
-        self.is_func = False
         self._sigma_func = None
 
     ## Save and Load mehtods
@@ -63,6 +62,10 @@ class f_material(material):
         return super().save(save=save, fname=fname, blacklist=bl, **kwargs)
 
     @property
+    def is_func(self):
+        return not self.sigma_func is None
+
+    @property
     def sigma(self):
         if self.is_func:
             return self.sigma_func
@@ -76,7 +79,6 @@ class f_material(material):
             epsilon=self.epsilon,
             freq=self.freq
         )
-
     def set_conductivity_function(self, sigma_func:nrv_function)->None:
         """
         set the conductivity space function for an anisotropic material
@@ -87,7 +89,6 @@ class f_material(material):
             conductivity function in 3D space
         """
         self.isotrop_cond = False
-        self.is_func = True
         self._sigma_func = sigma_func
 
     def is_function_defined(self)->bool:
@@ -99,7 +100,7 @@ class f_material(material):
         bool    :
             True if the per
         """
-        return self.is_func
+        return not self.is_func
 
 
 ###############
@@ -215,7 +216,7 @@ def load_f_material(X:any=None, **kwargs)->f_material:
         mat.set_isotropic_conductivity(X)
     elif np.iterable(X):
         if len(X) == 2:
-            mat = mat_from_interp(X[0], X[1], **kwargs)
+            mat = mat_from_interp(X[0,:], X[1,:], **kwargs)
         elif len(X) == 3:
             mat = f_material()
             mat.set_anisotropic_conductivity(X[0], X[1], X[2])

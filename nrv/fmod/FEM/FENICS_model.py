@@ -12,6 +12,7 @@ from ...backend.file_handler import rmv_ext
 from ...utils.units import V, mm
 from ...utils.misc import get_perineurial_thickness
 from ...backend.MCore import MCH, synchronize_processes
+from ...backend.log_interface import rise_warning
 from .fenics_utils.FEMSimulation import FEMSimulation
 
 from .FEM import FEM_model
@@ -33,6 +34,36 @@ FENICS_Ncores = int(machine_config.get("FENICS", "FENICS_CPU"))
 FENICS_Status = machine_config.get("FENICS", "FENICS_STATUS") == "True"
 
 fem_verbose = True
+
+def check_sim_dom(sim:FEMSimulation, mesh:NerveMshCreator):
+    """
+    Check if all the physical domains of a mesh are linked to a material property.
+    This function can either prevent errors or help to debbug
+
+    Paramters
+    ---------
+    sim:    FEMSimulation
+        Simulation to check.
+    mesh:   NerveMshCreator
+        Mesh in used for the silmulation.
+
+    Returns
+    -------
+    bool
+        True if all domains are linked to a material, False otherwise.
+    """
+    uset_dom = []
+    mdom = mesh.domains_3D
+    if sim.D == 2:
+        mdom = mesh.domains_2D
+
+    for i in mdom:
+        if not i in sim.domains_list:
+            uset_dom += [i]
+    if len(uset_dom):
+        rise_warning(f" the following domains are not set {uset_dom}")
+        return False
+    return True
 
 
 class FENICS_model(FEM_model):

@@ -132,7 +132,7 @@ class fenics_material(NRV_class):
             if self.mat.is_isotropic():
                 self._sigma_fen = Constant(domain, ScalarType(_sig))
             # constant anisotropic material: sigma set as a tensor
-            elif not self.mat.is_func:
+            elif not self.mat.is_function_defined():
                 self._sigma_fen = as_tensor(
                     [
                         [_sig[0], 0, 0],
@@ -153,7 +153,7 @@ class fenics_material(NRV_class):
             if self.mat.is_isotropic():
                 self._sigma_fen.value = _sig
             # constant anisotropic material: sigma set as a tensor
-            elif not self.mat.is_func:
+            elif not self.mat.is_function_defined():
                 self._sigma_fen = as_tensor(
                     [
                         [_sig[0], 0, 0],

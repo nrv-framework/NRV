@@ -25,10 +25,10 @@ else:
     else:
         t_stop_rec=self.t_sim
 
-    if "dt_fem" in kwargs:
-        dt_fem = kwargs["dt_fem"]
+    if "sample_dt" in kwargs:
+        sample_dt = kwargs["sample_dt"]
     else:
-        dt_fem=self.dt
+        sample_dt=self.dt
 
     if "rec_bounds" in kwargs:
         rec_bounds = kwargs["rec_bounds"]
@@ -44,18 +44,23 @@ else:
 
 
     t_APs = [k for k in range(i_t_min,i_t_max)]
-    t_APs = t_APs[::int(dt_fem/self.dt)]
+    t_APs = t_APs[::int(sample_dt/self.dt)]
     N_t = len(t_APs)
 
 
-    to_save =  np.zeros((N_t+1, N_x))
-    to_save[0,:] = axon_sim["x_rec"][I_x] - rec_bounds[0]
-    for i, i_t in enumerate(t_APs):
-        to_save[i+1,:] = axon_sim["g_mem"][I_x, i_t]
+    # Under sampling to reduce memory consumption
+    axon_sim["x_rec"] = axon_sim["x_rec"][I_x] - rec_bounds[0]
+    axon_sim["t"] = axon_sim["t"][t_APs]
+    axon_sim["g_mem"] = axon_sim["g_mem"][np.ix_(I_x, t_APs)]
 
+    to_save =  np.zeros((N_t+1, N_x))
+    to_save[0,:] = axon_sim["x_rec"]
+    to_save[1:,:] = axon_sim["g_mem"].T
     np.savetxt(fgmem, to_save, delimiter=",")
     if k == 0:
-        np.savetxt(ft, axon_sim["t"][t_APs],delimiter=",")
+        np.savetxt(ft, axon_sim["t"],delimiter=",")
+
+
 
 
     ###############################
@@ -64,7 +69,7 @@ else:
     list_keys = []
     removable_keys = []
     if not self.return_parameters_only:
-        list_keys += ["g_mem"]
+        list_keys += ["g_mem", "x_rec"]
         if k==0:
             list_keys += ["t"]
 

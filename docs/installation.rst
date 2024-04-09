@@ -22,7 +22,7 @@ are conda-installable only:
 ::
 
 
-    conda install -c conda-forge fenics-dolfin  mpich
+    conda install -c conda-forge fenics-dolfinx mpich
 
 
 
