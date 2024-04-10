@@ -4,6 +4,7 @@ NRV-:class:`.extracellular_context` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
@@ -280,6 +281,11 @@ class extracellular_context(NRV_class):
                 ID_elec,
                 "is not too big",
             )
+
+    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        for electrode in self.electrodes:
+            electrode.plot(axes, color , **kwgs)
+
 
 
 class stimulation(extracellular_context):

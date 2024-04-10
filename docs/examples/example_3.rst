@@ -162,7 +162,7 @@ using boolean arguments ``extracel_context``,\ ``intracel_context``,
 
 **Warning**
 
- - *some fascicle parameters (Length, diame) cannot be modified if footprints are calculated*.
+ - *Some fascicle parameters (length, diameters) cannot be modified if footprints are calculated*.
 
 ::
 

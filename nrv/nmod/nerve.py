@@ -46,7 +46,7 @@ class nerve(NRV_simulable):
         limit diameter between A-delta models (thin myelinated) and myelinated models for axons
     """
 
-    def __init__(self, Length=10000, Diameter=100, Outer_D=5, ID=0, **kwargs):
+    def __init__(self, length=10000, diameter=100, Outer_D=5, ID=0, **kwargs):
         """
         Instanciates an empty nerve.
         """
@@ -60,8 +60,8 @@ class nerve(NRV_simulable):
         self.loaded_footprints = True
 
         self.type = "nerve"
-        self.L = Length
-        self.D = Diameter
+        self.L = length
+        self.D =  None
         self.y_grav_center = 0
         self.z_grav_center = 0
         self.Outer_D = Outer_D
@@ -132,6 +132,10 @@ class nerve(NRV_simulable):
         self.recorder = None
         self.is_simulated = False
         # Simulation status
+
+
+        self.define_circular_contour(diameter)
+
 
     ## save/load methods
     def save(
@@ -556,7 +560,7 @@ class nerve(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, fig, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+        self, fig:plt.figure, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
     ):
         """
         plot the nerve in the Y-Z plane (transverse section)
@@ -573,24 +577,34 @@ class nerve(NRV_simulable):
             matplotlib color string applied to the myelinated axons. Red by default
         unmyel_color    : str
             matplotlib color string applied to the myelinated axons. Blue by default
+        elec_color    : str
+            matplotlib color string applied to the electrodes axons. Blue by default
         num             : bool
             if True, the index of each axon is displayed on top of the circle
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.plot(
-                self.y_vertices, self.z_vertices, linewidth=4, color=contour_color
-            )
+            axes.add_patch(plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D/2,
+                color=contour_color,
+                fill=False,
+                linewidth=4,
+            ))
             for i in self.fascicles:
                 fasc = self.fascicles[i]
                 fasc.plot(
                     fig=fig,
                     axes=axes,
-                    contour_color=contour_color,
+                    contour_color="grey",
                     myel_color=myel_color,
                     unmyel_color=unmyel_color,
                     num=num,
                 )
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
 
     ## Context handling methods
     def clear_context(
@@ -621,7 +635,6 @@ class nerve(NRV_simulable):
         self.is_simulated = False
 
     # Intra cellular
-
     def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
         """
         Insert a IC clamp stimulation
@@ -651,7 +664,6 @@ class nerve(NRV_simulable):
         self.N_intra += 1
 
     # Extracellular
-
     def attach_extracellular_stimulation(self, stimulation: FEM_stimulation):
         """
         attach a extracellular context of simulation for an axon.
@@ -686,7 +698,14 @@ class nerve(NRV_simulable):
             self.is_extra_stim = True
 
         for i, elec in enumerate(stimulation.electrodes):
-            self.extra_stim.add_electrode(elec, stimulation.stimuli[i])
+            _overlap = self.__check_perineurium_electrode_overlap(elec)
+            if _overlap == -1:
+                self.extra_stim.add_electrode(elec, stimulation.stimuli[i])
+                for fasc in self.fascicles.values():
+                        fasc.remove_axons_electrode_overlap(elec)
+            else:
+                rise_warning(f"Electrode {i} ovelerlap with the perineurium the fascicle {_overlap}")
+
 
     def change_stimulus_from_elecrode(self, ID_elec, stimulus):
         """
@@ -703,6 +722,36 @@ class nerve(NRV_simulable):
             self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
         else:
             rise_warning("Cannot be changed: no extrastim in the nerve")
+
+    def __check_perineurium_electrode_overlap(self, electrode:electrode)->int:
+        """
+        Check if an electrode overlap with one fascicle perineurium of the nerve.
+
+        Paramters
+        ---------
+        electrode   : electrode
+            electrode to check
+        
+        Returns
+        -------
+        int
+            ID of the fascicle overlapping, -1 if no overlap
+        """
+        y, z, D = 0, 0, 0
+        # CUFF electrodes do not affect intrafascicular state
+        if not is_CUFF_electrode(electrode):
+            y = electrode.y
+            z = electrode.z
+            if is_LIFE_electrode(electrode):
+                D = electrode.D
+            for fasc in self.fascicles.values():
+                dist = np.sqrt((fasc.y_grav_center - y) ** 2 + (fasc.z_grav_center - z) ** 2) - (
+                    fasc.D / 2
+                )
+                if abs(dist) < D:
+                    return fasc.ID
+        return -1
+
 
     # RECORDING MECHANIMS
     def attach_extracellular_recorder(self, rec: recorder):

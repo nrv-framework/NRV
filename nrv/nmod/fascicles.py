@@ -807,46 +807,6 @@ class fascicle(NRV_simulable):
         ) + z_c
         self.rotate_axons(theta, y_c=y_c, z_c=z_c)
 
-    def remove_axons_electrode_overlap(self, electrode):
-        """
-        Remove the axons that could overlap an electrode
-
-        Parameters
-        ----------
-        electrode : object
-            electrode instance, see electrodes for more details
-        """
-        y, z, D = 0, 0, 0
-        if is_LIFE_electrode(electrode):
-            D = electrode.D
-            y = electrode.y
-            z = electrode.z
-        elif is_analytical_electrode(electrode):
-            y = electrode.y
-            z = electrode.z
-        else:
-            # CUFF electrodes should not affect intrafascicular state
-            return 0
-        # compute the distance of all axons to electrode
-        D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
-            self.axons_diameter / 2 + D / 2
-        )
-        colapse = np.argwhere(D_vectors < 0)
-        mask = np.ones(len(self.axons_diameter), dtype=bool)
-        mask[colapse] = False
-        # remove axons colliding the electrode
-        if len(colapse) > 0:
-            pass_info(
-                "From Fascicle level: Electrode/Axons overlap, "
-                + str(len(colapse))
-                + " axons will be removed from the fascicle"
-            )
-        pass_info(self.n_ax, "axons remaining")
-        self.axons_diameter = self.axons_diameter[mask]
-        self.axons_type = self.axons_type[mask]
-        self.axons_y = self.axons_y[mask]
-        self.axons_z = self.axons_z[mask]
-
     ## Axons related method
     def set_axons_parameters(
         self, unmyelinated_only=False, myelinated_only=False, **kwargs
@@ -1118,6 +1078,40 @@ class fascicle(NRV_simulable):
         # remove overlaping axons
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
+
+    def remove_axons_electrode_overlap(self, electrode):
+        """
+        Remove the axons that could overlap an electrode
+
+        Parameters
+        ----------
+        electrode : object
+            electrode instance, see electrodes for more details
+        """
+        y, z, D = 0, 0, 0
+        # CUFF electrodes do not affect intrafascicular state
+        if not is_CUFF_electrode(electrode):
+            y = electrode.y
+            z = electrode.z
+            if is_LIFE_electrode(electrode):
+                D = electrode.D
+            # compute the distance of all axons to electrode
+            D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
+                self.axons_diameter / 2 + D / 2
+            )
+            colapse = np.argwhere(D_vectors < 0)
+            mask = np.ones(len(self.axons_diameter), dtype=bool)
+            mask[colapse] = False
+            # remove axons colliding the electrode
+            if len(colapse) > 0:
+                pass_info(
+                    f"From Fascicle {self.ID}: Electrode/Axons overlap, {len(colapse)} axons will be removed from the fascicle"
+                )
+                pass_info(self.n_ax, " axons remaining")
+            self.axons_diameter = self.axons_diameter[mask]
+            self.axons_type = self.axons_type[mask]
+            self.axons_y = self.axons_y[mask]
+            self.axons_z = self.axons_z[mask]
 
     def change_stimulus_from_elecrode(self, ID_elec, stimulus):
         """
