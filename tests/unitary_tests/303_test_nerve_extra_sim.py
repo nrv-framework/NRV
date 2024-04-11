@@ -67,7 +67,7 @@ if nrv.MCH.do_master_only_work():
     print("Nerve simulation time "+str(t2-t1))
     
     fig, ax = plt.subplots(figsize=(8,8))
-    nerve.plot(fig, ax)
+    nerve.plot(ax)
     plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
 
 #plt.show()

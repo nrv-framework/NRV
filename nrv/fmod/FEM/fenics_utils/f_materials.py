@@ -100,7 +100,7 @@ class f_material(material):
         bool    :
             True if the per
         """
-        return not self.is_func
+        return self.is_func
 
 
 ###############

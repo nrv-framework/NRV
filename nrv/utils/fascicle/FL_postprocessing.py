@@ -239,7 +239,6 @@ def fascicular_state(
 
 def plot_fasc_state(
     facsicular_state,
-    fig,
     axes,
     contour_color="k",
     myel_color="r",
@@ -251,8 +250,6 @@ def plot_fasc_state(
 
     Parameters
     ----------
-    fig     : matplotlib.figure
-        figure to display the fascicle
     axes    : matplotlib.axes
         axes of the figure to display the fascicle
     contour_color   : str
@@ -292,7 +289,12 @@ def plot_fasc_state(
     alpha = [1 - (i / (1 + max(alpha))) for i in alpha]
 
     ## plot contour
-    axes.plot(fasc["y_vertices"], fasc["z_vertices"], linewidth=2, color=contour_color)
+    axes.add_patch(plt.Circle(
+                fasc["y_grav_center"], fasc["z_grav_center"],
+                fasc["D"]/2,
+                color=contour_color,
+                fill=False,
+                linewidth=2,))
     ## plot axons
     circles = []
     for k in range(N):

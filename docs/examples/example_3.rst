@@ -173,9 +173,9 @@ using boolean arguments ``extracel_context``,\ ``intracel_context``,
     
     if nrv.MCH.do_master_only_work():
         fig, ax = plt.subplots(1, 2, figsize=(14,6))
-        fascicle_1.plot(fig, ax[0], num=True)
+        fascicle_1.plot(ax[0], num=True)
         ax[0].set_title("Fascicle saved")
-        fascicle_2.plot(fig, ax[1], num=True)
+        fascicle_2.plot(ax[1], num=True)
         ax[1].set_title("Fascicle loaded")
 
 

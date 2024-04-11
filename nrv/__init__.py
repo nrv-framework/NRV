@@ -72,7 +72,7 @@ from .nmod.axons import *
 from .nmod.unmyelinated import *
 from .nmod.myelinated import *
 from .nmod.fascicles import *
-from .nmod.fascicle_generator import *
+from .nmod.axon_pop_generator import *
 from .nmod.nerve import *
 
 from .nmod.results.axons_results import *

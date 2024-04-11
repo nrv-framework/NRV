@@ -12,7 +12,7 @@ fascicle_1 = nrv.fascicle()
 fascicle_1.load(source_file,extracel_context=True)
 fascicle_1.set_ID(77)
 fig, ax = plt.subplots(figsize=(6,6))
-fascicle_1.plot(fig, ax, num=True)
+fascicle_1.plot(ax, num=True)
 plt.savefig(figfile)
 
 

@@ -21,7 +21,7 @@ E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 fascicle_1.remove_axons_electrode_overlap(E1)
 
 fig, ax = plt.subplots(figsize=(8,8))
-fascicle_1.plot(fig, ax)
+fascicle_1.plot(ax)
 plt.savefig('./unitary_tests/figures/68_A.png')
 
 ##### LIFE electrode
@@ -35,6 +35,6 @@ elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
 fascicle_1.remove_axons_electrode_overlap(elec_1)
 
 fig2, ax2 = plt.subplots(figsize=(8,8))
-fascicle_1.plot(fig2, ax2)
+fascicle_1.plot(ax2)
 plt.savefig('./unitary_tests/figures/68_B.png')
 #plt.show()

@@ -24,5 +24,5 @@ nrv.save_placed_axon_population('./unitary_tests/results/53_test.ppop',test_axon
 fig, ax = plt.subplots(figsize=(8, 8))
 size_plot = 3*np.max(np.abs(y_axons))
 
-nrv.plot_fascicle(test_axons, y_axons, z_axons,ax=ax,size = size_plot,axon_type=axons_type)
+nrv.plot_population(test_axons, y_axons, z_axons,ax=ax,size = size_plot,axon_type=axons_type)
 fig.savefig('./unitary_tests/figures/53_B.png')

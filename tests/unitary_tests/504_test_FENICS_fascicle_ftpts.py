@@ -58,7 +58,7 @@ t5 = time.time()
 print('PS fascicle saved '+str(t5 - t_start)+' s')
 
 fig, ax = plt.subplots(figsize=(6,6))
-fascicle_1.plot(fig, ax, num=True)
+fascicle_1.plot(ax, num=True)
 plt.savefig(DIR + 'figures/504_A.png')
 
 del fascicle_1
@@ -118,5 +118,5 @@ print('Total time '+str(t6 - t_start)+' s')
 fig, ax = plt.subplots(figsize=(6,6))
 fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
 exit()
-fascicle_2.plot(fig, ax, num=True)
+fascicle_2.plot(ax, num=True)
 plt.savefig(DIR + 'figures/504_B.png')

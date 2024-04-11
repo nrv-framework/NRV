@@ -70,9 +70,6 @@ class nerve(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
-        self.N_vertices = 0
-        self.y_vertices = np.array([])
-        self.z_vertices = np.array([])
 
         # Fascicular content
         self.fascicles_IDs = []
@@ -318,7 +315,7 @@ class nerve(NRV_simulable):
             )
 
     ## generate stereotypic Nerve
-    def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
+    def define_circular_contour(self, D, y_c=None, z_c=None):
         """
         Define a circular countour to the fascicle
 
@@ -330,8 +327,6 @@ class nerve(NRV_simulable):
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         self.type = "Circular"
         self.D = D
@@ -339,12 +334,9 @@ class nerve(NRV_simulable):
             self.y_grav_center = y_c
         if z_c is not None:
             self.z_grav_center = z_c
-        self.N_vertices = N_vertices
-        theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = self.y_grav_center + (D / 2) * np.cos(theta)
-        self.z_vertices = self.z_grav_center + (D / 2) * np.sin(theta)
         self.A = np.pi * (D / 2) ** 2
         if self.is_extra_stim:
+            pass_info("FEM nerve resized!")
             self.extra_stim.reshape_nerve(
                 Nerve_D=self.D,
                 Length=self.L,
@@ -367,17 +359,10 @@ class nerve(NRV_simulable):
         """
         y = self.y_grav_center
         z = self.z_grav_center
-        if self.y_vertices == np.array([]) and self.D is None:
-            D = 0
-        elif self.D is not None:
-            D = self.D
-        else:
-            y = (np.amax(self.y_vertices) - np.amin(self.y_vertices)) / 2
-            z = (np.amax(self.z_vertices) - np.amin(self.z_vertices)) / 2
-            D = np.abs(np.amax(self.y_vertices) - np.amin(self.y_vertices))
+        D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, Delta=20, N_vertices=100):
+    def fit_circular_contour(self, y_c=None, z_c=None, Delta=20):
         """
         Define a circular countour to the fascicle
 
@@ -389,8 +374,6 @@ class nerve(NRV_simulable):
             z coordinate of the circular contour center, in um
         Delta       : float
             distance between farest axon and contour, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         N_fasc = len(self.fascicles)
         D = 2 * Delta
@@ -400,7 +383,7 @@ class nerve(NRV_simulable):
         if z_c is not None:
             self.z_grav_center = z_c
         if N_fasc == 0:
-            pass_info("No fascicles to fit fascicul diameter set to " + str(D) + "um")
+            pass_info("No fascicles to fit - Nerve diameter set to " + str(D) + "um")
         else:
             for fasc in self.fascicles.values():
                 dist_max = (
@@ -412,7 +395,7 @@ class nerve(NRV_simulable):
                     ** 0.5
                 )
                 D = max(D, 2 * (dist_max + Delta))
-        self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
+        self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
@@ -560,15 +543,13 @@ class nerve(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, fig:plt.figure, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
+        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
     ):
         """
         plot the nerve in the Y-Z plane (transverse section)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         contour_color   : str
@@ -594,7 +575,6 @@ class nerve(NRV_simulable):
             for i in self.fascicles:
                 fasc = self.fascicles[i]
                 fasc.plot(
-                    fig=fig,
                     axes=axes,
                     contour_color="grey",
                     myel_color=myel_color,

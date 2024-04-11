@@ -58,7 +58,7 @@ t5 = time.time()
 print('PS fascicle saved '+str(t5 - t_start)+' s')
 
 fig, ax = plt.subplots(figsize=(6,6))
-fascicle_1.plot(fig, ax, num=True)
+fascicle_1.plot(ax, num=True)
 plt.savefig(DIR + 'figures/76_A.png')
 
 my_model = 'Nerve_1_Fascicle_1_LIFE'
@@ -106,7 +106,7 @@ if nrv.COMSOL_Status:
     print('Total time '+str(t6 - t_start)+' s')
 
     fig, ax = plt.subplots(figsize=(6,6))
-    fascicle_1.plot(fig, ax, num=True)
+    fascicle_1.plot( ax, num=True)
     plt.savefig(DIR + 'figures/76_B.png')
 else:
     nrv.pass_info('not connected to COMSOL, parts of the test have been skiped')

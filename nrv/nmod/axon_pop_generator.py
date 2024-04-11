@@ -12,7 +12,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import rv_continuous, gamma
 
-from ..backend.log_interface import pass_info, progression_popup
+from ..backend.log_interface import pass_info, progression_popup, rise_warning
 
 # WARNING:
 # no prompt message for numpy division by zeros: handled in the code !!!
@@ -659,7 +659,7 @@ def update_axon_packing(pos:np.array,
 
 def axon_packer(diameters: np.array,
                  delta: np.array,
-                 n_iter: np.int32 = 25000,
+                 n_iter: np.int32 = 20000,
                  v_att: np.float32 = 0.01,
                  v_rep: np.float32 = 0.1,
                  y_gc:np.float32 = 0,
@@ -691,7 +691,7 @@ def axon_packer(diameters: np.array,
         Array containing the y coordinates of axons, in um
     z_axons         : np.array
         Array containing the z coordinates of axons, in um
-        
+
     Note
     ----
     - scientific reference
@@ -711,8 +711,27 @@ def axon_packer(diameters: np.array,
     pass_info("Packing done!")
     return y_axons, z_axons
 
+def expand_pop(y_axons:np.array, z_axons:np.array, factor:float) -> np.array:
+    """
+    Expand population of placed axons by a specified number
+
+    Parameters
+    ----------
+    y_axons     : np.array
+        y coordinate of the axons, in um
+    z_axons     : np.array
+        z coordinate of the axons, in um
+    factor          : float
+        expansion factor, unitless
+    """
+    if (factor<1):
+        rise_warning("expansion factor must be greater than one. Factor set to 1")
+        factor = 1
+    return(y_axons*factor,z_axons*factor)
+
+
 #plot fascicle
-def plot_fascicle(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
+def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
     """
     Display a population of axons. 
 

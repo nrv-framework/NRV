@@ -106,7 +106,7 @@ for k in range(len(loaded_rec.recording_points)):
     
 if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(6,6))
-    fascicle_2.plot(fig, ax, num=True)
+    fascicle_2.plot(ax, num=True)
 
     DIR_fasc = "./unitary_tests/figures/Fascicle_"+str(test_num)+"/"
     plt.savefig(DIR+ "figures/506_A.png")

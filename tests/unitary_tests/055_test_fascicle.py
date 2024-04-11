@@ -15,7 +15,7 @@ fascicle_1.fill()
 
 if nrv.MCH.do_master_only_work():
 	fig, ax = plt.subplots(figsize=(8,8))
-	fascicle_1.plot(fig, ax, num=True)
+	fascicle_1.plot(ax, num=True)
 	plt.savefig('./unitary_tests/figures/55.png')
 	#plt.show()
 

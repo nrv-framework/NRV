@@ -15,7 +15,7 @@ from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.cell.CL_postprocessing import *
 from .axons import *
-from .fascicle_generator import *
+from .axon_pop_generator import *
 from .myelinated import *
 from .unmyelinated import *
 
@@ -101,9 +101,6 @@ class fascicle(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
-        self.N_vertices = 0
-        self.y_vertices = np.array([])
-        self.z_vertices = np.array([])
         self.A = 0
         # axonal content
         self.axons_diameter = np.array([])
@@ -194,7 +191,7 @@ class fascicle(NRV_simulable):
         Returns
         -------
         key_dict:           dict
-            Pyhton dictionary containing all the fascicle information
+            Python dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
         if not intracel_context:
@@ -310,7 +307,7 @@ class fascicle(NRV_simulable):
     @property
     def N(self):
         rise_warning(
-            "DeprecationWarnin: ",
+            "DeprecationWarning: ",
             "fascicle.N property is obsolete use fascicle.n_ax instead"
         )
         return self.n_ax
@@ -343,7 +340,7 @@ class fascicle(NRV_simulable):
         self.set_axons_parameters(unmyelinated_nseg=self.L // 25)
 
     ## generate stereotypic Fascicle
-    def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
+    def define_circular_contour(self, D, y_c=None, z_c=None):
         """
         Define a circular countour to the fascicle
 
@@ -355,8 +352,6 @@ class fascicle(NRV_simulable):
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         self.type = "Circular"
         self.D = D
@@ -364,10 +359,6 @@ class fascicle(NRV_simulable):
             self.y_grav_center = y_c
         if z_c is not None:
             self.z_grav_center = z_c
-        self.N_vertices = N_vertices
-        theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = self.y_grav_center + (D / 2) * np.cos(theta)
-        self.z_vertices = self.z_grav_center + (D / 2) * np.sin(theta)
         self.A = np.pi * (D / 2) ** 2
 
     def get_circular_contour(self):
@@ -385,17 +376,10 @@ class fascicle(NRV_simulable):
         """
         y = self.y_grav_center
         z = self.z_grav_center
-        if self.y_vertices == np.array([]) and self.D is None:
-            D = 0
-        elif self.D is not None:
-            D = self.D
-        else:
-            y = (np.amax(self.y_vertices) - np.amin(self.y_vertices)) / 2
-            z = (np.amax(self.z_vertices) - np.amin(self.z_vertices)) / 2
-            D = np.abs(np.amax(self.y_vertices) - np.amin(self.y_vertices))
+        D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1, N_vertices=100):
+    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1):
         """
         Define a circular countour to the fascicle
 
@@ -407,8 +391,6 @@ class fascicle(NRV_simulable):
             z coordinate of the circular contour center, in um
         Delta       : float
             distance between farest axon and contour, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         N_axons = len(self.axons_diameter)
         D = 2 * Delta
@@ -430,7 +412,7 @@ class fascicle(NRV_simulable):
                     ** 0.5
                 )
                 D = max(D, 2 * (dist_max + Delta))
-        self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
+        self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
@@ -748,8 +730,6 @@ class fascicle(NRV_simulable):
         """
         self.y_grav_center += y
         self.z_grav_center += z
-        self.y_vertices += y
-        self.z_vertices += z
         self.translate_axons(y, z)
         if self.extra_stim is not None:
             self.extra_stim.translate(y=y, z=z)
@@ -796,14 +776,6 @@ class fascicle(NRV_simulable):
         self.z_grav_center = (
             np.sin(theta) * (self.y_grav_center - y_c)
             + np.cos(theta) * (self.z_grav_center - z_c)
-        ) + z_c
-        self.y_vertices += (
-            np.cos(theta) * (self.y_vertices - y_c)
-            - np.sin(theta) * (self.z_vertices - z_c)
-        ) + y_c
-        self.z_vertices += (
-            np.sin(theta) * (self.y_vertices - y_c)
-            + np.cos(theta) * (self.z_vertices - z_c)
         ) + z_c
         self.rotate_axons(theta, y_c=y_c, z_c=z_c)
 
@@ -905,15 +877,13 @@ class fascicle(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, fig, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+        self, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
     ):
         """
         plot the fascicle in the Y-Z plane (transverse section)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         contour_color   : str
@@ -927,9 +897,13 @@ class fascicle(NRV_simulable):
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.plot(
-                self.y_vertices, self.z_vertices, linewidth=2, color=contour_color
-            )
+            axes.add_patch(plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D/2,
+                color=contour_color,
+                fill=False,
+                linewidth=2,
+            ))
             ## plot axons
             circles = []
             for k in range(self.n_ax):
@@ -969,17 +943,17 @@ class fascicle(NRV_simulable):
             if num:
                 for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
 
     def plot_x(
-        self, fig, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
+        self, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
     ):
         """
         plot the fascicle's axons along Xline (longitudinal)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         myel_color      : str
