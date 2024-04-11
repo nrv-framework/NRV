@@ -465,61 +465,6 @@ def shuffle_population(axons_diameters, axons_type):
     return axons_diameters, axons_type
 
 
-def save_axon_population(f_name, axons_diameters, axons_type, comment=None):
-    """
-    Save an axonal population to a file
-
-    Parameters
-    ----------
-    f_name          : str
-        name of the file to store the population
-    axons_diameters : np.array
-        array containing the axons diameters
-    axons_type      : np.array
-        array containing the axons type ('1' for myelinated, '0' for unmyelinated)
-    comment         : str
-        comment added in the header of the file, optional
-    """
-    f = open(f_name, "w")
-    if comment is not None:
-        line = "# " + comment
-        f.write(line)
-    for k in range(len(axons_diameters)):
-        line = str(axons_diameters[k]) + ", " + str(axons_type[k]) + "\n"
-        f.write(line)
-    f.close()
-
-
-def load_axon_population(f_name):
-    """
-    Load a population from a file
-
-    Parameters
-    ----------
-    f_name          : str
-        name of the file where the population is stored
-
-    Returns
-    -------
-    axons_diameters     : np.array
-        Array containing all the diameters of the generated axon population
-    axons_type          : np.array
-        Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-    M_diam_list         : np.array
-        list of myelinated only diameters
-    U_diam_list         : np.array
-        list of unmyelinated only diamters
-    """
-    population_file = np.genfromtxt(f_name, delimiter=",", comments="#")
-    axons_diameters = population_file[:, 0]
-    axons_type = population_file[:, 1]
-    ind_myel = np.argwhere(axons_type == 1)
-    ind_unmyel = np.argwhere(axons_type == 0)
-    M_diam_list = axons_diameters[ind_myel]
-    U_diam_list = axons_diameters[ind_unmyel]
-    return axons_diameters, axons_type, M_diam_list, U_diam_list
-
-
 #############################################
 #############################################
 #############################################
@@ -780,8 +725,8 @@ def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=
     ax.set_ylim(-size / 2 + z_gc, size / 2 + z_gc)
 
 
-def save_placed_axon_population(
-    f_name, axons_diameters, axons_type, y_axons, z_axons, comment=None
+def save_axon_population(
+    f_name, axons_diameters, axons_type, y_axons=None, z_axons=None, comment=None
 ):
     """
     Save a placed axonal population to a file
@@ -801,6 +746,14 @@ def save_placed_axon_population(
     comment         : str
         comment added in the header of the file, optional
     """
+    if y_axons is None:
+        y_axons = np.zeros([len(axons_diameters)])
+        y_axons[:] = np.nan
+
+    if z_axons is None:
+        z_axons = np.zeros([len(axons_diameters)])
+        z_axons[:] = np.nan
+
     f = open(f_name, "w")
     if comment is not None:
         line = "# " + comment
@@ -820,7 +773,7 @@ def save_placed_axon_population(
     f.close()
 
 
-def load_placed_axon_population(f_name):
+def load_axon_population(f_name):
     """
     Load a placed population from a file
 
@@ -853,4 +806,9 @@ def load_placed_axon_population(f_name):
     ind_unmyel = np.argwhere(axons_type == 0)
     M_diam_list = axons_diameters[ind_myel]
     U_diam_list = axons_diameters[ind_unmyel]
-    return axons_diameters, axons_type, y_axons, z_axons, M_diam_list, U_diam_list
+    
+
+    if (np.isnan(y_axons).all() or np.isnan(z_axons).all()):
+        rise_warning("Loaded population has no y,z coordinates.")
+
+    return axons_diameters, axons_type, M_diam_list, U_diam_list, y_axons, z_axons

@@ -78,7 +78,7 @@ class fascicle(NRV_simulable):
         membrane voltage threshold for spike detection (mV), by default -40mV
     """
 
-    def __init__(self, ID=0, **kwargs):
+    def __init__(self, diameter=None, ID=0, **kwargs):
         """
         Instrantation of a Fascicle
         """
@@ -97,11 +97,10 @@ class fascicle(NRV_simulable):
         self.ID = ID
         self.type = None
         self.L = None
-        self.D = None
+        self.D = diameter
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
-        self.A = 0
         # axonal content
         self.axons_diameter = np.array([])
         self.axons_type = np.array([])
@@ -312,6 +311,15 @@ class fascicle(NRV_simulable):
         )
         return self.n_ax
 
+    @property
+    def A(self):
+        """
+        Area of the fascicle 
+        """
+        if (self. D is None):
+            return None
+        return (np.pi * (self.D / 2) ** 2)
+    
     def set_ID(self, ID):
         """
         set the ID of the fascicle
@@ -359,7 +367,6 @@ class fascicle(NRV_simulable):
             self.y_grav_center = y_c
         if z_c is not None:
             self.z_grav_center = z_c
-        self.A = np.pi * (D / 2) ** 2
 
     def get_circular_contour(self):
         """
@@ -527,7 +534,7 @@ class fascicle(NRV_simulable):
             N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(
+                save_axon_population(
                     ppop_fname,
                     self.axons_diameter,
                     self.axons_type,
@@ -605,7 +612,7 @@ class fascicle(NRV_simulable):
             N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(
+                save_axon_population(
                     ppop_fname,
                     self.axons_diameter,
                     self.axons_type,
@@ -680,7 +687,7 @@ class fascicle(NRV_simulable):
                 N = len(axons_diameter)
             # save the good population
             if ppop_fname is not None:
-                save_placed_axon_population(
+                save_axon_population(
                     ppop_fname,
                     self.axons_diameter,
                     self.axons_type,

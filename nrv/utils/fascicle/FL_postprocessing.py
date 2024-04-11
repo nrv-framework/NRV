@@ -290,7 +290,7 @@ def plot_fasc_state(
 
     ## plot contour
     axes.add_patch(plt.Circle(
-                fasc["y_grav_center"], fasc["z_grav_center"],
+                (fasc["y_grav_center"], fasc["z_grav_center"]),
                 fasc["D"]/2,
                 color=contour_color,
                 fill=False,

@@ -113,7 +113,7 @@ if nrv.MCH.do_master_only_work():
 
     fasc_state = nrv.fascicular_state(DIR_fasc, save=True, saving_file=DIR_fasc+"506_Facsicular_state.json")
     fig, ax = plt.subplots(figsize=(8,8))
-    nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
+    nrv.plot_fasc_state(fasc_state, ax, num=True)
     plt.savefig("./unitary_tests/figures/506_B.png")
 
     fig = plt.figure(figsize=(8,6))
