@@ -674,6 +674,36 @@ def expand_pop(y_axons:np.array, z_axons:np.array, factor:float) -> np.array:
         factor = 1
     return(y_axons*factor,z_axons*factor)
 
+def remove_collision(axons_diameters:np.array,y_axons:np.array,z_axons:np.array, axon_type:np.array, delta: float)-> np.array:
+    """
+    Remove collinding axons in a population
+
+    Parameters
+    ----------
+    axons_diameters : np.array
+        array containing the axons diameters
+    y_axons     : np.array
+        y coordinate of the axons to store, in um
+    z_axons     : np.array
+        z coordinate of the axons to store, in um
+    axon_type   : np.array
+        type of the axon (Myelinated = 1; Unmyelinated = 0)
+    delta               : float
+        minimal inter-axon distance to respect before considering collision, in um
+    """
+
+    Naxon = len(axons_diameters)
+    ids = np.arange(Naxon)    
+    id_pairs = get_axon_combinaisons(ids)
+    pos = np.zeros([2,Naxon])
+    pos[0,:] = y_axons
+    pos[1,:] = z_axons
+    diam_pairs = get_axon_inter_radius(axons_diameters,id_pairs)
+    ic = get_colliding_ids(pos,id_pairs,diam_pairs,delta) 
+    ic = ic[:,0]
+    if len(ic)>0:
+        rise_warning(f"{len(ic)} axon collisions detected - Axon discarded.")
+    return(np.delete(axons_diameters,ic),np.delete(y_axons,ic),np.delete(z_axons,ic),np.delete(axon_type,ic))
 
 #plot fascicle
 def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
