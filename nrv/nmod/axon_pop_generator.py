@@ -702,8 +702,56 @@ def remove_collision(axons_diameters:np.array,y_axons:np.array,z_axons:np.array,
     ic = get_colliding_ids(pos,id_pairs,diam_pairs,delta) 
     ic = ic[:,0]
     if len(ic)>0:
-        rise_warning(f"{len(ic)} axon collisions detected - Axon discarded.")
+        rise_warning(f"{len(ic)} axon collisions detected - Axons discarded.")
     return(np.delete(axons_diameters,ic),np.delete(y_axons,ic),np.delete(z_axons,ic),np.delete(axon_type,ic))
+
+def get_circular_contour(axons_diameters:np.array,y_axons:np.array,z_axons:np.array, delta: float = 10)-> float:
+    """
+    Get a circular contour diameter of the axon population
+
+    Parameters
+    ----------
+    axons_diameters : np.array
+        array containing the axons diameters
+    y_axons     : np.array
+        y coordinate of the axons to store, in um
+    z_axons     : np.array
+        z coordinate of the axons to store, in um
+    delta               : float
+        distance between the contour and the closest axon, in um
+    """
+    dist_axon = np.sqrt((y_axons ** 2 + z_axons**2))
+    dist_axon+= axons_diameters/2
+    radius = np.max(dist_axon) + delta
+    return(radius*2)
+
+def remove_outlier_axons(axons_diameters:np.array, y_axons:np.array, z_axons:np.array, axon_type:np.array, diameter: float = 10)-> np.array:
+    """
+    Remove axons in a population located outside a circular border, defined by its diameter
+
+    Parameters
+    ----------
+    axons_diameters : np.array
+        array containing the axons diameters
+    y_axons     : np.array
+        y coordinate of the axons to store, in um
+    z_axons     : np.array
+        z coordinate of the axons to store, in um
+    axon_type   : np.array
+        type of the axon (Myelinated = 1; Unmyelinated = 0)
+    diameter               : float
+        diameter of the circular border, in um
+    """
+    dist_axon = np.sqrt((y_axons ** 2 + z_axons**2))
+    dist_axon+= axons_diameters/2
+    inside_border = dist_axon <= diameter/2
+    n_remove = len(np.where(inside_border==False)[0])
+    if (n_remove>0):
+        rise_warning(f"{n_remove} outlier axons discarded.")
+
+    return(axons_diameters[inside_border],y_axons[inside_border],z_axons[inside_border],axon_type[inside_border])
+
+
 
 #plot fascicle
 def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
