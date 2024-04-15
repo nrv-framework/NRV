@@ -399,6 +399,8 @@ class fascicle(NRV_simulable):
         Delta       : float
             distance between farest axon and contour, in um
         """
+        rise_warning("fit_circular_contour method usage is not recommended anymore and will be removed in future release.")
+        pass_info("Define fascicle size/shape at object creation instead.")
         N_axons = len(self.axons_diameter)
         D = 2 * Delta
 
@@ -465,6 +467,9 @@ class fascicle(NRV_simulable):
         pop_fname       : str
             optional, if specified, name file to store the population generated
         """
+
+        rise_warning("fill method usage is not recommended anymore and will be removed in future release.")
+        pass_info("Use axon_pop_generator methods instead.")
         #### AXON GENERATION: parallelization if resquested ####
         Area_to_fill = 0
         # Note: generate a bit too much axons just in case
@@ -549,18 +554,17 @@ class fascicle(NRV_simulable):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
 
     def fill_with_population(
-        self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55
-    ):
+        self, axons_diameter:np.array, axons_type:np.array, delta:float=1,
+        y_axons:np.array=None, z_axons:np.array=None, fit_to_size: bool = False, n_iter: int = 20_000
+    ) -> None: 
         """
-        Fill a geometricaly defined contour with an already generated axon population
+        Fill the fascicle with an axon population
 
         Parameters
         ----------
@@ -568,149 +572,50 @@ class fascicle(NRV_simulable):
             Array  containing all the diameters of the axon population
         axons_type          : np.array
             Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-        ppop_fname      : str
-            optional, if specified, name file to store the placed population generated
-        FVF             : float
-            Fiber Volume Fraction estimated for the area. By default set to 0.55
-        """
-        if MCH.do_master_only_work():
-            ## check the population area
-            total_ax_area = 0
-            for diam in axons_diameter:
-                total_ax_area += np.pi * ((diam / 2) ** 2)
-            if self.A * FVF > total_ax_area and self.D is not None:
-                rise_warning(
-                    "Warning: the specified population maybe too small to fill the current fascicle"
-                )
-            N = len(axons_diameter)
-            pass_info("\n ... " + str(N) + " axons loaded")
-            if ppop_fname is not None:
-                save_axon_population(
-                    ppop_fname, axons_diameter, axons_type, comment=None
-                )
-            axons_y, axons_z = axon_packer(
-                axons_diameter,
-                delta=Delta,
-                y_gc=self.y_grav_center,
-                z_gc=self.z_grav_center,
-                n_iter=20000
-            )
-            N = len(axons_diameter)
-            # check if axons are inside the fascicle
-            if self.D is not None:
-                inside_axons = (
-                    np.power(axons_y - self.y_grav_center, 2)
-                    + np.power(axons_z - self.z_grav_center, 2)
-                    - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-                )
-                axons_to_keep = np.argwhere(inside_axons < 0)
-
-                axons_diameter = axons_diameter[axons_to_keep]
-                axons_type = axons_type[axons_to_keep]
-                axons_y = axons_y[axons_to_keep]
-                axons_z = axons_z[axons_to_keep]
-            N = len(axons_diameter)
-            # save the good population
-            if ppop_fname is not None:
-                save_axon_population(
-                    ppop_fname,
-                    self.axons_diameter,
-                    self.axons_type,
-                    self.axons_y,
-                    self.axons_z,
-                    comment=None,
-                )
-        else:
-            axons_diameter = None
-            axons_type = None
-            axons_y = None
-            axons_z = None
-            N = None
-        ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
-        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-
-    def fill_with_placed_population(
-        self,
-        axons_diameter,
-        axons_type,
-        axons_y,
-        axons_z,
-        check_inside=True,
-        check_collision=True,
-        ppop_fname=None,
-    ):
-        """
-        Fill a geometricaly defined contour with an already generated axon population
-
-        Parameters
-        ----------
-        axons_diameters     : np.array
-            Array  containing all the diameters of the axon population
-        axons_type          : np.array
-            Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-        axons_y             : np.array
-            y coordinate of the axons, in um
-        axons_z             : np.array
-            z coordinate of the axons, in um
-        check_inside        : bool
-            if True the placed axons position are checked to ensure all remaining axons at the end are inside the fascicle
-        check_collision     : bool
-            if True, possible remaining collisions are check in the loaded population, and thiner axons are deleted
-        ppop_fname          : str
-            optional, if specified, name file to store the placed population generated
+        delta               : float
+            axon-to-axon and axon to border minimal distance
+        y_axons             : np.array
+            y coordinate of the axon population, in um
+        z_axons             : np.array
+            z coordinate of the axons population, in um
+        fit_to_size         : bool
+            if true, the axon population is extended to fit within fascicle size, if not the population is kept as is
+        n_iter              : int
+            number of interation for the packing algorithm if the y-x axon coordinates are not specified
+        WARNING: If y_axons and z_axons are not specified then axon-packing algorithm is called within the method.
         """
         if MCH.do_master_only_work():
             N = len(axons_diameter)
-            if check_collision:
-                # check for remaining collisions and delete problematic axons
-                axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                    axons_diameter, axons_type, axons_y, axons_z
+            if (y_axons is None) and (z_axons is None):
+                y_axons, z_axons = axon_packer(
+                    axons_diameter,
+                    delta=delta,
+                    y_gc=self.y_grav_center,
+                    z_gc=self.z_grav_center,
+                    n_iter=n_iter
                 )
-                N = len(axons_diameter)
-            # check if axons are inside the fascicle
-            if check_inside and self.D is not None:
-                inside_axons = (
-                    np.power(axons_y - self.y_grav_center, 2)
-                    + np.power(axons_z - self.z_grav_center, 2)
-                    - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-                )
-                axons_to_keep = np.argwhere(inside_axons < 0)
-                axons_diameter = axons_diameter[axons_to_keep]
-                axons_type = axons_type[axons_to_keep]
-                axons_y = axons_y[axons_to_keep]
-                axons_z = axons_z[axons_to_keep]
-                N = len(axons_diameter)
-            # save the good population
-            if ppop_fname is not None:
-                save_axon_population(
-                    ppop_fname,
-                    self.axons_diameter,
-                    self.axons_type,
-                    self.axons_y,
-                    self.axons_z,
-                    comment=None,
-                )
+            if (fit_to_size):
+                d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
+                if (d_pop) < self.D:
+                    exp_factor = 0.99*(self.D/d_pop)
+                    y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+            axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
+            axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
         else:
             axons_diameter = None
             axons_type = None
-            axons_y = None
-            axons_z = None
+            y_axons = None
+            z_axons = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
+        self.axons_y = MCH.master_broadcasts_array_to_all(y_axons).flatten()
+        self.axons_z = MCH.master_broadcasts_array_to_all(z_axons).flatten()
+
 
     ## Move methods
-    def translate_axons(self, y, z):
+    def translate_axons(self, y, z): 
         """
         Move axons only in a fascicle by group translation
 

@@ -1,7 +1,7 @@
 """
-NRV-fascicule generator usefull functions.
+Axon population generator usefull functions.
 """
-import faulthandler
+import faulthandler 
 import math
 import os
 from tqdm import tqdm
@@ -674,7 +674,7 @@ def expand_pop(y_axons:np.array, z_axons:np.array, factor:float) -> np.array:
         factor = 1
     return(y_axons*factor,z_axons*factor)
 
-def remove_collision(axons_diameters:np.array,y_axons:np.array,z_axons:np.array, axon_type:np.array, delta: float)-> np.array:
+def remove_collision(axons_diameters:np.array,y_axons:np.array,z_axons:np.array, axon_type:np.array, delta: float=0)-> np.array:
     """
     Remove collinding axons in a population
 
@@ -752,8 +752,6 @@ def remove_outlier_axons(axons_diameters:np.array, y_axons:np.array, z_axons:np.
     return(axons_diameters[inside_border],y_axons[inside_border],z_axons[inside_border],axon_type[inside_border])
 
 
-
-#plot fascicle
 def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
     """
     Display a population of axons. 

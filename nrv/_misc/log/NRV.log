@@ -55801,3 +55801,250 @@
 2024-04-12 20:24:01,300 - NRV DEBUG: Packing done!
 2024-04-12 20:24:39,984 - NRV DEBUG: Axon packing initiated. This might take a while...
 2024-04-12 20:24:50,780 - NRV DEBUG: Packing done!
+2024-04-15 11:35:57,668 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 2 out of 3
+2024-04-15 11:35:57,671 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 1 out of 3
+2024-04-15 11:35:57,673 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 0 out of 3
+2024-04-15 11:36:35,135 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 2 out of 3
+2024-04-15 11:36:35,140 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 0 out of 3
+2024-04-15 11:36:35,142 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 11:36:35,146 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 1 out of 3
+2024-04-15 11:36:39,508 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 11:37:04,482 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 0 out of 3
+2024-04-15 11:37:04,483 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 11:37:04,484 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 2 out of 3
+2024-04-15 11:37:04,485 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 1 out of 3
+2024-04-15 11:37:07,115 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 11:37:31,537 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 0 out of 3
+2024-04-15 11:37:31,537 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 1 out of 3
+2024-04-15 11:37:31,539 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 11:37:31,542 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 2 out of 3
+2024-04-15 11:37:34,690 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 11:37:36,624 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 63 axons will be removed from the fascicle
+ from process 2 out of 3
+2024-04-15 11:37:36,624 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 63 axons will be removed from the fascicle
+ from process 1 out of 3
+2024-04-15 11:37:36,630 - NRV INFO: 75 axons remaining
+ from process 1 out of 3
+2024-04-15 11:37:36,630 - NRV INFO: 75 axons remaining
+ from process 2 out of 3
+2024-04-15 11:37:37,117 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 63 axons will be removed from the fascicle
+ from process 0 out of 3
+2024-04-15 11:37:37,129 - NRV INFO: 75 axons remaining
+ from process 0 out of 3
+2024-04-15 11:37:39,162 - NRV INFO: Mesh properties:
+ from process 0 out of 3
+2024-04-15 11:37:39,163 - NRV INFO: Number of processes : 3
+ from process 0 out of 3
+2024-04-15 11:37:39,163 - NRV INFO: Number of entities : 36
+ from process 0 out of 3
+2024-04-15 11:37:39,163 - NRV INFO: Number of nodes : 15471
+ from process 0 out of 3
+2024-04-15 11:37:39,163 - NRV INFO: Number of elements : 110628
+ from process 0 out of 3
+2024-04-15 11:37:39,164 - NRV INFO: Static/Quasi-Static electrical current problem
+ from process 0 out of 3
+2024-04-15 11:37:40,449 - NRV INFO: FEN4NRV: setup the bilinear form
+ from process 0 out of 3
+2024-04-15 11:37:40,460 - NRV INFO: FEN4NRV: setup the linear form
+ from process 0 out of 3
+2024-04-15 11:37:40,461 - NRV INFO: FEN4NRV: solving electrical potential
+ from process 0 out of 3
+2024-04-15 11:37:56,115 - NRV INFO: FEN4NRV: solved in 16.950940132141113 s
+ from process 0 out of 3
+2024-04-15 11:38:02,160 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:38:03,348 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:38:03,764 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:38:05,393 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:38:06,040 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:38:07,411 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:38:07,709 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:38:07,891 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:38:09,357 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:38:09,782 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:38:12,092 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:38:15,835 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:41:45,502 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 1 out of 3
+2024-04-15 11:41:45,504 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 2 out of 3
+2024-04-15 11:41:45,507 - NRV INFO: On 75 axons to generate, there are 23 Myelinated and 52 Unmyelinated
+ from process 0 out of 3
+2024-04-15 11:41:45,508 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 11:41:48,275 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 11:41:49,516 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 66 axons will be removed from the fascicle
+ from process 1 out of 3
+2024-04-15 11:41:49,516 - NRV INFO: 75 axons remaining
+ from process 1 out of 3
+2024-04-15 11:41:49,553 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 66 axons will be removed from the fascicle
+ from process 2 out of 3
+2024-04-15 11:41:49,553 - NRV INFO: 75 axons remaining
+ from process 2 out of 3
+2024-04-15 11:41:50,232 - NRV INFO: From Fascicle 504: Electrode/Axons overlap, 66 axons will be removed from the fascicle
+ from process 0 out of 3
+2024-04-15 11:41:50,232 - NRV INFO: 75 axons remaining
+ from process 0 out of 3
+2024-04-15 11:41:52,058 - NRV INFO: Mesh properties:
+ from process 0 out of 3
+2024-04-15 11:41:52,058 - NRV INFO: Number of processes : 3
+ from process 0 out of 3
+2024-04-15 11:41:52,058 - NRV INFO: Number of entities : 36
+ from process 0 out of 3
+2024-04-15 11:41:52,058 - NRV INFO: Number of nodes : 15494
+ from process 0 out of 3
+2024-04-15 11:41:52,058 - NRV INFO: Number of elements : 110752
+ from process 0 out of 3
+2024-04-15 11:41:52,059 - NRV INFO: Static/Quasi-Static electrical current problem
+ from process 0 out of 3
+2024-04-15 11:41:52,792 - NRV INFO: FEN4NRV: setup the bilinear form
+ from process 0 out of 3
+2024-04-15 11:41:52,805 - NRV INFO: FEN4NRV: setup the linear form
+ from process 0 out of 3
+2024-04-15 11:41:52,819 - NRV INFO: FEN4NRV: solving electrical potential
+ from process 0 out of 3
+2024-04-15 11:42:07,699 - NRV INFO: FEN4NRV: solved in 15.640501022338867 s
+ from process 0 out of 3
+2024-04-15 11:42:13,176 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:42:13,176 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:42:13,240 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:42:15,035 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:42:15,364 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 11:42:15,846 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:42:17,288 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-04-15 11:42:18,095 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-04-15 11:42:22,172 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-04-15 13:50:21,633 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 1 out of 3
+2024-04-15 13:50:21,636 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 2 out of 3
+2024-04-15 13:50:21,638 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 0 out of 3
+2024-04-15 13:50:21,641 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 1 out of 3
+2024-04-15 13:50:21,641 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 2 out of 3
+2024-04-15 13:50:21,641 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 13:50:24,930 - NRV INFO: Packing done!
+ from process 1 out of 3
+2024-04-15 13:50:24,954 - NRV INFO: Packing done!
+ from process 2 out of 3
+2024-04-15 13:50:24,990 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 13:52:18,682 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 1 out of 3
+2024-04-15 13:52:18,683 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 1 out of 3
+2024-04-15 13:52:18,688 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 0 out of 3
+2024-04-15 13:52:18,689 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 13:52:18,694 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 2 out of 3
+2024-04-15 13:52:18,695 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 2 out of 3
+2024-04-15 13:52:22,127 - NRV INFO: Packing done!
+ from process 1 out of 3
+2024-04-15 13:52:22,177 - NRV INFO: Packing done!
+ from process 2 out of 3
+2024-04-15 13:52:22,189 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 13:53:27,127 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 0 out of 3
+2024-04-15 13:53:27,139 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 13:53:30,275 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 13:54:40,926 - NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+ from process 0 out of 3
+2024-04-15 13:54:40,927 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-04-15 13:54:44,093 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-04-15 13:56:20,877 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 13:56:20,878 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 13:56:23,835 - NRV DEBUG: Packing done!
+2024-04-15 13:57:14,709 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 13:57:14,755 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 13:57:18,113 - NRV DEBUG: Packing done!
+2024-04-15 13:57:23,168 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 13:57:23,169 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 13:57:26,109 - NRV DEBUG: Packing done!
+2024-04-15 13:57:50,153 - NRV DEBUG: On 300 axons to generate, there are 90 Myelinated and 210 Unmyelinated
+2024-04-15 13:57:50,154 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 13:58:03,031 - NRV DEBUG: Packing done!
+2024-04-15 14:00:21,319 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 14:00:21,321 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:00:24,434 - NRV DEBUG: Packing done!
+2024-04-15 14:00:25,077 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:00:27,865 - NRV DEBUG: Packing done!
+2024-04-15 14:01:47,544 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 14:01:47,545 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:01:50,508 - NRV DEBUG: Packing done!
+2024-04-15 14:01:51,179 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:01:54,004 - NRV DEBUG: Packing done!
+2024-04-15 14:02:10,528 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 14:02:10,529 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:02:13,384 - NRV DEBUG: Packing done!
+2024-04-15 14:02:14,088 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:02:16,854 - NRV DEBUG: Packing done!
+2024-04-15 14:04:29,190 - NRV DEBUG: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
+2024-04-15 14:04:29,210 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:04:32,374 - NRV DEBUG: Packing done!
+2024-04-15 14:04:33,029 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:04:35,756 - NRV DEBUG: Packing done!
+2024-04-15 14:08:46,914 - NRV DEBUG: On 500 axons to generate, there are 150 Myelinated and 350 Unmyelinated
+2024-04-15 14:08:46,915 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:09:24,534 - NRV DEBUG: Packing done!
+2024-04-15 14:09:26,298 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:10:03,482 - NRV DEBUG: Packing done!
+2024-04-15 14:14:10,272 - NRV DEBUG: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
+2024-04-15 14:14:10,277 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:14:16,884 - NRV DEBUG: Packing done!
+2024-04-15 14:14:18,062 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:14:24,649 - NRV DEBUG: Packing done!
+2024-04-15 14:33:06,720 - NRV DEBUG: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
+2024-04-15 14:33:06,724 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:33:13,744 - NRV DEBUG: Packing done!
+2024-04-15 14:33:15,014 - NRV DEBUG: Axon packing initiated. This might take a while...
+2024-04-15 14:33:21,925 - NRV DEBUG: Packing done!
