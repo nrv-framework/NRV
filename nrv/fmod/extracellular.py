@@ -623,7 +623,7 @@ class FEM_stimulation(extracellular_context):
             is_overlaping = is_overlaping or check_electrodes_overlap(elec, electrode)
 
         if is_overlaping:
-            rise_warning("overlaping electrod: not added to context")
+            rise_warning("overlaping electrodes: not added to context")
         else:
             if is_FEM_electrode(electrode):
                 if not electrode.is_multipolar:

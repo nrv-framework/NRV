@@ -590,8 +590,6 @@ class fascicle(NRV_simulable):
                 y_axons, z_axons = axon_packer(
                     axons_diameter,
                     delta=delta,
-                    y_gc=self.y_grav_center,
-                    z_gc=self.z_grav_center,
                     n_iter=n_iter
                 )
             if (fit_to_size):
@@ -599,8 +597,10 @@ class fascicle(NRV_simulable):
                 if (d_pop) < self.D:
                     exp_factor = 0.99*(self.D/d_pop)
                     y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+            
             axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
             axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
+            
         else:
             axons_diameter = None
             axons_type = None
@@ -612,7 +612,23 @@ class fascicle(NRV_simulable):
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(y_axons).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(z_axons).flatten()
+        self.translate_axons(self.y_grav_center,self.z_grav_center)
 
+    def fit_population_to_size(self, delta: float = 1):
+        """
+        Fit the axon positions to the size of the fascicle
+
+        Parameters
+        ----------
+        delta   : float
+            minimum axon to fascicle border distance, in um
+        """
+        self.translate_axons(-self.y_grav_center,-self.z_grav_center)
+        d_pop = get_circular_contour(self.axons_diameter,self.axons_y,self.axons_z, delta)
+        if (d_pop) < self.D:
+            exp_factor = 0.99*(self.D/d_pop)
+            self.axons_y, self.axons_z = expand_pop(self.axons_y, self.axons_z, exp_factor)
+        self.translate_axons(self.y_grav_center,self.z_grav_center)
 
     ## Move methods
     def translate_axons(self, y, z): 
