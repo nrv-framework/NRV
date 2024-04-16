@@ -2,7 +2,7 @@ import nrv
 import numpy as np
 import matplotlib.pyplot as plt
 
-if nrv.MCH.do_master_only_work():
+if 1:#nrv.MCH.do_master_only_work():
     N = 200
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
     y_axons, z_axons = nrv.axon_packer(axons_diameters,delta = 10)

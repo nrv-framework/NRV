@@ -654,7 +654,8 @@ def axon_packer(diameters: np.array,
     y_axons = pos[0].copy()
     z_axons = pos[1].copy()
     pass_info("Packing done!")
-    return y_axons, z_axons
+    y_c, z_c = get_barycenter(diameters,y_axons,z_axons)    #center the population back to 0,0
+    return y_axons-y_c, z_axons-z_c
 
 def expand_pop(y_axons:np.array, z_axons:np.array, factor:float) -> np.array:
     """
@@ -751,6 +752,21 @@ def remove_outlier_axons(axons_diameters:np.array, y_axons:np.array, z_axons:np.
 
     return(axons_diameters[inside_border],y_axons[inside_border],z_axons[inside_border],axon_type[inside_border])
 
+def get_barycenter(axons_diameters, y_axons, z_axons):
+    """
+    Compute barycenter of the population
+
+    Parameters
+    ----------
+    axons_diameters : np.array
+        array containing the axons diameters
+    y_axons     : np.array
+        y coordinate of the axons to store, in um
+    z_axons     : np.array
+        z coordinate of the axons to store, in um
+    """
+    diam_sum = np.sum(axons_diameters)
+    return(np.sum(axons_diameters * y_axons)/diam_sum,np.sum(axons_diameters * z_axons)/diam_sum)
 
 def plot_population(diameters, y_axons, z_axons,ax,size, axon_type = None, y_gc=0, z_gc=0)->None:
     """
