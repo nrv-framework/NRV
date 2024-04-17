@@ -778,7 +778,8 @@ class nerve(NRV_simulable):
             fasc.record_g_ions = self.record_g_ions
             fasc.record_particles = self.record_particles
             fasc.postproc_script = self.postproc_script
-
+            fasc.save_results = self.save_results,
+            fasc.return_parameters_only = self.return_parameters_only
 
 
     # Footprint and mesh
@@ -820,7 +821,8 @@ class nerve(NRV_simulable):
         calling this method can result in long processing time, even with large computational ressources.
         Keep aware of what is really implemented, ensure configuration and simulation protocol is correctly designed.
         """
-        pass_info("Starting nerve simulation")
+        if self.verbose:
+            pass_info("Starting nerve simulation")
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
@@ -834,7 +836,8 @@ class nerve(NRV_simulable):
             else:
                 pass
         # run FEM model
-        pass_info("...computing electrodes footprint")
+        if self.verbose:
+            pass_info("...computing electrodes footprint")
         self.compute_electrodes_footprints(**kwargs)
         synchronize_processes()
         # Simulate all fascicles
@@ -842,12 +845,15 @@ class nerve(NRV_simulable):
         if self.save_results:
             fasc_kwargs["save_path"] = folder_name
         for fasc in self.fascicles.values():
-            pass_info("...simulating fascicle " + str(fasc.ID))
+            if self.verbose:
+                pass_info("...simulating fascicle " + str(fasc.ID))
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
-                in_nerve=True, save_results = self.save_results,
-                return_parameters_only = self.return_parameters_only,
+                in_nerve=True,
                 **fasc_kwargs,
             )
-        pass_info("...Done!")
+        if self.verbose:
+            pass_info("...Done!")
+        if "extra_stim" in nerve_sim:
+            nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"]) #dirty hack to force NRV_class type when saved
         self.is_simulated = True
         return nerve_sim

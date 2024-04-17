@@ -206,3 +206,4 @@ tests/log_NRV_test.txt
 .vscode/settings.json
 nrv/_misc/log/NRV.log
 tests/log_NRV_test.txt
+nrv/_misc/log/NRV.log

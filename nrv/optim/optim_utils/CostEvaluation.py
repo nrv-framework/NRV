@@ -147,11 +147,16 @@ class recrutement_count_CE(CostEvaluation):
         self.reverse = reverse
 
     def count_axon_activation(self, results: sim_results):
+        if "V_mem_raster_position" not in results:
+            rasterize(results, "V_mem")
         if len(results["V_mem_raster_position"]) == 0:
             # no spike
-            return 0
+            cpt = 0
         else:
-            return 1
+            cpt = 1
+        if self.reverse:
+            cpt = int(not cpt)
+        return cpt
 
     def count_fascicle_activation(self, results: sim_results):
         cpt = 0
@@ -173,6 +178,6 @@ class recrutement_count_CE(CostEvaluation):
             cost = self.count_fascicle_activation(results)
         else:
             # nerve simulation
-            for i in range(len(results["fascicles_IDs"])):
+            for i in results["fascicles_IDs"]:
                 cost += self.count_fascicle_activation(results["fascicle" + str(i)])
         return cost
