@@ -7,7 +7,7 @@ from numba import jit
 
 from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
-from ...backend.log_interface import rise_warning
+from ...backend.log_interface import rise_warning, rise_error
 from ...utils.units import to_nrv_unit
 from ...utils.misc import distance_point2line
 
@@ -56,6 +56,13 @@ class axon_results(sim_results):
         super().__init__(context)
 
 
+    def is_recruited(self) -> bool:
+        if not ("V_mem_raster_position") in  self:
+            self.rasterize("V_mem")
+        if len(self["V_mem_raster_position"]) == 0:
+            return(False)
+        else:
+            return(True)
 
     def rasterize(
         self, my_key, t_start=0, t_stop=0, t_min_spike=0.1, t_refractory=2, threshold=0
@@ -476,7 +483,7 @@ class axon_results(sim_results):
                     else:
                         return False
         else:
-            print("intra_stim_positions is not in dictionnary")
+            rise_error("intra_stim_positions is not in dictionnary")
 
 
 

@@ -1557,6 +1557,10 @@ class fascicle(NRV_simulable):
         if not self.return_parameters_only:
             synchronize_processes()
             fasc_sim = MCH.gather_jobs(fasc_sim)
+            if "extra_stim" in fasc_sim:
+                fasc_sim['extra_stim'] = load_any(fasc_sim['extra_stim']) #dirty hack to force NRV_class instead of dict
+            if "recorder" in fasc_sim:
+                fasc_sim['recorder'] = load_any(fasc_sim['extra_stim'])   #idem
         if MCH.is_alone() and self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True
