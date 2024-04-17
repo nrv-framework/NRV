@@ -57,6 +57,7 @@ class nerve(NRV_simulable):
         self.verbose = False
         self.postproc_script = "default"
         self.return_parameters_only = True
+        self.save_results = True
         self.loaded_footprints = True
 
         self.type = "nerve"
@@ -824,25 +825,29 @@ class nerve(NRV_simulable):
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
             nerve_sim = {}
-        folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
-        if MCH.do_master_only_work():
-            create_folder(folder_name)
-            config_filename = folder_name + "/00_Nerve_config.json"
-            self.save(config_filename, fascicles_context=False)
-        else:
-            pass
+        if self.save_results:
+            folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
+            if MCH.do_master_only_work():
+                create_folder(folder_name)
+                config_filename = folder_name + "/00_Nerve_config.json"
+                self.save(config_filename, fascicles_context=False)
+            else:
+                pass
         # run FEM model
         pass_info("...computing electrodes footprint")
         self.compute_electrodes_footprints(**kwargs)
         synchronize_processes()
         # Simulate all fascicles
         fasc_kwargs = kwargs
-        fasc_kwargs["save_path"] = folder_name
+        if self.save_results:
+            fasc_kwargs["save_path"] = folder_name
         for fasc in self.fascicles.values():
             pass_info("...simulating fascicle " + str(fasc.ID))
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
-                in_nerve=True,
+                in_nerve=True, save_results = self.save_results,
+                return_parameters_only = self.return_parameters_only,
                 **fasc_kwargs,
             )
+        pass_info("...Done!")
         self.is_simulated = True
         return nerve_sim
