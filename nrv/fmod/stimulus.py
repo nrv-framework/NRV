@@ -218,19 +218,11 @@ class stimulus(NRV_class):
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
-    def plot(self,ax:plt.axes,N_pts:int = 1000) -> None:
+    def plot(self,ax:plt.axes, **ax_kwargs) -> None:
         """
         Plot the stimulus
         """
-        new_t = np.linspace(self.t[0], self.t[-1], N_pts)
-        old_t = self.t.copy()
-        old_s = self.s.copy()
-        self.insert_samples(new_t)
-        ax.plot(self.t, self.s)
-        
-        #Restore previous stim
-        self.t = old_t.copy()
-        self.s = old_s.copy()
+        ax.step(self.t,self.s,where="post",**ax_kwargs)
 
 
 
