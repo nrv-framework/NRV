@@ -33,10 +33,11 @@ class fascicle_results(sim_results):
         axon_keys = [ i for i in all_keys if ("axon" in i and number_in_str(i)) ]
         if type is not 'all':
             if type is 'unmyelinated':
-                axon_keys = [ i for i in axon_keys if i.myelinated == False]
+                axon_keys = [ i for i in axon_keys if self[i].myelinated == False]
             else:
-                axon_keys = [ i for i in axon_keys if i.myelinated == True]
+                axon_keys = [ i for i in axon_keys if self[i].myelinated == True]
         return(axon_keys)
+
 
 
     def get_recruited_axons(self, type:str = 'all') -> float:
@@ -47,7 +48,7 @@ class fascicle_results(sim_results):
         n_recr = 0
         for axon in axons_keys:
             if (self[axon].is_recruited()):
-                n_recr=+1
+                n_recr+=1
         return(n_recr/len(axons_keys))
     
     def get_recruited_axons_greater_than(self, diam:float, type:str = 'all') -> float:
@@ -86,7 +87,7 @@ class fascicle_results(sim_results):
     ## Representation methods
     def plot_recruited_fibers(
         self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", num:bool=False
-    )->None:
+    ) -> None:
         if MCH.do_master_only_work():
             ## plot contour
             axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,

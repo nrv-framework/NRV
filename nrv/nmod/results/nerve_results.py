@@ -36,6 +36,7 @@ class nerve_results(sim_results):
         fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i)) ]
         return(fascicle_keys)
 
+    
 
     ## Representation methods
     def plot_recruited_fibers(

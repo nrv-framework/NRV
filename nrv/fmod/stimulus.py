@@ -7,6 +7,7 @@ import numpy as np
 
 from ..backend.log_interface import pass_info, rise_warning, rise_error
 from ..backend.NRV_Class import NRV_class
+import matplotlib.pyplot as plt
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -216,6 +217,22 @@ class stimulus(NRV_class):
                     i_mask[i + 1] = False
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
+
+    def plot(self,ax:plt.axes,N_pts:int = 1000) -> None:
+        """
+        Plot the stimulus
+        """
+        new_t = np.linspace(self.t[0], self.t[-1], N_pts)
+        old_t = self.t.copy()
+        old_s = self.s.copy()
+        self.insert_samples(new_t)
+        ax.plot(self.t, self.s)
+        
+        #Restore previous stim
+        self.t = old_t.copy()
+        self.s = old_s.copy()
+
+
 
     #####################
     ## special methods ##
