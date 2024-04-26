@@ -80,12 +80,15 @@ class charge_quantity_CE(CostEvaluation):
 
 
 class stim_energy_CE(CostEvaluation):
-    def __init__(self, id_elec=None, dt_res=0.0001):
+    def __init__(self, id_elec:None|int|list[int]=None, dt_res=0.0001):
         """
-        Create a callable object which return a value proportionnal to the stimulus energy, assuming Zelec is a constant
+        Create a callable object which return a value proportionnal to the stimulus energy, assuming the electrode impedance is a constant.
 
         Parameters
         ----------
+        id_elec : None | int | list[int]
+            id or list id of the electrode of the to from which the energy should be computed. If None, 
+        
 
         Returns
         -------
@@ -120,7 +123,7 @@ class stim_energy_CE(CostEvaluation):
 
 class recrutement_count_CE(CostEvaluation):
     """
-    Callable object which returns the number of activated fibre in the results
+    Callable object which returns the number of triggered fibre in the results
 
     Parameters
     ----------

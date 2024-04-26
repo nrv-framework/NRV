@@ -805,7 +805,7 @@ class fascicle(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+        self, axes, contour_color="k", myel_color="r", unmyel_color="b", elec_color="gold", num=False
     ):
         """
         plot the fascicle in the Y-Z plane (transverse section)
@@ -853,21 +853,10 @@ class fascicle(NRV_simulable):
                             fill=True,
                         )
                     )
-            if self.extra_stim is not None:
-                for electrode in self.extra_stim.electrodes:
-                    if electrode.type == "LIFE":
-                        circles.append(
-                            plt.Circle(
-                                (electrode.y, electrode.z),
-                                electrode.D / 2,
-                                color="gold",
-                                fill=True,
-                            )
-                        )
-                    elif not is_FEM_electrode(electrode):
-                        axes.scatter(electrode.y, electrode.z, color="gold")
             for circle in circles:
                 axes.add_patch(circle)
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
             if num:
                 for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))

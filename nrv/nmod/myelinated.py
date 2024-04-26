@@ -599,6 +599,20 @@ class myelinated(axon):
             blacklist=blacklist,
         )
 
+    def plot(self, axes: plt.axes, color: str="red", node_color: str="lightgray", elec_color="gold", **kwgs) -> None:
+        super().plot(axes, color, elec_color,**kwgs)
+        alpha = 1
+        if "alpha" in kwgs:
+            alpha = kwgs["alpha"]
+
+        axes.add_patch(plt.Circle(
+            (self.y, self.z),
+            self.nodeD / 2,
+            fc=node_color,
+            fill=True,
+            alpha = alpha,
+        ))
+
     def __set_model(self, model):
         """
         Set the double cable model. For internal use only.

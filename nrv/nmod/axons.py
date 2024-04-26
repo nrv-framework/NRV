@@ -450,6 +450,23 @@ class axon(NRV_simulable):
         rise_warning("load_axon is a deprecated method use load")
         self.save(data, extracel_context, intracel_context, rec_context)
 
+    def plot(self, axes: plt.axes, color: str="blue", elec_color="gold", **kwgs) -> None:
+
+        alpha = 1
+        if "alpha" in kwgs:
+            alpha = kwgs["alpha"]
+
+        axes.add_patch(plt.Circle(
+            (self.y, self.z),
+            self.d / 2,
+            color=color,
+            fill=True,
+            alpha = alpha,
+        ))
+        if self.extra_stim is not None:
+            self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.d)
+
+
     def __define_shape(self):
         """
         Define the shape of the axon after all sections creation

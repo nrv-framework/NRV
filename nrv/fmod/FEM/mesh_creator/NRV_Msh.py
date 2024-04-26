@@ -174,6 +174,3 @@ def mesh_from_nerve(
             res_elec=res_elec
             )
     return mesh
-
-
-

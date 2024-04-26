@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-N_test = "215"
+N_test = "208"
 figdir = "./unitary_tests/figures/" + N_test + "_"
 
 dt = 0.005

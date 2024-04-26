@@ -514,7 +514,7 @@ class FEM_stimulation(extracellular_context):
             else:
                 self.model.reshape_outerBox(Outer_D, res=res)
 
-    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
+    def reshape_nerve(self, Nerve_D=None, Length=None, y_c=0, z_c=0, res="default"):
         """
         Reshape the nerve of the FEM simulation
 

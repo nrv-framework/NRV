@@ -75,7 +75,6 @@ class FENICS_model(FEM_model):
         self,
         fname=None,
         Ncore=None,
-        handle_server=False,
         elem=None,
         comm="default",
         rank=0,
@@ -99,7 +98,7 @@ class FENICS_model(FEM_model):
         self.y_c = 0
         self.z_c = 0
         self.Outer_D = 5  # mm
-        self.Nerve_D = 250  # um
+        self.Nerve_D = 500  # um
         self.fascicles = {}
         self.Perineurium_thickness = {}
         self.electrodes = {}
@@ -113,7 +112,7 @@ class FENICS_model(FEM_model):
         self.Perineurium_mat = "perineurium"
         self.Electrodes_mat = 1  # "platinum"
 
-        self.default_fascicle = {"d": 200, "y_c": 0, "z_c": 0, "res": 20}
+        self.default_fascicle = {"d": 250, "y_c": 0, "z_c": 0, "res": 250/3}
         self.default_electrode = {
             "elec_type": "LIFE",
             "x_c": self.L / 2,
@@ -343,7 +342,7 @@ class FENICS_model(FEM_model):
             self.mesh.reshape_outerBox(Outer_D=Outer_D, res=res)
             self.__update_parameters()
 
-    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
+    def reshape_nerve(self, Nerve_D=None, Length=None, y_c=0, z_c=0, res="default"):
         """
         Reshape the nerve of the FEM simulation
 
@@ -361,10 +360,10 @@ class FENICS_model(FEM_model):
             Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
         """
         if not self.mesh_file_status:
-            self.L = Length
-            self.Nerve_D
+            self.L = Length or self.L
+            self.Nerve_D = Nerve_D or self.Nerve_D
             self.mesh.reshape_nerve(
-                Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res
+                Nerve_D=self.Nerve_D, Length=self.L, y_c=y_c, z_c=z_c, res=res
             )
             self.__update_parameters()
 

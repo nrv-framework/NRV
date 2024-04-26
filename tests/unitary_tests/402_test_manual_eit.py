@@ -17,7 +17,7 @@ def check_sim_dom(sim:nrv.FEMSimulation, mesh:nrv.NerveMshCreator):
         print(f"Warning: the following domains are not set {uset_dom}")
 
 
-test_num = "169"
+test_num = "402"
 mesh_file = f"./unitary_tests/results/mesh/{test_num}_mesh"
 sim_file = "./unitary_tests/results/outputs/" + test_num + "_simres"
 fig_file = f"./unitary_tests/figures/{test_num}_"
