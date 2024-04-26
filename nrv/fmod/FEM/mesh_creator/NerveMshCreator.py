@@ -1155,8 +1155,8 @@ class NerveMshCreator(MshCreator):
             self.electrodes[ID]["kwargs"]["insulator_offset"] = insulator_offset
             self.electrodes[ID]["volume"] = []
             self.electrodes[ID]["face"] = []
-            if self.electrodes[ID]["res"] > min(contact_length / 2, insulator_thickness):
-                self.electrodes[ID]["res"] = min(contact_length / 2, insulator_thickness)
+            if self.electrodes[ID]["res"] > min(contact_length, insulator_thickness) / 2:
+                self.electrodes[ID]["res"] = min(contact_length, insulator_thickness) / 2
 
         x_active = x_c - contact_length / 2
         y_active = self.y_c
