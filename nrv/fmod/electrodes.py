@@ -531,9 +531,11 @@ class CUFF_electrode(FEM_electrode):
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
         if "nerve_d" in kwgs:
+            rad = kwgs["nerve_d"] / 2
+            del kwgs["nerve_d"]
             axes.add_patch(plt.Circle(
                 (0, 0),
-                kwgs["nerve_d"] / 2,
+                rad,
                 color=color,
                 fill=False,
                 linewidth=2,
@@ -633,12 +635,14 @@ class CUFF_MP_electrode(CUFF_electrode):
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
         if "nerve_d" in kwgs:
+            rad = kwgs["nerve_d"] / 2
+            del kwgs["nerve_d"]
             elec_theta = 0.9 * 2 * np.pi / self.N_contact
             for i in range(self.N_contact):
                 theta_ = 2 * i * np.pi / self.N_contact
                 axes.add_patch(plt.Wedge(
                     (0, 0),
-                    kwgs["nerve_d"] / 2,
+                    rad,
                     theta1 = theta_,
                     theta2 = theta_ + elec_theta,
                     color=color,

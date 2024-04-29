@@ -204,8 +204,6 @@ tests/unitary_tests/results/*
 tests/unitary_tests/figures/*
 tests/log_NRV_test.txt
 .vscode/settings.json
-nrv/_misc/log/NRV.log
 tests/log_NRV_test.txt
-nrv/_misc/log/NRV.log
 .vscode/ltex.dictionary.en-US.txt
-nrv/_misc/log/NRV.log
+nrv/_misc/log/*
