@@ -711,12 +711,15 @@ class FEMSimulation(FEMParameters):
     def visualize_mesh(self):
         os.system("gmsh " + self.mesh_file + ".msh")
 
+    def get_surface(self, dom_id):
+        return assemble_scalar(form(1 * self.ds(dom_id)))
+
     def get_domain_potential(self, dom_id, dim=2, space=0):
         if dim == 2:
             do = self.ds
         elif dim == 3:
             do = self.dx
-        Surf = assemble_scalar(form(1 * do(dom_id)))
+        Surf = self.get_surface(dom_id)
         if self.to_merge:
             return assemble_scalar(form(self.vout * do(dom_id))) / Surf * V
         else:

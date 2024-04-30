@@ -61,15 +61,13 @@ else:
         np.savetxt(ft, axon_sim["t"],delimiter=",")
 
 
-
-
     ###############################
     ## remove non nevessary data ##
     ###############################
     list_keys = []
     removable_keys = []
     if not self.return_parameters_only:
-        list_keys += ["g_mem", "x_rec"]
+        list_keys += ["g_mem", "x_rec", "rec", "Nseg_per_sec", "axon_path_type", "Nseg_per_sec"]
         if k==0:
             list_keys += ["t"]
 
@@ -79,9 +77,4 @@ else:
             removable_keys += [key]
     for key in removable_keys:
         nrv.remove_key(axon_sim, key, verbose=False)
-
-
-
-
-
 

@@ -102,7 +102,7 @@ class FENICS_model(FEM_model):
         self.fascicles = {}
         self.Perineurium_thickness = {}
         self.electrodes = {}
-        self.Istim = 1e-3  # A
+        self.i_stim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
 
@@ -267,7 +267,7 @@ class FENICS_model(FEM_model):
         param["Epineurium_mat"] = self.Epineurium_mat
         param["Endoneurium_mat"] = self.Endoneurium_mat
         param["Perineurium_mat"] = self.Perineurium_mat
-        param["Istim"] = self.Istim
+        param["i_stim"] = self.i_stim
         return param
 
     def __update_parameters(self, bcast=False):
@@ -305,7 +305,7 @@ class FENICS_model(FEM_model):
         self.fascicles = {}
         self.Perineurium_thickness = {}
         self.electrodes = {}
-        self.Istim = 1e-3  # A
+        self.i_stim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
 
@@ -456,7 +456,6 @@ class FENICS_model(FEM_model):
             for _, (E, active_elec) in enumerate(self.electrodes.items()):
                 E_var = "E" + str(E)
                 mesh_domain_3D = self.__find_elec_subdomain(active_elec)
-                self.jstims += {self.__find_elec_jstim(active_elec)}
                 self.j_electrode[E_var] = 0
                 e_dom = (
                     ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * E)
@@ -470,6 +469,7 @@ class FENICS_model(FEM_model):
             # set a parallelizable preconditionner if sim solve on multiple precesses
             if self.is_multi_proc:
                 self.sim.set_solver_opt(pc_type="hypre")
+            self.sim.setup_sim(**self.j_electrode)
             self.is_sim_ready = True
             self.setup_timer += time.time() - t0
 
@@ -560,18 +560,18 @@ class FENICS_model(FEM_model):
         """
         # Unitary stimulation
         if I is not None:
-            self.Istim = I
+            self.i_stim = I
 
-        if elec["type"] == "CUFF":
-            d_e = self.Nerve_D + 2 * elec["kwargs"]["contact_thickness"]
+        """if elec["type"] == "CUFF":
+            d_e = self.Nerve_D
             l_e = elec["kwargs"]["contact_length"]
 
         elif elec["type"] == "LIFE":
             d_e = elec["kwargs"]["d"]
-            l_e = elec["kwargs"]["length"]
+            l_e = elec["kwargs"]["length"]"""
 
-        S = pi * (d_e) * (l_e)
-        jstim = self.Istim / S
+        S = self.sim
+        jstim = self.i_stim / S
         return jstim
 
     ###################
@@ -631,7 +631,10 @@ class FENICS_model(FEM_model):
             for E in range(self.N_electrode):
                 for i_elec in self.j_electrode:
                     if i_elec == "E" + str(E):
-                        self.j_electrode[i_elec] = self.jstims[E]
+                        e_dom = (
+                            ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * E)
+                        )
+                        self.j_electrode[i_elec] = self.i_stim/self.sim.get_surface(e_dom)
                     else:
                         self.j_electrode[i_elec] = 0
                 self.sim.setup_sim(**self.j_electrode)
