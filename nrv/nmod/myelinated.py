@@ -62,14 +62,17 @@ def get_MRG_parameters(diameter):
         nodeD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nodeD, 3))
         paraD1_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD1, 3))
         paraD2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD2, 3))
-        deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
-        if diameter < 1.0 or diameter > 16.0:
+        
+        if diameter < 1.0 or diameter > 14.0:
             # outside of the MRG originla limit, take 1st order approx,
-            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 1))
+            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 3))
+            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 2))        
         else:
             # try to fit a bit better
             paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 5))
+            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 5))
         nl_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nl, 3))
+
         # evaluate for the requested diameter
         g = g_poly(diameter)
         axonD = axonD_poly(diameter)

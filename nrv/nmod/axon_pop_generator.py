@@ -268,7 +268,7 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         bin_size = diameters[1] - diameters[0]
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
-    if myelinated:
+    if myelinated and dmax > 10:
         popt1, pcov1 = curve_fit(
             two_Gamma,
             xdata=diameters,
