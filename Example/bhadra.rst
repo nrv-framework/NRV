@@ -1,6 +1,5 @@
-================================================
-Example 2: Conduction block with kHz stimulation
-================================================
+Replicating the in-silico study from Bhadra et al.
+--------------------------------------------------
 
 In this example, we use NRV to replicate some results from the in-silico
 study from Bhadra et al. published in 2006. This is an example of
@@ -94,5 +93,5 @@ propagation block with an mylinated axon (MRG model).
 
 
 
-.. image:: ../images/bhadra_1_0.png
+.. image:: bhadra_files/bhadra_1_0.png
 
