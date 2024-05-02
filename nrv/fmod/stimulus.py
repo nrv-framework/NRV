@@ -218,7 +218,7 @@ class stimulus(NRV_class):
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
-    def plot(self,ax:plt.axes, **ax_kwargs) -> None:
+    def plot(self, ax:plt.axes, **ax_kwargs):
         """
         Plot the stimulus
         """
