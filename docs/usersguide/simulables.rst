@@ -447,7 +447,9 @@ Again, for the end-user, four specific methods for intracelullar stimulation mye
 Fascicles
 =========
 
-blablablabla
+Fascicles are induvidual bundles of axons. Their description is quite extensive in the NRV framework. However, their individual simulation for unexperienced user does not make a lot of sense (the geometry of the full simulation would not make a biophysical meaning). Therefore, we do not details extensively here their implementation for the end user, but refer to the API full documentation.
+
+Note that nerves (below) are the prefered object to describe simulations with multiple fibers, even if the number of fascicle in the nerve is 1.
 
 Nerves
 ======
