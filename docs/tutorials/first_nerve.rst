@@ -1,6 +1,6 @@
-===========================
-Stimulating nerves with NRV
-===========================
+========================================
+Tutorial 3 - Stimulating nerves with NRV
+========================================
 
 
 In this tutorial, we will create a 2-fascicle nerve, populate it with
