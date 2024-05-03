@@ -1,5 +1,6 @@
 import nrv
 import matplotlib.pyplot as plt
+from numpy import exp
 
 #####################################
 # Example of combination of stimuli #
@@ -60,5 +61,68 @@ axs[0].set_title('signal and and envelope')
 stim3.plot(axs[1])
 axs[1].set_title('amplitude modulated signal')
 
+#################################################
+## Example of a complex custom stimulus design ##
+##                                             ##
+## simple pulse with a prepulse and charge     ##
+## balance                                     ##
+## modulation with a gaussian of borst of 10   ##
+## patterns                                    ##
+## repetition of the bursts                    ##
+#################################################
+
+start = 0
+fig, axs = plt.subplots(2, 2, layout='constrained', figsize=(10, 8))
+
+# waveform parameters
+complex_stim = nrv.stimulus()
+prepulse_amp = -10              # in uA
+t_prepulse = 120e-3             # in ms
+cath_amp = -100                 # in uA
+t_cath = 60e-3                  # in ms
+deadtime = 60e-3                # in ms
+an_amp = 20                     # in uA
+# prepulse and cathodic pulse
+complex_stim.pulse(start, prepulse_amp)
+complex_stim.pulse(start + t_prepulse, cath_amp, t_cath)
+complex_stim.s[-1] = 0
+# compute the balancing time and anodic pulse
+an_duration = abs(prepulse_amp*t_prepulse + cath_amp*t_cath)/an_amp
+complex_stim.pulse(complex_stim.t[-1] + deadtime, an_amp, an_duration)
+# plot the pattern
+complex_stim.plot(axs[0, 0])
+axs[0, 0].set_title('pattern with prepulse')
+axs[0, 0].set_xlabel('time (ms)')
+axs[0, 0].set_ylabel('amplitude (uA)')
+
+# create burst of 10 patterns
+freq = 1.                       # in kHz
+# finish the period
+t_blank = 1/freq - (t_prepulse + t_cath + deadtime + an_duration)
+N_patterns = 10
+s_pattern, t_pattern = complex_stim.s, complex_stim.t
+for i in range(N_patterns-1):
+    complex_stim.concatenate(s_pattern, t_pattern, t_shift=t_blank)
+# plot the pattern
+complex_stim.plot(axs[0, 1])
+axs[0, 1].set_title('burst of 10 patterns')
+axs[0, 1].set_xlabel('time (ms)')
+axs[0, 1].set_ylabel('amplitude (uA)')
+
+# multiply by gaussian
+def my_gaussian(t, f, N_patterns):
+    return exp(-((t - ((N_patterns/2)-1)*(1/f))**2)/4)
+envelope = nrv.stimulus()
+for k in range(N_patterns):
+    envelope.pulse(k*(1/freq), my_gaussian(k*(1/freq), freq, N_patterns))
+#envelope.pulse(envelope.t[-1], 0, (1/freq)
+#envelope.plot(axs[1, 0], color='r', label='enveloppe')
+modulated_pattern = complex_stim * envelope
+modulated_pattern.plot(axs[1,0])
+#complex_stim.plot(axs[1, 0], color='b', label='stimulus')
+axs[1, 0].set_title('Burst modulation')
+#axs[1, 0].legend()
+axs[1, 0].set_xlabel('time (ms)')
+axs[1, 0].set_ylabel('amplitude (uA)')
 
 plt.show()
