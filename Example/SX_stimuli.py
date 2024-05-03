@@ -109,8 +109,7 @@ axs[0, 1].set_title('burst of 10 patterns')
 axs[0, 1].set_xlabel('time (ms)')
 axs[0, 1].set_ylabel('amplitude (uA)')
 
-
-# multiply by gaussian
+# modulate with gaussian envelope
 def my_gaussian(t, f, N_patterns):
     return exp(-((t - ((N_patterns/2)-1)*(1/f))**2)/4)
 
@@ -118,15 +117,24 @@ def my_gaussian(t, f, N_patterns):
 envelope = nrv.stimulus()
 for k in range(N_patterns):
     envelope.pulse(k*(1/freq), my_gaussian(k*(1/freq), freq, N_patterns))
-#envelope.pulse(envelope.t[-1], 0, (1/freq)
-#envelope.plot(axs[1, 0],scatter=True, color='r', label='enveloppe')
-#complex_stim *= 1/abs(cath_amp)
+
 modulated_pattern = complex_stim * envelope
-modulated_pattern.plot(axs[1,0])#, scatter=True)
-#complex_stim.plot(axs[1, 0], scatter=True, color='k', label='stimulus')
+modulated_pattern.plot(axs[1,0])
 axs[1, 0].set_title('Burst modulation')
-#axs[1, 0].legend()
 axs[1, 0].set_xlabel('time (ms)')
 axs[1, 0].set_ylabel('amplitude (uA)')
+
+# construct repeted groups of burst
+N_burst = 4
+f_burst = 0.05
+s_burst, t_burst = modulated_pattern.s, modulated_pattern.t
+t_blank = 1/f_burst - modulated_pattern.t[-1]
+for i in range(N_burst-1):
+    modulated_pattern.concatenate(s_burst, t_burst, t_shift=t_blank)
+modulated_pattern.plot(axs[1,1])
+axs[1, 1].set_title('groups of modulated burst')
+axs[1, 1].set_xlabel('time (ms)')
+axs[1, 1].set_ylabel('amplitude (uA)')
+
 
 plt.show()
