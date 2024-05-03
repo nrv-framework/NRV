@@ -1,5 +1,5 @@
 ================================================
-Example 3: Generate a fascicle with all contexts
+Example 6: Generate a fascicle with all contexts
 ================================================
 
 This example shows how to easily generate and save a fascicle with the

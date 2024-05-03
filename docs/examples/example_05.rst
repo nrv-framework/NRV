@@ -1,5 +1,5 @@
 ================================================
-Example 2: Conduction block with kHz stimulation
+Example 5: Conduction block with kHz stimulation
 ================================================
 
 In this example, we use NRV to replicate some results from the in-silico

@@ -7,6 +7,9 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
 .. toctree::
    :caption: Contents:
 
-   examples/example_1
-   examples/example_2
-   examples/example_3
+   examples/example_01
+   examples/example_02
+   examples/example_03
+   examples/example_04
+   examples/example_05
+   examples/example_06
