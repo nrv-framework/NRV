@@ -71,7 +71,7 @@ axs[1].set_title('amplitude modulated signal')
 ## repetition of the bursts                    ##
 #################################################
 
-start = 0
+start = 5e-3
 fig, axs = plt.subplots(2, 2, layout='constrained', figsize=(10, 8))
 
 # waveform parameters
@@ -98,7 +98,7 @@ axs[0, 0].set_ylabel('amplitude (uA)')
 # create burst of 10 patterns
 freq = 1.                       # in kHz
 # finish the period
-t_blank = 1/freq - (t_prepulse + t_cath + deadtime + an_duration)
+t_blank = 1/freq - (start + t_prepulse + t_cath + deadtime + an_duration)
 N_patterns = 10
 s_pattern, t_pattern = complex_stim.s, complex_stim.t
 for i in range(N_patterns-1):
@@ -109,17 +109,21 @@ axs[0, 1].set_title('burst of 10 patterns')
 axs[0, 1].set_xlabel('time (ms)')
 axs[0, 1].set_ylabel('amplitude (uA)')
 
+
 # multiply by gaussian
 def my_gaussian(t, f, N_patterns):
     return exp(-((t - ((N_patterns/2)-1)*(1/f))**2)/4)
+
+
 envelope = nrv.stimulus()
 for k in range(N_patterns):
     envelope.pulse(k*(1/freq), my_gaussian(k*(1/freq), freq, N_patterns))
 #envelope.pulse(envelope.t[-1], 0, (1/freq)
-#envelope.plot(axs[1, 0], color='r', label='enveloppe')
+#envelope.plot(axs[1, 0],scatter=True, color='r', label='enveloppe')
+#complex_stim *= 1/abs(cath_amp)
 modulated_pattern = complex_stim * envelope
-modulated_pattern.plot(axs[1,0])
-#complex_stim.plot(axs[1, 0], color='b', label='stimulus')
+modulated_pattern.plot(axs[1,0])#, scatter=True)
+#complex_stim.plot(axs[1, 0], scatter=True, color='k', label='stimulus')
 axs[1, 0].set_title('Burst modulation')
 #axs[1, 0].legend()
 axs[1, 0].set_xlabel('time (ms)')

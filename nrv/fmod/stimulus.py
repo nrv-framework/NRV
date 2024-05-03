@@ -218,11 +218,14 @@ class stimulus(NRV_class):
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
-    def plot(self, ax:plt.axes, **ax_kwargs):
+    def plot(self, ax:plt.axes, scatter=False, **ax_kwargs):
         """
         Plot the stimulus
         """
-        ax.step(self.t,self.s,where="post",**ax_kwargs)
+        if scatter:
+            ax.scatter(self.t, self.s, **ax_kwargs)
+        else:
+            ax.step(self.t, self.s, where="post", **ax_kwargs)
 
 
 

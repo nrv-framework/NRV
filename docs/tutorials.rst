@@ -8,10 +8,11 @@ NRV is designed to be accessible to a user with a limited knowledge of the pytho
 .. toctree::
 
    tutorials/first_steps
-   tutorials/realistic_example
    tutorials/propagation_velocity
+   tutorials/first_nerve
+   tutorials/realistic_example
    tutorials/optim_example
-   
+
 
 
 
