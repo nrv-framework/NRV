@@ -21,7 +21,6 @@ deps = (
     "mpi4py",
     "scipy",
     "numpy",
-    "ezdxf",
     "dolfinx",
     "petsc4py",
     "ufl",

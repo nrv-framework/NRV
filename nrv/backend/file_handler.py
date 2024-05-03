@@ -3,8 +3,6 @@ NRV-I/O File Handler.
 """
 import json
 import os
-
-#import ezdxf
 import numpy as np
 
 from .log_interface import rise_error, rise_warning
