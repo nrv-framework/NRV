@@ -848,8 +848,7 @@ class nerve(NRV_simulable):
             if self.verbose:
                 pass_info("...simulating fascicle " + str(fasc.ID))
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
-                in_nerve=True, save_results = self.save_results,
-                **fasc_kwargs,
+                in_nerve=True, **fasc_kwargs,
             )
         if self.verbose:
             pass_info("...Done!")

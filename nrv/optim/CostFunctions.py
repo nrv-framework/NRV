@@ -104,11 +104,15 @@ class CostFunction(NRV_class):
         del static_contect
 
     def simulate_context(self):
+        ## See what's the use of simulation 
         if callable(self.simulation):
             results = self.simulation(self.simulation_context, **self.kwargs_S)
         if self.simulation is None:
+            # if not pr
             if "return_parameters_only" not in self.kwargs_S:
                 self.kwargs_S["return_parameters_only"] = False
+            if "save_results" not in self.kwargs_S:
+                self.kwargs_S["save_results"] = False
             results = self.simulation_context(**self.kwargs_S)
         return results
 

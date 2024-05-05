@@ -36,6 +36,8 @@ class NRV_results(NRV_class, dict):
     @abstractmethod
     def __init__(self, context=None):
         super().__init__()
+        # Not ideal but require to load method
+        self.np_keys = {}
         if context is None:
             context = {}
         elif is_NRV_class(context):
@@ -47,6 +49,7 @@ class NRV_results(NRV_class, dict):
         self.__sync()
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
+        self.__update_np_keys()
         self.__sync()
         return super().save(save, fname, blacklist, **kwargs)
 
@@ -56,8 +59,11 @@ class NRV_results(NRV_class, dict):
         else:
             key_dic = data
         for key, item in key_dic.items():
-            if key not in self.__dict__:
+            if key in key_dic["np_keys"]:
+                self.__dict__[key] = np.array([], dtype=np.dtype(key_dic["np_keys"][key]))
+            elif key not in self.__dict__:
                 self.__dict__[key] = item
+
 
         super().load(data, blacklist, **kwargs)
         self.__sync()
@@ -78,6 +84,17 @@ class NRV_results(NRV_class, dict):
         """
         self.__dict__.update(__m, **kwargs)
         super().update(__m, **kwargs)
+
+    def __update_np_keys(self):
+        """
+        
+        """
+        self.np_keys = {}
+        for key in self:
+            if isinstance(self[key], np.ndarray):
+                self.np_keys[key] = self[key].dtype.name
+
+
 
     def __sync(self):
         self.update(self.__dict__)

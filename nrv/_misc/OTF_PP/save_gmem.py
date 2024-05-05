@@ -56,9 +56,10 @@ else:
     to_save =  np.zeros((N_t+1, N_x))
     to_save[0,:] = axon_sim["x_rec"]
     to_save[1:,:] = axon_sim["g_mem"].T
-    np.savetxt(fgmem, to_save, delimiter=",")
-    if k == 0:
-        np.savetxt(ft, axon_sim["t"],delimiter=",")
+    if self.save_results:
+        np.savetxt(fgmem, to_save, delimiter=",")
+        if k == 0:
+            np.savetxt(ft, axon_sim["t"],delimiter=",")
 
 
     ###############################

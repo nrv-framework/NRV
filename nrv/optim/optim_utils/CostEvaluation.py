@@ -80,15 +80,22 @@ class charge_quantity_CE(CostEvaluation):
 
 
 class stim_energy_CE(CostEvaluation):
-    def __init__(self, id_elec:None|int|list[int]=None, dt_res=0.0001):
-        """
+    def __init__(self, id_elec:None|int|list[int]=None, dt_res:float=0.0001):
+        r"""
         Create a callable object which return a value proportionnal to the stimulus energy, assuming the electrode impedance is a constant.
+
+        .. math::
+
+            \sum_{e}\sum_{t_k}{i_{e,stim}^2(t_k)}
+
+            with $t_k$ is the discrete time step of the simulation
 
         Parameters
         ----------
         id_elec : None | int | list[int]
             id or list id of the electrode of the to from which the energy should be computed. If None, 
-        
+        dt_res  : float
+            resolotion time step use to compute the cost value
 
         Returns
         -------

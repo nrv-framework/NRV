@@ -6,8 +6,7 @@ from ...fmod.stimulus import stimulus
 
 class ContextModifier(NRV_class):
     """
-    Instanciate a context modifier: Callable object which modify a static context,
-    regarding a vector of values, to generate a new local context
+    Instanciate a context modifier: Callable object which modify a static context, regarding a vector of values, to generate a new local context
 
     Parameters
     ----------

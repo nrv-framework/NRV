@@ -18,7 +18,7 @@ def crop_fascicle(fasc:fascicle, x0:float, new_l:float)->fascicle:
     Returns
     -------
     fascicle
-        fascicle croped
+        fascicle cropped
     """
     fasc.define_length(new_l)
     if not (fasc.L is None or len(fasc.NoR_relative_position) == 0):
@@ -36,7 +36,7 @@ def crop_nerve(nerv:nerve, x0:float, new_l:float)->nerve:
     Parameters
     ----------
     nerv : nerve
-        fascicle to crop
+        nerve to crop
     x0 : float
         x position of the begining of the new fascicle
     new_l : float
@@ -45,7 +45,7 @@ def crop_nerve(nerv:nerve, x0:float, new_l:float)->nerve:
     Returns
     -------
     nerve
-        _description_
+        nerve cropped
     """
     nerv.define_length(new_l)
     for fasc in nerv.fascicles.values:
