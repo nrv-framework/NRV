@@ -38,8 +38,8 @@ A first set of keys corresponds to data of configuration of the axon:
     *   - 001
         - 001
         - General architecture
-    *   - Simulation_state
-        - bla
+    *   - `bla`
+        - `np.array`
         - bla
 
 
@@ -85,22 +85,22 @@ here is the list of computation results:
         - Small signal linearization of the membrane conductance with time at the recorded x axis positions stored in the `x_rec` key
     *   - `g_na`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_k`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_l`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_na`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_k`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_l`
         - `np.array`
-        - For unmyelinated models "HH", "Rattay_Aberham". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated models "HH", "Rattay_Aberham" and "Sundt". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_nav17`
         - `np.array`
         - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
@@ -161,6 +161,59 @@ here is the list of computation results:
     *   - `I_kleak`
         - `np.array`
         - For unmyelinated model "Tigerholm". Potatium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+
+    *   - `g_naf`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nas`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kd`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_ka`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kds`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kca`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_can`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_cat`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+
+    *   - `I_naf`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nas`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kd`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_ka`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kds`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kca`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_can`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_cat`
+        - `np.array`
+        - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+
+
+
 
 Dictionary content reserved for post-processing
 -----------------------------------------------
