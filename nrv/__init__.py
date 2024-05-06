@@ -17,6 +17,7 @@ import os
 import inspect
 import platform
 
+
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 # create a dummy object to locate frameworks path

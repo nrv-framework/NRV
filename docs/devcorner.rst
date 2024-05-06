@@ -2,7 +2,7 @@
 Developer's corner
 ==================
 
-NRV is a framework designed by and for the scientific corner. Behind the the open source licence, we are also more than welcome anyone that would genuinly contribute to our effort of gathering *in-silico* models for the nervous system in general.
+NRV is a framework designed by and for the scientific corner. Behind the open source license, we are also more than welcome anyone that would genuinely contribute to our effort of gathering *in-silico* models for the nervous system in general.
 
 Here are some guidelines for clean implementation of novel functionalities and contributions.
 
@@ -32,14 +32,14 @@ Here is how to setup NRV for local development:
 
     $ git clone git@github.com:your_name_here/NRV.git
 
-3. We recommend to use a conda environnement, to ease the installation of FenicsX. However, a virtualenv should be possible. Assuming you are using a conda environnemnet this is how you set up you development configuration:
+3. We recommend using a conda environment, to ease the installation of FenicsX. However, a virtualenv should be possible. Assuming you are using a conda environment this is how you set up you development configuration:
 ::
 
     $ conda activate nrv-env
     $ cd NRV
     $ source bash_nrv
 
-4. Create a branc for local development:
+4. Create a branch for local development:
 ::
 
     $ git checkout -b name-of-your-contribution
@@ -53,7 +53,7 @@ You should be able to make changes locally
     $ ./NRV_test --syntax
     $ ./NRV_test --all
 
-If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easely understable values to proove the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
+If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
 6. Commit your changes and push you branch to GitHub:
 ::
@@ -72,7 +72,7 @@ In brief, commit messages should follow these conventions:
 NRV testing
 -----------
 
-NRV is build with its own custom system for testing and validating new functionalities. This choice as made since the early developpement of first version, and is kept as so to ensure scientific reproducibility of results.
+NRV is build with its own custom system for testing and validating new functionalities. This choice as made since the early development of first version, and is kept as so to ensure scientific reproducibility of results.
 
 In the sources of NRV, a *test* folder is dedicated to tests: 
 
@@ -93,19 +93,19 @@ The *NRV_test* file is a script that act as a test launcher. It should be called
 
     ./NRV_test
 
-This script can test the install and dependencies, test he syntax and trigger linters or launch unitary tests. The following options are possitle:
+This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
   - "-d", "--dependances": Check NEURON and COMSOL installation
-  - "-l", "--list": Print the name of all unitary tests, an optianal interger can be added to arguments to specify the number of columns used to print
-  - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all thest should be True, numerical values for debug only
-  - "-s", "--syntax": Lint nvr syntax source code
+  - "-l", "--list": Print the name of all unitary tests, an optional integerr can be added to arguments to specify the number of columns used to print
+  - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all the tests should be True, numerical values for debug only
+  - "-s", "--syntax": Lint nrv syntax source code
   - "-a", "--all": launches even potentially failing tests due to third party softwares such as COMSOL
   - "-t", "--target": ID of the tests to simulate, if a digit is replaced by '_' all the tests
   - "-F", "--fenics": Launch all and only FEniCS related tests
   - "-C", "--comsol": Launch all and only COMSOL related tests
   - "-p", "--python": Forces Python as interpreted instead of *nrv2calm*
 
-Note that runing all scripts without errors and with all prints set to 'True' (no 'False') is a neccessary condition for a PR to be accepted.
-If errors occured, the list of faild tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
+Note that running all scripts without errors and with all prints set to 'True' (no 'False') is a necessary condition for a PR to be accepted.
+If errors occurred, the list of failed tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
 
 All code sources for the unitary tests can be found in the *tests/unitary_tests/* folder. Tests are organized in groups and subgroups as follows:
 

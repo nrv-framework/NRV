@@ -54,6 +54,7 @@ deps = (
     "pyswarms",
     "pyswarms.utils",
     "pyswarms.backend.topology",
+    "tqdm",
 )
 for package in deps:
     sys.modules[package] = MagicMock()

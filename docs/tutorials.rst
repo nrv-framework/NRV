@@ -9,11 +9,11 @@ NRV is designed to be accessible to a user with a limited knowledge of the pytho
 
    tutorials/first_steps
    tutorials/propagation_velocity
-   tutorials/first_nerve
    tutorials/realistic_example
+   tutorials/first_nerve
    tutorials/optim_example
 
-Further code with less comments is available in the Example section
+Further code with fewer comments is available in the Example section
 
 
 

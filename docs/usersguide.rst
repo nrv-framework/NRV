@@ -2,24 +2,24 @@
 User's Guide
 ============
 
-This page provide a non-exhaustive guided tour of NRV framework. The following pages give information on how to:
+This page provides a non-exhaustive guided tour of NRV framework. The following pages give information on how to:
 
 1. describe the content of a simulation:
     * axons, fascicles and nerves,
     * electrodes, stimuli and materials.
 2. perform a simulation and first steps of post-processing
 3. launch automated simulation for threshold finding
-4. optimize a a generic problem
+4. optimize a generic problem
 
-Before going furthern, it worths to mention that NRV is designed using Oriented-Oriented principles for two reasons:
+Before going further, it is worth noting that NRV is designed using Oriented-Oriented principles for two reasons:
 
-* first, the description of simulation context and scenario implies the coordination of several physical objects (physiological such as fibers, fascicles, or technological such as electrodes for instance). Using a parallel to coding paradigm is a relatively natural way of easing the scripting.
-* Python is by nature object oriented, and actions such as simulation, condifugration are naturally described and attached to main object.
+* First, the description of simulation context and scenario implies the coordination of several physical objects (physiological such as fibers, fascicles, or technological such as electrodes for instance). Using a parallel to coding paradigm is a relatively natural way of easing the scripting.
+* Python is by nature object-oriented, and actions such as simulation, configuration are naturally described and attached to main object.
 
-Objects in NRV all inherit from an abstract class (called ``NRV_Class``) tha give them two spcial properties:
+Objects in NRV all inherit from an abstract class (called ``NRV_Class``) that gives them two special properties:
 
-1. All objects can be saved as dictionary or in json files, so that any simulation, optimization problem or any implementation in general can be saved.
-2. All objects can be described using a dictionary or a json file.
+1. All objects can be saved as dictionary or in `json` files, so that any simulation, optimization problem or any implementation in general can be saved.
+2. All objects can be described using a dictionary or a `json` file.
 
 These two points and their consequences on syntax are described hereafter.
 
@@ -40,7 +40,7 @@ Let's see bellow a first example showing how to save a simple `unmyelinated` axo
 
     ax_dict = axon1.save()
 
-This code first create an unmyelinated axon as seen in ``(first-steps-into-nrv-a-simple-axon)``. Then a python dictionary containing all this axon properties is generated in ``ax_dict``. To prevent the creation of unwanted files, the save method of most of ``NRV_Class`` object does not save this dictionary into a `.json` file by defaults. 
+This code snippet first creates an unmyelinated axon as seen in ``(first-steps-into-nrv-a-simple-axon)``. Then a python dictionary containing all this axon properties is generated in ``ax_dict``. To prevent the creation of unwanted files, the save method of most of ``NRV_Class`` object does not save this dictionary into a `.json` file by defaults. 
 
 To actually save the axon properties in a `.json` file, a `save`argument has to be set to ``True`` as bellow.
 

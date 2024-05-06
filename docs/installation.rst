@@ -17,7 +17,7 @@ Dependencies
 Open source third-party Dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The pip installation takes care of most of open source third-party dependencies, but the FEM solver (`FenicsX <http://https://fenicsproject.org/.org>`_) and the Message Passing Interface (`MPICH <https://www.mpich.org/>`_)
+The pip installation takes care of most of the open source third-party dependencies, but the FEM solver (`FenicsX <http://https://fenicsproject.org/.org>`_) and the Message Passing Interface (`MPICH <https://www.mpich.org/>`_)
 are conda-installable only:
 ::
 
@@ -29,7 +29,7 @@ are conda-installable only:
 COMSOL Installation
 ^^^^^^^^^^^^^^^^^^^
 
-NRV can perform computations of FEM with COMSOL. However, the end user has to provide a valid commercial installed licence by its own. COMSOL installation can be performed before or after NRV's installation. For using COMSOL, informations about the install must be specified in the ''nrv/_misc'' code folder, by filling the following fields in the ''NRV.ini'' file:
+NRV can perform computations of FEM with COMSOL. However, the end user has to provide a valid commercial installed license by its own. COMSOL installation can be performed before or after NRV's installation. For using COMSOL, information about the installation must be specified in the ''nrv/_misc'' code folder, by filling the following fields in the ''NRV.ini'' file:
 ::
 
     [COMSOL]
@@ -41,7 +41,7 @@ NRV can perform computations of FEM with COMSOL. However, the end user has to pr
  
 Especially, the correct path to the COMSOL server binaries has to be specified, the port has to be adapted if changed from default values.
 
-The use of FenicsX for FEM computations have been extensively tested by NRV's contributor, and we do not recommend to use COMSOL with NRV as new geometries or electrode won't be implemented with COMSOL. Also, the use of commercial licences limits the reproducibility and open-science possibilities.
+The use of FenicsX for FEM computations have been extensively tested by NRV's contributor, and we do not recommend to use COMSOL with NRV as new geometries or electrode won't be implemented with COMSOL. Also, the use of commercial licenses limits the reproducibility and open-science possibilities.
 
 Installing NRV
 --------------
@@ -54,7 +54,7 @@ NRV can simply be installed with pip (`nrv-py <https://pypi.org/project/nrv-py/>
 
     pip install nrv-py
 
-if you want the very last development version under developpement, please consider:
+if you want the very last development version under development, please consider:
 ::
 
     pip install git+https://github.com/fkolbl/NRV.git 
@@ -74,7 +74,7 @@ Be aware that on the first import of NRV, some files related to simulation of io
 Using docker
 ^^^^^^^^^^^^
 
-This method should be prefered as all dependencies are already setup. Note that in this configuration, COMSOL cannot be used. Assuming that docker is already installed, the first step is to pull the image:
+This method should be preferred as all dependencies are already setup. Note that in this configuration, COMSOL cannot be used. Assuming that docker is already installed, the first step is to pull the image:
 ::
 
     docker pull nrvframework/nrv
@@ -90,12 +90,12 @@ A second image is available to use NRV in Jupyter notebooks:
 
     docker pull nrvframework/lab
 
-You can then creat a container using:
+You can then create a container using:
 ::
 
     docker run --rm -p 8888:8888 nrvframework/lab
 
-where the -p 8888:8888 maps the port to the local host. This should give you a link and token to load Jupyter from your browser.
+Where the -p 8888:8888 maps the port to the local host. This should give you a link and token to load Jupyter from your browser.
 
 NRV on Windows
 ^^^^^^^^^^^^^^
@@ -123,7 +123,7 @@ Activating the environnement and installation the required packages:
 ::
 
     micromamba activate nrv-env
-    micromamba install -c conda-forge fenics-dolfinx==0.6.0  sysroot_linux-64=2.17 mpg
+    micromamba install -c conda-forge fenics-dolfinx  sysroot_linux-64=2.17 mpg
 
 Last, one can pip-install NRV:
 ::

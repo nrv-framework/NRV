@@ -1,5 +1,5 @@
 ========================================
-Tutorial 3 - Stimulating nerves with NRV
+Tutorial 4 - Stimulating nerves with NRV
 ========================================
 
 
@@ -14,8 +14,6 @@ matplotlib:
     import matplotlib.pyplot as plt
     %matplotlib inline
     import numpy as np
-    import sys
-    sys.path.append("../")
     import nrv
 
 Nerve creation
@@ -71,15 +69,6 @@ the ``plot``\ method of the ``nerve``-object to visualize it.
     ax.set_ylabel("y-axis (µm)")
 
 
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
-
-
 .. image:: ../images/4_nerve_simulation_5_1.png
 
 
@@ -112,31 +101,9 @@ axons only
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
 
 
-.. parsed-literal::
-
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
-
-
-
-
 .. code:: ipython3
 
     fascicle_1.fill_with_population(axons_diameters, axons_type, delta=5)
-
-
-.. parsed-literal::
-
-    NRV INFO: Axon packing initiated. This might take a while...
-
-
-.. parsed-literal::
-
-      0%|          | 0/20000 [00:00<?, ?it/s]100%|██████████| 20000/20000 [00:03<00:00, 5695.71it/s]
-
-.. parsed-literal::
-
-    NRV INFO: Packing done!
-
 
 
 Let’s repeat this operation for the 2nd fascicle and plot the nerve
@@ -154,32 +121,6 @@ again:
     ax.set_ylabel("y-axis (µm)")
 
 
-.. parsed-literal::
-
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
-    NRV INFO: Axon packing initiated. This might take a while...
-
-
-.. parsed-literal::
-
-    100%|██████████| 20000/20000 [00:03<00:00, 6505.71it/s]
-
-
-.. parsed-literal::
-
-    NRV INFO: Packing done!
-    [93mNRV WARNING: 12 outlier axons discarded.[0m
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
-
-
 .. image:: ../images/4_nerve_simulation_11_4.png
 
 
@@ -192,15 +133,6 @@ again:
     nerve.plot(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
 
 
 .. image:: ../images/4_nerve_simulation_13_1.png
@@ -294,15 +226,6 @@ Last, we attach ``extra_stim``-object to the nerve with the
 
     nerve.attach_extracellular_stimulation(extra_stim)
 
-
-.. parsed-literal::
-
-    NRV INFO: From Fascicle 1: Electrode/Axons overlap, 3 axons will be removed from the fascicle
-    NRV INFO: 100 axons remaining
-    NRV INFO: From Fascicle 2: Electrode/Axons overlap, 11 axons will be removed from the fascicle
-    NRV INFO: 88 axons remaining
-
-
 Let’s see how our nerve with electrodes now looks like:
 
 .. code:: ipython3
@@ -311,14 +234,6 @@ Let’s see how our nerve with electrodes now looks like:
     nerve.plot(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
 
 
 
@@ -335,31 +250,6 @@ Let’s see how our nerve with electrodes now looks like:
     nerve_results = nerve(t_sim=1,postproc_script = "AP_detection")         #Run the simulation
 
 
-.. parsed-literal::
-
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 63
-    NRV INFO: Number of nodes : 21084
-    NRV INFO: Number of elements : 148375
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 27.025853633880615 s
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 48.714189767837524 s
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 68.895024061203 s
-    NRV INFO: ...simulating fascicle 1
-    NRV INFO: ...simulating fascicle 2
-    NRV INFO: ...Done!
-
-
 We can plot the nerve again and highlight axons that are recruited:
 
 .. code:: ipython3
@@ -368,15 +258,6 @@ We can plot the nerve again and highlight axons that are recruited:
     nerve_results.plot_recruited_fibers(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
 
 
 .. image:: ../images/4_nerve_simulation_27_1.png
@@ -402,15 +283,6 @@ cathodic pulse:
     ax.set_xlabel("Time (ms)")
 
 
-
-
-.. parsed-literal::
-
-    Text(0.5, 0, 'Time (ms)')
-
-
-
-
 .. image:: ../images/4_nerve_simulation_29_1.png
 
 
@@ -428,24 +300,6 @@ plot the activated fibers.
     nerve_results.plot_recruited_fibers(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-
-
-.. parsed-literal::
-
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: ...simulating fascicle 1
-    NRV INFO: ...simulating fascicle 2
-    NRV INFO: ...Done!
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
 
 
 .. image:: ../images/4_nerve_simulation_31_2.png
@@ -488,14 +342,6 @@ instead:
     nerve_results = nerve(t_sim=3,postproc_script = "AP_detection")
 
 
-.. parsed-literal::
-
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: ...simulating fascicle 1
-    NRV INFO: ...simulating fascicle 2
-    NRV INFO: ...Done!
-
 
 Let’s see how many fibers are activated now:
 
@@ -527,15 +373,6 @@ Let’s see how many fibers are activated now:
     Proportion of myelinated recruited in fascicle_1: 58.620689655172406%
     Proportion of unmyelinated recruited in fascicle_2: 0.0%
     Proportion of myelinated recruited in fascicle_2: 83.33333333333334%
-
-
-
-
-.. parsed-literal::
-
-    Text(0, 0.5, 'y-axis (µm)')
-
-
 
 
 .. image:: ../images/4_nerve_simulation_37_2.png
@@ -600,73 +437,6 @@ unmyelinated fibers recruited in each fascicle in python list.
     unmyel_fasc1_LIFE0,myel_fasc1_LIFE0,unmyel_fasc2_LIFE0, myel_fasc2_LIFE0 = get_recruitment_electrode(0,amp_vec)
     unmyel_fasc1_LIFE1,myel_fasc1_LIFE1,unmyel_fasc2_LIFE1, myel_fasc2_LIFE1 = get_recruitment_electrode(1,amp_vec)
     unmyel_fasc1_LIFE2,myel_fasc1_LIFE2,unmyel_fasc2_LIFE2, myel_fasc2_LIFE2 = get_recruitment_electrode(2,amp_vec)
-
-
-.. parsed-literal::
-
-    Stimulating nerve with LIFE_0
-    Pulse amplitude set to -0.0µA (1/20)
-    Pulse amplitude set to -5.8µA (2/20)
-    Pulse amplitude set to -11.6µA (3/20)
-    Pulse amplitude set to -17.4µA (4/20)
-    Pulse amplitude set to -23.2µA (5/20)
-    Pulse amplitude set to -28.9µA (6/20)
-    Pulse amplitude set to -34.7µA (7/20)
-    Pulse amplitude set to -40.5µA (8/20)
-    Pulse amplitude set to -46.3µA (9/20)
-    Pulse amplitude set to -52.1µA (10/20)
-    Pulse amplitude set to -57.9µA (11/20)
-    Pulse amplitude set to -63.7µA (12/20)
-    Pulse amplitude set to -69.5µA (13/20)
-    Pulse amplitude set to -75.3µA (14/20)
-    Pulse amplitude set to -81.1µA (15/20)
-    Pulse amplitude set to -86.8µA (16/20)
-    Pulse amplitude set to -92.6µA (17/20)
-    Pulse amplitude set to -98.4µA (18/20)
-    Pulse amplitude set to -104.2µA (19/20)
-    Pulse amplitude set to -110.0µA (20/20)
-    Stimulating nerve with LIFE_1
-    Pulse amplitude set to -0.0µA (1/20)
-    Pulse amplitude set to -5.8µA (2/20)
-    Pulse amplitude set to -11.6µA (3/20)
-    Pulse amplitude set to -17.4µA (4/20)
-    Pulse amplitude set to -23.2µA (5/20)
-    Pulse amplitude set to -28.9µA (6/20)
-    Pulse amplitude set to -34.7µA (7/20)
-    Pulse amplitude set to -40.5µA (8/20)
-    Pulse amplitude set to -46.3µA (9/20)
-    Pulse amplitude set to -52.1µA (10/20)
-    Pulse amplitude set to -57.9µA (11/20)
-    Pulse amplitude set to -63.7µA (12/20)
-    Pulse amplitude set to -69.5µA (13/20)
-    Pulse amplitude set to -75.3µA (14/20)
-    Pulse amplitude set to -81.1µA (15/20)
-    Pulse amplitude set to -86.8µA (16/20)
-    Pulse amplitude set to -92.6µA (17/20)
-    Pulse amplitude set to -98.4µA (18/20)
-    Pulse amplitude set to -104.2µA (19/20)
-    Pulse amplitude set to -110.0µA (20/20)
-    Stimulating nerve with LIFE_2
-    Pulse amplitude set to -0.0µA (1/20)
-    Pulse amplitude set to -5.8µA (2/20)
-    Pulse amplitude set to -11.6µA (3/20)
-    Pulse amplitude set to -17.4µA (4/20)
-    Pulse amplitude set to -23.2µA (5/20)
-    Pulse amplitude set to -28.9µA (6/20)
-    Pulse amplitude set to -34.7µA (7/20)
-    Pulse amplitude set to -40.5µA (8/20)
-    Pulse amplitude set to -46.3µA (9/20)
-    Pulse amplitude set to -52.1µA (10/20)
-    Pulse amplitude set to -57.9µA (11/20)
-    Pulse amplitude set to -63.7µA (12/20)
-    Pulse amplitude set to -69.5µA (13/20)
-    Pulse amplitude set to -75.3µA (14/20)
-    Pulse amplitude set to -81.1µA (15/20)
-    Pulse amplitude set to -86.8µA (16/20)
-    Pulse amplitude set to -92.6µA (17/20)
-    Pulse amplitude set to -98.4µA (18/20)
-    Pulse amplitude set to -104.2µA (19/20)
-    Pulse amplitude set to -110.0µA (20/20)
 
 
 Now let’s look at the results for myelinated fibers:
@@ -765,35 +535,6 @@ Let’s create a second nerve with a cuff electrode now:
 
 
 
-.. parsed-literal::
-
-    NRV INFO: Axon packing initiated. This might take a while...
-
-
-.. parsed-literal::
-
-    100%|██████████| 20000/20000 [00:03<00:00, 6637.34it/s]
-
-
-.. parsed-literal::
-
-    NRV INFO: Packing done!
-    NRV INFO: Axon packing initiated. This might take a while...
-
-
-.. parsed-literal::
-
-    100%|██████████| 20000/20000 [00:03<00:00, 6622.16it/s]
-
-.. parsed-literal::
-
-    NRV INFO: Packing done!
-    [93mNRV WARNING: 12 outlier axons discarded.[0m
-
-
-
-
-
 We now create a FEM stimulation context, create a cuff electrode using
 the ``CUFF_electrode``-class, combine everything and add it to the
 ``nerve_cuff``-object:
@@ -856,42 +597,6 @@ with the LIFE electrodes:
         fasc_results = nerve_results.get_fascicle_results(ID = 2)
         unmyel_fasc2_cuff.append(fasc_results.get_recruited_axons('unmyelinated'))
         myel_fasc2_cuff.append(fasc_results.get_recruited_axons('myelinated'))
-
-
-
-.. parsed-literal::
-
-    Stimulating nerve with CUFF
-    Pulse amplitude set to -0.0µA (1/20)
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 70
-    NRV INFO: Number of nodes : 13216
-    NRV INFO: Number of elements : 93441
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 20.221781015396118 s
-    Pulse amplitude set to -5.8µA (2/20)
-    Pulse amplitude set to -11.6µA (3/20)
-    Pulse amplitude set to -17.4µA (4/20)
-    Pulse amplitude set to -23.2µA (5/20)
-    Pulse amplitude set to -28.9µA (6/20)
-    Pulse amplitude set to -34.7µA (7/20)
-    Pulse amplitude set to -40.5µA (8/20)
-    Pulse amplitude set to -46.3µA (9/20)
-    Pulse amplitude set to -52.1µA (10/20)
-    Pulse amplitude set to -57.9µA (11/20)
-    Pulse amplitude set to -63.7µA (12/20)
-    Pulse amplitude set to -69.5µA (13/20)
-    Pulse amplitude set to -75.3µA (14/20)
-    Pulse amplitude set to -81.1µA (15/20)
-    Pulse amplitude set to -86.8µA (16/20)
-    Pulse amplitude set to -92.6µA (17/20)
-    Pulse amplitude set to -98.4µA (18/20)
-    Pulse amplitude set to -104.2µA (19/20)
-    Pulse amplitude set to -110.0µA (20/20)
 
 
 And plot the results:

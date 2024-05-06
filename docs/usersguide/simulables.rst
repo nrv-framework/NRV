@@ -4,22 +4,22 @@ Simulable objects
 
 In NRV, all simulations can be launched by objects that have a physiological meaning:
 
-1. **axons** or individual fibers. These fibers can be mylinated or unmyelinated and few models are already implemented.
+1. **axons** or individual fibers. These fibers can be myelinated or unmyelinated and few models are already implemented.
 2. **fascicles**: containing one or several axons. 
 3. **nerves**: containing one or several fascicles.
 
-All these object have in common a method called ``simulate`` that automatically performs the simulation, handle computation of extracellular fields if needed, process the stimuli, record internal variables. For fascicles and nerves, if the script is launched on several CPU cores, the parallelization is automatically handled transparently for the user.
+All these object have in common a method called ``simulate`` that automatically performs the simulation, handles computation of extracellular fields if needed, processes the stimuli, records internal variables. For fascicles and nerves, if the script is launched on several CPU cores, the parallelization is automatically handled transparently for the user.
 
 Axons
 =====
 
-The ``axon`` class is abstract, meaning that the end user cannot directly instanciate an axon. Instead, two class exists and are accessible for the end-user for mylinated and unmyelinated fibers.
+The ``axon`` class is abstract, meaning that the end user cannot directly instantiate an axon. Instead, two daughter classes are accessible for the end-user for myelinated and unmyelinated fibers.
 
-generic parameters for all axons are defined by default and can be changed, as both unmyelinated and mylinated axons inherit from them
+Generic parameters for all axons are defined by default and can be changed, as both unmyelinated and myelinated axons inherit from them.
 
-However, for the end-user, some usefull methods are innherited by both unmyelinated and mylinated fibers:
+However, for the end-user, some useful methods are inherited by both unmyelinated and myelinated fibers:
 
-* the ``simulate`` method that compute the membrane voltage and internal state variables.
+* The ``simulate`` method that computes the membrane voltage and internal state variables.
 
     .. list-table:: Arguments of simulate method
        :widths: 15 25 50
@@ -32,7 +32,7 @@ However, for the end-user, some usefull methods are innherited by both unmyelina
          - float
          - total simulation time (ms), by default 20 ms
 
-    The simulate method is also controled by axon attributes as described in the next table:
+    The simulate method is also controlled by axon attributes as described in the next table:
 
     .. list-table:: Attributes of axon involved in simulate
        :widths: 15 15 15 50
@@ -65,7 +65,7 @@ However, for the end-user, some usefull methods are innherited by both unmyelina
 
     The simulate method for axons generate results stored and returned in a dictionary.
 
-* A method to link an axon to specification of an **extracellular stimulation**. This object provides the description of estimulation description which is involved in computation of external fields and footprint used to compute the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single paraleter, the ``stimulation`` object instance.
+* A method to link an axon to specification of an **extracellular stimulation**. This object provides the description of stimulation description which is involved in computation of external fields and footprint used to compute the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single paraleter, the ``stimulation`` object instance.
 
 * A method to change the stimulation waveform from a specific electrode already linked to the axon with the mprevious method. This method is called is called ``change_stimulus_from_electrode`` and has for arguments:
     .. list-table:: Attributes of axon involved in simulate

@@ -15,7 +15,7 @@ def mesh_from_electrode(
     Nerve_D:float=4000,
     y_c:float=0,
     z_c:float=0,
-    res:float|str="default",
+    res:float | str="default",
 )->NerveMshCreator:
     """
     returns the corresponding mesh from a nrv.facsicle
