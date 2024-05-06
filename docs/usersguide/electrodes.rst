@@ -25,7 +25,7 @@ Two class are abstract and not accessible by the end user:
 
 The last class enables experienced user to define other families of electrodes. 
 It is worth considering that such process implies to dive into the FEM definition of NRV to add electrode geometry to simulations. 
-This process is not described in detail here, and developper should refer to `API documentation <#modules>`_.
+This process is not described in detail here, and developper should refer to :ref:`API documentation<#modules>`.
 
 Four classes are directly accessible by the end user:
 
