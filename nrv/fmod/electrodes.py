@@ -446,7 +446,6 @@ class CUFF_electrode(FEM_electrode):
             name of the electrode in the COMSOL file
         x_center            :float
             x-position of the CUFF center in um, by default 0
-            length of the CUFF electrod in um, by default 100
         contact_length      :float
             length along x of the contact site in um, by default 100
         is_volume   : bool
