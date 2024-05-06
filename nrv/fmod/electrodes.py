@@ -319,7 +319,7 @@ class FEM_electrode(electrode):
     """
     Electrode located in Finite Element Model in Comsol
     """
-
+    @abstractmethod
     def __init__(self, label, ID=0):
         """
         Instrantiation of a FEM electrode
