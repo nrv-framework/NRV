@@ -28,7 +28,7 @@ Dictionary content for configration saving
 A first set of keys corresponds to data of configuration of the axon:
 
 .. list-table:: Tests functionalities
-    :widths: 10 10 50
+    :widths: 10 10 150
     :header-rows: 1
     :align: center
 
@@ -58,10 +58,16 @@ here is the list of computation results:
         - content
     *   - `Simulation_state`
         - `str`
-        - Final state of running `axon.simulate` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsucessful", without further detail. Refer to log file for debug.
+        - Final state of running `axon.simulate` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsucessful".
+    *   - `Error_from_prompt`
+        - `str`
+        - If the `simulation_state` is unsuccessful, this key contains the error message that has been returned (and that should also appear in the logfile).
     *   - `sim_time`
         - `float`
         - Final value of the demanded simulation time.
+    *   - `Neuron_t_max`
+        - `float`
+        - Final timing achieved by the neuron solver once the simulation initiated. in miliseconds,
     *   - `t`
         - `np.array`
         - Array of timesteps in miliseconds
@@ -70,31 +76,91 @@ here is the list of computation results:
         - Points in space along the x axis where simulation results are saved.
     *   - `V_mem`
         - `np.array`
-        - Values of membrane voltage at the recorded x axis positions stored in the `x_rec` key
+        - Values of membrane voltage with time at the recorded x axis positions stored in the `x_rec` key
     *   - `I_mem`
-        - `bla`
-        - bla
+        - `np.array`
+        - Values of membrane voltage with time at the recorded x axis positions stored in the `x_rec` key
     *   - `g_mem`
-        - `bla`
-        - bla
+        - `np.array`
+        - Small signal linearization of the membrane conductance with time at the recorded x axis positions stored in the `x_rec` key
     *   - `g_na`
-        - `bla`
-        - bla
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_k`
-        - `bla`
-        - bla
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_l`
-        - `bla`
-        - bla
-    *   - `Simulation_state`
-        - `bla`
-        - bla
-    *   - `Simulation_state`
-        - `bla`
-        - bla
-    *   - `Simulation_state`
-        - `bla`
-        - bla
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_na`
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_k`
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_l`
+        - `np.array`
+        - For unmyelinated models "HH", "Rattay_Aberham". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nav17`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nav18`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.8 channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nav19`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kA`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kM`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kdr`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kna`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_h`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_naleak`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kleak`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nav17`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nav18`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.8 channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nav19`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kA`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kM`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kdr`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kna`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_h`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_naleak`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Sodium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kleak`
+        - `np.array`
+        - For unmyelinated model "Tigerholm". Potatium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
 Dictionary content reserved for post-processing
 -----------------------------------------------
@@ -102,7 +168,7 @@ Dictionary content reserved for post-processing
 Some keys are also reserved for post-processing function to store results without over-writting raw results.
 
 .. list-table:: Tests functionalities
-    :widths: 10 10 50
+    :widths: 10 10 150
     :header-rows: 1
     :align: center
 
