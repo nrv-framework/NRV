@@ -68,7 +68,7 @@ else:
     list_keys = []
     removable_keys = []
     if not self.return_parameters_only:
-        list_keys += ["g_mem", "x_rec", "rec", "Nseg_per_sec", "axon_path_type", "Nseg_per_sec"]
+        list_keys += ["g_mem", "x_rec", "rec", "Nseg_per_sec", "axon_path_type", "t_sim"]
         if k==0:
             list_keys += ["t"]
 

@@ -188,6 +188,9 @@ class Mcore_handler(metaclass=NRV_singleton):
         if self.is_alone():
             final_result = partial_result
         else:
+            # Not ideal but prevent overwrite the type of master
+            if not self.is_master() and "nrv_type" in partial_result:
+                partial_result.pop("nrv_type")
             list_results = comm.gather(partial_result, root=0)
             if self.is_master():
                 final_result = list_results[0]

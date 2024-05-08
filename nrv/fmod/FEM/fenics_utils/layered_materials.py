@@ -43,9 +43,14 @@ def is_lay_mat(mat:object)->bool:
 
 
 def get_sig_ap(sig_in, sig_lay, alpha_lay):
-    alpha_in = 1/(1-1/alpha_lay)
-    _sig1 = sig_in * alpha_in
-    _sig2 = sig_lay * alpha_lay
+    """
+
+    """
+
+    _alpha_lay = 1/alpha_lay
+    _alpha_in = 1/(1-1/_alpha_lay)
+    _sig1 = sig_in * _alpha_in
+    _sig2 = sig_lay * _alpha_lay
     return (_sig1 * _sig2)/(_sig1 + _sig2)
 
 ####################
@@ -95,5 +100,5 @@ class layered_material(f_material):
         return get_sig_ap(
             self.mat_in.sigma,
             self.mat_lay.sigma,
-            1/self.alpha_lay,
+            self.alpha_lay,
         )

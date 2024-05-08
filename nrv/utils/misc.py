@@ -56,11 +56,9 @@ def distance_point2line(x_p, y_p, a, b):
     return d
 
 
-#########################################################
-############# Fascicles related functions ###############
-#########################################################
-
-
+####################################################
+############# nmod related functions ###############
+####################################################
 def get_perineurial_thickness(fasc_d:float, nerve_type:str="default") -> float:
     """
     Return a fascicle's perineurium thickness from its diameter.
@@ -105,3 +103,33 @@ def get_perineurial_thickness(fasc_d:float, nerve_type:str="default") -> float:
         thpc = 0.033
 
     return fasc_d * thpc
+
+def membrane_capacitance_from_model(model):
+    if model in ["MRG", "Gaines_motor", "Gaines_sensory" ]:
+        return 2
+    if "Schild" in model:
+        return 1.326291192
+    return 1
+
+
+
+
+def compute_complex_admitance(f:float, g:float, fc:float)->complex:
+    """
+    compute the complex admitance of a first oder system (of cutoff frequency fc and conductivity g) at a given frequency f
+
+    Parameters
+    ----------
+    f : float or np.array
+        frequency or frequencies for which the admitance should be computed
+    g : float
+        conductivity of the system
+    fc : float
+        cutoff frequency of the system
+
+    Returns
+    -------
+    complex
+        complex admitance
+    """
+    return g*(1+1j*f/fc)

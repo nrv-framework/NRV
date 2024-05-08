@@ -51,14 +51,26 @@ class myelinated_results(axon_results):
                 return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
 
+
+    def find_central_node_coordinate(self):
+        """
+        Returns the index of the closer node from the center
+
+        Returns
+        -------
+        float
+            x-position of the closer node from the center
+        """
+        return self["x_rec"][self.find_central_node_index()]
+
     def find_central_node_index(self):
         """
         Returns the index of the closer node from the center
 
         Returns
         -------
-        n_center              : int
-            value of the cutoff frequency of the axon's membrane
+        int
+            index of `x_rec` of the closer node from the center
         """
         n_center = len(self["x_rec"]) // 2
         if self["rec"] == "nodes":

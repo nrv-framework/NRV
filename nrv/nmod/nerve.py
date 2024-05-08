@@ -50,7 +50,7 @@ class nerve(NRV_simulable):
         """
         Instanciates an empty nerve.
         """
-        super().__init__()
+        super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
@@ -82,7 +82,7 @@ class nerve(NRV_simulable):
             "dt": 0.001,
             "Nrec": 0,
             "Nsec": 1,
-            "Nseg_per_sec": 100,
+            "Nseg_per_sec": length//25,
             "freq": 100,
             "freq_min": 0,
             "mesh_shape": "plateau_sigmoid",
@@ -117,7 +117,7 @@ class nerve(NRV_simulable):
         self.footprints = {}
         self.is_footprinted = False
         self.myelinated_nseg_per_sec = 3
-        self.unmyelinated_nseg = 100
+        self.unmyelinated_nseg = length//25
         # intra-cellular stimulation
         self.N_intra = 0
         self.intra_stim_position = []
@@ -826,7 +826,7 @@ class nerve(NRV_simulable):
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
-            nerve_sim = {}
+            nerve_sim = sim_results({})
         if self.save_results:
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
             if MCH.do_master_only_work():

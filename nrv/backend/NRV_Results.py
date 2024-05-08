@@ -45,10 +45,13 @@ class NRV_results(NRV_class, dict):
 
         if "nrv_type" in context:
             context["result_type"] = context.pop("nrv_type")
+        else:
+            context["result_type"] = None
         self.update(context)
         self.__sync()
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
+        save = save and self.is_empty
         self.__update_np_keys()
         self.__sync()
         return super().save(save, fname, blacklist, **kwargs)
@@ -92,6 +95,10 @@ class NRV_results(NRV_class, dict):
         for key in self:
             if isinstance(self[key], np.ndarray):
                 self.np_keys[key] = self[key].dtype.name
+
+    @property
+    def is_empty(self):
+        return "result_type" in self and not self["result_type"] is None
 
     def __sync(self):
         self.update(self.__dict__)

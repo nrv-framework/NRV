@@ -8,8 +8,8 @@ from numba import jit
 from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
 from ...backend.log_interface import rise_warning, rise_error
-from ...utils.units import to_nrv_unit
-from ...utils.misc import distance_point2line
+from ...utils.units import to_nrv_unit, from_nrv_unit, convert, nm
+from ...utils.misc import distance_point2line, membrane_capacitance_from_model, compute_complex_admitance
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
     if spike_begin == "down":
@@ -681,7 +681,7 @@ class axon_results(sim_results):
         return axon_state
 
     ##############################
-    ## Axon properties methods ##
+    ## Impedance properties methods ##
     ##############################
 
     def compute_f_mem(self):
@@ -716,3 +716,107 @@ class axon_results(sim_results):
         # [MHz] to convert to [kHz]
         self["f_mem"] = to_nrv_unit(f_mem, "MHz")
         return self["f_mem"]
+
+
+    def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->float:
+        """
+        get the membrane conductivity at a position x and a time t
+    
+
+        Parameters
+        ----------
+        x : float, optional
+            x-position in um where to get the conductivity, by default 0
+        t : float, optional
+            simulation time in ms when to get the conductivity, by default 0
+        unit : str, optional
+            unit of the returned conductivity see `units`, by default "S/cm**2"
+        mem_th : float, optional
+            membrane thickness in um, by default 7*nm
+
+        Note
+        ----
+        depending of the unit parameter this function either return :
+
+            - the surface conductivity in [S]/([m]*[m]): from neuron simulation
+            - the conductivity in [S]/[m]:  by multiplying surface conductivity by membrane thickness
+        """
+        if "g_mem" not in self:
+            rise_warning("to get membrane conductivity the ")
+            return None
+
+        n_t = len(self["g_mem"][0])
+        i_t = int(n_t*t/self["t_sim"])
+        i_x = np.argmin(abs(self["x_rec"] - x))
+        g = self["g_mem"][i_x, i_t]
+
+        # Surface conductivity in [S]/([m]*[m])
+        if "2" in unit:
+            return convert(g, "S/cm**2", unit)
+        # conductivity in [S]/[m]
+        else:
+            g *= from_nrv_unit(mem_th, "cm")
+            return convert(g, "S/cm", unit)
+
+
+    def get_membrane_capacitance(self, unit:str="uF/cm**2", mem_th:float=7*nm)->float:
+        """
+        get the axon membrane capacitance or permitivity
+
+        Parameters
+        ----------
+        unit : str, optional
+            unit of the returned conductivity see `units`, by default "S/cm**2"
+        mem_th : float, optional
+            membrane thickness in um, by default 7*nm
+
+        Note
+        ----
+        depending of the unit parameter this function either return :
+
+            - the surface conductivity in [S]/([m]*[m]): from neuron simulation
+            - the conductivity in [S]/[m]:  by multiplying surface conductivity by membrane thickness
+        """
+        c_mem = membrane_capacitance_from_model(self.model)
+
+        # Surface capacity in [F]/([m]*[m])
+        if "2" in unit:
+            return convert(c_mem, "S/cm**2", unit)
+        # permitivity in [F]/[m]
+        else:
+            c_mem *= from_nrv_unit(mem_th, "cm")
+            return convert(c_mem, "S/cm", unit)
+
+    def get_membrane_complexe_admitance(self, f:float=1., x:float=0, t:float=0, unit:str="S/m", mem_th:float=7*nm)->np.array:
+        """
+        get the membran complexe admitance of each axon at a position x and a time t for a given frequency
+
+        Parameters
+        ----------
+        f : float or np.array, optional
+            effective frequency in kHz, by default 1
+        x : float, optional
+            x-position in um where to get the conductivity, by default 0
+        t : float, optional
+            simulation time in ms when to get the conductivity, by default 0
+        unit : str, optional
+            unit of the returned conductivity see `units`, by default "S/cm**2"
+        mem_th : float, optional
+            membrane thickness in um, by default 7*nm
+        """
+        c = self.get_membrane_capacitance(mem_th=mem_th)
+        g = self.get_membrane_conductivity(x=x, t=t, mem_th=mem_th)
+        f_mem = g/(2*np.pi*c)
+
+        # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
+        # [MHz] to convert to [kHz]
+        f_mem = to_nrv_unit(f_mem, "MHz")
+
+        Y = compute_complex_admitance(f=f, g=g, fc=f_mem)
+
+        if "2" in unit:
+            return convert(Y, "S/cm**2", unit)
+        # permitivity in [F]/[m]
+        else:
+            Y *= from_nrv_unit(mem_th, "cm")
+            return convert(Y, "S/cm", unit)
