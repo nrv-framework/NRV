@@ -212,7 +212,73 @@ here is the list of computation results:
         - `np.array`
         - For unmyelinated models "Schild_94"and "Schild_97". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
+    *   - `g_na`
+        - `np.array`
+        - For myelinated model "MRG". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nap`
+        - `np.array`
+        - For myelinated model "MRG". Persistant Sodium channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_k`
+        - `np.array`
+        - For myelinated model "MRG". Potatium channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_l`
+        - `np.array`
+        - For myelinated model "MRG". Leakage channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_i`
+        - `np.array`
+        - For myelinated model "MRG". ??? channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_na`
+        - `np.array`
+        - For myelinated model "MRG". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nap`
+        - `np.array`
+        - For myelinated model "MRG". Persistant Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_k`
+        - `np.array`
+        - For myelinated model "MRG". Potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_l`
+        - `np.array`
+        - For myelinated model "MRG". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_i`
+        - `np.array`
+        - For myelinated model "MRG". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
+    *   - `g_na`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_nap`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistant sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_k`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potatium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_kf`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast potatium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_l`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `g_q`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_na`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_nap`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistant sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_k`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_kf`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_l`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+    *   - `I_q`
+        - `np.array`
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
 
 Dictionary content reserved for post-processing

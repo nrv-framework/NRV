@@ -1,6 +1,7 @@
 """
 NRV-:class:`.NRV_results` handling.
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -11,7 +12,6 @@ from .NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
 from .log_interface import rise_warning
 from ..fmod.stimulus import stimulus
 from .file_handler import json_load
-
 
 
 def generate_results(obj: any, **kwargs):
@@ -60,10 +60,11 @@ class NRV_results(NRV_class, dict):
             key_dic = data
         for key, item in key_dic.items():
             if key in key_dic["np_keys"]:
-                self.__dict__[key] = np.array([], dtype=np.dtype(key_dic["np_keys"][key]))
+                self.__dict__[key] = np.array(
+                    [], dtype=np.dtype(key_dic["np_keys"][key])
+                )
             elif key not in self.__dict__:
                 self.__dict__[key] = item
-
 
         super().load(data, blacklist, **kwargs)
         self.__sync()
@@ -86,15 +87,11 @@ class NRV_results(NRV_class, dict):
         super().update(__m, **kwargs)
 
     def __update_np_keys(self):
-        """
-        
-        """
+        """ """
         self.np_keys = {}
         for key in self:
             if isinstance(self[key], np.ndarray):
                 self.np_keys[key] = self[key].dtype.name
-
-
 
     def __sync(self):
         self.update(self.__dict__)
@@ -137,7 +134,9 @@ class sim_results(NRV_results):
                     new_sig[k, :] = self[my_key][k]
                     for f in f0:
                         b_notch, a_notch = signal.iirnotch(f, Q, fs)
-                        new_sig[k, :] = signal.lfilter(b_notch, a_notch, new_sig[k, :][k])
+                        new_sig[k, :] = signal.lfilter(
+                            b_notch, a_notch, new_sig[k, :][k]
+                        )
             else:
                 ##  NOTCH at the stimulation frequency
                 b_notch, a_notch = signal.iirnotch(f0, Q, fs)
@@ -145,7 +144,6 @@ class sim_results(NRV_results):
                 for k in range(len(self[my_key])):
                     new_sig[k, :] = signal.lfilter(b_notch, a_notch, self[my_key][k])
             self[my_key + "_filtered"] = new_sig
-
 
     def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
         """
