@@ -9,7 +9,7 @@ from dolfinx import default_scalar_type
 from dolfinx.fem import (
     Constant,
     Function,
-    FunctionSpace,
+    functionspace,
     assemble_scalar,
     dirichletbc,
     form,
@@ -19,9 +19,7 @@ from dolfinx.fem.petsc import LinearProblem
 from mpi4py import MPI
 from petsc4py.PETSc import ScalarType, Viewer
 from ufl import (
-    FiniteElement,
     Measure,
-    MixedElement,
     TestFunction,
     TrialFunction,
     avg,
@@ -29,6 +27,8 @@ from ufl import (
     nabla_grad,
     CellDiameter,
 )
+from basix.ufl import element, mixed_element
+
 
 from ....backend.log_interface import pass_info, rise_error, rise_warning
 from ....backend.file_handler import rmv_ext
@@ -338,13 +338,13 @@ class FEMSimulation(FEMParameters):
             if self.inbound:
                 self.Nspace = self.Ninboundaries + 1
                 ME = [
-                    FiniteElement(self.elem[0], self.domain.ufl_cell(), self.elem[1])
-                    for k in range(self.Nspace)
+                    element(self.elem[0], self.domain.basix_cell(), self.elem[1], dtype=ScalarType)
+                    for _ in range(self.Nspace)
                 ]
-                self.multi_elem = MixedElement(ME)
+                self.multi_elem = mixed_element(ME)
             else:
                 self.multi_elem = self.elem
-            self.V = FunctionSpace(self.domain, self.multi_elem)
+            self.V = functionspace(self.domain, self.multi_elem)
             # MEASURES FOR INTEGRATION
             self.dx = Measure("dx", domain=self.domain, subdomain_data=self.subdomains)
             self.ds = Measure("ds", domain=self.domain, subdomain_data=self.boundaries)
@@ -628,7 +628,7 @@ class FEMSimulation(FEMParameters):
     def __merge_mixed_solutions(self):
         if self.dg_problem is None:
             self.mixedvouts = self.mixedvout.split()
-            self.V_DG = FunctionSpace(
+            self.V_DG = functionspace(
                 self.domain, ("Discontinuous Lagrange", self.elem[1])
             )
             u_, v_ = TrialFunction(self.V_DG), TestFunction(self.V_DG)
@@ -652,7 +652,7 @@ class FEMSimulation(FEMParameters):
         self.__set_material_map()
         V_sigma = self.V
         od = order or self.elem[1]
-        V_sigma = FunctionSpace(
+        V_sigma = functionspace(
             self.domain, ("DG", od)
         )
         sigma_out = []
@@ -696,7 +696,7 @@ class FEMSimulation(FEMParameters):
         solver.view(viewer)
         solver_output = open(txt_fname, "r")
         for line in solver_output.readlines():
-            print(line)
+            pass_info(line)
 
     def solve_and_save_sim(self, filename, save=True):
         if not self.solve_status:

@@ -111,7 +111,6 @@ class COMSOL_model(FEM_model):
             self.client.disconnect()
             del self.client
             self.__has_client = False
-        print(self.handle_server or self.__has_server)
         if self.handle_server or self.__has_server:
             self.server.stop()
             del self.server

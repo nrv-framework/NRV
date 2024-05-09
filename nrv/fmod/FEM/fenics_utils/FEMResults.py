@@ -311,6 +311,7 @@ class FEMResults(NRV_class):
         """
         Eval the result field at X position
         """
+        X = np.array(X)
         N = len(X)
         cells = []
         points_on_proc = []

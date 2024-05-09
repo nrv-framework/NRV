@@ -5,7 +5,7 @@ import faulthandler
 import os
 
 import numpy as np
-from dolfinx.fem import Constant, Function, FunctionSpace
+from dolfinx.fem import Constant, Function, functionspace
 from petsc4py.PETSc import ScalarType
 from ufl import as_tensor
 
@@ -143,7 +143,7 @@ class fenics_material(NRV_class):
             # function defined anisotropic material: sigma set as a product of a
             # function and a constant (unit coeficient)
             else:
-                Q = FunctionSpace(domain, self.elem)
+                Q = functionspace(domain, self.elem)
                 self._sigma_fen = Function(Q)
                 self._sigma_fen.interpolate(_sig)
                 self._sigma_fen.name = "f" + name

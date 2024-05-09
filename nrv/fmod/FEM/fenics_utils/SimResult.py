@@ -1,7 +1,7 @@
 import gmsh
 import numpy as np
 import scipy
-from dolfinx.fem import Expression, Function, FunctionSpace
+from dolfinx.fem import Expression, Function, functionspace
 from dolfinx.geometry import (
     BoundingBoxTree,
     compute_colliding_cells,
@@ -108,7 +108,7 @@ def domain_from_meshfile(mesh_file):
 
 def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
     mesh = domain_from_meshfile(mesh_file)
-    V = FunctionSpace(mesh, elem)
+    V = functionspace(mesh, elem)
     return V
 
 
@@ -139,8 +139,8 @@ class SimResult(NRV_class):
             mesh domain on which the result is defined, by default None
         elem            :tupple (str, int)
             if None, ("Lagrange", 1), else (element type, element order), by default None
-        V       : None or dolfinx.fem.FunctionSpace
-            FunctionSpace on which the result is defined, by default None
+        V       : None or dolfinx.fem.functionspace
+            functionspace on which the result is defined, by default None
         vout       : None or dolfinx.fem.Function
             Function resulting from the FEMSimulation, by default None
         comm            :int
@@ -199,7 +199,7 @@ class SimResult(NRV_class):
         self.elem = (mdict["element"][0].strip(), int(mdict["element"][1]))
         if self.domain is None:
             self.domain = domain_from_meshfile(self.mesh_file)
-            self.V = FunctionSpace(self.domain, self.elem)
+            self.V = functionspace(self.domain, self.elem)
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict["vout"]
 
