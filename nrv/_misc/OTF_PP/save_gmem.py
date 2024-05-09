@@ -35,8 +35,12 @@ else:
     else:
         rec_bounds=(0,self.L)
 
+    if np.iterable(rec_bounds):
+        I_x = np.argwhere((axon_sim["x_rec"]>rec_bounds[0])&(axon_sim["x_rec"]<rec_bounds[1]))[:,0]
+    else:
+        rec_bounds = [rec_bounds]
+        I_x = np.array([np.argmin(abs(axon_sim["x_rec"]-rec_bounds[0]))])
 
-    I_x = np.argwhere((axon_sim["x_rec"]>rec_bounds[0])&(axon_sim["x_rec"]<rec_bounds[1]))[:,0]
 
     N_x = len(I_x)
     i_t_min = np.argwhere(axon_sim["t"]>t_start_rec)[0][0]
