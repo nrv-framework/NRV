@@ -5,7 +5,7 @@ import json
 import os
 import numpy as np
 
-from .log_interface import rise_error, rise_warning
+from .log_interface import rise_error, rise_warning, pass_info
 
 
 #################
@@ -97,7 +97,7 @@ def create_folder(foldername, access_rights=0o755):
     try:
         os.mkdir(foldername, access_rights)
     except OSError:
-        rise_warning(
+        pass_info(
             "Creation of the directory %s failed, this folder may already exist"
             % foldername
         )

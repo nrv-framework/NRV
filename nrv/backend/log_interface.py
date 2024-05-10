@@ -6,8 +6,9 @@ For the moment, the log interface is managed using the pyswarms reporter class t
 import logging
 import os
 import sys
-
+import tqdm
 from icecream import ic
+from time import sleep
 
 from .MCore import MCH
 from .parameters import parameters
@@ -246,6 +247,51 @@ def pass_debug_info(*args, **kwargs):
         if parameters.VERBOSITY_LEVEL >= 4:
             print(inf)
             sys.stdout.flush()
+
+
+
+
+########
+# pbar #
+########
+class pbar():
+    """
+    Progess bar object compatible with MPI
+    """
+    instanciate = True
+    def __init__(self, n_tot, label=""):
+        if not MCH.is_alone():
+            label = f"{MCH.rank}: " + label
+        self.__instantiate_delay()
+        self._pbar = tqdm.tqdm(total=n_tot, desc=label, position=MCH.rank)
+    
+    def __del__(self):
+        del self._pbar
+        if MCH.do_master_only_work():
+            # blanck print for new line
+            print()
+
+    def __instantiate_delay(self):
+        # Dirty hack to prevent skiping two lines 
+        sleep(0.05*(MCH.rank))
+
+    def set_label(self, label=""):
+        if not MCH.is_alone():
+            label = f"{MCH.rank}: " + label
+        self.__instantiate_delay()
+        self._pbar.set_description(label)
+        sys.stdout.flush()
+
+    def reset(self, n_tot=None):
+        self.__instantiate_delay()
+        if n_tot is None:
+            self._pbar.reset()
+        else:
+            self._pbar.reset(n_tot)
+
+    def update(self, i=1):
+        self._pbar.update(i)
+        sys.stdout.flush()
 
 
 def progression_popup(current, max_iter, begin_message="", end_message="", endl=""):

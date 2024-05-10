@@ -54,7 +54,7 @@ class nerve(NRV_simulable):
 
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
-        self.verbose = False
+        self.verbose = True
         self.postproc_script = "default"
         self.return_parameters_only = True
         self.save_results = True
@@ -780,6 +780,7 @@ class nerve(NRV_simulable):
             fasc.postproc_script = self.postproc_script
             fasc.save_results = self.save_results,
             fasc.return_parameters_only = self.return_parameters_only
+            fasc.verbose = self.verbose
 
 
     # Footprint and mesh
@@ -826,7 +827,7 @@ class nerve(NRV_simulable):
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
-            nerve_sim = sim_results({})
+            nerve_sim = sim_results({"dummy_res":1})
         if self.save_results:
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
             if MCH.do_master_only_work():
@@ -844,15 +845,26 @@ class nerve(NRV_simulable):
         fasc_kwargs = kwargs
         if self.save_results:
             fasc_kwargs["save_path"] = folder_name
+        has_pbar = False
+        if self.verbose:
+            i_pbar = 1
+            _pbar = pbar(n_tot=self.n_fasc, label="fasc")
+            has_pbar = True
         for fasc in self.fascicles.values():
-            if self.verbose:
-                pass_info("...simulating fascicle " + str(fasc.ID))
+            if has_pbar:
+                _pbar.set_label(f"fascicle {i_pbar}/{self.n_fasc}")
+                i_pbar += 1
+                fasc_kwargs["pbar"] = _pbar
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
                 in_nerve=True, **fasc_kwargs,
             )
+        del _pbar
         if self.verbose:
             pass_info("...Done!")
+        #dirty hack to force NRV_class type when saved
         if "extra_stim" in nerve_sim:
-            nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"]) #dirty hack to force NRV_class type when saved
+            nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"])
+        if self.record:     # recorder not saved in result !!BUG
+            nerve_sim["recorder"] = self.recorder
         self.is_simulated = True
         return nerve_sim

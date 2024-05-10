@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..backend.file_handler import *
-from ..backend.log_interface import pass_info, rise_warning
+from ..backend.log_interface import pass_info, rise_warning, pbar
 from ..backend.MCore import MCH, synchronize_processes
 from ..backend.NRV_Simulable import NRV_simulable, sim_results
 from ..fmod.extracellular import *
@@ -1046,7 +1046,7 @@ class fascicle(NRV_simulable):
         self.N_intra += 1
 
     ## RECORDING MECHANIMS
-    def attach_extracellular_recorder(self, rec):
+    def attach_extracellular_recorder(self, rec:recorder):
         """
         attach an extracellular recorder to the axon
 
@@ -1368,7 +1368,7 @@ class fascicle(NRV_simulable):
             import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         fasc_sim = super().simulate(**kwargs)
         if not MCH.do_master_only_work():
-            fasc_sim = sim_results({})
+            fasc_sim = sim_results({"dummy_res":1})
         # disable the result storage only if results are fully return
         # To use with caution (mostly for optimisatino)
         if not self.save_results:
@@ -1514,12 +1514,19 @@ class fascicle(NRV_simulable):
             is_master_slave = False
             ## split the job between Cores/Computation nodes
             this_core_mask = MCH.split_job_from_arrays(len(self.axons_diameter))
+            ## Set pbar
+            has_pbar = False
+            if self.verbose:
+                if "pbar" in kwargs:
+                    _pbar = kwargs["pbar"]
+                    _pbar.reset(n_tot=len(this_core_mask))
+                    self.verbose = False
+                else:
+                    pass_info("Simulating axons in fascicle " + str(self.ID))
+                    _pbar = pbar(n_tot=len(this_core_mask))
+                has_pbar = True
             ## perform simulations
-            if MCH.is_alone() and self.verbose:
-                pass_info("Simulating axons in fascicle " + str(self.ID))
             for k in this_core_mask:
-                if MCH.is_alone() and self.verbose:
-                    pass_info(f"\t Axon {k+1}/{self.n_ax}", end="\r")
                 axon_sim = self.__sim_axon(k, is_master_slave)
                 # postprocessing and data reduction
                 # (cannot be added to __sim.axon beceause nrv would not be global anymore)
@@ -1539,6 +1546,8 @@ class fascicle(NRV_simulable):
                     axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                 if not self.return_parameters_only:
                     fasc_sim.update({"axon" + str(k): axon_sim})
+                if has_pbar:
+                    _pbar.update()
             # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:
@@ -1549,8 +1558,8 @@ class fascicle(NRV_simulable):
             if MCH.do_master_only_work():
                 if "extra_stim" in fasc_sim:
                     fasc_sim['extra_stim'] = load_any(fasc_sim['extra_stim']) #dirty hack to force NRV_class instead of dict
-                if "recorder" in fasc_sim:
-                    fasc_sim['recorder'] = load_any(fasc_sim['extra_stim'])   #idem
+                if self.record:
+                    fasc_sim['recorder'] = load_any(fasc_sim['recorder'])   #idem
         if MCH.is_alone() and self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True
