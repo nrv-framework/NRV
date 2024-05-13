@@ -270,6 +270,7 @@ class pbar():
         if MCH.do_master_only_work():
             # blanck print for new line
             print()
+            sys.stdout.flush()
 
     def __instantiate_delay(self):
         # Dirty hack to prevent skiping two lines 

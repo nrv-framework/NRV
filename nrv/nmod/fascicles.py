@@ -103,7 +103,7 @@ class fascicle(NRV_simulable):
         self.z_grav_center = 0
         # axonal content
         self.axons_diameter = np.array([])
-        self.axons_type = np.array([])
+        self.axons_type = np.array([], dtype=int)
         self.axons_y = np.array([])
         self.axons_z = np.array([])
         self.NoR_relative_position = np.array([])

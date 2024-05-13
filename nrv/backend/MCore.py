@@ -80,7 +80,7 @@ class Mcore_handler(metaclass=NRV_singleton):
         else:
             print("Hi, I am a slave core, my ID is " + str(self.rank))
 
-    def split_job_from_arrays(self, len_arrays):
+    def split_job_from_arrays(self, len_arrays, stype="default"):
         """
         Split an array for parallel independant computing, by sharing independant sub-spaces \
         of array index
@@ -98,12 +98,16 @@ class Mcore_handler(metaclass=NRV_singleton):
         if self.is_alone():
             mask = np.arange(len_arrays)
         else:
-            if self.is_master():
-                all_indexes = np.arange(len_arrays)
-                mask_chunks = np.array_split(all_indexes, self.size, axis=0)
+            if stype=="comb":
+                mask = np.arange(len_arrays)
+                mask = np.where(self.rank == mask % self.size)[0]
             else:
-                mask_chunks = None
-            mask = comm.scatter(mask_chunks, root=0)
+                if self.is_master():
+                    all_indexes = np.arange(len_arrays)
+                    mask_chunks = np.array_split(all_indexes, self.size, axis=0)
+                else:
+                    mask_chunks = None
+                mask = comm.scatter(mask_chunks, root=0)
         return mask
 
     def split_job_from_arrays_to_slaves(self, len_arrays):
