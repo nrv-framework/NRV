@@ -4,7 +4,7 @@ Installation
 NRV is pip installable and the hole process should be quite simple. However, to prevent from third packages version conflict we recommend to create a dedicated conda environnement: 
 ::
 
-    conda create -n nrv-env -c anaconda python=3.10 
+    conda create -n nrv-env -c anaconda python=3.12 
 
 and activate it before any installation with the command: 
 ::

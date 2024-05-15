@@ -55,7 +55,17 @@ You should be able to make changes locally
 
 If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
-6. Commit your changes and push you branch to GitHub:
+6. Please do not forget to update the documentation if your changes imply knowledge from the end user. To be able to compile the documentation, few dependancies have to be considered:
+::
+
+    $ pip install sphinx sphinx-rtd-theme furo Pygments
+
+Once installed, you should be able to build the documentation with the following command:
+::
+
+    python3 -m sphinx.cmd.build -b html docs/ docs/build/
+
+7. Commit your changes and push you branch to GitHub:
 ::
 
     $ git add -A
@@ -67,7 +77,7 @@ In brief, commit messages should follow these conventions:
     - Subject lines should not exceed 50 characters.
     - The commit body should contain context about the change - how the code worked before, how it works now and why you decided to solve the issue in the way you did.
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 NRV testing
 -----------

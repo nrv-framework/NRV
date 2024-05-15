@@ -36,6 +36,8 @@ deps = (
     "dolfinx.cpp",
     "dolfinx.cpp.mesh",
     "numpy.linalg",
+    "numpy.typing",
+    "numpy.core.multiarray",
     "matplotlib",
     "matplotlib.pyplot",
     "matplotlib.pylab",
@@ -55,6 +57,9 @@ deps = (
     "pyswarms.utils",
     "pyswarms.backend.topology",
     "tqdm",
+    "ufl.finiteelement",
+    "basix",
+    "basix.ufl",
 )
 for package in deps:
     sys.modules[package] = MagicMock()
