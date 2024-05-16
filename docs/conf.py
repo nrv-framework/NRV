@@ -2,6 +2,9 @@
 import os
 import sys
 from unittest.mock import MagicMock  # mock imports
+from pygments.styles import get_all_styles
+
+styles = list(get_all_styles())
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -82,11 +85,11 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
     "sphinx.ext.intersphinx",
+    "sphinx_mdinclude",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
 
 # -- Options for HTML output -------------------------------------------------
 # Web site

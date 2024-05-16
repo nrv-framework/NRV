@@ -150,7 +150,7 @@ class material(NRV_class):
     @property
     def sigma(self):
         """
-        get the contuvity of the material
+        get the conductivity of the material
         """
         if not self.is_isotropic():
             return np.array([self.sigma_xx, self.sigma_yy, self.sigma_zz])
@@ -163,7 +163,7 @@ class material(NRV_class):
     @property
     def sigma_xx(self)->float:
         """
-        get the contuvity of the material along ox
+        get the conductivity of the material along ox
         """
         if self.isotrop_cond:
             rise_warning("Isotropic conductor sigma_xx is sigma")
@@ -178,7 +178,7 @@ class material(NRV_class):
     @property
     def sigma_yy(self)->float:
         """
-        get the contuvity of the material along oy
+        get the conductivity of the material along oy
         """
         if self.isotrop_cond:
             rise_warning("Isotropic conductor sigma_yy is sigma")
@@ -193,7 +193,7 @@ class material(NRV_class):
     @property
     def sigma_zz(self)->float:
         """
-        get the contuvity of the material along oz
+        get the conductivity of the material along oz
         """
         if self.isotrop_cond:
             rise_warning("Isotropic conductor sigma_zz is sigma")

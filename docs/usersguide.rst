@@ -21,7 +21,21 @@ Objects in NRV all inherit from an abstract class (called ``NRV_Class``) that gi
 1. All objects can be saved as dictionary or in `json` files, so that any simulation, optimization problem or any implementation in general can be saved.
 2. All objects can be described using a dictionary or a `json` file.
 
-These two points and their consequences on syntax are described hereafter.
+These two points and their consequences on syntax are described hereafter the link on chapters of the user's guide.
+
+Chapters of the User's Guide
+============================
+
+.. toctree::
+
+   usersguide/simulables
+   usersguide/populations
+   usersguide/stimuli
+   usersguide/electrodes
+   usersguide/materials
+   usersguide/postproc
+   usersguide/optimization
+
 
 
 Note on object saving
@@ -111,17 +125,5 @@ The save/load generic methods allow the possibility to instantiate a ``NRV_Class
     assert axon1.L == L
     del axon1
 
-
-
-
-Chapters of the User's Guide
-============================
-
-.. toctree::
-
-   usersguide/simulables
-   usersguide/stimuli
-   usersguide/electrodes
-   usersguide/postproc
 
 

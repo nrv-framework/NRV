@@ -22,7 +22,7 @@ are conda-installable only:
 ::
 
 
-    conda install -c conda-forge fenics-dolfinx mpich
+    conda install -c conda-forge fenics-dolfinx==0.8.0 mpich
 
 
 
@@ -123,7 +123,7 @@ Activating the environnement and installation the required packages:
 ::
 
     micromamba activate nrv-env
-    micromamba install -c conda-forge fenics-dolfinx  sysroot_linux-64=2.17 mpg
+    micromamba install -c conda-forge fenics-dolfinx==0.8.0  sysroot_linux-64=2.17 mpg
 
 Last, one can pip-install NRV:
 ::

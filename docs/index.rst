@@ -24,6 +24,7 @@ NRV was developed by contributors from the CELL research group at the Laboratory
    usersguide
    examples
    modules
+   changelog
    devcorner
 
 

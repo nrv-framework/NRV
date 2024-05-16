@@ -58,7 +58,7 @@ If you add a new functionality, you should add one or several tests, showing tha
 6. Please do not forget to update the documentation if your changes imply knowledge from the end user. To be able to compile the documentation, few dependancies have to be considered:
 ::
 
-    $ pip install sphinx sphinx-rtd-theme furo Pygments
+    $ pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude
 
 Once installed, you should be able to build the documentation with the following command:
 ::
