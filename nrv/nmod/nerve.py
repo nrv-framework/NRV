@@ -858,7 +858,8 @@ class nerve(NRV_simulable):
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
                 in_nerve=True, **fasc_kwargs,
             )
-        del _pbar
+        if has_pbar:
+            del _pbar
         if self.verbose:
             pass_info("...Done!")
         #dirty hack to force NRV_class type when saved
