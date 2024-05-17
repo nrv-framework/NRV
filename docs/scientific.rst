@@ -54,7 +54,7 @@ Analytical evaluation of the extracellular potential
 
 The `analytical_stimulation`-class solves the extracellular potential analytically using the PSA for the electrode, and the nerve is modeled as an infinite homogeneous medium [malmivuo1995bioelectromagnetism]. This method is only suitable for geometry-less simulation: axons are considered as being surrounded by a unique homogeneous material. In this case, the footprint function is computed as:
 
-..math::
+.. math::
     V_{\text{footprint}} = \frac{1}{4\pi\sigma \vert\vert \mathbf{r} - \mathbf{r_e}\vert\vert}
 
 where :math:`\vert\vert \cdot \vert\vert` denote the euclidean norm, :math:`\mathbf{r_e}` is the :math:`\left( x_{e}, y_{e}, z_{e}\right)`$` position of the PSA electrode and :math:`\sigma`` is the isotropic conductivity of the material. The conductivity of the endoneurium is generally considered as anisotropic [ranck1965specific] and is expressed as a diagonal matrix:
@@ -178,5 +178,23 @@ The top-level `nerve` class is implemented to aggregate one or more fascicles an
 Optimizing a setup
 ------------------
 
-**to write**
+.. image:: images/optim_full.png
 
+The figure above describes the generic formalism adopted in NRV for running optimization algorithms on PNS stimulations. The optimization problem, defined in a `Problem`-class, couples a `Cost_Function`-object, which evaluates the cost of the problem based on user-specified outcomes (e.g., stimulus energy, percentage of axon recruitment, etc.), to an optimization method or algorithm embedded in the `Optimizer`-object. The optimization space is defined by specifying in the problem definition the subset of available adjustable simulation parameters (e.g., stimulus shape, electrode size, etc.) and, optionally, their respective bounds. 
+
+NRV provides methods and objects to construct the `Cost_Function`-object according to the desired cost evaluation method and optimization space. Specifically, the `Cost_Function`-class is constructed around four main objects (see figure above):
+
+- A filter: which is an optional Python `callable`-object, for vector formatting or space restriction of the optimization space. In most cases, this function is set to identity and will be taken as such if not defined by the user.
+
+- A static context: it defines starting point of the simulation model to be optimized. It can be any of the `nmod`-objects (axon, fascicle, or nerve) to which all objects describing stimulation, recording and more generally the physical context are attached. 
+
+- A `ContextModifier`-object: it updates the static context according to the output of the optimization algorithm and the optimization space. The `ContextModifier`-object is an abstract class, and two daughter classes for specific optimization problems are currently predefined: for stimulus waveform optimization or for geometry (mainly electrodes) optimization. However, there is no restriction to define any specific optimization scenario by inheriting from the parent `ContextModifier`-class.
+
+- A `CostEvaluation`-object: uses the simulation results to evaluate a user-defined cost. Some examples of cost evaluation are included in the current version of the framework. Nonetheless, the `CostEvaluation`-class is a generic Python `callable`-class, so it can also be user-defined.
+
+Optimization methods and algorithm implemented in NRV rely on third-party optimization libraries: SciPy optimize [2020SciPy-NMeth] for continuous problems, Pyswarms [pyswarmsJOSS2018] as Particle Swarms Optimization metaheuristic for high-dimensional or discontinuous problems.
+
+
+References
+----------
+[]
