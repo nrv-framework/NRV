@@ -113,12 +113,7 @@ class fascicle_results(sim_results):
                                 color=color,fill=True,alpha = alpha,))
 
             if self.extra_stim is not None:
-                for electrode in self.extra_stim.electrodes:
-                    if electrode.ax_type == "LIFE":
-                        axes.add_patch(plt.Circle((electrode.y, electrode.z),
-                                electrode.D / 2,color="gold",fill=True,))
-                    elif not is_FEM_electrode(electrode):
-                        axes.scatter(electrode.y, electrode.z, color="gold")
+                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
             if num:
                 for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))

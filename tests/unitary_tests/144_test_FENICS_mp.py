@@ -27,7 +27,7 @@ I_cathod = 40
 I_anod = I_cathod/5
 T_cathod = 60e-3
 T_inter = 40e-3
-stim1 = nrv.FEM_stimulation(Ncore=1)
+stim1 = nrv.FEM_stimulation(Ncore=False)
 stim1.reshape_outerBox(Outer_D)
 stim1.reshape_nerve(Nerve_D, L)
 stim1.reshape_fascicle(Fascicle_D)#, res=220/10)
@@ -55,12 +55,11 @@ del fascicle_1
 
 
 #stim2 = nrv.load_any(stim1.save())
-stim2 = nrv.FEM_stimulation()
+stim2 = nrv.FEM_stimulation(Ncore=True)
 stim2.reshape_outerBox(Outer_D)
 stim2.reshape_nerve(Nerve_D, L)
 stim2.reshape_fascicle(Fascicle_D)
 stim2.add_electrode(elec_1, stim)
-stim2.set_Ncore(3)
 
 fascicle_2.set_ID(Ntest*10+1)
 fascicle_2.attach_extracellular_stimulation(stim2)

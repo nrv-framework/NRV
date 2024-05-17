@@ -486,6 +486,8 @@ class FEM_stimulation(extracellular_context):
         """
         super().load(data, **kwargs)
 
+        if self.fenics:
+            self.set_Ncore(self.Ncore)
         if C_model:
             if MCH.do_master_only_work():
                 self.model = COMSOL_model(self.model_fname)

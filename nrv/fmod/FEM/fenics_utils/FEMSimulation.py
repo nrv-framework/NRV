@@ -4,6 +4,7 @@ NRV-:class:`.FEMSimulation` handling.
 import os
 import time
 import numpy as np
+import sys
 
 from dolfinx import default_scalar_type
 from dolfinx.fem import (
@@ -712,7 +713,11 @@ class FEMSimulation(FEMParameters):
         os.system("gmsh " + self.mesh_file + ".msh")
 
     def get_surface(self, dom_id):
-        return assemble_scalar(form(1 * self.ds(dom_id)))
+        S = assemble_scalar(form(1 * self.ds(dom_id)))
+        if self.comm == MPI.COMM_WORLD:
+            S = self.comm.reduce(S, op=MPI.SUM, root=0)
+            S = self.comm.bcast(S, root=0)  
+        return S
 
     def get_domain_potential(self, dom_id, dim=2, space=0):
         if dim == 2:

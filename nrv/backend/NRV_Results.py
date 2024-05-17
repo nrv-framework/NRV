@@ -47,11 +47,13 @@ class NRV_results(NRV_class, dict):
             context["result_type"] = context.pop("nrv_type")
         
         # Discard saving for empty results (mostly fo Mcore)
-        self.to_save = True
-        if "dummy_res" in context:
-            self.to_save = False
         self.update(context)
         self.__sync()
+
+
+    @property
+    def to_save(self):
+        return "dummy_res" in self
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         save = save and self.to_save

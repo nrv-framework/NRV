@@ -88,6 +88,13 @@ class FEM_model(NRV_class):
         N       : int
             Number of cores to set
         """
+        if isinstance(N, bool):
+            if N:
+                N = MCH.size
+            else:
+                N = 1
+        if N is None:
+            N = 1
         self.Ncore = N
         if self.Ncore > MCH.size:
             rise_warning(
