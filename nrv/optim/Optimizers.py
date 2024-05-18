@@ -176,11 +176,11 @@ class PSO_optimizer(Optimizer):
     def __init__(
         self,
         n_particles=5,
+        bounds=(0, 0),
         dimensions=50,
         options=None,
         maxiter=1,
         n_processes=None,
-        bounds=(0, 0),
         init_pos=None,
         print_time=False,
         opt_type="global",

@@ -1,9 +1,11 @@
 """
 NRV-:class:`.CostFunction` handling.
 """
+import numpy as np
 from ..backend.NRV_Class import NRV_class, load_any
-from ..backend.NRV_Simulable import NRV_simulable
+from ..backend.NRV_Simulable import NRV_simulable, sim_results
 from ..backend.MCore import MCH, synchronize_processes
+from ..backend.log_interface import rise_warning
 
 
 class CostFunction(NRV_class):
@@ -12,6 +14,9 @@ class CostFunction(NRV_class):
 
     Parameters
     ----------
+    static_context      : str
+        saving dictionary or saving file name of a nrv_simulable object
+        which should be use as static context of the optimisation
     context_modifier   : funct
         function creating a context from a particle position, parameters:
             position        : particle position in each dimensions (array)
@@ -50,14 +55,13 @@ class CostFunction(NRV_class):
     saver         : funct or None
         function added at the end after calculating the cost for personalized savings, if None,
         nothing will be saved,  by default None
-
     """
 
     def __init__(
         self,
-        static_context,
-        context_modifier,
-        cost_evaluation,
+        static_context=None,
+        context_modifier=None,
+        cost_evaluation=None,
         simulation=None,
         kwargs_CM={},
         kwargs_S={},
@@ -87,21 +91,113 @@ class CostFunction(NRV_class):
         self.results = None
         self.cost = None
 
+        # not ideal but prevent having multiple t_sim
+        self.static_t_sim = 0
+        self.global_t_sim = 0
+
         self._MCore_CostFunction = False
         self.keep_results = False
-        self.__check_cost_function()
+        self.__check_mch()
+        self.__synchronise_t_sim()
 
+
+    ####################################
+    ###### automating methods ##########
+    ####################################
     def __clear_results(self):
+        """
+            clear result for re-use
+        """
         del self.simulation_context
         del self.results
         self.simulation_context = None
         self.results = None
 
-    def __check_cost_function(self):
-        static_contect = load_any(self.static_context)
-        if not MCH.is_alone() and static_contect.nrv_type in ["fascicle", "nerve"]:
-            self._MCore_CostFunction = True
-        del static_contect
+    def __check_mch(self):
+        """
+            check is the simulation will be handle in single or multiple cores
+        """
+        if self.static_context is not None:
+            static_context = load_any(self.static_context)
+            self.static_t_sim = static_context.t_sim
+            if not MCH.is_alone() and static_context.nrv_type in ["fascicle", "nerve"]:
+                self._MCore_CostFunction = True
+            del static_context
+
+    def __synchronise_t_sim(self):
+        """
+        if "t_sim" in self.kwargs_S:
+            self.global_t_sim = self.kwargs_S["t_sim"]
+        elif "t_sim" in self.kwargs_CM:
+            self.global_t_sim = self.kwargs_CM["t_sim"]
+        elif "t_sim" in self.kwargs_CE:
+            self.global_t_sim = self.kwargs_CE["t_sim"]
+        else:
+            self.global_t_sim = self.static_t_sim
+
+        self.kwargs_S["t_sim"] = self.global_t_sim
+        self.kwargs_CM["t_sim"] = self.global_t_sim
+        self.kwargs_CE["t_sim"] = self.global_t_sim"""
+        pass
+
+
+
+    @property
+    def __cost_function_ok(self):
+        s_status = []
+        if self.static_context is None:
+            s_status += ["static_context"]
+        if self.context_modifier is None:
+            s_status += ["context_modifier"]
+        if self.simulation is None:
+            s_status += ["simulation"]
+        if len(s_status)==0:
+            return True
+        else:
+            rise_warning("Cost function cannot be called because the following parameters are not defined: ",s_status)
+            return False
+
+    ## Setters
+    def set_static_context(self, static_context:str|dict, **kwgs):
+        """
+        set the cost static_context after the instantiation
+
+        Parameters
+        ----------
+        static_context : _type_
+            _description_
+        """
+        self.static_context = static_context
+        self.kwargs_S = kwgs
+        self.__check_mch()
+        self.__synchronise_t_sim()
+
+    def set_context_modifier(self, context_modifier:callable, **kwgs):
+        """
+        set the cost context modifier after the instantiation
+
+        Parameters
+        ----------
+        context_modifier : _type_
+            _description_
+        """
+        self.context_modifier = context_modifier
+        self.kwargs_CM = kwgs
+        self.__synchronise_t_sim()
+
+    def set_cost_evaluation(self, cost_evaluation:callable, **kwgs):
+        """
+        set the cost evalutation function after the instantiation
+
+        Parameters
+        ----------
+        cost_evaluation : _type_
+            _description_
+        """
+        self.cost_evaluation = cost_evaluation
+        self.kwargs_CE = kwgs
+        self.__synchronise_t_sim()
+
 
     def simulate_context(self):
         ## See what's the use of simulation 
@@ -114,13 +210,67 @@ class CostFunction(NRV_class):
             if "save_results" not in self.kwargs_S:
                 self.kwargs_S["save_results"] = False
             results = self.simulation_context(**self.kwargs_S)
+        return results    
+
+
+
+    #############################
+    ###### Call method ##########
+    #############################
+    def get_sim_results(self, X:np.ndarray)->sim_results:
+        """_summary_
+
+        Parameters
+        ----------
+        X : np.ndarray
+            _description_
+
+        Returns
+        -------
+        sim_results
+            _description_
+        """
+        self.keep_results = True
+
+        if self.filter is not None:
+            X_ = self.filter(X)
+        else:
+            X_ = X
+
+        # Interpolation
+        self.simulation_context = self.context_modifier(
+            X_, self.static_context, **self.kwargs_CM
+        )
+        # Simulation
+        results = self.simulate_context()
+        self.__clear_results()
         return results
 
-    def __call__(self, X):
+
+
+    def __call__(self, X:np.ndarray)->float:
+        """
+        This is where the magic happend. When called cost function evaluate the impact of tuning
+        parameters X on static context and evaluate a cost from the simulation results using
+        cost_evaluation
+
+        Parameters
+        ----------
+        X : np.ndarray
+            tunning parameters of the simulation which will be evaluated by the cost function
+
+        Returns
+        -------
+        float
+            cost corresponding to the input parameter
+        """
         # Broadcasting to slave wich are waiting for simulation
         if MCH.do_master_only_work() and self._MCore_CostFunction:
+            if not self.__cost_function_ok:
+                return -1
             slave_status = {"status": "Simulate", "X": X}
             MCH.master_broadcasts_array_to_all(slave_status)
+
         if self._MCore_CostFunction:
             synchronize_processes()
 
@@ -137,8 +287,9 @@ class CostFunction(NRV_class):
 
         # Simulation
         self.results = self.simulate_context()
+
+        # Cost calculation
         if MCH.do_master_only_work() or not self._MCore_CostFunction:
-            # Cost calculation
             self.cost = self.cost_evaluation(self.results, **self.kwargs_CE)
             # Savings
             if self.saver is not None:
