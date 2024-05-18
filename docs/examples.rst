@@ -13,3 +13,7 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
    examples/example_04
    examples/example_05
    examples/example_06
+   examples/example_07
+   examples/example_08
+   examples/example_09
+   examples/example_10
