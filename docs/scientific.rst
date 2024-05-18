@@ -18,8 +18,8 @@ Calls to Gmsh, Fenics, and COMSOL Server (for geometry definition, meshing, FEM 
 .. image:: images/main_fig.png
 
 NRV’s internal architecture is depicted in the figure above. It is subdivided into four main sections:
-    * **fmod:** for extracellular models and computations. Details of this section are described in section ???
-    * **nmod:** for axon membrane potential models and computation. Details of this section is described in section ???
+    * **fmod:** for extracellular models and computations.
+    * **nmod:** for axon membrane potential models and computation.
     * **optim:** enables automated optimization of stimulation contexts, either by controlling geometrical parameters or the stimulation waveshape.
     * **backend:** handles all related software engineering aspects behind NRV, such as machine capacity and performances, parallel processing, or file inputs and outputs for instance. This section is essential for the proper functioning of the framework, but mainly concerns the architecture and development of software whose knowledge does not provide relevant information to the end user. Thus, this section is not described in more detail.
 
@@ -29,7 +29,7 @@ NRV provides classes, tools, and templates to create 3-D models of the nerve and
 
 .. image:: images/fmod.png
 
-The computation of the extracellular electric potential associated with electrical stimulation is handled by the extracellular_context-class. The analytical_stimulation-class and the FEM_stimulation-class are derived from the parent extracellular_context-class as illustrated in Fig. II.37 and detailed in the next two subsections. NRV provides the possibility of analytically estimate compound action potential (CAP) using recorder-objects. 
+The computation of the extracellular electric potential associated with electrical stimulation is handled by the extracellular_context-class. The analytical_stimulation-class and the FEM_stimulation-class are derived from the parent extracellular_context-class as illustrated in the figure above and detailed in the next two subsections. NRV provides the possibility of analytically estimate compound action potential (CAP) using recorder-objects. 
 
 Electrical stimulation potential: computation mechanism
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -47,7 +47,7 @@ When describing the simulation by instantiating an extracellular_context- object
 
 With FEM, classes to simulate cuff electrodes and LIFEs have been implemented. FEM electrodes can be fully parameterized (active-site length, number of contacts, location, etc.). Implementation of the FEM solver is detailed in the next paragraph. Custom classes for alternative or more complex electrode designs can be further implemented by inheritance of the FEM_electrodes-class. All footprint computations are performed by the electrode- mother class automatically when the extracellular_context-object is associated with axons.
 
-Electrical conductivities (isotropic or anisotropic) of the tissues constituting the NRV nerve are defined using Material-class. The framework includes pre-defined materials for the epineurium, endoneurium, and perineum conductivities with values commonly found in the literature (Ranck and BeMent 1965). Custom conductivity values can also be user-specified.
+Electrical conductivities (isotropic or anisotropic) of the tissues constituting the NRV nerve are defined using Material-class. The framework includes pre-defined materials for the epineurium, endoneurium, and perineum conductivities with values commonly found in the literature [Ranck1965]. Custom conductivity values can also be user-specified.
 
 Analytical evaluation of the extracellular potential
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ The `analytical_stimulation`-class solves the extracellular potential analytical
 .. math::
     V_{\text{footprint}} = \frac{1}{4\pi\sigma \vert\vert \mathbf{r} - \mathbf{r_e}\vert\vert}
 
-where :math:`\vert\vert \cdot \vert\vert` denote the euclidean norm, :math:`\mathbf{r_e}` is the :math:`\left( x_{e}, y_{e}, z_{e}\right)`$` position of the PSA electrode and :math:`\sigma`` is the isotropic conductivity of the material. The conductivity of the endoneurium is generally considered as anisotropic [ranck1965specific] and is expressed as a diagonal matrix:
+where :math:`\vert\vert \cdot \vert\vert` denote the euclidean norm, :math:`\mathbf{r_e}` is the :math:`\left( x_{e}, y_{e}, z_{e}\right)` position of the PSA electrode and :math:`\sigma`` is the isotropic conductivity of the material. The conductivity of the endoneurium is generally considered as anisotropic [ranck1965specific] and is expressed as a diagonal matrix:
 
 .. math::
     \boldsymbol{\sigma} = \begin{bmatrix}
@@ -197,4 +197,34 @@ Optimization methods and algorithm implemented in NRV rely on third-party optimi
 
 References
 ----------
-[]
+[geuzaine2009gmsh]
+
+[alnaes2015fenics]
+
+[kent_model-based_2013]
+
+[yi2020kilohertz]
+
+[wongsarnpigoon_energy-efficient_2010]
+
+[cassar_improved_2017]
+
+[dalcin2021mpi4py]
+
+[Ranck1965]
+
+[malmivuo1995bioelectromagnetism]
+
+[grill1999modeling]
+
+[mcintyre2001finite]
+
+[givoli2004finite]
+
+[pelot2018parameters]
+
+[parasuram2016computational]
+
+[mcintyre2002modeling]
+
+[gaines2018model]
