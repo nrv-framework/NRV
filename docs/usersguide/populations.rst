@@ -70,15 +70,15 @@ There are predefined statistics taken from the litterature for unmyelinated fibe
     *   - Name
         - scientific source and comment
     *   - "Ochoa_U"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat1]
     *   - "Jacobs_11_A"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
     *   - "Jacobs_11_B"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
     *   - "Jacobs_11_C"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
     *   - "Jacobs_11_D"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
 
 These statistics (grey curves), and their interpolations in NRV (red curves) and an example of generated population histogramm are depicted in the figure bellow:
 
@@ -94,22 +94,41 @@ as well as for myelinated fibers:
     *   - Name
         - scientific source and comment
     *   - "Schellens_1"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat3]
     *   - "Schellens_2"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat3]
     *   - "Ochoa_M"
-        - scientific source and comment
+        - Statistics from human normal sural nerve, scientific reference [stat1]
     *   - "Jacobs_9_A"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
     *   - "Jacobs_9_B"
-        - scientific source and comment
+        - From human normal sural nerve, scientific reference [stat2]
 
 These statistics (grey curves), and their interpolations in NRV (blue curves) and an example of generated population histogramm are depicted in the figure bellow:
 
 .. image:: ../images/distributions_myelinated.png
 
+The scientific references used are:
+
+- [stat1] Ochoa, J., & Mair, W. G. P. (1969). The normal sural nerve in man: I. Ultrastructure and numbers of fibres and cells. Acta neuropathologica, 13, 197-216.
+
+- [stat2] Jacobs, J. M., & Love, S. (1985). Qualitative and quantitative morphology of human sural nerve at different ages. Brain, 108(4), 897-924.
+
+- [stat3] Schellens, R. L., van Veen, B. K., Gabreëls‐Festen, A. A., Notermans, S. L., van't Hof, M. A., & Stegeman, D. F. (1993). A statistical approach to fiber diameter distribution in human sural nerve. Muscle & Nerve: Official Journal of the American Association of Electrodiagnostic Medicine, 16(12), 1342-1350.
+
+
 Describe a new statistical law
 ------------------------------
+
+Predefined statistics are simple csv files with two columns:
+
+1. Starting value of the bin for diameter histogram.
+
+2. Value of the probability for the corresponding bin
+
+The length of the bins is automatically determined by two successive values. Note last bin is the same size as previous one. Sum of probabilities is automatically normalized to 1.
+
+Users can find the predefined statistics at the path `nrv/_misc/stats/`. Adding files to this folder make the statistics accessible by the filname without the extension. It is also possible to specify the statistics with a string beeing the path to the specific file.
 
 
 Axon Packing

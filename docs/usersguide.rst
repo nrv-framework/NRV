@@ -34,6 +34,7 @@ Chapters of the User's Guide
    usersguide/electrodes
    usersguide/materials
    usersguide/postproc
+   usersguide/parallel
    usersguide/optimization
 
 

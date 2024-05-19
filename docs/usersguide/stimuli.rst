@@ -12,9 +12,11 @@ handle stimuli.
 
 A stimulus is described as an asynchronous signal: there is no need for
 a regular clock to describe the stimulus changes in time. As a
-consequence, the stimulus is based on two lists: - a first list called
-‘s’ contains the signal values, - a second list called ‘t’ contains the
-time stamps for the different values.
+consequence, the stimulus is based on two lists: 
+
+- a first list called ‘s’ contains the signal values, 
+
+- a second list called ‘t’ contains the time stamps for the different values.
 
 The class constructor takes no positional arguments, however there is
 one optional argument: - s_init: the initial value of the stimulus at
