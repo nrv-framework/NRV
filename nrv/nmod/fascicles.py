@@ -60,27 +60,15 @@ class fascicle(NRV_simulable):
 
     Parameters
     ----------
-    dt              : float
-        simulation time stem for Neuron (ms), by default 1us
-    Nseg_per_sec    : float
-        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-    freq            : float
-        frequency of the d-lambda rule (Hz), by default 100Hz
-    freq_min        : float
-        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-    v_init          : float
-        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-    T               : float
-        temperature (C), specify None for automatic model choice of temperature
-    ID              : int
-        axon ID, by default set to 0
-    threshold       : int
-        membrane voltage threshold for spike detection (mV), by default -40mV
+    diameter              : float
+        Fascicle diameter, in um
+    ID    : int
+        Fascicle unique identifier
     """
 
     def __init__(self, diameter=None, ID=0, **kwargs):
         """
-        Instrantation of a Fascicle
+        Instantation of a Fascicle
         """
         super().__init__(**kwargs)
 

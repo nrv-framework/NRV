@@ -24,7 +24,6 @@ deps = (
     "dolfinx",
     "petsc4py",
     "ufl",
-    "gmsh",
     "dolfinx.io",
     "petsc4py.PETSc",
     "dolfinx.fem",
@@ -134,6 +133,6 @@ setup(
         "pyswarms",
         "tqdm",
     ],  # external packages as dependencies
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script
 )

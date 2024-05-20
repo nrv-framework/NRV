@@ -26,27 +26,17 @@ class nerve(NRV_simulable):
 
     Parameters
     ----------
-    dt              : float
-        simulation time stem for Neuron (ms), by default 1us
-    Nseg_per_sec    : float
-        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-    freq            : float
-        frequency of the d-lambda rule (Hz), by default 100Hz
-    freq_min        : float
-        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-    v_init          : float
-        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-    T               : float
-        temperature (C), specify None for automatic model choice of temperature
-    ID              : int
-        axon ID, by default set to 0
-    threshold       : int
-        membrane voltage threshold for spike detection (mV), by default -40mV
-    Adelta_limit    : float
-        limit diameter between A-delta models (thin myelinated) and myelinated models for axons
+    length              : float
+        Nerve length, in um
+    diameter    : float
+        Nerve diameter, in um
+    Outer_D            : float
+        Outer saline box diameter, in mm
+    ID        : int
+        Nerve unique identifier 
     """
 
-    def __init__(self, length=10000, diameter=100, Outer_D=5, ID=0, **kwargs):
+    def __init__(self, length=10_000, diameter=100, Outer_D=5, ID=0, **kwargs):
         """
         Instanciates an empty nerve.
         """
@@ -283,23 +273,23 @@ class nerve(NRV_simulable):
 
     def set_ID(self, ID):
         """
-        set the ID of the fascicle
+        set the ID of the nerve
 
         Parameters
         ----------
         ID : int
-            ID number of the fascicle
+            ID number of the nerve
         """
         self.ID = ID
 
     def define_length(self, L):
         """
-        set the length over the x axis of the fascicle
+        set the length over the x axis of the nerve
 
         Parameters
         ----------
         L   : float
-            length of the fascicle in um
+            length of the nerve in um
         """
         if self.extra_stim is not None or self.N_intra > 0:
             rise_warning(
@@ -318,12 +308,12 @@ class nerve(NRV_simulable):
     ## generate stereotypic Nerve
     def define_circular_contour(self, D, y_c=None, z_c=None):
         """
-        Define a circular countour to the fascicle
+        Define a circular countour to the nerve
 
         Parameters
         ----------
         D           : float
-            diameter of the circular fascicle contour, in um
+            diameter of the circular nerve contour, in um
         y_c         : float
             y coordinate of the circular contour center, in um
         z_c         : float
@@ -347,7 +337,7 @@ class nerve(NRV_simulable):
 
     def get_circular_contour(self):
         """
-        Returns the properties of the fascicle contour considered as a circle (y and z center and diameter)
+        Returns the properties of the nerve contour considered as a circle (y and z center and diameter)
 
         Returns
         -------
@@ -365,7 +355,7 @@ class nerve(NRV_simulable):
 
     def fit_circular_contour(self, y_c=None, z_c=None, Delta=20):
         """
-        Define a circular countour to the fascicle
+        Define a circular countour to the nerve
 
         Parameters
         ----------
@@ -487,7 +477,7 @@ class nerve(NRV_simulable):
         self, unmyelinated_only=False, myelinated_only=False, **kwargs
     ):
         """
-        set parameters of axons in the fascicle
+        set parameters of axons in the nerve
 
         Parameters
         ----------

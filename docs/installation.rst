@@ -111,7 +111,7 @@ Installation of `micromamba <https://github.com/mamba-org/mamba>`_ (a lighter an
 Creation of the environnement: 
 ::
 
-    micromamba create -n nrv-env -c anaconda python=3.10 
+    micromamba create -n nrv-env -c anaconda python=3.12 
 
 Sudo update and installation of the required libs:
 ::

@@ -10,6 +10,21 @@ In NRV, all simulations can be launched by objects that have a physiological mea
 
 All these object have in common a method called ``simulate`` that automatically performs the simulation, handles computation of extracellular fields if needed, processes the stimuli, records internal variables. For fascicles and nerves, if the script is launched on several CPU cores, the parallelization is automatically handled transparently for the user.
 
+
+.. note::
+  Simulable objects are callable. Calling any simulable object will call the ``simulate``-method. In other words:
+
+  .. code:: ipython3
+
+      my_simulable.simulate(*myargs)
+        
+  is equivalent to:
+
+  .. code:: ipython3
+
+      my_simulable(*myargs)
+
+
 Axons
 =====
 
@@ -17,58 +32,58 @@ The ``axon`` class is abstract, meaning that the end user cannot directly instan
 
 Generic parameters for all axons are defined by default and can be changed, as both unmyelinated and myelinated axons inherit from them.
 
-However, for the end-user, some useful methods are inherited by both unmyelinated and myelinated fibers:
+Some useful methods are inherited by both unmyelinated and myelinated fibers:
 
-* The ``simulate`` method that computes the membrane voltage and internal state variables.
+* The ``simulate`` method that solves the neural model.
 
-    .. list-table:: Arguments of simulate method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of simulate method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - t_sim
-         - float
-         - total simulation time (ms), by default 20 ms
+      * - Parameter
+        - Type
+        - Comment
+      * - t_sim
+        - float
+        - total simulation time (ms), by default 20 ms
 
-    The simulate method is also controlled by axon attributes as described in the next table:
+  The simulate method is also controlled by axon attributes as described in the next table:
 
-    .. list-table:: Attributes of axon involved in simulate
-       :widths: 15 15 15 50
-       :header-rows: 1
+  .. list-table:: Attributes of axon involved in simulate
+      :widths: 15 15 15 50
+      :header-rows: 1
 
-       * - Attribute
-         - Type
-         - default
-         - Comment
-       * - record_V_mem
-         - float
-         - ``True``
-         - if true, the membrane voltage is recorded
-       * - record_I_mem
-         - float
-         - ``False``
-         - f true, the membrane current is recorded
-       * - record_I_mem
-         - float
-         - ``False``
-         - if true, the ionic currents are recorded
-       * - record_particules
-         - float
-         - ``False``
-         - if true, the particule states are recorded
-       * - record_V_mem
-         - float
-         - None
-         - Dictionnary composed of extracellular footprint array, the keys are int value of the corresponding electrode ID, if None, footprints calculated during the simulation,
+      * - Attribute
+        - Type
+        - default
+        - Comment
+      * - record_V_mem
+        - bool
+        - ``True``
+        - if true, the membrane voltage is recorded
+      * - record_I_mem
+        - bool
+        - ``False``
+        - f true, the membrane current is recorded
+      * - record_I_mem
+        - bool
+        - ``False``
+        - if true, the ionic currents are recorded
+      * - record_particules
+        - bool
+        - ``False``
+        - if true, the particle states are recorded
+      * - loaded_footprints
+        - dictionary
+        - None
+        - Dictionary composed of extracellular footprint array, the keys are int value of the corresponding electrode ID, if None, footprints calculated during the simulation,
 
-    The simulate method for axons generate results stored and returned in a dictionary.
+  The simulate method for axons generate results are stored and returned in a ``axon_results`` object.
 
-* A method to link an axon to specification of an **extracellular stimulation**. This object provides the description of stimulation description which is involved in computation of external fields and footprint used to compute the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single paraleter, the ``stimulation`` object instance.
+* A method to link an axon to an **extracellular stimulation**. This object provides the description of the extracellular context. It is required for computing the external fields and footprint used to evaluate the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single parameter, the ``stimulation`` object instance.
 
-* A method to change the stimulation waveform from a specific electrode already linked to the axon with the mprevious method. This method is called is called ``change_stimulus_from_electrode`` and has for arguments:
-    .. list-table:: Attributes of axon involved in simulate
+* A method to change the stimulation waveform from a specific electrode already linked to the axon with the ``attach_extracellular_stimulation`` method. This method is called ``change_stimulus_from_electrode`` and has for arguments:
+    .. list-table:: Arguments of the ``change_stimulus_from_elecrode`` method
        :widths: 15 25 50
        :header-rows: 1
 
@@ -86,7 +101,7 @@ However, for the end-user, some useful methods are inherited by both unmyelinate
 Unmyelinated axons
 ------------------
 
-Unmyelinated axons object implements automatically in Neuron the simple cable Hodgkin-Heuxley formalism. Axons are oriented along the x-axis as depicted bellow. The user can specify the y and z coordinates, directly in microns.
+Unmyelinated axons object implements automatically Hodgkin-Huxley-like cable formalism in NEURON. Axons are oriented along the x-axis as depicted bellow. The user can specify the y and z coordinates, directly in microns.
 
 .. image:: ../images/unmyelinated.png
 
@@ -97,7 +112,7 @@ The main property of the axon is the diameter, that the user specifies in micron
    :header-rows: 1
 
    * - Name
-     - Instanciation string
+     - Instantiation string
      - Comment
    * - Hodgkin-Huxley
      - ``"HH"``
@@ -118,7 +133,7 @@ The main property of the axon is the diameter, that the user specifies in micron
      - ``"Schild_97"``
      - Comment
 
-A scientific review of these models is available in the the following paper:
+A scientific review of these models is available in the following paper:
 Pelot, N. A., Catherall, D. C., Thio, B. J., Titus, N. D., Liang, E. D., Henriquez, C. S., & Grill, W. M. (2021). Excitation properties of computational models of unmyelinated peripheral axons. Journal of neurophysiology, 125(1), 86-104.
 
 The complete list of tunable parameters for unmyelinated axons is:
@@ -135,11 +150,11 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - y 
      - float
      - 0
-     - y coordinate for the axon, in um
+     - y coordinate for the axon, in µm
    * - z
      - float
      - 0
-     - z coordinate for the axon, in um
+     - z coordinate for the axon, in µm
    * - d
      - float
      - 1
@@ -147,7 +162,7 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - L
      - float
      - 1000
-     - axon length along the x axins, in um
+     - axon length along the x axons, in µm
    * - model
      - str
      - "Rattay_Aberham"
@@ -163,23 +178,23 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - Nsec
      - int
      - 1
-     - Number of sections in the axon, by default 1. Usefull to create umnyelinated axons with a variable segment density
+     - Number of sections in the axon, by default 1. Useful to create umnyelinated axons with a variable segment density
    * - Nseg_per_sec
      - int
      - 0
-     - Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
+     - Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following parameters. If set by user, please use odd numbers
    * - freq
      - float
      - 100
-     - Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
+     - Frequency used for the d-lambda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
    * - freq_min
      - float
      - 0
-     - Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
+     - Minimal frequency for the d-lambda rule when using irregular number of segments along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
    * - mesh_shape
      - str
      - "plateau_sigmoid"
-     - Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
+     - Shape of the frequencies' distribution for the d-lmabda rule along the axon, pick between:
    * - alpha_max
      - float
      - 0.3
@@ -187,7 +202,7 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - d_lambda
      - float
      - 0.1
-     - value of d-lambda for the dlambda rule,
+     - value of d-lambda for the d-lambda rule,
    * - v_init
      - float
      - None
@@ -203,11 +218,11 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - threshold
      - float
      - -40
-     - voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing files for further help
+     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, see post-processing files for further help
 
 For the end-user, two specific methods for intracellular stimulation of unmyelinated axons are available:
 
-* ``insert_I_Clamp`` to perform current clamp stimulation. For the moment this restric to a single pulse waveform
+* ``insert_I_Clamp`` to perform current clamp stimulation. For the moment only single pulse waveform are available.
 
     .. list-table:: Arguments of current clamp method
        :widths: 15 25 50
@@ -250,28 +265,28 @@ For the end-user, two specific methods for intracellular stimulation of unmyelin
 Myelinated axons
 ----------------
 
-Similarly, myelinated axons implements automatically in Neuron the doble cable fiber description. Axons are oriented along the x-axis as depicted bellow. The user can specify the y and z coordinates, directly in microns.
+Similarly, myelinated axons implements the double cable fiber description in NEURON. Axons are oriented along the x-axis as depicted bellow. The user can specify the y and z coordinates, directly in microns.
 
 .. image:: ../images/myelinated.png
 
-The main property of the axon is the diameter, that the user specifies in microns, and the length of the fiber, also specified in microns. The succesion of mylinated regions and Nodes-of-Ranvier is automatically computed and the axon can be shifted along its axes so that for similar diameter fibers, nodes-of-Ranvier are not aligned. Different models are pre-implemented in NRV:
+The main property of the axon is the diameter, that the user specifies in microns, and the length of the fiber, also specified in microns. The succession of myelinated regions and Nodes-of-Ranvier is automatically computed, and the axon can be shifted along its axes so that for similar diameter fibers, nodes-of-Ranvier are not aligned. Different models are pre-implemented in NRV:
 
 .. list-table:: Available models for myelinated axons
    :widths: 15 25 50
    :header-rows: 1
 
    * - Name
-     - Instanciation string
+     - Instantiation string
      - Comment
    * - MacIntyre-Grill-Richardson
      - ``"MRG"``
      - First model of double cable axon described in [1], ionic channels on NoR and passive myelin
    * - Gaines motor fibers
      - ``"Gaines_motor"``
-     - Doble cable described in [2], ionic channels on NoR and adjacent myelinated regions for **motor** fibers
+     - Double cable described in [2], ionic channels on NoR and adjacent myelinated regions for **motor** fibers
    * - Gaines sensory fibers
      - ``"Gaines_sensory"``
-     - Doble cable described in [2], ionic channels on NoR and adjacent myelinated regions for **sensory** fibers
+     - Double cable described in [2], ionic channels on NoR and adjacent myelinated regions for **sensory** fibers
 
 Details of model can be found in the following scientific contributions:
 
@@ -279,7 +294,7 @@ Details of model can be found in the following scientific contributions:
 
 [2] Gaines, J. L., Finn, K. E., Slopsema, J. P., Heyboer, L. A.,  Polasek, K. H. (2018). A model of motor and sensory axon activation in the median nerve using surface electrical stimulation. Journal of computational neuroscience, 45(1), 29-43.
 
-he complete list of tunable parameters for unmyelinated axons is:
+The complete list of tunable parameters for unmyelinated axons is:
 
 .. list-table:: Public attributes of unmyelinated axons
    :widths: 10 10 10 50
@@ -305,7 +320,7 @@ he complete list of tunable parameters for unmyelinated axons is:
    * - L
      - float
      - 1000
-     - axon length along the x axins, in um
+     - axon length along the x axis, in um
    * - model
      - str
      - "MRG"
@@ -313,7 +328,7 @@ he complete list of tunable parameters for unmyelinated axons is:
    * - dt
      - float
      - 0.001
-     - computation step for simulations, in ms. By default equal to 1 us
+     - computation step for simulations, in ms. By default equal to 1 µs
    * - node_shift
      - float
      - 0
@@ -321,19 +336,19 @@ he complete list of tunable parameters for unmyelinated axons is:
    * - Nseg_per_sec
      - int
      - 0
-     - Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following paramters. If set by user, please use odd numbers
+     - Number of segment per section in the axon. If set to 0, the number of segment is automatically computed using d-lambda rule and following parameters. If set by user, please use odd numbers
    * - freq
      - float
      - 100
-     - Frequency used for the d-lmbda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
+     - Frequency used for the d-lambda rule, corresponding to the maximum membrane current frequency, by default set to 100 Hz
    * - freq_min
      - float
      - 0
-     - Minimal frequency fot the d-lambda rule when using an irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
+     - Minimal frequency for the d-lambda rule when using irregular number of segment along the axon, if set to 0, all sections have the same frequency determined by the previous parameter
    * - mesh_shape
      - str
      - "plateau_sigmoid"
-     - Shape of the frequencial distribution for the dlmabda rule along the axon, pick between:
+     - Shape of the frequencies distribution for the d-lmabda rule along the axon, pick between:
    * - alpha_max
      - float
      - 0.3
@@ -341,13 +356,13 @@ he complete list of tunable parameters for unmyelinated axons is:
    * - d_lambda
      - float
      - 0.1
-     - value of d-lambda for the dlambda rule,
+     - value of d-lambda for the d-lambda rule,
    * - rec
      - str
      - ``"nodes"``
      - recording zones for the membrane potential, eiter:
-        "nodes" -> record only at the nodes of Ranvier
-        "all" -> all computation points in nodes of Ranvier and over myelin
+        "nodes": record only at the nodes of Ranvier
+        "all": all computation points in nodes of Ranvier and over myelin
    * - v_init
      - float
      - None
@@ -363,9 +378,9 @@ he complete list of tunable parameters for unmyelinated axons is:
    * - threshold
      - float
      - -40
-     - voltage threshold in mV for further spike detection in post-processing, by defautl set to -40mV, see post-processing files for further help
+     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, see post-processing files for further help
 
-Again, for the end-user, four specific methods for intracelullar stimulation myelinated axons are available:
+Again, for the end-user, four specific methods for intracellular stimulation myelinated axons are available:
 
 * ``insert_I_Clamp_node``, for which the current clamp is directly applied at a node-of-Ranvier, given its number
 
@@ -421,7 +436,7 @@ Again, for the end-user, four specific methods for intracelullar stimulation mye
          - Type
          - Comment
        * - index
-         - index
+         - int
          - node number of the node to stimulate
        * - stimulus
          - ``Stimulus object``
@@ -447,11 +462,234 @@ Again, for the end-user, four specific methods for intracelullar stimulation mye
 Fascicles
 =========
 
-Fascicles are induvidual bundles of axons. Their description is quite extensive in the NRV framework. However, their individual simulation for unexperienced user does not make a lot of sense (the geometry of the full simulation would not make a biophysical meaning). Therefore, we do not details extensively here their implementation for the end user, but refer to the API full documentation.
+In NRV, fascicles consist in an aggregation of axon objects, on which we can perform logical/arithmetical operations, specify properties, and simulate. Fascicle constructor takes two initialization parameters:
 
-Note that nerves (below) are the prefered object to describe simulations with multiple fibers, even if the number of fascicle in the nerve is 1.
+.. list-table:: Fascicle initialization parameters list
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - d 
+    - float
+    - None
+    - fascicle diameter, in um
+  * - ID
+    - int
+    - 0
+    - fascicle unique identifier 
+
+Once created, the fascicle can be filled with a population of axon. The axon population can be either generated with NRV (see xxx), or by any external means. Axons are added to the fascicle with the ``fill_with_population`` method.
+
+.. list-table:: fill_with_population parameters
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - axons_diameter 
+    - np.array[float]
+    - 
+    - Array of axon diameter, in um
+  
+  * - axons_type
+    - np.array[bool]
+    - 
+    - Array of axon type. True means myelinated, False means unmyelinated
+
+  * - delta
+    - float
+    - 1um
+    - axon-to-axon and axon to fascicle border minimal distance
+
+  * - y_axons
+    - np.array[float]
+    - None
+    - Optional, y-position of each axon
+
+  * - z_axons
+    - np.array[float]
+    - None
+    - Optional, z-position of each axon
+
+  * - fit_to_size
+    - bool
+    - False
+    - If true, axons position will be dilated to fit the entire fascicle area
+
+  * - n_iter
+    - int
+    - 20 000
+    - Optional, number of iteration of the packing algorithm 
+
+.. note::
+  If the ``y_axons`` and ``z_axons`` parameters are not specified, the  ``fill_with_population``-method will automatically called the NRV's packing algorithm to place them.
+
+
+Axon simulation parameters can be specified in a dictionary and pass to the fascicle object with the ``set_axons_parameters`` method:
+
+
+.. list-table:: set_axons_parameters parameters
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - unmyelinated_only 
+    - bool
+    - False
+    - Parameters are for unmyelinated axons only
+
+  * - myelinated_only 
+    - bool
+    - False
+    - Parameters are for myelinated axons only
+
+  * - kwargs 
+    - kwargs
+    - 
+    - kwargs for axon parameters
+
+
+To simulate the fascicle, one option is to use the ``insert_I_Clamp`` method. 
+
+.. list-table:: insert_I_Clamp parameters
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - position 
+    - float
+    - 
+    - Clamp position along the axon's x-axis
+
+  * - t_start 
+    - float
+    - 
+    - Pulse start time, in ms
+
+  * - duration 
+    - float
+    - 
+    - Pulse duration, in ms
+
+  * - amplitude 
+    - float
+    - 
+    - Pulse amplitude, in nA
+
+  * - ax_list 
+    - np.array[int]
+    - None
+    - Array to filter axon for I clamp. If None, I clamp is applied to all axons.
+
+
+Extracellular context is attached to a fascicle with the ``attach_extracellular_stimulation`` method, as for the axon (see above). Stimulus can also be changed with the ``change_stimulus_from_elecrode`` method. NRV also provides several other methods to manipulate fascicle objects, such as ``remove_myelinated_axons``, ``remove_axons_size_threshold``, ``rotate_fascicle``, ``translate_fascicle``, ``plot``, etc. Full documentation can be found in the API documentation section. 
+
+
+Before running simulation, some flags can be set: ``save_results``, ``return_parameters_only`` and ``save_path``:
+
+- If ``save_results`` is True, then fascicle simulation results are saved on the hard-drive. 
+- ``save_path`` specifies where to save the results
+- ``return_parameters_only`` removes results from the returned ``fascicle_results`` object.
+
+Setting correctly those flags are particularly useful for large simulations. It relaxes RAM memory usage and facilities heavy post-processing. Additionally, post-processing scripts can be run during fascicle simulation. Post-processing scripts are set in the fascicle ``simulate`` method with the ``PostProc_Filtering`` parameter. 
+Available post-processing script and how to make a custom one is described in the post-processing section of the documentation. 
+
+
+.. warning::
+  We do not recommend attaching extracellular context and running simulation of fascicle directly. Instead, we recommend using nerve object (see below), even for monofascicular nerve.
 
 Nerves
 ======
 
-blablablabla
+A ``nerve`` object in NRV serves two purposes:
+
+- Gathering one or multiple ``fascicles`` object
+- Ensuring consistency between the FEM model and the neural model
+
+The ``nerve`` object is initialized with the following list of parameters:
+
+.. list-table:: nerve object initialization parameters list
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - length 
+    - float
+    - 10_000
+    - nerve length, in µm
+
+  * - diameter 
+    - float
+    - 100
+    - nerve diameter, in µm
+
+  * - Outer_D 
+    - float
+    - 5
+    - outer saline box diameter, in mm
+
+  * - ID
+    - int
+    - 0
+    - nerve unique identifier
+
+
+``fascicle`` objects are incorporated to the nerve with the ``add_fascicle`` method:
+
+
+
+
+.. list-table:: add_fascicle parameters list
+  :widths: 10 10 10 50
+  :header-rows: 1
+
+  * - Property
+    - type
+    - default
+    - Comment
+
+  * - fascicle
+    - fascicle
+    - 
+    - fascicle object to add to the nerve
+
+  * - ID 
+    - int
+    - None
+    - optional, forces new fascicle unique identifier
+
+  * - y 
+    - float
+    - None
+    - optional, forces fascicle new y coordinate
+
+  * - z 
+    - float
+    - None
+    - optional, forces fascicle new z coordinate
+
+.. warning::
+  Aggregation of ``fascicle`` objects in the ``nerve`` object uses the Python's deep-copy mechanism. Any modification of one
+  of the fascicle after adding them to the ``nerve`` will also affect the copy added in the latter.
+
+The ``nerve`` class includes most of the method available in the ``fascicle`` class: ``set_axons_parameters``, ``plot``, ``insert_I_Clamp``, ``attach_extracellular_stimulation``, etc.
+The ``simulate`` method runs the simulation and returns a ``nerve_results`` object (see post-processing section).
