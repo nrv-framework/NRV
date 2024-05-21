@@ -2,84 +2,71 @@
 Post-processing
 ===============
 
-Post-processing function, both at the cellular or fascicle (nerve) levels have been implemented in NRV. The code is mainly consisting in function, opposed to method. This is due to the nature of results, returned by the ``simulate`` method that consist in a python dictionary and not  a specific object.
+NRV provides object and method to facilitate simulation post-processing and analysis. This chapter describes how to use those features.
 
-This chapter contains:
+NRV Result objects
+==================
 
-* a more in depth explanation of the results' dictionary returned by simulate methods
-* explanation of axon/cellular level post-processing functions
-* explanation of fascicle (nerve) level post-processing functions
+When called, NRV ``simulable`` objects return object inhering from the ``NRV_results`` class. Specifically:
 
-Result dictionary
-=================
-When the an axon is simulated (by calling the ``axon.simulate`` method), a dictionnary is returned, containing all meta-data from the simulation.
-The meta data include:
+- ``axon`` simulations return ``axon_results`` objects
+- ``fascicle`` simulations return ``fascicle_results`` objects
+- ``nerve`` simulations return ``nerve_results`` objects
 
-* all properties of the axon,
+.. note::
+  NRV_results behave like a python object and a like dictionary. In other words:
 
-* all computed results.
+  .. code:: ipython3
 
-The user can also perform some post-processing steps that add results to this dictionary.
-Here below we detail the content of the dictionary. 
+      val = my_result.my_key
+        
+  is equivalent to:
 
-Dictionary content for configration saving
-------------------------------------------
+  .. code:: ipython3
 
-A first set of keys corresponds to data of configuration of the axon:
+      val = my_result['my_key']
 
-.. list-table:: Tests functionalities
+Those objects contain every parameter of the simulation, e.g axon diameter in a ``axon_results``, axon population description in a ``fascicle_results``,
+fascicles description in ``nerve_results``, etc. Each object inhering from ``NRV_results`` also includes a copy of the extracellular and intracellular context.
+Those objects are described hereafter.
+
+axon_results
+------------
+
+The following table describes all the keys/member available in a ``axon_results`` object:
+
+.. list-table:: axon_results key/member
     :widths: 10 10 150
     :header-rows: 1
     :align: center
 
-    *   - Key
-        - Type
-        - content
-    *   - 001
-        - 001
-        - General architecture
-    *   - `bla`
-        - `np.array`
-        - bla
-
-
-Dictionary content for computation results
-------------------------------------------
-
-here is the list of computation results:
-
-.. list-table:: Tests functionalities
-    :widths: 10 10 150
-    :header-rows: 1
-    :align: center
-
-    *   - Key
+    *   - Key/Member
         - Type
         - content
     *   - `Simulation_state`
         - `str`
-        - Final state of running `axon.simulate` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsucessful".
+        - Final state of running ``axon.simulate`` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsuccessful".
     *   - `Error_from_prompt`
         - `str`
         - If the `simulation_state` is unsuccessful, this key contains the error message that has been returned (and that should also appear in the logfile).
     *   - `sim_time`
         - `float`
-        - Final value of the demanded simulation time.
+        - Final value of the simulation time, in ms
     *   - `Neuron_t_max`
         - `float`
-        - Final timing achieved by the neuron solver once the simulation initiated. in miliseconds,
+        - Final timing achieved by the neuron solver once the simulation initiated, in ms.
     *   - `t`
         - `np.array`
-        - Array of timesteps in miliseconds
+        - Array of timesteps, in ms.
     *   - `x_rec`
         - `np.array`
-        - Points in space along the x axis where simulation results are saved.
+        - Points in space along the x axis where simulation results are saved, in um.
     *   - `V_mem`
         - `np.array`
         - Values of membrane voltage with time at the recorded x axis positions stored in the `x_rec` key
     *   - `I_mem`
         - `np.array`
-        - Values of membrane voltage with time at the recorded x axis positions stored in the `x_rec` key
+        - Values of membrane current with time at the recorded x axis positions stored in the `x_rec` key
     *   - `g_mem`
         - `np.array`
         - Small signal linearization of the membrane conductance with time at the recorded x axis positions stored in the `x_rec` key
@@ -112,13 +99,13 @@ here is the list of computation results:
         - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kA`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kM`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kdr`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kna`
         - `np.array`
         - For unmyelinated model "Tigerholm". Sodium ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
@@ -130,7 +117,7 @@ here is the list of computation results:
         - For unmyelinated model "Tigerholm". Sodium leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kleak`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_nav17`
         - `np.array`
         - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels current with time at the recorded x axis positions stored in the `x_rec` key.
@@ -142,13 +129,13 @@ here is the list of computation results:
         - For unmyelinated model "Tigerholm". Sodium NAV1.7 channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kA`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kM`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kdr`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kna`
         - `np.array`
         - For unmyelinated model "Tigerholm". Sodium ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
@@ -160,7 +147,7 @@ here is the list of computation results:
         - For unmyelinated model "Tigerholm". Sodium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kleak`
         - `np.array`
-        - For unmyelinated model "Tigerholm". Potatium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For unmyelinated model "Tigerholm". Potassium leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
     *   - `g_naf`
         - `np.array`
@@ -217,25 +204,25 @@ here is the list of computation results:
         - For myelinated model "MRG". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_nap`
         - `np.array`
-        - For myelinated model "MRG". Persistant Sodium channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". Persistent Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_k`
         - `np.array`
-        - For myelinated model "MRG". Potatium channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_l`
         - `np.array`
-        - For myelinated model "MRG". Leakage channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_i`
         - `np.array`
-        - For myelinated model "MRG". ??? channels cconductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". ??? channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_na`
         - `np.array`
         - For myelinated model "MRG". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_nap`
         - `np.array`
-        - For myelinated model "MRG". Persistant Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". Persistent Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_k`
         - `np.array`
-        - For myelinated model "MRG". Potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "MRG". Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_l`
         - `np.array`
         - For myelinated model "MRG". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
@@ -248,13 +235,13 @@ here is the list of computation results:
         - For myelinated model "Gaines_motor" and "Gaines_sensory". Sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_nap`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistant sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistent sodium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_k`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potatium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_kf`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast potatium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast Potassium channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `g_l`
         - `np.array`
         - For myelinated model "Gaines_motor" and "Gaines_sensory". Leakage channels conductance with time at the recorded x axis positions stored in the `x_rec` key.
@@ -266,13 +253,13 @@ here is the list of computation results:
         - For myelinated model "Gaines_motor" and "Gaines_sensory". Sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_nap`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistant sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Persistent sodium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_k`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_kf`
         - `np.array`
-        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast potatium channels current with time at the recorded x axis positions stored in the `x_rec` key.
+        - For myelinated model "Gaines_motor" and "Gaines_sensory". Fast Potassium channels current with time at the recorded x axis positions stored in the `x_rec` key.
     *   - `I_l`
         - `np.array`
         - For myelinated model "Gaines_motor" and "Gaines_sensory". Leakage channels current with time at the recorded x axis positions stored in the `x_rec` key.
@@ -281,32 +268,79 @@ here is the list of computation results:
         - For myelinated model "Gaines_motor" and "Gaines_sensory". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
 
-Dictionary content reserved for post-processing
------------------------------------------------
+To save some space in the ``axon_results`` object and discarded unnecessary keys, some flags can be set in the ``axon`` object, prior to the simulation: 
 
-Some keys are also reserved for post-processing function to store results without over-writting raw results.
+.. code:: ipython3
 
-.. list-table:: Tests functionalities
-    :widths: 10 10 150
-    :header-rows: 1
-    :align: center
+    my_axon.record_V_mem = True         #save V_men in the result object
+    my_axon.record_I_mem = True         #save I_men in the result object
+    my_axon.record_g_mem = True         #save g_men in the result object
+    my_axon.record_g_ions = True        #save all g_xx in the result object
+    my_axon.record_I_ions = True        #save all I_xx in the result object
+    my_axon.record_particles = True     #save all particles in the result object 
+    
+.. Note::
 
-    *   - Key
-        - Type
-        - content
-    *   - 001
-        - 001
-        - General architecture
+    By default, only the ``record_V_mem`` flag is set to ``True``.
 
-Keys outside from those three tables are not used and can be freely reached by the user to store additional results associated with simulations.
+Several methods are implemented in the ``axon_result`` class. It includes the ``is_recruited`` method which returns ``True`` if an action-potential
+is detected in the axon, the ``speed`` method that returns the velocity of the AP, the ``block`` method that detects if an axon has its conduction 
+block or not (using KES for example), the ``rasterize`` method that rasterizes ``V_mem`` to facilitate data analysis, etc. 
 
-Cellular level post-processing
-==============================
+.. Note::
+    The ``block`` method required an intracellular pulse to test the conduction of the axon.
 
-blablablablablablabla
 
-Fascicle (nerve) level post-processing
-======================================
+fascicle_results
+----------------
 
-blablablablalbalbalbabla
+``fascicle_results`` object aggregate ``fascicle`` object parameters and every ``axon_result`` correspond to each ``axon`` object simulated 
+in the fascicle. Each ``axon_result`` is available with the following key: 
+
+.. code:: ipython3
+
+    my_axon_result = my_fascicle_result.axonx
+    my_axon_result = my_fascicle_result['axonx']    #equivalent
+
+where ``x`` ranges from 0 to the number of axon-1 in the fascicle. All available axon keys can be obtained with the ``get_axons_key`` method. Other available methods include 
+the ``get_recruited_axons`` method which returns the proportion (between 0 and 1) of axon recruited in the fascicle. The ``plot_recruited_fibers`` method facilitates plot of activated fiber in the fascicle. 
+
+nerve_results
+-------------
+
+``nerve_results`` object aggregate ``nerve`` object parameters and every ``fascicle_result`` correspond to each ``fascicle`` object simulated 
+in the nerve. Each ``fascicle_result`` is available with the following key: 
+
+.. code:: ipython3
+
+    my_fascicle_result = my_nerve_result.fasciclex
+    my_fascicle_result = my_nerve_result['fasciclex']    #equivalent
+
+where ``x`` ranges from 0 to the number of fascicle-1 in the nerve. All available fascicle keys can be obtained with the ``get_fascicle_key`` method. Other available methods include 
+the ``get_fascicle_results`` method which returns a ``fascicle_result`` of a specified fascicle ID, or the ``plot_recruited_fibers`` method that plots activated fiber in the nerve. 
+
+Post-processing script
+=======================
+
+NRV provides a way to run external post-processing script during ``nerve`` or ``fascicle`` simulation. Those scripts are meant to apply filtering/post-processing functions
+to each simulate ``axon_result`` object during the simulation. It is mainly used to remove unnecessary keys (after AP detection for example) to alleviate RAM usage during large simulation. 
+Post-processing scripts are selected by setting the ``postproc_script`` class member of ``fascicle`` or ``nerve`` objects:
+
+.. code:: ipython3
+
+    my_fascicle.postproc_script = "my_postproc_script"      #for fascicle
+    my_nerve.postproc_script = "my_postproc_script"         #for nerve
+
+
+Those scripts can be custom, but NRV provides some pre-written scripts: 
+
+- ``default`` : rasterizes ``V_mem`` and remove the ``V_mem`` if the ``record_V_mem`` flag is set. It is the script called by default.  
+- ``ap_detection`` : rasterizes ``V_mem`` and remove all the keys except the rasterized result and axons parameters (type, diameter, position, etc)
+- ``is_blocked`` : rasterizes and detects block state, and remove all the keys except the rasterized result and axons parameters (type, diameter, position, etc)
+
+.. warning::
+  Post-processing scripts are called "on-the-fly", i.e. any modification of the script during the simulation runtime will impact the post-processing.
+
+.. warning::
+  Post-processing scripts will be replaced by callable object in future release of the API.
 
