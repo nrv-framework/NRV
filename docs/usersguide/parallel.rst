@@ -3,5 +3,5 @@ Parallel computation
 ====================
 
 
-blablablabla
+.. image:: ../images/NRV_parallel.png
 

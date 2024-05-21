@@ -45,6 +45,7 @@ if not os.access(nrv_path + "/nrv2calm", os.X_OK):
 from .backend import compileMods
 from .backend.parameters import *
 from .backend.NRV_Class import load_any
+from .backend.wrappers import *
 
 from .fmod.materials import *
 from .fmod.electrodes import *

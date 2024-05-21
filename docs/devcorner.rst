@@ -166,6 +166,9 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
     *   - 200
         - 225
         - Optimization functions
+    *   - 250
+        - 275
+        - Wrappers and decorators
     *   - 300
         - 306
         - Nerve functions
