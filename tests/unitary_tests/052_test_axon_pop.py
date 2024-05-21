@@ -34,9 +34,6 @@ for k in range(len(myelinated_stats)):
     print('Population of '+str(N)+' axons generated in '+str(t)+' s')
 
 
-
-    
-
     plt.figure()
     y_M, x, _ =plt.hist(M_diam_list,bins = 50,color = 'blue',label='Myelinated')
     y_U, x, _ =plt.hist(U_diam_list,bins = 50,color = 'red',label='Unmyelinated')

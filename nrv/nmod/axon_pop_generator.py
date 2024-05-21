@@ -600,15 +600,18 @@ def update_axon_packing(pos:np.array,
     velocity = compute_attraction_v(pos,gc,Naxon,v_att)
     ic = get_colliding_ids(pos,id_pairs,diam_pairs,delta)
     velocity[:,ic[:,0]], velocity[:,ic[:,1]] = compute_repulsion_v(pos[:,ic[:,0]], pos[:,ic[:,1]],v_rep)
-    return(pos + velocity)   
+    return (pos + velocity)
 
 def axon_packer(diameters: np.array,
-                 delta: np.array,
+                 y_gc:np.float32 = 0,
+                 z_gc:np.float32 = 0,
+                 delta: np.float32 = 0.5,
                  n_iter: np.int32 = 20000,
                  v_att: np.float32 = 0.01,
                  v_rep: np.float32 = 0.1,
-                 y_gc:np.float32 = 0,
-                 z_gc:np.float32 = 0,):
+                 monitor = False,
+                 monitoring_Folder="",
+                 n_monitor = 200):
     """
     Axon Packing algorithm: this operation takes a vector of diameter (random population) and places it at best. The used algorithm is largely based on [1]
 
@@ -628,7 +631,12 @@ def axon_packer(diameters: np.array,
         y coordinate of the gravity center for the packing, in um
     z_gc                : float
         z coordinate of the gravity center for the packing, in um
-
+    monitor             : bool
+        monitor the packing algorithm by saving regularly plot of the population
+    monitoring_Folder   : str
+        where to save the monitoring plots
+    n_monitor           : int
+        number of iterration between two successive plots when monitoring the algorithm
 
     Returns
     -------
@@ -641,16 +649,29 @@ def axon_packer(diameters: np.array,
     ----
     - scientific reference
         [1] Mingasson, T., Duval, T., Stikov, N., and Cohen-Adad, J. (2017). AxonPacking: an open-source software to simulate arrangements of axons in white matter. Frontiers in neuroinformatics, 11, 5.
+    - This algorithm cannot be parallelized for the moment.
     - dev Note
         the algorithm perform a fixed number of iteration, the code could evoluate to tke into account the FVF convergence, however this value depends on the range on number of axons.
     """
     pass_info("Axon packing initiated. This might take a while...")
     pos,velocity,gc,ids= init_packing(diameters,delta,y_gc,z_gc)
+    max_pos = 2.2 * (np.max(pos[0]) - y_gc)
     id_pairs = get_axon_combinaisons(ids)
     diam_pair = get_axon_inter_radius(diameters,id_pairs)
     Naxon = len(pos[0])
-    for _ in tqdm(range (n_iter)):
+    #for _ in tqdm(range (n_iter)):
+    #    pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.set_axis_off()
+    fig.add_axes(ax)
+    for i in tqdm(range (n_iter)):
         pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
+        if monitor and i %n_monitor == 0:
+            y_prov = pos[0].copy()
+            z_prov = pos[1].copy()
+            ax.cla()
+            plot_population(diameters, y_prov, z_prov,ax,max_pos, y_gc=y_gc, z_gc=z_gc)
+            plt.savefig(monitoring_Folder+"vignette_"+str(i)+".png")
     y_axons = pos[0].copy()
     z_axons = pos[1].copy()
     pass_info("Packing done!")
