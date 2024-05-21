@@ -33,6 +33,7 @@ Chapters of the User's Guide
    usersguide/stimuli
    usersguide/electrodes
    usersguide/materials
+   usersguide/fem
    usersguide/postproc
    usersguide/parallel
    usersguide/optimization
