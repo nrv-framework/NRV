@@ -14,7 +14,7 @@ T_cathod = 60e-3
 T_inter = 40e-3
 stim1 = nrv.stimulus()
 stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
-axon1.change_stimulus_from_elecrode(0, stim1)
+axon1.change_stimulus_from_electrode(0, stim1)
 
 
 

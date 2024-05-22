@@ -106,7 +106,7 @@ class stimulus_CM(ContextModifier):
         self.__update_t_sim(local_sim)
         X_inter = self.interpolate(X)
         stim = self.stimulus_generator(X_inter)
-        local_sim.extra_stim.change_stimulus_from_elecrode(self.stim_ID, stim)
+        local_sim.extra_stim.change_stimulus_from_electrode(self.stim_ID, stim)
         return local_sim
 
 

@@ -513,7 +513,7 @@ def firing_threshold_from_axon(
         # axon_load = load_any_axon(axon, extracel_context=True)
         # axon_th = copy.deepcopy(axon)
         axon.dt = dt
-        axon.change_stimulus_from_elecrode(0, stim_1)
+        axon.change_stimulus_from_electrode(0, stim_1)
 
         # simulate axon activity
         results = axon.simulate(t_sim=t_sim, loaded_footprints=True)
@@ -1144,7 +1144,7 @@ def blocking_threshold_from_axon(
         )
 
         axon.dt = dt
-        axon.change_stimulus_from_elecrode(0, stim_1)
+        axon.change_stimulus_from_electrode(0, stim_1)
 
         # simulate axon activity
         results = axon.simulate(t_sim=t_sim, loaded_footprints=True)

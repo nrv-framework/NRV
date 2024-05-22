@@ -258,7 +258,7 @@ class extracellular_context(NRV_class):
         for electrode in self.electrodes:
             electrode.clear_footprint()
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -357,10 +357,26 @@ class stimulation(extracellular_context):
 
 class FEM_stimulation(extracellular_context):
     """
-    FEM_based_simulation object are designed to connect all other objects requierd to compute the external potential voltage for axons using FEM :
+    FEM_based_simulation object are designed to connect all other objects required to compute the external potential voltage for axons using FEM :
+
+    - Shape and positon of the nerve 
+    - Shape and position of each fascicle 
     - the materials for the FEM stimulation : endoneurium, perineurium, epineurium and external material
     - a list of electrode(s)
     - a list of corresponding current stimuli
+
+    Parameters
+    ----------
+    model_fname   : str
+        name of the comsol mph file to solve
+    endo_mat            : str
+        specification of the endoneurium material, see :class:`~nrv.fmod.materials.material` for further details
+    peri_mat            : str
+        specification of the perineurium material, see :class:`~nrv.fmod.materials.material` for further details
+    epi_mat             : str
+        specification of the epineurium material, see :class:`~nrv.fmod.materials.material` for further details
+    ext_mat             : str
+        specification of the external material (everything but the nerve), see :class:`~nrv.fmod.materials.material` for further details
     """
 
     def __init__(
@@ -373,22 +389,7 @@ class FEM_stimulation(extracellular_context):
         comsol=True,
         Ncore=None,
     ):
-        """
-        Implement a FEM_based_stimulation object.
 
-        Parameters
-        ----------
-        simuluation_fname   : str
-            name of the simluation file to compute the field
-        endo_mat            : material object
-            specification of the endoneurium material, see Material.py or material object help for further details
-        peri_mat            : material object
-            specification of the perineurium material, see Material.py or material object help for further details
-        epi_mat             : material object
-            specification of the epineurium material, see Material.py or material object help for further details
-        ext_mat             : material object
-            specification of the external material (everything but the nerve), see Material.py or material object help for further details
-        """
         super().__init__()
         self.electrodes_label = []
         self.model_fname = model_fname
@@ -523,13 +524,13 @@ class FEM_stimulation(extracellular_context):
         Parameters
         ----------
         Nerve_D                 : float
-            Nerve diameter, in um
+            Nerve diameter, in µm
         Length                  : float
-            Nerve length, in um
+            Nerve length, in µm
         y_c                     : float
-            Nerve center y-coordinate in um, 0 by default
+            Nerve center y-coordinate in µm, 0 by default
         z_c                     : float
-            Nerve z-coordinate center in um, 0 by default
+            Nerve z-coordinate center in µm, 0 by default
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
@@ -553,13 +554,13 @@ class FEM_stimulation(extracellular_context):
         Parameters
         ----------
         Fascicle_D  : float
-            Fascicle diameter, in um
+            Fascicle diameter, in µm
         y_c         : float
-            Fascicle center y-coodinate in um, 0 by default
+            Fascicle center y-coodinate in µm, 0 by default
         z_c         : float
-            Fascicle center y-coodinate in um, 0 by default
+            Fascicle center y-coodinate in µm, 0 by default
         Perineurium_thickness   :float
-            Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
+            Thickness of the Perineurium sheet surounding the fascicles in µm. If None, thickness is determined according to the fascicle diameter 
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
         res         : float or "default"

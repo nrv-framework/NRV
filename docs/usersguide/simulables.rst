@@ -83,7 +83,7 @@ Some useful methods are inherited by both unmyelinated and myelinated fibers:
 * A method to link an axon to an **extracellular stimulation**. This object provides the description of the extracellular context. It is required for computing the external fields and footprint used to evaluate the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single parameter, the ``stimulation`` object instance.
 
 * A method to change the stimulation waveform from a specific electrode already linked to the axon with the ``attach_extracellular_stimulation`` method. This method is called ``change_stimulus_from_electrode`` and has for arguments:
-    .. list-table:: Arguments of the ``change_stimulus_from_elecrode`` method
+    .. list-table:: Arguments of the ``change_stimulus_from_electrode`` method
        :widths: 15 25 50
        :header-rows: 1
 
@@ -597,7 +597,7 @@ To simulate the fascicle, one option is to use the ``insert_I_Clamp`` method.
     - Array to filter axon for I clamp. If None, I clamp is applied to all axons.
 
 
-Extracellular context is attached to a fascicle with the ``attach_extracellular_stimulation`` method, as for the axon (see above). Stimulus can also be changed with the ``change_stimulus_from_elecrode`` method. NRV also provides several other methods to manipulate fascicle objects, such as ``remove_myelinated_axons``, ``remove_axons_size_threshold``, ``rotate_fascicle``, ``translate_fascicle``, ``plot``, etc. Full documentation can be found in the API documentation section. 
+Extracellular context is attached to a fascicle with the ``attach_extracellular_stimulation`` method, as for the axon (see above). Stimulus can also be changed with the ``change_stimulus_from_electrode`` method. NRV also provides several other methods to manipulate fascicle objects, such as ``remove_myelinated_axons``, ``remove_axons_size_threshold``, ``rotate_fascicle``, ``translate_fascicle``, ``plot``, etc. Full documentation can be found in the API documentation section. 
 
 
 Before running simulation, some flags can be set: ``save_results``, ``return_parameters_only`` and ``save_path``:

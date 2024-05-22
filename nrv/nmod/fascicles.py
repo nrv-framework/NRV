@@ -992,7 +992,7 @@ class fascicle(NRV_simulable):
             self.axons_y = self.axons_y[mask]
             self.axons_z = self.axons_z[mask]
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -1004,7 +1004,7 @@ class fascicle(NRV_simulable):
                 new stimulus to set
         """
         if self.extra_stim is not None:
-            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+            self.extra_stim.change_stimulus_from_electrode(ID_elec, stimulus)
         else:
             rise_warning("Cannot be changed: no extrastim in the fascicle")
 

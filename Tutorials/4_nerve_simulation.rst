@@ -417,13 +417,13 @@ cathodic pulse:
 
 
 We can change the stimulus of ``LIFE_2`` by calling
-``change_stimulus_from_elecrode`` of the ``nerve``-object with the
+``change_stimulus_from_electrode`` of the ``nerve``-object with the
 ``LIFE_2`` ID and the new stimulus. We then re-run the simulation and
 plot the activated fibers.
 
 .. code:: ipython3
 
-    nerve.change_stimulus_from_elecrode(ID_elec=2,stimulus=pulse_stim)
+    nerve.change_stimulus_from_electrode(ID_elec=2,stimulus=pulse_stim)
     nerve_results = nerve(t_sim=3,postproc_script = "AP_detection")
     
     fig, ax = plt.subplots(1, 1, figsize=(6,6))
@@ -485,8 +485,8 @@ instead:
 
 .. code:: ipython3
 
-    nerve.change_stimulus_from_elecrode(ID_elec=0,stimulus=pulse_stim)
-    nerve.change_stimulus_from_elecrode(ID_elec=2,stimulus=dummy_stim)
+    nerve.change_stimulus_from_electrode(ID_elec=0,stimulus=pulse_stim)
+    nerve.change_stimulus_from_electrode(ID_elec=2,stimulus=dummy_stim)
     nerve_results = nerve(t_sim=3,postproc_script = "AP_detection")
 
 
@@ -569,7 +569,7 @@ unmyelinated fibers recruited in each fascicle in python list.
         elec_IDs = [0,1,2]
         unused_elec = [x for x in elec_IDs if elec_ID != x]
         for elec in unused_elec:
-            nerve.change_stimulus_from_elecrode(ID_elec=elec,stimulus=dummy_stim)   
+            nerve.change_stimulus_from_electrode(ID_elec=elec,stimulus=dummy_stim)   
     
         #Loop throught amp_vec
         print(f"Stimulating nerve with LIFE_{elec_ID}")
@@ -578,7 +578,7 @@ unmyelinated fibers recruited in each fascicle in python list.
             print(f"Pulse amplitude set to {-amp}µA ({idx+1}/{len(amp_vec)})")
             pulse_stim = nrv.stimulus()                                                 #create a new empty stimulus
             pulse_stim.pulse(t_start, -amp, t_pulse)                                    #create a pulse with the new amplitude
-            nerve.change_stimulus_from_elecrode(ID_elec=elec_ID,stimulus=pulse_stim)    #attach stimulus to selected electrode
+            nerve.change_stimulus_from_electrode(ID_elec=elec_ID,stimulus=pulse_stim)    #attach stimulus to selected electrode
             nerve_results = nerve(t_sim=3,postproc_script = "AP_detection")             #run the simulation
     
             #add results to lists
@@ -850,7 +850,7 @@ with the LIFE electrodes:
         print(f"Pulse amplitude set to {-amp}µA ({idx+1}/{len(amp_vec)})")
         pulse_stim = nrv.stimulus()                                                 #create a new empty stimulus
         pulse_stim.pulse(t_start, -amp, t_pulse)                                    #create a pulse with the new amplitude
-        nerve_cuff.change_stimulus_from_elecrode(ID_elec=0,stimulus=pulse_stim)          #attach stimulus to selected electrode
+        nerve_cuff.change_stimulus_from_electrode(ID_elec=0,stimulus=pulse_stim)          #attach stimulus to selected electrode
         nerve_results = nerve_cuff(t_sim=3,postproc_script = "AP_detection")             #run the simulation
     
         #add results to lists

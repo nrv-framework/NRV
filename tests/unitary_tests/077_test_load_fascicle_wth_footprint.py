@@ -26,6 +26,6 @@ T_inter = 40e-3
 stim1 = nrv.stimulus()
 stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
 
-fascicle_1.change_stimulus_from_elecrode(0,stim1)
+fascicle_1.change_stimulus_from_electrode(0,stim1)
 # simulation
 fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True, loaded_footprints=True)

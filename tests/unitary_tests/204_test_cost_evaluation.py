@@ -38,7 +38,7 @@ plt.savefig('./unitary_tests/figures/202_A.png')
 
 ## Generate and simulate axon
 ax = nrv.load_any(context, extracel_context=True)
-ax.change_stimulus_from_elecrode(0, stim)
+ax.change_stimulus_from_electrode(0, stim)
 results = ax(t_sim=t_sim)
 del ax
 t1 = time.time()
