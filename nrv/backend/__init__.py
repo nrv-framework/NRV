@@ -1,1 +1,1 @@
-""" NRV Backend librairy """
+""" NRV Backend library """

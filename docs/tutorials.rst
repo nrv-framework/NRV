@@ -9,7 +9,7 @@ NRV is designed to be accessible to a user with a limited knowledge of the pytho
 
    tutorials/first_steps
    tutorials/propagation_velocity
-   tutorials/realistic_example
+   tutorials/3_single_fiber_simulation
    tutorials/first_nerve
    tutorials/optim_example
 

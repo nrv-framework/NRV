@@ -37,7 +37,7 @@ nrv.backend.NRV\_Results module
    :show-inheritance:
 
 nrv.backend.NRV\_Simulable module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. automodule:: nrv.backend.NRV_Simulable
    :members:

@@ -389,6 +389,8 @@ def firing_threshold_from_axon(
             See below
 
     Keyword Arguments:
+            elec_id        : int
+                    elec_id where to change stimulus
             amp_min        : float
                     minimum amplitude for the binary search
             t_sim          : float
@@ -416,6 +418,11 @@ def firing_threshold_from_axon(
     threshold       : float
             estimated firing threshold in uA
     """
+
+    if "elec_id" in kwargs:
+        elec_id = kwargs.get("elec_id")
+    else:
+        elec_id = 0
 
     if "t_sim" in kwargs:
         t_sim = kwargs.get("t_sim")
@@ -513,7 +520,7 @@ def firing_threshold_from_axon(
         # axon_load = load_any_axon(axon, extracel_context=True)
         # axon_th = copy.deepcopy(axon)
         axon.dt = dt
-        axon.change_stimulus_from_electrode(0, stim_1)
+        axon.change_stimulus_from_electrode(elec_id, stim_1)
 
         # simulate axon activity
         results = axon.simulate(t_sim=t_sim, loaded_footprints=True)
