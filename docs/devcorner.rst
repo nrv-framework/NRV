@@ -21,7 +21,7 @@ We welcome different types of contributions:
 
 
 Contribution - forking and Pull-Requests
-----------------------------------------
+========================================
 
 Here is how to setup NRV for local development:
 
@@ -80,7 +80,7 @@ In brief, commit messages should follow these conventions:
 8. Submit a pull request through the GitHub website.
 
 NRV testing
------------
+===========
 
 NRV is build with its own custom system for testing and validating new functionalities. This choice as made since the early development of first version, and is kept as so to ensure scientific reproducibility of results.
 
@@ -175,3 +175,28 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
     *   - 500
         - 509
         - Various functions
+
+
+Public roadmap
+==============
+NRV is developed for the research and education community. We hope to provide a tool for biomedical engineering, and provide a framework that is as open as possible, to ensure scientific communication and reproducibility.
+
+NRV is certainly not perfect, and we hope that the open-science approach can contribute to improve the framework, however ensuring retrocompatilibty. There is a continuous effort from the Bioelectronics group of the IMS Laboratory (U. Bordeaux, Bordeaux INP, CNRS UMR 5218) to continue to develop NRV, and some purely scientific objectives are linked to this project. Here is a list of non-scientific and mostly technical objectives, that we intend to develop and on which we are also extremely happy to get help or guiding if you want to contribute:
+
+- **Improving geometry:**
+
+    - enable axon tortuosity for axons,
+
+    - enable elliptical shapes for fascicles and nerves (with automatized population filling and basic operations as already developed for round shapes fascicles/nerves).
+
+    - integrate mode complex shapes based on histology and image segmentation (with automatized population filling).
+
+    - extend FenicsX computation with curvilinear coordinates, to enable non-extruded 3D models of fascicles
+
+    - add electrode daughter-classes for more specific electrode geometries.
+
+- **Improving recordings:** current recording simulation is based on analytical field computation, thus restricting to one material between fibers and recording points. Such computations have already been performed with FEM and should be integrated in NRV
+
+- **Objects for fiber-populations:** generation and packing are based on functions, we hope to change to objects to ease the way of script ex-novo population production
+
+- 
