@@ -199,4 +199,20 @@ NRV is certainly not perfect, and we hope that the open-science approach can con
 
 - **Objects for fiber-populations:** generation and packing are based on functions, we hope to change to objects to ease the way of script ex-novo population production
 
-- 
+- **Post-processing options:**
+
+    - provide automatic link between FEM computation results and *Paraview*
+
+    - provide basic integration of *Pyvista* and *Matplotlib* to ease results exploration
+
+    - design wrapper and decorators with simulations to ease systematic tasks in results post-processing
+
+- **Compatibility and marking of results:** provide automated tagging of objects with version and develop routines for versions checking.
+
+- **Parallel computing**
+
+    - migrate to *multiprocessing* (Python core library)
+
+    - parallel version of axon population generation and axon packing
+
+    - design further decorators to clean scripting and make syntax more pythonic
