@@ -30,7 +30,7 @@ def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="do
         return position_max
 
 
-@jit(nopython=True, fastmath=True)
+#@jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
     """
     spike counting, just in time compiled. For internal use only.
@@ -130,7 +130,7 @@ class axon_results(sim_results):
             t_min_spike,
         )
 
-    @jit(nopython=True, fastmath=True)
+    #@jit(nopython=True, fastmath=True)
     def spike_detection(
         self, my_key, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
     ):
