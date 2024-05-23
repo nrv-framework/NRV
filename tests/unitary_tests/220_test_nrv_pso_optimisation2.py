@@ -42,7 +42,7 @@ kwarg_sim = {
     "postproc_script":"is_excited"
 }
 
-my_cost1 = nrv.CostFunction(
+my_cost1 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM,
     cost_evaluation=cost_evaluation,
@@ -90,7 +90,7 @@ kwrgs_interp2 = {
     }
 
 test_stim_CM2 = nrv.stimulus_CM(interpolator=nrv.interpolate_Npts, intrep_kwargs=kwrgs_interp2, t_sim=t_sim)
-my_cost2 = nrv.CostFunction(
+my_cost2 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM2,
     cost_evaluation=cost_evaluation,
@@ -107,7 +107,7 @@ pso_kwargs = {
     "opt_type" : "global",
     "bounds" : bounds2,
 }
-test_prob.CostFunction = my_cost2
+test_prob.cost_function = my_cost2
 
 res = test_prob(**pso_kwargs)
 

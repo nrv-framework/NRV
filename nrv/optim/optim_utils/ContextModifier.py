@@ -30,6 +30,21 @@ class ContextModifier(NRV_class):
         self.rec_context = rec_context
 
     def __call__(self, X, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
+        """
+        :meta public:
+
+        Parameters
+        ----------
+        X : _type_
+            _description_
+        static_context : NRV_simulable
+            _description_
+
+        Returns
+        -------
+        NRV_simulable
+            _description_
+        """
         self.set_parameters(**kwargs)
         return load_any(
             static_context,
@@ -45,6 +60,8 @@ class stimulus_CM(ContextModifier):
     interpolate the input vector,
     generate a stimulus from interplotated values and
     set the stimulus to an electrode of a static context
+
+
     """
 
     def __init__(
@@ -59,9 +76,6 @@ class stimulus_CM(ContextModifier):
         rec_context=False,
         **kwargs,
     ):
-        """
-        i
-        """
         super().__init__(
             extracel_context=extracel_context,
             intracel_context=intracel_context,

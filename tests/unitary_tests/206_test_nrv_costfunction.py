@@ -26,7 +26,7 @@ test_stim_CM = nrv.stimulus_CM(stim_gen=stimulus_generator)
 # generate cost_evaluation method
 cost_evaluation = - 2* nrv.raster_count_CE() + 3 * nrv.raster_count_CE()
 
-cost = nrv.CostFunction(static_context=context, context_modifier=test_stim_CM, cost_evaluation=cost_evaluation, t_sim=20)
+cost = nrv.cost_function(static_context=context, context_modifier=test_stim_CM, cost_evaluation=cost_evaluation, t_sim=20)
 N_test = 5
 X = np.array([[k] for k in range(N_test)]) + 1
 for i, x in enumerate(X):

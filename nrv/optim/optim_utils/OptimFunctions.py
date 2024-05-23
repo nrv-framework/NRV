@@ -14,8 +14,8 @@ from ...utils.nrv_function import nrv_interp
 
 ## interpolation
 def interpolate(
-    y,
-    x=[],
+    y:np.ndarray,
+    x:np.ndarray=[],
     scale=4,
     intertype="Spline",
     bounds=(0, 0),
@@ -24,6 +24,7 @@ def interpolate(
     save_scale=False,
     kwargs_interp={},
 ):
+
     y_scale = []
 
     if len(x) == 0:
@@ -65,16 +66,16 @@ def interpolate(
 
 
 def interpolate_amp(
-    position,
-    t_sim=100,
-    t_end=None,
-    dt=0.005,
-    intertype="Spline",
-    bounds=(0, 0),
-    save=False,
-    filename="interpolate_part.dat",
-    save_scale=False,
-):
+    position:np.ndarray,
+    t_sim:float=100,
+    t_end:float=None,
+    dt:float=0.005,
+    intertype:str="Spline",
+    bounds:tuple[float]=(0, 0),
+    save:bool=False,
+    filename:str="interpolate_part.dat",
+    save_scale:bool=False,
+)->np.ndarray:
     """
     genarte a waveform from a particle position using interpolate where the position
     values are the output waveform amplitudes at regular times
@@ -90,7 +91,8 @@ def interpolate_amp(
     intertype   : str
         type of interpolation perform, by default 'Spline'
         type possibly:
-                'Spline'                : Cubic spline interpolation
+            
+            - 'Spline'                : Cubic spline interpolation
     bounds      : tupple
         limit range of the interpolation, if both equal no limit,by default (0,0)
     save        : bool
@@ -132,49 +134,70 @@ def interpolate_amp(
 
 def interpolate_Npts(
     position,
-    t_sim=100,
-    dt=0.005,
-    amp_start=0,
-    amp_stop=1,
-    intertype="Spline",
-    bounds=(0, 0),
-    fixed_order=False,
-    t_end=None,
-    t_shift=None,
-    save=False,
-    fname="interpolate_2pts.dat",
-    plot=False,
-    save_scale=False,
-    generatefigure=True,
-    strict_bounds=True,
-    kwargs_interp={},
+    t_sim:float=100,
+    dt:float=0.005,
+    amp_start:float=0,
+    amp_stop:float=1,
+    intertype:str="Spline",
+    bounds:tuple[float]=(0, 0),
+    fixed_order:bool=False,
+    t_end:float=None,
+    t_shift:float=None,
+    save:bool=False,
+    fname:str="interpolate_2pts.dat",
+    plot:bool=False,
+    save_scale:bool=False,
+    generatefigure:bool=True,
+    strict_bounds:bool=True,
+    kwargs_interp:dict={},
     **kwargs
 ):
-    """
+    r"""
     genarte a waveform from a particle position using interpolate where the position
-    values are the coordonnate of two points which should be reached by the output waveform
+    values are the coordonnate of N points which should be reached by the output waveform
+
+    Note
+    ----
+    If :math:`I_{i}` and :math:`t_{i}` are the time and amplitude of the :math:`ith` point the position vector :math:`\mathcal{X}` should be:
+
+    .. math::
+
+        \mathcal{X} = \begin{pmatrix} I_{1} & t_{1} & I_{2} & t_{2} & ... & I_{N} & t_{N}   \end{pmatrix}
 
     Parameters
     ----------
-    position    : array
-        particle position in 4 dimensions where the first two are the coordonate of the first point
-        the last two are the coordonate of the second, syntax: X = (time, amplitude)
+    position    : np.ndarray
+        particle position in 2N dimensions with the coordonnate of the N points to interpolate.
     t_sim       : float
         simulation time (ms), by default 100
     dt          : float
         time step of the simulation (ms), by default 0.005
+    amp_start   : float
+        amplitude at the beginning of the interpolation
+    amp_stop    : float
+        amplitude at the end of the interpolation
     intertype   : str
         type of interpolation perform, by default 'Spline'
         type possibly:
-                'Spline'                : Cubic spline interpolation
+
+            - 'Spline'                : Cubic spline interpolation
+            - 'linear'
     bounds      : tupple
         limit range of the interpolation, if both equal no limit, by default (0,0)
+    fixed_order         :bool
+        fix the order of the points to interpolate
+    t_end           :float
+        optionnal, if not None, time of the stimulation at which the interpollation should reach amp_stop
+    t_shift         :float
+        optionnal, if not None, interpolation will be shifted of this time
     save        : bool
         save or not the output in a .dat file, by default False
-    filename    : str
+    fname    : str
         name of the file on wich the output should be saved, by default 'interpolate_2pts.dat'
     strict_bounds    :bool
         if True values out of bound will be set to closer bound
+    kwargs_interp   : dict
+        kwargs to add to the interpollation 
 
     Returns
     -------
@@ -263,8 +286,8 @@ def interpolate_Npts(
 
 def cost_position_saver(data, file_name="document.csv"):
     """
-    Simple saver which can be used in a CostFunction to save the cost
-    and position in a .csv file (see .Optim.CostFunction)
+    Simple saver which can be used in a cost_function to save the cost
+    and position in a .csv file (see .Optim.cost_function)
 
     Parameters
     ----------

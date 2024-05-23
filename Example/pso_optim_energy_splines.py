@@ -88,7 +88,7 @@ test_prob.optimizer = nrv.PSO_optimizer()
 if nrv.MCH.do_master_only_work():
     print("first optim (biphasic pulse)")
 context_modifier0 = nrv.biphasic_stimulus_CM(start=t_start, I_cathod="0", T_cathod=0.1*t_end, I_anod=0)
-my_cost0 = nrv.CostFunction(
+my_cost0 = nrv.cost_function(
     static_context=static_context,
     context_modifier=context_modifier0,
     cost_evaluation=cost_evaluation,
@@ -130,7 +130,7 @@ if False:# do_opt2:
     if nrv.MCH.do_master_only_work():
         print("Second optim (splines 2pts)")
     context_modifier2 = nrv.stimulus_CM(interpolator=nrv.interpolate_Npts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
-    my_cost2 = nrv.CostFunction(
+    my_cost2 = nrv.cost_function(
         static_context=static_context,
         context_modifier=context_modifier2,
         cost_evaluation=cost_evaluation,

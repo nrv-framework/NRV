@@ -22,7 +22,7 @@ kwarg_sim = {
     "postproc_script":"is_excited"
 }
 
-my_cost1 = nrv.CostFunction(
+my_cost1 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM,
     cost_evaluation=cost_evaluation,

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter, FFMpegWriter
 from .OptimFunctions import interpolate_Npts
-from ..CostFunctions import CostFunction
+from ..CostFunctions import cost_function
 import numpy as np
 
 from ...backend.NRV_Results import NRV_results
@@ -94,7 +94,7 @@ class optim_results(NRV_results):
             pass_info("not found with decimals =", decimals)
         return self.findbestpart(decimals - 1, verbose=verbose, lim_it=lim_it)
 
-    def compute_best_pos(self, cost_function:CostFunction, **kwrgs):
+    def compute_best_pos(self, cost_function:cost_function, **kwrgs):
         return cost_function.get_sim_results(self.x)
 
     ############################

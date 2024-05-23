@@ -1,5 +1,5 @@
 """
-NRV-:class:`.CostFunction` handling.
+NRV-:class:`.cost_function` handling.
 """
 import numpy as np
 from ..backend.NRV_Class import NRV_class, load_any
@@ -8,7 +8,7 @@ from ..backend.MCore import MCH, synchronize_processes
 from ..backend.log_interface import rise_warning
 
 
-class CostFunction(NRV_class):
+class cost_function(NRV_class):
     """
     A class to define cost from position input vector
 
