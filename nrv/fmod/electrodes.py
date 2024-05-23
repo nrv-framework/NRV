@@ -165,7 +165,7 @@ class electrode(NRV_class):
         """
         self.ID = ID
 
-    def get_footptint(self):
+    def get_footprint(self):
         """
         get the footprint of a electrode
 
