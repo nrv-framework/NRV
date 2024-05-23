@@ -87,7 +87,6 @@ from .utils.saving_handler import *
 from .utils.nrv_function import *
 from .utils.cell.CL_postprocessing import *
 from .utils.cell.CL_simulations import *
-from .utils.cell.CL_discretization import *
 from .utils.fascicle.FL_postprocessing import *
 
 from .optim.CostFunctions import *

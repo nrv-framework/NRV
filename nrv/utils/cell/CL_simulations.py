@@ -13,7 +13,6 @@ from ...nmod.axons import *
 from ...nmod.myelinated import *
 from ...nmod.unmyelinated import *
 from ..saving_handler import *
-from .CL_discretization import *
 from .CL_postprocessing import *
 
 unmyelinated_models = [
@@ -1005,25 +1004,16 @@ def blocking_threshold_from_axon(
 
     Parameters
     ----------
-    diameter        : float
-            axon diameter in um
-    L               : float
-            axon length in um
-    dist_elec       : float
-            y coordinate of the point source electrode in um
+    axon       : axon
+            axon to stimulation
     block_freq      : float
             Blocking frequency in kHz
-    model           : str
-            Axon model
     amp_max         : float
             Maximum tested blocking amplitude for the binary search in uA
     amp_tol         : float
             Threshold tolerance in % for the binary search
     dt              : float
             time discretization in ms
-    Nseg_per_sec    : int
-            Number of segment per section (myelinated axons)
-            Number of segment per mm of length (unmyelinated axons)
     verbose         : bool
             set the verbosity of the search
 
@@ -1031,16 +1021,8 @@ def blocking_threshold_from_axon(
             See below
 
     Keyword Arguments:
-            material       :   str
-                    material used to compute the extracellular field
-            position_elect : float
-                    x location of the electrode, between 0 and 1
-            z_elect        : float
-                    z coordinate of the electrode
             amp_min        : float
                     minimum amplitude for the binary search
-            f_dlambda      : float
-                    To set the number of segment with the d_dlambda rule (Hz)
             t_sim          : float
                     Duration of the simulation in ms
             amp_tol_abs    : float
@@ -1060,10 +1042,6 @@ def blocking_threshold_from_axon(
                     start of the blocking stimulation in ms
             b_duration     : float
                     duration of the blocking stimulation in ms
-            node_shift      : float between -1 and 1
-                    Align electrode with Node of Ranvier. When Shift = 0, Electrode is aligned with node
-            n_nodes         : integer
-                    Specify the number of Node of Ranvier for myelinated models. Overwrite L when specified.
 
     Returns
     -------
@@ -1075,11 +1053,6 @@ def blocking_threshold_from_axon(
         amp_min = kwargs.get("amp_min")
     else:
         amp_min = 0
-
-    if "f_dlambda" in kwargs:
-        f_dlambda = kwargs.get("f_dlambda")
-    else:
-        f_dlambda = 100
 
     if "t_sim" in kwargs:
         t_sim = kwargs.get("t_sim")
