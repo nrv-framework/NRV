@@ -13,7 +13,7 @@ NRV is designed to be accessible to a user with a limited knowledge of the pytho
    tutorials/4_first_nerve
    tutorials/5_first_optimization
 
-Further code with fewer comments is available in the Example section
+Further code with fewer comments is available in the :doc:`Example section</examples>`.
 
 
 
