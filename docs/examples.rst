@@ -6,25 +6,15 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
 
 .. toctree::
    :caption: Generic examples:
+   :glob:
    :maxdepth: 1
 
-   examples/generic/example_01
-   examples/generic/example_02
-   examples/generic/example_03
-   examples/generic/example_04
-   examples/generic/example_05
-   examples/generic/example_06
-   examples/generic/example_07
-   examples/generic/example_08
-   examples/generic/example_09
-   examples/generic/example_10
-   examples/generic/example_11
-   examples/generic/example_12
-   examples/generic/example_13
+   examples/generic/*
+
 
 .. toctree::
    :caption: Optimization examples:
+   :glob:
    :maxdepth: 1
 
-   examples/optim/example_o01
-   
+   examples/optim/*
