@@ -199,6 +199,7 @@ Thumbs.db
 
 # added by FK
 nrv/_misc/mods/x86_64/*
+nrv/_misc/mods/arm64/*
 nrv/_misc/log/NRV.log
 tests/unitary_tests/results/*
 tests/unitary_tests/figures/*
@@ -206,4 +207,3 @@ tests/log_NRV_test.txt
 .vscode/settings.json
 tests/log_NRV_test.txt
 .vscode/ltex.dictionary.en-US.txt
-

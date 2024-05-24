@@ -125,7 +125,6 @@ class cost_function(NRV_class):
             del static_context
 
     def __synchronise_t_sim(self):
-        """
         if "t_sim" in self.kwargs_S:
             self.global_t_sim = self.kwargs_S["t_sim"]
         elif "t_sim" in self.kwargs_CM:
@@ -137,7 +136,7 @@ class cost_function(NRV_class):
 
         self.kwargs_S["t_sim"] = self.global_t_sim
         self.kwargs_CM["t_sim"] = self.global_t_sim
-        self.kwargs_CE["t_sim"] = self.global_t_sim"""
+        self.kwargs_CE["t_sim"] = self.global_t_sim
         pass
 
 
@@ -149,8 +148,8 @@ class cost_function(NRV_class):
             s_status += ["static_context"]
         if self.context_modifier is None:
             s_status += ["context_modifier"]
-        if self.simulation is None:
-            s_status += ["simulation"]
+        if self.cost_evaluation is None:
+            s_status += ["cost_evaluation"]
         if len(s_status)==0:
             return True
         else:
