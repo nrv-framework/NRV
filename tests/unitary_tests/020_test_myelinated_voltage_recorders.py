@@ -35,7 +35,7 @@ plt.figure()
 for k in range(len(results2['x_rec'])):
 	plt.plot(results2['t'],results2['V_mem'][k]+k*100, color='k')
 plt.yticks([])
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/20_B.png')
 
 #plt.show()

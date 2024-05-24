@@ -62,9 +62,9 @@ res = test_prob(**pso_kwargs)
 
 if nrv.MCH.do_master_only_work():
     print(res.x)
-    plt.figure()
-    res.plot_cost_history()
-    plt.legend()
-    plt.savefig(figdir+"A.png")
+    fig,ax = plt.subplots(1)
+    res.plot_cost_history(ax)
+    ax.legend()
+    fig.savefig(figdir+"A.png")
 
 #plt.show()

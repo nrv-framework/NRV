@@ -76,16 +76,16 @@ second show a sub-threshold stimulation with no AP produced.
     
     plt.figure()
     plt.plot(x_vect,acti_function_ano,color = color)
-    plt.ylabel('Activation Function ($\Delta^2V_e$)')
-    plt.xlabel('x-axis ($\mu m$)')
+    plt.ylabel(r'Activation Function ($\Delta^2V_e$)')
+    plt.xlabel(r'x-axis ($\mu m$)')
     plt.xlim(np.min(x_vect),np.max(x_vect))
     plt.title('Activation function for anodic stimulation')
     plt.grid()
     
     plt.figure()
     plt.plot(x_vect,acti_function,color = color)
-    plt.ylabel('Activation Function ($\Delta^2V_e$)')
-    plt.xlabel('x-axis ($\mu m$)')
+    plt.ylabel(r'Activation Function ($\Delta^2V_e$)')
+    plt.xlabel(r'x-axis ($\mu m$)')
     plt.xlim(np.min(x_vect),np.max(x_vect))
     plt.title('Activation function for cathodic stimulation')
     plt.grid()
@@ -100,7 +100,7 @@ second show a sub-threshold stimulation with no AP produced.
     plt.xlabel('Time (ms)')
     plt.ylabel('x-position (µm)')
     cbar = plt.colorbar(map)
-    cbar.set_label('Membrane Voltage $V_m$ (mV)')
+    cbar.set_label(r'Membrane Voltage $V_m$ (mV)')
     plt.title('Example of supra threshold stimulation (AP)')
     
     

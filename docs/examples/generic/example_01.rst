@@ -39,7 +39,7 @@ conduction) fibers.
     plt.ylabel('x-position (µm)')
     plt.title('propagation along myelinated fiber')
     cbar = plt.colorbar(map)
-    cbar.set_label('Membrane Voltage $V_m$ (mV)')
+    cbar.set_label(r'Membrane Voltage $V_m$ (mV)')
     
     results = axon2.simulate(t_sim=4.5)
     del axon2
@@ -50,7 +50,7 @@ conduction) fibers.
     plt.ylabel('x-position (µm)')
     plt.title('propagation along unmyelinated fiber')
     cbar = plt.colorbar(map)
-    cbar.set_label('Membrane Voltage $V_m$  (mV)')
+    cbar.set_label(r'Membrane Voltage $V_m$  (mV)')
     
     plt.show()
 

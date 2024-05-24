@@ -1011,7 +1011,7 @@ def plot_Nav_states(ax, values, title=""):
         axes of the figure to work on
     values  : list, array, numpy array
     """
-    states = ["$I_1$", "$I_2$", "$C_1$", "$C_2$", "$O_1$", "$O_2$"]
+    states = [r"$I_1$", r"$I_2$", r"$C_1$", r"$C_2$", r"$O_1$", r"$O_2$"]
 
     X = [-1, -3, 0, 1, 0, 3]
     Y = [0, 0, 1, 0, -1, 0]

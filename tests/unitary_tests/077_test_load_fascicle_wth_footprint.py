@@ -1,7 +1,7 @@
 import nrv
 import matplotlib.pyplot as plt
 
-#nrv.parameters.set_nrv_verbosity(4)
+nrv.parameters.set_nrv_verbosity(2)
 DIR = './unitary_tests/'
 source_file = DIR + 'sources/77_fascicle_1.json'
 #source_file =  DIR + 'figures/76_fascicle_PS.json'
@@ -28,4 +28,5 @@ stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
 
 fascicle_1.change_stimulus_from_electrode(0,stim1)
 # simulation
+
 fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True, loaded_footprints=True)

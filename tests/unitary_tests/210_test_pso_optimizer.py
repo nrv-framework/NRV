@@ -41,12 +41,11 @@ print(test_prob.compute_cost(1)==0)
 res3 = test_prob(problem_fname=fnam3, **pso_kwargs)
 print(res3.x)
 
-
-plt.figure()
-res1.plot_cost_history(label="sphere")
-res2.plot_cost_history(label="rosenbock")
-res2.plot_cost_history(label="rastrigin")
-plt.legend()
-plt.savefig(figdir+"A.png")
+fig,ax = plt.subplots(1)
+res1.plot_cost_history(ax,label="sphere")
+res2.plot_cost_history(ax,label="rosenbock")
+res2.plot_cost_history(ax,label="rastrigin")
+ax.legend()
+fig.savefig(figdir+"A.png")
 
 #plt.show()

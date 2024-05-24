@@ -34,6 +34,7 @@ def firing_threshold_point_source(
     model="MRG",
     amp_max=2000,
     amp_tol=1,
+    dt = 0.005,
     verbose=True,
     **kwargs,
 ):
@@ -56,6 +57,8 @@ def firing_threshold_point_source(
             Maximum tested blocking amplitude for the binary search in uA
     amp_tol         : float
             Threshold tolerance in % for the binary search
+    dt              : float
+        Set the dt to a specific value in ms
     verbose         : bool
             set the verbosity of the search
     **kwargs:
@@ -89,10 +92,6 @@ def firing_threshold_point_source(
                     Set the tolorance for dt in %
             nseg            : int
                     Set the number of segment for the axon
-            nseg_tol        : float
-                    Set the nseg tolerance in %
-            dt_tol        : float
-                    Set the dt tolerance in %
             amp_tol_abs     : float
                     Set the absolute tolerance for the binary search in uA.
             node_shift      : float between -1 and 1
@@ -149,16 +148,6 @@ def firing_threshold_point_source(
     else:
         f_dlambda = 0
 
-    if "dt" in kwargs:
-        dt = kwargs.get("dt")
-    else:
-        dt = 0
-
-    if "dt_tol" in kwargs:
-        dt_tol = kwargs.get("dt_tol")
-    else:
-        dt_tol = amp_tol
-
     if "nseg" in kwargs:
         nseg = kwargs.get("nseg")
     else:
@@ -168,11 +157,6 @@ def firing_threshold_point_source(
         Nseg_per_sec = kwargs.get("Nseg_per_sec")
     else:
         Nseg_per_sec = 0
-
-    if "nseg_tol" in kwargs:
-        nseg_tol = kwargs.get("nseg_tol")
-    else:
-        nseg_tol = amp_tol
 
     if "amp_tol_abs" in kwargs:
         amp_tol_abs = kwargs.get("amp_tol_abs")
@@ -195,29 +179,6 @@ def firing_threshold_point_source(
     # axon
     y = 0
     z = 0
-
-    if dt == 0:
-        if cath_an_ratio > 0 and cath_an_ratio < 1:
-            dt = Get_dt(
-                dt_tol,
-                model,
-                simulation_category="Spike_threshold",
-                stim_pw=cath_time / cath_an_ratio,
-            )
-        else:
-            dt = Get_dt(
-                dt_tol, model, simulation_category="Spike_threshold", stim_pw=cath_time
-            )
-
-    if (nseg == 0) and (f_dlambda == 0) and (Nseg_per_sec == 0):
-        if model in unmyelinated_models:
-            Nseg_per_sec = Get_nseg(
-                nseg_tol, model, simulation_category="Spike_threshold", d=diameter, L=L
-            )
-        else:
-            Nseg_per_sec = Get_nseg(
-                nseg_tol, model, simulation_category="Spike_threshold"
-            )
 
     # extra cellular
     extra_material = load_material(material)
@@ -388,29 +349,25 @@ def firing_threshold_from_axon(
             See below
 
     Keyword Arguments:
-            elec_id        : int
-                    elec_id where to change stimulus
-            amp_min        : float
-                    minimum amplitude for the binary search
-            t_sim          : float
-                    Duration of the simulation in ms
-            amp_tol_abs    : float
-                    Specify an absolute amplitude tolerance for the binary search
-                    in uA
-            dt             : float
-                    Set the dt to a specific value in ms
-            anod_first  : bool
-                    Set the anodic phase before the cathodic phase
-            t_inter : float
-                    Specify the interphase delay in ms
-            cath_an_ratio: float
-                    Specify the cathodic/anodic ratio
-            cath_an_ratio          : float
-                    Set the tolorance for dt in %
-            amp_tol_abs     : float
-                    Set the absolute tolerance for the binary search in uA.
-            dt_tol        : float
-                    Set the dt tolerance in %
+    elec_id        : int
+            elec_id where to change stimulus
+    amp_min        : float
+            minimum amplitude for the binary search
+    t_sim          : float
+            Duration of the simulation in ms
+    amp_tol_abs    : float
+            Specify an absolute amplitude tolerance for the binary search
+            in uA
+    anod_first  : bool
+            Set the anodic phase before the cathodic phase
+    t_inter : float
+            Specify the interphase delay in ms
+    cath_an_ratio: float
+            Specify the cathodic/anodic ratio
+    cath_an_ratio          : float
+            Set the tolorance for dt in %
+    amp_tol_abs     : float
+            Set the absolute tolerance for the binary search in uA.
 
     Returns
     -------
@@ -453,32 +410,6 @@ def firing_threshold_from_axon(
     else:
         amp_tol_abs = 0
 
-    if "dt" in kwargs:
-        dt = kwargs.get("dt")
-    else:
-        dt = 0
-
-    if "dt_tol" in kwargs:
-        dt_tol = kwargs.get("dt_tol")
-    else:
-        dt_tol = amp_tol
-
-    if dt == 0:
-        if cath_an_ratio > 0 and cath_an_ratio < 1:
-            dt = Get_dt(
-                dt_tol,
-                axon.model,
-                simulation_category="Spike_threshold",
-                stim_pw=cath_time / cath_an_ratio,
-            )
-        else:
-            dt = Get_dt(
-                dt_tol,
-                axon.model,
-                simulation_category="Spike_threshold",
-                stim_pw=cath_time,
-            )
-
     amplitude_max_th = amp_max
     amplitude_min_th = amp_min
     amplitude_tol = amp_tol
@@ -518,7 +449,6 @@ def firing_threshold_from_axon(
             )
         # axon_load = load_any_axon(axon, extracel_context=True)
         # axon_th = copy.deepcopy(axon)
-        axon.dt = dt
         axon.change_stimulus_from_electrode(elec_id, stim_1)
 
         # simulate axon activity
@@ -1012,8 +942,6 @@ def blocking_threshold_from_axon(
             Maximum tested blocking amplitude for the binary search in uA
     amp_tol         : float
             Threshold tolerance in % for the binary search
-    dt              : float
-            time discretization in ms
     verbose         : bool
             set the verbosity of the search
 
@@ -1082,7 +1010,7 @@ def blocking_threshold_from_axon(
     if "t_amplitude" in kwargs:
         t_amplitude = kwargs.get("t_amplitude")
     else:
-        t_amplitude = 2
+        t_amplitude = 5
 
     if "b_start" in kwargs:
         b_start = kwargs.get("b_start")
@@ -1123,7 +1051,6 @@ def blocking_threshold_from_axon(
             b_start, b_duration, current_amp, block_freq, dt=1 / (block_freq * 20)
         )
 
-        axon.dt = dt
         axon.change_stimulus_from_electrode(0, stim_1)
 
         # simulate axon activity

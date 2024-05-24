@@ -36,9 +36,9 @@ print("best position",res2.x, "best cost", res2.best_cost)
 
 
 
-plt.figure()
-res1.plot_cost_history(label="sphere")
-res2.plot_cost_history(label="rosenbock")
-plt.legend()
-plt.savefig(figdir+"A.png")
+fig,ax = plt.subplots(1)
+res1.plot_cost_history(ax,label="sphere")
+res2.plot_cost_history(ax,label="rosenbock")
+ax.legend()
+fig.savefig(figdir+"A.png")
 #plt.show()

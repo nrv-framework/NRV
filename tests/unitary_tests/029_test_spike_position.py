@@ -21,7 +21,7 @@ nrv.rasterize(results,'V_mem')
 plt.figure()
 plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'])
 plt.xlabel('time (ms)')
-plt.ylabel('position along the axon($\mu m$)')
+plt.ylabel(r'position along the axon($\mu m$)')
 plt.xlim(0,results['tstop'])
 plt.savefig('./unitary_tests/figures/29_A.png')
 

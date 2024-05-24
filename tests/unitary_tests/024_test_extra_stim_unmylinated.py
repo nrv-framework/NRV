@@ -57,6 +57,6 @@ for k in range(len(results['node_index'])):
 	plt.plot(results['t'], results['V_mem'][index]+k*100, color = 'k')
 plt.yticks([])
 plt.xlim(0.9,2)
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/24_C.png')
 #plt.show()

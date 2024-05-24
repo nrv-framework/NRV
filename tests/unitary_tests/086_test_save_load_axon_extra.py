@@ -115,7 +115,7 @@ for k in range(len(results1['node_index'])):
     plt.plot(results2['t'], results2['V_mem'][index]+k*100, ':', color='grey')
 plt.yticks([])
 plt.xlim(0,t_sim)
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/505_A.png')
 
 
