@@ -7,13 +7,16 @@ All notable changes to NRV are sumed up in this file.
 
 ### Added
 - Significant improvement in the documentation
-- first simulations for nerve EIT direct models
-- classes for results of simulables and more
+- first simulations for nerve EIT direct models -> not documented yet, technical tests pass, still under scientific tests and development
+- classes for results and more
+- modification of post-processing architecture
 - progress bar for parallel computing with process specific toolbars
+- decorator for single-core function definition
+- 
 
 ### Fixed
-- issues with type hints on doc
-- code troubles with DOLFINx v0.8.0 now resolved, versions below are not suppoted anymore
+- issues with type hints on documentation generation
+- code troubles with DOLFINx v0.8.0 now resolved, versions below are not supported anymore
 
 ## [1.0.1] - 2024-01-26
 
