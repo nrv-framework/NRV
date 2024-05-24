@@ -312,6 +312,8 @@ class point_source_electrode(electrode):
             )
 
     def plot(self, axes: plt.axes, color: str="gold", **kwgs) -> None:
+        if ("nerve_d" in kwgs):
+            del kwgs["nerve_d"]
         axes.plot(self.y, self.z, ".", color=color, **kwgs)
 
 
