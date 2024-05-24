@@ -16,6 +16,7 @@ In addition, NRV introduces a way to evaluate the impact of specific parameters 
 - A static context: an NRV-:doc:`simulate</usersguide/simulables>` object as an axon, fascicle or nerve, set as the base for the simulation.
 - A ``context_modifier`` object: creates an updated local context from the static context and input vector.
 - A ``cost_evaluation`` object: evaluates a cost from the simulation results. It's a generic ``callable`` class, allowing user-defined functions.
+- A saver: an optional Python ``callable`` object saving specific parameters and results during the optimization
 
 .. figure:: ../images/optim.png
 
@@ -42,8 +43,32 @@ Once correctly set, the optimizer can be started by calling the instance as show
 Cost Function
 =============
 
-As mentionned above, the 
+As mentioned above, cost_functions are composed of the following components:
+ - A static context
+ - A context modifier
+ - A cost evaluation
+ - An optional filter
 
+It can be either defined from the instantiation
+::
+
+    my_cost = nrv.cost_function(
+    static_context=my_static_context,
+    context_modifier=my_context_modifier,
+    cost_evaluation=my_cost_evaluation,
+    kwargs_S=kwarg_sim
+    kwargs_CM=kwarg_cm
+    kwargs_CE=kwarg_ce)
+
+Or be generated empty and filled afterward:
+
+::
+
+    my_cost = nrv.cost_function()
+    [...]
+    my_cost.set_static_context(my_static_context, **kwarg_sim)
+    my_cost.set_context_modifier(my_context_modifier, **kwarg_cm)
+    my_cost0.set_cost_evaluation(my_cost_evaluation, **kwarg_ce)
 
 
 Context Modifier
@@ -52,6 +77,8 @@ Context Modifier
 Context modifiers are functions or callable classes adapting the static context to 
 
 
+Several context modifiers have been implemented in NRV for general uses. All of them inherit from a generic context modifier class: :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`. A list of existing context is given bellow:
+
 .. list-table:: **List of built-in context modifiers**
     :widths: 10 150
     :header-rows: 1
@@ -59,30 +86,37 @@ Context modifiers are functions or callable classes adapting the static context 
 
     *   - Name
         - description
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`
-        -  Generic context modifier which should be used as parent class for other con
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`
-        -
+        - Generic context modifiers targeting the modification of an electrode stimulus. This modification can either be done by interpolation the input vector or by generating a specific stimulus from this vector.
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM`
-        -
+        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :class:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_CM`
-        -
+        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :class:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_with_pw_CM`
-        -
+        - 
 
 
 Cost Evaluation
 ---------------
 
+.. list-table:: **List of built-in context modifiers**
+    :widths: 10 150
+    :header-rows: 1
+    :align: center
+
+    *   - Name
+        - description
+    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.charge_quantity_CE`
+        - 
+    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.stim_energy_CE`
+        - 
+    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.recrutement_count_CE`
+        - 
+
 
 
 Filter (optional)
 -----------------
-
-
-Saver (optional)
-----------------
-
 
 
 Optimizer
@@ -96,4 +130,16 @@ Two types optimizing classes are implemented in NRV:
 
 
  * scipy_optimizer: 
+
+.. list-table:: **List of optimizers in NRV**
+    :widths: 10 150
+    :header-rows: 1
+    :align: center
+
+    *   - Name
+        - description
+    *   - :class:`~nrv.optim.Optimizers.scipy_optimizer`
+        - 
+    *   - :class:`~nrv.optim.Optimizers.PSO_optimizer`
+        - 
 
