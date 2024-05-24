@@ -188,7 +188,7 @@ NRV provides methods and objects to construct the `Cost_Function`-object accordi
 
 - A static context: it defines starting point of the simulation model to be optimized. It can be any of the `nmod`-objects (axon, fascicle, or nerve) to which all objects describing stimulation, recording and more generally the physical context are attached. 
 
-- A `ContextModifier`-object: it updates the static context according to the output of the optimization algorithm and the optimization space. The `ContextModifier`-object is an abstract class, and two daughter classes for specific optimization problems are currently predefined: for stimulus waveform optimization or for geometry (mainly electrodes) optimization. However, there is no restriction to define any specific optimization scenario by inheriting from the parent `ContextModifier`-class.
+- A `context_modifier`-object: it updates the static context according to the output of the optimization algorithm and the optimization space. The `context_modifier`-object is an abstract class, and two daughter classes for specific optimization problems are currently predefined: for stimulus waveform optimization or for geometry (mainly electrodes) optimization. However, there is no restriction to define any specific optimization scenario by inheriting from the parent `context_modifier`-class.
 
 - A `CostEvaluation`-object: uses the simulation results to evaluate a user-defined cost. Some examples of cost evaluation are included in the current version of the framework. Nonetheless, the `CostEvaluation`-class is a generic Python `callable`-class, so it can also be user-defined.
 

@@ -110,5 +110,6 @@ html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
 
 # Sources options
+napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
 autodoc_member_order = 'bysource' # keep the order of class and function source files
 #                                   (thus don't use alphabetical order)

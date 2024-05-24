@@ -13,10 +13,10 @@ Module contents
 Submodules
 ----------
 
-nrv.optim.optim_utils.ContextModifier module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nrv.optim.optim_utils.ContextModifiers module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: nrv.optim.optim_utils.ContextModifier
+.. automodule:: nrv.optim.optim_utils.ContextModifiers
    :members:
    :undoc-members:
    :show-inheritance:

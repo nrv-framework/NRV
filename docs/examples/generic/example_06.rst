@@ -181,5 +181,5 @@ using boolean arguments ``extracel_context``,\ ``intracel_context``,
 
 
 
-.. image:: ../images/examples/example_3_0.png
+.. image:: ../images/06_example_0.png
 

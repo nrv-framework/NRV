@@ -4,21 +4,22 @@ from ...backend.NRV_Simulable import NRV_simulable
 from ...fmod.stimulus import stimulus
 
 
-class ContextModifier(NRV_class):
+class context_modifier(NRV_class):
     """
     Instanciate a context modifier: Callable object which modify a static context, regarding a vector of values, to generate a new local context
 
+    Notes
+    -----
+    `context_modifier` is an abstract class used to inherit new context modifier.
+
     Parameters
     ----------
-    X               : np.array (X,)
-        Vector of that will lead to the modification of the static context
-    static_context  : NRV_simulable
-        Static context which should be modify to optain th local context
-
-    Returns
-    -------
-    local_context  : NRV_simulable
-        simulable object generated from the vector X and the static_context
+    extracel_context        : bool
+        specifies whether to load extracel_context with the static context
+    intracel_context        : bool
+        specifies whether to load intracel_context with the static context
+    rec_context     : bool
+        specifies whether to load rec_context with the static context
     """
 
     def __init__(
@@ -29,21 +30,22 @@ class ContextModifier(NRV_class):
         self.intracel_context = intracel_context
         self.rec_context = rec_context
 
-    def __call__(self, X, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
+    def __call__(self, X: np.ndarray, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
         """
-        :meta public:
+        Modify ``static_context`` tunning paramters vector ``X``.
 
         Parameters
         ----------
-        X : _type_
-            _description_
-        static_context : NRV_simulable
-            _description_
+        X               : np.array (X,)
+            Vector of that will lead to the modification of the static context
+        static_context  : NRV_simulable
+            Static context which should be modify to optain th local context
 
         Returns
         -------
-        NRV_simulable
-            _description_
+        local_context  : NRV_simulable
+            simulable object generated from the vector X and the static_context
+
         """
         self.set_parameters(**kwargs)
         return load_any(
@@ -54,26 +56,46 @@ class ContextModifier(NRV_class):
         )
 
 
-class stimulus_CM(ContextModifier):
+class stimulus_CM(context_modifier):
     """
-    Context modifier which:
+    Context modifier which generate a stimulus from
+
+
     interpolate the input vector,
     generate a stimulus from interplotated values and
     set the stimulus to an electrode of a static context
 
+    Parameters
+    ----------
+    stim_ID : int, optional
+        ID of the electrode which should be adapted, by default 0
+    interpolator : callable, optional
+        if not None this , by default None
+    intrep_kwargs : dict, optional
+        _description_, by default {}
+    stim_gen : callable, optional
+        _description_, by default None
+    stim_gen_kwargs : dict, optional
+        _description_, by default {}
+    extracel_context : bool, optional
+        _description_, by default True
+    intracel_context : bool, optional
+        _description_, by default False
+    rec_context : bool, optional
+        _description_, by default False
 
     """
 
     def __init__(
         self,
-        stim_ID=0,
-        interpolator=None,
-        intrep_kwargs={},
-        stim_gen=None,
-        stim_gen_kwargs={},
-        extracel_context=True,
-        intracel_context=False,
-        rec_context=False,
+        stim_ID:int=0,
+        interpolator:callable=None,
+        intrep_kwargs:dict={},
+        stim_gen:callable=None,
+        stim_gen_kwargs:dict={},
+        extracel_context:bool=True,
+        intracel_context:bool=False,
+        rec_context:bool=False,
         **kwargs,
     ):
         super().__init__(
