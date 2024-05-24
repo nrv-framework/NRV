@@ -99,10 +99,11 @@ fascicle_2.simulate(t_sim=5, save_path="./unitary_tests/figures/", verbose=True)
 t5 = time.time()
 print("Total time "+str(t5 - t0)+" s")
 loaded_rec = fascicle_2.recorder
-
 print(loaded_rec.t is not None)
+
 for k in range(len(loaded_rec.recording_points)):
     print(len(loaded_rec.t)==len(loaded_rec.recording_points[k].recording))
+exit()
     
 if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(6,6))

@@ -15,7 +15,7 @@ In addition, NRV introduces a way to evaluate the impact of specific parameters 
 - A filter: an optional Python ``callable`` object for vector formatting or space restriction.
 - A static context: an NRV-:doc:`simulate</usersguide/simulables>` object as an axon, fascicle or nerve, set as the base for the simulation.
 - A ``context_modifier`` object: creates an updated local context from the static context and input vector.
-- A ``CostEvaluation`` object: evaluates a cost from the simulation results. It's a generic ``callable`` class, allowing user-defined functions.
+- A ``cost_evaluation`` object: evaluates a cost from the simulation results. It's a generic ``callable`` class, allowing user-defined functions.
 
 .. figure:: ../images/optim.png
 
@@ -52,7 +52,7 @@ Context Modifier
 Context modifiers are functions or callable classes adapting the static context to 
 
 
-.. list-table:: List of built-in context modifiers
+.. list-table:: **List of built-in context modifiers**
     :widths: 10 150
     :header-rows: 1
     :align: center
@@ -61,13 +61,20 @@ Context modifiers are functions or callable classes adapting the static context 
         - description
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`
         -  Generic context modifier which should be used as parent class for other con
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`
+    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`
         -
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`
+    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM`
         -
+    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_CM`
+        -
+    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_with_pw_CM`
+        -
+
 
 Cost Evaluation
 ---------------
+
+
 
 Filter (optional)
 -----------------

@@ -5,11 +5,11 @@ from ...fmod.extracellular import extracellular_context
 
 from ...backend.NRV_Class import NRV_class, load_any, abstractmethod
 from ...backend.NRV_Simulable import sim_results
-from ...utils.nrv_function import CostEvaluation
+from ...utils.nrv_function import cost_evaluation
 from ...utils.cell.CL_postprocessing import *
 
 
-class raster_count_CE(CostEvaluation):
+class raster_count_CE(cost_evaluation):
     def __init__(self):
         """
         Create a callable object which returne the number of spike from the result
@@ -41,7 +41,7 @@ class raster_count_CE(CostEvaluation):
         return cost
 
 
-class charge_quantity_CE(CostEvaluation):
+class charge_quantity_CE(cost_evaluation):
     def __init__(self, id_elec=None, dt_res=0.0001):
         """
         Create a callable object which return the charge injected
@@ -79,7 +79,7 @@ class charge_quantity_CE(CostEvaluation):
         return cost
 
 
-class stim_energy_CE(CostEvaluation):
+class stim_energy_CE(cost_evaluation):
     def __init__(self, id_elec:None|int|list[int]=None, dt_res:float=0.0001):
         r"""
         Create a callable object which return a value proportionnal to the stimulus energy, assuming the electrode impedance is a constant.
@@ -128,7 +128,7 @@ class stim_energy_CE(CostEvaluation):
         return cost
 
 
-class recrutement_count_CE(CostEvaluation):
+class recrutement_count_CE(cost_evaluation):
     """
     Callable object which returns the number of triggered fibre in the results
 

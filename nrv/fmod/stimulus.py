@@ -382,7 +382,6 @@ class stimulus(NRV_class):
             starting time of the waveform, in ms
         s_cathod    : float
             cathodic (negative stimulation value) current, in uA
-            WARNING: always positive, the user give here the absolute value
         t_stim      : float
             stimulation time, in ms
         s_anod      : float
@@ -394,6 +393,10 @@ class stimulus(NRV_class):
             and is balanced with cathodic value, else stimuation is cathodic
             and begins with the cathodic value and is balances with anodic value,
             by default set to False (cathodic first as most stimulation protocols)
+
+        WARNING
+        -------
+        `s_cathod` must always positive, the user give here the absolute value
         """
         if not anod_first:
             s_1 = -s_cathod

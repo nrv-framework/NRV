@@ -31,7 +31,7 @@ This is a very small example of a way to plot the built-in
     ##################################################################
     # Biphasic pulse
     t_start = 0.1
-    context_modifier1 = nrv.biphasic_stimulus_CM(start=t_start, I_cathod="0", T_cathod="1", I_anod=0)
+    context_modifier1 = nrv.biphasic_stimulus_CM(start=t_start, s_cathod="0", T_cathod="1", s_anod=0)
     def generate_waveform0(Xsp2, t_sim=100, **kwargs):
         stim = context_modifier1.stimulus_generator(Xsp2)
         stim0 = nrv.stimulus()

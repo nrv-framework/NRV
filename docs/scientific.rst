@@ -190,7 +190,7 @@ NRV provides methods and objects to construct the `Cost_Function`-object accordi
 
 - A `context_modifier`-object: it updates the static context according to the output of the optimization algorithm and the optimization space. The `context_modifier`-object is an abstract class, and two daughter classes for specific optimization problems are currently predefined: for stimulus waveform optimization or for geometry (mainly electrodes) optimization. However, there is no restriction to define any specific optimization scenario by inheriting from the parent `context_modifier`-class.
 
-- A `CostEvaluation`-object: uses the simulation results to evaluate a user-defined cost. Some examples of cost evaluation are included in the current version of the framework. Nonetheless, the `CostEvaluation`-class is a generic Python `callable`-class, so it can also be user-defined.
+- A `cost_evaluation`-object: uses the simulation results to evaluate a user-defined cost. Some examples of cost evaluation are included in the current version of the framework. Nonetheless, the `cost_evaluation`-class is a generic Python `callable`-class, so it can also be user-defined.
 
 Optimization methods and algorithm implemented in NRV rely on third-party optimization libraries: SciPy optimize [2020SciPy-NMeth] for continuous problems, Pyswarms [pyswarmsJOSS2018] as Particle Swarms Optimization metaheuristic for high-dimensional or discontinuous problems.
 

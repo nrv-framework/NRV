@@ -6,7 +6,7 @@ from ...fmod.stimulus import stimulus
 
 class context_modifier(NRV_class):
     """
-    Instanciate a context modifier: Callable object which modify a static context, regarding a vector of values, to generate a new local context
+    Instantiate a context modifier: Callable object which modify a static context, regarding a vector of tunning parameters, to generate a new local context
 
     Notes
     -----
@@ -58,32 +58,33 @@ class context_modifier(NRV_class):
 
 class stimulus_CM(context_modifier):
     """
-    Context modifier which generate a stimulus from
+    Generic context modifier which generate a stimulus from the input tuning parameters.
 
-
-    interpolate the input vector,
-    generate a stimulus from interplotated values and
-    set the stimulus to an electrode of a static context
+    Note
+    ----
+    When an instance of this class is called the three following steps are done:
+        1. The input vector is interpolated with the `interpolator`. If not set, the interpolated vector will be the equal to the input vector.
+        2. The stimulus is generated from interpolated values with  `stim_gen` function. If not set, interpolated values are set for the stimulus amplitude at constant sample rate (from zero to an argument ``t_sim``)
+        3. The generated stimulus is added to an electrode of a static context.
 
     Parameters
     ----------
-    stim_ID : int, optional
+    stim_ID                 : int, optional
         ID of the electrode which should be adapted, by default 0
-    interpolator : callable, optional
-        if not None this , by default None
-    intrep_kwargs : dict, optional
-        _description_, by default {}
-    stim_gen : callable, optional
-        _description_, by default None
-    stim_gen_kwargs : dict, optional
-        _description_, by default {}
-    extracel_context : bool, optional
-        _description_, by default True
-    intracel_context : bool, optional
-        _description_, by default False
-    rec_context : bool, optional
-        _description_, by default False
-
+    interpolator            : callable, optional
+        if not None function use to interpolate the input vector, by default None
+    intrep_kwargs           : dict, optional
+        key arguments to use with the `interpolator`, by default {}
+    stim_gen                : callable, optional
+        function use to generate the stimulus from the interpolated values, by default None
+    stim_gen_kwargs         : dict, optional
+        key arguments used for the , by default {}
+    extracel_context        : bool
+        specifies whether to load extracel_context with the static context
+    intracel_context        : bool
+        specifies whether to load intracel_context with the static context
+    rec_context             : bool
+        specifies whether to load rec_context with the static context
     """
 
     def __init__(
@@ -112,14 +113,39 @@ class stimulus_CM(context_modifier):
             self.intrep_kwargs[key] = kwargs[key]
             self.stim_gen_kwargs[key] = kwargs[key]
 
-    def interpolate(self, X):
+    def interpolate(self, X:np.ndarray)->np.ndarray:
+        """
+        interpolate the input vector with the `interpolator`. If not set, the interpolated vector will be the equal to the input vector.
+        Parameters
+        ----------
+        X : np.ndarray
+            Input vector to interpolate.
+
+        Returns
+        -------
+        np.ndarray
+            Interpolated vector.
+        """
         if self.interpolator is not None:
             X_interp = self.interpolator(X, **self.intrep_kwargs)
         else:
             X_interp = X
         return X_interp
 
-    def stimulus_generator(self, X_interp) -> stimulus:
+    def stimulus_generator(self, X_interp:np.ndarray) -> stimulus:
+        """
+        generated from interpolated values with  `stim_gen` function. If not set, interpolated values are set for the stimulus amplitude at constant sample rate (from zero to an argument ``t_sim``)
+
+        Parameters
+        ----------
+        X_interp : np.ndarray
+            Interpolated values.
+
+        Returns
+        -------
+        stimulus
+            stimulus generated from the values
+        """
         if self.stim_gen is not None:
             stim = self.stim_gen(X_interp, **self.stim_gen_kwargs)
         else:
@@ -137,7 +163,26 @@ class stimulus_CM(context_modifier):
             else:
                 self.stim_gen_kwargs["t_sim"] = local_sim.t_sim
 
-    def __call__(self, X, static_sim: NRV_simulable, **kwargs) -> NRV_simulable:
+    def __call__(self, X:np.ndarray, static_sim: NRV_simulable, **kwargs) -> NRV_simulable:
+        """
+        Modify ``static_context`` tunning paramters vector ``X``.
+
+        Note
+        ----
+        The ``t_sim`` argument need can be added for `stimulus_generator`. If the instance is called from :class:`~nrv.optim.CostFunctions.cost_function` it will be automatically added from the simulation parameter.
+
+        Parameters
+        ----------
+        X               : np.array (X,)
+            Vector of that will lead to the modification of the static context
+        static_context  : NRV_simulable
+            Static context which should be modify to optain th local context
+
+        Returns
+        -------
+        local_context  : NRV_simulable
+            simulable object generated from the vector X and the static_context
+        """
         local_sim = super().__call__(X, static_sim, **kwargs)
         self.__update_t_sim(local_sim)
         X_inter = self.interpolate(X)
@@ -147,21 +192,62 @@ class stimulus_CM(context_modifier):
 
 
 class biphasic_stimulus_CM(stimulus_CM):
+    """
+    Context modifier which generate a stimulus biphasic stimulus from the input tuning parameters.
+
+    Note
+    ----
+    The parameters to tune have to be set at the class instantiation. To do so the 
+
+    Parameters
+    ----------
+    stim_ID                 : int, optional
+        ID of the electrode which should be adapted, by default 0
+    start       : float or str
+        starting time of the waveform, in ms
+    s_cathod    : float or str
+        cathodic (negative stimulation value) current, in uA
+    s_anod      : float or str
+        anodic (positive stimulation value) current and, in uA
+    t_inter     : float or str
+        inter pulse timing, in ms
+        _description_, by default None
+    stim_gen                : callable, optional
+        function use to generate the stimulus from the interpolated values, by default None
+    stim_gen_kwargs         : dict, optional
+        key arguments used for the , by default {}
+    extracel_context        : bool
+        specifies whether to load extracel_context with the static context
+    intracel_context        : bool
+        specifies whether to load intracel_context with the static context
+    rec_context             : bool
+        specifies whether to load rec_context with the static context
+
+    WARNING
+    -------
+    `s_cathod` must always positive, the user give here the absolute value
+
+    Example
+    -------
+    For instance the folliwing line will generate a context 
+
+        >>> cm_0 = nrv.biphasic_stimulus_CM(start=1, s_cathod="0", t_cathod="1", s_anod=0)
+
+    """
     def __init__(
         self,
-        stim_ID=0,
-        start=1,
-        I_cathod=100,
-        T_cathod=60e-3,
-        T_inter=40e-3,
-        I_anod=None,
-        stim_gen=None,
-        stim_gen_kwargs={},
-        extracel_context=True,
-        intracel_context=False,
-        rec_context=False,
+        stim_ID:int=0,
+        start:float=1,
+        s_cathod:float|str=100,
+        t_cathod:float|str=60e-3,
+        t_inter:float|str=40e-3,
+        s_anod:float|str=None,
+        stim_gen:callable=None,
+        stim_gen_kwargs:dict={},
+        extracel_context:bool=True,
+        intracel_context:bool=False,
+        rec_context:bool=False,
     ):
-        """ """
         super().__init__(
             stim_ID=stim_ID,
             stim_gen=stim_gen,
@@ -171,46 +257,46 @@ class biphasic_stimulus_CM(stimulus_CM):
             rec_context=rec_context,
         )
         self.start = start
-        self.I_cathod = I_cathod
-        self.T_cathod = T_cathod
-        self.T_inter = T_inter
-        self.I_anod = I_anod
+        self.s_cathod = s_cathod
+        self.t_cathod = t_cathod
+        self.t_inter = t_inter
+        self.s_anod = s_anod
 
     def __set_values(self, X):
         N_X = len(X)
         start = self.start
-        I_cathod = self.I_cathod
-        T_cathod = self.T_cathod
-        T_inter = self.T_inter
+        s_cathod = self.s_cathod
+        t_cathod = self.t_cathod
+        t_inter = self.t_inter
         if isinstance(self.start, str):
             for i in range(N_X):
                 if str(i) in self.start:
                     start = X[i]
-        if isinstance(self.I_cathod, str):
+        if isinstance(self.s_cathod, str):
             for i in range(N_X):
-                if str(i) in self.I_cathod:
-                    I_cathod = X[i]
-        if isinstance(self.T_cathod, str):
+                if str(i) in self.s_cathod:
+                    s_cathod = X[i]
+        if isinstance(self.t_cathod, str):
             for i in range(N_X):
-                if str(i) in self.T_cathod:
-                    T_cathod = X[i]
-        if isinstance(self.T_inter, str):
+                if str(i) in self.t_cathod:
+                    t_cathod = X[i]
+        if isinstance(self.t_inter, str):
             for i in range(N_X):
-                if str(i) in self.T_inter:
-                    T_inter = X[i]
-        return start, I_cathod, T_cathod, T_inter
+                if str(i) in self.t_inter:
+                    t_inter = X[i]
+        return start, s_cathod, t_cathod, t_inter
 
     def stimulus_generator(self, X_interp) -> stimulus:
         if self.stim_gen is not None:
             stim = self.stim_gen(X_interp, **self.stim_gen_kwargs)
         else:
             stim = stimulus()
-            start, I_cathod, T_cathod, T_inter = self.__set_values(X_interp)
-            if self.I_anod is None:
-                I_anod = I_cathod / 5
+            start, s_cathod, t_cathod, t_inter = self.__set_values(X_interp)
+            if self.s_anod is None:
+                s_anod = s_cathod / 5
             else:
-                I_anod = self.I_anod
-            stim.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
+                s_anod = self.s_anod
+            stim.biphasic_pulse(start, s_cathod, t_cathod, s_anod, t_inter)
             return stim
 
 

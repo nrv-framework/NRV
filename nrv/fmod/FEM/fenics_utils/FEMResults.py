@@ -5,10 +5,18 @@ NRV-:class:`.FEMResults` handling.
 import gmsh
 import numpy as np
 import scipy
-from dolfinx.fem import Expression, Function, FunctionSpace
+from dolfinx.fem import Expression, Function, functionspace
 from dolfinx.io.gmshio import model_to_mesh
 from dolfinx.io.utils import XDMFFile, VTXWriter, VTKFile
 from dolfinx.cpp.mesh import entities_to_geometry
+from dolfinx.geometry import (
+bb_tree,
+compute_colliding_cells,
+compute_collisions_points,
+compute_closest_entity,
+compute_distance_gjk,
+create_midpoint_tree,
+)
 from mpi4py import MPI
 
 
@@ -21,25 +29,9 @@ from ..mesh_creator.MshCreator import (
     is_MshCreator,
     clear_gmsh,
 )
-# issue #38 See if this should be kept or not
-# Not ideal but requiered because of changes in dolfinx
-dfx_utd = parameters.check_dolfinx_version("0.7.0")
-if dfx_utd:
-    from dolfinx.geometry import (
-    bb_tree,
-    compute_colliding_cells,
-    compute_collisions_points,
-    compute_closest_entity,
-    compute_distance_gjk,
-    create_midpoint_tree,
-    )
-else:
-    from dolfinx.geometry import (
-    BoundingBoxTree,
-    compute_colliding_cells,
-    compute_collisions,
-    )
-# issue #38 ############
+
+
+
 
 ###############
 ## Functions ##
@@ -61,7 +53,7 @@ def is_sim_res(result):
     return isinstance(result, FEMResults)
 
 
-def save_sim_res_list(sim_res_list, fname, vtxtype=True, dt=1.):
+def save_sim_res_list(sim_res_list, fname, dt=1.):
     r"""
     save a list of SimResults in a .bp folder which can be open with PrarView
 
@@ -83,22 +75,14 @@ def save_sim_res_list(sim_res_list, fname, vtxtype=True, dt=1.):
         -   ParaView \\(\\geq\\) 5.12.0
     """
     N_list = len(sim_res_list)
-    if vtxtype: #and dfx_utd:
-        fname = rmv_ext(fname) + ".bp"
-        vcp = sim_res_list[0].vout
-        vtxf = VTXWriter(sim_res_list[0].domain.comm, fname, vcp)
-        for i in range(N_list):
-            vcp = sim_res_list[i].vout
-            vtxf.write(i * dt)
-        vtxf.close()
-    # issue #38 See if this should be kept or not
-    else:
-        fname = rmv_ext(fname) + ".xdmf"
-        xdmf = XDMFFile(sim_res_list[0].domain.comm, fname, "w")
-        xdmf.write_mesh(sim_res_list[0].domain)
-        for i in range(N_list):
-            xdmf.write_function(sim_res_list[i].vout, i * dt)
-    # issue #38 ############
+    fname = rmv_ext(fname) + ".bp"
+    vcp = sim_res_list[0].vout
+    vtxf = VTXWriter(sim_res_list[0].domain.comm, fname, vcp)
+    for i in range(N_list):
+        vcp = sim_res_list[i].vout
+        vtxf.write(i * dt)
+    vtxf.close()
+
 
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
@@ -160,7 +144,7 @@ def domain_from_meshfile(mesh_file):
 
 def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
     mesh = domain_from_meshfile(mesh_file)
-    V = FunctionSpace(mesh, elem)
+    V = functionspace(mesh, elem)
     return V
 
 
@@ -200,8 +184,8 @@ class FEMResults(NRV_class):
             mesh domain on which the result is defined, by default None
         elem            :tupple (str, int)
             if None, ("Lagrange", 1), else (element type, element order), by default None
-        V       : None or dolfinx.fem.FunctionSpace
-            FunctionSpace on which the result is defined, by default None
+        V       : None or dolfinx.fem.functionspace
+            functionspace on which the result is defined, by default None
         vout       : None or dolfinx.fem.Function
             Function resulting from the FEMSimulation, by default None
         comm            :int
@@ -264,7 +248,7 @@ class FEMResults(NRV_class):
         self.elem = (mdict["element"][0].strip(), int(mdict["element"][1]))
         if self.domain is None:
             self.domain = domain_from_meshfile(self.mesh_file)
-            self.V = FunctionSpace(self.domain, self.elem)
+            self.V = functionspace(self.domain, self.elem)
         self.vout = Function(self.V)
         self.vout.vector[:] = mdict["vout"]
 
@@ -320,16 +304,10 @@ class FEMResults(NRV_class):
             + self.domain.topology.index_map(tdim).num_ghosts
         entities = np.arange(n_entities_local, dtype=np.int32)
         midpoint_tree = create_midpoint_tree(self.domain, tdim, entities)
-        if dfx_utd:
-            tree = bb_tree(self.domain, tdim)
-            # Find cells whose bounding-box collide with the the points
-            cells_candidates = compute_collisions_points(tree, X)
-            # issue #38 See if this should be kept or not
-        else:
-            tree = BoundingBoxTree(self.domain, tdim)
-            # Find cells whose bounding-box collide with the the points
-            cells_candidates = compute_collisions(tree, X)
-            # issue #38 ############
+        tree = bb_tree(self.domain, tdim)
+        # Find cells whose bounding-box collide with the the points
+        cells_candidates = compute_collisions_points(tree, X)
+
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):

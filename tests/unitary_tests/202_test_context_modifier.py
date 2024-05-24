@@ -11,7 +11,7 @@ def plot_stim(stim, t_stop=None, N_plot=1000):
     stim2.t = np.linspace(0, t_stop, N_plot)
     stim2 += stim
     plt.plot(stim2.t, stim2.s)
-test_stim_CM = nrv.biphasic_stimulus_CM(start="0", I_cathod="1")
+test_stim_CM = nrv.biphasic_stimulus_CM(start="0", s_cathod="1")
 
 t_sim=5
 static_context = "./unitary_tests/sources/202_axon.json"

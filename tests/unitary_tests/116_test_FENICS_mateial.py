@@ -80,16 +80,13 @@ print('res1 saved')
 
 N = 100
 x = np.linspace(0, L, N)
-X = [(k, 0, 0) for k in x]
+X = np.array([[k, 0, 0] for k in x])
 
 mesh = nrv.domain_from_meshfile(mesh_file)
 
-try:
-    tree = geometry.bb_tree(mesh, mesh.geometry.dim)
-    cells_candidates = geometry.compute_collisions_points(tree, X)
-except:
-    tree = geometry.BoundingBoxTree(mesh, mesh.geometry.dim)
-    cells_candidates = geometry.compute_collisions(tree, X)
+tree = geometry.bb_tree(mesh, mesh.geometry.dim)
+cells_candidates = geometry.compute_collisions_points(tree, X)
+
 
 cells_colliding = geometry.compute_colliding_cells(mesh, cells_candidates, X)
 cells = [cells_colliding.links(i)[0] for i in range(N)]

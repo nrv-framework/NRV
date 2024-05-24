@@ -391,12 +391,12 @@ class sphere(function_ND):
 
 
 ###########################################################
-####################  CostEvaluation  #####################
+####################  cost_evaluation  #####################
 ###########################################################
-class CostEvaluation(nrv_function):
+class cost_evaluation(nrv_function):
     def __init__(self):
         super().__init__()
-        self.f_type = "CostEvaluation"
+        self.f_type = "cost_evaluation"
 
     @staticmethod
     def call_method(self, static_sim) -> float:
