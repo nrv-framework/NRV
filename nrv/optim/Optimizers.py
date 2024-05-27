@@ -107,7 +107,7 @@ class scipy_optimizer(Optimizer):
     """
     def __init__(
         self,
-        method:str|callable=None,
+        method:str=None,
         x0:np.ndarray=None,
         args:tuple=(),
         jac:callable=None,
