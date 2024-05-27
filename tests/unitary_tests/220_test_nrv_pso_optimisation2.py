@@ -42,7 +42,7 @@ kwarg_sim = {
     "postproc_script":"is_excited"
 }
 
-my_cost1 = nrv.CostFunction(
+my_cost1 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM,
     cost_evaluation=cost_evaluation,
@@ -67,10 +67,10 @@ res = test_prob(**pso_kwargs)
 
 if nrv.MCH.do_master_only_work():
     print(res.x)
-    plt.figure()
-    res.plot_cost_history()
-    plt.legend()
-    plt.savefig(figdir+"A.png")
+    fig,ax = plt.subplots(1)
+    res.plot_cost_history(ax)
+    ax.legend()
+    fig.savefig(figdir+"A.png")
 
 dt = 0.005
 t_sim = 1
@@ -90,7 +90,7 @@ kwrgs_interp2 = {
     }
 
 test_stim_CM2 = nrv.stimulus_CM(interpolator=nrv.interpolate_Npts, intrep_kwargs=kwrgs_interp2, t_sim=t_sim)
-my_cost2 = nrv.CostFunction(
+my_cost2 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM2,
     cost_evaluation=cost_evaluation,
@@ -107,13 +107,13 @@ pso_kwargs = {
     "opt_type" : "global",
     "bounds" : bounds2,
 }
-test_prob.CostFunction = my_cost2
+test_prob.cost_function = my_cost2
 
 res = test_prob(**pso_kwargs)
 
 if nrv.MCH.do_master_only_work():
     print(res.x)
-    plt.figure()
-    res.plot_cost_history()
-    plt.legend()
-    plt.savefig(figdir+"B.png")
+    fig,ax = plt.subplots(1)
+    res.plot_cost_history(ax)
+    ax.legend()
+    fig.savefig(figdir+"B.png")

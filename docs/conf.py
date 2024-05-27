@@ -2,8 +2,15 @@
 import os
 import sys
 from unittest.mock import MagicMock  # mock imports
+from pygments.styles import get_all_styles
+
+styles = list(get_all_styles())
 
 sys.path.insert(0, os.path.abspath(".."))
+
+html_css_files = [
+    'custom.css',
+]
 
 # prevent from unnistalled requierements for nrv
 deps = (
@@ -29,7 +36,11 @@ deps = (
     "dolfinx.io.gmshio",
     "dolfinx.geometry",
     "dolfinx.mesh",
+    "dolfinx.cpp",
+    "dolfinx.cpp.mesh",
     "numpy.linalg",
+    "numpy.typing",
+    "numpy.core.multiarray",
     "matplotlib",
     "matplotlib.pyplot",
     "matplotlib.pylab",
@@ -39,6 +50,7 @@ deps = (
     "matplotlib._path",
     "scipy.stats",
     "scipy.optimize",
+    "scipy.constants",
     "pylab",
     "scipy.spatial",
     "scipy.sparse",
@@ -47,6 +59,10 @@ deps = (
     "pyswarms",
     "pyswarms.utils",
     "pyswarms.backend.topology",
+    "tqdm",
+    "ufl.finiteelement",
+    "basix",
+    "basix.ufl",
 )
 for package in deps:
     sys.modules[package] = MagicMock()
@@ -68,11 +84,12 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
+    "sphinx.ext.intersphinx",
+    "sphinx_mdinclude",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
@@ -93,5 +110,6 @@ html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
 
 # Sources options
+napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
 autodoc_member_order = 'bysource' # keep the order of class and function source files
 #                                   (thus don't use alphabetical order)

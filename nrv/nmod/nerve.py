@@ -26,42 +26,33 @@ class nerve(NRV_simulable):
 
     Parameters
     ----------
-    dt              : float
-        simulation time stem for Neuron (ms), by default 1us
-    Nseg_per_sec    : float
-        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-    freq            : float
-        frequency of the d-lambda rule (Hz), by default 100Hz
-    freq_min        : float
-        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-    v_init          : float
-        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-    T               : float
-        temperature (C), specify None for automatic model choice of temperature
-    ID              : int
-        axon ID, by default set to 0
-    threshold       : int
-        membrane voltage threshold for spike detection (mV), by default -40mV
-    Adelta_limit    : float
-        limit diameter between A-delta models (thin myelinated) and myelinated models for axons
+    length              : float
+        Nerve length, in um
+    diameter    : float
+        Nerve diameter, in um
+    Outer_D            : float
+        Outer saline box diameter, in mm
+    ID        : int
+        Nerve unique identifier 
     """
 
-    def __init__(self, Length=10000, Diameter=100, Outer_D=5, ID=0, **kwargs):
+    def __init__(self, length=10_000, diameter=100, Outer_D=5, ID=0, **kwargs):
         """
         Instanciates an empty nerve.
         """
-        super().__init__()
+        super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
-        self.verbose = False
+        self.verbose = True
         self.postproc_script = "default"
         self.return_parameters_only = True
+        self.save_results = True
         self.loaded_footprints = True
 
         self.type = "nerve"
-        self.L = Length
-        self.D = Diameter
+        self.L = length
+        self.D =  None
         self.y_grav_center = 0
         self.z_grav_center = 0
         self.Outer_D = Outer_D
@@ -70,12 +61,8 @@ class nerve(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
-        self.N_vertices = 0
-        self.y_vertices = np.array([])
-        self.z_vertices = np.array([])
 
         # Fascicular content
-        self.N_ax = 0
         self.fascicles_IDs = []
         self.fascicles = {}
 
@@ -85,7 +72,7 @@ class nerve(NRV_simulable):
             "dt": 0.001,
             "Nrec": 0,
             "Nsec": 1,
-            "Nseg_per_sec": 100,
+            "Nseg_per_sec": length//25,
             "freq": 100,
             "freq_min": 0,
             "mesh_shape": "plateau_sigmoid",
@@ -120,7 +107,7 @@ class nerve(NRV_simulable):
         self.footprints = {}
         self.is_footprinted = False
         self.myelinated_nseg_per_sec = 3
-        self.unmyelinated_nseg = 100
+        self.unmyelinated_nseg = length//25
         # intra-cellular stimulation
         self.N_intra = 0
         self.intra_stim_position = []
@@ -133,6 +120,10 @@ class nerve(NRV_simulable):
         self.recorder = None
         self.is_simulated = False
         # Simulation status
+
+
+        self.define_circular_contour(diameter)
+
 
     ## save/load methods
     def save(
@@ -263,25 +254,42 @@ class nerve(NRV_simulable):
         )
 
     ## Nerve property method
+    @property
+    def n_fasc(self):
+        return len(self.fascicles)
+
+    def get_n_ax(self, id_fasc=None):
+        n = 0
+        if id_fasc is None:
+            id_fasc = self.fascicles.keys()
+        elif not np.iterable(id_fasc):
+            id_fasc = [id_fasc]
+        for i_fasc in id_fasc:
+            if i_fasc in self.fascicles:
+                fasc = self.fascicles[i_fasc]
+                n += fasc.n_ax
+        return n
+    n_ax = property(get_n_ax)
+
     def set_ID(self, ID):
         """
-        set the ID of the fascicle
+        set the ID of the nerve
 
         Parameters
         ----------
         ID : int
-            ID number of the fascicle
+            ID number of the nerve
         """
         self.ID = ID
 
     def define_length(self, L):
         """
-        set the length over the x axis of the fascicle
+        set the length over the x axis of the nerve
 
         Parameters
         ----------
         L   : float
-            length of the fascicle in um
+            length of the nerve in um
         """
         if self.extra_stim is not None or self.N_intra > 0:
             rise_warning(
@@ -298,20 +306,18 @@ class nerve(NRV_simulable):
             )
 
     ## generate stereotypic Nerve
-    def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
+    def define_circular_contour(self, D, y_c=None, z_c=None):
         """
-        Define a circular countour to the fascicle
+        Define a circular countour to the nerve
 
         Parameters
         ----------
         D           : float
-            diameter of the circular fascicle contour, in um
+            diameter of the circular nerve contour, in um
         y_c         : float
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         self.type = "Circular"
         self.D = D
@@ -319,12 +325,9 @@ class nerve(NRV_simulable):
             self.y_grav_center = y_c
         if z_c is not None:
             self.z_grav_center = z_c
-        self.N_vertices = N_vertices
-        theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = self.y_grav_center + (D / 2) * np.cos(theta)
-        self.z_vertices = self.z_grav_center + (D / 2) * np.sin(theta)
         self.A = np.pi * (D / 2) ** 2
         if self.is_extra_stim:
+            pass_info("FEM nerve resized!")
             self.extra_stim.reshape_nerve(
                 Nerve_D=self.D,
                 Length=self.L,
@@ -334,7 +337,7 @@ class nerve(NRV_simulable):
 
     def get_circular_contour(self):
         """
-        Returns the properties of the fascicle contour considered as a circle (y and z center and diameter)
+        Returns the properties of the nerve contour considered as a circle (y and z center and diameter)
 
         Returns
         -------
@@ -347,19 +350,12 @@ class nerve(NRV_simulable):
         """
         y = self.y_grav_center
         z = self.z_grav_center
-        if self.y_vertices == np.array([]) and self.D is None:
-            D = 0
-        elif self.D is not None:
-            D = self.D
-        else:
-            y = (np.amax(self.y_vertices) - np.amin(self.y_vertices)) / 2
-            z = (np.amax(self.z_vertices) - np.amin(self.z_vertices)) / 2
-            D = np.abs(np.amax(self.y_vertices) - np.amin(self.y_vertices))
+        D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, Delta=20, N_vertices=100):
+    def fit_circular_contour(self, y_c=None, z_c=None, Delta=20):
         """
-        Define a circular countour to the fascicle
+        Define a circular countour to the nerve
 
         Parameters
         ----------
@@ -369,8 +365,6 @@ class nerve(NRV_simulable):
             z coordinate of the circular contour center, in um
         Delta       : float
             distance between farest axon and contour, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         N_fasc = len(self.fascicles)
         D = 2 * Delta
@@ -380,7 +374,7 @@ class nerve(NRV_simulable):
         if z_c is not None:
             self.z_grav_center = z_c
         if N_fasc == 0:
-            pass_info("No fascicles to fit fascicul diameter set to " + str(D) + "um")
+            pass_info("No fascicles to fit - Nerve diameter set to " + str(D) + "um")
         else:
             for fasc in self.fascicles.values():
                 dist_max = (
@@ -392,7 +386,7 @@ class nerve(NRV_simulable):
                     ** 0.5
                 )
                 D = max(D, 2 * (dist_max + Delta))
-        self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
+        self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
@@ -455,7 +449,7 @@ class nerve(NRV_simulable):
                 self.__merge_fascicular_context(self.fascicles[fasc.ID])
                 self.fascicles[fasc.ID].define_length(self.L)
 
-    def __check_fascicle_overlap(self, fasc):
+    def __check_fascicle_overlap(self, fasc:fascicle):
         for fasc_i in self.fascicles.values():
             dist_yz = (fasc.y_grav_center - fasc_i.y_grav_center) ** 2 + (
                 fasc.z_grav_center - fasc_i.z_grav_center
@@ -483,7 +477,7 @@ class nerve(NRV_simulable):
         self, unmyelinated_only=False, myelinated_only=False, **kwargs
     ):
         """
-        set parameters of axons in the fascicle
+        set parameters of axons in the nerve
 
         Parameters
         ----------
@@ -505,9 +499,9 @@ class nerve(NRV_simulable):
                     rise_warning(kwargs[key], " is not an implemented axon model")
             else:
                 if not myelinated_only and key in self.unmyelinated_param:
-                    self.unmyelinated_param["model"] = kwargs[key]
+                    self.unmyelinated_param[key] = kwargs[key]
                 if not unmyelinated_only and key in self.myelinated_param:
-                    self.myelinated_param["model"] = kwargs[key]
+                    self.myelinated_param[key] = kwargs[key]
 
         ## Specific keys
         if "unmyelinated_nseg" in kwargs:
@@ -540,15 +534,13 @@ class nerve(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, fig, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
     ):
         """
         plot the nerve in the Y-Z plane (transverse section)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         contour_color   : str
@@ -557,24 +549,33 @@ class nerve(NRV_simulable):
             matplotlib color string applied to the myelinated axons. Red by default
         unmyel_color    : str
             matplotlib color string applied to the myelinated axons. Blue by default
+        elec_color    : str
+            matplotlib color string applied to the electrodes axons. Blue by default
         num             : bool
             if True, the index of each axon is displayed on top of the circle
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.plot(
-                self.y_vertices, self.z_vertices, linewidth=4, color=contour_color
-            )
+            axes.add_patch(plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D/2,
+                color=contour_color,
+                fill=False,
+                linewidth=4,
+            ))
             for i in self.fascicles:
                 fasc = self.fascicles[i]
                 fasc.plot(
-                    fig=fig,
                     axes=axes,
-                    contour_color=contour_color,
+                    contour_color="grey",
                     myel_color=myel_color,
                     unmyel_color=unmyel_color,
                     num=num,
                 )
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
 
     ## Context handling methods
     def clear_context(
@@ -605,7 +606,6 @@ class nerve(NRV_simulable):
         self.is_simulated = False
 
     # Intra cellular
-
     def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
         """
         Insert a IC clamp stimulation
@@ -635,7 +635,6 @@ class nerve(NRV_simulable):
         self.N_intra += 1
 
     # Extracellular
-
     def attach_extracellular_stimulation(self, stimulation: FEM_stimulation):
         """
         attach a extracellular context of simulation for an axon.
@@ -670,9 +669,16 @@ class nerve(NRV_simulable):
             self.is_extra_stim = True
 
         for i, elec in enumerate(stimulation.electrodes):
-            self.extra_stim.add_electrode(elec, stimulation.stimuli[i])
+            _overlap = self.__check_perineurium_electrode_overlap(elec)
+            if _overlap == -1:
+                self.extra_stim.add_electrode(elec, stimulation.stimuli[i])
+                for fasc in self.fascicles.values():
+                        fasc.remove_axons_electrode_overlap(elec)
+            else:
+                rise_warning(f"Electrode {i} ovelerlap with the perineurium the fascicle {_overlap}")
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -684,9 +690,39 @@ class nerve(NRV_simulable):
                 New stimulus to set
         """
         if self.extra_stim is not None:
-            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+            self.extra_stim.change_stimulus_from_electrode(ID_elec, stimulus)
         else:
             rise_warning("Cannot be changed: no extrastim in the nerve")
+
+    def __check_perineurium_electrode_overlap(self, electrode:electrode)->int:
+        """
+        Check if an electrode overlap with one fascicle perineurium of the nerve.
+
+        Paramters
+        ---------
+        electrode   : electrode
+            electrode to check
+        
+        Returns
+        -------
+        int
+            ID of the fascicle overlapping, -1 if no overlap
+        """
+        y, z, D = 0, 0, 0
+        # CUFF electrodes do not affect intrafascicular state
+        if not is_CUFF_electrode(electrode):
+            y = electrode.y
+            z = electrode.z
+            if is_LIFE_electrode(electrode):
+                D = electrode.D
+            for fasc in self.fascicles.values():
+                dist = np.sqrt((fasc.y_grav_center - y) ** 2 + (fasc.z_grav_center - z) ** 2) - (
+                    fasc.D / 2
+                )
+                if abs(dist) < D:
+                    return fasc.ID
+        return -1
+
 
     # RECORDING MECHANIMS
     def attach_extracellular_recorder(self, rec: recorder):
@@ -732,7 +768,12 @@ class nerve(NRV_simulable):
             fasc.record_g_ions = self.record_g_ions
             fasc.record_particles = self.record_particles
             fasc.postproc_script = self.postproc_script
+            fasc.save_results = self.save_results,
+            fasc.return_parameters_only = self.return_parameters_only
+            fasc.verbose = self.verbose
 
+
+    # Footprint and mesh
     def compute_electrodes_footprints(self, **kwargs):
         """
         compute electrodes footprints
@@ -753,6 +794,7 @@ class nerve(NRV_simulable):
                     fasc.compute_electrodes_footprints()
             self.is_footprinted = True
 
+
     ## SIMULATION
     def simulate(
         self,
@@ -770,30 +812,50 @@ class nerve(NRV_simulable):
         calling this method can result in long processing time, even with large computational ressources.
         Keep aware of what is really implemented, ensure configuration and simulation protocol is correctly designed.
         """
-        pass_info("Starting nerve simulation")
+        if self.verbose:
+            pass_info("Starting nerve simulation")
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
-            nerve_sim = {}
-        folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
-        if MCH.do_master_only_work():
-            create_folder(folder_name)
-            config_filename = folder_name + "/00_Nerve_config.json"
-            self.save(config_filename, fascicles_context=False)
-        else:
-            pass
+            nerve_sim = sim_results({"dummy_res":1})
+        if self.save_results:
+            folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
+            if MCH.do_master_only_work():
+                create_folder(folder_name)
+                config_filename = folder_name + "/00_Nerve_config.json"
+                self.save(config_filename, fascicles_context=False)
+            else:
+                pass
         # run FEM model
-        pass_info("...computing electrodes footprint")
+        if self.verbose:
+            pass_info("...computing electrodes footprint")
         self.compute_electrodes_footprints(**kwargs)
         synchronize_processes()
         # Simulate all fascicles
         fasc_kwargs = kwargs
-        fasc_kwargs["save_path"] = folder_name
+        if self.save_results:
+            fasc_kwargs["save_path"] = folder_name
+        has_pbar = False
+        if self.verbose:
+            i_pbar = 1
+            _pbar = pbar(n_tot=self.n_fasc, label="fasc")
+            has_pbar = True
         for fasc in self.fascicles.values():
-            pass_info("...simulating fascicle " + str(fasc.ID))
+            if has_pbar:
+                _pbar.set_label(f"fascicle {i_pbar}/{self.n_fasc}")
+                i_pbar += 1
+                fasc_kwargs["pbar"] = _pbar
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
-                in_nerve=True,
-                **fasc_kwargs,
+                in_nerve=True, **fasc_kwargs,
             )
+        if has_pbar:
+            del _pbar
+        if self.verbose:
+            pass_info("...Done!")
+        #dirty hack to force NRV_class type when saved
+        if "extra_stim" in nerve_sim:
+            nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"])
+        if self.record:     # recorder not saved in result !!BUG
+            nerve_sim["recorder"] = self.recorder
         self.is_simulated = True
         return nerve_sim

@@ -4,7 +4,7 @@ import numpy as np
 
 fig_DIR = "./unitary_tests/results/"
 
-test_stim_CM = nrv.biphasic_stimulus_CM(I_cathod="0", T_cathod="1")
+test_stim_CM = nrv.biphasic_stimulus_CM(s_cathod="0", t_cathod="1")
 t_sim=5
 static_context = "./unitary_tests/sources/200_fascicle_1.json"
 
@@ -23,7 +23,7 @@ kwarg_sim = {
     "postproc_script":"is_excited"
 }
 
-cost_function = nrv.CostFunction(
+cost_function = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM,
     cost_evaluation=test_CE,

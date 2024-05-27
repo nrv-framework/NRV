@@ -9,6 +9,15 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nrv.optim.optim_utils
+
+
 Submodules
 ----------
 

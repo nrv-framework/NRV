@@ -3,7 +3,7 @@ import time
 
 out_file = './unitary_tests/results/outputs/106_simfile'
 
-param = nrv.SimParameters(D=3, mesh_file="unitary_tests/sources/3cylinder")
+param = nrv.FEMParameters(D=3, mesh_file="unitary_tests/sources/3cylinder")
 """
 param.add_domain(mesh_domain=0,mat_file="material_1")
 param.add_domain(mesh_domain=100,mat_file="material_2")

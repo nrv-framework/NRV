@@ -4,11 +4,13 @@ NRV-:class:`.extracellular_context` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
 from ..backend.MCore import MCH
 from ..backend.NRV_Class import NRV_class, is_empty_iterable
+from ..utils.misc import get_perineurial_thickness
 from .electrodes import (
     is_analytical_electrode,
     is_FEM_electrode,
@@ -256,7 +258,7 @@ class extracellular_context(NRV_class):
         for electrode in self.electrodes:
             electrode.clear_footprint()
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -279,6 +281,11 @@ class extracellular_context(NRV_class):
                 ID_elec,
                 "is not too big",
             )
+
+    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        for electrode in self.electrodes:
+            electrode.plot(axes, color , **kwgs)
+
 
 
 class stimulation(extracellular_context):
@@ -350,10 +357,26 @@ class stimulation(extracellular_context):
 
 class FEM_stimulation(extracellular_context):
     """
-    FEM_based_simulation object are designed to connect all other objects requierd to compute the external potential voltage for axons using FEM :
+    FEM_based_simulation object are designed to connect all other objects required to compute the external potential voltage for axons using FEM :
+
+    - Shape and positon of the nerve 
+    - Shape and position of each fascicle 
     - the materials for the FEM stimulation : endoneurium, perineurium, epineurium and external material
     - a list of electrode(s)
     - a list of corresponding current stimuli
+
+    Parameters
+    ----------
+    model_fname   : str
+        name of the comsol mph file to solve
+    endo_mat            : str
+        specification of the endoneurium material, see :class:`~nrv.fmod.materials.material` for further details
+    peri_mat            : str
+        specification of the perineurium material, see :class:`~nrv.fmod.materials.material` for further details
+    epi_mat             : str
+        specification of the epineurium material, see :class:`~nrv.fmod.materials.material` for further details
+    ext_mat             : str
+        specification of the external material (everything but the nerve), see :class:`~nrv.fmod.materials.material` for further details
     """
 
     def __init__(
@@ -366,22 +389,7 @@ class FEM_stimulation(extracellular_context):
         comsol=True,
         Ncore=None,
     ):
-        """
-        Implement a FEM_based_stimulation object.
 
-        Parameters
-        ----------
-        simuluation_fname   : str
-            name of the simluation file to compute the field
-        endo_mat            : material object
-            specification of the endoneurium material, see Material.py or material object help for further details
-        peri_mat            : material object
-            specification of the perineurium material, see Material.py or material object help for further details
-        epi_mat             : material object
-            specification of the epineurium material, see Material.py or material object help for further details
-        ext_mat             : material object
-            specification of the external material (everything but the nerve), see Material.py or material object help for further details
-        """
         super().__init__()
         self.electrodes_label = []
         self.model_fname = model_fname
@@ -479,6 +487,8 @@ class FEM_stimulation(extracellular_context):
         """
         super().load(data, **kwargs)
 
+        if self.fenics:
+            self.set_Ncore(self.Ncore)
         if C_model:
             if MCH.do_master_only_work():
                 self.model = COMSOL_model(self.model_fname)
@@ -507,20 +517,20 @@ class FEM_stimulation(extracellular_context):
             else:
                 self.model.reshape_outerBox(Outer_D, res=res)
 
-    def reshape_nerve(self, Nerve_D, Length, y_c=0, z_c=0, res="default"):
+    def reshape_nerve(self, Nerve_D=None, Length=None, y_c=0, z_c=0, res="default"):
         """
         Reshape the nerve of the FEM simulation
 
         Parameters
         ----------
         Nerve_D                 : float
-            Nerve diameter, in um
+            Nerve diameter, in µm
         Length                  : float
-            Nerve length, in um
+            Nerve length, in µm
         y_c                     : float
-            Nerve center y-coordinate in um, 0 by default
+            Nerve center y-coordinate in µm, 0 by default
         z_c                     : float
-            Nerve z-coordinate center in um, 0 by default
+            Nerve z-coordinate center in µm, 0 by default
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
@@ -536,7 +546,7 @@ class FEM_stimulation(extracellular_context):
                 )
 
     def reshape_fascicle(
-        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=5, res="default"
+        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=None, res="default"
     ):
         """
         Reshape a fascicle of the FEM simulation
@@ -544,19 +554,20 @@ class FEM_stimulation(extracellular_context):
         Parameters
         ----------
         Fascicle_D  : float
-            Fascicle diameter, in um
+            Fascicle diameter, in µm
         y_c         : float
-            Fascicle center y-coodinate in um, 0 by default
+            Fascicle center y-coodinate in µm, 0 by default
         z_c         : float
-            Fascicle center y-coodinate in um, 0 by default
+            Fascicle center y-coodinate in µm, 0 by default
         Perineurium_thickness   :float
-            Thickness of the Perineurium sheet surounding the fascicles in um, 5 by default
+            Thickness of the Perineurium sheet surounding the fascicles in µm. If None, thickness is determined according to the fascicle diameter 
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
         if MCH.do_master_only_work():
+            p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
             if self.comsol:
                 if ID is None:
                     self.model.set_parameter("Fascicle_D", str(Fascicle_D) + "[um]")
@@ -573,7 +584,7 @@ class FEM_stimulation(extracellular_context):
                         "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
                     )
                 self.model.set_parameter(
-                    "Perineurium_thickness", str(Perineurium_thickness) + "[um]"
+                    "Perineurium_thickness", str(p_th) + "[um]"
                 )
             else:
                 self.model.reshape_fascicle(
@@ -581,7 +592,7 @@ class FEM_stimulation(extracellular_context):
                     y_c=y_c,
                     z_c=z_c,
                     ID=ID,
-                    Perineurium_thickness=Perineurium_thickness,
+                    Perineurium_thickness=p_th,
                     res=res,
                 )
 
@@ -615,7 +626,7 @@ class FEM_stimulation(extracellular_context):
             is_overlaping = is_overlaping or check_electrodes_overlap(elec, electrode)
 
         if is_overlaping:
-            rise_warning("overlaping electrod: not added to context")
+            rise_warning("overlaping electrodes: not added to context")
         else:
             if is_FEM_electrode(electrode):
                 if not electrode.is_multipolar:

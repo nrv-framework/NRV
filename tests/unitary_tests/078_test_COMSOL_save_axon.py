@@ -67,7 +67,7 @@ if nrv.COMSOL_Status:
         plt.plot(results['t'], results['V_mem'][index]+k*100, color = 'k')
     plt.yticks([])
     plt.xlim(0.9,2)
-    plt.xlabel('time ($ms$)')
+    plt.xlabel(r'time ($ms$)')
     plt.savefig('./unitary_tests/figures/78_A.png')
 else:
     nrv.pass_info('not connected to COMSOL, parts of the test were skiped')

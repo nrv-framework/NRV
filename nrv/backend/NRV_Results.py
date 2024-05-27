@@ -1,8 +1,12 @@
 """
 NRV-:class:`.NRV_results` handling.
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+from collections.abc import Iterable
+from scipy import signal
 
 from .NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
 from .log_interface import rise_warning
@@ -10,8 +14,7 @@ from ..fmod.stimulus import stimulus
 from .file_handler import json_load
 
 
-
-def generate_results(obj: str, **kwargs):
+def generate_results(obj: any, **kwargs):
     """
     generate the proper results object depending of the obj simulated
 
@@ -20,10 +23,8 @@ def generate_results(obj: str, **kwargs):
     obj      : any
     """
     nrv_obj = load_any(obj)
-    if "nrv_type" in nrv_obj.__dict__():
+    if "nrv_type" in nrv_obj.__dict__:
         nrv_type = nrv_obj.nrv_type
-        if "myelinated" in nrv_type:
-            nrv_type = ""
         return eval('sys.modules["nrv"].' + nrv_type + "_results")(context=obj)
 
 
@@ -35,6 +36,8 @@ class NRV_results(NRV_class, dict):
     @abstractmethod
     def __init__(self, context=None):
         super().__init__()
+        # Not ideal but require to load method
+        self.np_keys = {}
         if context is None:
             context = {}
         elif is_NRV_class(context):
@@ -42,10 +45,19 @@ class NRV_results(NRV_class, dict):
 
         if "nrv_type" in context:
             context["result_type"] = context.pop("nrv_type")
+        
+        # Discard saving for empty results (mostly fo Mcore)
         self.update(context)
         self.__sync()
 
+
+    @property
+    def to_save(self):
+        return "dummy_res" not in self
+
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
+        save = save and self.to_save
+        self.__update_np_keys()
         self.__sync()
         return super().save(save, fname, blacklist, **kwargs)
 
@@ -55,7 +67,11 @@ class NRV_results(NRV_class, dict):
         else:
             key_dic = data
         for key, item in key_dic.items():
-            if key not in self.__dict__:
+            if key in key_dic["np_keys"]:
+                self.__dict__[key] = np.array(
+                    [], dtype=np.dtype(key_dic["np_keys"][key])
+                )
+            elif key not in self.__dict__:
                 self.__dict__[key] = item
 
         super().load(data, blacklist, **kwargs)
@@ -78,6 +94,17 @@ class NRV_results(NRV_class, dict):
         self.__dict__.update(__m, **kwargs)
         super().update(__m, **kwargs)
 
+    def __update_np_keys(self):
+        """ """
+        self.np_keys = {}
+        for key in self:
+            if isinstance(self[key], np.ndarray):
+                self.np_keys[key] = self[key].dtype.name
+
+    @property
+    def is_empty(self):
+        return "result_type" in self and not self["result_type"] is None
+
     def __sync(self):
         self.update(self.__dict__)
         self.pop("__NRVObject__")
@@ -86,6 +113,49 @@ class NRV_results(NRV_class, dict):
 class sim_results(NRV_results):
     def __init__(self, context=None):
         super().__init__(context)
+
+    def filter_freq(self, my_key, freq, Q=10):
+        """
+        Basic Filtering of quantities. This function design a notch filter (scipy IIR-notch).
+        Adds an item to the specified dictionary, with the key termination '_filtered' concatenated to the original key.
+
+        Parameters
+        ----------
+        key     : str
+            name of the key to filter
+        freq    : float or array, list, np.array
+            frequecy or list of frequencies to filter in kHz, as time is defined in ms in NRV2.
+            If multiple frequencies, they are filtered sequencially, with as may filters as frequencies, in the specified order
+        Q       : float
+            quality factor of the filter, by default set to 10
+        """
+        if isinstance(freq, Iterable):
+            f0 = np.asarray(freq)
+        else:
+            f0 = freq
+        if self["dt"] == 0:
+            rise_warning(
+                "Warning: filtering aborted, variable time step used for differential equation solving"
+            )
+            return False
+        else:
+            fs = 1 / self["dt"]
+            if isinstance(f0, Iterable):
+                new_sig = np.zeros(self[my_key].shape)
+                for k in range(len(self[my_key])):
+                    new_sig[k, :] = self[my_key][k]
+                    for f in f0:
+                        b_notch, a_notch = signal.iirnotch(f, Q, fs)
+                        new_sig[k, :] = signal.lfilter(
+                            b_notch, a_notch, new_sig[k, :][k]
+                        )
+            else:
+                ##  NOTCH at the stimulation frequency
+                b_notch, a_notch = signal.iirnotch(f0, Q, fs)
+                new_sig = np.zeros(self[my_key].shape)
+                for k in range(len(self[my_key])):
+                    new_sig[k, :] = signal.lfilter(b_notch, a_notch, self[my_key][k])
+            self[my_key + "_filtered"] = new_sig
 
     def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
         """

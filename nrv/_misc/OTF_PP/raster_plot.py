@@ -4,7 +4,7 @@ nrv.remove_key(axon_sim, "V_mem", verbose=self.verbose)
 plt.figure()
 plt.scatter(axon_sim["V_mem_raster_time"], axon_sim["V_mem_raster_x_position"])
 plt.xlabel("time (ms)")
-plt.ylabel("position along the axon($\mu m$)")
+plt.ylabel(r'position along the axon($\mu m$)')
 title = (
     "Axon "
     + str(k)

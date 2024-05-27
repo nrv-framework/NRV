@@ -5,5 +5,5 @@ try:
 except:
     axon1, _ = nrv.load_any_axon('./sources/89_axon.json', extracel_context=True)
 
-threshold = nrv.blocking_threshold_from_axon(axon1,block_freq=10,amp_max=500,amp_tol=5)
+threshold = nrv.blocking_threshold_from_axon(axon1,block_freq=10,amp_max=50,amp_tol=5)
 print(threshold)

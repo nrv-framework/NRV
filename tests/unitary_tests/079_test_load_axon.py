@@ -14,7 +14,7 @@ T_cathod = 60e-3
 T_inter = 40e-3
 stim1 = nrv.stimulus()
 stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
-axon1.change_stimulus_from_elecrode(0, stim1)
+axon1.change_stimulus_from_electrode(0, stim1)
 
 
 
@@ -30,7 +30,7 @@ for k in range(len(results['node_index'])):
     plt.plot(results['t'], results['V_mem'][index]+k*100, color = 'k')
 plt.yticks([])
 plt.xlim(0.9,2)
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/79_A.png')
 
 #plt.show()

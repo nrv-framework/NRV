@@ -6,7 +6,7 @@ A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:
 
 
 from .NRV_Class import NRV_class
-from .NRV_Results import sim_results
+from .NRV_Results import generate_results, sim_results
 
 
 def is_NRV_simulable(x):
@@ -87,6 +87,7 @@ class NRV_simulable(NRV_class):
         record_g_mem=False,
         record_g_ions=False,
         loaded_footprints=None,
+        **kwargs
     ):
         super().__init__()
         self.t_sim = t_sim
@@ -175,5 +176,5 @@ class NRV_simulable(NRV_class):
             intracel_context=self.intracel_status(),
             rec_context=self.rec_status(),
         )
-        results = sim_results(context)
+        results = generate_results(context)
         return results

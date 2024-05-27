@@ -8,7 +8,8 @@ import traceback
 from ..backend.NRV_Class import NRV_class
 from ..backend.MCore import MCH, synchronize_processes
 from ..backend.log_interface import rise_error, pass_debug_info, set_log_level
-from .CostFunctions import CostFunction
+from .optim_utils.optim_results import optim_results
+from .CostFunctions import cost_function
 from .Optimizers import Optimizer
 
 import sys
@@ -52,7 +53,7 @@ class Problem(NRV_class):
 
     A class to describe problems that should be optimized with the NRV Framework.
     The problem should be described with a simulation and a cost, using the object
-    CostFunction, and various optimization algorithms can be used to find optimal solution.
+    cost_function, and various optimization algorithms can be used to find optimal solution.
 
     This class is abstract and is not supposed to be used directly by the end user. NRV can
     handle two types of problems:
@@ -62,7 +63,7 @@ class Problem(NRV_class):
 
     def __init__(
         self,
-        cost_function: CostFunction = None,
+        cost_function: cost_function = None,
         optimizer: Optimizer = None,
         save_problem_results=False,
         problem_fname="optim.json",
@@ -76,17 +77,18 @@ class Problem(NRV_class):
         self.save_problem_results = save_problem_results
         self.problem_fname = problem_fname
 
-    # Handling the CostFunction attribute
+    # Handling the cost_function attribute
     @property
     def costfunction(self):
         """
         Cost function of a Problem,
         the cost function should be a CosFunction object, it should return a scalar.
-        NRV function should be prefered"""
+        NRV function should be prefered
+        """
         return self._CostFunction
 
     @costfunction.setter
-    def costfunction(self, cf: CostFunction):
+    def costfunction(self, cf: cost_function):
         # need to add a verification that the cost function is a scallar and so on
         self._CostFunction = cf
 
@@ -118,7 +120,27 @@ class Problem(NRV_class):
         pass
 
     # Call method is where the magic happens
-    def __call__(self, **kwargs):
+    def __call__(self, **kwargs)->optim_results:
+        """
+        Perform the optimization: minimze the `cost_function` using `optmizer`
+
+        Parameters
+        ----------
+
+        kwargs
+            containing parameters of the optimizer to change
+
+        Returns
+        -------
+        optim_results
+            results of the optimization
+
+
+        Raises
+        ------
+        KeyboardInterrupt
+            _description_
+        """
         if MCH.do_master_only_work():
             try:
                 kwargs = self.__update_saving_parameters(**kwargs)
@@ -150,6 +172,10 @@ class Problem(NRV_class):
 
     # Mcore handling
     def __check_MCore_CostFunction(self):
+        """
+
+        ch
+        """
         return getattr(self._CostFunction, "_MCore_CostFunction", False)
 
     def __wait_for_simulation(self):
@@ -180,7 +206,7 @@ class Problem(NRV_class):
         return kwargs
 
     def context_and_cost(self, context_func, cost_func, residual):
-        self.CostFunction = CostFunction(context_func, cost_func, residual)
+        self.cost_function = cost_function(context_func, cost_func, residual)
 
     def autoset_optimizer(self):
         pass

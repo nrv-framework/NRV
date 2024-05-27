@@ -95,7 +95,7 @@ plt.figure()
 for k in range(len(results['x_rec'])):
     plt.plot(results['t'],results['V_mem'][k]+k*100, color='k')
 plt.yticks([])
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/85_D.png')
 
 
@@ -106,7 +106,7 @@ plt.figure()
 for k in range(len(results['x_rec'])):
     plt.plot(results['t'],results['V_mem'][k]+k*100, color='k')
 plt.yticks([])
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/85_E.png')
 
 #plt.show()

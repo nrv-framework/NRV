@@ -20,7 +20,7 @@ unmyelinated_stats = [
     "Jacobs_11_D",
 ]
 
-N = 5000
+N = 500
 
 
 for k in range(len(myelinated_stats)):
@@ -33,9 +33,6 @@ for k in range(len(myelinated_stats)):
 
     print('Population of '+str(N)+' axons generated in '+str(t)+' s')
 
-
-
-    
 
     plt.figure()
     y_M, x, _ =plt.hist(M_diam_list,bins = 50,color = 'blue',label='Myelinated')
@@ -72,7 +69,7 @@ for k in range(len(myelinated_stats)):
     pop_name = '52_mpop_'+m_stat+'_upop_'+u_stat+'.pop'
 
     nrv.save_axon_population('./unitary_tests/results/'+pop_name,axons_diameters, axons_type)
-    axons_diameters_2, axons_type_2, M_diam_list_2, U_diam_list_2 = nrv.load_axon_population('./unitary_tests/results/'+pop_name)
+    axons_diameters_2, axons_type_2, M_diam_list_2, U_diam_list_2, _, _ = nrv.load_axon_population('./unitary_tests/results/'+pop_name)
     #print(fig_name)
     plt.savefig('./unitary_tests/figures/'+fig_name)
     plt.close('all')

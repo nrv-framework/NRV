@@ -86,8 +86,8 @@ z = 0						# axon z position, in [um]
 d = 10					# axon diameter, in [um]
 axonm1 = nrv.myelinated(y,z,d,L_mye,rec='all', dt=0.0003)
 axonm1.attach_extracellular_stimulation(test_stim)
-axonm1.change_stimulus_from_elecrode(ID_elec=0, stimulus=stim_m1)
-axonm1.change_stimulus_from_elecrode(ID_elec=1, stimulus=stim_m2)
+axonm1.change_stimulus_from_electrode(ID_elec=0, stimulus=stim_m1)
+axonm1.change_stimulus_from_electrode(ID_elec=1, stimulus=stim_m2)
 axonm1.get_electrodes_footprints_on_axon()
 
 
@@ -115,7 +115,7 @@ for k in range(len(results1['node_index'])):
     plt.plot(results2['t'], results2['V_mem'][index]+k*100, ':', color='grey')
 plt.yticks([])
 plt.xlim(0,t_sim)
-plt.xlabel('time ($ms$)')
+plt.xlabel(r'time ($ms$)')
 plt.savefig('./unitary_tests/figures/505_A.png')
 
 
@@ -125,8 +125,8 @@ z = 0						# axon z position, in [um]
 d = 1					# axon diameter, in [um]
 axonu1 = nrv.unmyelinated(y,z,d,L_mye, dt=0.0003)
 axonu1.attach_extracellular_stimulation(test_stim)
-axonu1.change_stimulus_from_elecrode(ID_elec=0, stimulus=stim_u1)
-axonu1.change_stimulus_from_elecrode(ID_elec=1, stimulus=stim_u2)
+axonu1.change_stimulus_from_electrode(ID_elec=0, stimulus=stim_u1)
+axonu1.change_stimulus_from_electrode(ID_elec=1, stimulus=stim_u2)
 axonu1.get_electrodes_footprints_on_axon()
 
 ax_dic2 = axonu1.save(save=True, fname=unm_axon_file, extracel_context=True)

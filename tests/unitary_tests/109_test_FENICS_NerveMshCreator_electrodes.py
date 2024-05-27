@@ -13,17 +13,17 @@ Nerve_D = 5000 #um
 
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
 
-mesh.reshape_fascicle(D=1700, y_c=700, z_c=0, ID=1)
-mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)
+mesh.reshape_fascicle(d=1700, y_c=700, z_c=0, ID=1)
+mesh.reshape_fascicle(d=1000, y_c=-1000, z_c=0, ID=2)
 
-#mesh.reshape_axon(D=10, y_c=1100, z_c=200, ID=1, res=3)
+#mesh.reshape_axon(d=10, y=1100, z=200, ID=1, res=3)
 
 
 
-mesh.add_electrode(elec_type="LIFE", x_c=L/4, y_c=1100, z_c=-300, length = 1000, D=25, res=5)
-mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=1100, z_c=-300, length = 1000, D=25, res=5)
-mesh.add_electrode(elec_type="LIFE", x_c=L/4, y_c=-800, z_c=-100, length = 1000, D=25, res=5)
-mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=-800, z_c=-100, length = 1000, D=25, res=5)
+mesh.add_electrode(elec_type="LIFE", x_c=L/4, y_c=1100, z_c=-300, length = 1000, d=25, res=5)
+mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=1100, z_c=-300, length = 1000, d=25, res=5)
+mesh.add_electrode(elec_type="LIFE", x_c=L/4, y_c=-800, z_c=-100, length = 1000, d=25, res=5)
+mesh.add_electrode(elec_type="LIFE", x_c=3*L/4, y_c=-800, z_c=-100, length = 1000, d=25, res=5)
 
 mesh.add_electrode(elec_type="CUFF MP", N=5, x_c=L/4, contact_width = 1000, contact_length=500,\
     insulator=True, insulator_length=3000, insulator_thickness=500,res=50)

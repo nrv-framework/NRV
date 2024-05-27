@@ -63,6 +63,6 @@ fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular
 
 if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(8,8))
-    nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
+    nrv.plot_fasc_state(fasc_state, ax, num=True)
     plt.savefig("./unitary_tests/figures/70_A.png")
 

@@ -9,6 +9,15 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nrv.nmod.results
+
+
 Submodules
 ----------
 
@@ -40,7 +49,7 @@ nrv.nmod.myelinated module
 nrv.nmod.fascicle\_generator module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: nrv.nmod.fascicle_generator
+.. automodule:: nrv.nmod.axon_pop_generator
    :members:
    :undoc-members:
    :show-inheritance:

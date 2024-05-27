@@ -62,14 +62,17 @@ def get_MRG_parameters(diameter):
         nodeD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nodeD, 3))
         paraD1_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD1, 3))
         paraD2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD2, 3))
-        deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
-        if diameter < 1.0 or diameter > 16.0:
+        
+        if diameter < 1.0 or diameter > 14.0:
             # outside of the MRG originla limit, take 1st order approx,
-            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 1))
+            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 3))
+            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 2))        
         else:
             # try to fit a bit better
             paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 5))
+            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 5))
         nl_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nl, 3))
+
         # evaluate for the requested diameter
         g = g_poly(diameter)
         axonD = axonD_poly(diameter)
@@ -187,7 +190,7 @@ class myelinated(axon):
         model="MRG",
         dt=0.001,
         node_shift=0,
-        Nseg_per_sec=0,
+        Nseg_per_sec=1,
         freq=100,
         freq_min=0,
         mesh_shape="plateau_sigmoid",
@@ -599,6 +602,20 @@ class myelinated(axon):
             blacklist=blacklist,
         )
 
+    def plot(self, axes: plt.axes, color: str="red", node_color: str="lightgray", elec_color="gold", **kwgs) -> None:
+        super().plot(axes, color, elec_color,**kwgs)
+        alpha = 1
+        if "alpha" in kwgs:
+            alpha = kwgs["alpha"]
+
+        axes.add_patch(plt.Circle(
+            (self.y, self.z),
+            self.nodeD / 2,
+            fc=node_color,
+            fill=True,
+            alpha = alpha,
+        ))
+
     def __set_model(self, model):
         """
         Set the double cable model. For internal use only.
@@ -781,15 +798,15 @@ class myelinated(axon):
                     n.nseg = Nseg
                     self.node_Nseg += Nseg
                 for m in self.MYSA:
-                    Nseg = Nseg = d_lambda_rule(m.L, self.d_lambda, self.freq, m)
+                    Nseg = d_lambda_rule(m.L, self.d_lambda, self.freq, m)
                     m.nseg = Nseg
                     self.MYSA_Nseg += Nseg
                 for f in self.FLUT:
-                    Nseg = Nseg = d_lambda_rule(f.L, self.d_lambda, self.freq, f)
+                    Nseg = d_lambda_rule(f.L, self.d_lambda, self.freq, f)
                     f.nseg = Nseg
                     self.FLUT_Nseg += Nseg
                 for s in self.STIN:
-                    Nseg = Nseg = d_lambda_rule(s.L, self.d_lambda, self.freq, s)
+                    Nseg = d_lambda_rule(s.L, self.d_lambda, self.freq, s)
                     s.nseg = Nseg
                     self.STIN_Nseg += Nseg
             else:

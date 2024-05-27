@@ -52,7 +52,7 @@ print(block == False) # the spike should pass
 plt.figure()
 plt.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'])
 plt.xlabel('time (ms)')
-plt.ylabel('position along the axon($\mu m$)')
+plt.ylabel(r'position along the axon($\mu m$)')
 plt.xlim(0,results['tstop'])
 plt.savefig('./unitary_tests/figures/32_A.png')
 
@@ -81,7 +81,7 @@ print(block == True) # should block
 plt.figure()
 plt.scatter(results2['V_mem_filtered_raster_time'],results2['V_mem_filtered_raster_x_position'])
 plt.xlabel('time (ms)')
-plt.ylabel('position along the axon($\mu m$)')
+plt.ylabel(r'position along the axon($\mu m$)')
 plt.xlim(0,results2['tstop'])
 plt.ylim(0,results2['L'])
 plt.savefig('./unitary_tests/figures/32_B.png')

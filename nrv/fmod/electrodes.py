@@ -4,10 +4,11 @@ NRV-:class:`.electrode` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend.file_handler import json_load
 from ..backend.log_interface import rise_error, rise_warning
-from ..backend.NRV_Class import NRV_class
+from ..backend.NRV_Class import NRV_class, abstractmethod
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -115,7 +116,7 @@ class electrode(NRV_class):
     """
     Objet for generic electrode description. Each electrode has an ID and a position.
     """
-
+    @abstractmethod
     def __init__(self, ID=0):
         """
         Instantiation of a generic electrode
@@ -164,7 +165,7 @@ class electrode(NRV_class):
         """
         self.ID = ID
 
-    def get_footptint(self):
+    def get_footprint(self):
         """
         get the footprint of a electrode
 
@@ -232,13 +233,20 @@ class electrode(NRV_class):
             self.z += z
         self.clear_footprint()
 
+    @abstractmethod
+    def plot(
+        self, axes:plt.axes, color:str="gold",**kwgs
+    )->None:
+        pass
+
+
+
 
 class point_source_electrode(electrode):
     """
     Point source electrode. Inherite from electrode. The electrode is punctual and act as a\
     monopole.
     """
-
     def __init__(self, x=0, y=0, z=0, ID=0):
         """
         Instantiation of a Point source electrode
@@ -303,12 +311,17 @@ class point_source_electrode(electrode):
                 )
             )
 
+    def plot(self, axes: plt.axes, color: str="gold", **kwgs) -> None:
+        if ("nerve_d" in kwgs):
+            del kwgs["nerve_d"]
+        axes.plot(self.y, self.z, ".", color=color, **kwgs)
+
 
 class FEM_electrode(electrode):
     """
     Electrode located in Finite Element Model in Comsol
     """
-
+    @abstractmethod
     def __init__(self, label, ID=0):
         """
         Instrantiation of a FEM electrode
@@ -330,7 +343,6 @@ class FEM_electrode(electrode):
             Voltage response at 1mA
         """
         self.footprint = np.asarray(V_1mA)
-
 
 class LIFE_electrode(FEM_electrode):
     """
@@ -395,10 +407,18 @@ class LIFE_electrode(FEM_electrode):
                 y_c=self.y,
                 z_c=self.z,
                 length=self.length,
-                D=self.D,
+                d=self.D,
                 is_volume=self.is_volume,
                 res=res,
             )
+
+    def plot(self, axes: plt.axes, color: str="gold", **kwgs) -> None:
+        axes.add_patch(plt.Circle(
+            (self.y, self.z),
+            self.D / 2,
+            color=color,
+            fill=True,
+        ))
 
 
 class CUFF_electrode(FEM_electrode):
@@ -428,7 +448,6 @@ class CUFF_electrode(FEM_electrode):
             name of the electrode in the COMSOL file
         x_center            :float
             x-position of the CUFF center in um, by default 0
-            length of the CUFF electrod in um, by default 100
         contact_length      :float
             length along x of the contact site in um, by default 100
         is_volume   : bool
@@ -511,6 +530,20 @@ class CUFF_electrode(FEM_electrode):
                 res=res,
             )
 
+    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        if "nerve_d" in kwgs:
+            rad = kwgs["nerve_d"] / 2
+            del kwgs["nerve_d"]
+            axes.add_patch(plt.Circle(
+                (0, 0),
+                rad,
+                color=color,
+                fill=False,
+                linewidth=2,
+                **kwgs
+            ))
+        else:
+            rise_warning("Diameter has to be specifie to plot CUFF electrodes")
 
 class CUFF_MP_electrode(CUFF_electrode):
     """
@@ -600,3 +633,23 @@ class CUFF_MP_electrode(CUFF_electrode):
                 insulator_offset=self.insulator_offset,
                 res=res,
             )
+
+    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        if "nerve_d" in kwgs:
+            rad = kwgs["nerve_d"] / 2
+            del kwgs["nerve_d"]
+            elec_theta = 0.9 * 2 * np.pi / self.N_contact
+            for i in range(self.N_contact):
+                theta_ = 2 * i * np.pi / self.N_contact
+                axes.add_patch(plt.Wedge(
+                    (0, 0),
+                    rad,
+                    theta1 = theta_,
+                    theta2 = theta_ + elec_theta,
+                    color=color,
+                    fill=False,
+                    linewidth=2,
+                    **kwgs
+                ))
+        else:
+            rise_warning("Diameter has to be specifie to plot CUFF MP electrodes")

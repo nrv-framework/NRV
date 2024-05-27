@@ -9,7 +9,7 @@ fname0 = './unitary_tests/sources/131_0.csv'
 fname1 = './unitary_tests/sources/131_1.csv'
 
 
-param = nrv.SimParameters(D=3, mesh_file=filename)
+param = nrv.FEMParameters(D=3, mesh_file=filename)
 param.add_domain(mesh_domain=0,mat_pty="saline")
 param.add_domain(mesh_domain=2,mat_pty=1)
 param.add_domain(mesh_domain=12,mat_pty=fname0)

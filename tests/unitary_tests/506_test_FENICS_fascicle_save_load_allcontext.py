@@ -11,7 +11,7 @@ fasc_file = DIR + "figures/506_fascicle_1.json"
 ##########################
 ## Fascicle declaration ##
 ##########################
-N = 30
+N = 17
 t0 = time.time()
 axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
 
@@ -20,13 +20,13 @@ t1 = time.time()
 print("Population of "+str(N)+" axons generated in "+str(t1 - t0)+" s")
 
 
-D = 500				# diameter, in um
+d = 500				# diameter, in um
 L = 10000 			# length, in um
 
 fascicle_1 = nrv.fascicle(ID=test_num)
 fascicle_1.define_length(L)
-fascicle_1.define_circular_contour(D)
-fascicle_1.fill_with_population(axons_diameters, axons_type, Delta=4)
+fascicle_1.define_circular_contour(d)
+fascicle_1.fill_with_population(axons_diameters, axons_type, delta=5)
 fascicle_1.fit_circular_contour(Delta = 0.1)
 fascicle_1.generate_random_NoR_position()
 t2 = time.time()
@@ -99,21 +99,22 @@ fascicle_2.simulate(t_sim=5, save_path="./unitary_tests/figures/", verbose=True)
 t5 = time.time()
 print("Total time "+str(t5 - t0)+" s")
 loaded_rec = fascicle_2.recorder
-
 print(loaded_rec.t is not None)
+
 for k in range(len(loaded_rec.recording_points)):
     print(len(loaded_rec.t)==len(loaded_rec.recording_points[k].recording))
+exit()
     
 if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(6,6))
-    fascicle_2.plot(fig, ax, num=True)
+    fascicle_2.plot(ax, num=True)
 
     DIR_fasc = "./unitary_tests/figures/Fascicle_"+str(test_num)+"/"
     plt.savefig(DIR+ "figures/506_A.png")
 
     fasc_state = nrv.fascicular_state(DIR_fasc, save=True, saving_file=DIR_fasc+"506_Facsicular_state.json")
     fig, ax = plt.subplots(figsize=(8,8))
-    nrv.plot_fasc_state(fasc_state, fig, ax, num=True)
+    nrv.plot_fasc_state(fasc_state, ax, num=True)
     plt.savefig("./unitary_tests/figures/506_B.png")
 
     fig = plt.figure(figsize=(8,6))

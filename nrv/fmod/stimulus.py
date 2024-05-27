@@ -7,6 +7,7 @@ import numpy as np
 
 from ..backend.log_interface import pass_info, rise_warning, rise_error
 from ..backend.NRV_Class import NRV_class
+import matplotlib.pyplot as plt
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -217,6 +218,17 @@ class stimulus(NRV_class):
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
+    def plot(self, ax:plt.axes, scatter=False, **ax_kwargs):
+        """
+        Plot the stimulus
+        """
+        if scatter:
+            ax.scatter(self.t, self.s, **ax_kwargs)
+        else:
+            ax.step(self.t, self.s, where="post", **ax_kwargs)
+
+
+
     #####################
     ## special methods ##
     #####################
@@ -370,7 +382,6 @@ class stimulus(NRV_class):
             starting time of the waveform, in ms
         s_cathod    : float
             cathodic (negative stimulation value) current, in uA
-            WARNING: always positive, the user give here the absolute value
         t_stim      : float
             stimulation time, in ms
         s_anod      : float
@@ -382,6 +393,10 @@ class stimulus(NRV_class):
             and is balanced with cathodic value, else stimuation is cathodic
             and begins with the cathodic value and is balances with anodic value,
             by default set to False (cathodic first as most stimulation protocols)
+
+        WARNING
+        -------
+        `s_cathod` must always positive, the user give here the absolute value
         """
         if not anod_first:
             s_1 = -s_cathod
@@ -422,9 +437,11 @@ class stimulus(NRV_class):
             offset current of the waveform, in uA, by default set to 0
         phase       : float
             initial phase of the waveform, in rad, by default set to 0
-        dt          : float
-            sampling time period to generate the sinusoidal shape. If equal to 0,
-            dt is automatically set to match 100 samples per sinusoid period by default set to 0
+        anod_first  : bool
+            if true, stimulation is anodic and begins with the anodic value
+            and is balanced with cathodic value, else stimuation is cathodic
+            and begins with the cathodic value and is balances with anodic value,
+            by default set to False (cathodic first as most stimulation protocols)
         """
         # check the pseudo sampling period
         if dt == 0:
@@ -510,7 +527,7 @@ class stimulus(NRV_class):
             t = np.linspace(start, start + t_pulse, num=Nb_points)
             self.concatenate(s, t, t_shift=0)
 
-    def square(self, start, duration, freq, amplitude, offset, dt):
+    def square(self, start, duration, freq, amplitude, offset, anod_first=False):
         """
         Create a repetitive (periodic) square waveform
 
@@ -530,21 +547,17 @@ class stimulus(NRV_class):
             sampling time period to generate the sinusoidal shape. If equal to 0,
             dt is automatically set to match 100 samples per sinusoid period by default set to 0
         """
-        Nb_points = int(duration / dt)
-        if start == 0:
-            Nb_points -= 1
-        T = 1 / freq
-        t = np.linspace(dt, start + duration, num=Nb_points)
-        s = np.ones(Nb_points)
-        point_start = int(start / dt)
-        for i in range(Nb_points):
-            if i < point_start:
-                s[i] = 0
-            else:
-                if t[i] % T < T / 2:
-                    s[i] = -s[i]
-                s[i] = amplitude * s[i] + offset
-        self.concatenate(s, t, t_shift=0)
+        Nb_pts = 2*int(duration / freq) - 1
+        dt = 1 / (2*freq)
+        t = np.linspace(0, duration, num=Nb_pts)
+        s = np.ones(Nb_pts)*amplitude
+        k_start = 0
+        if anod_first:
+            k_start = 1
+        for k in range(k_start, len(s), 2):
+            s[k]*=-1
+        s += offset
+        self.concatenate(s, t, t_shift=start)
 
     def ramp(
         self, slope, start, duration, dt, bounds=(0, float("inf")), printslope=False

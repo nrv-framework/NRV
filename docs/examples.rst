@@ -5,7 +5,16 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
 
 
 .. toctree::
-   :caption: Contents:
+   :caption: Generic examples:
+   :glob:
+   :maxdepth: 1
 
-   examples/example_1
-   examples/example_2
+   examples/generic/*
+
+
+.. toctree::
+   :caption: Optimization examples:
+   :glob:
+   :maxdepth: 1
+
+   examples/optim/*

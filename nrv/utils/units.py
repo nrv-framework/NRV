@@ -18,7 +18,7 @@ The folowing table details the default units used in NRV and the lists of units 
             - us, s, minute, hour, day
         *   - Length
             - um
-            - mm, cm, dm, m
+            - nm, mm, cm, dm, m
         *   - Currents
             - uA
             - nA, mA, A
@@ -73,6 +73,7 @@ GHz = 1e6 * kHz
 #####################
 ## length prefixes ##
 #####################
+nm = 1e-3 * um
 mm = 1e3 * um
 cm = 1e1 * mm
 dm = 1e1 * cm
@@ -211,7 +212,41 @@ def to_nrv_unit(value, unit):
     else:
         return value * unit
 
+def convert(value, unitin, unitout):
+    """
+    Convert a quantity ``value`` from ``unitin`` to ``unitout``.
 
+    Parameters
+    ----------
+    value:      int, float, list or np.ndarray
+        value or values wich should be converted.
+    unit:     int or str
+        unit to which value should be converted, see examples.
+
+    Returns
+    -------
+    int, float, list or np.ndarray
+        rounded value or values, with the same type and shape than ``value``.)
+
+    Example
+    -------
+    Here are two ways of converting 0.2 S/m^{2} into S/cm^{2}:
+
+        >>> import nrv
+        >>> val_S_m = 0.2 # S/m**2
+        >>> nrv.convert(val_S_m, nrv.S/nrv.m**2, nrv.S/nrv.cm**2)
+        2e-05
+        >>> nrv.convert(val_S_m, "S/m**2", "S/cm**2")
+        2e-05
+    """
+    if np.iterable(value) and not isinstance(value, np.ndarray):
+        cp_value = deepcopy(value)
+        for i, num in enumerate(value):
+            cp_value[i] = convert(num, unitin, unitout)
+        return cp_value
+    else:
+        return from_nrv_unit(to_nrv_unit(value, unitin), unitout)
+    
 def sci_round(value, digits=3):
     """
     Rounds one or several values to ``digits`` significant digits.

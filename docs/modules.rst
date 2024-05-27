@@ -1,5 +1,7 @@
-nrv
-===
+.. _modules:
+
+API documentation
+=================
 
 .. toctree::
    :maxdepth: 5

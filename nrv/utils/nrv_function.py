@@ -8,7 +8,7 @@ from scipy.interpolate import CubicHermiteSpline, interp1d
 from scipy.special import erf
 
 from ..backend.file_handler import json_dump, json_load
-from ..backend.log_interface import rise_warning
+from ..backend.log_interface import rise_warning, rise_error
 from ..backend.NRV_Class import NRV_class, is_empty_iterable
 
 #############################
@@ -391,12 +391,12 @@ class sphere(function_ND):
 
 
 ###########################################################
-####################  CostEvaluation  #####################
+####################  cost_evaluation  #####################
 ###########################################################
-class CostEvaluation(nrv_function):
+class cost_evaluation(nrv_function):
     def __init__(self):
         super().__init__()
-        self.f_type = "CostEvaluation"
+        self.f_type = "cost_evaluation"
 
     @staticmethod
     def call_method(self, static_sim) -> float:
@@ -455,7 +455,7 @@ class nrv_interp(nrv_function):
             (domain, cell_tag, facet_tag)
         """
         super().__init__()
-        self.f_type = "interp"
+        self.f_type = "nrv_interp"
         # General parameters
         self.X_values = X_values
         self.Y_values = Y_values
@@ -533,6 +533,114 @@ class nrv_interp(nrv_function):
             self.interpolator = CubicHermiteSpline(
                 self.X_values, self.Y_values, self.scale * self.dxdy
             )
+
+    # Mathematical operations
+    def __add__(self, b):
+        if isinstance(b, nrv_interp):
+            if np.allclose(b.X_values, self.X_values):
+                Y = b.Y_values + self.Y_values
+                # TO ADD: computation of dxdy when both are set
+            else:
+                rise_error(
+                    "Not implemented: operations of nrv_iterp with different X_scale"
+                )
+        else: 
+            Y = self.Y_values+b
+        return nrv_interp(
+            X_values = self.X_values,
+            Y_values = Y,
+            interpolator = self.interpolator,
+            kind = self.kind,
+            dx = self.dx,
+            dxdy = None,
+            scale = self.scale,
+            columns = self.columns,
+        )
+
+    def __mul__(self, b):
+        if isinstance(b, nrv_interp):
+            if np.allclose(b.X_values, self.X_values):
+                Y =  self.Y_values*b.Y_values
+                # TO ADD: computation of dxdy when both are set
+            else:
+                rise_error(
+                    "Not implemented: operations of nrv_iterp with different X_scale"
+                )
+        else: 
+            Y = self.Y_values*b
+        return nrv_interp(
+            X_values = self.X_values,
+            Y_values = Y,
+            interpolator = self.interpolator,
+            kind = self.kind,
+            dx = self.dx,
+            dxdy = None,
+            scale = self.scale,
+            columns = self.columns,
+        )
+
+    def __truediv__(self, b):
+        if isinstance(b, nrv_interp):
+            if np.allclose(b.X_values, self.X_values):
+                if np.isclose(b.Y_values, 0).any():
+                    rise_error(ZeroDivisionError, "float division by zero in Python")
+                Y = self.Y_values / b.Y_values
+                # TO ADD: computation of dxdy when both are set
+            else:
+                rise_error(
+                    NotImplementedError,
+                    "operations of nrv_iterp with different X_scale",
+                )
+        else:
+            Y = self.Y_values/b
+        return nrv_interp(
+            X_values = self.X_values,
+            Y_values = Y,
+            interpolator = self.interpolator,
+            kind = self.kind,
+            dx = self.dx,
+            dxdy = None,
+            scale = self.scale,
+            columns = self.columns,
+        )
+
+    def __rtruediv__(self, b):
+        if np.isclose(self.Y_values, 0).any():
+            rise_error(ZeroDivisionError, " float division by zero in Python")
+        if isinstance(b, nrv_interp):
+            if np.allclose(b.X_values, self.X_values):
+                Y = b.Y_values/self.Y_values
+                # TO ADD: computation of dxdy when both are set
+            else:
+                rise_error(
+                    NotImplementedError,
+                    "operations of nrv_iterp with different X_scale",
+                )
+        else:
+            Y = b/self.Y_values
+        return nrv_interp(
+            X_values = self.X_values,
+            Y_values = Y,
+            interpolator = self.interpolator,
+            kind = self.kind,
+            dx = self.dx,
+            dxdy = self.dxdy,
+            scale = self.scale,
+            columns = self.columns,
+        )
+
+
+    def __radd__(self, b):
+        return self.__add__(b)
+
+    def __rmul__(self, b):
+        return self.__mul__(b)
+    
+    def __sub__(self, b):
+        return self.__add__(-b)
+    
+    def __rsub__(self, b):
+        return self.__sub__(b)
 
     def __call__(self, X):
         if is_empty_iterable(self.columns):

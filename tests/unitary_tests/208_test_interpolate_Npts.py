@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-N_test = "215"
+N_test = "208"
 figdir = "./unitary_tests/figures/" + N_test + "_"
 
 dt = 0.005
@@ -34,7 +34,7 @@ X3 = [2, -20, 1, -40, 1.001, -45, 1.5, -30]
 nrv.interpolate_Npts(position=X3, save=True, fname=figdir + "C.png", **kwrgs_interp)
 
 X4 = [0, -20, 0, -40, 0, -45, 0, -30, 0, -30, 0, -30]
-nrv.interpolate_Npts(position=X4, strict_bounds=True, save=True, fname=figdir + "D.png", **kwrgs_interp)
+nrv.interpolate_Npts(position=X4, strict_bounds=True, save=True, fname=figdir + "d.png", **kwrgs_interp)
 
 X = [t_end, 0, t_end, -500]
 nrv.interpolate_Npts(position=X, save=True, fname=figdir + "E.png", **kwrgs_interp)

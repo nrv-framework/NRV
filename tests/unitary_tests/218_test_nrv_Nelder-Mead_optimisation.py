@@ -12,7 +12,7 @@ fnam1 = "./unitary_tests/results/json/" + N_test + "_optim1.json"
 
 t_sim=5
 static_context = "./unitary_tests/sources/200_fascicle_1.json"
-test_stim_CM = nrv.biphasic_stimulus_CM(start=0.1, I_cathod="0", T_cathod="1")
+test_stim_CM = nrv.biphasic_stimulus_CM(start=0.1, s_cathod="0", t_cathod="1")
 costR = nrv.recrutement_count_CE()
 costC = nrv.charge_quantity_CE()
 cost_evaluation = (15 - costR) + 0.01*costC
@@ -22,7 +22,7 @@ kwarg_sim = {
     "postproc_script":"is_excited"
 }
 
-my_cost1 = nrv.CostFunction(
+my_cost1 = nrv.cost_function(
     static_context=static_context,
     context_modifier=test_stim_CM,
     cost_evaluation=cost_evaluation,
@@ -49,7 +49,7 @@ res = test_prob(**cg_kwargs)
 
 if nrv.MCH.do_master_only_work():
     print(res.x)
-    plt.figure()
-    res.plot_cost_history()
-    plt.legend()
+    fig,ax = plt.subplots(1)
+    res.plot_cost_history(ax)
+    ax.legend()
     plt.savefig(figdir+"A.png")

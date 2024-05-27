@@ -25,8 +25,8 @@ mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D)
 
 mesh.reshape_nerve(res=500)
 
-mesh.reshape_fascicle(D=3000, y_c=0, z_c=0, ID=1, res=300)
-mesh.add_electrode(elec_type="LIFE", x_c=L/2, y_c=0, z_c=0, length = 1000, D=25, res=3)
+mesh.reshape_fascicle(d=3000, y_c=0, z_c=0, ID=1, res=300)
+mesh.add_electrode(elec_type="LIFE", x_c=L/2, y_c=0, z_c=0, length = 1000, d=25, res=3)
 
 mesh.compute_mesh()
 

@@ -247,12 +247,12 @@ class axon(NRV_simulable):
         T=None,
         ID=0,
         threshold=-40,
-        **kwarks,
+        **kwargs,
     ):
         """
         initialisation of the axon,
         """
-        super().__init__()
+        super().__init__(**kwargs)
         self.type = "axon"
         ## Given by user
         self.x = []
@@ -300,8 +300,8 @@ class axon(NRV_simulable):
         self.rec = "all"
         self.node_index = None
         ## required for generate_axon_from_results
-        if "diameter" in kwarks:
-            self.d = kwarks["diameter"]
+        if "diameter" in kwargs:
+            self.d = kwargs["diameter"]
 
     def __del__(self):
         for section in neuron.h.allsec():
@@ -450,6 +450,23 @@ class axon(NRV_simulable):
         rise_warning("load_axon is a deprecated method use load")
         self.save(data, extracel_context, intracel_context, rec_context)
 
+    def plot(self, axes: plt.axes, color: str="blue", elec_color="gold", **kwgs) -> None:
+
+        alpha = 1
+        if "alpha" in kwgs:
+            alpha = kwgs["alpha"]
+
+        axes.add_patch(plt.Circle(
+            (self.y, self.z),
+            self.d / 2,
+            color=color,
+            fill=True,
+            alpha = alpha,
+        ))
+        if self.extra_stim is not None:
+            self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.d)
+
+
     def __define_shape(self):
         """
         Define the shape of the axon after all sections creation
@@ -513,7 +530,7 @@ class axon(NRV_simulable):
         if is_extra_stim(stim):
             self.extra_stim = stim
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -525,7 +542,7 @@ class axon(NRV_simulable):
                 New stimulus to set
         """
         if self.extra_stim is not None:
-            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+            self.extra_stim.change_stimulus_from_electrode(ID_elec, stimulus)
         else:
             rise_warning("Cannot be changed: no extrastim in the axon")
 
@@ -600,7 +617,7 @@ class axon(NRV_simulable):
         self.record_I_ions       : bool
             if true, the ionic currents are recorded, set to False by default
         record_particules   : bool
-            if true, the marticule states are recorded, set to False by default
+            if true, the particule states are recorded, set to False by default
         self.loaded_footprints           :dict or bool
             Dictionnary composed of extracellular footprint array, the keys are int value
             of the corresponding electrode ID, if None, footprints calculated during the simulation,
@@ -1089,10 +1106,10 @@ class axon(NRV_simulable):
                 self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
 
         except KeyboardInterrupt:
-            """rise_error(
-                "\n Caught KeyboardInterrupt, simulation stoped by user, stopping process..."
-            )"""
-            raise KeyboardInterrupt
+            rise_error(
+                KeyboardInterrupt,
+                "\n Caught KeyboardInterrupt, simulation stoped by user, stopping process...",
+            )
         except:
             axon_sim["Simulation_state"] = "Unsuccessful"
             axon_sim["Error_from_prompt"] = traceback.format_exc()
@@ -1174,7 +1191,7 @@ class axon(NRV_simulable):
                 electrodes_z = []
                 for electrode in self.extra_stim.electrodes:
                     if is_CUFF_electrode(electrode):
-                        electrodes_x.append(electrode.x_center)
+                        electrodes_x.append(electrode.x)
                         electrodes_y.append(0)
                         electrodes_z.append(0)
                         electrodes_type.append("CUFF")

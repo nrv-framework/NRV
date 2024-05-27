@@ -8,14 +8,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..backend.file_handler import *
-from ..backend.log_interface import pass_info, rise_warning
+from ..backend.log_interface import pass_info, rise_warning, pbar
 from ..backend.MCore import MCH, synchronize_processes
 from ..backend.NRV_Simulable import NRV_simulable, sim_results
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.cell.CL_postprocessing import *
 from .axons import *
-from .fascicle_generator import *
+from .axon_pop_generator import *
 from .myelinated import *
 from .unmyelinated import *
 
@@ -60,29 +60,17 @@ class fascicle(NRV_simulable):
 
     Parameters
     ----------
-    dt              : float
-        simulation time stem for Neuron (ms), by default 1us
-    Nseg_per_sec    : float
-        number of segment per section in Neuron. If set to 0, the number of segment per section is calculated with the d-lambda rule
-    freq            : float
-        frequency of the d-lambda rule (Hz), by default 100Hz
-    freq_min        : float
-        minimum frequency for the d-lambda rule when meshing is irregular, 0 for regular meshing
-    v_init          : float
-        initial value for the membrane voltage (mV), specify None for automatic model choice of v_init
-    T               : float
-        temperature (C), specify None for automatic model choice of temperature
-    ID              : int
-        axon ID, by default set to 0
-    threshold       : int
-        membrane voltage threshold for spike detection (mV), by default -40mV
+    diameter              : float
+        Fascicle diameter, in um
+    ID    : int
+        Fascicle unique identifier
     """
 
-    def __init__(self, ID=0, **kwargs):
+    def __init__(self, diameter=None, ID=0, **kwargs):
         """
-        Instrantation of a Fascicle
+        Instantation of a Fascicle
         """
-        super().__init__()
+        super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
@@ -97,18 +85,13 @@ class fascicle(NRV_simulable):
         self.ID = ID
         self.type = None
         self.L = None
-        self.D = None
+        self.D = diameter
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
-        self.N_vertices = 0
-        self.y_vertices = np.array([])
-        self.z_vertices = np.array([])
-        self.A = 0
         # axonal content
-        self.N = 0
         self.axons_diameter = np.array([])
-        self.axons_type = np.array([])
+        self.axons_type = np.array([], dtype=int)
         self.axons_y = np.array([])
         self.axons_z = np.array([])
         self.NoR_relative_position = np.array([])
@@ -195,7 +178,7 @@ class fascicle(NRV_simulable):
         Returns
         -------
         key_dict:           dict
-            Pyhton dictionary containing all the fascicle information
+            Python dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
         if not intracel_context:
@@ -301,6 +284,30 @@ class fascicle(NRV_simulable):
         )
 
     ## Fascicle property method
+    @property
+    def n_ax(self):
+        """
+        Number of axons in the fascicle
+        """
+        return len(self.axons_diameter)
+
+    @property
+    def N(self):
+        rise_warning(
+            "DeprecationWarning: ",
+            "fascicle.N property is obsolete use fascicle.n_ax instead"
+        )
+        return self.n_ax
+
+    @property
+    def A(self):
+        """
+        Area of the fascicle 
+        """
+        if (self. D is None):
+            return None
+        return (np.pi * (self.D / 2) ** 2)
+    
     def set_ID(self, ID):
         """
         set the ID of the fascicle
@@ -329,7 +336,7 @@ class fascicle(NRV_simulable):
         self.set_axons_parameters(unmyelinated_nseg=self.L // 25)
 
     ## generate stereotypic Fascicle
-    def define_circular_contour(self, D, y_c=None, z_c=None, N_vertices=100):
+    def define_circular_contour(self, D, y_c=None, z_c=None):
         """
         Define a circular countour to the fascicle
 
@@ -341,8 +348,6 @@ class fascicle(NRV_simulable):
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
         self.type = "Circular"
         self.D = D
@@ -350,11 +355,6 @@ class fascicle(NRV_simulable):
             self.y_grav_center = y_c
         if z_c is not None:
             self.z_grav_center = z_c
-        self.N_vertices = N_vertices
-        theta = np.linspace(-np.pi, np.pi, num=N_vertices)
-        self.y_vertices = self.y_grav_center + (D / 2) * np.cos(theta)
-        self.z_vertices = self.z_grav_center + (D / 2) * np.sin(theta)
-        self.A = np.pi * (D / 2) ** 2
 
     def get_circular_contour(self):
         """
@@ -371,17 +371,10 @@ class fascicle(NRV_simulable):
         """
         y = self.y_grav_center
         z = self.z_grav_center
-        if self.y_vertices == np.array([]) and self.D is None:
-            D = 0
-        elif self.D is not None:
-            D = self.D
-        else:
-            y = (np.amax(self.y_vertices) - np.amin(self.y_vertices)) / 2
-            z = (np.amax(self.z_vertices) - np.amin(self.z_vertices)) / 2
-            D = np.abs(np.amax(self.y_vertices) - np.amin(self.y_vertices))
+        D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1, N_vertices=100):
+    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1):
         """
         Define a circular countour to the fascicle
 
@@ -393,9 +386,9 @@ class fascicle(NRV_simulable):
             z coordinate of the circular contour center, in um
         Delta       : float
             distance between farest axon and contour, in um
-        N_vertices  : int
-            Number of vertice in the compute the contour
         """
+        rise_warning("fit_circular_contour method usage is not recommended anymore and will be removed in future release.")
+        pass_info("Define fascicle size/shape at object creation instead.")
         N_axons = len(self.axons_diameter)
         D = 2 * Delta
 
@@ -416,7 +409,7 @@ class fascicle(NRV_simulable):
                     ** 0.5
                 )
                 D = max(D, 2 * (dist_max + Delta))
-        self.define_circular_contour(D, y_c=None, z_c=None, N_vertices=N_vertices)
+        self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
@@ -462,6 +455,9 @@ class fascicle(NRV_simulable):
         pop_fname       : str
             optional, if specified, name file to store the population generated
         """
+
+        rise_warning("fill method usage is not recommended anymore and will be removed in future release.")
+        pass_info("Use axon_pop_generator methods instead.")
         #### AXON GENERATION: parallelization if resquested ####
         Area_to_fill = 0
         # Note: generate a bit too much axons just in case
@@ -508,21 +504,15 @@ class fascicle(NRV_simulable):
                 save_axon_population(
                     pop_fname, axons_diameter, axons_type, comment=None
                 )
-            pass_info("Axon Packing is starting")
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
+            axons_y, axons_z, = axon_packer(
                 axons_diameter,
-                Delta=0.1,
+                delta=0.1,
                 y_gc=self.y_grav_center,
                 z_gc=self.z_grav_center,
-                max_iter=20000,
-                monitor=False,
+                n_iter=20000,
             )
-            # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                axons_diameter, axons_type, axons_y, axons_z
-            )
+
             N = len(axons_diameter)
-            pass_info("... Axon Packing done")
             # check if axons are inside the fascicle
             inside_axons = (
                 np.power(axons_y - self.y_grav_center, 2)
@@ -536,92 +526,8 @@ class fascicle(NRV_simulable):
             axons_z = axons_z[axons_to_keep]
             N = len(axons_diameter)
             # save the good population
-            if ppop_fname is not None:
-                save_placed_axon_population(
-                    ppop_fname,
-                    self.axons_diameter,
-                    self.axons_type,
-                    self.axons_y,
-                    self.axons_z,
-                    comment=None,
-                )
-        else:
-            axons_diameter = None
-            axons_type = None
-            axons_y = None
-            axons_z = None
-            N = None
-        ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
-        self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
-
-    def fill_with_population(
-        self, axons_diameter, axons_type, Delta=0.1, ppop_fname=None, FVF=0.55
-    ):
-        """
-        Fill a geometricaly defined contour with an already generated axon population
-
-        Parameters
-        ----------
-        axons_diameters     : np.array
-            Array  containing all the diameters of the axon population
-        axons_type          : np.array
-            Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-        ppop_fname      : str
-            optional, if specified, name file to store the placed population generated
-        FVF             : float
-            Fiber Volume Fraction estimated for the area. By default set to 0.55
-        """
-        if MCH.do_master_only_work():
-            ## check the population area
-            total_ax_area = 0
-            for diam in axons_diameter:
-                total_ax_area += np.pi * ((diam / 2) ** 2)
-            if self.A * FVF > total_ax_area:
-                rise_warning(
-                    "Warning: the specified population maybe too small to fill the current fascicle"
-                )
-            N = len(axons_diameter)
-            pass_info("\n ... " + str(N) + " axons loaded")
             if ppop_fname is not None:
                 save_axon_population(
-                    ppop_fname, axons_diameter, axons_type, comment=None
-                )
-            pass_info("Axon Packing is starting")
-            axons_y, axons_z, iteration, FVF_array, probed_iter = axon_packer(
-                axons_diameter,
-                Delta=Delta,
-                y_gc=self.y_grav_center,
-                z_gc=self.z_grav_center,
-                max_iter=20000,
-                monitor=False,
-            )
-            # check for remaining collisions and delete problematic axons
-            axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                axons_diameter, axons_type, axons_y, axons_z
-            )
-            N = len(axons_diameter)
-            pass_info("... Axon Packing done")
-            # check if axons are inside the fascicle
-            inside_axons = (
-                np.power(axons_y - self.y_grav_center, 2)
-                + np.power(axons_z - self.z_grav_center, 2)
-                - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-            )
-            axons_to_keep = np.argwhere(inside_axons < 0)
-            axons_diameter = axons_diameter[axons_to_keep]
-            axons_type = axons_type[axons_to_keep]
-            axons_y = axons_y[axons_to_keep]
-            axons_z = axons_z[axons_to_keep]
-            N = len(axons_diameter)
-            # save the good population
-            if ppop_fname is not None:
-                save_placed_axon_population(
                     ppop_fname,
                     self.axons_diameter,
                     self.axons_type,
@@ -636,26 +542,17 @@ class fascicle(NRV_simulable):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
 
-    def fill_with_placed_population(
-        self,
-        axons_diameter,
-        axons_type,
-        axons_y,
-        axons_z,
-        check_inside=True,
-        check_collision=True,
-        ppop_fname=None,
-    ):
+    def fill_with_population(
+        self, axons_diameter:np.array, axons_type:np.array, delta:float=1,
+        y_axons:np.array=None, z_axons:np.array=None, fit_to_size: bool = False, n_iter: int = 20_000
+    ) -> None: 
         """
-        Fill a geometricaly defined contour with an already generated axon population
+        Fill the fascicle with an axon population
 
         Parameters
         ----------
@@ -663,65 +560,66 @@ class fascicle(NRV_simulable):
             Array  containing all the diameters of the axon population
         axons_type          : np.array
             Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-        axons_y             : np.array
-            y coordinate of the axons, in um
-        axons_z             : np.array
-            z coordinate of the axons, in um
-        check_inside        : bool
-            if True the placed axons position are checked to ensure all remaining axons at the end are inside the fascicle
-        check_collision     : bool
-            if True, possible remaining collisions are check in the loaded population, and thiner axons are deleted
-        ppop_fname          : str
-            optional, if specified, name file to store the placed population generated
+        delta               : float
+            axon-to-axon and axon to border minimal distance
+        y_axons             : np.array
+            y coordinate of the axon population, in um
+        z_axons             : np.array
+            z coordinate of the axons population, in um
+        fit_to_size         : bool
+            if true, the axon population is extended to fit within fascicle size, if not the population is kept as is
+        n_iter              : int
+            number of interation for the packing algorithm if the y-x axon coordinates are not specified
+        WARNING: If y_axons and z_axons are not specified then axon-packing algorithm is called within the method.
         """
         if MCH.do_master_only_work():
             N = len(axons_diameter)
-            if check_collision:
-                # check for remaining collisions and delete problematic axons
-                axons_diameter, axons_type, axons_y, axons_z = delete_collisions(
-                    axons_diameter, axons_type, axons_y, axons_z
+            if (y_axons is None) and (z_axons is None):
+                y_axons, z_axons = axon_packer(
+                    axons_diameter,
+                    delta=delta,
+                    n_iter=n_iter
                 )
-                N = len(axons_diameter)
-            # check if axons are inside the fascicle
-            if check_inside:
-                inside_axons = (
-                    np.power(axons_y - self.y_grav_center, 2)
-                    + np.power(axons_z - self.z_grav_center, 2)
-                    - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-                )
-                axons_to_keep = np.argwhere(inside_axons < 0)
-                axons_diameter = axons_diameter[axons_to_keep]
-                axons_type = axons_type[axons_to_keep]
-                axons_y = axons_y[axons_to_keep]
-                axons_z = axons_z[axons_to_keep]
-                N = len(axons_diameter)
-            # save the good population
-            if ppop_fname is not None:
-                save_placed_axon_population(
-                    ppop_fname,
-                    self.axons_diameter,
-                    self.axons_type,
-                    self.axons_y,
-                    self.axons_z,
-                    comment=None,
-                )
+            if (fit_to_size):
+                d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
+                if (d_pop) < self.D:
+                    exp_factor = 0.99*(self.D/d_pop)
+                    y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+            
+            axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
+            axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
+            
         else:
             axons_diameter = None
             axons_type = None
-            axons_y = None
-            axons_z = None
+            y_axons = None
+            z_axons = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(
-            axons_diameter
-        ).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
-        self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
-        self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
-        self.N = MCH.master_broadcasts_array_to_all(N)
+        self.axons_y = MCH.master_broadcasts_array_to_all(y_axons).flatten()
+        self.axons_z = MCH.master_broadcasts_array_to_all(z_axons).flatten()
+        self.translate_axons(self.y_grav_center,self.z_grav_center)
+
+    def fit_population_to_size(self, delta: float = 1):
+        """
+        Fit the axon positions to the size of the fascicle
+
+        Parameters
+        ----------
+        delta   : float
+            minimum axon to fascicle border distance, in um
+        """
+        self.translate_axons(-self.y_grav_center,-self.z_grav_center)
+        d_pop = get_circular_contour(self.axons_diameter,self.axons_y,self.axons_z, delta)
+        if (d_pop) < self.D:
+            exp_factor = 0.99*(self.D/d_pop)
+            self.axons_y, self.axons_z = expand_pop(self.axons_y, self.axons_z, exp_factor)
+        self.translate_axons(self.y_grav_center,self.z_grav_center)
 
     ## Move methods
-    def translate_axons(self, y, z):
+    def translate_axons(self, y, z): 
         """
         Move axons only in a fascicle by group translation
 
@@ -748,8 +646,6 @@ class fascicle(NRV_simulable):
         """
         self.y_grav_center += y
         self.z_grav_center += z
-        self.y_vertices += y
-        self.z_vertices += z
         self.translate_axons(y, z)
         if self.extra_stim is not None:
             self.extra_stim.translate(y=y, z=z)
@@ -797,56 +693,7 @@ class fascicle(NRV_simulable):
             np.sin(theta) * (self.y_grav_center - y_c)
             + np.cos(theta) * (self.z_grav_center - z_c)
         ) + z_c
-        self.y_vertices += (
-            np.cos(theta) * (self.y_vertices - y_c)
-            - np.sin(theta) * (self.z_vertices - z_c)
-        ) + y_c
-        self.z_vertices += (
-            np.sin(theta) * (self.y_vertices - y_c)
-            + np.cos(theta) * (self.z_vertices - z_c)
-        ) + z_c
         self.rotate_axons(theta, y_c=y_c, z_c=z_c)
-
-    def remove_axons_electrode_overlap(self, electrode):
-        """
-        Remove the axons that could overlap an electrode
-
-        Parameters
-        ----------
-        electrode : object
-            electrode instance, see electrodes for more details
-        """
-        y, z, D = 0, 0, 0
-        if is_LIFE_electrode(electrode):
-            D = electrode.D
-            y = electrode.y
-            z = electrode.z
-        elif is_analytical_electrode(electrode):
-            y = electrode.y
-            z = electrode.z
-        else:
-            # CUFF electrodes should not affect intrafascicular state
-            return 0
-        # compute the distance of all axons to electrode
-        D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
-            self.axons_diameter / 2 + D / 2
-        )
-        colapse = np.argwhere(D_vectors < 0)
-        mask = np.ones(len(self.axons_diameter), dtype=bool)
-        mask[colapse] = False
-        # remove axons colliding the electrode
-        if len(colapse) > 0:
-            pass_info(
-                "From Fascicle level: Electrode/Axons overlap, "
-                + str(len(colapse))
-                + " axons will be removed from the fascicle"
-            )
-        self.N -= len(colapse)
-        pass_info(self.N, "axons remaining")
-        self.axons_diameter = self.axons_diameter[mask]
-        self.axons_type = self.axons_type[mask]
-        self.axons_y = self.axons_y[mask]
-        self.axons_z = self.axons_z[mask]
 
     ## Axons related method
     def set_axons_parameters(
@@ -911,7 +758,6 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
@@ -924,7 +770,6 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             # almost useless but here for coherence
             self.NoR_relative_position = self.NoR_relative_position[mask]
@@ -942,22 +787,19 @@ class fascicle(NRV_simulable):
         self.axons_y = self.axons_y[mask]
         self.axons_z = self.axons_z[mask]
         self.axons_type = self.axons_type[mask]
-        self.N = len(self.axons_diameter)
         if len(self.NoR_relative_position) != 0:
             # almost useless but here for coherence
             self.NoR_relative_position = self.NoR_relative_position[mask]
 
     ## Representation methods
     def plot(
-        self, fig, axes, contour_color="k", myel_color="r", unmyel_color="b", num=False
+        self, axes, contour_color="k", myel_color="r", unmyel_color="b", elec_color="gold", num=False
     ):
         """
         plot the fascicle in the Y-Z plane (transverse section)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         contour_color   : str
@@ -971,12 +813,16 @@ class fascicle(NRV_simulable):
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.plot(
-                self.y_vertices, self.z_vertices, linewidth=2, color=contour_color
-            )
+            axes.add_patch(plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D/2,
+                color=contour_color,
+                fill=False,
+                linewidth=2,
+            ))
             ## plot axons
             circles = []
-            for k in range(self.N):
+            for k in range(self.n_ax):
                 if self.axons_type[k] == 1:  # myelinated
                     circles.append(
                         plt.Circle(
@@ -995,35 +841,24 @@ class fascicle(NRV_simulable):
                             fill=True,
                         )
                     )
-            if self.extra_stim is not None:
-                for electrode in self.extra_stim.electrodes:
-                    if electrode.type == "LIFE":
-                        circles.append(
-                            plt.Circle(
-                                (electrode.y, electrode.z),
-                                electrode.D / 2,
-                                color="gold",
-                                fill=True,
-                            )
-                        )
-                    elif not is_FEM_electrode(electrode):
-                        axes.scatter(electrode.y, electrode.z, color="gold")
             for circle in circles:
                 axes.add_patch(circle)
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
             if num:
-                for k in range(self.N):
+                for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
 
     def plot_x(
-        self, fig, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
+        self, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
     ):
         """
         plot the fascicle's axons along Xline (longitudinal)
 
         Parameters
         ----------
-        fig     : matplotlib.figure
-            figure to display the fascicle
         axes    : matplotlib.axes
             axes of the figure to display the fascicle
         myel_color      : str
@@ -1040,7 +875,7 @@ class fascicle(NRV_simulable):
                     max(self.axons_diameter.flatten()),
                 ]
                 polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
-                for k in range(self.N):
+                for k in range(self.n_ax):
                     relative_pos = self.NoR_relative_position[k]
                     d = round(self.axons_diameter.flatten()[k], 2)
                     if self.axons_type.flatten()[k] == 0.0:
@@ -1074,11 +909,11 @@ class fascicle(NRV_simulable):
                     for electrode in self.extra_stim.electrodes:
                         if not is_FEM_electrode(electrode):
                             axes.plot(
-                                electrode.x * np.ones(2), [0, self.N - 1], color="gold"
+                                electrode.x * np.ones(2), [0, self.n_ax - 1], color="gold"
                             )
                 axes.set_xlabel("x (um)")
                 axes.set_ylabel("axon ID")
-                axes.set_yticks(np.arange(self.N))
+                axes.set_yticks(np.arange(self.n_ax))
                 axes.set_xlim(0, self.L)
                 plt.tight_layout()
 
@@ -1119,11 +954,45 @@ class fascicle(NRV_simulable):
         """
         if is_extra_stim(stimulation):
             self.extra_stim = stimulation
-        # remove everlaping axons
+        # remove overlaping axons
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
 
-    def change_stimulus_from_elecrode(self, ID_elec, stimulus):
+    def remove_axons_electrode_overlap(self, electrode):
+        """
+        Remove the axons that could overlap an electrode
+
+        Parameters
+        ----------
+        electrode : object
+            electrode instance, see electrodes for more details
+        """
+        y, z, D = 0, 0, 0
+        # CUFF electrodes do not affect intrafascicular state
+        if not is_CUFF_electrode(electrode):
+            y = electrode.y
+            z = electrode.z
+            if is_LIFE_electrode(electrode):
+                D = electrode.D
+            # compute the distance of all axons to electrode
+            D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
+                self.axons_diameter / 2 + D / 2
+            )
+            colapse = np.argwhere(D_vectors < 0)
+            mask = np.ones(len(self.axons_diameter), dtype=bool)
+            mask[colapse] = False
+            # remove axons colliding the electrode
+            if len(colapse) > 0:
+                pass_info(
+                    f"From Fascicle {self.ID}: Electrode/Axons overlap, {len(colapse)} axons will be removed from the fascicle"
+                )
+                pass_info(self.n_ax, " axons remaining")
+            self.axons_diameter = self.axons_diameter[mask]
+            self.axons_type = self.axons_type[mask]
+            self.axons_y = self.axons_y[mask]
+            self.axons_z = self.axons_z[mask]
+
+    def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
         Change the stimulus of the ID_elec electrods
 
@@ -1135,7 +1004,7 @@ class fascicle(NRV_simulable):
                 new stimulus to set
         """
         if self.extra_stim is not None:
-            self.extra_stim.change_stimulus_from_elecrode(ID_elec, stimulus)
+            self.extra_stim.change_stimulus_from_electrode(ID_elec, stimulus)
         else:
             rise_warning("Cannot be changed: no extrastim in the fascicle")
 
@@ -1165,7 +1034,7 @@ class fascicle(NRV_simulable):
         self.N_intra += 1
 
     ## RECORDING MECHANIMS
-    def attach_extracellular_recorder(self, rec):
+    def attach_extracellular_recorder(self, rec:recorder):
         """
         attach an extracellular recorder to the axon
 
@@ -1206,7 +1075,7 @@ class fascicle(NRV_simulable):
         # also generated for unmyelinated but the meaningless value won't be used
         self.NoR_relative_position = []
 
-        for i in range(self.N):
+        for i in range(self.n_ax):
             if self.axons_type.flatten()[i] == 0.0:
                 self.NoR_relative_position += [0.0]
             else:
@@ -1487,7 +1356,7 @@ class fascicle(NRV_simulable):
             import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         fasc_sim = super().simulate(**kwargs)
         if not MCH.do_master_only_work():
-            fasc_sim = sim_results({})
+            fasc_sim = sim_results({"dummy_res":1})
         # disable the result storage only if results are fully return
         # To use with caution (mostly for optimisatino)
         if not self.save_results:
@@ -1633,12 +1502,19 @@ class fascicle(NRV_simulable):
             is_master_slave = False
             ## split the job between Cores/Computation nodes
             this_core_mask = MCH.split_job_from_arrays(len(self.axons_diameter))
+            ## Set pbar
+            has_pbar = False
+            if self.verbose:
+                if "pbar" in kwargs:
+                    _pbar = kwargs["pbar"]
+                    _pbar.reset(n_tot=len(this_core_mask))
+                    self.verbose = False
+                else:
+                    pass_info("Simulating axons in fascicle " + str(self.ID))
+                    _pbar = pbar(n_tot=len(this_core_mask))
+                has_pbar = True
             ## perform simulations
-            if MCH.is_alone() and self.verbose:
-                pass_info("Simulating axons in fascicle " + str(self.ID))
             for k in this_core_mask:
-                if MCH.is_alone() and self.verbose:
-                    pass_info("\t Axon " + f"{k+1}" + "/" + str(self.N), end="\r")
                 axon_sim = self.__sim_axon(k, is_master_slave)
                 # postprocessing and data reduction
                 # (cannot be added to __sim.axon beceause nrv would not be global anymore)
@@ -1658,6 +1534,8 @@ class fascicle(NRV_simulable):
                     axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                 if not self.return_parameters_only:
                     fasc_sim.update({"axon" + str(k): axon_sim})
+                if has_pbar:
+                    _pbar.update()
             # sum up all recorded extracellular potential if applicable
             synchronize_processes()
             if self.record:
@@ -1665,6 +1543,11 @@ class fascicle(NRV_simulable):
         if not self.return_parameters_only:
             synchronize_processes()
             fasc_sim = MCH.gather_jobs(fasc_sim)
+            if MCH.do_master_only_work():
+                if "extra_stim" in fasc_sim:
+                    fasc_sim['extra_stim'] = load_any(fasc_sim['extra_stim']) #dirty hack to force NRV_class instead of dict
+                if self.record:
+                    fasc_sim['recorder'] = load_any(fasc_sim['recorder'])   #idem
         if MCH.is_alone() and self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True

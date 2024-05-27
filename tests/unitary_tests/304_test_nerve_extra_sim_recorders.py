@@ -29,7 +29,7 @@ nerve.simulate(t_sim=10, save_path='./unitary_tests/figures/', postproc_script='
 loaded_rec = nerve.recorder
 if nrv.MCH.do_master_only_work():
     fig, ax = plt.subplots(figsize=(8,8))
-    nerve.plot(fig, ax)
+    nerve.plot(ax)
     plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
 
     fig = plt.figure(figsize=(8,6))

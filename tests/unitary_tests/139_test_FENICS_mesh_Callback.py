@@ -40,7 +40,7 @@ plt.savefig(fig_file1)
 
 ## Mesh generation
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
-mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)
+mesh.reshape_fascicle(d=1000, y_c=-1000, z_c=0, ID=2)
 mesh.refinement_callback(meshSizeCallback1)
 mesh.compute_mesh()
 
@@ -51,7 +51,7 @@ print('mesh 1 generated in '+str(t2 - t1)+' s')
 del mesh
 
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
-mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)
+mesh.reshape_fascicle(d=1000, y_c=-1000, z_c=0, ID=2)
 mesh.refinement_callback(meshSizeCallback2)
 mesh.compute_mesh()
 
@@ -62,7 +62,7 @@ print('mesh 2 generated in '+str(t3 - t2)+' s')
 del mesh
 
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D, ver_level=2)
-mesh.reshape_fascicle(D=1000, y_c=-1000, z_c=0, ID=2)
+mesh.reshape_fascicle(d=1000, y_c=-1000, z_c=0, ID=2)
 mesh.refinement_callback(meshSizeCallback3)
 mesh.compute_mesh()
 

@@ -14,7 +14,6 @@ fascicle.axons_type = np.asarray([1])
 fascicle.axons_y = np.asarray([0])
 fascicle.axons_z = np.asarray([0])
 fascicle.define_circular_contour(D=6)
-fascicle.N = 1 
 fasc_dic = fascicle.save(save=False)
 
 for i in range(len(postproc)):
@@ -33,4 +32,6 @@ for i in range(len(postproc)):
     if nrv.MCH.do_master_only_work():
         print(postproc[i] + ' OFT_PP ok')
         sys.stdout.flush()
+    del nerve
+
 #plt.show()

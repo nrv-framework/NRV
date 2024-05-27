@@ -31,7 +31,7 @@ t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
 
 ## FEM Simulation
-param = nrv.SimParameters(D=3, mesh_file=mesh_file)
+param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
 param.add_domain(mesh_domain=0,mat_file="saline")
 param.add_domain(mesh_domain=2,mat_file="epineurium")
 

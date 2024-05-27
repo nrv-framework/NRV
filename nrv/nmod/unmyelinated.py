@@ -612,8 +612,8 @@ class unmyelinated(axon):
             self.i_k_reclist = neuron.h.List()
             self.i_l_reclist = neuron.h.List()
             self.__set_recorders_with_key(
-                (self.i_na_reclist, "_ref_nai"),
-                (self.i_k_reclist, "_ref_ki"),
+                (self.i_na_reclist, "_ref_ina"),
+                (self.i_k_reclist, "_ref_ik"),
                 (self.i_l_reclist, "_ref_i_pas"),
             )
         else:
@@ -621,8 +621,8 @@ class unmyelinated(axon):
             self.i_k_reclist = neuron.h.List()
             self.i_ca_reclist = neuron.h.List()
             self.__set_recorders_with_key(
-                (self.i_na_reclist, "_ref_nai"),
-                (self.i_k_reclist, "_ref_ki"),
+                (self.i_na_reclist, "_ref_ina"),
+                (self.i_k_reclist, "_ref_ik"),
                 (self.i_ca_reclist, "_ref_cai"),
             )
 

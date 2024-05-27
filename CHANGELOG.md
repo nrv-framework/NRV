@@ -1,8 +1,23 @@
-# Changelog
+# Version updates
 
 All notable changes to NRV are sumed up in this file.
 
-## [1.0.1] - 2023-01-26
+
+## [1.1.0] - 2024-05-27
+
+### Added
+- Significant improvement in the documentation
+- first simulations for nerve EIT direct models -> not documented yet, technical tests pass, still under scientific tests and development
+- classes for results and more
+- modification of post-processing architecture
+- progress bar for parallel computing with process specific toolbars
+- decorator for single-core function definition
+
+### Fixed
+- issues with type hints on documentation generation
+- code troubles with DOLFINx v0.8.0 now resolved, versions below are not supported anymore
+
+## [1.0.1] - 2024-01-26
 
 ### Fixed
 
@@ -10,7 +25,7 @@ All notable changes to NRV are sumed up in this file.
     - Now FEMSimulation results are saved in a folder ending in .bp which can also be opened in ParaView (-5.12.0 or higher).
     - DOLFINx v0.6.0 and v0.8.0 are now suported
 
-## [1.0.0] - 2023-01-12
+## [1.0.0] - 2024-01-12
 
 - Version corresponding to preprint (https://doi.org/10.1101/2024.01.15.575628)
 

@@ -138,7 +138,7 @@ if __name__ == "__main__":
                         arg_offset *= 10
                 args.TARGET = args.TARGET[:i+offset] + new_argt + args.TARGET[i+offset+1:]
                 offset += arg_offset
-
+        args.TARGET.sort()
         print("TARGETED:", *args.TARGET)
         for argt in args.TARGET:
             target_script_key = f"{int(argt):03}"
