@@ -63,7 +63,7 @@ If you add a new functionality, you should add one or several tests, showing tha
 Once installed, you should be able to build the documentation with the following command:
 ::
 
-    python3 -m sphinx.cmd.build -b html docs/ docs/build/
+    python3 -m sphinx.cmd.build -b html docs/ docs/_build/
 
 7. Commit your changes and push you branch to GitHub:
 ::
