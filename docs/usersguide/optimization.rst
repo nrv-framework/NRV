@@ -206,10 +206,25 @@ Filters are callable objects which used in the `cost function` to format the inp
 Optimizer
 =========
 
-The second part of an optimization problem in NRV is the optimizer.
-In NRV, :class:`~nrv.optim.Optimizers.Optimizer` is an abstract class from which inherit two optimizing classes compatible with NRV formalism.
+The second component of an optimization problem in NRV is the optimizer. Two optimizer classes, based on various algorithms, are implemented in NRV. These two classes both inherit from :class:`~nrv.optim.Optimizers.Optimizer` and can be used to minimize a function by calling the ``minimize`` or simply by calling the optimizer.
 
-Two optimizing classes are available in NRV: 
+.. note::
+    As mentioned above:
+
+    ::
+
+        res = my_optimizer.minimize(func_to_minimize, ...)
+        
+    is equivalent to:
+
+    ::
+
+        res = my_optimizer(func_to_minimize, ...)
+
+
+
+The two optimizer classes available in NRV are listed below: 
+
 .. list-table:: **List of optimizers in NRV**
     :widths: 10 150
     :header-rows: 1
@@ -218,9 +233,15 @@ Two optimizing classes are available in NRV:
     *   - Name
         - description
     *   - :class:`~nrv.optim.Optimizers.scipy_optimizer`
-        - Based on `scipy <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ optimization algorithms. Offer the ch
+        - Class insuring the compatibility between `scipy.optimize.minimize <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ optimization algorithms and NRV optimization problems.
     *   - :class:`~nrv.optim.Optimizers.PSO_optimizer`
-        -  For **discontinuous optimization** based `Pyswarms <https://pyswarms.readthedocs.io/en/latest/>`_ algorithms. This class provides a Particle Swarm Optimization adapted to NRV optimization problems.
+        -   Class providing particle swarm optimization based on `Pyswarms <https://pyswarms.readthedocs.io/en/latest/>`_ algorithms, adapted to NRV optimization problems.
+
+.. tip::
+    In general, the choice of optimization classes depends on the problem characteristics:
+
+        - :class:`~nrv.optim.Optimizers.scipy_optimizer` is more suitable for **continuous problems**
+        - :class:`~nrv.optim.Optimizers.PSO_optimizer` is preferable for **discontinuous problems** 
 
 .. warning::
     `Pyswarms <https://pyswarms.readthedocs.io/en/latest/>`_ algorithms may be replaced by `scikit-opt <https://scikit-opt.github.io/scikit-opt/#/en/>` in future versions.

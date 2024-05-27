@@ -10,21 +10,11 @@ from ...utils.cell.CL_postprocessing import *
 
 
 class raster_count_CE(cost_evaluation):
+    """
+    Create a callable object which returne the number of spike from the result
+    of a simulation
+    """
     def __init__(self):
-        """
-        Create a callable object which returne the number of spike from the result
-        of a simulation
-
-        Parameters
-        ----------
-        results     : dict
-            output of an axon simulation using Markov model for at least a node
-
-        Returns
-        -------
-        cost        :int
-            number of spike in the v_mem part
-        """
         super().__init__()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
@@ -42,13 +32,27 @@ class raster_count_CE(cost_evaluation):
 
 
 class recrutement_count_CE(cost_evaluation):
-    """
+    r"""
     Callable object which returns the number of triggered fibre in the results
 
     Parameters
     ----------
     reverse     : bool
-        output of an axon simulation using Markov model for at least a node
+        if True, the final cost is the difference between the number total of fibre and the number of activate fibre
+
+    Note
+    ----
+    if reverse is false:
+
+    .. math::
+
+        cost = N_{recruited}
+
+    else:
+
+    .. math::
+
+        cost = N_{total} - N_{recruited}
     """
 
     def __init__(self, reverse=False):
@@ -104,16 +108,16 @@ class recrutement_count_CE(cost_evaluation):
 
 
 class charge_quantity_CE(cost_evaluation):
+    r"""
+    Create a callable object which return a value proportionnal to the charge quantity injected by stimulus.
+
+    .. math::
+
+        cost = \sum_{e}\sum_{t_k}{i_{e,stim}(t_k)}
+
+    with :math:`t_k` is the discrete time step of the simulation
+    """
     def __init__(self, id_elec=None, dt_res=0.0001):
-        r"""
-        Create a callable object which return a value proportionnal to the charge quantity injected by stimulus.
-
-        .. math::
-
-            \sum_{e}\sum_{t_k}{i_{e,stim}(t_k)}
-
-            with $t_k$ is the discrete time step of the simulation
-        """
         super().__init__()
         self.id_elec = id_elec
         self.dt_res = dt_res
@@ -127,19 +131,6 @@ class charge_quantity_CE(cost_evaluation):
         return abs(stim).integrate()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
-        """
-        
-
-        Parameters
-        ----------
-        results : sim_results
-            _description_
-
-        Returns
-        -------
-        float
-            _description_
-        """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0
@@ -153,23 +144,23 @@ class charge_quantity_CE(cost_evaluation):
 
 
 class stim_energy_CE(cost_evaluation):
+    r"""
+    Create a callable object which return a value proportionnal to the stimulus energy, assuming the electrode impedance is a constant.
+
+    .. math::
+
+        cost = \sum_{e}\sum_{t_k}{i_{e,stim}^2(t_k)}
+
+    with :math:`t_k` is the discrete time step of the simulation
+
+    Parameters
+    ----------
+    id_elec : None | int | list[int]
+        id or list id of the electrode of the to from which the energy should be computed. If None, 
+    dt_res  : float
+        resolotion time step use to compute the cost value
+    """
     def __init__(self, id_elec:None|int|list[int]=None, dt_res:float=0.0001):
-        r"""
-        Create a callable object which return a value proportionnal to the stimulus energy, assuming the electrode impedance is a constant.
-
-        .. math::
-
-            \sum_{e}\sum_{t_k}{i_{e,stim}^2(t_k)}
-
-            with $t_k$ is the discrete time step of the simulation
-
-        Parameters
-        ----------
-        id_elec : None | int | list[int]
-            id or list id of the electrode of the to from which the energy should be computed. If None, 
-        dt_res  : float
-            resolotion time step use to compute the cost value
-        """
         super().__init__()
         self.id_elec = id_elec
         self.dt_res = dt_res
@@ -184,7 +175,6 @@ class stim_energy_CE(cost_evaluation):
         return abs(stim).integrate()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
-        """ """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0

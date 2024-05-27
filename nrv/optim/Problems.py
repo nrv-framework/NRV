@@ -8,6 +8,7 @@ import traceback
 from ..backend.NRV_Class import NRV_class
 from ..backend.MCore import MCH, synchronize_processes
 from ..backend.log_interface import rise_error, pass_debug_info, set_log_level
+from .optim_utils.optim_results import optim_results
 from .CostFunctions import cost_function
 from .Optimizers import Optimizer
 
@@ -119,14 +120,21 @@ class Problem(NRV_class):
         pass
 
     # Call method is where the magic happens
-    def __call__(self, **kwargs):
+    def __call__(self, **kwargs)->optim_results:
         """
-        
+        Perform the optimization: minimze the `cost_function` using `optmizer`
+
+        Parameters
+        ----------
+
+        kwargs
+            containing parameters of the optimizer to change
 
         Returns
         -------
-        _type_
-            _description_
+        optim_results
+            results of the optimization
+
 
         Raises
         ------
@@ -165,7 +173,7 @@ class Problem(NRV_class):
     # Mcore handling
     def __check_MCore_CostFunction(self):
         """
-        
+
         ch
         """
         return getattr(self._CostFunction, "_MCore_CostFunction", False)

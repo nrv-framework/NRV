@@ -34,14 +34,29 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
         self._method = method
         self.swarm_optimizer = False
 
-    def minimize(self, f, **kwargs):
+    def minimize(self, f:callable, **kwargs)->optim_results:
+        """
+        Minimze the function ``f`` using the `optimzer`'s parameters
+
+        Parameters
+        ----------
+        f : callable
+            function to minimize
+        kwargs                  : dict
+            containing parameters to change in the class (:class:``PSO_optimizer``)
+
+        Returns
+        -------
+        optim_results
+            results of the optimization
+        """
         self.set_parameters(**kwargs)
         results = optim_results(self.save(save=False))
         results["date"] = asctime(localtime())
         results["status"] = "Processing"
         return results
 
-    def __call__(self, f, **kwargs: Any) -> optim_results:
+    def __call__(self, f:callable, **kwargs: Any) -> optim_results:
         return self.minimize(f, **kwargs)
 
 
@@ -54,22 +69,21 @@ class scipy_optimizer(Optimizer):
     ----------
     method : str | callable, optional
         Type of solver.  Should be one of
-
-            - 'Nelder-Mead' :ref:`(see here) <optimize.minimize-neldermead>`
-            - 'Powell'      :ref:`(see here) <optimize.minimize-powell>`
-            - 'CG'          :ref:`(see here) <optimize.minimize-cg>`
-            - 'BFGS'        :ref:`(see here) <optimize.minimize-bfgs>`
-            - 'Newton-CG'   :ref:`(see here) <optimize.minimize-newtoncg>`
-            - 'L-BFGS-B'    :ref:`(see here) <optimize.minimize-lbfgsb>`
-            - 'TNC'         :ref:`(see here) <optimize.minimize-tnc>`
-            - 'COBYLA'      :ref:`(see here) <optimize.minimize-cobyla>`
-            - 'SLSQP'       :ref:`(see here) <optimize.minimize-slsqp>`
-            - 'trust-constr':ref:`(see here) <optimize.minimize-trustconstr>`
-            - 'dogleg'      :ref:`(see here) <optimize.minimize-dogleg>`
-            - 'trust-ncg'   :ref:`(see here) <optimize.minimize-trustncg>`
-            - 'trust-exact' :ref:`(see here) <optimize.minimize-trustexact>`
-            - 'trust-krylov' :ref:`(see here) <optimize.minimize-trustkrylov>`
-            - custom - a callable object, see below for description.
+            - 'Nelder-Mead'
+            - 'Powell'
+            - 'CG'
+            - 'BFGS'
+            - 'Newton-CG'
+            - 'L-BFGS-B'
+            - 'TNC'
+            - 'COBYLA'
+            - 'SLSQP'
+            - 'trust-constr'
+            - 'dogleg'
+            - 'trust-ncg'
+            - 'trust-exact'
+            - 'trust-krylov'
+            - custom - a callable object
 
     x0 : np.ndarray, optional
         Initial guess. Array of real elements of size (n,), where n is the number of independent variables,. by default None
@@ -91,7 +105,7 @@ class scipy_optimizer(Optimizer):
     tol : float, optional
         Tolerance for termination, by default None
     callback : callable, optional
-        _description_, by default None
+        A callable called after each iteration, by default None
     maxiter : int, optional
         _description_, by default None
     options : dict, optional
@@ -103,7 +117,26 @@ class scipy_optimizer(Optimizer):
 
     Note
     ----
-    the following argumlents are those used in scipy.optimize.minimize (see `scipy documentation <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ for more informations)`x0`,`args`,`jac`,`hess`,`hessp`,`bounds`,`constraints`,`tol`,`callback`,`options`
+    The following arguments are those used in scipy.optimize.minimize (see scipy documentation [2] for more informations): ``x0``, ``args``, ``jac``, ``hess``, ``hessp``, ``bounds``, ``constraints``, ``tol``, ``callback``, ``options``
+
+    Examples
+    --------
+    The following lines shows how `scipy_optimizer` can be used to minimze a 2D sphere function.
+
+    >>> import nrv
+    >>> my_cost1 = nrv.sphere()
+    >>> my_opt = nrv.scipy_optimizer(dimension=2, x0= [100, 10], maxiter=10)
+    >>> res = my_opt.minimize(my_cost1)
+    >>> print("best position",res.x, "best cost", res.best_cost)
+
+        best position [-1.52666570e-08 -1.32835147e-07] best cost 1.337095622502969e-07
+
+
+    References
+    ----------
+    [1] `scipy <https://docs.scipy.org/doc/scipy/>`_
+
+    [2] `scipy.optimize.minimize <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_
     """
     def __init__(
         self,
@@ -185,7 +218,7 @@ class scipy_optimizer(Optimizer):
         results["scale_homothety"] = self.scale_homothety
         results["scaled_bounds"] = self.scaled_bounds
 
-    def minimize(self, f, **kwargs):
+    def minimize(self, f:callable, **kwargs)->optim_results:
         results = super().minimize(f, **kwargs)
         if self.maxiter is not None:
             self.options["maxiter"] = self.maxiter
@@ -257,26 +290,32 @@ class PSO_optimizer(Optimizer):
     opt_type                : str
         Neightboorhood type, by default "global"
         type possibly:
-                "global"                : Global best PSO (star topology)
-                "local"                 : Local best PSO (ring topology)
+
+            - "global"                : Global best PSO (star topology)
+            - "local"                 : Local best PSO (ring topology)
+
     static      : bool
         if False and opt_type is local, update the neigthboorhood of each particle every iterations
     bh_strategy             : str
         out of bound position strategy for pyswarms optimizer [2]:
-                "nearest"               : Round the value to the nearest bound (default)
-                "periodic"              : set to the modulus of the value between the two bounds
-                "random"                : set to a random value
-                "shrink"                : reduce the velocity to finish land on the bound
-                "reflective"            : mirror the position form inside to ouside the bounds
-                "intermediate"          : set to intermediate value between previous pos and bound
+
+            - "nearest"               : Round the value to the nearest bound (default)
+            - "periodic"              : set to the modulus of the value between the two bounds
+            - "random"                : set to a random value
+            - "shrink"                : reduce the velocity to finish land on the bound
+            - "reflective"            : mirror the position form inside to ouside the bounds
+            - "intermediate"          : set to intermediate value between previous pos and bound
+
     oh_strategy             : dict (like {"w":str, "c1":str, "c2":str})
         Dynamic options strategy for pyswarms optimizer [3], if None static options,
         by default None:
-                "exp_decay"             : Decreases the parameter exponentially between limits
-                "lin_variation"         : Decreases/increases the parameter linearly between limits
-                "nonlin_mod"            : Decreases/increases the parameter between limits
-                                        according to a nonlinear modulation index
-                "rand"                  : takes a uniform random value between limits
+
+            - "exp_decay"             : Decreases the parameter exponentially between limits
+            - "lin_variation"         : Decreases/increases the parameter linearly between limits
+            - "nonlin_mod"            : Decreases/increases the parameter between limits
+                                    according to a nonlinear modulation index
+            - "rand"                  : takes a uniform random value between limits
+
     ftol                    : float
         relative error in objective_func(best_pos) acceptable for convergence, if None -np.inf
         default None
@@ -293,11 +332,12 @@ class PSO_optimizer(Optimizer):
     results     : optim_results
         contains all the parameters and outputs of the PSO
 
-    Note
-    ----
+    References
+    ----------
     links to pyswarms doc:
-    [1] https://pyswarms.readthedocs.io/en/latest/index.html
-    [2] https://pyswarms.readthedocs.io/en/latest/api/pyswarms.handlers.html
+        [1] `Pyswams <https://pyswarms.readthedocs.io/en/latest/index.html>`_
+
+        [2] `Pyswams handlers <https://pyswarms.readthedocs.io/en/latest/api/pyswarms.handlers.html>`_
     """
     def __init__(
         self,
@@ -381,17 +421,22 @@ class PSO_optimizer(Optimizer):
                 print("Terminated")
                 return False
 
-    def minimize(self, f_swarm, **kwargs):
+    def minimize(self, f_swarm:callable, **kwargs)-> optim_results:
         """
         Perform a Particle swarm optimization
 
         Parameters
         ----------
-        cost_function_swarm     : func
+        f_swarm     : callable
             function taking in parameter a swarm (dim-dimensions array) and returning the cost for each
             particle (1-dimensionnal array)
         kwargs                  : dict
-            containing parameters to change to class (PSO_optimizer.__init__)
+            containing parameters to change in the class (:class:``PSO_optimizer``)
+
+        Returns
+        -------
+        optim_results
+            results of the optimization
         """
         self.__mproc_handling()
         results = super().minimize(f_swarm, **kwargs)
@@ -497,8 +542,7 @@ class PSO_optimizer(Optimizer):
             if self.save_results:
                 with open(self.saving_file, "w") as outfile:
                     json.dump(results, outfile)
-            raise KeyboardInterrupt
-            sys.exit(1)
+            rise_error(KeyboardInterrupt, "Interuption raised during PSO")
         except:
             results["status"] = "Failed"
             results["Error_from_prompt"] = traceback.format_exc()

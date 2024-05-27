@@ -14,31 +14,19 @@ class cost_function(NRV_class):
 
     Parameters
     ----------
-    static_context      : str
+    static_context      : str | dict
         saving dictionary or saving file name of a nrv_simulable object
         which should be use as static context of the optimisation
     context_modifier   : funct
         function creating a context from a particle position, parameters:
-            position        : particle position in each dimensions (array)
-            t_sim           : simulation time (float)
-            dt              : time step of the context (float)
-            kwargs          : keys word arguments
+            >>> context_modifier(X: np.ndarray, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
         returns
             context        : values of a context (array)
-    simulate_context   : funct
-        function which perform the NEURON simulation, parameters:
-            context        : context to use for the simulation (array)
-            t_sim           : simulation time (float)
-            dt              : time step of the context (float)
-            kwargs          : keys word arguments
-        returns
-            results        : axon simulaiton results (dictionary)
     cost_evaluation            : funct
         function calculating a cost from a axon simulation results, parameters:
-            results        : axon simulaiton results (dictionary)
-            kwargs          : keys word arguments
-        returns
-            cost              : cost evaluation value (float)
+            >>> cost_evaluation(results: sim_results, **kwargs) -> float:
+    simulation  : funct
+        optional 
     kwargs_CM           : dict
         key word arguments of context_modifier function, by default {}
     kwargs_S           : dict
@@ -49,7 +37,7 @@ class cost_function(NRV_class):
         time of the simulation on wich the cost will be calculated in ms (ms), by default 100ms
     dt              : float
         simulation time stem for neuron (ms), by default 1us
-    part_filter         : funct or None
+    filter         : funct or None
         function wich return a filtered postition from a position, if None, position is unfiltered,
         by default None
     saver         : funct or None
@@ -161,10 +149,12 @@ class cost_function(NRV_class):
         """
         set the cost static_context after the instantiation
 
+
         Parameters
         ----------
-        static_context : _type_
-            _description_
+        static_context      : str | dict
+            saving dictionary or saving file name of a nrv_simulable object
+            which should be use as static context of the optimisation
         """
         self.static_context = static_context
         self.kwargs_S = kwgs
@@ -177,8 +167,9 @@ class cost_function(NRV_class):
 
         Parameters
         ----------
-        context_modifier : _type_
-            _description_
+        context_modifier   : funct
+            function creating a context from a particle position, parameters:
+                >>> context_modifier(X: np.ndarray, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
         """
         self.context_modifier = context_modifier
         self.kwargs_CM = kwgs
@@ -190,8 +181,9 @@ class cost_function(NRV_class):
 
         Parameters
         ----------
-        cost_evaluation : _type_
-            _description_
+        cost_evaluation            : funct
+            function calculating a cost from a axon simulation results, parameters:
+                >>> cost_evaluation(results: sim_results, **kwargs) -> float:
         """
         self.cost_evaluation = cost_evaluation
         self.kwargs_CE = kwgs
@@ -217,17 +209,22 @@ class cost_function(NRV_class):
     ###### Call method ##########
     #############################
     def get_sim_results(self, X:np.ndarray)->sim_results:
-        """_summary_
+        """
+        Simulated the static context modified with the tuning paramters X
+
+        Note
+        ----
+        This method follows the same step than when the cost function is called without evaluating the cost, simulation results is returned insteat
 
         Parameters
         ----------
         X : np.ndarray
-            _description_
+            tunning parameters of the simulation which will be evaluated by the cost function
 
         Returns
         -------
         sim_results
-            _description_
+            Simulation results of the static context modified with the tuning paramters X
         """
         self.keep_results = True
 
@@ -249,7 +246,7 @@ class cost_function(NRV_class):
 
     def __call__(self, X:np.ndarray)->float:
         """
-        This is where the magic happend. When called cost function evaluate the impact of tuning
+        When called cost function evaluate the impact of tuning
         parameters X on static context and evaluate a cost from the simulation results using
         cost_evaluation
 
