@@ -53,7 +53,7 @@ class NRV_results(NRV_class, dict):
 
     @property
     def to_save(self):
-        return "dummy_res" in self
+        return "dummy_res" not in self
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
         save = save and self.to_save
