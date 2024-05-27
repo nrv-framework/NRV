@@ -46,22 +46,81 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
 
 
 class scipy_optimizer(Optimizer):
+
+    """
+    
+
+    Parameters
+    ----------
+    method : str | callable, optional
+        Type of solver.  Should be one of
+
+            - 'Nelder-Mead' :ref:`(see here) <optimize.minimize-neldermead>`
+            - 'Powell'      :ref:`(see here) <optimize.minimize-powell>`
+            - 'CG'          :ref:`(see here) <optimize.minimize-cg>`
+            - 'BFGS'        :ref:`(see here) <optimize.minimize-bfgs>`
+            - 'Newton-CG'   :ref:`(see here) <optimize.minimize-newtoncg>`
+            - 'L-BFGS-B'    :ref:`(see here) <optimize.minimize-lbfgsb>`
+            - 'TNC'         :ref:`(see here) <optimize.minimize-tnc>`
+            - 'COBYLA'      :ref:`(see here) <optimize.minimize-cobyla>`
+            - 'SLSQP'       :ref:`(see here) <optimize.minimize-slsqp>`
+            - 'trust-constr':ref:`(see here) <optimize.minimize-trustconstr>`
+            - 'dogleg'      :ref:`(see here) <optimize.minimize-dogleg>`
+            - 'trust-ncg'   :ref:`(see here) <optimize.minimize-trustncg>`
+            - 'trust-exact' :ref:`(see here) <optimize.minimize-trustexact>`
+            - 'trust-krylov' :ref:`(see here) <optimize.minimize-trustkrylov>`
+            - custom - a callable object, see below for description.
+
+    x0 : np.ndarray, optional
+        Initial guess. Array of real elements of size (n,), where n is the number of independent variables,. by default None
+    args : tuple, optional
+        Extra arguments passed to the objective function and its derivatives (fun, jac and hess functions), by default ()
+    jac : {callable,  '2-point', '3-point', 'cs', bool}, optional
+        Method for computing the gradient vector, optional
+        _description_, by default None
+    hess : {callable, '2-point', '3-point', 'cs', HessianUpdateStrategy}, optional
+        Method for computing the Hessian matrix, by default None
+    hessp : callable, optional
+        Hessian of objective function times an arbitrary vector p. Only for
+        Newton-CG, trust-ncg, trust-krylov, trust-constr, by default None
+    bounds : sequence or `Bounds`, optional
+        Bounds on variables for Nelder-Mead, L-BFGS-B, TNC, SLSQP, Powell,
+        trust-constr, and COBYLA methods., by default None
+    constraints : {Constraint, dict} or List of {Constraint, dict}, optional
+        Constraints definition. Only for COBYLA, SLSQP and trust-constr, by default ()
+    tol : float, optional
+        Tolerance for termination, by default None
+    callback : callable, optional
+        _description_, by default None
+    maxiter : int, optional
+        _description_, by default None
+    options : dict, optional
+        A dictionary of solver options, by default None
+    dimension : int, optional
+        _description_, by default None
+    normalize : bool, optional
+        _description_, by default False
+
+    Note
+    ----
+    the following argumlents are those used in scipy.optimize.minimize (see `scipy documentation <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ for more informations)`x0`,`args`,`jac`,`hess`,`hessp`,`bounds`,`constraints`,`tol`,`callback`,`options`
+    """
     def __init__(
         self,
-        method=None,
-        x0=None,
-        args=(),
-        jac=None,
-        hess=None,
-        hessp=None,
-        bounds=None,
-        constraints=(),
-        tol=None,
-        callback=None,
-        maxiter=None,
-        options=None,
-        dimension=None,
-        normalize=False,
+        method:str|callable=None,
+        x0:np.ndarray=None,
+        args:tuple=(),
+        jac:callable=None,
+        hess:callable=None,
+        hessp:callable=None,
+        bounds:tuple=None,
+        constraints:dict=(),
+        tol:float=None,
+        callback:callable=None,
+        maxiter:int=None,
+        options:dict=None,
+        dimension:int=None,
+        normalize:bool=False,
     ):
         if method is None:
             super().__init__("scipy_default")
@@ -173,6 +232,73 @@ class scipy_optimizer(Optimizer):
 
 
 class PSO_optimizer(Optimizer):
+    """
+    Perform a Particle swarm optimization (PSO) on with a defined cost function using pyswarms
+    library[1]
+
+    Parameters
+    ----------
+    n_particles           	: int
+        number of particle of the swarm, by default 5
+    dimensions              : int
+        number of dimensions of each particle
+    options                 : dict
+        hyperparameter of the PSO
+    maxiter                    : int
+        number of iteration of the PSO
+    n_processes             : int
+        number of process used to parallelize cost calculation, by default None
+    bounds                  : tupple
+        bounds of the particle, if equal no bounds, by default (0, 0)
+    init_pos                : array
+        initial position of the particles if None random, by default None
+    print_time              : bool
+        if True, print the optimisation time, by default True
+    opt_type                : str
+        Neightboorhood type, by default "global"
+        type possibly:
+                "global"                : Global best PSO (star topology)
+                "local"                 : Local best PSO (ring topology)
+    static      : bool
+        if False and opt_type is local, update the neigthboorhood of each particle every iterations
+    bh_strategy             : str
+        out of bound position strategy for pyswarms optimizer [2]:
+                "nearest"               : Round the value to the nearest bound (default)
+                "periodic"              : set to the modulus of the value between the two bounds
+                "random"                : set to a random value
+                "shrink"                : reduce the velocity to finish land on the bound
+                "reflective"            : mirror the position form inside to ouside the bounds
+                "intermediate"          : set to intermediate value between previous pos and bound
+    oh_strategy             : dict (like {"w":str, "c1":str, "c2":str})
+        Dynamic options strategy for pyswarms optimizer [3], if None static options,
+        by default None:
+                "exp_decay"             : Decreases the parameter exponentially between limits
+                "lin_variation"         : Decreases/increases the parameter linearly between limits
+                "nonlin_mod"            : Decreases/increases the parameter between limits
+                                        according to a nonlinear modulation index
+                "rand"                  : takes a uniform random value between limits
+    ftol                    : float
+        relative error in objective_func(best_pos) acceptable for convergence, if None -np.inf
+        default None
+    ftol                    : int
+        number of iterations over which the relative error in objective_func(best_pos) is
+        acceptable for convergence, by default 1
+    save_results            : bool
+        save or not the output in a .json file, by default False
+    saving_file             : str
+        name of the file on wich the output should be saved, by default "pso_results.json"
+
+    Returns
+    -------
+    results     : optim_results
+        contains all the parameters and outputs of the PSO
+
+    Note
+    ----
+    links to pyswarms doc:
+    [1] https://pyswarms.readthedocs.io/en/latest/index.html
+    [2] https://pyswarms.readthedocs.io/en/latest/api/pyswarms.handlers.html
+    """
     def __init__(
         self,
         n_particles=5,
@@ -193,73 +319,6 @@ class PSO_optimizer(Optimizer):
         saving_file="pso_results.json",
         comment=None,
     ):
-        """
-        Perform a Particle swarm optimization (PSO) on with a defined cost function using pyswarms
-        library[1]
-
-        Parameters
-        ----------
-        n_particles           	: int
-            number of particle of the swarm, by default 5
-        dimensions              : int
-            number of dimensions of each particle
-        options                 : dict
-            hyperparameter of the PSO
-        maxiter                    : int
-            number of iteration of the PSO
-        n_processes             : int
-            number of process used to parallelize cost calculation, by default None
-        bounds                  : tupple
-            bounds of the particle, if equal no bounds, by default (0, 0)
-        init_pos                : array
-            initial position of the particles if None random, by default None
-        print_time              : bool
-            if True, print the optimisation time, by default True
-        opt_type                : str
-            Neightboorhood type, by default "global"
-            type possibly:
-                    "global"                : Global best PSO (star topology)
-                    "local"                 : Local best PSO (ring topology)
-        static      : bool
-            if False and opt_type is local, update the neigthboorhood of each particle every iterations
-        bh_strategy             : str
-            out of bound position strategy for pyswarms optimizer [2]:
-                    "nearest"               : Round the value to the nearest bound (default)
-                    "periodic"              : set to the modulus of the value between the two bounds
-                    "random"                : set to a random value
-                    "shrink"                : reduce the velocity to finish land on the bound
-                    "reflective"            : mirror the position form inside to ouside the bounds
-                    "intermediate"          : set to intermediate value between previous pos and bound
-        oh_strategy             : dict (like {"w":str, "c1":str, "c2":str})
-            Dynamic options strategy for pyswarms optimizer [3], if None static options,
-            by default None:
-                    "exp_decay"             : Decreases the parameter exponentially between limits
-                    "lin_variation"         : Decreases/increases the parameter linearly between limits
-                    "nonlin_mod"            : Decreases/increases the parameter between limits
-                                            according to a nonlinear modulation index
-                    "rand"                  : takes a uniform random value between limits
-        ftol                    : float
-            relative error in objective_func(best_pos) acceptable for convergence, if None -np.inf
-            default None
-        ftol                    : int
-            number of iterations over which the relative error in objective_func(best_pos) is
-            acceptable for convergence, by default 1
-        save_results            : bool
-            save or not the output in a .json file, by default False
-        saving_file             : str
-            name of the file on wich the output should be saved, by default "pso_results.json"
-
-        Returns
-        -------
-        results     : optim_results
-            contains all the parameters and outputs of the PSO
-
-        Note
-        ----
-        links to pyswarms doc:
-        [1] https://pyswarms.readthedocs.io/en/latest/index.html
-        [2] https://pyswarms.readthedocs.io/en/latest/api/pyswarms.handlers.html
-        """
         super().__init__("PSO")
         self.swarm_optimizer = True
         self.n_particles = n_particles

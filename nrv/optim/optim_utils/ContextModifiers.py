@@ -195,10 +195,6 @@ class biphasic_stimulus_CM(stimulus_CM):
     """
     Context modifier which generate a stimulus biphasic stimulus from the input tuning parameters.
 
-    Note
-    ----
-    The parameters to tune have to be set at the class instantiation. To do so the 
-
     Parameters
     ----------
     stim_ID                 : int, optional
@@ -211,7 +207,6 @@ class biphasic_stimulus_CM(stimulus_CM):
         anodic (positive stimulation value) current and, in uA
     t_inter     : float or str
         inter pulse timing, in ms
-        _description_, by default None
     stim_gen                : callable, optional
         function use to generate the stimulus from the interpolated values, by default None
     stim_gen_kwargs         : dict, optional
@@ -225,13 +220,17 @@ class biphasic_stimulus_CM(stimulus_CM):
 
     WARNING
     -------
-    `s_cathod` must always positive, the user give here the absolute value
+    ``s_cathod`` must always positive, the user give here the absolute value
 
-    Example
-    -------
-    For instance the folliwing line will generate a context 
+    Note
+    ----
+    Note that `start`, `s_cathod`, `s_anod` and `t_inter` are the paramters used to generate a :meth:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` stimulus. They can either be:
+         - set as ``float``, to a constant value (wich will not be changed by the )
+         - set as ``str`` ("1", "2", ..) of the index of the value in the input vector.
 
-        >>> cm_0 = nrv.biphasic_stimulus_CM(start=1, s_cathod="0", t_cathod="1", s_anod=0)
+    See Also
+    --------
+    :doc:`tutorials 5</tutorials/5_first_optimization>`: First optimization problem using NRV
 
     """
     def __init__(
@@ -262,7 +261,7 @@ class biphasic_stimulus_CM(stimulus_CM):
         self.t_inter = t_inter
         self.s_anod = s_anod
 
-    def __set_values(self, X):
+    def __set_values(self, X:np.ndarray):
         N_X = len(X)
         start = self.start
         s_cathod = self.s_cathod
@@ -301,18 +300,44 @@ class biphasic_stimulus_CM(stimulus_CM):
 
 
 class harmonic_stimulus_CM(stimulus_CM):
+    """
+    Context modifier which generate a stimulus harmonic stimulus from the input tuning parameters.
+
+    Parameters
+    ----------
+    stim_ID : int, optional
+        ID of the electrode which should be adapted, by default 0
+    start : float or str
+        starting time of the waveform, in ms
+    amplitude : float, optional
+        _description_, by default 100
+    t_pulse : float, optional
+        _description_, by default 60e-3
+    dt : float, optional
+        _description_, by default 0
+    stim_gen : callable, optional
+        _description_, by default None
+    stim_gen_kwargs : dict, optional
+        _description_, by default {}
+    extracel_context        : bool
+        specifies whether to load extracel_context with the static context
+    intracel_context        : bool
+        specifies whether to load intracel_context with the static context
+    rec_context             : bool
+        specifies whether to load rec_context with the static context
+    """
     def __init__(
         self,
-        stim_ID=0,
-        start=1,
-        amplitude=100,
-        t_pulse=60e-3,
-        dt=0,
-        stim_gen=None,
-        stim_gen_kwargs={},
-        extracel_context=True,
-        intracel_context=False,
-        rec_context=False,
+        stim_ID:int=0,
+        start:float=1,
+        amplitude:float=100,
+        t_pulse:float=60e-3,
+        dt:float=0,
+        stim_gen:callable=None,
+        stim_gen_kwargs:dict={},
+        extracel_context:bool=True,
+        intracel_context:bool=False,
+        rec_context:bool=False,
     ):
         super().__init__(
             stim_ID=stim_ID,
@@ -351,16 +376,16 @@ class harmonic_stimulus_CM(stimulus_CM):
 class harmonic_stimulus_with_pw_CM(stimulus_CM):
     def __init__(
         self,
-        stim_ID=0,
-        start=1,
-        amplitude=100,
-        t_pulse=60e-3,
-        dt=0,
-        stim_gen=None,
-        stim_gen_kwargs={},
-        extracel_context=True,
-        intracel_context=False,
-        rec_context=False,
+        stim_ID:int=0,
+        start:float=1,
+        amplitude:float=100,
+        t_pulse:float=60e-3,
+        dt:float=0,
+        stim_gen:callable=None,
+        stim_gen_kwargs:dict={},
+        extracel_context:bool=True,
+        intracel_context:bool=False,
+        rec_context:bool=False,
     ):
         super().__init__(
             stim_ID=stim_ID,

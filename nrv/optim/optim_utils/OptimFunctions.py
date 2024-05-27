@@ -24,6 +24,35 @@ def interpolate(
     save_scale=False,
     kwargs_interp={},
 ):
+    """
+    :meta private:
+
+    Parameters
+    ----------
+    y : np.ndarray
+        _description_
+    x : np.ndarray, optional
+        _description_, by default []
+    scale : int, optional
+        _description_, by default 4
+    intertype : str, optional
+        _description_, by default "Spline"
+    bounds : tuple, optional
+        _description_, by default (0, 0)
+    save : bool, optional
+        _description_, by default False
+    filename : str, optional
+        _description_, by default "interpolate.dat"
+    save_scale : bool, optional
+        _description_, by default False
+    kwargs_interp : dict, optional
+        _description_, by default {}
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
 
     y_scale = []
 
@@ -77,8 +106,7 @@ def interpolate_amp(
     save_scale:bool=False,
 )->np.ndarray:
     """
-    genarte a waveform from a particle position using interpolate where the position
-    values are the output waveform amplitudes at regular times
+    genarte a waveform from a particle position using interpolate where the position values are the output waveform amplitudes at constant sample rate
 
     Parameters
     ----------

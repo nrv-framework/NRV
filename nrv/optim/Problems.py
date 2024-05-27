@@ -82,7 +82,8 @@ class Problem(NRV_class):
         """
         Cost function of a Problem,
         the cost function should be a CosFunction object, it should return a scalar.
-        NRV function should be prefered"""
+        NRV function should be prefered
+        """
         return self._CostFunction
 
     @costfunction.setter
@@ -119,6 +120,19 @@ class Problem(NRV_class):
 
     # Call method is where the magic happens
     def __call__(self, **kwargs):
+        """
+        
+
+        Returns
+        -------
+        _type_
+            _description_
+
+        Raises
+        ------
+        KeyboardInterrupt
+            _description_
+        """
         if MCH.do_master_only_work():
             try:
                 kwargs = self.__update_saving_parameters(**kwargs)
@@ -150,6 +164,10 @@ class Problem(NRV_class):
 
     # Mcore handling
     def __check_MCore_CostFunction(self):
+        """
+        
+        ch
+        """
         return getattr(self._CostFunction, "_MCore_CostFunction", False)
 
     def __wait_for_simulation(self):

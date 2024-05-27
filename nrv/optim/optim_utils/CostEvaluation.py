@@ -41,17 +41,78 @@ class raster_count_CE(cost_evaluation):
         return cost
 
 
-class charge_quantity_CE(cost_evaluation):
-    def __init__(self, id_elec=None, dt_res=0.0001):
+class recrutement_count_CE(cost_evaluation):
+    """
+    Callable object which returns the number of triggered fibre in the results
+
+    Parameters
+    ----------
+    reverse     : bool
+        output of an axon simulation using Markov model for at least a node
+    """
+
+    def __init__(self, reverse=False):
+        super().__init__()
+        self.reverse = reverse
+
+    def count_axon_activation(self, results: sim_results):
+        if "V_mem_raster_position" not in results:
+            rasterize(results, "V_mem")
+        if len(results["V_mem_raster_position"]) == 0:
+            # no spike
+            cpt = 0
+        else:
+            cpt = 1
+        if self.reverse:
+            cpt = int(not cpt)
+        return cpt
+
+    def count_fascicle_activation(self, results: sim_results):
+        cpt = 0
+        for i in range(len(results["axons_diameter"])):
+            if self.reverse:
+                cpt += 1 - results["axon" + str(i)]["spike"]
+            else:
+                cpt += results["axon" + str(i)]["spike"]
+        return cpt
+
+    def call_method(self, results: sim_results, **kwargs) -> float:
         """
-        Create a callable object which return the charge injected
+        Returns the spike number from a simulation result
 
         Parameters
         ----------
+        results     : dict
+            output of an axon simulation using Markov model for at least a node
 
         Returns
         -------
+        cost        :int
+            number of spike in the v_mem part
+        """
+        cost = 0
+        if "myelinated" in results["result_type"]:
+            cost = self.count_axon_activation(results)
+        elif results["result_type"] == "fascicle":
+            cost = self.count_fascicle_activation(results)
+        else:
+            # nerve simulation
+            for i in results["fascicles_IDs"]:
+                cost += self.count_fascicle_activation(results["fascicle" + str(i)])
+        return cost
 
+
+
+class charge_quantity_CE(cost_evaluation):
+    def __init__(self, id_elec=None, dt_res=0.0001):
+        r"""
+        Create a callable object which return a value proportionnal to the charge quantity injected by stimulus.
+
+        .. math::
+
+            \sum_{e}\sum_{t_k}{i_{e,stim}(t_k)}
+
+            with $t_k$ is the discrete time step of the simulation
         """
         super().__init__()
         self.id_elec = id_elec
@@ -66,7 +127,19 @@ class charge_quantity_CE(cost_evaluation):
         return abs(stim).integrate()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
-        """ """
+        """
+        
+
+        Parameters
+        ----------
+        results : sim_results
+            _description_
+
+        Returns
+        -------
+        float
+            _description_
+        """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0
@@ -96,10 +169,6 @@ class stim_energy_CE(cost_evaluation):
             id or list id of the electrode of the to from which the energy should be computed. If None, 
         dt_res  : float
             resolotion time step use to compute the cost value
-
-        Returns
-        -------
-
         """
         super().__init__()
         self.id_elec = id_elec
@@ -127,67 +196,3 @@ class stim_energy_CE(cost_evaluation):
             cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
         return cost
 
-
-class recrutement_count_CE(cost_evaluation):
-    """
-    Callable object which returns the number of triggered fibre in the results
-
-    Parameters
-    ----------
-    results     : dict
-        output of an axon simulation using Markov model for at least a node
-
-    Returns
-    -------
-    cost        :int
-        number of spike in the v_mem part
-    """
-
-    def __init__(self, reverse=False):
-        """
-        Create a callable object which returns the number of activated fibre in the results
-
-        Parameters
-        ----------
-        reverse     : bool
-            output of an axon simulation using Markov model for at least a node
-
-        """
-        super().__init__()
-        self.reverse = reverse
-
-    def count_axon_activation(self, results: sim_results):
-        if "V_mem_raster_position" not in results:
-            rasterize(results, "V_mem")
-        if len(results["V_mem_raster_position"]) == 0:
-            # no spike
-            cpt = 0
-        else:
-            cpt = 1
-        if self.reverse:
-            cpt = int(not cpt)
-        return cpt
-
-    def count_fascicle_activation(self, results: sim_results):
-        cpt = 0
-        for i in range(len(results["axons_diameter"])):
-            if self.reverse:
-                cpt += 1 - results["axon" + str(i)]["spike"]
-            else:
-                cpt += results["axon" + str(i)]["spike"]
-        return cpt
-
-    def call_method(self, results: sim_results, **kwargs) -> float:
-        """
-        Returns the spike number from a simulation result
-        """
-        cost = 0
-        if "myelinated" in results["result_type"]:
-            cost = self.count_axon_activation(results)
-        elif results["result_type"] == "fascicle":
-            cost = self.count_fascicle_activation(results)
-        else:
-            # nerve simulation
-            for i in results["fascicles_IDs"]:
-                cost += self.count_fascicle_activation(results["fascicle" + str(i)])
-        return cost

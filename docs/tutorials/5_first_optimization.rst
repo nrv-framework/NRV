@@ -53,7 +53,7 @@ progressively with its components.
 Static context
 ~~~~~~~~~~~~~~
 
-The first step to implement the optimization is to define the static context. This context can be generated with the following script, the same way as in previous :doc:`Tutorial 1 </tutorials/1_first_steps>`.. In this first example the context is only composed of:
+The first step to implement the optimization is to define the static context. This context can be generated with the following script, the same way as in previous :doc:`Tutorial 1 </tutorials/1_first_steps>`. In this first example the context is only composed of:
  * a myelinated axon: :math:`10mm` long, :math:`10\mu m` diameter large, with a centre located at :math:`(y=50\mu m, z=0)`
  * a LIFE-electrode: :math:`1mm` long, :math:`25\mu m` diameter large, with a centre located at :math:`(x=500\mu m, y=0, z=0)`
 
@@ -65,7 +65,7 @@ The first step to implement the optimization is to define the static context. Th
     * To speed up the simulations done later, in the optimization, the footprints of the electrode on the axon are computed with `get_electrodes_footprints_on_axon` method and save with the context.
 
 
-Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV `save` methods (XXX). This file will be loaded by the `cost_function` every time it will be called for the optimization.
+Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV :doc:`save methods<../usersguide>` . This file will be loaded by the `cost_function` every time it will be called for the optimization.
 
 
 
@@ -165,14 +165,14 @@ The next step is to define how to interpret the tuning parameters to modify the 
 
 In NRV, the modification of the static context can either be done with a callable class or a function. Some `context_modifier` classes have already been implemented in NRV.
 
-The `biphasic_stimulus_CM` is appropriate for our problem. Such `context_modifier`(XXX) add a biphasic pulse to a given electrode of a `nrv_simulable` object. To fit with our problem, we set the following arguments:
+The :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM` is appropriate for our problem. Such `context_modifier` add a biphasic pulse to a given electrode of a :doc:`simulable</usersguide/simulables>` object. To fit with our problem, we set the following arguments:
  * `start=1`: the cathodic pulse to start at :math:`1ms`.
  * `s_cathod="0"` the cathodic pulse amplitude is defined by the first value of the input vector :math:`\mathcal{X}_{sq}`.
  * `t_cathod="1"` the cathodic pulse duration is defined by the second value of the input vector :math:`\mathcal{X}_{sq}`.
  * `s_anod=0` anodic pulse amplitude is 0 (we consider a monophasic pulse).
 
 .. note::
-    Arguments of `biphasic_stimulus_CM` are similar to those of `stimulus.biphasic_pulse` (XXX). User can either set the argument to a specific value or specify that it should be defined by a tuning parameters input vector. In the second case the argument should be a `str` of the index of the argument in the vector.
+    Arguments of `biphasic_stimulus_CM` are similar to those of :meth:`~nrv.fmod.stimulus.stimulus.biphasic_pulse`. User can either set the argument to a specific value or specify that it should be defined by a tuning parameters input vector. In the second case the argument should be a `str` of the index of the argument in the vector.
 
 
 .. code:: ipython3
@@ -401,29 +401,19 @@ rasterized :math:`V_{mem}` as in :doc:`Tutorial 1 </tutorials/1_first_steps>`.
 Second optimization spline interpolated stimulus
 ================================================
 
-At this point, we have found a rectangle pulse stimulus shape triggering
-our fibre with a minimal energy. Let’s see if we can find a better cost
-with a more complex stimulus shape.
+At this point, we have found a rectangle pulse stimulus shape triggering our fibre with a minimal energy. Let’s see if we can find a better cost with a more complex stimulus shape.
 
-In this new problem, we can define the stimulus as a cathodic pulse
-through interpolated splines over :math:`2` points which are
-individually defined in time and amplitude. This second optimization
-scenario results in a :math:`4`-dimensional problem with the input
-vector :math:`\mathcal{X}_{s_2}` defined as:
+In this new problem, we can define the stimulus as a cathodic pulse through interpolated splines over :math:`2` points which are individually defined in time and amplitude. This second optimization scenario results in a :math:`4`-dimensional problem with the input vector :math:`\mathcal{X}_{s_2}` defined as:
 
 .. math::
 
 
    \mathcal{X}_{s_2} = \begin{pmatrix} I_{s_1} & t_{s_1} & I_{s_2} & t_{s_2}    \end{pmatrix}
 
-With :math:`I_{s_1}` and :math:`t_{s_1}` the amplitude and time of the
-first point and :math:`I_{s_2}` and :math:`t_{s_2}` those of the second.
+With :math:`I_{s_1}` and :math:`t_{s_1}` the amplitude and time of the first point and :math:`I_{s_2}` and :math:`t_{s_2}` those of the second.
 
-As in the first optimization, the stimulus generation from input vector
-is handled by the ``context_modifier``. So let’s define a new one which
-will fit our purpose. This can be done using another built-in class in
-NRV: :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`. To fit with our problem the following
-parameters are set
+As in the first optimization, the stimulus generation from input vector is handled by the ``context_modifier``. So let’s define a new one which will fit our purpose. 
+This can be done using another built-in class in NRV, :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM` and by using :func:`~nrv.optim.optim_utils.OptimFunctions.interpolate_Npts` as interpellator.
 
 .. code:: ipython3
 
