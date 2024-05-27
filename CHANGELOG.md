@@ -3,7 +3,7 @@
 All notable changes to NRV are sumed up in this file.
 
 
-## [1.1.0] - 2024-05-??
+## [1.1.0] - 2024-05-27
 
 ### Added
 - Significant improvement in the documentation
@@ -12,7 +12,6 @@ All notable changes to NRV are sumed up in this file.
 - modification of post-processing architecture
 - progress bar for parallel computing with process specific toolbars
 - decorator for single-core function definition
-- 
 
 ### Fixed
 - issues with type hints on documentation generation
