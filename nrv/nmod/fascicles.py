@@ -588,7 +588,6 @@ class fascicle(NRV_simulable):
             
             axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
             axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
-            
         else:
             axons_diameter = None
             axons_type = None

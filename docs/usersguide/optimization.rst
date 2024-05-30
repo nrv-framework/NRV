@@ -88,20 +88,22 @@ Context Modifier
 Several `context modifiers` have been implemented in NRV for general use. They all inherit from a generic context modifier class: :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`. A list of existing contexts is given below:
 
 .. list-table:: **List of built-in context modifiers**
-    :widths: 10 150
+    :widths: 10 150 10
     :header-rows: 1
     :align: center
 
     *   - Name
-        - description
+        - Description
+        - See Also
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`
         - Generic context modifiers targeting the modification of an electrode stimulus. This modification can either be done by interpolation the input vector or by generating a specific stimulus from this vector.
+        - :doc:`o02 </examples/optim/example_o02>` :doc:`T5 </tutorials/5_first_optimization>`
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM`
         - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.biphasic_pulse` to an electrode of the static context.
+        - :doc:`o03 </examples/optim/example_o03>` :doc:`T5 </tutorials/5_first_optimization>`
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_CM`
         - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_with_pw_CM`
-        - 
+        - :doc:`o04 </examples/optim/example_o04>`
 
 For a fully customize optimization problem, it is also possible to use user-defined `context modifiers`. Such a function should follow the structure bellow:
 
@@ -141,7 +143,7 @@ The list of built-in `cost evaluations` is given in the table below:
     :align: center
 
     *   - Name
-        - description
+        - Description
     *   - :class:`~nrv.optim.optim_utils.CostEvaluation.raster_count_CE`
         - Count the number of spike by fiber triggered during the simulation.
     *   - :class:`~nrv.optim.optim_utils.CostEvaluation.recrutement_count_CE`
@@ -231,7 +233,7 @@ The two optimizer classes available in NRV are listed below:
     :align: center
 
     *   - Name
-        - description
+        - Description
     *   - :class:`~nrv.optim.Optimizers.scipy_optimizer`
         - Class insuring the compatibility between `scipy.optimize.minimize <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ optimization algorithms and NRV optimization problems.
     *   - :class:`~nrv.optim.Optimizers.PSO_optimizer`

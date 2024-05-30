@@ -9,8 +9,7 @@ formalism can be found in
 
 To reduce the computation time, this optimization will be done on a
 single myelinated axon. The exact same optimization problem could be
-applied to a nerve filled with multiple myelinated axons (see example
-(XXX))
+applied to a nerve filled with multiple myelinated axons (see :doc:`example o01 </examples/optim/example_o01>`)
 
 The very first step is, as usual, to import NRV and the required
 packages and to generate an outputs’ repository.

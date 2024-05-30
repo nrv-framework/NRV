@@ -168,7 +168,7 @@ class Problem(NRV_class):
                 results.save(save=True, fname=self.problem_fname)
             return results
         else:
-            return None
+            return optim_results({"dummy_res":1})
 
     # Mcore handling
     def __check_MCore_CostFunction(self):

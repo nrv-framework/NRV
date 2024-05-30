@@ -7,15 +7,10 @@ NRV is a framework designed by and for the scientific corner. Behind the open so
 Here are some guidelines for clean implementation of novel functionalities and contributions.
 
 We welcome different types of contributions:
-
   - **Report Bugs**: Report bugs `here:  <https://github.com/fkolbl/NRV/issues>`_. When reporting a bug, please include:
-
         1. Your operating system name and version.
-        
         2. Any details about your local setup that might be helpful in troubleshooting.
-
         3. Detailed steps to reproduce the bug.
-
   - **Fix Bug**: Look through the GitHub issues for bugs. Anything tagged with “bug” and “help wanted” is open to whoever wants to implement it.
   - **Implement Feature**: Look through the GitHub issues for features. Anything tagged with “enhancement” and “help wanted” is open to whoever wants to implement it. Those that are tagged with “first-timers-only” is suitable for those getting started in open-source software.
 
@@ -64,6 +59,12 @@ Once installed, you should be able to build the documentation with the following
 ::
 
     python3 -m sphinx.cmd.build -b html docs/ docs/_build/
+
+.. tip::
+    To document new features, example should be added as `.rst <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ file in the folder ``NRV.docs.examples``. It can be more convenient to write the example in a *jupiter notebook* to check the code and then convert it in using `nbconvert <https://nbconvert.readthedocs.io/en/latest/>`_ and this command line:
+        ::
+
+            jupyter nbconvert --to rst your_fname.ipynb
 
 7. Commit your changes and push you branch to GitHub:
 ::
@@ -184,15 +185,10 @@ NRV is developed for the research and education community. We hope to provide a 
 NRV is certainly not perfect, and we hope that the open-science approach can contribute to improve the framework, however ensuring retrocompatilibty. There is a continuous effort from the Bioelectronics group of the IMS Laboratory (U. Bordeaux, Bordeaux INP, CNRS UMR 5218) to continue to develop NRV, and some purely scientific objectives are linked to this project. Here is a list of non-scientific and mostly technical objectives, that we intend to develop and on which we are also extremely happy to get help or guiding if you want to contribute:
 
 - **Improving geometry:**
-
     - enable axon tortuosity for axons,
-
     - enable elliptical shapes for fascicles and nerves (with automatized population filling and basic operations as already developed for round shapes fascicles/nerves).
-
     - integrate mode complex shapes based on histology and image segmentation (with automatized population filling).
-
     - extend FenicsX computation with curvilinear coordinates, to enable non-extruded 3D models of fascicles
-
     - add electrode daughter-classes for more specific electrode geometries.
 
 - **Improving recordings:** current recording simulation is based on analytical field computation, thus restricting to one material between fibers and recording points. Such computations have already been performed with FEM and should be integrated in NRV
@@ -200,19 +196,13 @@ NRV is certainly not perfect, and we hope that the open-science approach can con
 - **Objects for fiber-populations:** generation and packing are based on functions, we hope to change to objects to ease the way of script ex-novo population production
 
 - **Post-processing options:**
-
     - provide automatic link between FEM computation results and *Paraview*
-
     - provide basic integration of *Pyvista* and *Matplotlib* to ease results exploration
-
     - design wrapper and decorators with simulations to ease systematic tasks in results post-processing
 
 - **Compatibility and marking of results:** provide automated tagging of objects with version and develop routines for versions checking.
 
 - **Parallel computing**
-
     - migrate to *multiprocessing* (Python core library)
-
     - parallel version of axon population generation and axon packing
-
     - design further decorators to clean scripting and make syntax more pythonic

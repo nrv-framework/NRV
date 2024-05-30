@@ -5,6 +5,7 @@ from ..CostFunctions import cost_function
 import numpy as np
 
 from ...backend.NRV_Results import NRV_results
+from ...backend.MCore import MCH
 from ...backend.log_interface import pass_info, rise_warning
 
 
@@ -95,7 +96,15 @@ class optim_results(NRV_results):
         return self.findbestpart(decimals - 1, verbose=verbose, lim_it=lim_it)
 
     def compute_best_pos(self, cost_function:cost_function, **kwrgs):
-        return cost_function.get_sim_results(self.x)
+        if MCH.is_alone():
+            return cost_function.get_sim_results(self.x)
+        else:
+            if MCH.do_master_only_work():
+                x_ = self.x
+            else:
+                x_ = None
+            x_ = MCH.master_broadcasts_to_all(x_)
+            return cost_function.get_sim_results(x_)
 
     ############################
     ##    plotting methods    ##

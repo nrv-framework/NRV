@@ -192,7 +192,7 @@ class stimulus_CM(context_modifier):
 
 
 class biphasic_stimulus_CM(stimulus_CM):
-    """
+    r"""
     Context modifier which generate a stimulus biphasic stimulus from the input tuning parameters.
 
     Parameters
@@ -207,6 +207,8 @@ class biphasic_stimulus_CM(stimulus_CM):
         anodic (positive stimulation value) current and, in uA
     t_inter     : float or str
         inter pulse timing, in ms
+    s_ratio     : float or str
+        if s_cathod set to None, s_cathod is set as: :math:`s_{anod}*s_{ratio}`. by default 0.2
     stim_gen                : callable, optional
         function use to generate the stimulus from the interpolated values, by default None
     stim_gen_kwargs         : dict, optional
@@ -241,6 +243,7 @@ class biphasic_stimulus_CM(stimulus_CM):
         t_cathod:float|str=60e-3,
         t_inter:float|str=40e-3,
         s_anod:float|str=None,
+        s_ratio:float|str=0.2,
         stim_gen:callable=None,
         stim_gen_kwargs:dict={},
         extracel_context:bool=True,
@@ -260,41 +263,38 @@ class biphasic_stimulus_CM(stimulus_CM):
         self.t_cathod = t_cathod
         self.t_inter = t_inter
         self.s_anod = s_anod
+        self.s_ratio = s_ratio
 
     def __set_values(self, X:np.ndarray):
-        N_X = len(X)
         start = self.start
         s_cathod = self.s_cathod
         t_cathod = self.t_cathod
         t_inter = self.t_inter
         if isinstance(self.start, str):
-            for i in range(N_X):
-                if str(i) in self.start:
-                    start = X[i]
+            start = X[int(self.start)]
         if isinstance(self.s_cathod, str):
-            for i in range(N_X):
-                if str(i) in self.s_cathod:
-                    s_cathod = X[i]
+            s_cathod = X[int(self.s_cathod)]
         if isinstance(self.t_cathod, str):
-            for i in range(N_X):
-                if str(i) in self.t_cathod:
-                    t_cathod = X[i]
+            t_cathod = X[int(self.t_cathod)]
         if isinstance(self.t_inter, str):
-            for i in range(N_X):
-                if str(i) in self.t_inter:
-                    t_inter = X[i]
-        return start, s_cathod, t_cathod, t_inter
+            t_inter = X[int(self.t_inter)]
+        s_anod = self.s_anod
+        if s_anod is not None:
+            if isinstance(self.s_anod, str):
+                s_anod = X[int(self.s_anod)]
+        else:
+            s_ratio = self.s_ratio
+            if isinstance(self.s_ratio, str):
+                s_ratio = X[int(self.s_ratio)]
+            s_anod = s_cathod * s_ratio
+        return start, s_cathod, t_cathod, t_inter, s_anod
 
     def stimulus_generator(self, X_interp) -> stimulus:
         if self.stim_gen is not None:
             stim = self.stim_gen(X_interp, **self.stim_gen_kwargs)
         else:
             stim = stimulus()
-            start, s_cathod, t_cathod, t_inter = self.__set_values(X_interp)
-            if self.s_anod is None:
-                s_anod = s_cathod / 5
-            else:
-                s_anod = self.s_anod
+            start, s_cathod, t_cathod, t_inter, s_anod = self.__set_values(X_interp)
             stim.biphasic_pulse(start, s_cathod, t_cathod, s_anod, t_inter)
             return stim
 

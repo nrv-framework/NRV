@@ -1,178 +1,207 @@
-Example O-01: Ploting Optimization - context modifiers
-======================================================
+Example O-01: Optimization Pulse Stimulus on Nerve
+==================================================
 
-This is a very small example of a way to plot the built-in
-``context_modifiers``
+This example is an extantion of the :doc:`Tuorial 5 </tutorials/5_first_optimization>`, The same problem is applied to a mono-fascicular nerve.
+
+The objective of the first optimization problem is to **minimize a rectangle pulse stimulus energy required by a LIFE-electrode to recruit all myelinated fibres of a mono-fascicular nerve**.
+
+.. note::
+    This example is run with only run on a 30-fibres nerve, for a small optimization (15 PSO particles, 40 iterations). Those parameters could be increase for a more realistic problem.
+
+.. Tip::
+    This code is *multicore friendly*, computation time could be reduce a lot by runing the script the following command (see :doc:`MCH </usersguide/parallel>`)
+
+        ::
+            mpirun -n 
 
 .. code:: ipython3
 
-    import numpy as np
-    import sys
     import matplotlib.pyplot as plt
-    
+    import numpy as np
+    import os
+    import sys
     sys.path.append("../")
     import nrv
     
-    fname = "figures/stimuli_v2"
-    small_linewidth = 1
-    big_linewidth = 5
-    markersize = 15
+    np.random.seed(4444)
+    
+    test_name = "Example_"
+    dir_res = f"./{test_name}/"
+    if not os.path.isdir(dir_res):
+        os.mkdir(dir_res)
+    
+    ## Cost function definition
+    my_cost0 = nrv.cost_function()
+    
+    # Static context
+    nerve_file = dir_res + "nerve.json"
+    
+    outer_d = 5 # mm
+    nerve_d = 300 # um
+    nerve_l = 5000 # um
+    
+    fasc1_d = 250 # um
+    fasc1_y = 0
+    fasc1_z = 0
+    n_ax1 = 30
     
     
+    nerve_1 = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d)
+    nerve_1.verbose = False
+    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax1, percent_unmyel=0, M_stat="Ochoa_M", U_stat="Ochoa_U",)
+    
+    fascicle_1 = nrv.fascicle(ID=0)      #we can add diameter here / no need to call define_circular_contour (not tested)
+    fascicle_1.define_circular_contour(fasc1_d)
+    fascicle_1.fill_with_population(axons_diameters, axons_type, fit_to_size=True,delta=5)
+    fascicle_1.generate_random_NoR_position()
+    nerve_1.add_fascicle(fascicle=fascicle_1, y=fasc1_y, z=fasc1_z)
+    
+    # LIFE in neither of the two fascicles
+    LIFE_stim0 = nrv.FEM_stimulation()
+    LIFE_stim0.reshape_nerve(Length=nerve_l)
+    life_d = 25 # um
+    life_length = 1000 # um
+    life_x_0_offset = life_length/2
+    life_y_c_0 = 0
+    life_z_c_0 = 0
+    elec_0 = nrv.LIFE_electrode("LIFE", life_d, life_length, life_x_0_offset, life_y_c_0, life_z_c_0)
+    
+    dummy_stim = nrv.stimulus()
+    dummy_stim.pulse(0, 0.1, 10)
+    LIFE_stim0.add_electrode(elec_0, dummy_stim)
+    nerve_1.attach_extracellular_stimulation(LIFE_stim0)
+    
+    fig, ax = plt.subplots(1, 1, figsize=(6,6))
+    nerve_1.plot(ax)
+    
+    nerve_1.compute_electrodes_footprints()
+    nerve_1.set_parameters(postproc_script="is_excited")
+    _ = nerve_1.save(fname=nerve_file, extracel_context=True)
+    nrv.synchronize_processes()
+    #nerve_1(t_sim=5)
+    del nerve_1
+    
+    
+    t_sim = 5
     dt = 0.005
-    t_sim = 0.5
-    t_end = 0.5
-    I_max_abs = 100
-    t_bound = (0, t_end)
-    I_bound = (-I_max_abs, 0)
-    
-    ###################################################################
-    ####################### waveform figure ###################
-    ##################################################################
-    # Biphasic pulse
-    t_start = 0.1
-    context_modifier1 = nrv.biphasic_stimulus_CM(start=t_start, s_cathod="0", T_cathod="1", s_anod=0)
-    def generate_waveform0(Xsp2, t_sim=100, **kwargs):
-        stim = context_modifier1.stimulus_generator(Xsp2)
-        stim0 = nrv.stimulus()
-        stim0.s = np.zeros(1000)
-        stim0.t = np.linspace(0, t_sim, 1000)
-        stim0 += stim
-        return stim0.s
-    
-    Xb = [85, 0.25]
-    
-    waveform0 = generate_waveform0(Xb, t_sim=t_sim)
-    t0 = np.linspace(0, t_sim, len(waveform0))
-    # Spline 2pts
-    kwrgs_interp = {
-        "dt": dt,
-        "amp_start": 0,
-        "amp_stop": 0,
-        "intertype": "Spline",
-        "bounds": I_bound,
-        "fixed_order": False,
-        "t_end": t_end,
+    kwarg_sim = {
+        "dt":dt,
         "t_sim":t_sim,
-        "t_shift":0,
-        "strict_bounds":True,
-        }
+    }
+    
+    static_context = nerve_file
+    my_cost0.set_static_context(static_context, **kwarg_sim)
+    
+    # Context modifier
+    t_start = 1
+    I_max_abs = 100
+    
+    cm_0 = nrv.biphasic_stimulus_CM(start=t_start, s_cathod="0", t_cathod="1", s_anod=0)
+    my_cost0.set_context_modifier(cm_0)
+    
+    # Cost evaluation
+    costR = nrv.recrutement_count_CE(reverse=True)
+    costC = nrv.stim_energy_CE()
+    
+    cost_evaluation = costR + 0.01 * costC
+    my_cost0.set_cost_evaluation(cost_evaluation)
     
     
-    Xsp1 = [0.1, 0]
-    Xsp1 += [0.27, -20]
-    Xsp1 += [0.35,0]
+    ## Optimizer
+    pso_kwargs = {
+        "maxiter" : 40,
+        "n_particles" : 20,
+        "opt_type" : "local",
+        "options": {'c1': 0.55, 'c2': 0.55, 'w': 0.75, 'k': 2, 'p': 1},
+        "bh_strategy": "reflective",
+    }
+    pso_opt = nrv.PSO_optimizer(**pso_kwargs)
     
-    waveform1 = nrv.interpolate_Npts(Xsp1,**kwrgs_interp)
-    t1 = np.linspace(0, t_sim, len(waveform1))
-    
-    Xsp2 = [0.1, 0]
-    Xsp2 += [0.22, -70]
-    Xsp2 += [0.15, -30]
-    Xsp2 += [0.35,0]
-    
-    waveform2 = nrv.interpolate_Npts(Xsp2,**kwrgs_interp)
-    t2 = np.linspace(0, t_sim, len(waveform2))
+    ## Problem definition
+    my_prob = nrv.Problem()
+    my_prob.costfunction = my_cost0
+    my_prob.optimizer = pso_opt
     
     
-    fig, ax = plt.subplots(figsize=(5,3))
-    #plt.gcf()
+    # Optimization
+    t_end = 0.5
+    bounds0 = (
+        (0, I_max_abs),
+        (0.01, t_end),
+    )
+    pso_kwargs_pb_0 = {
+        "dimensions" : 2,
+        "bounds" : bounds0,
+        "comment":"pulse"}
     
-    #axes
-    ax.set_axis_off()
-    t_bound_plot = [-0.05, t_sim]
-    I_bound_plot = [-I_max_abs, 10]
+    res0 = my_prob(**pso_kwargs_pb_0)
     
-    ax.set_xlim(t_bound_plot)
-    ax.set_ylim(I_bound_plot)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    ax.plot(t_bound_plot, [0, 0], linewidth=small_linewidth,color="k")
-    ax.plot([0, 0], I_bound_plot, linewidth=small_linewidth,color="k")
-
-
+    res_sim = res0.compute_best_pos(my_cost0)
+    
+    # Plot results on master process
+    if nrv.MCH.do_master_only_work():
+        fig_costs, axs_costs = plt.subplots(2, 1)
+    
+        stim = cm_0(res0.x, static_context).extra_stim.stimuli[0]
+        stim.plot(axs_costs[0])
+        axs_costs[0].set_xlabel("best stimulus shape")
+        axs_costs[0].set_xlabel("time (ms)")
+        axs_costs[0].set_ylabel("amplitude (µA)")
+    
+        res0.plot_cost_history(axs_costs[1])
+        axs_costs[1].set_xlabel("optimization iteration")
+        axs_costs[1].set_ylabel("cost")
+        fig_costs.tight_layout()
+    
+    
+        fig_best, ax_best = plt.subplots(figsize=(6,6))
+        ax_best.set_title("recruited fibers")
+        res_sim.plot_recruited_fibers(ax_best)
 
 
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x30401bd70>]
-
-.. image:: ../images/o01_plot_optim_1_1.png
-
-
-waveform 2
-----------
-
-.. code:: ipython3
-
-    # details wf2
-    for i in range(len(Xsp2)//2):
-        ax.plot([Xsp2[2*i], Xsp2[2*i]], [0, Xsp2[2*i+1]], ":", linewidth=small_linewidth,color="k")
-        ax.plot([0, Xsp2[2*i]], [Xsp2[2*i+1], Xsp2[2*i+1]], ":", linewidth=small_linewidth,color="k")
-    
-    
-    # wf2
-    ax.plot(t2, waveform2, linewidth=big_linewidth,color="#006161")
-    ax.plot(Xsp2[::2], Xsp2[1::2], "+", markersize=markersize, markeredgewidth=big_linewidth/2,color="darkred")
-    fig
-
-
-
-
-.. image:: ../images/o01_plot_optim_3_0.png
-
-
-
-waveform 1
-----------
-
-.. code:: ipython3
-
-    # details wf1
-    for i in range(len(Xsp1)//2):
-        ax.plot([Xsp1[2*i], Xsp1[2*i]], [0, Xsp1[2*i+1]], ":", linewidth=small_linewidth,color="k")
-        ax.plot([0, Xsp1[2*i]], [Xsp1[2*i+1], Xsp1[2*i+1]], ":", linewidth=small_linewidth,color="k")
-    
-    
-    # wf2
-    ax.plot(t1, waveform1, linewidth=big_linewidth,color="#009999")
-    ax.plot(Xsp1[::2], Xsp1[1::2], "+", markersize=markersize, markeredgewidth=big_linewidth/2,color="darkred")
-    fig
-
-
-
-
-.. image:: ../images/o01_plot_optim_5_0.png
-
-
-
-waveform 0
-----------
-
-.. code:: ipython3
-
-    # details wf0
-    offset = 5
-    ax.plot([t_start, t_start+Xb[1]], [-Xb[0]-offset, -Xb[0]-offset], linewidth=small_linewidth,color="darkred")
-    ax.plot([t_start], [-Xb[0]-offset], "4", markersize=markersize,markeredgewidth=small_linewidth, color="darkred")
-    ax.plot([t_start+Xb[1]], [-Xb[0]-offset], "3", markersize=markersize,markeredgewidth=small_linewidth, color="darkred")
-    ax.plot([0, t_start], [-Xb[0], -Xb[0]], ":", linewidth=small_linewidth,color="k")
-    
-    # wf0
-    ax.plot(t0, waveform0, linewidth=big_linewidth,color="#715D99")
-    fig
-
-
-
+    NRV INFO: On 30 axons to generate, there are 30 Myelinated and 0 Unmyelinated
+    NRV INFO: Axon packing initiated. This might take a while...
 
 
 .. parsed-literal::
 
-    [<matplotlib.lines.Line2D at 0x304191d90>]
+    100%|██████████| 20000/20000 [00:00<00:00, 33466.52it/s]
+
+
+.. parsed-literal::
+
+    NRV INFO: Packing done!
+    NRV INFO: From Fascicle 0: Electrode/Axons overlap, 1 axons will be removed from the fascicle
+    NRV INFO: 30 axons remaining
+    NRV INFO: Mesh properties:
+    NRV INFO: Number of processes : 3
+    NRV INFO: Number of entities : 36
+    NRV INFO: Number of nodes : 8917
+    NRV INFO: Number of elements : 62380
+    NRV INFO: Static/Quasi-Static electrical current problem
+    NRV INFO: FEN4NRV: setup the bilinear form
+    NRV INFO: FEN4NRV: setup the linear form
+    NRV INFO: Static/Quasi-Static electrical current problem
+    NRV INFO: FEN4NRV: solving electrical potential
+    NRV INFO: FEN4NRV: solved in 2.9086241722106934 s
+
+
+.. parsed-literal::
+
+    pyswarms.single.general_optimizer: 100%|██████████|40/40, best_cost=0.228
 
 
 
+.. image:: ../images/o01_1_4.png
 
-.. image:: ../images/o01_plot_optim_7_1.png
+
+
+.. image:: ../images/o01_1_5.png
+
+
+
+.. image:: ../images/o01_1_6.png
 

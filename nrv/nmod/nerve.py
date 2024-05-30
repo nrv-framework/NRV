@@ -759,6 +759,7 @@ class nerve(NRV_simulable):
                 fasc.attach_extracellular_recorder(self.recorder)
 
     def __set_fascicles_simulation_parameters(self):
+        self.__set_fascicles_context()
         for fasc in self.fascicles.values():
             fasc.t_sim = self.t_sim
             fasc.record_V_mem = self.record_V_mem

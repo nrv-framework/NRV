@@ -19,7 +19,7 @@ start = 1
 t_pulse = 100e-3
 amplitude = 200
 
-test_stim_CM = nrv.harmonic_stimulus_CM(start = start,t_pulse=t_pulse)
+test_stim_CM = nrv.harmonic_stimulus_CM(start=start,t_pulse=t_pulse)
 
 
 t_sim=5
