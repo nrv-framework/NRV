@@ -2,6 +2,10 @@
 
 All notable changes to NRV are sumed up in this file.
 
+## [1.1.1] - XXXX
+
+### Fixed
+- issues with mcore optimization
 
 ## [1.1.0] - 2024-05-27
 
