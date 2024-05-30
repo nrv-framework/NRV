@@ -9,10 +9,12 @@ The objective of the first optimization problem is to **minimize a rectangle pul
     This example is run with only run on a 30-fibres nerve, for a small optimization (15 PSO particles, 40 iterations). Those parameters could be increase for a more realistic problem.
 
 .. Tip::
-    This code is *multicore friendly*, computation time could be reduce a lot by runing the script the following command (see :doc:`MCH </usersguide/parallel>`)
+    This code is *multicore friendly*, computation time could be reduced a lot by running the script on `N` the following command (see :doc:`MCH </usersguide/parallel>`)
 
         ::
-            mpirun -n 
+
+            mpirun -n N python example_o01.py
+
 
 .. code:: ipython3
 

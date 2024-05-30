@@ -106,7 +106,7 @@ The *NRV_test* file is a script that act as a test launcher. It should be called
 
 This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
   - "-d", "--dependances": Check NEURON and COMSOL installation
-  - "-l", "--list": Print the name of all unitary tests, an optional integerr can be added to arguments to specify the number of columns used to print
+  - "-l", "--list": Print the name of all unitary tests, an optional integer can be added to arguments to specify the number of columns used to print
   - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all the tests should be True, numerical values for debug only
   - "-s", "--syntax": Lint nrv syntax source code
   - "-a", "--all": launches even potentially failing tests due to third party softwares such as COMSOL
@@ -185,11 +185,11 @@ NRV is developed for the research and education community. We hope to provide a 
 NRV is certainly not perfect, and we hope that the open-science approach can contribute to improve the framework, however ensuring retrocompatilibty. There is a continuous effort from the Bioelectronics group of the IMS Laboratory (U. Bordeaux, Bordeaux INP, CNRS UMR 5218) to continue to develop NRV, and some purely scientific objectives are linked to this project. Here is a list of non-scientific and mostly technical objectives, that we intend to develop and on which we are also extremely happy to get help or guiding if you want to contribute:
 
 - **Improving geometry:**
-    - enable axon tortuosity for axons,
-    - enable elliptical shapes for fascicles and nerves (with automatized population filling and basic operations as already developed for round shapes fascicles/nerves).
-    - integrate mode complex shapes based on histology and image segmentation (with automatized population filling).
-    - extend FenicsX computation with curvilinear coordinates, to enable non-extruded 3D models of fascicles
-    - add electrode daughter-classes for more specific electrode geometries.
+    - Enable axon tortuosity for axons.
+    - Enable elliptical shapes for fascicles and nerves (with automatized population filling and basic operations as already developed for round shapes fascicles/nerves).
+    - Integrate mode complex shapes based on histology and image segmentation (with automatized population filling).
+    - Extend FenicsX computation with curvilinear coordinates, to enable non-extruded 3D models of fascicles.
+    - Add electrode daughter-classes for more specific electrode geometries.
 
 - **Improving recordings:** current recording simulation is based on analytical field computation, thus restricting to one material between fibers and recording points. Such computations have already been performed with FEM and should be integrated in NRV
 
