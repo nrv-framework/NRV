@@ -9,6 +9,16 @@ Module contents
    :undoc-members:
    :show-inheritance:
 
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 3
+
+   nrv.utils.cell
+
+
 Submodules
 ----------
 
@@ -35,3 +45,4 @@ nrv.utils.units module
    :members:
    :undoc-members:
    :show-inheritance:
+

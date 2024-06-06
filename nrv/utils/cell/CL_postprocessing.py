@@ -1,11 +1,15 @@
 """
 NRV-Cellular Level postprocessing.
+.. warning::
+
+    CL_postprocessing functions are deprecated. Use axon_results and associated methods instead.
 """
+
 import faulthandler
 from collections.abc import Iterable
 
 import numpy as np
-from numba import jit
+#from numba import jit
 from scipy import signal
 
 from ...backend.file_handler import is_iterable, json_dump, json_load
@@ -39,7 +43,13 @@ def save_axon_results_as_json(results, filename):
     filename    : str
         name of the file where results are saved
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "save_axon_results_as_json is obsolete use method from axon_result objects instead"
+    )
     json_dump(results, filename)
+
 
 
 def load_simulation_from_json(filename):
@@ -51,6 +61,10 @@ def load_simulation_from_json(filename):
     filename    : str
         name of the file where axons simulations are saved
     """
+    rise_warning(
+            "DeprecationWarning: ",
+            "load_simulation_from_json is obsolete use method from axon_result objects instead"
+        )
     results = json_load(filename)
 
     # convert iterables to numpy arrays
@@ -95,6 +109,11 @@ def remove_key(my_dict, key, verbose=False):
     key     : str
         name of the key to delete
     """
+    
+    rise_warning(
+        "DeprecationWarning: ",
+        "remove_key is obsolete use method from axon_result objects instead"
+    )
     # if isinstance(key, Iterable):
     #    for k in key:
     #        del my_dict[k]
@@ -115,6 +134,11 @@ def remove_non_NoR_zones(my_dict, key):
     key     : str
         name of the key to clean
     """
+
+    rise_warning(
+            "DeprecationWarning: ",
+            "remove_non_NoR_zones is obsolete use method from axon_result objects instead"
+        )
     if "V_mem" in key:
         if my_dict["Axon_type"] == "Myelinated":
             new_entry = []
@@ -145,6 +169,11 @@ def generate_axon_from_results(results):
     ax              : unmyelinated or myelinated
         blank axon with the same dimensions as in the results
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "generate_axon_from_results property is obsolete use method from axon_result objects instead"
+    )
     if not results["myelinated"]:
         ax = unmyelinated(**results)
     else:
@@ -172,6 +201,11 @@ def filter_freq(my_dict, my_key, freq, Q=10):
     Q       : float
         quality factor of the filter, by default set to 10
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "filter_freq is obsolete use method from axon_result objects instead"
+    )
     if isinstance(freq, Iterable):
         f0 = np.asarray(freq)
     else:
@@ -229,6 +263,11 @@ def rasterize(
         threshold for spike dection, in mV. If 0 is specified the threshold associated with the axon is automatically chosen. By default set to 0.
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "rasterize is obsolete use method from axon_result objects instead"
+    )
     if t_stop == 0:
         t_stop = int(my_dict["t_sim"] / my_dict["dt"])
     else:
@@ -254,7 +293,7 @@ def rasterize(
         my_dict[my_key + "_raster_x_position"],
         my_dict[my_key + "_raster_time_index"],
         my_dict[my_key + "_raster_time"],
-    ) = spike_detection(
+    ) = AP_detection(
         my_dict[my_key],
         my_dict["t"],
         x,
@@ -268,13 +307,18 @@ def rasterize(
     )
 
 
-@jit(nopython=True, fastmath=True)
-def spike_detection(
+#@jit(nopython=True, fastmath=True)
+def AP_detection(
     Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
 ):
     """
     Internal use only, spike detection just in time compiled to speed up the process
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "AP_detection is obsolete use method from axon_result objects instead"
+    )
     raster_position = []
     raster_x_position = []
     raster_time_index = []
@@ -333,6 +377,11 @@ def find_spike_origin(
     start_x_position    : float
         first occurance position in um
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "find_spike_origin is obsolete use method from axon_result objects instead"
+    )
     # define max timing if not already defined
     if t_stop == 0:
         t_stop = my_dict["t_sim"]
@@ -402,6 +451,11 @@ def find_spike_last_occurance(
     x_last  : float
         last occurance position in um
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "find_spike_last_occurance is obsolete use method from axon_result objects instead"
+    )
     # define max timing if not already defined
     if t_stop == 0:
         t_stop = my_dict["t_sim"]
@@ -504,6 +558,11 @@ def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
     ----
     the velocity is computed with first and last occurance of a spike, be careful specifying the computation window if multiple spikes. This function will not see velocity variation.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "speed is obsolete use method from axon_result objects instead"
+    )
     # define max timing if not already defined
     if t_stop == 0:
         t_stop = my_dict["t_sim"]
@@ -569,6 +628,11 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
     flag 	: bool or None
         True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "block is obsolete use method from axon_result objects instead"
+    )
     position_max = 0
     blocked_spike_positionlist = []
     if t_stop == 0:
@@ -633,6 +697,10 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    rise_warning(
+        "DeprecationWarning: ",
+        "max_spike_position is obsolete use method from axon_result objects instead"
+    )
     if spike_begin == "down":
         while blocked_spike_positionlist[
             position_max + 1
@@ -651,11 +719,16 @@ def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="do
         return position_max
 
 
-@jit(nopython=True, fastmath=True)
+#@jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
     """
     spike counting, just in time compiled. For internal use only.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "count_spike is obsolete use method from axon_result objects instead"
+    )
     if len(onset_position) == 0:
         spike_number = 0
         return 0
@@ -683,6 +756,11 @@ def check_test_AP(results_sim):
     test_AP     : float or None
         time in ms of the first test AP during the simulation. None if no test AP found
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "check_test_AP is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
     if "intra_stim_starts" not in results_sim:
@@ -724,6 +802,11 @@ def detect_start_extrastim(results_sim, threshold=None):
     t_start     : list or float or None
         list of stimulation starting time in ms, float if only one stimulation and None if no stimulation
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "detect_start_extrastim is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -759,6 +842,11 @@ def extra_stim_properties(results_sim):
         dictonry containing the position (x, y, z), the stimulation start (ms) and maximum value (uA)
         for each electrodes
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "extra_stim_properties is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -794,6 +882,11 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
     axon_state       : dict
         dictionary containing axon caracteristics
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "axon_state is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -891,6 +984,11 @@ def get_index_myelinated_sequence(results, n):
     n_center              : int
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "get_index_myelinated_sequence is obsolete use method from axon_result objects instead"
+    )
     if not results["myelinated"] or results["rec"] == "node":
         return "node"
     else:
@@ -921,6 +1019,11 @@ def find_central_node_index(results):
     n_center              : int
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "find_central_node_index is obsolete use method from axon_result objects instead"
+    )
     n_center = len(results["x_rec"]) // 2
     if not results["myelinated"] or results["rec"] == "node":
         return n_center
@@ -950,6 +1053,10 @@ def compute_f_mem(results):
         value of the cutoff frequency of the axon's membrane
     """
 
+    rise_warning(
+        "DeprecationWarning: ",
+        "compute_f_mem is obsolete use method from axon_result objects instead"
+    )
     if "g_mem" not in results:
         rise_warning("f_mem cannot be computed computed without membrane conductivity")
         return None
@@ -983,6 +1090,11 @@ def get_myeline_properties(results):
     f_mem              : np.ndarray
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "get_myeline_properties is obsolete use method from axon_result objects instead"
+    )
     if not results["myelinated"] or results["rec"] == "node":
         rise_warning("No myeline in the axon simulated, None returned")
         return None
@@ -1005,12 +1117,21 @@ def plot_Nav_states(ax, values, title=""):
     """
     Plot the state machine for kinetic (Markov) Nav 1.1 to 1.9 values
 
-    Parameters:
-    -----------
-    ax      : matplotlib axis object
+    Parameters
+    ----------
+    ax : matplotlib axis object
         axes of the figure to work on
-    values  : list, array, numpy array
+    values : list, array, numpy array
+        
+    title : str, optional
+        Title of the plot, by default ""
     """
+
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "plot_Nav_states is obsolete use method from axon_result objects instead"
+    )
     states = [r"$I_1$", r"$I_2$", r"$C_1$", r"$C_2$", r"$O_1$", r"$O_2$"]
 
     X = [-1, -3, 0, 1, 0, 3]

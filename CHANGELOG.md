@@ -3,6 +3,12 @@
 All notable changes to NRV are sumed up in this file.
 
 ## [1.1.1] - XXXX
+### Added
+- reworked ``rasterize`` method of the ``axon_result`` class
+- deprecated functions of ``CL_postprocessing``
+- Add the ``axon_AP_threshold`` function in ``CL_simulations`` to evaluate activation thresholds with arbitrary stimulation settings (see Example 16)
+- deprecated ``firing_threshold_point_source`` and ``firing_threshold_from_axon``from ``CL_simulations`` as they are replaced by the more generalized version ``axon_AP_threshold``. 
+- Added CL simulation documentation.
 
 ### Fixed
 - issues with mcore optimization

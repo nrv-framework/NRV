@@ -37,7 +37,7 @@ Chapters of the User's Guide
    usersguide/postproc
    usersguide/parallel
    usersguide/optimization
-
+   usersguide/CL_simulations
 
 
 Note on object saving

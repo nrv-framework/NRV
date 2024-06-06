@@ -332,3 +332,18 @@ def prompt_debug(*args):
         anything to pass to icecrean
     """
     ic(*args)
+
+
+def clear_prompt_line(n:int=1) -> None:
+    """
+    Clear lines of the prompt, to overwrite stuffs.
+
+    Parameters
+    ----------
+    n : int, optional
+        Number of line to clear, by default 1
+    """
+    LINE_UP = '\033[1A'
+    LINE_CLEAR = '\x1b[2K'
+    for i in range(n):
+        print(LINE_UP, end=LINE_CLEAR)

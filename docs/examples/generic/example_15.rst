@@ -4,6 +4,11 @@ Example 15: Activation thresholds with LIFE and cuff-like electrodes
 This script evaluates the activation threshold of myelinated fibers when
 stimulated with a cuff electrode and with a LIFE
 
+.. tip::
+    NRV now provides a more generalized approach to estimated activation threshold of an axon, :func:`~nrv.utils.cell.CL_simulations.axon_AP_threshold`, that works with any stimulation parameters.
+    See documentation :doc:`here <../../usersguide/CL_simulations>` and some usage examples in :doc:`Example 16 </examples/generic/example_16>`.
+
+
 .. code:: ipython3
 
     import sys

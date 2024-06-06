@@ -3,7 +3,7 @@ NRV-:class:`.axon_results` handling.
 """
 
 import numpy as np
-from numba import jit
+from itertools import combinations
 
 from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
@@ -29,6 +29,41 @@ def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="do
             position_max = position_max + 1
         return position_max
 
+def AP_detection(
+    Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
+):
+    """
+    Internal use only, detects an AP
+    """
+    raster_position = []
+    raster_x_position = []
+    raster_time_index = []
+    raster_time = []
+    # parsing to find spikes
+
+    for i in list_to_parse:
+        t_last_spike = t_start - t_refractory
+        for j in range(int(t_start * (1 / dt)), t_stop):
+            if (
+                Voltage[i][j] <= thr
+                and Voltage[i][j + 1] >= thr
+                and Voltage[i][min((j + int(t_min_spike * (1 / dt))), t_stop)] >= thr
+                and (j * dt - t_last_spike) > t_refractory
+            ):  # 1st line: threshold crossing, 2nd: minimum time above threshold,3rd: refractory period
+                # there was a spike, get time and position
+                raster_position.append(i)
+                raster_x_position.append(x[i])
+                raster_time_index.append(j)
+                raster_time.append(t[j])
+                # memorize the time in ms, to evaluate refractory period
+                t_last_spike = j * dt
+    # return results
+    return (
+        np.asarray(raster_position),
+        np.asarray(raster_x_position),
+        np.asarray(raster_time_index),
+        np.asarray(raster_time),
+    )
 
 #@jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
@@ -57,115 +92,121 @@ class axon_results(sim_results):
 
 
     def is_recruited(self) -> bool:
+        """Return True if an AP is detected, else False.
+
+        Returns
+        -------
+        is_recruited                : bool
+            Return True if an AP is detected, else False.
+        """
         if not ("V_mem_raster_position") in  self:
-            self.rasterize("V_mem")
+            self.rasterize()
         if len(self["V_mem_raster_position"]) == 0:
             return(False)
         else:
             return(True)
-
-    def rasterize(
-        self, my_key, t_start=0, t_stop=0, t_min_spike=0.1, t_refractory=2, threshold=0
-    ):
+        
+    def rasterize(self,**kwargs) -> None :
         """
-        Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with spike detection.
-        This function adds 4 items to the dictionnary, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
+        Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with AP detection.
+        This function adds 4 items to the class, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
         These keys correspond to:
-        _raster_position    : spike position as the indice of the original key
-        _raster_x_position  : spike position as geometrical position in um
-        _raster_time_index  : spike time as the indice of the original key
-        _raster_time        : spike time as ms
+
+            - _raster_position    : AP position as the indice of the original key
+            - _raster_x_position  : AP position as geometrical position in um
+            - _raster_time_index  : AP time as the indice of the original key
+            - _raster_time        : AP time as ms
 
         Parameters
         ----------
-        key     : str
-            name of the key to rasterize
-        t_start         : float
-            time at which the spike detection should start, in ms. By default 0
-        t_stop          : float
-            maximum time to apply spike detection, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-        t_min_spike     : float
-            minimum duration of a spike over its threshold, in ms. By default set to 0.1 ms
-        t_refractory    : float
-            refractory period for a spike, in ms. By default set to 2 ms.
-        threshold       : float
-            threshold for spike dection, in mV. If 0 is specified the threshold associated with the axon is automatically chosen. By default set to 0.
-            Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
+        **kwargs: 
+            - vm_key: (str) name of the key to rasterize, default is "V_mem"
+            - threshold: (float) threshold for AP detection, in mV. Default value is taken from axon model
+            - t_min_AP: (float) minimum AP duration, in ms. Default is 0.1ms
+            - t_refractory: (float) inter-AP duration, in ms. Default is 2ms
+            - t_start: (float) start time for rasterize, in ms. Default is 0ms
+            - t_stop: (float) stop time for rasterize, in ms. Default is simulation time.
         """
-        if t_stop == 0:
-            t_stop = int(self["t_sim"] / self["dt"])
+
+        if "V_mem_key" in kwargs:
+            vm_key = kwargs["V_mem_key"]
         else:
-            t_stop = int(t_stop / self["dt"])
-        if threshold == 0:
-            thr = self["threshold"]
+            vm_key = "V_mem"
+
+        if "threshold" in kwargs:
+            threshold = kwargs["threshold"]
         else:
-            thr = threshold
+            threshold = self["threshold"]
+
+        if "t_min_AP" in kwargs:
+            t_min_AP = kwargs["t_min_AP"]
+        else:
+            t_min_AP=0.1
+
+        if "t_refractory" in kwargs:
+            t_refractory = kwargs["t_refractory"]
+        else:
+            t_refractory=2
+
+        if "t_start" in kwargs:
+            t_start_idx = np.where(self.t>=kwargs["t_start"])[0][0]
+        else:
+            t_start_idx = 0
+        
+        if "t_stop" in kwargs:
+            t_stop_idx = np.where(self.t<=kwargs["t_stop"])[0][-1]
+        else:
+            t_stop_idx = -1
+        t = self.t.copy()
+        t = t[t_start_idx:t_stop_idx]
+        vm = self[vm_key].copy()
+
         ## selecting the list of position considering what has been recorded
         if self["myelinated"] == True:
             if self["rec"] == "all":
-                list_to_parse = self["node_index"]
-                x = self["x"]
+                x_idx = self["node_index"]
+                x = self["x"].copy()[x_idx]
+                vm = vm[x_idx]
             else:
-                list_to_parse = np.arange(len(self["x_rec"]))  # self[my_key]
-                x = self["x_rec"]
+                x = self["x_rec"].copy()
         else:
-            list_to_parse = np.arange(len(self["x_rec"]))  # self[my_key]
-            x = self["x_rec"]
-        # spike detection
-        (
-            self[my_key + "_raster_position"],
-            self[my_key + "_raster_x_position"],
-            self[my_key + "_raster_time_index"],
-            self[my_key + "_raster_time"],
-        ) = self.spike_detection(
-            my_key,
-            self["t"],
-            x,
-            list_to_parse,
-            thr,
-            self["dt"],
-            t_start,
-            t_stop,
-            t_refractory,
-            t_min_spike,
-        )
+            x = self["x_rec"].copy()
 
-    #@jit(nopython=True, fastmath=True)
-    def spike_detection(
-        self, my_key, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
-    ):
-        """
-        Internal use only, spike detection just in time compiled to speed up the process
-        """
-        Voltage = self[my_key]
-        raster_position = []
-        raster_x_position = []
-        raster_time_index = []
-        raster_time = []
-        # parsing to find spikes
-        for i in list_to_parse:
-            t_last_spike = t_start - t_refractory
-            for j in range(int(t_start * (1 / dt)), t_stop):
-                if (
-                    Voltage[i][j] <= thr
-                    and Voltage[i][j + 1] >= thr
-                    and Voltage[i][min((j + int(t_min_spike * (1 / dt))), t_stop)] >= thr
-                    and (j * dt - t_last_spike) > t_refractory
-                ):  # 1st line: threshold crossing, 2nd: minimum time above threshold,3rd: refractory period
-                    # there was a spike, get time and position
-                    raster_position.append(i)
-                    raster_x_position.append(x[i])
-                    raster_time_index.append(j)
-                    raster_time.append(t[j])
-                    # memorize the time in ms, to evaluate refractory period
-                    t_last_spike = j * dt
-        # return results
-        return (
-            np.asarray(raster_position),
-            np.asarray(raster_x_position),
-            np.asarray(raster_time_index),
-            np.asarray(raster_time),
-        )
+        t_ap = np.array([],np.int32)
+        x_idx_AP = np.array([],np.int32)
+
+        for x_val,v in enumerate(vm):
+            v = v[t_start_idx:t_stop_idx]
+            itemindex = np.where(v >= threshold)[0]                 #find vmem above threshold
+            if (len(itemindex)):
+                end_cons_idx = np.where(np.diff(itemindex) != 1)[0]     #find when indexes are not consecutive (ie multiple APs)
+                start_APs_idx = itemindex[end_cons_idx+1]               #get start index of each APs
+                end_APs_idx = itemindex[end_cons_idx]                   #get stop index of each APs
+
+                start_APs_idx = np.concatenate([[itemindex[0]],start_APs_idx])  #add index 0 for start idxs
+                end_APs_idx = np.concatenate([end_APs_idx,[itemindex[-1]]])     #add index -1 in stop idxs
+                dur_APs = t[end_APs_idx] - t[start_APs_idx]           #get duration of each APs
+                dur_inter_APs = t[np.diff(start_APs_idx)]                  #get inter APs duration
+
+                AP_mask = np.where(dur_APs<t_min_AP)[0]                         #mask when AP duration is too small
+                AP_mask2 = np.where(dur_inter_APs<t_refractory)[0]+1            #mask when inter APs duration is too small
+                AP_mask = np.concatenate([AP_mask,AP_mask2])
+
+                start_APs_idx = np.delete(start_APs_idx,AP_mask)
+                end_APs_idx = np.delete(end_APs_idx,AP_mask)
+                dur_APs= np.delete(dur_APs,AP_mask)
+
+                t_ap = np.concatenate([t_ap,start_APs_idx])
+                x_idx_AP = np.concatenate([x_idx_AP,np.ones(np.size(start_APs_idx))*x_val])
+            
+        t_ap = np.int32(t_ap)
+        x_idx_AP = np.int32(x_idx_AP)
+        self[vm_key + "_raster_position"] = x_idx_AP
+        self[vm_key + "_raster_x_position"] = x[x_idx_AP]
+        self[vm_key + "_raster_time_index"] = t_ap          
+        self[vm_key + "_raster_time"] = t[t_ap]
+
+
 
     def find_spike_origin(
         self, my_key=None, t_start=0, t_stop=0, x_min=None, x_max=None
