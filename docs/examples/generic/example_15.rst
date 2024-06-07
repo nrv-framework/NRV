@@ -8,6 +8,10 @@ stimulated with a cuff electrode and with a LIFE
     NRV now provides a more generalized approach to estimated activation threshold of an axon, :func:`~nrv.utils.cell.CL_simulations.axon_AP_threshold`, that works with any stimulation parameters.
     See documentation :doc:`here <../../usersguide/CL_simulations>` and some usage examples in :doc:`Example 16 </examples/generic/example_16>`.
 
+.. tip::
+    NRV now provides the :func:`~nrv.utils.cell.CL_simulations.search_threshold_dispatcher` function, that leverage on multiprocessing to efficiently explore the effect of one parameter of the 
+    model on threshold, instead of using a serialized method like showed in this example.
+    See documentation :doc:`here <../../usersguide/CL_simulations>` and some usage examples in :doc:`Example 17 </examples/generic/example_17>`.
 
 .. code:: ipython3
 

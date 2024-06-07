@@ -4,6 +4,8 @@ NRV-Cellular Level simulations.
 import sys
 from typing import Callable
 from time import perf_counter
+from multiprocessing import Pool
+from tqdm import tqdm
 
 from ...backend.log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
 from ...backend.MCore import *
@@ -27,7 +29,32 @@ unmyelinated_models = [
 ]
 myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]
 
+def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None)->list[any]:
+    """
+    Automatically dispatches any search threshold callable object on available cpu cores. 
 
+    Parameters
+    ----------
+    search_func : Callable
+        Any callable object that takes as input a value from parameter_list and that returns a threshold
+    parameter_list : list[any]
+        Lists the values to evaluate the thresholds
+    ncore : int, optional
+        Fix the number of CPU core count. If None, ncore is set the size of parameter_list. By default None
+
+    Returns
+    -------
+    list[any]
+        List of ordered thresholds.
+    """
+    tot = len(parameter_list)
+    if ncore is not None:
+        tot = ncore
+    with Pool(tot) as pool: 
+        results = list(tqdm(pool.imap(search_func, parameter_list), total=len(parameter_list)))
+        pool.close()
+        pool.join()
+        return(results)
 
 def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                       t_sim: float = 5, tol: float = 1,
