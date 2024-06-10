@@ -1,3 +1,4 @@
 sphinx_rtd_theme
 furo
 sphinx_mdinclude
+sphinx_copybutton

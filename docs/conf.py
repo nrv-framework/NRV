@@ -86,6 +86,7 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.intersphinx",
     "sphinx_mdinclude",
+    'sphinx_copybutton'
 ]
 
 templates_path = ["_templates"]
