@@ -343,7 +343,7 @@ run.
 
 Although not identical, the 3 models have very similar propagation
 speeds. Indeed, these models are very similar, Gaines’ versions being
-directly derived from the MRG model. Lets do the same thing but with
+directly derived from the MRG model. Let's do the same thing but with
 unmyelinated models:
 
 .. code:: ipython3
