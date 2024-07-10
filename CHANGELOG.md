@@ -13,6 +13,7 @@ All notable changes to NRV are sumed up in this file.
 
 ### Fixed
 - issues with mcore optimization
+- Fix duplicate node count in node_index of myelinated axons
 
 ## [1.1.0] - 2024-05-27
 

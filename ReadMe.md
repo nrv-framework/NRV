@@ -8,7 +8,7 @@
 <img src="docs/images/logo.png" alt="NRV" width="50%" height="auto" class="center">
 
 # NRV
-*Python librairy for Peripheral Nervous System stimulation modeling*
+*Python library for Peripheral Nervous System stimulation modeling*
 
 NRV (or NeuRon Virtualizer) is a pythonic framework to enable fast and user friendly simulations of the Peripheral Nervous System. Axons models are simulated with the [NEURON](http://www.neuron.yale.edu/neuron) software, and extracellular fields are computed either from analytic equations such as point source approximation or with a more detailed description of the nerve and electrode geometry and Finite Elements Method, either using [COMSOL](https://www.comsol.com) (additional commercial licence requiered) or the [FENICS project](https://fenicsproject.org). All computations are performed with the quasistatic approximation of the Maxwell equations, no ephaptic coupling. Stimulation waveform can be of random shapes, and any kinds of electrode can be combined to model complex stimulation strategies.
 

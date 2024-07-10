@@ -40531,3 +40531,320 @@
 2024-06-07 10:53:24,183 - NRV DEBUG: FEN4NRV: solved in 33.36570191383362 s
 2024-06-07 10:53:26,313 - NRV DEBUG: FEN4NRV: solved in 35.412245750427246 s
 2024-06-07 10:53:29,808 - NRV DEBUG: FEN4NRV: solved in 36.429462909698486 s
+2024-06-26 14:56:08,434 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:29,926 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:31,323 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.372s)
+2024-06-26 14:56:32,730 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:34,140 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.387s)
+2024-06-26 14:56:35,538 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:36,994 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.432s)
+2024-06-26 14:56:53,457 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:54,832 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.351s)
+2024-06-26 14:56:56,211 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:56:57,639 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.405s)
+2024-06-26 14:56:59,061 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 14:57:00,415 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.331s)
+2024-06-26 15:00:49,643 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:00:51,048 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.375s)
+2024-06-26 15:00:52,463 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.391s)
+2024-06-26 15:00:53,993 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.504s)
+2024-06-26 15:00:55,444 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.422s)
+2024-06-26 15:00:57,078 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.607s)
+2024-06-26 15:00:58,637 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.533s)
+2024-06-26 15:01:00,328 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.668s)
+2024-06-26 15:01:01,847 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.495s)
+2024-06-26 15:01:03,318 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-06-26 15:01:06,859 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:01:08,258 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.369s)
+2024-06-26 15:01:09,655 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.374s)
+2024-06-26 15:01:11,085 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.407s)
+2024-06-26 15:01:12,492 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.378s)
+2024-06-26 15:01:13,897 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.379s)
+2024-06-26 15:01:15,288 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.367s)
+2024-06-26 15:01:16,677 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.366s)
+2024-06-26 15:01:18,058 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.358s)
+2024-06-26 15:01:19,462 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.381s)
+2024-06-26 15:01:20,849 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.365s)
+2024-06-26 15:01:20,849 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (13.99s).
+2024-06-26 15:01:20,850 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:01:22,261 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.384s)
+2024-06-26 15:01:23,628 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.344s)
+2024-06-26 15:01:25,024 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.373s)
+2024-06-26 15:01:26,430 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.38s)
+2024-06-26 15:01:27,812 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.359s)
+2024-06-26 15:04:31,841 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:04:33,223 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.352s)
+2024-06-26 15:04:34,628 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.38s)
+2024-06-26 15:04:36,034 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.381s)
+2024-06-26 15:04:37,425 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.365s)
+2024-06-26 15:04:38,807 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.355s)
+2024-06-26 15:04:40,172 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.34s)
+2024-06-26 15:04:41,561 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.365s)
+2024-06-26 15:04:42,942 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.355s)
+2024-06-26 15:04:44,397 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.433s)
+2024-06-26 15:04:45,747 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.328s)
+2024-06-26 15:04:45,748 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (13.91s).
+2024-06-26 15:04:45,748 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:04:47,101 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.326s)
+2024-06-26 15:04:48,472 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.345s)
+2024-06-26 15:04:49,860 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.336s)
+2024-06-26 15:04:51,248 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.36s)
+2024-06-26 15:04:52,606 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.334s)
+2024-06-26 15:10:15,201 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:10:16,589 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.358s)
+2024-06-26 15:10:17,935 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.323s)
+2024-06-26 15:10:19,278 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.32s)
+2024-06-26 15:10:20,644 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.338s)
+2024-06-26 15:10:22,035 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.364s)
+2024-06-26 15:10:23,403 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.343s)
+2024-06-26 15:10:24,762 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.335s)
+2024-06-26 15:10:26,136 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.349s)
+2024-06-26 15:10:27,505 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.346s)
+2024-06-26 15:10:28,857 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.329s)
+2024-06-26 15:10:28,857 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (13.66s).
+2024-06-26 15:10:28,858 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:10:30,213 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.327s)
+2024-06-26 15:10:31,555 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.32s)
+2024-06-26 15:10:32,938 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.359s)
+2024-06-26 15:10:34,294 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.329s)
+2024-06-26 15:10:35,665 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.347s)
+2024-06-26 15:12:38,976 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:12:40,435 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.429s)
+2024-06-26 15:12:41,847 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.388s)
+2024-06-26 15:12:43,229 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.359s)
+2024-06-26 15:12:44,599 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.344s)
+2024-06-26 15:12:45,976 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.355s)
+2024-06-26 15:13:20,259 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:13:21,654 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.364s)
+2024-06-26 15:13:23,022 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.343s)
+2024-06-26 15:13:24,394 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.346s)
+2024-06-26 15:13:25,774 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.353s)
+2024-06-26 15:13:27,219 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.422s)
+2024-06-26 15:14:17,409 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:14:18,794 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.356s)
+2024-06-26 15:14:20,168 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.35s)
+2024-06-26 15:14:21,568 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.376s)
+2024-06-26 15:14:22,943 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.348s)
+2024-06-26 15:14:24,316 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.351s)
+2024-06-26 15:15:25,510 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:15:27,028 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.435s)
+2024-06-26 15:15:28,446 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.38s)
+2024-06-26 15:15:29,810 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.341s)
+2024-06-26 15:15:31,167 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.33s)
+2024-06-26 15:15:32,520 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.33s)
+2024-06-26 15:23:41,133 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:23:42,512 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.345s)
+2024-06-26 15:23:43,874 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.339s)
+2024-06-26 15:23:45,290 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.393s)
+2024-06-26 15:23:46,654 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.337s)
+2024-06-26 15:23:48,036 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.358s)
+2024-06-26 15:25:25,354 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:25:30,238 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.367s)
+2024-06-26 15:25:33,846 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.368s)
+2024-06-26 15:25:36,173 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.375s)
+2024-06-26 15:25:43,991 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.352s)
+2024-06-26 15:25:46,418 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.363s)
+2024-06-26 15:26:20,011 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-26 15:26:23,308 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.423s)
+2024-06-26 15:26:24,713 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.369s)
+2024-06-26 15:26:26,103 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.366s)
+2024-06-26 15:26:29,639 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.366s)
+2024-06-26 15:26:31,041 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.369s)
+2024-06-27 14:30:27,641 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:30:29,207 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.504s)
+2024-06-27 14:30:30,676 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.443s)
+2024-06-27 14:30:32,112 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.411s)
+2024-06-27 14:30:33,541 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.401s)
+2024-06-27 14:30:35,024 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.458s)
+2024-06-27 14:34:33,481 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:34:34,955 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.431s)
+2024-06-27 14:34:36,387 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.407s)
+2024-06-27 14:34:37,839 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.425s)
+2024-06-27 14:34:39,373 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.503s)
+2024-06-27 14:34:40,798 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.399s)
+2024-06-27 14:36:02,956 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:36:06,983 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.513s)
+2024-06-27 14:36:10,205 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.397s)
+2024-06-27 14:36:13,280 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.395s)
+2024-06-27 14:36:16,658 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.397s)
+2024-06-27 14:36:30,236 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.404s)
+2024-06-27 14:36:45,957 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:36:57,146 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.423s)
+2024-06-27 14:37:00,163 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.395s)
+2024-06-27 14:37:02,695 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.394s)
+2024-06-27 14:37:09,540 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.475s)
+2024-06-27 14:37:11,845 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.379s)
+2024-06-27 14:38:11,927 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:38:39,906 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:40:20,900 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:40:49,998 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:41:24,101 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:42:30,284 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:42:47,827 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:43:11,787 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:44:17,539 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:44:19,006 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.436s)
+2024-06-27 14:44:20,675 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.642s)
+2024-06-27 14:44:22,284 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.584s)
+2024-06-27 14:44:23,898 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.586s)
+2024-06-27 14:44:25,348 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.427s)
+2024-06-27 14:44:26,768 - NRV DEBUG: Iteration 6, Amp is 206.25µA (9.09%)... AP Detected! (in 1.393s)
+2024-06-27 14:44:28,188 - NRV DEBUG: Iteration 7, Amp is 196.88µA (4.55%)... AP Detected! (in 1.392s)
+2024-06-27 14:44:29,609 - NRV DEBUG: Iteration 8, Amp is 192.19µA (2.38%)... AP Not Detected! (in 1.398s)
+2024-06-27 14:44:31,025 - NRV DEBUG: Iteration 9, Amp is 194.53µA (1.2%)... AP Not Detected! (in 1.392s)
+2024-06-27 14:44:32,469 - NRV DEBUG: Iteration 10, Amp is 195.7µA (0.6%)... AP Not Detected! (in 1.42s)
+2024-06-27 14:44:32,469 - NRV DEBUG: Activation threshold is 196.29µA (0.6%), found in 10 iterations (14.93s).
+2024-06-27 14:44:32,470 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:44:33,915 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.414s)
+2024-06-27 14:44:35,358 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.419s)
+2024-06-27 14:44:36,837 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.455s)
+2024-06-27 14:44:38,325 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Not Detected! (in 1.464s)
+2024-06-27 14:44:40,013 - NRV DEBUG: Iteration 5, Amp is 262.5µA (14.29%)... AP Not Detected! (in 1.651s)
+2024-06-27 14:44:41,765 - NRV DEBUG: Iteration 6, Amp is 281.25µA (6.67%)... AP Detected! (in 1.723s)
+2024-06-27 14:44:43,224 - NRV DEBUG: Iteration 7, Amp is 271.88µA (3.33%)... AP Detected! (in 1.43s)
+2024-06-27 14:44:44,698 - NRV DEBUG: Iteration 8, Amp is 267.19µA (1.72%)... AP Detected! (in 1.444s)
+2024-06-27 14:44:46,131 - NRV DEBUG: Iteration 9, Amp is 264.84µA (0.88%)... AP Not Detected! (in 1.408s)
+2024-06-27 14:44:46,131 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (13.66s).
+2024-06-27 14:44:52,762 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:44:54,211 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.418s)
+2024-06-27 14:44:55,727 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.491s)
+2024-06-27 14:44:57,191 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.425s)
+2024-06-27 14:44:58,664 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.446s)
+2024-06-27 14:45:00,153 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.448s)
+2024-06-27 14:45:01,590 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.413s)
+2024-06-27 14:45:03,075 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.46s)
+2024-06-27 14:45:04,503 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.404s)
+2024-06-27 14:45:05,930 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.403s)
+2024-06-27 14:45:07,355 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.4s)
+2024-06-27 14:45:07,355 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (14.59s).
+2024-06-27 14:45:07,355 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:45:08,786 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.403s)
+2024-06-27 14:45:10,209 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.398s)
+2024-06-27 14:45:11,625 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.392s)
+2024-06-27 14:45:13,046 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.393s)
+2024-06-27 14:45:14,461 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.39s)
+2024-06-27 14:45:15,878 - NRV DEBUG: Iteration 6, Amp is 206.25µA (9.09%)... AP Detected! (in 1.388s)
+2024-06-27 14:45:17,304 - NRV DEBUG: Iteration 7, Amp is 196.88µA (4.55%)... AP Detected! (in 1.398s)
+2024-06-27 14:45:18,742 - NRV DEBUG: Iteration 8, Amp is 192.19µA (2.38%)... AP Not Detected! (in 1.412s)
+2024-06-27 14:45:20,160 - NRV DEBUG: Iteration 9, Amp is 194.53µA (1.2%)... AP Not Detected! (in 1.393s)
+2024-06-27 14:45:21,573 - NRV DEBUG: Iteration 10, Amp is 195.7µA (0.6%)... AP Not Detected! (in 1.389s)
+2024-06-27 14:45:21,573 - NRV DEBUG: Activation threshold is 196.29µA (0.6%), found in 10 iterations (14.22s).
+2024-06-27 14:45:21,574 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 14:45:23,004 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.401s)
+2024-06-27 14:45:24,776 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.748s)
+2024-06-27 14:45:26,238 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.437s)
+2024-06-27 14:45:27,690 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Not Detected! (in 1.424s)
+2024-06-27 14:45:29,222 - NRV DEBUG: Iteration 5, Amp is 262.5µA (14.29%)... AP Not Detected! (in 1.508s)
+2024-06-27 14:45:30,711 - NRV DEBUG: Iteration 6, Amp is 281.25µA (6.67%)... AP Detected! (in 1.459s)
+2024-06-27 14:45:32,157 - NRV DEBUG: Iteration 7, Amp is 271.88µA (3.33%)... AP Detected! (in 1.418s)
+2024-06-27 14:45:33,596 - NRV DEBUG: Iteration 8, Amp is 267.19µA (1.72%)... AP Detected! (in 1.41s)
+2024-06-27 14:45:35,070 - NRV DEBUG: Iteration 9, Amp is 264.84µA (0.88%)... AP Not Detected! (in 1.451s)
+2024-06-27 14:45:35,071 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (13.5s).
+2024-06-27 16:31:05,514 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 16:31:06,926 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.377s)
+2024-06-27 16:31:08,325 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.373s)
+2024-06-27 16:31:09,811 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.453s)
+2024-06-27 16:31:11,327 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.469s)
+2024-06-27 16:31:12,805 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.45s)
+2024-06-27 16:31:14,275 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.444s)
+2024-06-27 16:31:15,766 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.466s)
+2024-06-27 16:31:17,170 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.379s)
+2024-06-27 16:31:18,559 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.366s)
+2024-06-27 16:31:19,952 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.37s)
+2024-06-27 16:31:19,953 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (14.44s).
+2024-06-27 16:31:19,953 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 16:31:21,379 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.398s)
+2024-06-27 16:31:22,768 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.365s)
+2024-06-27 16:31:24,332 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.54s)
+2024-06-27 16:31:25,767 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.407s)
+2024-06-27 16:31:27,281 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.49s)
+2024-06-27 16:31:28,672 - NRV DEBUG: Iteration 6, Amp is 206.25µA (9.09%)... AP Detected! (in 1.361s)
+2024-06-27 16:31:30,071 - NRV DEBUG: Iteration 7, Amp is 196.88µA (4.55%)... AP Detected! (in 1.372s)
+2024-06-27 16:31:31,506 - NRV DEBUG: Iteration 8, Amp is 192.19µA (2.38%)... AP Not Detected! (in 1.411s)
+2024-06-27 16:31:32,903 - NRV DEBUG: Iteration 9, Amp is 194.53µA (1.2%)... AP Not Detected! (in 1.374s)
+2024-06-27 16:31:34,390 - NRV DEBUG: Iteration 10, Amp is 195.7µA (0.6%)... AP Not Detected! (in 1.463s)
+2024-06-27 16:31:34,390 - NRV DEBUG: Activation threshold is 196.29µA (0.6%), found in 10 iterations (14.44s).
+2024-06-27 16:31:34,391 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-27 16:31:35,914 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.493s)
+2024-06-27 16:31:37,326 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.388s)
+2024-06-27 16:31:38,723 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.375s)
+2024-06-27 16:31:40,095 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Not Detected! (in 1.348s)
+2024-06-27 16:31:41,456 - NRV DEBUG: Iteration 5, Amp is 262.5µA (14.29%)... AP Not Detected! (in 1.337s)
+2024-06-27 16:31:42,827 - NRV DEBUG: Iteration 6, Amp is 281.25µA (6.67%)... AP Detected! (in 1.343s)
+2024-06-27 16:31:44,188 - NRV DEBUG: Iteration 7, Amp is 271.88µA (3.33%)... AP Detected! (in 1.334s)
+2024-06-27 16:31:45,557 - NRV DEBUG: Iteration 8, Amp is 267.19µA (1.72%)... AP Detected! (in 1.341s)
+2024-06-27 16:31:46,920 - NRV DEBUG: Iteration 9, Amp is 264.84µA (0.88%)... AP Not Detected! (in 1.339s)
+2024-06-27 16:31:46,920 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (12.53s).
+2024-06-28 11:52:35,210 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 11:52:36,663 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.417s)
+2024-06-28 11:52:38,087 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.399s)
+2024-06-28 11:52:39,583 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.472s)
+2024-06-28 11:52:41,001 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.391s)
+2024-06-28 11:52:42,427 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.398s)
+2024-06-28 11:52:43,853 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.399s)
+2024-06-28 11:52:45,281 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.403s)
+2024-06-28 11:52:46,963 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.658s)
+2024-06-28 11:52:48,382 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.395s)
+2024-06-28 11:52:49,910 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.502s)
+2024-06-28 11:52:49,910 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (14.7s).
+2024-06-28 11:52:49,910 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 11:52:51,399 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.46s)
+2024-06-28 11:52:52,938 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.515s)
+2024-06-28 11:52:54,406 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.444s)
+2024-06-28 11:52:55,910 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.475s)
+2024-06-28 11:52:57,772 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.837s)
+2024-06-28 11:52:59,409 - NRV DEBUG: Iteration 6, Amp is 206.25µA (9.09%)... AP Detected! (in 1.605s)
+2024-06-28 11:53:01,394 - NRV DEBUG: Iteration 7, Amp is 196.88µA (4.55%)... AP Detected! (in 1.956s)
+2024-06-28 11:53:03,379 - NRV DEBUG: Iteration 8, Amp is 192.19µA (2.38%)... AP Not Detected! (in 1.96s)
+2024-06-28 11:53:04,938 - NRV DEBUG: Iteration 9, Amp is 194.53µA (1.2%)... AP Not Detected! (in 1.532s)
+2024-06-28 11:53:06,536 - NRV DEBUG: Iteration 10, Amp is 195.7µA (0.6%)... AP Not Detected! (in 1.575s)
+2024-06-28 11:53:06,537 - NRV DEBUG: Activation threshold is 196.29µA (0.6%), found in 10 iterations (16.63s).
+2024-06-28 11:53:06,537 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 11:53:08,306 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.736s)
+2024-06-28 11:53:09,858 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.526s)
+2024-06-28 11:53:11,357 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.475s)
+2024-06-28 11:53:12,819 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Not Detected! (in 1.437s)
+2024-06-28 11:53:14,293 - NRV DEBUG: Iteration 5, Amp is 262.5µA (14.29%)... AP Not Detected! (in 1.45s)
+2024-06-28 11:53:15,993 - NRV DEBUG: Iteration 6, Amp is 281.25µA (6.67%)... AP Detected! (in 1.67s)
+2024-06-28 11:53:17,521 - NRV DEBUG: Iteration 7, Amp is 271.88µA (3.33%)... AP Detected! (in 1.487s)
+2024-06-28 11:53:19,081 - NRV DEBUG: Iteration 8, Amp is 267.19µA (1.72%)... AP Detected! (in 1.53s)
+2024-06-28 11:53:20,603 - NRV DEBUG: Iteration 9, Amp is 264.84µA (0.88%)... AP Not Detected! (in 1.497s)
+2024-06-28 11:53:20,611 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (14.07s).
+2024-06-28 13:03:53,025 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 13:03:54,410 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.344s)
+2024-06-28 13:03:55,769 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.332s)
+2024-06-28 13:03:57,122 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.329s)
+2024-06-28 13:03:58,506 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.355s)
+2024-06-28 13:03:59,872 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 1.339s)
+2024-06-28 13:04:01,276 - NRV DEBUG: Iteration 6, Amp is 168.75µA (10.0%)... AP Not Detected! (in 1.379s)
+2024-06-28 13:04:02,680 - NRV DEBUG: Iteration 7, Amp is 178.12µA (5.26%)... AP Not Detected! (in 1.379s)
+2024-06-28 13:04:04,088 - NRV DEBUG: Iteration 8, Amp is 182.81µA (2.56%)... AP Not Detected! (in 1.385s)
+2024-06-28 13:04:05,443 - NRV DEBUG: Iteration 9, Amp is 185.16µA (1.27%)... AP Not Detected! (in 1.331s)
+2024-06-28 13:04:06,813 - NRV DEBUG: Iteration 10, Amp is 186.33µA (0.63%)... AP Not Detected! (in 1.346s)
+2024-06-28 13:04:06,813 - NRV DEBUG: Activation threshold is 186.91µA (0.63%), found in 10 iterations (13.79s).
+2024-06-28 13:04:06,813 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 13:04:08,181 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.338s)
+2024-06-28 13:04:09,527 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.321s)
+2024-06-28 13:04:10,896 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.345s)
+2024-06-28 13:04:12,272 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 1.346s)
+2024-06-28 13:04:13,663 - NRV DEBUG: Iteration 5, Amp is 187.5µA (16.67%)... AP Not Detected! (in 1.367s)
+2024-06-28 13:04:15,034 - NRV DEBUG: Iteration 6, Amp is 206.25µA (9.09%)... AP Detected! (in 1.343s)
+2024-06-28 13:04:16,394 - NRV DEBUG: Iteration 7, Amp is 196.88µA (4.55%)... AP Detected! (in 1.332s)
+2024-06-28 13:04:17,754 - NRV DEBUG: Iteration 8, Amp is 192.19µA (2.38%)... AP Not Detected! (in 1.336s)
+2024-06-28 13:04:19,096 - NRV DEBUG: Iteration 9, Amp is 194.53µA (1.2%)... AP Not Detected! (in 1.319s)
+2024-06-28 13:04:20,542 - NRV DEBUG: Iteration 10, Amp is 195.7µA (0.6%)... AP Not Detected! (in 1.326s)
+2024-06-28 13:04:20,542 - NRV DEBUG: Activation threshold is 196.29µA (0.6%), found in 10 iterations (13.73s).
+2024-06-28 13:04:20,543 - NRV DEBUG: Iteration 1, Amp is 300µA ...
+2024-06-28 13:04:21,886 - NRV DEBUG: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 1.313s)
+2024-06-28 13:04:23,241 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 1.332s)
+2024-06-28 13:04:24,572 - NRV DEBUG: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 1.307s)
+2024-06-28 13:04:25,913 - NRV DEBUG: Iteration 4, Amp is 225.0µA (33.33%)... AP Not Detected! (in 1.317s)
+2024-06-28 13:04:27,255 - NRV DEBUG: Iteration 5, Amp is 262.5µA (14.29%)... AP Not Detected! (in 1.319s)
+2024-06-28 13:04:28,604 - NRV DEBUG: Iteration 6, Amp is 281.25µA (6.67%)... AP Detected! (in 1.321s)
+2024-06-28 13:04:29,959 - NRV DEBUG: Iteration 7, Amp is 271.88µA (3.33%)... AP Detected! (in 1.327s)
+2024-06-28 13:04:31,313 - NRV DEBUG: Iteration 8, Amp is 267.19µA (1.72%)... AP Detected! (in 1.326s)
+2024-06-28 13:04:32,664 - NRV DEBUG: Iteration 9, Amp is 264.84µA (0.88%)... AP Not Detected! (in 1.327s)
+2024-06-28 13:04:32,665 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (12.12s).
+2024-06-28 17:03:20,548 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...

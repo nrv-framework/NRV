@@ -1463,6 +1463,7 @@ class fascicle(NRV_simulable):
                 try:
                     for k in this_core_mask:
                         axon_sim = self.__sim_axon(k, is_master_slave)
+                        axon_sim = my_pp_function(axon_sim)
                         # postprocessing and data reduction
                         # (cannot be added to __sim.axon beceause nrv would not be global anymore)
                         if self.postproc_script.lower() in OTF_PP_library:
@@ -1476,6 +1477,7 @@ class fascicle(NRV_simulable):
                         with open(self.postproc_script) as f:
                             code = compile(f.read(), self.postproc_script, "exec")
                             exec(code, globals(), locals())
+                        
                         if self.save_results:
                             ## store results
                             ax_fname = "sim_axon_" + str(k) + ".json"

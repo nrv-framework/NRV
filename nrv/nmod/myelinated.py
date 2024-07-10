@@ -864,6 +864,7 @@ class myelinated(axon):
         x_nodes = []
         nodes_index = []
         self.rec_position_list = []
+        #print(self.axon_path_type)
         for k in range(len(self.axon_path_type)):
             sec_type = self.axon_path_type[k]
             sec_index = self.axon_path_index[k]
@@ -917,7 +918,9 @@ class myelinated(axon):
                 x_offset += self.STIN[sec_index].L
         self.x = np.asarray(x)
         self.x_nodes = np.asarray(x_nodes)
-        self.node_index = np.asarray(nodes_index)
+        #self.node_index = np.asarray(nodes_index)
+        self.node_index = [np.where(self.x == x_n)[0][0] for x_n in x_nodes]        #LR: to avoid duplicates in node_index calculated previously...
+        
 
     def __get_rec_positions(self):
         """
