@@ -32,4 +32,4 @@ ax.set_ylabel("Spikes along axon")
 fig.savefig('./unitary_tests/figures/530_B.png')
 
 
-plt.show()
+#plt.show()
