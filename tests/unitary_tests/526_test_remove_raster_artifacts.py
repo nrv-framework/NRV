@@ -70,8 +70,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
     
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')

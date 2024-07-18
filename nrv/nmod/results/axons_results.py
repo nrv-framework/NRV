@@ -10,7 +10,7 @@ from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
 from ...backend.log_interface import rise_warning, rise_error
 from ...utils.units import to_nrv_unit, from_nrv_unit, convert, nm
-from ...utils.misc import distance_point2line, membrane_capacitance_from_model, compute_complex_admitance
+from ...utils.misc import distance_point2line, membrane_capacitance_from_model, compute_complex_admitance,nearest_greater_idx
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
     rise_warning(
@@ -301,18 +301,46 @@ class axon_results(sim_results):
         else:
             return(True)
         
-    def is_blocked(self, AP_start:float, freq: float = None) -> bool:
+    def is_blocked(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> bool:
 
         v_mey_key = "V_mem"
         if (freq is not None):
-            self.filter_freq("V_mem",freq)
+            self.filter_freq("V_mem",freq , Q= 2)
             v_mey_key += "_filtered"
+        self.rasterize(V_mem_key = v_mey_key)
+        _,t_starts = self.get_start_APs(v_mey_key)
+        n_APs = len(t_starts[t_starts>=AP_start])
+        test_AP_idx = nearest_greater_idx(t_starts,AP_start)        #get idx of test AP in the APs list
+        x_APs,_,t_APs,_ = self.split_APs(v_mey_key)
+        x_AP_test = x_APs[test_AP_idx]
+        t_AP_test = t_APs[test_AP_idx]
+        _,t_AP_start = self.get_start_AP(x_AP_test,t_AP_test)
 
-        x_idx_AP,x_AP,t_idx_AP,t_AP = rasterize(self[v_mey_key],self.x_rec,self.t,self.threshold)
-        t_AP_start = np.min()
-        #plt.figure()
-        #plt.scatter(t_AP,x_AP)
-        #plt.show()
+        if (n_APs == 0 or (t_AP_start >= AP_start + 0.1)):       #warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
+            rise_error("is_blocked: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response.")
+        if (n_APs > 2):
+            rise_warning("is_blocked: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization.")
+
+        if (self.has_AP_reached_end(x_AP_test,t_AP_test)):  #test AP has reached the end --> is not blocked
+            return (False)
+        else:
+            if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
+                rise_error("is_blocked: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
+            _,_,coll_list = self.get_collision_pts(v_mey_key)
+            if coll_list[test_AP_idx]:
+                rise_error("is_blocked: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus.")
+            
+            t_AP_test_max = np.max(t_AP_test) #test AP last time position:
+            
+            if len(t_starts[t_starts<AP_start]):
+                if np.min(np.abs(t_starts[t_starts<AP_start]-t_AP_test_max)) < t_refractory: #check if test AP is during refractory period
+                    rise_error("is_blocked: Test AP occures during axon's refractory period, probably due to onset response. Consider increasing the duration between start of block stimulus and test stimulus.")      
+
+            if len(t_starts[t_starts>t_AP_start]): #AP jump
+                if np.min(np.abs(t_starts[t_starts>AP_start]-t_AP_test_max)) < t_refractory: 
+                    #todo: make sure that the jumping AP is reaching the over side of the axon
+                    return(False)
+            return (True)
 
     def split_APs(self,vm_key:str="V_mem") -> list[np.array] | list[np.array] | list[np.array] | list[np.array] :
         """        
@@ -422,6 +450,35 @@ class axon_results(sim_results):
         start_idx = t_AP.argmin()
         return(x_AP[start_idx],t_AP[start_idx])
 
+    def get_start_APs(self,vm_key:str="V_mem") -> NDArray|NDArray:
+        """
+        Return list of (x,t) start positions of each detected APs
+
+        Parameters
+        ----------
+        vm_key : str, optional
+            Vmembrane key, by default "V_mem", by default "V_mem"
+
+        Returns
+        -------
+        Returns
+        -------
+        NDArray
+            Array of the start x-position of each APs
+        NDArray
+            Array of the start t-position of each APs
+        """
+        x_APs,_,t_APs,_ = self.split_APs(vm_key)
+        x_AP_start = []
+        t_AP_start = []
+        for x_AP,t_AP in zip(x_APs,t_APs):
+            x_AP_s,t_AP_s = self.get_start_AP(x_AP,t_AP)
+            x_AP_start.append(x_AP_s)
+            t_AP_start.append(t_AP_s)
+        return(np.array(x_AP_start),np.array(t_AP_start))
+
+        
+
     def get_xmax_AP(self,x_AP:np.array ,t_AP:np.array) -> float|float:
         """
         Returns the x,t values the maximum AP x-position
@@ -440,8 +497,8 @@ class axon_results(sim_results):
         float
             t value of the maximum AP x-position
         """
-        start_idx = x_AP.argmax()
-        return(x_AP[start_idx],t_AP[start_idx])
+        max_idx = x_AP.argmax()
+        return(x_AP[max_idx],t_AP[max_idx])
 
     def get_xmin_AP(self,x_AP:np.array ,t_AP:np.array) -> float|float:
         """
@@ -461,8 +518,8 @@ class axon_results(sim_results):
         float
             t value of the minimum AP x-position
         """
-        start_idx = x_AP.argmin()
-        return(x_AP[start_idx],t_AP[start_idx])
+        min_idx = x_AP.argmin()
+        return(x_AP[min_idx],t_AP[min_idx])
     
     def get_AP_upward_len(self,x_AP:np.array ,t_AP:np.array) -> int:
         """
@@ -544,7 +601,7 @@ class axon_results(sim_results):
             True if ALL APs have reached the both ends of the axon, else False
         """
 
-        x_APs,_,t_APs,_ = self.split_APs(vm_key="V_mem")
+        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
         if (len(x_APs)):
             for x_AP,t_AP in zip(x_APs,t_APs):
                 if (not self.has_AP_reached_end(x_AP,t_AP)):
@@ -565,7 +622,7 @@ class axon_results(sim_results):
         Returns
         -------
         bool
-            true if AP has reached it's last position (in both direction) within the simulation timeframe, else False
+            true if AP has reached its last position (in both direction) within the simulation timeframe, else False
         """
         if (self.has_AP_reached_end(x_AP,t_AP)):
             return True
@@ -603,7 +660,7 @@ class axon_results(sim_results):
         bool
             True if ALL APs have reached their last position (in both direction) within the simulation timeframe, else False
         """
-        x_APs,_,t_APs,_ = self.split_APs(vm_key="V_mem")
+        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
         if (len(x_APs)):
             for x_AP,t_AP in zip(x_APs,t_APs):
                 if (not self.is_AP_in_timeframe(x_AP,t_AP)):
@@ -612,7 +669,8 @@ class axon_results(sim_results):
         
     def get_collision_pts(self,vm_key:str="V_mem") -> list[float]|list[float]:
         """
-        Returns two lists, containing the x,t coordinates of the interAPs collisionning coordinates
+        Returns three lists: - two containing the x,t coordinates of the interAPs colliding coordinates
+                             - one boolean list where true means the AP is colliding, else false 
 
         Parameters
         ----------
@@ -625,16 +683,23 @@ class axon_results(sim_results):
             x coordinates of the interAPs collision point
         list[float]
             t coordinates of the interAPs collision point
+        list[bool]
+            list of colliding APs: true when colliding else false
         """
-        x_APs,_,t_APs,_ = self.split_APs(vm_key="V_mem")
+        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
         x_APs_coll = []
         t_APs_coll = []
-        for x_AP,t_AP in zip(x_APs,t_APs):
+        idx_coll = []
+        colliding_list =  [False for i in range(len(x_APs))]
+        idx_APs = np.arange(len(x_APs))
+        
+        for x_AP,t_AP,idx_AP in zip(x_APs,t_APs,idx_APs):
             if (not self.has_AP_reached_end(x_AP,t_AP)):
                 x_APs_coll.append(x_AP)
                 t_APs_coll.append(t_AP)
+                idx_coll.append(idx_AP)
         if len(x_APs_coll)<=1: #need at least 2 APs to get a collision 
-            return([],[])
+            return([],[],colliding_list)
         ids = np.arange(len(x_APs_coll))
         comb_list = list(combinations(ids,2))
         x_coll_l = []
@@ -645,7 +710,10 @@ class axon_results(sim_results):
             if (x_inter and t_inter)>0:
                 x_coll_l.append(x_inter)
                 t_coll_l.append(t_inter)
-        return(x_coll_l,t_coll_l)
+                colliding_list[idx_coll[idx_comb[1]]] = True
+                colliding_list[idx_coll[idx_comb[0]]] = True
+
+        return(x_coll_l,t_coll_l,colliding_list)
     
     def detect_AP_collisions(self,vm_key:str="V_mem") -> bool:
         """
@@ -661,7 +729,7 @@ class axon_results(sim_results):
         bool
             True if an interAP collision is detected, else False
         """
-        _,t_coll = self.get_collision_pts(vm_key)
+        _,t_coll,_ = self.get_collision_pts(vm_key)
         if len(t_coll):
             return(True)
         return(False)
@@ -691,16 +759,74 @@ class axon_results(sim_results):
         poly_up_2,poly_down_2 = self.linfit_AP(x_AP2,t_AP2)
         x_inter1,t_inter1 = self.get_1dpoly_intersec(poly_up_1,poly_down_2)
         x_inter2,t_inter2 = self.get_1dpoly_intersec(poly_up_2,poly_down_1)
+
+        x1_max,t1_max = self.get_xmax_AP(x_AP1,t_AP1)
+        x1_min,t1_min = self.get_xmin_AP(x_AP1,t_AP1)
+
+        x2_max,t2_max = self.get_xmax_AP(x_AP2,t_AP2)
+        x2_min,t2_min = self.get_xmin_AP(x_AP2,t_AP2)
+
+        if self._pts_in_sim_range(x_inter1,t_inter1) and self._pts_in_sim_range(x_inter2,t_inter2):
+            if t_inter2>t_inter1:
+                if self._AP_pt_in_range(x1_max,t1_max,x_inter2,t_inter2) and self._AP_pt_in_range(x2_min,t2_min,x_inter2,t_inter2):
+                    if t_inter2 > (t1_max and t2_min):
+                        return x_inter2, t_inter2
+                if self._AP_pt_in_range(x1_min,t1_min,x_inter2,t_inter2) and self._AP_pt_in_range(x2_max,t2_max,x_inter2,t_inter2):
+                    if t_inter2 > (t1_min and t2_max):
+                        return x_inter2, t_inter2
+            else:
+                if self._AP_pt_in_range(x1_max,t1_max,x_inter1,t_inter1) and self._AP_pt_in_range(x2_min,t2_min,x_inter1,t_inter1):
+                    if t_inter1 > (t1_max and t2_min):
+                        return x_inter1, t_inter1
+                if self._AP_pt_in_range(x1_min,t1_min,x_inter1,t_inter1) and self._AP_pt_in_range(x2_max,t2_max,x_inter1,t_inter1):
+                    if t_inter1 > (t1_min and t2_max):
+                        return x_inter1, t_inter1
+        return 0, 0
+
+    def _pts_in_sim_range(self, x:float,t:float) -> bool:
+        """
+        Returns true if the (x,t) point is within the simulation range
+
+        Parameters
+        ----------
+        x : float
+            x coordinate of the point
+        t : float
+            t coordinate of the point
+
+        Returns
+        -------
+        bool
+            true if the (x,t) point is within the simulation range, else false
+        """
         x_max = np.max(self.get_axon_xrec())
         t_max = np.max(self.t)
-        #pb ici: il faut regarde si les points sont pas trop éloingnée 
-        if (x_inter1 and x_inter2)<x_max and (x_inter1 and x_inter2)>0:
-            if (t_inter1 and t_inter2)<t_max and (t_inter1 and t_inter2)>0:
-                if t_inter2>t_inter1:
-                    return x_inter2, t_inter2
-                else:
-                    return x_inter1, t_inter1
-        return 0, 0
+        return((x < x_max) and (x > 0) and (t > 0) and (t < t_max))
+
+    def _AP_pt_in_range(self, x1:float, t1:float, x2:float, t2:float, tol:float = 0.12) -> bool:
+        """
+        Return true is the point (x1,t1) and (x2,t2) are within a range, set by tol
+
+        Parameters
+        ----------
+        x1 : float
+            x coordinate of the (x1,t1) point
+        t1 : float
+            t coordinate of the (x1,t1) point
+        x2 : float
+            x coordinate of the (x2,t2) point
+        t2 : float
+            t coordinate of the (x2,t2) point
+        tol : float, optional
+            range tolerance, expressed as a fraction of the (x1,t1) pts. by default 0.1
+
+        Returns
+        -------
+        bool
+            True if the two points are within the range
+        """
+        return(np.abs(x1-x2)<=tol*x1 and np.abs(t1-t2)<=tol*t1)
+
 
     def get_1dpoly_intersec(self, poly1:np.poly1d, poly2:np.poly1d) -> float|float:
         """
@@ -821,7 +947,7 @@ class axon_results(sim_results):
         list[float]
             list of propagation speed of each APs, in m/s 
         """  
-        x_APs,_,t_APs,_ = self.split_APs(vm_key="V_mem")
+        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
         APspeed = []
         if (len(x_APs)):
             for x_AP,t_AP in zip(x_APs,t_APs):
@@ -882,7 +1008,7 @@ class axon_results(sim_results):
         self[vm_key + "_raster_time_index"] = np.array(t_idx_clean)
         self[vm_key + "_raster_time"] = np.array(t_clean)
 
-    def rasterize(self,clear_artifacts = True,**kwargs) -> None :
+    def rasterize(self,clear_artifacts:bool = True,**kwargs) -> None :
         """
         Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with AP detection.
         This function adds 4 items to the class, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
@@ -954,6 +1080,7 @@ class axon_results(sim_results):
                             t_stop=t_stop)
         if (clear_artifacts):
             self.remove_raster_artifacts(vm_key)
+
 
 
     def find_spike_origin(

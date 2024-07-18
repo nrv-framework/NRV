@@ -8,6 +8,7 @@ import numpy as np
 from ..backend.log_interface import rise_warning
 from ..backend.NRV_Class import is_empty_iterable
 from .axons import *
+from ..utils.misc import nearest_idx
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_g = np.asarray(
@@ -919,7 +920,9 @@ class myelinated(axon):
         self.x = np.asarray(x)
         self.x_nodes = np.asarray(x_nodes)
         #self.node_index = np.asarray(nodes_index)
-        self.node_index = [np.where(self.x == x_n)[0][0] for x_n in x_nodes]        #LR: to avoid duplicates in node_index calculated previously...
+
+        self.node_index = [nearest_idx(self.x, x_n) for x_n in x_nodes]         #LR: to avoid duplicates in node_index calculated previously...
+        
         
 
     def __get_rec_positions(self):

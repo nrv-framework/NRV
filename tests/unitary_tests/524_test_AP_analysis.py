@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 y = 0
 z = 0
 d = 10
-L = 60000
+L = 20000
 
 
 #No APs
@@ -32,8 +32,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(x_min,t_xmin,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -74,8 +74,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -120,8 +120,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -159,8 +159,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -199,8 +199,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -208,7 +208,7 @@ plt.xlim(0,results['tstop'])
 plt.savefig('./unitary_tests/figures/524_E.png')
 
 d = 0.5
-L = 6000
+L = 2000
 
 #No APs
 axon0 = nrv.unmyelinated(y,z,d,L,dt=0.005,rec='all')
@@ -235,8 +235,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -277,8 +277,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -319,8 +319,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -356,8 +356,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -393,8 +393,8 @@ for x_AP,t_AP in zip(x_APs,t_APs):
     plt.scatter(t_xmin,x_min,s=10,c = 'b')
 
 if results.detect_AP_collisions():
-    x_coll,t_coll = results.get_collision_pts()
-    plt.scatter(t_coll,x_coll,s=50,c = 'k')
+    x_coll,t_coll,_ = results.get_collision_pts()
+    plt.scatter(t_coll,x_coll,s=50,c = 'r')
 
 plt.xlabel('time (ms)')
 plt.ylabel(r'position along the axon($\mu m$)')
@@ -402,4 +402,4 @@ plt.xlim(0,results['tstop'])
 plt.savefig('./unitary_tests/figures/524_J.png')
 
 
-plt.show()
+#plt.show()
