@@ -1821,9 +1821,9 @@ class axon_results(sim_results):
         required_keys = {key, "tstop", "L"}
         if required_keys in self:
             self.rasterize(key)
-            plt.scatter(self[key+"_raster_time"], self["V_mem_raster_x_position"], **kwgs)
-            plt.xlim(0, self["tstop"])
-            plt.ylim(0, self["L"])
+            axes.scatter(self[key+"_raster_time"], self["V_mem_raster_x_position"], **kwgs)
+            axes.set_xlim(0, self["tstop"])
+            axes.set_ylim(0, self["L"])
         else:
             rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
 

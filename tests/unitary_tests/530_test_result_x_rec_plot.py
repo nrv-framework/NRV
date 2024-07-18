@@ -23,11 +23,13 @@ res.plot_x_t(axs[2], "g_mem")
 axs[2].set_yticks([])
 axs[2].set_xlabel("time (ms)")
 axs[2].set_ylabel("$g_{mem}$ along axon")
-
+fig.savefig('./unitary_tests/figures/530_A.png')
 
 fig, ax = plt.subplots()
-res.scatter_plot(ax, "V_mem")
+res.raster_plot(ax, "V_mem")
 ax.set_xlabel("time (ms)")
 ax.set_ylabel("Spikes along axon")
+fig.savefig('./unitary_tests/figures/530_B.png')
+
 
 plt.show()
