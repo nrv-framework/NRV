@@ -45,10 +45,14 @@ class nerve(NRV_simulable):
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
         self.verbose = True
-        self.postproc_script = "default"
         self.return_parameters_only = True
         self.save_results = True
         self.loaded_footprints = True
+
+        self.postproc_label = "default"
+        self.postproc_function = None
+        self.postproc_script = None
+        self.postproc_kwargs = {}
 
         self.type = "nerve"
         self.L = length
@@ -61,6 +65,9 @@ class nerve(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
+
+        # Update parameters with kwargs
+        self.set_parameters(**kwargs)
 
         # Fascicular content
         self.fascicles_IDs = []
@@ -163,6 +170,11 @@ class nerve(NRV_simulable):
             Pyhton dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
+
+        bl += ["postproc_function", "postproc_script"]
+        if self.postproc_label not in builtin_postproc_functions:
+            rise_warning("custom axon postprocessing cannot be save. Be carefull to set the postproc_function again when reloading fascicle")
+
         if not intracel_context:
             bl += [
                 "N_intra",
@@ -763,13 +775,16 @@ class nerve(NRV_simulable):
         for fasc in self.fascicles.values():
             fasc.t_sim = self.t_sim
             fasc.record_V_mem = self.record_V_mem
-            fasc.record_I_mem = (self.record_I_mem,)
+            fasc.record_I_mem = self.record_I_mem
             fasc.record_I_ions = self.record_I_ions
             fasc.record_g_mem = self.record_g_mem
             fasc.record_g_ions = self.record_g_ions
             fasc.record_particles = self.record_particles
+
             fasc.postproc_script = self.postproc_script
-            fasc.save_results = self.save_results,
+            fasc.postproc_label = self.postproc_label
+            fasc.postproc_function = self.postproc_function
+            fasc.save_results = self.save_results
             fasc.return_parameters_only = self.return_parameters_only
             fasc.verbose = self.verbose
 

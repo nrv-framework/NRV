@@ -20,6 +20,7 @@ def mesh_from_electrode(
     """
     returns the corresponding mesh from a nrv.facsicle
     """
+    elec = load_any(elec)
     if not is_FEM_electrode(elec):
         rise_warning("Only FEM electrode can be added to a mesh")
     else:
@@ -43,6 +44,7 @@ def mesh_from_extracellular_context(
     """
     returns the corresponding mesh from a nrv.facsicle
     """
+    extracel_context = load_any(extracel_context)
     if not is_FEM_extra_stim(extracel_context):
         rise_warning("Only FEM electrode can be added to a mesh")
     else:
@@ -90,6 +92,7 @@ def mesh_from_fascicle(
     """
     returns the corresponding mesh from a nrv.facsicle
     """
+    fascicle = load_any(fascicle, extracel_context=True)
     if mesh is None:
         mesh = NerveMshCreator(
             Length=Length, Outer_D=Outer_D, Nerve_D=Nerve_D, y_c=y_c, z_c=z_c
@@ -138,6 +141,7 @@ def mesh_from_nerve(
     """
     
     """
+    nerve = load_any(nerve, extracel_context=True)
     length = length or nerve.L
     mesh = NerveMshCreator(
         Length=length,
@@ -167,7 +171,7 @@ def mesh_from_nerve(
             res_ax=res_ax,
             res_fasc=res[i_fasc],
         )
-    if nerve.extra_stim is not None:
+    if "extra_stim" in nerve.__dict__ and nerve.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
             nerve.extra_stim,
             mesh=mesh,

@@ -10,15 +10,18 @@ from collections.abc import Iterable
 
 import numpy as np
 #from numba import jit
+import matplotlib.pyplot as plt
 from scipy import signal
 
 from ...backend.file_handler import is_iterable, json_dump, json_load
 from ...backend.log_interface import pass_info, rise_warning, rise_error
 from ...backend.NRV_Class import load_any
 from ..units import MHz
+from ...backend.file_handler import rmv_ext
 from ..misc import distance_point2line
 from ...nmod.unmyelinated import unmyelinated
 from ...nmod.myelinated import myelinated
+from ...nmod.results.axons_results import axon_results
 
 
 # enable faulthandler to ease 'segmentation faults' debug
@@ -110,10 +113,10 @@ def remove_key(my_dict, key, verbose=False):
         name of the key to delete
     """
     
-    rise_warning(
-        "DeprecationWarning: ",
-        "remove_key is obsolete use method from axon_result objects instead"
-    )
+    # rise_warning(
+    #     "DeprecationWarning: ",
+    #     "remove_key is obsolete use method from axon_result objects instead"
+    # )
     # if isinstance(key, Iterable):
     #    for k in key:
     #        del my_dict[k]
@@ -170,10 +173,10 @@ def generate_axon_from_results(results):
         blank axon with the same dimensions as in the results
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "generate_axon_from_results property is obsolete use method from axon_result objects instead"
-    )
+    # rise_warning(
+    #     "DeprecationWarning: ",
+    #     "generate_axon_from_results property is obsolete use method from axon_result objects instead"
+    # )
     if not results["myelinated"]:
         ax = unmyelinated(**results)
     else:
@@ -264,10 +267,10 @@ def rasterize(
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "rasterize is obsolete use method from axon_result objects instead"
-    )
+    # rise_warning(
+    #     "DeprecationWarning: ",
+    #     "rasterize is obsolete use method from axon_result objects instead"
+    # )
     if t_stop == 0:
         t_stop = int(my_dict["t_sim"] / my_dict["dt"])
     else:
@@ -315,10 +318,10 @@ def AP_detection(
     Internal use only, spike detection just in time compiled to speed up the process
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "AP_detection is obsolete use method from axon_result objects instead"
-    )
+    # rise_warning(
+    #     "DeprecationWarning: ",
+    #     "AP_detection is obsolete use method from axon_result objects instead"
+    # )
     raster_position = []
     raster_x_position = []
     raster_time_index = []
@@ -1217,3 +1220,339 @@ def plot_Nav_states(ax, values, title=""):
     ax.set_yticks([])
     ax.set_title(title)
     ax.axis("off")
+
+
+################################
+## usefull methods on results ##
+#############################
+
+def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+    """
+    remove most of the results key to save computing memory.
+
+    Note
+    ----
+    By default, only the following key are kept:
+     - "ID",
+     - `L`,
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `intra_stim_starts`
+     - `intra_stim_positions`
+
+    Warning
+    -------
+    This function removes a large amount of data from the `results` object. Some methods included in the results may not be used afterwards
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    keys_to_remove : str | list[str], optional
+        key or set of key that should be removed, by default []
+    keys_to_keep : str | list[str], optional
+        If None only keys_to_remove are removed. Otherwise, all key exept those in this list are deleted, by default None.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+
+    results.rasterize("V_mem")
+    default_list_keys = {
+    "ID",
+    "L",
+    "V_mem_raster_position",
+    "V_mem_raster_x_position",
+    "V_mem_raster_time_index",
+    "V_mem_raster_time",
+    "myelinated",
+    "intra_stim_starts",
+    "intra_stim_positions",
+    }
+
+    default_list_keys.update(set(keys_to_keep))
+    default_list_keys -= set(keys_to_remove)
+    results.remove_key(keys_to_keep=default_list_keys)
+    return results
+
+
+def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_results:
+    """_summary_
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    results.is_recruited(vm_key="V_mem")
+
+    # remove non nevessary data
+    list_keys = {
+    "ID",
+    "L",
+    "V_mem_raster_position",
+    "V_mem_raster_x_position",
+    "V_mem_raster_time_index",
+    "V_mem_raster_time",
+    "myelinated",
+    "y",
+    "z",
+    "diameter",
+    "intra_stim_starts",
+    "tstop",
+    "intra_stim_positions",
+    "extracellular_electrode_x",
+    "is_recruited",
+    }
+    results.remove_key(keys_to_keep=list_keys)
+    if save:
+        if fdir[-1] != "/":
+            fdir += "/"
+        file_object = open(fdir + "block_summary.csv", "a")
+        line = ""
+        line += (
+            str(results["ID"])
+            + "\t"
+            + str(results["y"])
+            + "\t"
+            + str(results["z"])
+            + "\t"
+            + str(results["diameter"])
+            + "\t"
+            + str(results["myelinated"])
+            + "\t"
+            + str(results["is_recruited"])
+            + "\n"
+        )
+        file_object.write(line)
+        file_object.close()
+
+def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:float=0, freq:float=None, t_refractory:float=1)->axon_results:
+    """_summary_
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+block_summary.csv`, by default ""
+
+    Note
+    ----
+    If `save` is true, the data arranged as column of a same line in the following order:
+     - `ID`
+     - `y`
+     - `z`
+     - `diameter`
+     - `myelinated`
+     - `is_blocked`
+     - `has_onset`
+     - `n_onset`
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    ## TO CHANGE WHEN is block is developped
+    #results.axon_state(save=False)
+    if AP_start == 0:
+            if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
+                AP_start = results["intra_stim_starts"][0]
+    results.is_blocked(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
+
+    # remove non nevessary data
+    list_keys = {
+    "ID",
+    "L",
+    "V_mem_raster_position",
+    "V_mem_raster_x_position",
+    "V_mem_raster_time_index",
+    "V_mem_raster_time",
+    "myelinated",
+    "y",
+    "z",
+    "diameter",
+    "intra_stim_starts",
+    "tstop",
+    "intra_stim_positions",
+    "extracellular_electrode_x",
+    "is_blocked",
+    }
+    results.remove_key(keys_to_keep=list_keys)
+
+    if save:
+        if fdir[-1] != "/":
+            fdir += "/"
+        file_object = open(fdir + "block_summary.csv", "a")
+        line = ""
+        line += (
+            str(results["ID"])
+            + "\t"
+            + str(results["y"])
+            + "\t"
+            + str(results["z"])
+            + "\t"
+            + str(results["diameter"])
+            + "\t"
+            + str(results["myelinated"])
+            + "\t"
+            + str(results["is_blocked"])
+            + "\t"
+            + str(results["has_onset"])
+            + "\t"
+            + str(results["n_onset"])
+            + "\n"
+        )
+        file_object.write(line)
+        file_object.close()
+
+
+def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|tuple[float]=None, save:bool=False, fdir="")->axon_results:
+    """_summary_
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    t_start_rec : float, optional
+        _description_, by default 0
+    t_stop_rec : float, optional
+        _description_, by default -1
+    sample_dt : None | float, optional
+        _description_, by default None
+    x_bounds : None | tuple[float], optional
+        _description_, by default None
+    save : bool, optional
+        if true, the conductivity of the axon is saved. The times array is also saved if the axon ID is `0`, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved , by default ""
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    if not results["record_g_mem"]:
+        rise_error("gmem not recorded nothing will be done")
+    else:
+        if t_stop_rec < 0:
+            t_stop_rec=results.t_sim
+
+        if sample_dt is None:
+            sample_dt=results.dt
+
+        if x_bounds is None:
+            x_bounds=(0,results.L)
+
+        if np.iterable(x_bounds):
+            I_x = np.argwhere((results["x_rec"]>x_bounds[0])&(results["x_rec"]<x_bounds[1]))[:,0]
+        else:
+            x_bounds = [x_bounds]
+            I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
+
+        if save:
+            if fdir[-1] != "/":
+                fdir += "/"
+            fgmem = fdir + f"{results.ID}.csv"
+            ft = fdir + "ft.csv"
+
+        N_x = len(I_x)
+        i_t_min = np.argwhere(results["t"]>t_start_rec)[0][0]
+        i_t_max = np.argwhere(results["t"]<t_stop_rec)[-1][0]
+
+        t_APs = [k for k in range(i_t_min,i_t_max)]
+        t_APs = t_APs[::int(sample_dt/results.dt)]
+        N_t = len(t_APs)
+
+
+        # Under sampling to reduce memory consumption
+        results["x_rec"] = results["x_rec"][I_x] - x_bounds[0]
+        results["t"] = results["t"][t_APs]
+        results["g_mem"] = results["g_mem"][np.ix_(I_x, t_APs)]
+
+        to_save =  np.zeros((N_t+1, N_x))
+        to_save[0,:] = results["x_rec"]
+        to_save[1:,:] = results["g_mem"].T
+        if results:
+            np.savetxt(fgmem, to_save, delimiter=",")
+            if k == 0:
+                np.savetxt(ft, results["t"],delimiter=",")
+
+
+        ###############################
+        ## remove non nevessary data ##
+        ###############################
+        list_keys = []
+        if not results.return_parameters_only:
+            list_keys += ["g_mem", "x_rec", "rec", "Nseg_per_sec", "axon_path_type", "t_sim"]
+            if results.ID==0:
+                list_keys += ["t"]
+            results.remove_key(keys_to_keep=list_keys, verbose=False)
+    return results
+
+def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
+    """_summary_
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+"block_summary.csv"`, by default ""
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    fig, ax = plt.subplots()
+    results.raster_plot(ax)
+    title = (
+    "Axon "
+    + str(results)
+    + ", myelination is "
+    + str(results["myelinated"])
+    + ", "
+    + str(results["diameter"])
+    + " um diameter"
+)
+    plt.title(title)
+    if save:
+        plt.tight_layout()
+        fig_name = fdir + "/Activity_axon_" + str(res) + ".pdf"
+        plt.savefig(fig_name)
+        plt.close()
+
+def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
+    """
+    
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+block_summary.csv`, by default ""
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """

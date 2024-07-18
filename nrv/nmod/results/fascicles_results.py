@@ -69,7 +69,6 @@ class fascicle_results(sim_results):
             if (self[axon].is_recruited() and self[axon].diameter<=diam):
                 n_recr=+1
         return(n_recr/len(axons_keys))
-            
 
     def get_axons(self) -> list: 
         axons_keys = self.get_axons_key()

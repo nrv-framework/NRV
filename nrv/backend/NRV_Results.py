@@ -9,7 +9,7 @@ from collections.abc import Iterable
 from scipy import signal
 
 from .NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
-from .log_interface import rise_warning
+from .log_interface import rise_warning, pass_info
 from ..fmod.stimulus import stimulus
 from .file_handler import json_load
 
@@ -62,7 +62,7 @@ class NRV_results(NRV_class, dict):
         return super().save(save, fname, blacklist, **kwargs)
 
     def load(self, data, blacklist=[], **kwargs):
-        if isinstance(data, str):
+        if isinstance(data, str|list[str]):
             key_dic = json_load(data)
         else:
             key_dic = data
@@ -83,9 +83,37 @@ class NRV_results(NRV_class, dict):
         super().__setitem__(key, value)
 
     def __delitem__(self, key):
-        if not key == "nrv_type":
-            del self.__dict__[key]
-        super().__delitem__(key)
+        if key not in self.__dict__:
+            rise_warning(key, "not found cannot be deleted from results")
+        else:
+            if not key == "nrv_type":
+                del self.__dict__[key]
+            super().__delitem__(key)
+
+    def remove_key(self, keys_to_remove:str|set[str]=[], keys_to_keep:set[str]|None=None, verbose:bool=False):
+        """
+        Remove a key or a list of keys from the results
+
+        Parameters
+        ----------
+        keys_to_remove : str | list[str], optional
+            key or set of key that should be removed, by default []
+        keys_to_keep : str | list[str], optional
+            If None only keys_to_remove are removed. Otherwise, all key exept those in this list are deleted, by default None
+        verbose : bool, optional
+            If True print a message informing the suppression, by default False
+        """
+        if keys_to_keep is not None:
+            keys_to_remove = set(self.keys()) - set(keys_to_keep)
+            self.remove_key(keys_to_remove=keys_to_remove, verbose=verbose)
+        else:
+            if isinstance(keys_to_remove, str):
+                del self[keys_to_remove]
+                pass_info("removed the following key from results: ", keys_to_remove, verbose=verbose)
+            else:
+                for key in keys_to_remove:
+                    del self[key]
+                    pass_info("removed the following key from results: ", key, verbose=verbose)
 
     def update(self, __m, **kwargs) -> None:
         """
@@ -109,6 +137,12 @@ class NRV_results(NRV_class, dict):
         self.update(self.__dict__)
         self.pop("__NRVObject__")
 
+    def __contains__(self, key: object) -> bool:
+        if isinstance(key, list) or isinstance(key, set):
+            missing_keys = set(key) - set(self.keys())
+            return len(missing_keys) == 0
+        return super().__contains__(key)
+
 
 class sim_results(NRV_results):
     def __init__(self, context=None):
@@ -121,7 +155,7 @@ class sim_results(NRV_results):
 
         Parameters
         ----------
-        key     : str
+        key     : str|list[str]
             name of the key to filter
         freq    : float or array, list, np.array
             frequecy or list of frequencies to filter in kHz, as time is defined in ms in NRV2.

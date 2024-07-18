@@ -1,4 +1,5 @@
 import nrv
+from sources.OTF_PP_stim_intra import stim_intra
 
 # Fascicle config
 L = 10000 			# length, in um
@@ -32,4 +33,4 @@ fascicle_1.set_ID(59)
 # extra cellular stimulation
 fascicle_1.attach_extracellular_stimulation(extra_stim)
 # simulation
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='./unitary_tests/sources/59_OTF_PP_stim_extra.py')
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script=stim_intra)

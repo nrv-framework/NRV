@@ -296,51 +296,71 @@ class axon_results(sim_results):
             Return True if an AP is detected, else False.
         """
         
-        if self.count_APs(vm_key) == 0:
-            return(False)
-        else:
-            return(True)
+        if not "is_recruited" in self:
+            self["is_recruited"] = self.count_APs(vm_key) != 0
+        return self["is_recruited"]
         
     def is_blocked(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> bool:
+        """
+        check if the 
 
-        v_mey_key = "V_mem"
-        if (freq is not None):
-            self.filter_freq("V_mem",freq , Q= 2)
-            v_mey_key += "_filtered"
-        self.rasterize(V_mem_key = v_mey_key)
-        _,t_starts = self.get_start_APs(v_mey_key)
-        n_APs = len(t_starts[t_starts>=AP_start])
-        test_AP_idx = nearest_greater_idx(t_starts,AP_start)        #get idx of test AP in the APs list
-        x_APs,_,t_APs,_ = self.split_APs(v_mey_key)
-        x_AP_test = x_APs[test_AP_idx]
-        t_AP_test = t_APs[test_AP_idx]
-        _,t_AP_start = self.get_start_AP(x_AP_test,t_AP_test)
+        Parameters
+        ----------
+        AP_start : float
+            _description_
+        freq : float, optional
+            _description_, by default None
+        t_refractory : float, optional
+            _description_, by default 1
 
-        if (n_APs == 0 or (t_AP_start >= AP_start + 0.1)):       #warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
-            rise_error("is_blocked: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response.")
-        if (n_APs > 2):
-            rise_warning("is_blocked: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization.")
+        Returns
+        -------
+        bool
+            _description_
+        """
+        if not "is_blocked" in self:
+            v_mey_key = "V_mem"
+            if (freq is not None):
+                self.filter_freq("V_mem",freq , Q= 2)
+                v_mey_key += "_filtered"
+            self.rasterize(V_mem_key = v_mey_key)
+            _,t_starts = self.get_start_APs(v_mey_key)
+            n_APs = len(t_starts[t_starts>=AP_start])
+            test_AP_idx = nearest_greater_idx(t_starts,AP_start)        #get idx of test AP in the APs list
+            x_APs,_,t_APs,_ = self.split_APs(v_mey_key)
+            x_AP_test = x_APs[test_AP_idx]
+            t_AP_test = t_APs[test_AP_idx]
+            _,t_AP_start = self.get_start_AP(x_AP_test,t_AP_test)
 
-        if (self.has_AP_reached_end(x_AP_test,t_AP_test)):  #test AP has reached the end --> is not blocked
-            return (False)
-        else:
-            if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
-                rise_error("is_blocked: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
-            _,_,coll_list = self.get_collision_pts(v_mey_key)
-            if coll_list[test_AP_idx]:
-                rise_error("is_blocked: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus.")
-            
-            t_AP_test_max = np.max(t_AP_test) #test AP last time position:
-            
-            if len(t_starts[t_starts<AP_start]):
-                if np.min(np.abs(t_starts[t_starts<AP_start]-t_AP_test_max)) < t_refractory: #check if test AP is during refractory period
-                    rise_error("is_blocked: Test AP occures during axon's refractory period, probably due to onset response. Consider increasing the duration between start of block stimulus and test stimulus.")      
+            if (n_APs == 0 or (t_AP_start >= AP_start + 0.1)):       #warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
+                rise_error("is_blocked: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response.")
+            if (n_APs > 2):
+                rise_warning("is_blocked: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization.")
 
-            if len(t_starts[t_starts>t_AP_start]): #AP jump
-                if np.min(np.abs(t_starts[t_starts>AP_start]-t_AP_test_max)) < t_refractory: 
-                    #todo: make sure that the jumping AP is reaching the over side of the axon
-                    return(False)
-            return (True)
+            if (self.has_AP_reached_end(x_AP_test,t_AP_test)):  #test AP has reached the end --> is not blocked
+                self["is_blocked"] = False
+                return self["is_blocked"]
+            else:
+                if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
+                    rise_error("is_blocked: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
+                _,_,coll_list = self.get_collision_pts(v_mey_key)
+                if coll_list[test_AP_idx]:
+                    rise_error("is_blocked: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus.")
+                
+                t_AP_test_max = np.max(t_AP_test) #test AP last time position:
+                
+                if len(t_starts[t_starts<AP_start]):
+                    if np.min(np.abs(t_starts[t_starts<AP_start]-t_AP_test_max)) < t_refractory: #check if test AP is during refractory period
+                        rise_error("is_blocked: Test AP occures during axon's refractory period, probably due to onset response. Consider increasing the duration between start of block stimulus and test stimulus.")      
+
+                if len(t_starts[t_starts>t_AP_start]): #AP jump
+                    if np.min(np.abs(t_starts[t_starts>AP_start]-t_AP_test_max)) < t_refractory: 
+                        #todo: make sure that the jumping AP is reaching the over side of the axon
+                        self["is_blocked"] = False
+                        return self["is_blocked"]
+                self["is_blocked"] = True
+                return self["is_blocked"]
+        return self["is_blocked"]
 
     def split_APs(self,vm_key:str="V_mem") -> list[np.array] | list[np.array] | list[np.array] | list[np.array] :
         """        
@@ -1355,10 +1375,12 @@ class axon_results(sim_results):
             True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
         """
 
-        rise_warning(
-        "DeprecationWarning: ",
-        "block is obsolete, please used isBlocked() instead"
-        )
+        # rise_warning(
+        # "DeprecationWarning: ",
+        # "block is obsolete, please used isBlocked() instead"
+        # )
+        if "is_blocked" in self:
+            return self["is_blocked"]
         position_max = 0
         blocked_spike_positionlist = []
         if t_stop == 0:
@@ -1374,7 +1396,8 @@ class axon_results(sim_results):
                 good_key_prefix = "V_mem_raster"
             else:
                 # there is no rasterized voltage, nothing to find
-                return False
+                self["is_blocked"] = False
+                return self["is_blocked"]
         sup_time_indexes = np.where(self[good_key_prefix + "_time"] > t_start)
         inf_time_indexes = np.where(self[good_key_prefix + "_time"] < t_stop)
         good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
@@ -1383,7 +1406,8 @@ class axon_results(sim_results):
             good_indexes_time
         ]
         if len(blocked_spike_positionlist) == 0:
-            return None
+            self["is_blocked"] = None
+            return self["is_blocked"]
         if "intra_stim_positions" in self:
             if self["intra_stim_positions"] < self["extracellular_electrode_x"]:
                 position_max = max_spike_position(
@@ -1391,7 +1415,8 @@ class axon_results(sim_results):
                 )
 
                 if blocked_spike_positionlist[position_max] < 9.0 / 10 * self["L"]:
-                    return True
+                    self["is_blocked"] = True
+                    return self["is_blocked"]
                 else:
                     for i in range(position_max - 1):
                         if (
@@ -1399,15 +1424,18 @@ class axon_results(sim_results):
                             - blocked_spike_positionlist[i]
                             > self["L"] / 5
                         ):
-                            return True
+                            self["is_blocked"] = True
+                            return self["is_blocked"]
                     else:
-                        return False
+                        self["is_blocked"] = False
+                        return self["is_blocked"]
             else:
                 position_max = max_spike_position(
                     blocked_spike_positionlist, position_max, spike_begin="up"
                 )
                 if min(blocked_spike_positionlist) > 1.0 / 10 * self["L"]:
-                    return True
+                    self["is_blocked"] = True
+                    return self["is_blocked"]
                 else:
                     for i in range(position_max - 1):
                         if (
@@ -1415,12 +1443,13 @@ class axon_results(sim_results):
                             - blocked_spike_positionlist[i + 1]
                             > self["L"] / 5
                         ):
-                            return True
+                            self["is_blocked"] = True
+                            return self["is_blocked"]
                     else:
-                        return False
+                        self["is_blocked"] = False
+                        return self["is_blocked"]
         else:
             rise_error("intra_stim_positions is not in dictionnary")
-
 
 
     def check_test_AP(self):
@@ -1625,14 +1654,19 @@ class axon_results(sim_results):
             "onset_state": onset_state,
             "onset number": N_AP,
         }
+
+        self["is_blocked"] = block_state
+        self["has_onset"] = onset_state
+        self["n_onset"] = N_AP
+
         if save:
             json_dump(axon_state, saving_file)
 
         return axon_state
 
-    ##############################
+    ##################################
     ## Impedance properties methods ##
-    ##############################
+    ##################################
 
     def compute_f_mem(self):
         """
@@ -1770,3 +1804,25 @@ class axon_results(sim_results):
         else:
             Y *= from_nrv_unit(mem_th, "cm")
             return convert(Y, "S/cm", unit)
+
+
+    #####################
+    ## Ploting methods ##
+    #####################
+    def plot_x_t(self, axes: plt.axes, key:str="V_mem", color: str="k",**kwgs)->None:
+        shift = np.max(abs(self[key]))
+        for node in range(len(self["x_rec"])):
+            axes.plot(
+                self["t"], self[key][node] + 1.1* shift * node, color=color, **kwgs
+            )
+
+    def raster_plot(self, axes: plt.axes, key:str="V_mem",**kwgs)->None:
+        required_keys = {key, "tstop", "L"}
+        if required_keys in self:
+            self.rasterize(key)
+            plt.scatter(self[key+"_raster_time"], self["V_mem_raster_x_position"], **kwgs)
+            plt.xlim(0, self["tstop"])
+            plt.ylim(0, self["L"])
+        else:
+            rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
+

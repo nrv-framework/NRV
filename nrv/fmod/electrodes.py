@@ -530,7 +530,7 @@ class CUFF_electrode(FEM_electrode):
                 res=res,
             )
 
-    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+    def plot(self, axes: plt.axes, color: str="gold", **kwgs) -> None:
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]

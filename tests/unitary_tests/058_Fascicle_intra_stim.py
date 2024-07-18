@@ -1,4 +1,5 @@
 import nrv
+from sources.OTF_PP_stim_intra import stim_intra
 
 # Fascicle config
 L = 10000 			# length, in um
@@ -11,10 +12,10 @@ amplitude = 4
 
 # Fascicle declaration
 fascicle_1 = nrv.fascicle()
-fascicle_1.load_fascicle_configuration(source_file)
+fascicle_1.load(source_file)
 fascicle_1.define_length(L)
 fascicle_1.set_ID(58)
 # intra cellular stimulation 
 fascicle_1.insert_I_Clamp(position, t_start, duration, amplitude)
 # simulation
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='./unitary_tests/sources/58_OTF_PP_stim_intra.py')
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script=stim_intra)
