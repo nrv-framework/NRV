@@ -89,9 +89,9 @@ ax2.legend()
 fig2.savefig('./unitary_tests/figures/33_D.png')
 
 fc = results['g_mem']/(2*np.pi*1) * nrv.MHz
-fc2 = nrv.compute_f_mem(results)
+fc2 = results.compute_f_mem()
 
-print(np.allclose(fc, nrv.compute_f_mem(results)))
+print(np.allclose(fc, results.compute_f_mem()))
 
 plt.figure(figsize=(9,7))
 plt.subplot(3,1,1)

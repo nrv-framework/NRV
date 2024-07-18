@@ -1,7 +1,7 @@
 import nrv
 import matplotlib.pyplot as plt
 
-def stim_intra(results:nrv.axon_results, save:bool=False, fpath:str=""):
+def stim_intra(results:nrv.axon_results, save:bool=False, fdir:str=""):
     results.rasterize('V_mem')
     results.remove_key('V_mem')
 
@@ -15,7 +15,7 @@ def stim_intra(results:nrv.axon_results, save:bool=False, fpath:str=""):
     plt.ylim(0,results['L'])
     plt.tight_layout()
     if save:
-        fig_name = fpath + f'/Activity_axon_{results.ID}.pdf'
+        fig_name = fdir + f'/Activity_axon_{results.ID}.pdf'
         plt.savefig(fig_name)
     plt.close()
     return results

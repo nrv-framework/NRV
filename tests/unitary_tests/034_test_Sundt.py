@@ -60,7 +60,7 @@ results = axon2.simulate(t_sim=10, record_particles=True, record_g_ions=True, re
 print(axon2.T == 37)
 del axon2
 
-fc2 = nrv.compute_f_mem(results)
+fc2 = results.compute_f_mem()
 
 fig2, ax1 = plt.subplots()
 ax1.set_xlabel('time (ms)')

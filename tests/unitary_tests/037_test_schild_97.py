@@ -80,7 +80,7 @@ print(np.allclose(cm, cmshild))
 del axon2
 
 #### Check results
-fc2 = nrv.compute_f_mem(results)
+fc2 = results.compute_f_mem()
 fig2, ax1 = plt.subplots()
 ax1.set_xlabel('time (ms)')
 

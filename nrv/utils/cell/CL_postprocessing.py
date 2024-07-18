@@ -197,10 +197,10 @@ def rasterize(
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
 
-    # rise_warning(
-    #     "DeprecationWarning: ",
-    #     "rasterize is obsolete use method from axon_result objects instead"
-    # )
+    rise_warning(
+        "DeprecationWarning: ",
+        "rasterize is obsolete use method from axon_result objects instead"
+    )
     if t_stop == 0:
         t_stop = int(my_dict["t_sim"] / my_dict["dt"])
     else:
@@ -248,10 +248,10 @@ def AP_detection(
     Internal use only, spike detection just in time compiled to speed up the process
     """
 
-    # rise_warning(
-    #     "DeprecationWarning: ",
-    #     "AP_detection is obsolete use method from axon_result objects instead"
-    # )
+    rise_warning(
+        "DeprecationWarning: ",
+        "AP_detection is obsolete use method from axon_result objects instead"
+    )
     raster_position = []
     raster_x_position = []
     raster_time_index = []
@@ -1080,7 +1080,7 @@ def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_result
     "tstop",
     "intra_stim_positions",
     "extracellular_electrode_x",
-    "is_recruited",
+    "recruited",
     }
     results.remove_key(keys_to_keep=list_keys)
     if save:
@@ -1099,7 +1099,7 @@ def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_result
             + "\t"
             + str(results["myelinated"])
             + "\t"
-            + str(results["is_recruited"])
+            + str(results["recruited"])
             + "\n"
         )
         file_object.write(line)
@@ -1166,7 +1166,7 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     "tstop",
     "intra_stim_positions",
     "extracellular_electrode_x",
-    "is_blocked",
+    "blocked",
     "has_onset",
     "n_onset",
     }
@@ -1188,7 +1188,7 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
             + "\t"
             + str(results["myelinated"])
             + "\t"
-            + str(results["is_blocked"])
+            + str(results["blocked"])
             + "\t"
             + str(results["has_onset"])
             + "\t"

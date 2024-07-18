@@ -136,7 +136,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if results.is_recruited():
+        if results.is_recruited("V_mem"):
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
@@ -431,7 +431,6 @@ def firing_threshold_point_source(
                 + " s"
             )
         # post-process results
-        rasterize(results, "V_mem")
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -449,7 +448,7 @@ def firing_threshold_point_source(
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if len(results["V_mem_raster_position"]) > 0:
+        if results.is_recruited("V_mem") :
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
@@ -523,7 +522,7 @@ def firing_threshold_from_axon(
 
     rise_warning(
         "DeprecationWarning: ",
-        "firing_threshold_point_source is obsolete use firing_threshold_from_axon instead"
+        "firing_threshold_point_source is obsolete use axon_AP_threshold instead"
     )
 
     if "elec_id" in kwargs:
@@ -612,7 +611,7 @@ def firing_threshold_from_axon(
                 + " s"
             )
         # post-process results
-        rasterize(results, "V_mem")
+        
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -630,7 +629,7 @@ def firing_threshold_from_axon(
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if len(results["V_mem_raster_position"]) > 0:
+        if results.is_recruited("V_mem"):
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
@@ -733,9 +732,8 @@ def para_firing_threshold(
         results = axon1.simulate(t_sim=5)
         del axon1
         # post-process results
-        rasterize(results, "V_mem")
         # test simulation results, gather results to master
-        if len(results["V_mem_raster_position"]) > 0:
+        if results.is_recruited("V_mem"):
             spike = np.asarray([True])
         else:
             spike = np.asarray([False])
@@ -1035,8 +1033,8 @@ def blocking_threshold_point_source(
                 + " s"
             )
         # post-process results
-        filter_freq(results, "V_mem", block_freq)
-        rasterize(results, "V_mem_filtered", threshold=0)
+        #filter_freq(results, "V_mem", block_freq)
+        #rasterize(results, "V_mem_filtered", threshold=0)
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -1051,10 +1049,10 @@ def blocking_threshold_point_source(
             if tol <= amp_tol:
                 keep_going = 0
             else:
-                keep_going = 1
+                keep_going = 1  
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if block(results, t_start=t_start) == False:
+        if results.is_blocked(AP_start=t_start, freq=block_freq) == False:
             if current_amp == amp_max:
                 rise_warning("Maximum Stimulation Current is too Low!")
                 return 0
@@ -1214,8 +1212,6 @@ def blocking_threshold_from_axon(
                 + " s"
             )
         # post-process results
-        filter_freq(results, "V_mem", block_freq)
-        rasterize(results, "V_mem_filtered", threshold=0)
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -1233,7 +1229,7 @@ def blocking_threshold_from_axon(
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if block(results, t_start=t_start) == False:
+        if results.is_blocked(AP_start=t_start, freq=block_freq) == False:
             if current_amp == amp_max:
                 rise_warning("Maximum Stimulation Current is too Low!")
                 return 0
@@ -1329,10 +1325,9 @@ def para_blocking_threshold(
         results = axon1.simulate(t_sim=25)
         del axon1
         # post-process results
-        rasterize(results, "V_mem")
 
         # test simulation results, gather results to master
-        blocked = [block(results)]
+        blocked = [results.is_blocked(AP_start=t_start, freq=block_freq)]
         all_blocks = MCH.gather_jobs_as_array(blocked)
         if MCH.do_master_only_work():
             # add the extrema (False at start, True at the end) already computed at the previous step if Niter > 1

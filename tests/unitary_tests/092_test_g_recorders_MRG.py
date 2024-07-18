@@ -43,7 +43,7 @@ print(np.allclose(gks_mrg[:,:-1],results['g_k'][:,1:]))
 print(np.allclose(gm[:,:-1],results['g_mem'][:,1:]))
 
 
-nrv.compute_f_mem(results)
+results.compute_f_mem()
 
 print(np.allclose(fc[:,:-1], results['f_mem'][:,1:]))
 
