@@ -5,6 +5,7 @@ NRV-:class:`.axon_results` handling.
 import numpy as np
 from numpy.typing import NDArray
 from itertools import combinations
+import matplotlib.pyplot as plt
 
 from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump

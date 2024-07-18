@@ -40848,3 +40848,9 @@
 2024-06-28 13:04:32,665 - NRV DEBUG: Activation threshold is 266.02µA (0.88%), found in 9 iterations (12.12s).
 2024-06-28 17:03:20,548 - <class 'KeyboardInterrupt'>
  Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-18 11:50:31,846 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/fascicles_results.py:37: SyntaxWarning: "is not" with 'str' literal. Did you mean "!="?
+  if ax_type is not 'all':
+
+2024-07-18 11:50:31,847 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/fascicles_results.py:38: SyntaxWarning: "is" with 'str' literal. Did you mean "=="?
+  if ax_type is 'unmyelinated':
+
