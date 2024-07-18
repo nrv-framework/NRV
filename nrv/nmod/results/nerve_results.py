@@ -40,28 +40,6 @@ class nerve_results(sim_results):
         return(fascicle_keys)
 
 
-    ## Representation methods
-    def plot_recruited_fibers(
-        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
-    ):
-        """
-
-        """
-        if MCH.do_master_only_work():
-            ## plot contour
-            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,color=contour_color,
-                                fill=False,linewidth=4,))
-            fasc_keys = self.get_fascicle_key()
-            for key in fasc_keys:
-                fasc_res = self[key]
-                fasc_res.plot_recruited_fibers(axes=axes,contour_color="grey",
-                    myel_color=myel_color,unmyel_color=unmyel_color,num=num,)
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
-            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
-            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
-
-
     # impeddance related methods
     def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->np.array:
         """
@@ -153,3 +131,24 @@ class nerve_results(sim_results):
             else:
                 return None
         return Y
+    
+    ## Representation methods
+    def plot_recruited_fibers(
+        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
+    ):
+        """
+
+        """
+        if MCH.do_master_only_work():
+            ## plot contour
+            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,color=contour_color,
+                                fill=False,linewidth=4,))
+            fasc_keys = self.get_fascicle_key()
+            for key in fasc_keys:
+                fasc_res = self[key]
+                fasc_res.plot_recruited_fibers(axes=axes,contour_color="grey",
+                    myel_color=myel_color,unmyel_color=unmyel_color,num=num,)
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))

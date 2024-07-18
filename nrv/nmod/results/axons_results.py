@@ -202,10 +202,10 @@ def get_first_AP(x_APs: np.array, x_idx_APs: np.array, t_APs: np.array,
     """
 
     if (len(t_APs)==1):
-        return([x_APs[0]],[t_APs[0]],[0])
+        return(np.array(x_APs),[0],np.array(t_APs),[0],[0])
         
     if (len(t_APs)<1):
-        return([],[],[])
+        return([],[],[],[],[])
     
     ordered_t_idx = np.argsort(t_APs)               #sort time indexes 
 

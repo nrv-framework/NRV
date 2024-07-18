@@ -89,34 +89,6 @@ class fascicle_results(sim_results):
         """
         return len(self.axons_diameter)
 
-    ## Representation methods
-    def plot_recruited_fibers(
-        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", num:bool=False
-    ) -> None:
-        if MCH.do_master_only_work():
-            ## plot contour
-            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,
-                                        color=contour_color,fill=False,linewidth=2,))
-            ## plot axons
-            axon_diam,axon_type,axon_y,axon_z,axon_recruited = self.get_axons()
-            for k,_ in enumerate(axon_diam):
-                color = unmyel_color
-                if axon_type[k]:
-                    color = myel_color
-                alpha = 0.1
-                if (axon_recruited[k]):
-                    alpha = 1
-                axes.add_patch(plt.Circle((axon_y[k], axon_z[k]),axon_diam[k] / 2,
-                                color=color,fill=True,alpha = alpha,))
-
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
-            if num:
-                for k in range(self.n_ax):
-                    axes.text(self.axons_y[k], self.axons_z[k], str(k))
-            axes.set_xlim((-1.1*self.D/2+self.y_grav_center, 1.1*self.D/2+self.y_grav_center))
-            axes.set_ylim((-1.1*self.D/2+self.z_grav_center, 1.1*self.D/2+self.z_grav_center))
-
 
     # impeddance related methods
     def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->np.array:
@@ -240,3 +212,31 @@ class fascicle_results(sim_results):
                 self[axon].block_summary(AP_start,freq,t_refractory_m)
             else:
                 self[axon].block_summary(AP_start,freq,t_refractory_um)
+
+    ## Representation methods
+    def plot_recruited_fibers(
+        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", num:bool=False
+    ) -> None:
+        if MCH.do_master_only_work():
+            ## plot contour
+            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,
+                                        color=contour_color,fill=False,linewidth=2,))
+            ## plot axons
+            axon_diam,axon_type,axon_y,axon_z,axon_recruited = self.get_axons()
+            for k,_ in enumerate(axon_diam):
+                color = unmyel_color
+                if axon_type[k]:
+                    color = myel_color
+                alpha = 0.1
+                if (axon_recruited[k]):
+                    alpha = 1
+                axes.add_patch(plt.Circle((axon_y[k], axon_z[k]),axon_diam[k] / 2,
+                                color=color,fill=True,alpha = alpha,))
+
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+            if num:
+                for k in range(self.n_ax):
+                    axes.text(self.axons_y[k], self.axons_z[k], str(k))
+            axes.set_xlim((-1.1*self.D/2+self.y_grav_center, 1.1*self.D/2+self.y_grav_center))
+            axes.set_ylim((-1.1*self.D/2+self.z_grav_center, 1.1*self.D/2+self.z_grav_center))

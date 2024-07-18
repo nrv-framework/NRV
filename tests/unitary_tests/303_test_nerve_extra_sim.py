@@ -39,7 +39,7 @@ amp = 10
 start = 0
 duration = 10
 stim1 = nrv.stimulus()
-stim1.sinus(start=start, duration=duration, amplitude=amp, freq=freq, dt=0.001)
+stim1.sinus(start=start, duration=duration, amplitude=amp, freq=freq, dt=0.005)
 stim1.t = np.round(stim1.t, 4)
 LIFE_stim.add_electrode(elec_1, stim1)
 

@@ -2,7 +2,7 @@ import nrv
 import matplotlib.pyplot as plt
 
 #nrv.parameters.set_nrv_verbosity(4)
-test_num = 304
+test_num = 305
 fname = "./unitary_tests/figures/"+str(test_num)+"_nerve.json"
 nerve = nrv.nerve(Length=10000)
 nerve.set_ID(test_num)
