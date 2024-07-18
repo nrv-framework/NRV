@@ -48,9 +48,25 @@ class fascicle_results(sim_results):
                 axon_keys = [ i for i in axon_keys if self[i].myelinated == True]
         return(axon_keys)
 
-    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) -> float:
+    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) -> int|float:
         """
+        Return the number or the ratio of recruited axons in the fascicle
 
+        Parameters
+        ----------
+        ax_type : str, optional
+            type of axon counted, by default 'all'
+            possible options:
+                - "all"
+                - "unmyelinated"
+                - "myelinated"
+        normalize : bool, optional
+            if False the total number of recruited axons is returned, else the ratio is returned, by default False
+
+        Returns
+        -------
+        int or float
+            number of recruited axons
         """
         axons_keys = self.get_axons_key(ax_type)
         n_recr = 0
@@ -62,21 +78,65 @@ class fascicle_results(sim_results):
         return n_recr
 
     def get_recruited_axons_greater_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
+        """
+        Return the number or the ratio of recruited axons with a diameter greater than `diam` in the fascicle
+
+        Parameters
+        ----------
+        ax_type : str, optional
+            type of axon counted, by default 'all'
+            possible options:
+                - "all"
+                - "unmyelinated"
+                - "myelinated"
+        normalize : bool, optional
+            if False the total number of recruited axons is returned, else the ratio is returned, by default False
+
+        Returns
+        -------
+        int or float
+            number of recruited axons
+        """
         axons_keys = self.get_axons_key(ax_type)
         n_recr = 0
+        n_tot = 0
         for axon in axons_keys:
-            if (self[axon].is_recruited() and self[axon].diameter>diam):
-                n_recr=+1
+            if self[axon].diameter>diam:
+                n_tot += 1
+                if (self[axon].is_recruited()):
+                    n_recr += 1
         if normalize:
             n_recr /= len(axons_keys)
         return n_recr
 
     def get_recruited_axons_lesser_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
+        """
+        Return the number or the ratio of recruited axons with a diameter smaller than `diam` in the fascicle
+
+        Parameters
+        ----------
+        ax_type : str, optional
+            type of axon counted, by default 'all'
+            possible options:
+                - "all"
+                - "unmyelinated"
+                - "myelinated"
+        normalize : bool, optional
+            if False the total number of recruited axons is returned, else the ratio is returned, by default False
+
+        Returns
+        -------
+        int or float
+            number of recruited axons
+        """
         axons_keys = self.get_axons_key(ax_type)
         n_recr = 0
+        n_tot = 0
         for axon in axons_keys:
-            if (self[axon].is_recruited() and self[axon].diameter<=diam):
-                n_recr=+1
+            if self[axon].diameter<diam:
+                n_tot += 1
+                if (self[axon].is_recruited()):
+                    n_recr += 1
         if normalize:
             n_recr /= len(axons_keys)
         return n_recr

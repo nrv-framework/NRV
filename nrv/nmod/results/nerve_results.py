@@ -66,9 +66,25 @@ class nerve_results(sim_results):
         return(fascicle_keys)
 
 
-    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) -> float:
+    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) ->  int|float:
         """
+        Return the number or the ratio of recruited axons in the nerve
 
+        Parameters
+        ----------
+        ax_type : str, optional
+            type of axon counted, by default 'all'
+            possible options:
+                - "all"
+                - "unmyelinated"
+                - "myelinated"
+        normalize : bool, optional
+            if False the total number of recruited axons is returned, else the ratio is returned, by default False
+
+        Returns
+        -------
+        float
+            number of recruited axons
         """
         fasc_keys = self.get_fascicle_key()
         for key in fasc_keys:
