@@ -12,7 +12,6 @@ nerve.fit_circular_contour()
 L = nerve.L
 
 
-
 ##################################
 ##### Intracellular context ######
 ##################################
@@ -65,7 +64,7 @@ del nerve
 
 nrv.synchronize_processes()
 nerve2 = nrv.nerve()
-nerve2.load(data="./unitary_tests/figures/"+str(test_num)+"_nerve.json",intracel_context=True, extracel_context=True, rec_context=True)
+nerve2.load(data=fname,intracel_context=True, extracel_context=True, rec_context=True)
 
 nerve2.simulate(t_sim=10, save_path='./unitary_tests/figures/', postproc_script='rmv_keys')
 loaded_rec = nerve2.recorder

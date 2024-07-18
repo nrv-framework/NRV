@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 
 #nrv.parameters.set_nrv_verbosity(4)
 # Fascicle config
-dt = 0.005
-t_sim = 10
+dt = 0.001
+t_sim = 15
 L = 10000 			# length, in um
 source_file = './unitary_tests/sources/56_fasc.json'
 ID = 70
@@ -56,9 +56,15 @@ fascicle_1.attach_extracellular_stimulation(extra_stim)
 fascicle_1.insert_I_Clamp(position, t_start, duration, amplitude)
 
 # simulation
-fascicle_1.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/', verbose=False)
+fascicle_1.return_parameters_only = False
+fascicle_1.save_results = False
+f_results = fascicle_1.simulate(t_sim=t_sim, verbose=False, postproc_script = "is_blocked")
 
-DIR = './unitary_tests/figures/Fascicle_'+str(ID)+'/'
+print(f_results)
+#DIR = './unitary_tests/figures/Fascicle_'+str(ID)+'/'
+
+
+"""
 fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular_state.json")
 
 if nrv.MCH.do_master_only_work():
@@ -66,3 +72,4 @@ if nrv.MCH.do_master_only_work():
     nrv.plot_fasc_state(fasc_state, ax, num=True)
     plt.savefig("./unitary_tests/figures/70_A.png")
 
+"""

@@ -50,7 +50,9 @@ results.rasterize(clear_artifacts=False)
 plt.figure()
 plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'],s=80)
 
-results.rasterize(clear_artifacts=True)
+results.remove_raster_artifacts()
+
+
 plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'],s=30)
 
 

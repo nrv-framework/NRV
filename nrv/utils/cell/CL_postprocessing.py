@@ -28,76 +28,6 @@ from ...nmod.results.axons_results import axon_results
 faulthandler.enable()
 
 
-
-
-#####################################
-## SAVE AND LOAD RESULTS FUNCTIONS ##
-#####################################
-
-
-def save_axon_results_as_json(results, filename):
-    """
-    save dictionary as a json file
-
-    Parameters
-    ----------
-    results     : dictionary
-        stuff to save
-    filename    : str
-        name of the file where results are saved
-    """
-
-    rise_warning(
-        "DeprecationWarning: ",
-        "save_axon_results_as_json is obsolete use method from axon_result objects instead"
-    )
-    json_dump(results, filename)
-
-
-
-def load_simulation_from_json(filename):
-    """
-    load results of individual axon simulation from a json. This function is specific to axons simulation as some identified results are automatically converted as numpy arrays.
-
-    Parameters
-    ----------
-    filename    : str
-        name of the file where axons simulations are saved
-    """
-    rise_warning(
-            "DeprecationWarning: ",
-            "load_simulation_from_json is obsolete use method from axon_result objects instead"
-        )
-    results = json_load(filename)
-
-    # convert iterables to numpy arrays
-    int_iterables = [
-        "node_index",
-        "Markov_Nav_modeled_NoR",
-        "V_mem_raster_position",
-        "V_mem_filtered_raster_position",
-        "V_mem_raster_time_index",
-        "V_mem_filtered_raster_time_index",
-    ]
-    for key, value in results.items():
-        if is_iterable(value) and not isinstance(results[key], dict):
-            if key in int_iterables:
-                results[key] = np.asarray(value, dtype=np.int16)
-            else:
-                if len(value) == 0:
-                    results[key] = []
-                elif isinstance(value[0], str):
-                    results[key] = value
-                else:
-                    if key in "rec_position_list":
-                        results[key] = value
-                    else:
-                        results[key] = np.asarray(value, dtype=np.float32)
-        else:
-            results[key] = value
-    return results
-
-
 ##############################################
 ## HANDLE THE SIMULATION RESULT DICTIONNARY ##
 ##############################################
@@ -351,186 +281,6 @@ def AP_detection(
         np.asarray(raster_time),
     )
 
-
-def find_spike_origin(
-    my_dict, my_key=None, t_start=0, t_stop=0, x_min=None, x_max=None
-):
-    """
-    Find the start time and position of a spike or a spike train. Only work on rasterized keys
-
-    Parameters
-    ----------
-    my_dict : dictionary
-        dictionary where the quantity should be rasterized
-    key     : str
-        name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-    t_start : float
-        time at which the spikes are processed, in ms. By default 0
-    t_stop  : float
-        maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-    x_min   : float
-        minimum position for spike processing, in um. If none is specified, the spike are processed starting at the 0 position. By default set to None.
-    x_max   : float
-        minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-    Returns
-    -------
-    start_time          : float
-        first occurance time in ms
-    start_x_position    : float
-        first occurance position in um
-    """
-
-    rise_warning(
-        "DeprecationWarning: ",
-        "find_spike_origin is obsolete use method from axon_result objects instead"
-    )
-    # define max timing if not already defined
-    if t_stop == 0:
-        t_stop = my_dict["t_sim"]
-    # find the best raster plot
-    if my_key == None:
-        if "V_mem_filtered_raster_position" in my_dict:
-            good_key_prefix = "V_mem_filtered_raster"
-        elif "V_mem_raster_position" in my_dict:
-            good_key_prefix = "V_mem_raster"
-        else:
-            # there is no rasterized voltage, nothing to find
-            return False
-    else:
-        good_key_prefix = my_key
-    # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
-    good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    good_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
-    good_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
-    # get data only in the z window if applicable
-    if x_min != None:
-        sup_xmin_indexes = np.where(good_spike_positions > x_min)
-    else:
-        sup_xmin_indexes = np.arange(len(good_spike_positions))
-    if x_max != None:
-        inf_xmax_indexes = np.where(good_spike_positions < x_max)
-    else:
-        inf_xmax_indexes = np.arange(len(good_spike_positions))
-    good_x_indexes = np.intersect1d(sup_xmin_indexes, inf_xmax_indexes)
-    considered_spike_times = good_spike_times[good_x_indexes]
-    considered_spike_positions = good_spike_positions[good_x_indexes]
-    # fin the minimum time corresponding to spike initiation
-    start_index = np.where(considered_spike_times == np.amin(considered_spike_times))
-    start_time = considered_spike_times[start_index]
-    start_x_position = considered_spike_positions[start_index]
-    return start_time, start_x_position
-
-
-def find_spike_last_occurance(
-    my_dict, my_key=None, t_start=0, t_stop=0, direction="up", x_start=0
-):
-    """
-    Find the last position of a spike occurance for rasterized data
-
-    Parameters
-    ----------
-    my_dict     : dictionary
-        dictionary where the quantity should be rasterized
-    key         : str
-        name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-    t_start     : float
-        time at which the spikes are processed, in ms. By default 0
-    t_stop      : float
-        maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-    direction   : str
-        Direction of the spike propagation, chose between:
-            'up'    -> spike propagating to higher x-coordinate values
-            'down'  -> spike propagating to lower x-coordinate values
-    x_start     : float
-        minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-    Returns
-    -------
-    t_last      : float
-        last occurance time in ms
-    x_last  : float
-        last occurance position in um
-    """
-
-    rise_warning(
-        "DeprecationWarning: ",
-        "find_spike_last_occurance is obsolete use method from axon_result objects instead"
-    )
-    # define max timing if not already defined
-    if t_stop == 0:
-        t_stop = my_dict["t_sim"]
-    # find the best raster plot
-    if my_key == None:
-        if "V_mem_filtered_raster_position" in my_dict:
-            good_key_prefix = "V_mem_filtered_raster"
-        elif "V_mem_raster_position" in my_dict:
-            good_key_prefix = "V_mem_raster"
-        else:
-            # there is no rasterized voltage, nothing to find
-            return False
-    else:
-        good_key_prefix = my_key
-    # get x_start, eventually t_start
-    if x_start == 0:
-        t_start, x_start = find_spike_origin(
-            my_dict, my_key=good_key_prefix, t_start=t_start, t_stop=t_stop
-        )
-    # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
-    good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    considered_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
-    considered_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
-    if direction == "up":
-        # find the spike in the upper region of the start
-        upper_spike_index = np.where(considered_spike_positions > x_start)
-        upper_spike_times = considered_spike_times[upper_spike_index]
-        upper_spike_positions = considered_spike_positions[upper_spike_index]
-        # find the last occurance
-        last_spike_index = np.where(upper_spike_times == np.amax(upper_spike_times))
-        t_last = upper_spike_times[last_spike_index]
-        x_last = upper_spike_positions[last_spike_index]
-    elif direction == "down":
-        # find the spike in the upper region of the start
-        lower_spike_index = np.where(considered_spike_positions < x_start)
-        lower_spike_times = considered_spike_times[lower_spike_index]
-        lower_spike_positions = considered_spike_positions[lower_spike_index]
-        # find the last occurance
-        last_spike_index = np.where(lower_spike_times == np.amax(lower_spike_times))
-        t_last = lower_spike_times[last_spike_index]
-        x_last = lower_spike_positions[last_spike_index]
-    else:
-        # find the spike in the upper region of the start
-        upper_spike_index = np.where(considered_spike_positions > x_start)
-        upper_spike_times = considered_spike_times[upper_spike_index]
-        upper_spike_positions = considered_spike_positions[upper_spike_index]
-        # find the spike in the upper region of the start
-        lower_spike_index = np.where(considered_spike_positions < x_start)
-        lower_spike_times = considered_spike_times[lower_spike_index]
-        lower_spike_positions = considered_spike_positions[lower_spike_index]
-        # find the last occurances
-        last_upper_spike_index = np.where(
-            upper_spike_times == np.amax(upper_spike_times)
-        )
-        last_lower_spike_index = np.where(
-            lower_spike_times == np.amax(lower_spike_times)
-        )
-        t_last = np.asarray(
-            [
-                lower_spike_times[last_lower_spike_index][0],
-                lower_spike_times[last_upper_spike_index],
-            ][0]
-        )
-        x_last = np.asarray(
-            [
-                lower_spike_positions[last_lower_spike_index][0],
-                lower_spike_positions[last_upper_spike_index],
-            ][0]
-        )
-    return t_last, x_last
 
 
 def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
@@ -1226,6 +976,24 @@ def plot_Nav_states(ax, values, title=""):
 ## usefull methods on results ##
 #############################
 
+def default_PP (results:axon_results)->axon_results:
+    """
+    Default postprocessing function. Rasterize data and remove v_mem to alliviate RAM usage
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+
+    Returns
+    -------
+    axon_results
+        updated results of the axon simulation.
+    """
+    results.rasterize()
+    results.remove_key("V_mem")
+    return(results)
+
 def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
     """
     remove most of the results key to save computing memory.
@@ -1336,8 +1104,9 @@ def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_result
         )
         file_object.write(line)
         file_object.close()
+    return(results)
 
-def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:float=0, freq:float=None, t_refractory:float=1)->axon_results:
+def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
     """_summary_
 
     Parameters
@@ -1368,19 +1137,27 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     """
     ## TO CHANGE WHEN is block is developped
     #results.axon_state(save=False)
-    if AP_start == 0:
-            if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
-                AP_start = results["intra_stim_starts"][0]
-    results.is_blocked(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
+    if AP_start is None :
+        if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
+            AP_start = results["intra_stim_starts"][0]
+    
+    vm_key = "V_mem"
+    if freq is not None:
+        vm_key += "_filtered"
+    
+    try:
+        results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
+    except:
+        pass
 
     # remove non nevessary data
     list_keys = {
     "ID",
     "L",
-    "V_mem_raster_position",
-    "V_mem_raster_x_position",
-    "V_mem_raster_time_index",
-    "V_mem_raster_time",
+    f"{vm_key}_raster_position",
+    f"{vm_key}raster_x_position",
+    f"{vm_key}_raster_time_index",
+    f"{vm_key}_raster_time",
     "myelinated",
     "y",
     "z",
@@ -1390,6 +1167,8 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     "intra_stim_positions",
     "extracellular_electrode_x",
     "is_blocked",
+    "has_onset",
+    "n_onset",
     }
     results.remove_key(keys_to_keep=list_keys)
 
@@ -1418,6 +1197,7 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
         )
         file_object.write(line)
         file_object.close()
+    return(results)
 
 
 def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|tuple[float]=None, save:bool=False, fdir="")->axon_results:
@@ -1521,22 +1301,23 @@ def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
         updated results.
     """
     fig, ax = plt.subplots()
-    results.raster_plot(ax)
+    results.plot_x_t(ax)
     title = (
     "Axon "
-    + str(results)
+    + str(results.ID)
     + ", myelination is "
     + str(results["myelinated"])
     + ", "
     + str(results["diameter"])
     + " um diameter"
 )
-    plt.title(title)
+    ax.set_title(title)
     if save:
-        plt.tight_layout()
-        fig_name = fdir + "/Activity_axon_" + str(res) + ".pdf"
-        plt.savefig(fig_name)
-        plt.close()
+        fig.tight_layout()
+        fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
+        fig.savefig(fig_name)
+        plt.close(fig)
+    return(results)
 
 def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
     """
@@ -1556,3 +1337,21 @@ def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
     axon_results
         updated results.
     """
+    fig, ax = plt.subplots()
+    results.raster_plot(ax)
+    title = (
+    "Axon "
+    + str(results.ID)
+    + ", myelination is "
+    + str(results["myelinated"])
+    + ", "
+    + str(results["diameter"])
+    + " um diameter"
+)
+    ax.set_title(title)
+    if save:
+        fig.tight_layout()
+        fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
+        fig.savefig(fig_name)
+        plt.close(fig)
+    return(results)

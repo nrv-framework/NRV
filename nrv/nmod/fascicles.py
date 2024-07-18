@@ -31,7 +31,8 @@ if not MCH.is_alone():
 faulthandler.enable()
 
 builtin_postproc_functions = {
-    "default": rmv_keys,
+    "default": default_PP,
+    "default_PP": default_PP,
     "rmv_keys": rmv_keys,
     "is_recruited": is_recruited,
     "is_blocked": is_blocked,
@@ -1228,8 +1229,8 @@ class fascicle(NRV_simulable):
         ## !!See if this part should be kept ##
         if "save" not in self.postproc_kwargs.keys():
             self.postproc_kwargs["save"] = self.save_results
-        if "fpath" not in self.postproc_kwargs.keys():
-            self.postproc_kwargs["fpath"] = self.save_path
+        if "fdir" not in self.postproc_kwargs.keys():
+            self.postproc_kwargs["fdir"] = self.save_path + "Fascicle_" + str(self.ID)
         ##  ##
         self.postproc_kwargs = check_function_kwargs(self.postproc_function, self.postproc_kwargs)
 

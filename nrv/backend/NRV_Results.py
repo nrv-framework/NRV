@@ -62,7 +62,7 @@ class NRV_results(NRV_class, dict):
         return super().save(save, fname, blacklist, **kwargs)
 
     def load(self, data, blacklist=[], **kwargs):
-        if isinstance(data, str|list[str]):
+        if isinstance(data, str):
             key_dic = json_load(data)
         else:
             key_dic = data

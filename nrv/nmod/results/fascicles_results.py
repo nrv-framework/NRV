@@ -41,8 +41,6 @@ class fascicle_results(sim_results):
                 axon_keys = [ i for i in axon_keys if self[i].myelinated == True]
         return(axon_keys)
 
-
-
     def get_recruited_axons(self, ax_type:str = 'all') -> float:
         """
 
@@ -219,3 +217,26 @@ class fascicle_results(sim_results):
         else:
             Y *= from_nrv_unit(mem_th, "cm")
             return convert(Y, "S/cm", unit)
+        
+    def get_block_summary (self, AP_start:float, freq:float=None, t_refractory_m:float = 1, t_refractory_um:float = 1) -> None:
+        
+        """
+        Get block characteristics (blocked, onset response, number of APs) for each axon of the fascicle
+
+        Parameters
+        ----------
+        AP_start : float
+            timestamp of the test pulse start, in ms.
+        freq : float, optional
+            Frequency of the stimulation, for KES block, by default None
+        t_refractory_m : float, optional
+            Axon refractory period for myelinated fibers, by default 1
+        t_refractory_um : float, optional
+            Axon refractory period for unmyelinated fibers, by default 1
+        """
+        axons_keys = self.get_axons_key()
+        for axon in axons_keys:
+            if self[axon].myelinated == True:
+                self[axon].block_summary(AP_start,freq,t_refractory_m)
+            else:
+                self[axon].block_summary(AP_start,freq,t_refractory_um)

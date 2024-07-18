@@ -12,9 +12,8 @@ nerve.fit_circular_contour()
 
 
 
-
 position = 0.5
-t_start = 3
+t_start = 1
 duration = 0.5
 amplitude = 4
 nerve.insert_I_Clamp(position, t_start, duration, amplitude)

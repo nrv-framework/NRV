@@ -303,32 +303,37 @@ class axon_results(sim_results):
         
     def is_blocked(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> bool:
         """
-        check if the 
+        check if the axon is blocked or not. 
+        
+        Warning
+        -------
+        A test pulse must be added to generate an AP propagating through the axon. This test AP is used to 
+        validate or not the neural conduction of the axon. 
 
         Parameters
         ----------
         AP_start : float
-            _description_
+            timestamp of the test pulse start, in ms.
         freq : float, optional
-            _description_, by default None
+            Frequency of the stimulation, for KES block, by default None
         t_refractory : float, optional
-            _description_, by default 1
+            Axon refractory period, by default 1
 
         Returns
         -------
         bool
-            _description_
+            True is the axon is blocked (the test AP doesn't propagate through), else false.
         """
         if not "is_blocked" in self:
-            v_mey_key = "V_mem"
+            vm_key = "V_mem"
             if (freq is not None):
                 self.filter_freq("V_mem",freq , Q= 2)
-                v_mey_key += "_filtered"
-            self.rasterize(V_mem_key = v_mey_key)
-            _,t_starts = self.get_start_APs(v_mey_key)
+                vm_key += "_filtered"
+            self.rasterize(vm_key = vm_key)
+            _,t_starts = self.get_start_APs(vm_key)
             n_APs = len(t_starts[t_starts>=AP_start])
             test_AP_idx = nearest_greater_idx(t_starts,AP_start)        #get idx of test AP in the APs list
-            x_APs,_,t_APs,_ = self.split_APs(v_mey_key)
+            x_APs,_,t_APs,_ = self.split_APs(vm_key)
             x_AP_test = x_APs[test_AP_idx]
             t_AP_test = t_APs[test_AP_idx]
             _,t_AP_start = self.get_start_AP(x_AP_test,t_AP_test)
@@ -344,7 +349,7 @@ class axon_results(sim_results):
             else:
                 if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
                     rise_error("is_blocked: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
-                _,_,coll_list = self.get_collision_pts(v_mey_key)
+                _,_,coll_list = self.get_collision_pts(vm_key)
                 if coll_list[test_AP_idx]:
                     rise_error("is_blocked: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus.")
                 
@@ -383,13 +388,12 @@ class axon_results(sim_results):
         list[np.array]
             list of the time index of each AP
         """
-        if not vm_key + "_raster_x_position" in self:
-            self.rasterize(vm_key=vm_key,clear_artifacts=False)
+        #if not vm_key + "_raster_x_position" in self:
+        self.rasterize(vm_key=vm_key,clear_artifacts=False)
         x_APs = []
         x_idx_APs = []
         t_APs = []
         t_idx_APs = []
-
         x_raster = self[vm_key + "_raster_x_position"].copy()
         t_raster = self[vm_key + "_raster_time"].copy()
         x_idx_raster = self[vm_key + "_raster_position"].copy()
@@ -1029,7 +1033,7 @@ class axon_results(sim_results):
         self[vm_key + "_raster_time_index"] = np.array(t_idx_clean)
         self[vm_key + "_raster_time"] = np.array(t_clean)
 
-    def rasterize(self,clear_artifacts:bool = True,**kwargs) -> None :
+    def rasterize(self, vm_key:str="V_mem", clear_artifacts:bool = True,**kwargs) -> None :
         """
         Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with AP detection.
         This function adds 4 items to the class, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
@@ -1042,11 +1046,13 @@ class axon_results(sim_results):
 
         Parameters
         ----------
+        vm_key : str, optional
+            Rasterized Vmembrane key , by default "V_mem"
+
         clear_artifacts : bool
             if True, remove artifacts (non-APs) rasterized points. By default True.
 
         **kwargs: 
-            - vm_key: (str) name of the key to rasterize, default is "V_mem"
             - threshold: (float) threshold for AP detection, in mV. Default value is taken from axon model
             - t_min_AP: (float) minimum AP duration, in ms. Default is 0.1ms
             - t_refractory: (float) inter-AP duration, in ms. Default is 0.5ms
@@ -1054,231 +1060,49 @@ class axon_results(sim_results):
             - t_stop: (float) stop time for rasterize, in ms. Default is simulation time.
         """
 
-        if "V_mem_key" in kwargs:
-            vm_key = kwargs["V_mem_key"]
-        else:
-            vm_key = "V_mem"
+        if not vm_key + "_raster_position" in self:
 
-        if "threshold" in kwargs:
-            threshold = kwargs["threshold"]
-        else:
-            threshold = self["threshold"]
+            if "threshold" in kwargs:
+                threshold = kwargs["threshold"]
+            else:
+                threshold = self["threshold"]
 
-        if "t_min_AP" in kwargs:
-            t_min_AP = kwargs["t_min_AP"]
-        else:
-            t_min_AP=0.1
+            if "t_min_AP" in kwargs:
+                t_min_AP = kwargs["t_min_AP"]
+            else:
+                t_min_AP=0.1
 
-        if "t_refractory" in kwargs:
-            t_refractory = kwargs["t_refractory"]
-        else:
-            t_refractory=0.5
+            if "t_refractory" in kwargs:
+                t_refractory = kwargs["t_refractory"]
+            else:
+                t_refractory=0.5
 
-        t_start = None
-        if "t_start" in kwargs:
-            t_start = kwargs["t_start"]
-        
-        t_stop = None
-        if "t_stop" in kwargs:
-            t_start = kwargs["t_stop"]
+            t_start = None
+            if "t_start" in kwargs:
+                t_start = kwargs["t_start"]
+            
+            t_stop = None
+            if "t_stop" in kwargs:
+                t_start = kwargs["t_stop"]
 
-
-        ## selecting the list of position considering what has been recorded
-        vm = self[vm_key].copy()
-        if self["myelinated"] == True:
-            if self["rec"] == "all":
-                x_idx = self["node_index"]
-                x = self["x"][x_idx]
-                vm = vm[x_idx]
+            ## selecting the list of position considering what has been recorded
+            vm = self[vm_key].copy()
+            if self["myelinated"] == True:
+                if self["rec"] == "all":
+                    x_idx = self["node_index"]
+                    x = self["x"][x_idx]
+                    vm = vm[x_idx]
+                else:
+                    x = self["x_rec"]
             else:
                 x = self["x_rec"]
-        else:
-            x = self["x_rec"]
 
-        (self[vm_key + "_raster_position"],self[vm_key + "_raster_x_position"],
-        self[vm_key + "_raster_time_index"],self[vm_key + "_raster_time"]) = rasterize(y_data=vm,x_data=x,
-                            t_data=self.t,threshold=threshold,t_min_AP=t_min_AP,t_refractory=t_refractory,t_start=t_start,
-                            t_stop=t_stop)
-        if (clear_artifacts):
-            self.remove_raster_artifacts(vm_key)
-
-
-
-    def find_spike_origin(
-        self, my_key=None, t_start=0, t_stop=0, x_min=None, x_max=None
-    ):
-        """
-        Find the start time and position of a spike or a spike train. Only work on rasterized keys
-
-        Parameters
-        ----------
-        key     : str
-            name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-        t_start : float
-            time at which the spikes are processed, in ms. By default 0
-        t_stop  : float
-            maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-        x_min   : float
-            minimum position for spike processing, in um. If none is specified, the spike are processed starting at the 0 position. By default set to None.
-        x_max   : float
-            minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-        Returns
-        -------
-        start_time          : float
-            first occurance time in ms
-        start_x_position    : float
-            first occurance position in um
-        """
-
-        rise_warning(
-        "DeprecationWarning: ",
-        "find_spike_origin is obsolete, use get_start_AP() instead"
-        )
-        # define max timing if not already defined
-        if t_stop == 0:
-            t_stop = self["t_sim"]
-        # find the best raster plot
-        if my_key == None:
-            if "V_mem_filtered_raster_position" in self:
-                good_key_prefix = "V_mem_filtered_raster"
-            elif "V_mem_raster_position" in self:
-                good_key_prefix = "V_mem_raster"
-            else:
-                # there is no rasterized voltage, nothing to find
-                return False
-        else:
-            good_key_prefix = my_key
-        # get data only in time windows
-        sup_indexes = np.where(self[good_key_prefix + "_time"] > t_start)
-        inf_indexes = np.where(self[good_key_prefix + "_time"] < t_stop)
-        good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-        good_spike_times = self[good_key_prefix + "_time"][good_indexes]
-        good_spike_positions = self[good_key_prefix + "_x_position"][good_indexes]
-        # get data only in the z window if applicable
-        if x_min != None:
-            sup_xmin_indexes = np.where(good_spike_positions > x_min)
-        else:
-            sup_xmin_indexes = np.arange(len(good_spike_positions))
-        if x_max != None:
-            inf_xmax_indexes = np.where(good_spike_positions < x_max)
-        else:
-            inf_xmax_indexes = np.arange(len(good_spike_positions))
-        good_x_indexes = np.intersect1d(sup_xmin_indexes, inf_xmax_indexes)
-        considered_spike_times = good_spike_times[good_x_indexes]
-        considered_spike_positions = good_spike_positions[good_x_indexes]
-        # fin the minimum time corresponding to spike initiation
-        start_index = np.where(considered_spike_times == np.amin(considered_spike_times))
-        start_time = considered_spike_times[start_index]
-        start_x_position = considered_spike_positions[start_index]
-        return start_time, start_x_position
-
-
-    def find_spike_last_occurance(
-        self, my_key=None, t_start=0, t_stop=0, direction="up", x_start=0
-    ):
-        """
-        Find the last position of a spike occurance for rasterized data
-
-        Parameters
-        ----------
-        key         : str
-            name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-        t_start     : float
-            time at which the spikes are processed, in ms. By default 0
-        t_stop      : float
-            maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-        direction   : str
-            Direction of the spike propagation, chose between:
-                'up'    -> spike propagating to higher x-coordinate values
-                'down'  -> spike propagating to lower x-coordinate values
-        x_start     : float
-            minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-        Returns
-        -------
-        t_last      : float
-            last occurance time in ms
-        x_last  : float
-            last occurance position in um
-        """
-
-        rise_warning(
-        "DeprecationWarning: ",
-        "find_spike_last_occurance is obsolete"
-        )
-        # define max timing if not already defined
-        if t_stop == 0:
-            t_stop = self["t_sim"]
-        # find the best raster plot
-        if my_key == None:
-            if "V_mem_filtered_raster_position" in self:
-                good_key_prefix = "V_mem_filtered_raster"
-            elif "V_mem_raster_position" in self:
-                good_key_prefix = "V_mem_raster"
-            else:
-                # there is no rasterized voltage, nothing to find
-                return False
-        else:
-            good_key_prefix = my_key
-        # get x_start, eventually t_start
-        if x_start == 0:
-            t_start, x_start = self.find_spike_origin(
-                my_key=good_key_prefix, t_start=t_start, t_stop=t_stop
-            )
-        # get data only in time windows
-        sup_indexes = np.where(self[good_key_prefix + "_time"] > t_start)
-        inf_indexes = np.where(self[good_key_prefix + "_time"] < t_stop)
-        good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-        considered_spike_times = self[good_key_prefix + "_time"][good_indexes]
-        considered_spike_positions = self[good_key_prefix + "_x_position"][good_indexes]
-        if direction == "up":
-            # find the spike in the upper region of the start
-            upper_spike_index = np.where(considered_spike_positions > x_start)
-            upper_spike_times = considered_spike_times[upper_spike_index]
-            upper_spike_positions = considered_spike_positions[upper_spike_index]
-            # find the last occurance
-            last_spike_index = np.where(upper_spike_times == np.amax(upper_spike_times))
-            t_last = upper_spike_times[last_spike_index]
-            x_last = upper_spike_positions[last_spike_index]
-        elif direction == "down":
-            # find the spike in the upper region of the start
-            lower_spike_index = np.where(considered_spike_positions < x_start)
-            lower_spike_times = considered_spike_times[lower_spike_index]
-            lower_spike_positions = considered_spike_positions[lower_spike_index]
-            # find the last occurance
-            last_spike_index = np.where(lower_spike_times == np.amax(lower_spike_times))
-            t_last = lower_spike_times[last_spike_index]
-            x_last = lower_spike_positions[last_spike_index]
-        else:
-            # find the spike in the upper region of the start
-            upper_spike_index = np.where(considered_spike_positions > x_start)
-            upper_spike_times = considered_spike_times[upper_spike_index]
-            upper_spike_positions = considered_spike_positions[upper_spike_index]
-            # find the spike in the upper region of the start
-            lower_spike_index = np.where(considered_spike_positions < x_start)
-            lower_spike_times = considered_spike_times[lower_spike_index]
-            lower_spike_positions = considered_spike_positions[lower_spike_index]
-            # find the last occurances
-            last_upper_spike_index = np.where(
-                upper_spike_times == np.amax(upper_spike_times)
-            )
-            last_lower_spike_index = np.where(
-                lower_spike_times == np.amax(lower_spike_times)
-            )
-            t_last = np.asarray(
-                [
-                    lower_spike_times[last_lower_spike_index][0],
-                    lower_spike_times[last_upper_spike_index],
-                ][0]
-            )
-            x_last = np.asarray(
-                [
-                    lower_spike_positions[last_lower_spike_index][0],
-                    lower_spike_positions[last_upper_spike_index],
-                ][0]
-            )
-        return t_last, x_last
+            (self[vm_key + "_raster_position"],self[vm_key + "_raster_x_position"],
+            self[vm_key + "_raster_time_index"],self[vm_key + "_raster_time"]) = rasterize(y_data=vm,x_data=x,
+                                t_data=self.t,threshold=threshold,t_min_AP=t_min_AP,t_refractory=t_refractory,t_start=t_start,
+                                t_stop=t_stop)
+            if (clear_artifacts):
+                self.remove_raster_artifacts(vm_key)
 
 
     def speed(self, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
@@ -1562,107 +1386,49 @@ class axon_results(sim_results):
         return electrode
 
 
-    def axon_state(self, save=False, saving_file="axon_state.json"):
+    def block_summary(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> dict:
+        
         """
-        Return axon caracteristics (blocked, Onset response, ...) from axon simulation results
+        Return axon block characteristics: blocked, onset response, number of APs) 
 
         Parameters
         ----------
-        self       : dict or str
-            simulation results dictionary or path and name of the saving file
-        save        : bool
-            if True save result in json file
-        saving_file : str
-            if save is True path and name of the saving file
+        AP_start : float
+            timestamp of the test pulse start, in ms.
+        freq : float, optional
+            Frequency of the stimulation, for KES block, by default None
+        t_refractory : float, optional
+            Axon refractory period, by default 1
 
         Returns
         -------
         axon_state       : dict
-            dictionary containing axon caracteristics
+            tuple containing the block characteristics: is_blocked (bool), has_onset (bool), n_onset (int) 
         """
-        rise_warning(
-        "DeprecationWarning: ",
-        "axon_state is obsolete"
-        )
-        ID = self["ID"]
 
-        # Axon parameter
-        parameters = {}
+        if {'is_blocked','has_onset','n_onset'} not in self:
+            required_keys = {"V_mem"}
+            if required_keys in self:
+                vm_key = "V_mem"
+                if (freq is not None):
+                    self.filter_freq("V_mem",freq , Q= 2)
+                    vm_key += "_filtered"
 
-        if "diameter" in self:
-            parameters["diameter"] = self["diameter"]
+                blocked = self.is_blocked(AP_start,freq,t_refractory)
+                n_APs = self.count_APs(vm_key) - 1
+                onset = n_APs > 0
 
-        if "myelinated" in self and self["myelinated"]:
-            parameters["node"] = len(self["x_nodes"])
-
-        if (
-            "extracellular_electrode_y" in self
-            and len(self["extracellular_electrode_y"]) == 1
-        ):
-            parameters["distance electrod"] = distance_point2line(
-                self["y"],
-                self["z"],
-                self["extracellular_electrode_y"][0],
-                self["extracellular_electrode_z"][0],
-            )
-            if self["myelinated"]:
-                x_elec = self["extracellular_electrode_x"][0]
-                elec_node = np.argmin(abs(self["x_nodes"] - x_elec))
-                elec_ali = (self["x_nodes"][elec_node] - x_elec) / (
-                    self["x_nodes"][1] - self["x_nodes"][0]
-                )
-                parameters["electrod node"] = int(elec_node)
-                parameters["electrod alignment"] = float(elec_ali)
-
-        # Check Block
-        test_AP = self.check_test_AP()
-        if test_AP is None:
-            block_state = None
-        else:
-            if "extracellular_electrode_x" not in self:
-                self["extracellular_electrode_x"] = 0
-            block_state = self.block(
-                t_start=test_AP - 0.001
-            )  # , t_stop=test_AP+1) # Gerer le delay
-        # Check Onset Response
-
-        onset_state = False
-        t_start_stim = self.detect_start_extrastim()
-
-        pos = self["V_mem_raster_position"]
-        if self["myelinated"]:
-            M = len(["x_nodes"])
-        else:
-            M = len(["x_rec"])
-        i_first_pos = np.where(pos == 0)
-        i_last_pos = np.where(pos == M)
-
-        # Count Onset response
-        N_AP = (len(i_first_pos[0]) + len(i_last_pos[0])) / 2
-        if test_AP is not None:
-            if block_state:
-                N_AP -= 0.5
+                axon_state = { 'is_blocked':blocked,
+                                'has_onset':onset,
+                                'n_onset':n_APs}
+                self.update(axon_state)
             else:
-                N_AP -= 1
-
-        if N_AP > 0:
-            onset_state = True
-
-        axon_state = {
-            "ID": ID,
-            "parameters": parameters,
-            "block_state": block_state,
-            "onset_state": onset_state,
-            "onset number": N_AP,
-        }
-
-        self["is_blocked"] = block_state
-        self["has_onset"] = onset_state
-        self["n_onset"] = N_AP
-
-        if save:
-            json_dump(axon_state, saving_file)
-
+                rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
+            
+        else:
+            axon_state = { 'is_blocked':self.is_blocked,
+                            'has_onset':self.has_onset,
+                            'n_onset':self.n_onset} 
         return axon_state
 
     ##################################

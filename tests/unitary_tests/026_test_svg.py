@@ -9,5 +9,6 @@ axon1 = nrv.unmyelinated(y,z,d,L,dt=0.01)
 results = axon1.simulate(t_sim=1)
 del axon1
 
-nrv.remove_key(results,'ID')
-nrv.save_axon_results_as_json(results,'./unitary_tests/figures/test_svg.json')
+results.remove_key('ID')
+results.save(save=True, fname='./unitary_tests/sources/26_test_svg.json')
+

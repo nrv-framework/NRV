@@ -45,10 +45,12 @@ print('Simulation performed in '+str(results['sim_time'])+' s')
 
 
 
-nrv.filter_freq(results,'V_mem',10)
-nrv.rasterize(results,'V_mem_filtered')
-speed=nrv.speed(results)
-block=nrv.block(results)
+results.filter_freq('V_mem',10)
+results.rasterize(vm_key='V_mem_filtered')
+speed = results.get_avg_AP_speed("V_mem_filtered")
+
+
+block=results.is_blocked(t_start,block_freq)
 print('speed='+str(speed)+'m/s')
 print(block == False) # the spike should pass
 #print(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'])
@@ -77,10 +79,10 @@ axon1.attach_extracellular_stimulation(extra_stim)
 results2 = axon1.simulate(t_sim=20, record_particles=True,record_I_ions=True,)
 del axon1
 
-nrv.filter_freq(results2,'V_mem',10)
-nrv.rasterize(results2,'V_mem_filtered')
-speed=nrv.speed(results2)
-block=nrv.block(results2)
+results2.filter_freq('V_mem',10)
+results2.rasterize(vm_key='V_mem_filtered')
+speed = results2.get_avg_AP_speed("V_mem_filtered")
+block=results2.is_blocked(t_start,block_freq)
 print('speed='+str(speed)+'m/s')
 print(block == True) # should block
 plt.figure()

@@ -1,9 +1,9 @@
 import nrv
 import matplotlib.pyplot as plt
 
-fname = './unitary_tests/figures/test_svg.json'
+fname = './unitary_tests/sources/26_test_svg.json'
 
-results = nrv.load_simulation_from_json(fname)
+results = nrv.load_any(fname)
 
 print('d_lambda' in results.keys())
 print('ID' not in results.keys())
