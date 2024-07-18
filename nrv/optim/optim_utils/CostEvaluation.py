@@ -5,6 +5,9 @@ from ...fmod.extracellular import extracellular_context
 
 from ...backend.NRV_Class import NRV_class, load_any, abstractmethod
 from ...backend.NRV_Simulable import sim_results
+from ...nmod.results.axons_results import axon_results
+from ...nmod.results.fascicles_results import fascicle_results
+from ...nmod.results.nerve_results import nerve_results
 from ...utils.nrv_function import cost_evaluation
 from ...utils.cell.CL_postprocessing import *
 
@@ -60,16 +63,10 @@ class recrutement_count_CE(cost_evaluation):
         self.reverse = reverse
 
     def count_axon_activation(self, results: sim_results):
-        if "V_mem_raster_position" not in results:
-            rasterize(results, "V_mem")
-        if len(results["V_mem_raster_position"]) == 0:
-            # no spike
-            cpt = 0
-        else:
-            cpt = 1
+        cpt = results.is_recruited()
         if self.reverse:
-            cpt = int(not cpt)
-        return cpt
+            cpt = not cpt
+        return int(cpt)
 
     def count_fascicle_activation(self, results: sim_results):
         cpt = 0
@@ -95,14 +92,12 @@ class recrutement_count_CE(cost_evaluation):
             number of spike in the v_mem part
         """
         cost = 0
-        if "myelinated" in results["result_type"]:
+        if isinstance(results, axon_results):
             cost = self.count_axon_activation(results)
-        elif results["result_type"] == "fascicle":
-            cost = self.count_fascicle_activation(results)
         else:
-            # nerve simulation
-            for i in results["fascicles_IDs"]:
-                cost += self.count_fascicle_activation(results["fascicle" + str(i)])
+            cost = results.get_recruited_axons(ax_type= 'all', normalize=False)
+            if self.reverse:
+                cost = results.n_ax - cost
         return cost
 
 

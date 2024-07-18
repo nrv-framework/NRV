@@ -19,7 +19,7 @@ cost_evaluation = costR + 0.01*costC
 kwarg_sim = {
     "return_parameters_only":False,
     "save_results":False,
-    "postproc_script":"is_excited"
+    "postproc_script":"is_recruited"
 }
 
 my_cost1 = nrv.cost_function(

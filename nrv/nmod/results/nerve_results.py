@@ -27,6 +27,32 @@ class nerve_results(sim_results):
         super().__init__(context)
 
 
+    @property
+    def fascicle_keys(self)->list:
+        """
+        Number of fascicles in the fascicle
+        """
+        all_keys = self.keys()
+        return [i for i in all_keys if ("fascicle" in i and number_in_str(i))]
+
+    @property
+    def n_fasc(self)->int:
+        """
+        Number of fascicles in the fascicle
+        """
+        return len(self.fascicles)
+
+    @property
+    def n_ax(self)->int:
+        """
+        Number of axons in the fascicle
+        """
+        fasc_keys = self.fascicle_keys
+        _n_ax = 0
+        for key in fasc_keys:
+            _n_ax += self[key].n_ax
+        return _n_ax
+
     def get_fascicle_results(self, ID: int) -> fascicle_results:
         if ID not in self.fascicles_IDs:
             rise_error(("Fascicle ID does not exists."))
@@ -38,6 +64,19 @@ class nerve_results(sim_results):
         all_keys = self.keys()
         fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i)) ]
         return(fascicle_keys)
+
+
+    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) -> float:
+        """
+
+        """
+        fasc_keys = self.get_fascicle_key()
+        for key in fasc_keys:
+            fasc_res = self[key]
+            n_recr += fasc_res.get_recruited_axons(ax_type=ax_type, normalize=normalize)
+        if normalize:
+            n_recr /= self.n_fasc
+        return n_recr
 
 
     # impeddance related methods

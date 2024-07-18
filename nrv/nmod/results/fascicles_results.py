@@ -26,6 +26,13 @@ class fascicle_results(sim_results):
     def __init__(self, context=None):
         super().__init__(context)
 
+    @property
+    def n_ax(self):
+        """
+        Number of axons in the fascicle
+        """
+        return len(self.axons_diameter)
+
     def get_axons_key(self, ax_type:str = 'all') -> list:
         """
 
@@ -41,7 +48,7 @@ class fascicle_results(sim_results):
                 axon_keys = [ i for i in axon_keys if self[i].myelinated == True]
         return(axon_keys)
 
-    def get_recruited_axons(self, ax_type:str = 'all') -> float:
+    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) -> float:
         """
 
         """
@@ -50,23 +57,29 @@ class fascicle_results(sim_results):
         for axon in axons_keys:
             if (self[axon].is_recruited()):
                 n_recr+=1
-        return(n_recr/len(axons_keys))
-    
-    def get_recruited_axons_greater_than(self, diam:float, ax_type:str = 'all') -> float:
+        if normalize:
+            n_recr /= self.n_ax
+        return n_recr
+
+    def get_recruited_axons_greater_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
         axons_keys = self.get_axons_key(ax_type)
         n_recr = 0
         for axon in axons_keys:
             if (self[axon].is_recruited() and self[axon].diameter>diam):
                 n_recr=+1
-        return(n_recr/len(axons_keys))
-    
-    def get_recruited_axons_lesser_than(self, diam:float, ax_type:str = 'all') -> float:
+        if normalize:
+            n_recr /= len(axons_keys)
+        return n_recr
+
+    def get_recruited_axons_lesser_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
         axons_keys = self.get_axons_key(ax_type)
         n_recr = 0
         for axon in axons_keys:
             if (self[axon].is_recruited() and self[axon].diameter<=diam):
                 n_recr=+1
-        return(n_recr/len(axons_keys))
+        if normalize:
+            n_recr /= len(axons_keys)
+        return n_recr
 
     def get_axons(self) -> list: 
         axons_keys = self.get_axons_key()
@@ -82,13 +95,6 @@ class fascicle_results(sim_results):
             axon_diam.append(self[axon].diameter)
             axon_type.append(self[axon].myelinated)
         return(axon_diam,axon_type,axon_y,axon_z,axon_recruited)
-
-    def n_ax(self):
-        """
-        Number of axons in the fascicle
-        """
-        return len(self.axons_diameter)
-
 
     # impeddance related methods
     def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->np.array:

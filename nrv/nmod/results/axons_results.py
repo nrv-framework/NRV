@@ -287,7 +287,7 @@ class axon_results(sim_results):
         super().__init__(context)
 
 
-    def is_recruited(self,vm_key:str="V_mem") -> bool:         
+    def is_recruited(self,vm_key:str="V_mem") -> bool:
         """
         Return True if an AP is detected, else False.
 
@@ -297,9 +297,9 @@ class axon_results(sim_results):
             Return True if an AP is detected, else False.
         """
         
-        if not "is_recruited" in self:
-            self["is_recruited"] = self.count_APs(vm_key) != 0
-        return self["is_recruited"]
+        if not "recruited" in self:
+            self["recruited"] = self.count_APs(vm_key) != 0
+        return self["recruited"]
         
     def is_blocked(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> bool:
         """
@@ -324,7 +324,7 @@ class axon_results(sim_results):
         bool
             True is the axon is blocked (the test AP doesn't propagate through), else false.
         """
-        if not "is_blocked" in self:
+        if not "blocked" in self:
             vm_key = "V_mem"
             if (freq is not None):
                 self.filter_freq("V_mem",freq , Q= 2)
@@ -344,8 +344,8 @@ class axon_results(sim_results):
                 rise_warning("is_blocked: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization.")
 
             if (self.has_AP_reached_end(x_AP_test,t_AP_test)):  #test AP has reached the end --> is not blocked
-                self["is_blocked"] = False
-                return self["is_blocked"]
+                self["blocked"] = False
+                return self["blocked"]
             else:
                 if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
                     rise_error("is_blocked: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
@@ -362,11 +362,11 @@ class axon_results(sim_results):
                 if len(t_starts[t_starts>t_AP_start]): #AP jump
                     if np.min(np.abs(t_starts[t_starts>AP_start]-t_AP_test_max)) < t_refractory: 
                         #todo: make sure that the jumping AP is reaching the over side of the axon
-                        self["is_blocked"] = False
-                        return self["is_blocked"]
-                self["is_blocked"] = True
-                return self["is_blocked"]
-        return self["is_blocked"]
+                        self["blocked"] = False
+                        return self["blocked"]
+                self["blocked"] = True
+                return self["blocked"]
+        return self["blocked"]
 
     def split_APs(self,vm_key:str="V_mem") -> list[np.array] | list[np.array] | list[np.array] | list[np.array] :
         """        
@@ -1204,8 +1204,8 @@ class axon_results(sim_results):
         # "DeprecationWarning: ",
         # "block is obsolete, please used isBlocked() instead"
         # )
-        if "is_blocked" in self:
-            return self["is_blocked"]
+        if "blocked" in self:
+            return self["blocked"]
         position_max = 0
         blocked_spike_positionlist = []
         if t_stop == 0:
@@ -1221,8 +1221,8 @@ class axon_results(sim_results):
                 good_key_prefix = "V_mem_raster"
             else:
                 # there is no rasterized voltage, nothing to find
-                self["is_blocked"] = False
-                return self["is_blocked"]
+                self["blocked"] = False
+                return self["blocked"]
         sup_time_indexes = np.where(self[good_key_prefix + "_time"] > t_start)
         inf_time_indexes = np.where(self[good_key_prefix + "_time"] < t_stop)
         good_indexes_time = np.intersect1d(sup_time_indexes, inf_time_indexes)
@@ -1231,8 +1231,8 @@ class axon_results(sim_results):
             good_indexes_time
         ]
         if len(blocked_spike_positionlist) == 0:
-            self["is_blocked"] = None
-            return self["is_blocked"]
+            self["blocked"] = None
+            return self["blocked"]
         if "intra_stim_positions" in self:
             if self["intra_stim_positions"] < self["extracellular_electrode_x"]:
                 position_max = max_spike_position(
@@ -1240,8 +1240,8 @@ class axon_results(sim_results):
                 )
 
                 if blocked_spike_positionlist[position_max] < 9.0 / 10 * self["L"]:
-                    self["is_blocked"] = True
-                    return self["is_blocked"]
+                    self["blocked"] = True
+                    return self["blocked"]
                 else:
                     for i in range(position_max - 1):
                         if (
@@ -1249,18 +1249,18 @@ class axon_results(sim_results):
                             - blocked_spike_positionlist[i]
                             > self["L"] / 5
                         ):
-                            self["is_blocked"] = True
-                            return self["is_blocked"]
+                            self["blocked"] = True
+                            return self["blocked"]
                     else:
-                        self["is_blocked"] = False
-                        return self["is_blocked"]
+                        self["blocked"] = False
+                        return self["blocked"]
             else:
                 position_max = max_spike_position(
                     blocked_spike_positionlist, position_max, spike_begin="up"
                 )
                 if min(blocked_spike_positionlist) > 1.0 / 10 * self["L"]:
-                    self["is_blocked"] = True
-                    return self["is_blocked"]
+                    self["blocked"] = True
+                    return self["blocked"]
                 else:
                     for i in range(position_max - 1):
                         if (
@@ -1268,11 +1268,11 @@ class axon_results(sim_results):
                             - blocked_spike_positionlist[i + 1]
                             > self["L"] / 5
                         ):
-                            self["is_blocked"] = True
-                            return self["is_blocked"]
+                            self["blocked"] = True
+                            return self["blocked"]
                     else:
-                        self["is_blocked"] = False
-                        return self["is_blocked"]
+                        self["blocked"] = False
+                        return self["blocked"]
         else:
             rise_error("intra_stim_positions is not in dictionnary")
 
