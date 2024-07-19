@@ -25,7 +25,8 @@ if not is_mesh:
     mesh.reshape_fascicle(d=2000, y_c=1000, z_c=0, ID=1, res=100)
 
 
-    mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=L/2, y_c=0, z_c=0, size=size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
+    #mesh.add_electrode(elec_type="CUFF MEA", N=5, x_c=L/2, y_c=0, z_c=0, size=size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
+    mesh.add_electrode(elec_type="CUFF MP", N=5, x_c=L/2, contact_width = None, contact_length = 100,res=50)
 
     mesh.compute_mesh()
     mesh.save(mesh_file)

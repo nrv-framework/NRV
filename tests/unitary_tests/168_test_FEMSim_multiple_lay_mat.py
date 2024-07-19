@@ -40,7 +40,7 @@ mesh.compute_mesh()
 mesh.save(mesh_file)
 
 t2 = perf_counter()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 
 
 print('mesh generated in '+str(t2 - t1)+' s')

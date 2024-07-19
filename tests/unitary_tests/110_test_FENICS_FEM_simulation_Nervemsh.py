@@ -12,14 +12,14 @@ L=15000         #um
 Outer_D = 10    #mm
 Nerve_D = 5000 #um
 
-size_elec = (1000, 500)
+contact_length = 1000
 
 mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D)
 
 mesh.reshape_nerve(res=400)
 
 
-mesh.add_electrode(elec_type="CUFF MEA", N=4, x_c=L/2, y_c=0, z_c=0, size = size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
+mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=L/2, contact_width = None, contact_length = 100,res=50)
 
 mesh.compute_mesh()
 #mesh.save(mesh_file)

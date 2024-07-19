@@ -50,8 +50,8 @@ z = 0
 test_stim1.compute_electrodes_footprints(x, y, z, ID=0)
 test_stim2.compute_electrodes_footprints(x, y, z, ID=0)
 
-fen_elec_1.save_electrode(save=True, fname="./unitary_tests/results/json/150_elec1fen.json")
-fen_elec_1.save_electrode(save=True, fname="./unitary_tests/results/json/150_elec1com.json")
+fen_elec_1.save(save=True, fname="./unitary_tests/results/json/150_elec1fen.json")
+com_elec_1.save(save=True, fname="./unitary_tests/results/json/150_elec1com.json")
 
 print(np.shape(fen_elec_1.footprint))
 print('Fenics sim:')

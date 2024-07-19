@@ -17,7 +17,7 @@ axon1.insert_I_Clamp(0.5, t_start, duration, amplitude)
 
 results = axon1.simulate(t_sim=6)
 
-nrv.rasterize(results,'V_mem')
+results.rasterize('V_mem')
 plt.figure()
 plt.scatter(results['V_mem_raster_time'],results['V_mem_raster_x_position'])
 plt.xlabel('time (ms)')

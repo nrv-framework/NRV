@@ -62,7 +62,7 @@ mesh.compute_mesh()
 mesh.save(mesh_file)
 
 t2 = time.time()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 print('mesh generated in '+str(t2 - t1)+' s')
 
 param = nrv.FEMParameters(D=3, mesh_file=mesh_file)

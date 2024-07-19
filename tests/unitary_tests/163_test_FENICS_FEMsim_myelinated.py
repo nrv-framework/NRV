@@ -28,7 +28,7 @@ mesh.compute_mesh()
 mesh.save(mesh_file)
 
 t2 = time.time()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 
 
 ax1 = nrv.myelinated(d=10, L=L, rec="all", t_sim=5, Nseg_per_sec=1,record_g_mem=True)
