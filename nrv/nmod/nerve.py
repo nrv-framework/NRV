@@ -8,6 +8,7 @@ from ..backend.NRV_Class import load_any
 from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.stimulus import stimulus
 from .fascicles import *
+from .results.nerve_results import nerve_results
 
 
 #################
@@ -43,11 +44,11 @@ class nerve(NRV_simulable):
         super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
-        self.save_path = ""
         self.verbose = True
-        self.return_parameters_only = True
-        self.save_results = True
         self.loaded_footprints = True
+        self.return_parameters_only = False
+        self.save_results = False
+        self.save_path = ""
 
         self.postproc_label = "default"
         self.postproc_function = None
@@ -815,7 +816,7 @@ class nerve(NRV_simulable):
     def simulate(
         self,
         **kwargs,
-    ):
+    )->nerve_results:
         """
         Simulate the nerve with the proposed extracellular context. Top level method for large
         scale neural simulation.
@@ -833,7 +834,7 @@ class nerve(NRV_simulable):
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
-            nerve_sim = sim_results({"dummy_res":1})
+            nerve_sim = nerve_results({"dummy_res":1})
         if self.save_results:
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
             if MCH.do_master_only_work():

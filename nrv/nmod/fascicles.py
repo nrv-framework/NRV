@@ -19,6 +19,8 @@ from .axons import *
 from .axon_pop_generator import *
 from .myelinated import *
 from .unmyelinated import *
+from .results.fascicles_results import fascicle_results
+from .results.axons_results import axon_results
 
 
 # Parallel computing options
@@ -91,8 +93,8 @@ class fascicle(NRV_simulable):
         self.save_path = ""
         self.verbose = False
         self.return_parameters_only = True
-        self.loaded_footprints = True
-        self.save_results = True
+        self.loaded_footprints = False
+        self.save_results = False
 
         self.postproc_label = "default"
         self.postproc_function = None
@@ -1240,7 +1242,7 @@ class fascicle(NRV_simulable):
         folder_name,
         is_master_slave=False,
         **kwargs,
-    ):
+    )->axon_results:
         """
         Internal use only simumlated one axon of the fascicle
 
@@ -1369,7 +1371,7 @@ class fascicle(NRV_simulable):
         self,
         save_V_mem=False,
         **kwargs,
-    ):
+    )->fascicle_results:
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead

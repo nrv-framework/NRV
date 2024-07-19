@@ -72,12 +72,13 @@ class nerve_results(sim_results):
 
         Parameters
         ----------
+        diam : float
+            diameter above wich axon should be counted.
         ax_type : str, optional
-            type of axon counted, by default 'all'
-            possible options:
-                - "all"
-                - "unmyelinated"
-                - "myelinated"
+            type of axon counted,possible options:
+             - "all" (default)
+             - "unmyelinated"
+             - "myelinated"
         normalize : bool, optional
             if False the total number of recruited axons is returned, else the ratio is returned, by default False
 

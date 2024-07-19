@@ -55,11 +55,10 @@ class fascicle_results(sim_results):
         Parameters
         ----------
         ax_type : str, optional
-            type of axon counted, by default 'all'
-            possible options:
-                - "all"
-                - "unmyelinated"
-                - "myelinated"
+            type of axon counted,possible options:
+             - "all" (default)
+             - "unmyelinated"
+             - "myelinated"
         normalize : bool, optional
             if False the total number of recruited axons is returned, else the ratio is returned, by default False
 
@@ -84,9 +83,8 @@ class fascicle_results(sim_results):
         Parameters
         ----------
         ax_type : str, optional
-            type of axon counted, by default 'all'
-            possible options:
-                - "all"
+            type of axon counted, possible options:
+                - "all" (default)
                 - "unmyelinated"
                 - "myelinated"
         normalize : bool, optional
@@ -116,9 +114,8 @@ class fascicle_results(sim_results):
         Parameters
         ----------
         ax_type : str, optional
-            type of axon counted, by default 'all'
-            possible options:
-                - "all"
+            type of axon counted, possible options:
+                - "all" (default)
                 - "unmyelinated"
                 - "myelinated"
         normalize : bool, optional

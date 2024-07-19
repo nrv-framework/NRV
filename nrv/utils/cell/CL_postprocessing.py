@@ -974,7 +974,7 @@ def plot_Nav_states(ax, values, title=""):
 
 ################################
 ## usefull methods on results ##
-#############################
+################################
 
 def default_PP (results:axon_results)->axon_results:
     """
@@ -1000,9 +1000,9 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
 
     Note
     ----
-    By default, only the following key are kept:
-     - "ID",
-     - `L`,
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
      - `V_mem_raster_position`
      - `V_mem_raster_x_position`
      - `V_mem_raster_time_index`
@@ -1010,6 +1010,7 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
      - `myelinated`
      - `intra_stim_starts`
      - `intra_stim_positions`
+
 
     Warning
     -------
@@ -1050,7 +1051,27 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
 
 
 def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_results:
-    """_summary_
+    """
+    Evaluate if each fibre is recruited by a stimulation (see `axon_results.is_recruited`) and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `y`
+     - `z`
+     - `diameter`
+     - `intra_stim_starts`
+     - `tstop`
+     - `intra_stim_positions`
+     - `extracellular_electrode_x`
+     - `recruited`
 
     Parameters
     ----------
@@ -1107,7 +1128,29 @@ def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_result
     return(results)
 
 def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
-    """_summary_
+    """
+    Evaluate the impact od a blocking stimulation on axon (see `axon_results.block_summary`) and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `y`
+     - `z`
+     - `diameter`
+     - `intra_stim_starts`
+     - `tstop`
+     - `intra_stim_positions`
+     - `extracellular_electrode_x`
+     - `blocked`
+     - `has_onset`
+     - `n_onset`
 
     Parameters
     ----------
@@ -1200,25 +1243,40 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     return(results)
 
 
-def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|tuple[float]=None, save:bool=False, fdir="")->axon_results:
-    """_summary_
+def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None)->axon_results:
+    """
+    Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `g_mem`
+     - `x_rec`
+     - `rec`
+     - `Nseg_per_sec`
+     - `axon_path_type`
+     - `t_sim`
 
     Parameters
     ----------
     results : axon_results
         results of the axon simulation.
     t_start_rec : float, optional
-        _description_, by default 0
+        Lower time at whitch `g_mem` should be stored, by default 0
     t_stop_rec : float, optional
-        _description_, by default -1
+        Upper time at whitch `g_mem` should be stored, by default -1
     sample_dt : None | float, optional
-        _description_, by default None
+        Time sample rate at which `g_mem` should be stored if None simulation dt is kept, by default None
     x_bounds : None | tuple[float], optional
-        _description_, by default None
-    save : bool, optional
-        if true, the conductivity of the axon is saved. The times array is also saved if the axon ID is `0`, by default False
-    fdir : str, optional
-        Path where the conductivity should be saved , by default ""
+        x-positions where to store `g_mem`, possible option:
+         - float: The values of `g_mem` are only stored at the nearest position in `x_rec`.
+         - tupple: `g_mem` values are stored for all positions included between the two boundaries.
+         - None (default): `g_mem` values are stored for all positions.
+
+    Warning
+    -------
+    ``sample_dt`` should be at multiple of the simulation ``dt`` to allow a correct undersampling. 
+    If the not ``sample_dt`` choosen will be the closer multiple of ``dt``.
 
     Returns
     -------
@@ -1243,12 +1301,6 @@ def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1,
             x_bounds = [x_bounds]
             I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
 
-        if save:
-            if fdir[-1] != "/":
-                fdir += "/"
-            fgmem = fdir + f"{results.ID}.csv"
-            ft = fdir + "ft.csv"
-
         N_x = len(I_x)
         i_t_min = np.argwhere(results["t"]>t_start_rec)[0][0]
         i_t_max = np.argwhere(results["t"]<t_stop_rec)[-1][0]
@@ -1263,28 +1315,25 @@ def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1,
         results["t"] = results["t"][t_APs]
         results["g_mem"] = results["g_mem"][np.ix_(I_x, t_APs)]
 
-        to_save =  np.zeros((N_t+1, N_x))
-        to_save[0,:] = results["x_rec"]
-        to_save[1:,:] = results["g_mem"].T
-        if results:
-            np.savetxt(fgmem, to_save, delimiter=",")
-            if k == 0:
-                np.savetxt(ft, results["t"],delimiter=",")
-
-
         ###############################
         ## remove non nevessary data ##
         ###############################
-        list_keys = []
-        if not results.return_parameters_only:
-            list_keys += ["g_mem", "x_rec", "rec", "Nseg_per_sec", "axon_path_type", "t_sim"]
-            if results.ID==0:
-                list_keys += ["t"]
-            results.remove_key(keys_to_keep=list_keys, verbose=False)
+        list_keys = {
+        "g_mem",
+        "x_rec",
+        "rec",
+        "Nseg_per_sec",
+        "axon_path_type",
+        "t_sim",
+        }
+        if results.ID==0:
+            list_keys.update({"t"})
+        results.remove_key(keys_to_keep=list_keys)
     return results
 
 def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
-    """_summary_
+    """
+    Plot and save the membrane potential along each axon of the fascicle
 
     Parameters
     ----------
@@ -1317,11 +1366,11 @@ def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
         fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
         fig.savefig(fig_name)
         plt.close(fig)
-    return(results)
+    return results
 
 def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
     """
-    
+    Plot and save the raster plot along each axon of the fascicle.
 
     Parameters
     ----------
@@ -1354,4 +1403,4 @@ def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
         fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
         fig.savefig(fig_name)
         plt.close(fig)
-    return(results)
+    return results
