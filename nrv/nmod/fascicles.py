@@ -1190,7 +1190,7 @@ class fascicle(NRV_simulable):
         rise_warning(
             DeprecationWarning,
             "Deprecation method get_electrodes_footprints_on_axons",
-            "\nuse get_electrodes_footprints_on_axons instead",
+            "\nuse compute_electrodes_footprints instead",
         )
         self.compute_electrodes_footprints(
             save_ftp_only=save_ftp_only, filename=filename, **kwargs

@@ -49,7 +49,7 @@ stim1 = nrv.stimulus()
 extra_stim.add_electrode(elec_2, stim1)
 
 fascicle_1.attach_extracellular_stimulation(extra_stim)
-footprints = fascicle_1.get_electrodes_footprints_on_axons()
+footprints = fascicle_1.compute_electrodes_footprints()
 fascicle_1.save_fascicle_configuration(PSfile,extracel_context=True)
 
 
@@ -95,7 +95,7 @@ if nrv.COMSOL_Status:
     t3 = time.time()
     print('Extracel context generated in '+str(t3 - t2)+' s')
     #Footprint saving
-    footprints = fascicle_1.get_electrodes_footprints_on_axons()
+    footprints = fascicle_1.compute_electrodes_footprints()
 
     t4 = time.time()
     print('Electrod footprint generated in '+str(t4 - t3)+' s')

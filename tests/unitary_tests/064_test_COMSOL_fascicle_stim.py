@@ -43,4 +43,4 @@ fascicle_1.set_ID(64)
 # extra cellular stimulation
 fascicle_1.attach_extracellular_stimulation(test_stim)
 # simulation
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_excited')
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')

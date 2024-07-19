@@ -77,7 +77,7 @@ The objective of the first optimization problem is to **minimize a rectangle pul
     nerve_1.plot(ax)
     
     nerve_1.compute_electrodes_footprints()
-    nerve_1.set_parameters(postproc_script="is_excited")
+    nerve_1.set_parameters(postproc_script="is_recruited")
     _ = nerve_1.save(fname=nerve_file, extracel_context=True)
     nrv.synchronize_processes()
     #nerve_1(t_sim=5)

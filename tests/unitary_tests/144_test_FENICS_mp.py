@@ -70,6 +70,6 @@ if nrv.MCH.do_master_only_work():
     print(f"Single proc simulation : {t_fem} s\n {n_proc}-proc simulation:{t_fem_mp} s")
 
 
-#fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_excited')
+#fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
 
 nrv.synchronize_processes()

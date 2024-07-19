@@ -47,7 +47,7 @@ fascicle_1.set_ID(Ntest)
 fascicle_1.attach_extracellular_stimulation(test_stim)
 fascicle_1.axons_type[12] = -1
 # simulation
-#print(fascicle_1.get_electrodes_footprints_on_axons())
-fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_excited')
+#print(fascicle_1.compute_electrodes_footprints())
+fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
 t1 = time.time()
 print('simulation done in ' + str(t1-t0))
