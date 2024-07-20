@@ -78,7 +78,7 @@ class fascicle(NRV_simulable):
 
     See Also
     --------
-    :doc:`tutorials 5</usersguide/simulables>`: First optimization problem using NRV
+    :doc:`Simulables</usersguide/simulables>`: First optimization problem using NRV
     
     :class:`.nerve.nerve`
     
@@ -92,69 +92,79 @@ class fascicle(NRV_simulable):
        :header-rows: 1
 
        * - Attributes
-         - type
+         - Type
          - Default
          - Description
-       * - `ID`
+       * - ``ID``
          - ``int``
          - 0
          - Identification number of the fascicle.
-       * - `L`
+       *
+         - ``L``
          - ``float``
          - None
          - Length of the fascicle.
-       * - `D`
+       * 
+         - ``D``
          - ``float``
          - None
          - Diameter of the fascicle.
-       * - `y_grav_center`
+       * 
+         - ``y_grav_center``
          - ``float``
          - 0
          - y-position of the fascicle center.
-       * - `z_grav_center`
+       * 
+         - ``z_grav_center``
          - ``float``
          - 0
          - z-position of the fascicle center.
-       * - `verbose`
+       * 
+         - ``postproc_label``
+         - ``str``
+         - None
+         - Label of the axon postprocessing funtion, used for the buildin postproc functions.
+       * 
+         - ``postproc_function``
+         - ``function``
+         - None
+         - Axon postprocessing funtion, used for the custom postproc functions.
+       * 
+         - ``postproc_script``
+         - ``str`` | ``function``
+         - None
+         - Either postprocessing funtion or postprocessing funtion label, automatically set depending on the type
+       * 
+         - ``postproc_kwargs``
+         - ``dict``
+         - None
+         - key arguments of the postporcessing function
+       * 
+         - ``save_results``
+         - ``bool``
+         - False
+         - If ``True``, fascicle configuration and all axon simulations results are saved in ``save_path`` directory.
+       * 
+         - ``save_path``
+         - ``str``
+         - ""
+         - Path of the directory where simulation results should be saved.
+       * 
+         - ``return_parameters_only``
+         - ``bool``
+         - False
+         - If ``True`` (and ``save_results`` also ``True``), only the parameters should be returned from the simulation.
+       * 
+         - ``loaded_footprints``
+         - ``bool``
+         - False
+         - If ``False``, the footprints already computed are favored over new footprint computation.
+       * 
+         - ``verbose``
          - ``bool``
          - False
          - Plot or not.
-       * - `save_results`
-         - ``bool``
-         - False
-         - If ``True`` fascicle configuration and all axon simulations results are saved in `save_path` directory.
-       * - `save_path`
-         - ``str``
-         - ""
-         - path of the directory where simulation results should be saved
-       * - `return_parameters_only`
-         - ``bool``
-         - False
-         - If ``True``, (and `save_results` also ``True``) only the parameters should be return from simulation.
-       * - `loaded_footprints`
-         - ``bool``
-         - Default
-         -  If ``False``, the footprints already computed footprint are favorise over new footprint
-       * - `postproc_label`
-         - ``str``
-         - Labe
-         - Description for method2.
-       * - `postproc_function`
-         - ``function``
-         - Default
-         - Description for method2.
-       * - `postproc_script`
-         - ``str`` | ``function``
-         - None
-         - Description for method2.
-       * - `postproc_kwargs`
-         - ``dict``
-         - Default
-         - Description for method2.
-       * - `config_filename`
-         - ``str``
-         - Default
-         - Description for method2.
+
 
     Note
     ----
@@ -196,8 +206,6 @@ class fascicle(NRV_simulable):
         generate_random_NoR_position
         generate_ligned_NoR_position
         simulate
-
-
 
     """
 

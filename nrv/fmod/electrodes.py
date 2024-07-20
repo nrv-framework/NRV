@@ -337,8 +337,8 @@ class FEM_electrode(electrode):
         """
         set the footprin of a FEM electrode
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         V_1mA : list, array, numpy array
             Voltage response at 1mA
         """
