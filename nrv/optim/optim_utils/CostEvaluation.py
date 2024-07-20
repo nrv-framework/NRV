@@ -25,7 +25,7 @@ class raster_count_CE(cost_evaluation):
         Returns the spike number from a simulation result
         """
         if "V_mem_raster_position" not in results:
-            rasterize(results, "V_mem")
+            results.rasterize("V_mem")
         pos = results["V_mem_raster_position"]
         M = len(results["x_rec"]) - 1  # pos starts at 0
         i_first_pos = np.where(pos == 0)
