@@ -1,14 +1,22 @@
-nrv Framework
-=============
+nrv.fmod.FEM package
+====================
 
 Module contents
 ---------------
 
-.. automodule:: nrv
+.. automodule:: nrv.fmod.FEM
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: DummyClass
+
+Submodules
+----------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   mod_*
 
 Subpackages
 -----------

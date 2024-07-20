@@ -1,14 +1,22 @@
-nrv Framework
-=============
+nrv.fmod package
+================
 
 Module contents
 ---------------
 
-.. automodule:: nrv
+.. automodule:: nrv.fmod
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: DummyClass
+
+Submodules
+----------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   mod_*
 
 Subpackages
 -----------
@@ -18,3 +26,4 @@ Subpackages
    :maxdepth: 3
 
    */nrv.*
+

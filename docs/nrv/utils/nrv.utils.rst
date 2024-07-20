@@ -1,14 +1,23 @@
-nrv Framework
-=============
+nrv.utils package
+=================
 
 Module contents
 ---------------
 
-.. automodule:: nrv
+.. automodule:: nrv.utils
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: DummyClass
+
+
+Submodules
+----------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   mod_*
 
 Subpackages
 -----------

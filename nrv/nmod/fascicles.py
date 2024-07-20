@@ -72,15 +72,133 @@ def is_fascicle(object):
 
 
 class fascicle(NRV_simulable):
-    """
+    r"""
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
 
-    Parameters
-    ----------
-    diameter              : float
-        Fascicle diameter, in um
-    ID    : int
-        Fascicle unique identifier
+
+    See Also
+    --------
+    :doc:`tutorials 5</usersguide/simulables>`: First optimization problem using NRV
+    
+    :class:`.nerve.nerve`
+    
+    :class:`.axons.axon`
+
+
+    .. rubric:: Customizable Attributes:
+
+    .. list-table::
+       :widths: 10 10 10 70
+       :header-rows: 1
+
+       * - Attributes
+         - type
+         - Default
+         - Description
+       * - `ID`
+         - ``int``
+         - 0
+         - Identification number of the fascicle.
+       * - `L`
+         - ``float``
+         - None
+         - Length of the fascicle.
+       * - `D`
+         - ``float``
+         - None
+         - Diameter of the fascicle.
+       * - `y_grav_center`
+         - ``float``
+         - 0
+         - y-position of the fascicle center.
+       * - `z_grav_center`
+         - ``float``
+         - 0
+         - z-position of the fascicle center.
+       * - `verbose`
+         - ``bool``
+         - False
+         - Plot or not.
+       * - `save_results`
+         - ``bool``
+         - False
+         - If ``True`` fascicle configuration and all axon simulations results are saved in `save_path` directory.
+       * - `save_path`
+         - ``str``
+         - ""
+         - path of the directory where simulation results should be saved
+       * - `return_parameters_only`
+         - ``bool``
+         - False
+         - If ``True``, (and `save_results` also ``True``) only the parameters should be return from simulation.
+       * - `loaded_footprints`
+         - ``bool``
+         - Default
+         -  If ``False``, the footprints already computed footprint are favorise over new footprint
+       * - `postproc_label`
+         - ``str``
+         - Labe
+         - Description for method2.
+       * - `postproc_function`
+         - ``function``
+         - Default
+         - Description for method2.
+       * - `postproc_script`
+         - ``str`` | ``function``
+         - None
+         - Description for method2.
+       * - `postproc_kwargs`
+         - ``dict``
+         - Default
+         - Description for method2.
+       * - `config_filename`
+         - ``str``
+         - Default
+         - Description for method2.
+
+    Note
+    ----
+    Customizable Attributes can be either be set 
+
+
+
+    .. rubric:: Methods:
+
+    .. autosummary::
+
+        save
+        load
+        set_ID
+        define_length
+        define_circular_contour
+        get_circular_contour
+        fit_circular_contour
+        define_ellipsoid_contour
+        import_contour
+        fill_with_population
+        fit_population_to_size
+        translate_axons
+        translate_fascicle
+        rotate_axons
+        rotate_fascicle
+        set_axons_parameters
+        get_axons_parameters
+        remove_unmyelinated_axons
+        remove_myelinated_axons
+        remove_axons_size_threshold
+        plot
+        attach_extracellular_stimulation
+        remove_axons_electrode_overlap
+        change_stimulus_from_electrode
+        insert_I_Clamp
+        attach_extracellular_recorder
+        shut_recorder_down
+        generate_random_NoR_position
+        generate_ligned_NoR_position
+        simulate
+
+
+
     """
 
     def __init__(self, diameter=None, ID=0, **kwargs):
@@ -322,6 +440,9 @@ class fascicle(NRV_simulable):
 
     @property
     def N(self):
+        """
+        :meta private:
+        """
         rise_warning(
             "DeprecationWarning: ",
             "fascicle.N property is obsolete use fascicle.n_ax instead"
@@ -1189,6 +1310,9 @@ class fascicle(NRV_simulable):
     def get_electrodes_footprints_on_axons(
         self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
     ):
+        """
+        :meta private:
+        """
         rise_warning(
             DeprecationWarning,
             "Deprecation method get_electrodes_footprints_on_axons",

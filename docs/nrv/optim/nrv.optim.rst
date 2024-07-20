@@ -1,14 +1,22 @@
-nrv Framework
-=============
+nrv.optim package
+=================
 
 Module contents
 ---------------
 
-.. automodule:: nrv
+.. automodule:: nrv.optim
    :members:
    :undoc-members:
    :show-inheritance:
-   :exclude-members: DummyClass
+
+Submodules
+----------
+
+.. toctree::
+   :glob:
+   :maxdepth: 1
+
+   mod_*
 
 Subpackages
 -----------
