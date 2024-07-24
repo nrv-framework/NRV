@@ -835,14 +835,18 @@ class nerve(NRV_simulable):
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
             nerve_sim = nerve_results({"dummy_res":1})
-        if self.save_results:
+        
+        if self.save_path:                                                          #LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
             if MCH.do_master_only_work():
                 create_folder(folder_name)
+
+        if self.save_results:
+            folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
+            if MCH.do_master_only_work():
                 config_filename = folder_name + "/00_Nerve_config.json"
                 self.save(config_filename, fascicles_context=False)
-            else:
-                pass
+
         # run FEM model
         if self.verbose:
             pass_info("...computing electrodes footprint")
@@ -850,7 +854,7 @@ class nerve(NRV_simulable):
         synchronize_processes()
         # Simulate all fascicles
         fasc_kwargs = kwargs
-        if self.save_results:
+        if self.save_path:
             fasc_kwargs["save_path"] = folder_name
         has_pbar = False
         if self.verbose:

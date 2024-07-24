@@ -3,7 +3,7 @@ NRV-:class:`.myelinated_results` handling.
 """
 
 import numpy as np
-
+import matplotlib.pyplot as plt
 from .axons_results import axon_results
 from ..myelinated import myelinated
 from ...backend.log_interface import rise_warning
@@ -118,3 +118,17 @@ class myelinated_results(axon_results):
         # * [MHz] to convert to [kHz]
         self["f_mye"] = to_nrv_unit(self["f_mye"], "MHz")
         return self["g_mye"], self["c_mye"], self["f_mye"]
+
+
+    def plot_x_t(self, axes: plt.axes, key:str="V_mem", color: str="k",**kwgs)->None:
+        node_x = self.x[self.node_index]
+        dx = np.abs(node_x[1]-node_x[0])
+        rec_idx = self.node_index
+        if not "ALL" in self.rec.upper():
+            rec_idx = np.arange(len(node_x))
+        norm_fac = dx/(np.max(abs(self[key]))*1.1)
+        offset = np.abs(np.min(self[key][0]*norm_fac))
+        for node,node_idx in zip(node_x,rec_idx):
+            axes.plot(
+                self["t"], self[key][node_idx]*norm_fac + node + offset, color=color, **kwgs
+            )

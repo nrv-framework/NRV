@@ -32,6 +32,13 @@ class fascicle_results(sim_results):
         Number of axons in the fascicle
         """
         return len(self.axons_diameter)
+    
+    
+    def get_n_ax(self, ax_type:str = 'all') -> int:
+        """
+        Number of myelinated axons in the fascicle
+        """
+        return(len(self.get_axons_key(ax_type)))
 
     def get_axons_key(self, ax_type:str = 'all') -> list:
         """
@@ -73,7 +80,7 @@ class fascicle_results(sim_results):
             if (self[axon].is_recruited()):
                 n_recr+=1
         if normalize:
-            n_recr /= self.n_ax
+            n_recr /= self.get_n_ax(ax_type)
         return n_recr
 
     def get_recruited_axons_greater_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
@@ -104,7 +111,7 @@ class fascicle_results(sim_results):
                 if (self[axon].is_recruited()):
                     n_recr += 1
         if normalize:
-            n_recr /= len(axons_keys)
+            n_recr /= n_tot
         return n_recr
 
     def get_recruited_axons_lesser_than(self, diam:float, ax_type:str = 'all', normalize:bool=False) -> float:
@@ -135,7 +142,7 @@ class fascicle_results(sim_results):
                 if (self[axon].is_recruited()):
                     n_recr += 1
         if normalize:
-            n_recr /= len(axons_keys)
+            n_recr /= n_tot
         return n_recr
 
     def get_axons(self) -> list: 

@@ -928,7 +928,7 @@ class axon_results(sim_results):
         """
 
         if self["myelinated"] == True:
-            if self["rec"] == "all":
+            if self["rec"] == "All":
                 x_idx = self["node_index"]
                 x = self["x"][x_idx]
             else:
@@ -1576,20 +1576,29 @@ class axon_results(sim_results):
     #####################
     ## Ploting methods ##
     #####################
-    def plot_x_t(self, axes: plt.axes, key:str="V_mem", color: str="k",**kwgs)->None:
-        shift = np.max(abs(self[key]))
-        for node in range(len(self["x_rec"])):
-            axes.plot(
-                self["t"], self[key][node] + 1.1* shift * node, color=color, **kwgs
-            )
 
     def raster_plot(self, axes: plt.axes, key:str="V_mem",**kwgs)->None:
         required_keys = {key, "tstop", "L"}
         if required_keys in self:
             self.rasterize(key)
-            axes.scatter(self[key+"_raster_time"], self["V_mem_raster_x_position"], **kwgs)
+            axes.scatter(self[key+"_raster_time"], self[key+"_raster_x_position"], **kwgs)
             axes.set_xlim(0, self["tstop"])
             axes.set_ylim(0, self["L"])
         else:
             rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
 
+
+    def colormap_plot(self, axes: plt.axes, key:str="V_mem",**kwgs)->plt.colorbar:
+        required_keys = {key, "tstop", "L","t"}
+        if required_keys in self:
+            map = axes.pcolormesh(self['t'], self.get_axon_xrec(), self[key] ,shading='auto', **kwgs)
+            axes.set_xlabel('Time (ms)')
+            axes.set_ylabel('Position (µm)')
+            axes.set_xlim(0, self["tstop"])
+            axes.set_ylim(0, self["L"])
+            cbar = plt.colorbar(map)
+            cbar.set_label(key)
+            return(cbar)
+        else:
+            rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
+        return(None)

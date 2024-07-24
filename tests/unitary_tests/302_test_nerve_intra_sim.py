@@ -19,6 +19,7 @@ amplitude = 4
 nerve.insert_I_Clamp(position, t_start, duration, amplitude)
 
 
+
 nerve.simulate(t_sim=5, save_path='./unitary_tests/figures/', postproc_script='raster_plot')
 
 if nrv.MCH.do_master_only_work():

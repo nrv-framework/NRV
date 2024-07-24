@@ -26,6 +26,12 @@ cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 plt.savefig('./unitary_tests/figures/33_A.png')
 
+fig, ax = plt.subplots()
+results.plot_x_t(ax)
+plt.show()
+exit()
+plt.savefig('./unitary_tests/figures/25_C.png')
+
 plt.figure()
 plt.plot(results['t'],results['V_mem'][25], label=str(round(results['x_rec'][25]))+'um')
 plt.plot(results['t'],results['V_mem'][50], label=str(round(results['x_rec'][50]))+'um')

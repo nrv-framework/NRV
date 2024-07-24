@@ -218,7 +218,7 @@ class fascicle(NRV_simulable):
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
         self.verbose = False
-        self.return_parameters_only = True
+        self.return_parameters_only = False
         self.loaded_footprints = False
         self.save_results = False
 
@@ -739,13 +739,17 @@ class fascicle(NRV_simulable):
                     n_iter=n_iter
                 )
             if (fit_to_size):
-                d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
-                if (d_pop) < self.D:
-                    exp_factor = 0.99*(self.D/d_pop)
-                    y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+                if self.D is not None:
+                    d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
+                    if (d_pop) < self.D:
+                        exp_factor = 0.99*(self.D/d_pop)
+                        y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+                else:
+                    rise_warning("Can't fit population to size, fascicle diameter is not defined.")
             
             axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
-            axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
+            if self.D is not None:
+                axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
         else:
             axons_diameter = None
             axons_type = None
@@ -1362,7 +1366,7 @@ class fascicle(NRV_simulable):
         # update and check function_kwargs
         ## !!See if this part should be kept ##
         if "save" not in self.postproc_kwargs.keys():
-            self.postproc_kwargs["save"] = self.save_results
+            self.postproc_kwargs["save"] = len(self.save_path) > 0
         if "fdir" not in self.postproc_kwargs.keys():
             self.postproc_kwargs["fdir"] = self.save_path + "Fascicle_" + str(self.ID)
         ##  ##
@@ -1576,8 +1580,11 @@ class fascicle(NRV_simulable):
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if MCH.do_master_only_work() and self.save_results:
+        if len(self.save_path) and MCH.do_master_only_work():          #LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             create_folder(folder_name)
+
+        if MCH.do_master_only_work() and self.save_results:
+            #create_folder(folder_name)
             self.config_filename = folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
         else:

@@ -1331,7 +1331,7 @@ def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1,
         results.remove_key(keys_to_keep=list_keys)
     return results
 
-def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
+def vmem_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str=""):
     """
     Plot and save the membrane potential along each axon of the fascicle
 
@@ -1339,6 +1339,8 @@ def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
     ----------
     results : axon_results
         results of the axon simulation.
+    freq : float, optional
+            Filter vmem at the specified frequency, by default None
     save : bool, optional
         if true, the block status is saved as a line in a `.csv` file, by default False
     fdir : str, optional
@@ -1349,17 +1351,19 @@ def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
     axon_results
         updated results.
     """
+    vm_key = "V_mem"
+    if (freq is not None):
+        results.filter_freq("V_mem",freq , Q= 2)
+        vm_key += "_filtered"
+    
     fig, ax = plt.subplots()
-    results.plot_x_t(ax)
-    title = (
-    "Axon "
-    + str(results.ID)
-    + ", myelination is "
-    + str(results["myelinated"])
-    + ", "
-    + str(results["diameter"])
-    + " um diameter"
-)
+    results.plot_x_t(ax, key=vm_key)
+    if results.myelinated:
+        title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    else:                                                                           #colormap for unmyelinated fibers as plot_x_t are unreadable
+        title = f"Unmyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    
+    #print(fdir)
     ax.set_title(title)
     if save:
         fig.tight_layout()
@@ -1368,7 +1372,7 @@ def vmem_plot(results:axon_results, save:bool=False, fdir:str=""):
         plt.close(fig)
     return results
 
-def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
+def raster_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str=""):
     """
     Plot and save the raster plot along each axon of the fascicle.
 
@@ -1376,6 +1380,8 @@ def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
     ----------
     results : axon_results
         results of the axon simulation.
+    freq : float, optional
+            Filter vmem at the specified frequency, by default None
     save : bool, optional
         if true, the block status is saved as a line in a `.csv` file, by default False
     fdir : str, optional
@@ -1386,21 +1392,24 @@ def raster_plot(results:axon_results, save:bool=False, fdir:str=""):
     axon_results
         updated results.
     """
+
+    vm_key = "V_mem"
+    if (freq is not None):
+        results.filter_freq("V_mem",freq , Q= 2)
+        vm_key += "_filtered"
     fig, ax = plt.subplots()
-    results.raster_plot(ax)
-    title = (
-    "Axon "
-    + str(results.ID)
-    + ", myelination is "
-    + str(results["myelinated"])
-    + ", "
-    + str(results["diameter"])
-    + " um diameter"
-)
+
+    results.raster_plot(ax, key=vm_key)
+    if results.myelinated:
+        title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    else:
+        title = f"Unyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+
+    #print(fdir)
     ax.set_title(title)
     if save:
         fig.tight_layout()
-        fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
+        fig_name = fdir + "/Rasterplot_axon_" + str(results.ID) + ".png"
         fig.savefig(fig_name)
         plt.close(fig)
     return results

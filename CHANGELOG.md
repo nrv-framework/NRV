@@ -3,7 +3,21 @@
 All notable changes to NRV are sumed up in this file.
 
 ## [1.1.1] - XXXX
+
 ### Added
+- Removed OTF_PP etc etc --> Thomas 
+- Add ``block_summary`` method in ``axons_results`` which returns axon block characteristics: blocked, onset response, number of onset APs.
+- Add ``getAPspeed`` and ``get_avg_AP_speed`` methods in ``axons_results`` to measure AP propagation velocity. Should be used instead of ``speed`` (deprecated method)
+- Add ``is_blocked`` method in ``axons_results`` to detect AP propagation block. Should be used instead of ``block`` (deprecated method)
+- Add ``is_recruited`` method in ``axons_results`` to detect AP in an axon. 
+- Add optional ``normalize`` bool parameter in ``get_recruited_axons``, ``get_recruited_axons_greater_than``, ``get_recruited_axons_lesser_than`` methods from ``fascicle_results``
+- Action potential (AP) analysis methods added in ``axons_results`` (``split_APs``, ``count_APs``, ``get_start_APs``, ``detect_AP_collisions``, etc). See usage in example 18
+- Several plot functions added in ``axons_results`` (``raster_plot``, ``colormap_plot`` and ``plot_x_t``)
+- ``self.save_path`` from fascicle and nerve is passed to postprocessing_function/scripts if specified and used to save data from postprocessing_function/scripts.
+- Fascicles and Nerve return ``nerve_results`` and ``fascicle_results`` by default (``self.return_parameters_only`` and ``self.save_results`` are false at init)
+- Updated tutorials and examples with newest features, removed use of deprecated methods/functions
+- Add NRV_examples.py and NRV_tutorials.py to run all examples/tutorials
+- Reorganized Example folder
 - reworked ``rasterize`` method of the ``axon_result`` class
 - deprecated functions of ``CL_postprocessing``
 - Add the ``axon_AP_threshold`` function in ``CL_simulations`` to evaluate activation thresholds with arbitrary stimulation settings (see Example 16)
@@ -14,6 +28,12 @@ All notable changes to NRV are sumed up in this file.
 ### Fixed
 - issues with mcore optimization
 - Fix duplicate node count in node_index of myelinated axons
+- ``fit_to_size`` parameter in ``fill_with_population`` is not considered if fascicle diameter is None
+- ``remove_outliers`` parameter in ``fill_with_population`` is not called if fascicle diameter is None
+
+
+### Removed
+
 
 ## [1.1.0] - 2024-05-27
 
