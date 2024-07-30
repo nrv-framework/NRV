@@ -132,3 +132,102 @@ class myelinated_results(axon_results):
             axes.plot(
                 self["t"], self[key][node_idx]*norm_fac + node + offset, color=color, **kwgs
             )
+
+
+
+    def plot_Nav_states(ax: plt.axes) ->None:
+        """
+        Plot the state machine for kinetic (Markov) Nav 1.1 to 1.9 values
+
+        Parameters
+        ----------
+        ax : matplotlib axis object
+            axes of the figure to work on
+        """
+
+        values = []
+        rise_warning("plot_Nav_states is not fully implemented")
+        states = [r"$I_1$", r"$I_2$", r"$C_1$", r"$C_2$", r"$O_1$", r"$O_2$"]
+
+        X = [-1, -3, 0, 1, 0, 3]
+        Y = [0, 0, 1, 0, -1, 0]
+        c = ["r", "r", "b", "b", "g", "g"]
+
+        ax.set_xlim(-3.4, 3.4)
+        ax.set_ylim(-1.5, 1.5)
+        for i in range(len(states)):
+            ax.scatter(X[i], Y[i], s=300 + values[i] * 1450, c=c[i], alpha=0.4)
+            ax.text(X[i], Y[i], states[i], ha="center", va="center")
+        # paths
+        ax.arrow(
+            -2.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(-2, 0.2, "$I_2I_1$", ha="center", va="center", alpha=0.4)
+        ax.arrow(
+            -1.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(-2, -0.2, "$I_1I_2$", ha="center", va="center", alpha=0.4)
+
+        ax.arrow(
+            -0.83, 0.25, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(-0.9, 0.6, "$I_1C_1$", ha="center", va="center", alpha=0.4)
+        ax.arrow(
+            -0.22,
+            0.75,
+            -0.5,
+            -0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
+        )
+        ax.text(-0.45, 0.25, r"$C_1I_1$", ha="center", va="center", alpha=0.4)
+
+        ax.arrow(
+            0.72, 0.25, -0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(0.9, 0.6, r"$C_1C_2$", ha="center", va="center", alpha=0.4)
+        ax.arrow(
+            0.33, 0.75, 0.5, -0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(0.45, 0.25, r"$C_2C_1$", ha="center", va="center", alpha=0.4)
+
+        ax.arrow(
+            0.83,
+            -0.25,
+            -0.5,
+            -0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
+        )
+        ax.text(0.9, -0.6, r"$C_2O_1$", ha="center", va="center", alpha=0.4)
+        ax.arrow(
+            0.22, -0.75, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(0.45, -0.25, r"$O_1C_2$", ha="center", va="center", alpha=0.4)
+
+        ax.arrow(
+            -0.33,
+            -0.75,
+            -0.5,
+            0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
+        )
+        ax.text(-0.9, -0.6, r"$O_1I_1$", ha="center", va="center", alpha=0.4)
+
+        ax.arrow(1.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02)
+        ax.text(2, 0.2, r"$C_20_2$", ha="center", va="center", alpha=0.4)
+        ax.arrow(
+            2.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
+        ax.text(2, -0.2, r"$O_2C_2$", ha="center", va="center", alpha=0.4)
+        # make axes to disappear
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.axis("off")

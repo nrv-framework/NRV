@@ -43,10 +43,10 @@ def remove_key(my_dict, key, verbose=False):
         name of the key to delete
     """
     
-    # rise_warning(
-    #     "DeprecationWarning: ",
-    #     "remove_key is obsolete use method from axon_result objects instead"
-    # )
+    rise_warning(
+        "DeprecationWarning: ",
+        "remove_key is obsolete use method from axon_result objects instead"
+    )
     # if isinstance(key, Iterable):
     #    for k in key:
     #        del my_dict[k]
@@ -1180,6 +1180,7 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     """
     ## TO CHANGE WHEN is block is developped
     #results.axon_state(save=False)
+    
     if AP_start is None :
         if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
             AP_start = results["intra_stim_starts"][0]
@@ -1188,19 +1189,17 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     if freq is not None:
         vm_key += "_filtered"
     
-    try:
-        results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
-    except:
-        pass
 
+    results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
+    
     # remove non nevessary data
     list_keys = {
     "ID",
     "L",
-    f"{vm_key}_raster_position",
-    f"{vm_key}raster_x_position",
-    f"{vm_key}_raster_time_index",
-    f"{vm_key}_raster_time",
+    #f"{vm_key}_raster_position",
+    #f"{vm_key}raster_x_position",
+    #f"{vm_key}_raster_time_index",
+    #f"{vm_key}_raster_time",
     "myelinated",
     "y",
     "z",
@@ -1209,11 +1208,12 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     "tstop",
     "intra_stim_positions",
     "extracellular_electrode_x",
-    "blocked",
+    "is_blocked",
     "has_onset",
     "n_onset",
     }
     results.remove_key(keys_to_keep=list_keys)
+
 
     if save:
         if fdir[-1] != "/":

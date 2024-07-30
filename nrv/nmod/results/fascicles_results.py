@@ -159,6 +159,25 @@ class fascicle_results(sim_results):
             axon_diam.append(self[axon].diameter)
             axon_type.append(self[axon].myelinated)
         return(axon_diam,axon_type,axon_y,axon_z,axon_recruited)
+    
+    def get_block_summary_axons(self,AP_start:float, freq:float=None, t_refractory:float = 1) -> list:
+        axons_keys = self.get_axons_key()
+        axon_diam = []
+        axon_type = []
+        axon_y = []
+        axon_z = []
+        is_blocked = [] 
+        n_onset = [] 
+        for axon in axons_keys:
+            self[axon].block_summary(AP_start,freq,t_refractory)
+
+            is_blocked.append(self[axon].is_blocked)
+            n_onset.append(self[axon].n_onset)
+            axon_y.append(self[axon].y)
+            axon_z.append(self[axon].z)
+            axon_diam.append(self[axon].diameter)
+            axon_type.append(self[axon].myelinated)
+        return(axon_diam,axon_type,axon_y,axon_z,is_blocked,n_onset)
 
     # impeddance related methods
     def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->np.array:
@@ -307,6 +326,79 @@ class fascicle_results(sim_results):
                 self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
             if num:
                 for k in range(self.n_ax):
-                    axes.text(self.axons_y[k], self.axons_z[k], str(k))
+                    axes.text(self.axons_y[k], self.axons_z[k], str(k),horizontalalignment='center',verticalalignment='center')
             axes.set_xlim((-1.1*self.D/2+self.y_grav_center, 1.1*self.D/2+self.y_grav_center))
             axes.set_ylim((-1.1*self.D/2+self.z_grav_center, 1.1*self.D/2+self.z_grav_center))
+    
+    def plot_block_summary( self, axes:plt.axes,AP_start:float, freq:float=None, 
+                           t_refractory:float = 1, contour_color:str="k", num:bool=False) -> None:
+
+        """
+        plot the block_summary of the fascicle in the Y-Z plane (transverse section)
+        Color code: 
+            - Green: fiber is blocked without any onset
+            - Blue: fiber is blocked with some onset
+            - Red: fiber is not blocked but has onset
+            - Grey: Fiber is nor blocked nor has onset
+
+        A cross-mark on the fiber means block state can't be evaluted (is_blocked returned None)
+        Alpha colorfill represents number of onset APs.
+
+        Parameters
+        ----------
+        axes    : matplotlib.axes
+            axes of the figure to display the fascicle
+        AP_start : float
+            timestamp of the test pulse start, in ms.
+        freq : float, optional
+            Frequency of the stimulation, for KES block, by default None
+        t_refractory : float, optional
+            Axon refractory period for myelinated fibers, by default 1
+        contour_color   : str
+            matplotlib color string applied to the contour. Black by default
+        num             : bool
+            if True, the index of each axon is displayed on top of the circle
+        """
+
+        if MCH.do_master_only_work():
+            ## plot contour
+            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,
+                                        color=contour_color,fill=False,linewidth=2,))
+            ## plot axons
+            axon_diam,_,axon_y,axon_z,is_blocked,n_onset = self.get_block_summary_axons(AP_start=AP_start,freq=freq,t_refractory=t_refractory)
+            alpha_g = 1/np.max(n_onset)
+
+            #cmap = plt.get_cmap('viridis')
+            #norm = plt.Normalize(min(n_onset), max(n_onset))
+            #line_colors = cmap((n_onset))
+
+            for k,_ in enumerate(axon_diam):
+                if is_blocked[k] is not True:
+                    if n_onset[k] == 0:
+                        c = "grey"
+                        alpha = 0.5
+                    else:
+                        c = "orangered" 
+                        alpha = n_onset[k]*alpha_g   
+                    if is_blocked[k] is None:
+                        axes.scatter(axon_y[k], axon_z[k], marker =  'x', s = 20, c = 'k')
+
+                else:
+                    if n_onset[k] == 0:
+                        c = "seagreen"
+                        alpha = 1
+                    else:
+                        c = "steelblue" 
+                        alpha = n_onset[k]*alpha_g   
+            
+                axes.add_patch(plt.Circle((axon_y[k], axon_z[k]),axon_diam[k] / 2,
+                                color=c,fill=True,alpha = alpha,))
+
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+            if num:
+                for k in range(self.n_ax):
+                    axes.text(self.axons_y[k], self.axons_z[k], str(k))#horizontalalignment='center',verticalalignment='center')
+            axes.set_xlim((-1.1*self.D/2+self.y_grav_center, 1.1*self.D/2+self.y_grav_center))
+            axes.set_ylim((-1.1*self.D/2+self.z_grav_center, 1.1*self.D/2+self.z_grav_center))
+    

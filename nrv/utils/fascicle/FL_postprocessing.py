@@ -34,6 +34,11 @@ def ls_axons_results(dir_path):
     files        :list of str
         list of axons result files
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "ls_axons_results is deprecated."
+    )
     list_files = [file for file in os.listdir(dir_path) if file[0:9] == "sim_axon_"]
     return list_files
 
@@ -51,6 +56,10 @@ def ls_csv(dir_path):
     files        :list of str
         list of axons result files
     """
+    rise_warning(
+        "DeprecationWarning: ",
+        "ls_csv is depecrated."
+    )
     list_files = [file for file in os.listdir(dir_path) if file[-4:] == ".csv"]
     return list_files
 
@@ -66,6 +75,10 @@ def rm_file(file_path, verbose=True):
     verbose     : str
         pass information when file is deleted
     """
+    rise_warning(
+        "DeprecationWarning: ",
+        "rm_file is deprecated."
+    )
     os.remove(file_path)
     pass_info("folowing file removed :" + file_path, verbose=verbose)
 
@@ -82,6 +95,11 @@ def rm_sim_dir(dir_path, verbose=True):
     verbose     : str
         pass information when file is deleted
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "rm_sim_dir is deprecated."
+    )
     if os.path.exists(dir_path):
         # messaging saying folder not empty
         if os.path.exists(
@@ -117,6 +135,10 @@ def rm_sim_dir_from_results(results, verbose=True):
     verbose     : str
         pass information when file is deleted
     """
+    rise_warning(
+        "DeprecationWarning: ",
+        "rm_sim_dir_from_results is deprecated."
+    )
     fasc_dir = results["save_path"] + "Fascicle_" +str(results["ID"]) + "/"
     rm_sim_dir(dir_path=fasc_dir, verbose=verbose)
 
@@ -141,6 +163,11 @@ def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinate
     index     : bool
         if true the time index is returned, else the time value
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "CAP_time_detection is deprecated."
+    )
     i_start_unm, i_stop_unm = 0, 0
     i_start_m, i_stop_m = 0, 0
     dt = t[1] - t[0]
@@ -211,6 +238,11 @@ def fascicular_state(
     facsicular_state       : dict
     """
 
+    rise_warning(
+        "DeprecationWarning: ",
+        "fascicular_state is deprecated, use block_summary from axon_results instead."
+    )
+
     fascicular = json_load(dir_path + "00_Fascicle_config.json")
     facsicular_state = {"-1": fascicular}
     N_ax = len(fascicular["axons_diameter"])
@@ -261,6 +293,11 @@ def plot_fasc_state(
     num             : bool
         if True, the index of each axon is displayed on top of the circle
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "plot_fasc_state is deprecated, use plot_block_summary from fascicules_results instead."
+    )
 
     fasc = facsicular_state["-1"]
     colors = []

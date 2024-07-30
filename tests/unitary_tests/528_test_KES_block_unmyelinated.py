@@ -45,10 +45,7 @@ cbar.set_label('membrane voltage (mV)')
 ax1.set_xlim(0,results['tstop'])
 
 x_APs,_,t_APs,_ = results.split_APs("V_mem_filtered")
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 
@@ -93,10 +90,7 @@ ax1.set_xlim(0,results['tstop'])
 
 x_APs,_,t_APs,_ = results.split_APs("V_mem_filtered")
 
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 
@@ -136,10 +130,7 @@ ax1.set_ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 ax1.set_xlim(0,results['tstop'])
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 for x_AP,t_AP in zip(x_APs,t_APs):
     ax2.scatter(t_AP,x_AP)
@@ -176,10 +167,7 @@ ax1.set_ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 ax1.set_xlim(0,results['tstop'])
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 for x_AP,t_AP in zip(x_APs,t_APs):
     ax2.scatter(t_AP,x_AP)
@@ -216,10 +204,7 @@ ax1.set_ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 ax1.set_xlim(0,results['tstop'])
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 for x_AP,t_AP in zip(x_APs,t_APs):
     ax2.scatter(t_AP,x_AP)
@@ -256,10 +241,7 @@ ax1.set_ylabel('position (µm)')
 cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 ax1.set_xlim(0,results['tstop'])
-try: 
-    print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
-except:
-    pass
+print(f"Test AP blocked: {results.is_blocked(test_start,f_KES)}")
 ax2.scatter(results['V_mem_filtered_raster_time'],results['V_mem_filtered_raster_x_position'],s=80)
 for x_AP,t_AP in zip(x_APs,t_APs):
     ax2.scatter(t_AP,x_AP)

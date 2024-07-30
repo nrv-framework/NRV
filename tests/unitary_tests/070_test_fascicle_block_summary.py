@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 #nrv.parameters.set_nrv_verbosity(4)
 # Fascicle config
 dt = 0.001
-t_sim = 15
+t_sim = 25
 L = 10000 			# length, in um
 source_file = './unitary_tests/sources/56_fasc.json'
 ID = 70
@@ -56,11 +56,22 @@ fascicle_1.attach_extracellular_stimulation(extra_stim)
 fascicle_1.insert_I_Clamp(position, t_start, duration, amplitude)
 
 # simulation
-fascicle_1.return_parameters_only = False
-fascicle_1.save_results = False
-f_results = fascicle_1.simulate(t_sim=t_sim, verbose=False, postproc_script = "is_blocked")
+fascicle_1.verbose = True
+f_results = fascicle_1.simulate(t_sim=t_sim, verbose=False, postproc_script = "is_blocked", postproc_kwargs = {"freq":block_freq, "AP_start":t_start})#,save_path='./unitary_tests/figures/')
 
-print(f_results)
+#f_results.save(save=True,fname="test.json")
+#f_results = nrv.load_any("test.json")
+
+fig,ax = plt.subplots(1)
+fig.set_size_inches(5, 5)
+
+f_results.plot_block_summary(ax, AP_start = t_start, freq = block_freq, num=True)
+
+fig.tight_layout()
+fig.savefig("./unitary_tests/figures/70_A.png")
+#plt.show()
+
+#print(f_results)
 #DIR = './unitary_tests/figures/Fascicle_'+str(ID)+'/'
 
 
