@@ -3196,3 +3196,1549 @@
 2024-07-30 12:46:34,165 - NRV DEBUG: removed the following key from results: d_lambda
 2024-07-30 12:46:34,165 - NRV DEBUG: removed the following key from results: intra_stim_durations
 2024-07-30 12:46:34,165 - NRV DEBUG: removed the following key from results: timeVector
+2024-07-30 14:21:53,464 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/fascicles_results.py:51: SyntaxWarning: "is not" with 'str' literal. Did you mean "!="?
+  if ax_type is not 'all':
+
+2024-07-30 14:21:53,465 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/fascicles_results.py:52: SyntaxWarning: "is" with 'str' literal. Did you mean "=="?
+  if ax_type is 'unmyelinated':
+
+2024-07-30 14:21:53,564 - NRV DEBUG: FEM nerve resized!
+2024-07-30 14:21:53,568 - NRV DEBUG: Starting nerve simulation
+2024-07-30 14:21:53,571 - NRV DEBUG: Creation of the directory ./unitary_tests/figures/Nerve_307/ failed, this folder may already exist
+2024-07-30 14:21:53,571 - NRV DEBUG: ...computing electrodes footprint
+2024-07-30 14:21:58,640 - NRV DEBUG: Mesh properties:
+2024-07-30 14:21:58,640 - NRV DEBUG: Number of processes : 3
+2024-07-30 14:21:58,641 - NRV DEBUG: Number of entities : 54
+2024-07-30 14:21:58,641 - NRV DEBUG: Number of nodes : 62110
+2024-07-30 14:21:58,641 - NRV DEBUG: Number of elements : 437551
+2024-07-30 14:21:58,643 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:22:01,537 - NRV DEBUG: FEN4NRV: setup the bilinear form
+2024-07-30 14:22:01,552 - NRV DEBUG: FEN4NRV: setup the linear form
+2024-07-30 14:22:01,571 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:22:01,572 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-30 14:23:53,926 - NRV DEBUG: FEN4NRV: solved in 115.26496505737305 s
+2024-07-30 14:23:53,953 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:23:53,953 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-30 14:25:14,638 - NRV DEBUG: FEN4NRV: solved in 195.94928097724915 s
+2024-07-30 14:25:46,855 - NRV DEBUG: Creation of the directory ./unitary_tests/figures/Nerve_307/Fascicle_0 failed, this folder may already exist
+2024-07-30 14:33:09,513 - NRV DEBUG: Creation of the directory ./unitary_tests/figures/Nerve_307/Fascicle_1 failed, this folder may already exist
+2024-07-30 14:39:42,353 - NRV DEBUG: FEM nerve resized!
+2024-07-30 14:39:42,354 - NRV DEBUG: Starting nerve simulation
+2024-07-30 14:39:42,356 - NRV DEBUG: Creation of the directory ./unitary_tests/figures/Nerve_307/ failed, this folder may already exist
+2024-07-30 14:39:42,357 - NRV DEBUG: ...computing electrodes footprint
+2024-07-30 14:39:47,216 - NRV DEBUG: Mesh properties:
+2024-07-30 14:39:47,216 - NRV DEBUG: Number of processes : 3
+2024-07-30 14:39:47,216 - NRV DEBUG: Number of entities : 54
+2024-07-30 14:39:47,216 - NRV DEBUG: Number of nodes : 62021
+2024-07-30 14:39:47,216 - NRV DEBUG: Number of elements : 436778
+2024-07-30 14:39:47,218 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:39:50,308 - NRV DEBUG: FEN4NRV: setup the bilinear form
+2024-07-30 14:39:50,320 - NRV DEBUG: FEN4NRV: setup the linear form
+2024-07-30 14:39:50,328 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:39:50,328 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-30 14:41:57,509 - NRV DEBUG: FEN4NRV: solved in 130.28413319587708 s
+2024-07-30 14:41:57,542 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-30 14:41:57,543 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-30 14:43:32,970 - NRV DEBUG: FEN4NRV: solved in 225.71127820014954 s
+2024-07-30 14:44:07,119 - NRV DEBUG: Creation of the directory ./unitary_tests/figures/Nerve_307/Fascicle_0 failed, this folder may already exist
+2024-07-31 11:32:14,682 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 11:36:05,688 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 11:39:04,774 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 11:39:07,962 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 11:39:13,325 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 12:08:24,967 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 12:08:26,666 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 12:08:48,361 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 12:08:52,270 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 12:12:17,247 - NRV DEBUG: Iteration 1, Amp is 200µA ...
+2024-07-31 12:12:38,079 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 12:12:43,712 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:12:43,713 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:12:43,713 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:12:43,713 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:12:43,714 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Detected! (in 5.609s)
+2024-07-31 12:12:49,247 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 5.517s)
+2024-07-31 12:12:55,089 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:12:55,089 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:12:55,090 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:12:55,090 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:12:55,090 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Detected! (in 5.823s)
+2024-07-31 12:13:00,292 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Detected! (in 5.185s)
+2024-07-31 12:13:06,810 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,811 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,811 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,812 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,812 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,812 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,813 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,813 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,814 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,814 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,816 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,817 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,817 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,817 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,818 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,818 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,819 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,819 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,820 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,820 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,821 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,821 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,821 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,822 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,823 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,823 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,823 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,824 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,824 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,825 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,825 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,825 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,826 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,826 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,826 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,827 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,827 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,828 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,828 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,828 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,829 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,829 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,830 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,830 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,831 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,832 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,832 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,833 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,833 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,834 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,834 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,835 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,836 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,836 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,836 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,837 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,837 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,838 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,838 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,838 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,839 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,839 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,839 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,841 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,841 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,842 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,842 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,842 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,843 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,843 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,843 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,844 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,844 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,845 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,845 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,846 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,846 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,847 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,847 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,848 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,848 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,849 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,849 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,850 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,850 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,850 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,851 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,851 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,852 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,853 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,853 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,854 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,854 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,855 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,855 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,855 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:06,856 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:06,857 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 12:13:17,953 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,953 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:17,953 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,954 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,954 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:13:17,954 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,955 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,955 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:13:17,955 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Detected! (in 11.064s)
+2024-07-31 12:13:30,151 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 12.176s)
+2024-07-31 12:13:43,186 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Detected! (in 13.015s)
+2024-07-31 12:13:56,008 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Detected! (in 12.798s)
+2024-07-31 12:14:08,526 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Detected! (in 12.484s)
+2024-07-31 12:14:19,011 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,011 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,012 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,012 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,012 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,012 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,013 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,013 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,013 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,014 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,014 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,014 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,014 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,015 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,015 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,015 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,016 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,016 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,016 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,017 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,017 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,017 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,018 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,018 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,019 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,019 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,019 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,019 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,020 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,020 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:19,020 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,020 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,021 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,022 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,024 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,025 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,025 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,026 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,026 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,027 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,027 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,028 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,029 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,029 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,030 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,030 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,031 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,031 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:19,031 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Not Detected! (in 10.458s)
+2024-07-31 12:14:30,436 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 12:14:30,436 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 12:14:30,437 - NRV DEBUG: Iteration 7, Amp is 218.75µA (14.29%)... AP Detected! (in 11.382s)
+2024-07-31 15:29:52,010 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:29:58,323 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:29:58,324 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:29:58,324 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:29:58,325 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:29:58,325 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 5.941s)
+2024-07-31 15:30:04,440 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 5.966s)
+2024-07-31 15:30:10,242 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:10,243 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:10,243 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:10,244 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:10,244 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 5.659s)
+2024-07-31 15:30:16,421 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 6.023s)
+2024-07-31 15:30:22,673 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,673 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,673 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,674 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,674 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,674 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,675 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,675 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,676 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,676 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,676 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,677 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,677 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,678 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,678 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,678 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,679 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,679 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,679 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,680 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,680 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,681 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,681 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,682 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,682 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,682 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,683 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,683 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,684 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,684 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,684 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,685 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,685 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,685 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,686 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,686 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,687 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,687 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,688 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,688 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,688 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,689 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,689 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,690 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,690 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,690 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,691 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,691 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,691 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,692 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,692 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,693 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,693 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,693 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,694 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,694 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,695 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,695 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,695 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,696 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,696 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,696 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,697 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,697 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,698 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,698 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,699 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,699 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,699 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,700 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,700 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,700 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,701 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,701 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,702 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,703 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,703 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,703 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,704 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,705 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,705 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,706 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,706 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,707 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,708 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,708 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,708 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,709 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,709 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,710 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,710 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,711 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,711 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,712 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,712 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,713 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,714 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,714 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,714 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:30:22,715 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:30:22,716 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:30:33,866 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:31:14,832 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:32:49,228 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:32:55,356 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:32:55,358 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:32:55,359 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:32:55,359 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:32:55,997 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 6.099s)
+2024-07-31 15:33:03,260 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 6.893s)
+2024-07-31 15:33:09,658 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:09,660 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:09,661 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:09,662 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:09,977 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 6.376s)
+2024-07-31 15:33:16,685 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 6.317s)
+2024-07-31 15:33:22,631 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,631 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,632 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,632 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,633 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,633 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,634 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,634 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,634 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,635 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,635 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,635 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,636 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,636 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,637 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,637 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,637 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,638 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,638 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,639 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,639 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,640 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,640 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,640 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,641 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,641 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,641 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,642 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,642 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,642 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,643 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,643 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,644 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,644 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,644 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,645 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,645 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,645 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,646 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,646 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,647 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,647 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,647 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,648 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,648 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,648 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,649 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,649 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,650 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,650 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,650 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,651 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,651 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,651 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,652 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,652 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,652 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,653 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,653 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,653 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,654 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,654 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,655 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,655 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,656 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,656 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,656 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,657 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,657 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,657 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,658 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,658 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,659 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,659 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,659 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,660 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,660 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,660 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,661 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,661 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,662 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,662 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,662 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,663 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,663 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,663 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,664 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,664 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,665 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,665 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,665 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,666 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,666 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,667 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,667 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,667 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,668 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,668 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,669 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:22,669 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:22,989 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:33:34,838 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:34,839 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:34,839 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:34,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:34,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:33:34,840 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:34,841 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:34,841 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:915: RankWarning: Polyfit may be poorly conditioned
+  p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
+
+2024-07-31 15:33:35,264 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 11.822s)
+2024-07-31 15:33:36,857 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:33:48,315 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:34:02,278 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:34:02,279 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:34:02,824 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 13.917s)
+2024-07-31 15:34:17,596 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 14.4s)
+2024-07-31 15:34:32,574 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 14.558s)
+2024-07-31 15:34:47,490 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 14.539s)
+2024-07-31 15:35:01,996 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 13.934s)
+2024-07-31 15:35:16,572 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 14.119s)
+2024-07-31 15:35:31,010 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Blocked! (in 14.049s)
+2024-07-31 15:35:46,405 - NRV DEBUG: Iteration 8, Amp is 140.62µA (10.0%)... AP Not Blocked! (in 14.953s)
+2024-07-31 15:36:01,807 - NRV DEBUG: Iteration 9, Amp is 148.44µA (5.26%)... AP Blocked! (in 15.002s)
+2024-07-31 15:36:17,028 - NRV DEBUG: Iteration 10, Amp is 144.53µA (2.63%)... AP Not Blocked! (in 14.778s)
+2024-07-31 15:36:31,739 - NRV DEBUG: Iteration 11, Amp is 146.48µA (1.33%)... AP Not Blocked! (in 14.279s)
+2024-07-31 15:36:46,903 - NRV DEBUG: Iteration 12, Amp is 147.46µA (0.66%)... AP Not Blocked! (in 14.774s)
+2024-07-31 15:36:46,904 - NRV DEBUG: Activation threshold is 147.95µA (0.66%), found in 12 iterations (178.59s).
+2024-07-31 15:36:46,905 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:37:15,648 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:37:16,044 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 28.692s)
+2024-07-31 15:37:43,913 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 27.463s)
+2024-07-31 15:38:12,416 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 27.917s)
+2024-07-31 15:38:41,442 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 28.593s)
+2024-07-31 15:39:10,306 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 28.396s)
+2024-07-31 15:39:38,842 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 28.085s)
+2024-07-31 15:40:08,137 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Not Blocked! (in 28.867s)
+2024-07-31 15:40:36,875 - NRV DEBUG: Iteration 8, Amp is 171.88µA (9.09%)... AP Blocked! (in 28.3s)
+2024-07-31 15:41:04,175 - NRV DEBUG: Iteration 9, Amp is 164.06µA (4.55%)... AP Not Blocked! (in 26.873s)
+2024-07-31 15:41:31,725 - NRV DEBUG: Iteration 10, Amp is 167.97µA (2.33%)... AP Blocked! (in 27.019s)
+2024-07-31 15:41:59,647 - NRV DEBUG: Iteration 11, Amp is 166.02µA (1.16%)... AP Not Blocked! (in 27.418s)
+2024-07-31 15:42:29,686 - NRV DEBUG: Iteration 12, Amp is 166.99µA (0.58%)... AP Not Blocked! (in 29.412s)
+2024-07-31 15:42:29,687 - NRV DEBUG: Activation threshold is 167.48µA (0.58%), found in 12 iterations (342.78s).
+2024-07-31 15:42:51,156 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:42:58,563 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:43:13,901 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 14.878s)
+2024-07-31 15:43:28,594 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 14.308s)
+2024-07-31 15:43:31,013 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:43:34,664 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:43:41,782 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:43:41,783 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:43:42,239 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 7.08s)
+2024-07-31 15:43:49,862 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 7.232s)
+2024-07-31 15:43:57,689 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 7.471s)
+2024-07-31 15:44:05,591 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 7.541s)
+2024-07-31 15:44:13,346 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 7.408s)
+2024-07-31 15:44:21,590 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 7.798s)
+2024-07-31 15:44:29,272 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Blocked! (in 7.33s)
+2024-07-31 15:44:36,930 - NRV DEBUG: Iteration 8, Amp is 140.62µA (10.0%)... AP Blocked! (in 7.301s)
+2024-07-31 15:44:45,529 - NRV DEBUG: Iteration 9, Amp is 132.81µA (5.56%)... AP Not Blocked! (in 8.201s)
+2024-07-31 15:44:53,036 - NRV DEBUG: Iteration 10, Amp is 136.72µA (2.86%)... AP Not Blocked! (in 7.13s)
+2024-07-31 15:45:00,897 - NRV DEBUG: Iteration 11, Amp is 138.67µA (1.41%)... AP Not Blocked! (in 7.463s)
+2024-07-31 15:45:08,682 - NRV DEBUG: Iteration 12, Amp is 139.65µA (0.7%)... AP Not Blocked! (in 7.392s)
+2024-07-31 15:45:08,683 - NRV DEBUG: Activation threshold is 140.14µA (0.7%), found in 12 iterations (94.02s).
+2024-07-31 15:45:08,683 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:45:23,167 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:45:23,482 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 14.445s)
+2024-07-31 15:45:38,394 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 14.537s)
+2024-07-31 15:45:53,610 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 14.842s)
+2024-07-31 15:46:04,699 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:46:09,641 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:46:16,681 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:46:16,683 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:46:17,144 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 7.0s)
+2024-07-31 15:46:24,988 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 7.486s)
+2024-07-31 15:46:32,609 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 7.253s)
+2024-07-31 15:46:40,421 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 7.467s)
+2024-07-31 15:46:48,599 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 7.815s)
+2024-07-31 15:46:56,786 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 7.699s)
+2024-07-31 15:47:04,684 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Blocked! (in 7.508s)
+2024-07-31 15:47:12,179 - NRV DEBUG: Iteration 8, Amp is 140.62µA (10.0%)... AP Blocked! (in 7.153s)
+2024-07-31 15:47:19,851 - NRV DEBUG: Iteration 9, Amp is 132.81µA (5.56%)... AP Not Blocked! (in 7.307s)
+2024-07-31 15:47:27,159 - NRV DEBUG: Iteration 10, Amp is 136.72µA (2.86%)... AP Not Blocked! (in 6.945s)
+2024-07-31 15:47:35,120 - NRV DEBUG: Iteration 11, Amp is 138.67µA (1.41%)... AP Not Blocked! (in 7.512s)
+2024-07-31 15:47:42,061 - NRV DEBUG: Iteration 12, Amp is 139.65µA (0.7%)... AP Not Blocked! (in 6.606s)
+2024-07-31 15:47:42,061 - NRV DEBUG: Activation threshold is 140.14µA (0.7%), found in 12 iterations (92.5s).
+2024-07-31 15:47:42,062 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:47:55,661 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:47:55,991 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 13.559s)
+2024-07-31 15:48:11,704 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 15.332s)
+2024-07-31 15:48:17,881 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:48:25,012 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:48:32,384 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 6.833s)
+2024-07-31 15:48:40,173 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 7.438s)
+2024-07-31 15:48:47,873 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 7.343s)
+2024-07-31 15:48:55,166 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 6.962s)
+2024-07-31 15:49:02,745 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 7.223s)
+2024-07-31 15:49:10,634 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 7.413s)
+2024-07-31 15:49:18,171 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Blocked! (in 7.192s)
+2024-07-31 15:49:25,865 - NRV DEBUG: Iteration 8, Amp is 140.62µA (10.0%)... AP Blocked! (in 7.351s)
+2024-07-31 15:49:33,152 - NRV DEBUG: Iteration 9, Amp is 132.81µA (5.56%)... AP Not Blocked! (in 6.918s)
+2024-07-31 15:49:42,358 - NRV DEBUG: Iteration 10, Amp is 136.72µA (2.86%)... AP Blocked! (in 8.862s)
+2024-07-31 15:49:49,696 - NRV DEBUG: Iteration 11, Amp is 134.77µA (1.43%)... AP Blocked! (in 6.98s)
+2024-07-31 15:49:56,910 - NRV DEBUG: Iteration 12, Amp is 133.79µA (0.72%)... AP Not Blocked! (in 6.866s)
+2024-07-31 15:49:56,910 - NRV DEBUG: Activation threshold is 134.28µA (0.72%), found in 12 iterations (91.9s).
+2024-07-31 15:49:56,910 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:50:11,994 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 14.725s)
+2024-07-31 15:50:26,990 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 14.625s)
+2024-07-31 15:50:42,643 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Blocked! (in 15.237s)
+2024-07-31 15:50:56,620 - NRV DEBUG: Iteration 4, Amp is 250.0µA (50.0%)... AP Blocked! (in 13.586s)
+2024-07-31 15:51:11,068 - NRV DEBUG: Iteration 5, Amp is 125.0µA (50.0%)... AP Not Blocked! (in 13.957s)
+2024-07-31 15:51:24,770 - NRV DEBUG: Iteration 6, Amp is 187.5µA (33.33%)... AP Blocked! (in 13.338s)
+2024-07-31 15:51:38,193 - NRV DEBUG: Iteration 7, Amp is 156.25µA (16.67%)... AP Blocked! (in 13.039s)
+2024-07-31 15:51:52,277 - NRV DEBUG: Iteration 8, Amp is 140.62µA (10.0%)... AP Not Blocked! (in 13.698s)
+2024-07-31 15:52:07,726 - NRV DEBUG: Iteration 9, Amp is 148.44µA (5.26%)... AP Not Blocked! (in 15.003s)
+2024-07-31 15:52:23,144 - NRV DEBUG: Iteration 10, Amp is 152.34µA (2.56%)... AP Not Blocked! (in 15.009s)
+2024-07-31 15:52:38,295 - NRV DEBUG: Iteration 11, Amp is 154.3µA (1.27%)... AP Blocked! (in 14.763s)
+2024-07-31 15:52:53,389 - NRV DEBUG: Iteration 12, Amp is 153.32µA (0.63%)... AP Blocked! (in 14.722s)
+2024-07-31 15:52:53,390 - NRV DEBUG: Activation threshold is 152.83µA (0.63%), found in 12 iterations (176.48s).
+2024-07-31 15:54:32,064 - NRV DEBUG: Iteration 1, Amp is 10000µA ...
+2024-07-31 15:54:35,475 - NRV DEBUG: Iteration 1, Amp is 10000µA ...
+2024-07-31 15:55:11,216 - NRV DEBUG: Iteration 1, Amp is 50000µA ...
+2024-07-31 15:55:14,904 - NRV DEBUG: Iteration 1, Amp is 50000µA ...
+2024-07-31 15:56:22,927 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 15:56:26,695 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 15:57:13,109 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:57:16,684 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:57:22,829 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:57:23,224 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 5.882s)
+2024-07-31 15:57:29,671 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 5.808s)
+2024-07-31 15:57:35,350 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:57:35,737 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Not Blocked! (in 5.475s)
+2024-07-31 15:57:41,893 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:57:42,275 - NRV DEBUG: Iteration 4, Amp is 750.0µA (33.33%)... AP Blocked! (in 5.941s)
+2024-07-31 15:57:48,930 - NRV DEBUG: Iteration 5, Amp is 625.0µA (16.67%)... AP Blocked! (in 5.915s)
+2024-07-31 15:57:56,094 - NRV DEBUG: Iteration 6, Amp is 562.5µA (10.0%)... AP Blocked! (in 6.511s)
+2024-07-31 15:57:56,953 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:58:02,659 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:58:06,331 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 15:58:12,775 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 15:58:13,163 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 6.189s)
+2024-07-31 15:58:19,483 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 5.75s)
+2024-07-31 15:58:26,195 - NRV DEBUG: Iteration 3, Amp is 500.0µA (100.0%)... AP Not Blocked! (in 6.118s)
+2024-07-31 15:58:31,833 - <class 'KeyboardInterrupt'>
+ Caught KeyboardInterrupt, simulation stoped by user, stopping process...
+2024-07-31 15:59:16,759 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 15:59:20,361 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 16:00:01,660 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 16:00:06,604 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:00:07,111 - NRV DEBUG: Iteration 1, Amp is 5000µA (100.0%)... AP Blocked! (in 4.79s)
+2024-07-31 16:00:12,799 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 5.15s)
+2024-07-31 16:00:17,665 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:00:18,013 - NRV DEBUG: Iteration 3, Amp is 2500.0µA (100.0%)... AP Blocked! (in 4.736s)
+2024-07-31 16:00:23,576 - NRV DEBUG: Iteration 4, Amp is 1250.0µA (50.0%)... AP Blocked! (in 5.059s)
+2024-07-31 16:00:28,674 - NRV DEBUG: Iteration 5, Amp is 625.0µA (50.0%)... AP Blocked! (in 4.662s)
+2024-07-31 16:00:33,591 - NRV DEBUG: Iteration 6, Amp is 312.5µA (50.0%)... AP Blocked! (in 4.391s)
+2024-07-31 16:00:38,829 - NRV DEBUG: Iteration 7, Amp is 156.25µA (50.0%)... AP Not Blocked! (in 4.748s)
+2024-07-31 16:00:43,896 - NRV DEBUG: Iteration 8, Amp is 234.38µA (33.33%)... AP Not Blocked! (in 4.616s)
+2024-07-31 16:00:49,125 - NRV DEBUG: Iteration 9, Amp is 273.44µA (14.29%)... AP Blocked! (in 4.743s)
+2024-07-31 16:00:54,151 - NRV DEBUG: Iteration 10, Amp is 253.91µA (7.14%)... AP Blocked! (in 4.583s)
+2024-07-31 16:00:59,178 - NRV DEBUG: Iteration 11, Amp is 244.14µA (3.85%)... AP Blocked! (in 4.584s)
+2024-07-31 16:01:04,747 - NRV DEBUG: Iteration 12, Amp is 239.26µA (2.0%)... AP Blocked! (in 5.118s)
+2024-07-31 16:01:09,353 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:01:09,698 - NRV DEBUG: Iteration 13, Amp is 236.82µA (1.02%)... AP Not Blocked! (in 4.479s)
+2024-07-31 16:01:14,554 - NRV DEBUG: Iteration 14, Amp is 238.04µA (0.51%)... AP Blocked! (in 4.437s)
+2024-07-31 16:01:14,555 - NRV DEBUG: Activation threshold is 237.43µA (0.51%), found in 14 iterations (72.9s).
+2024-07-31 16:01:14,561 - NRV DEBUG: Iteration 1, Amp is 5000µA ...
+2024-07-31 16:01:24,526 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:01:24,934 - NRV DEBUG: Iteration 1, Amp is 5000µA (100.0%)... AP Blocked! (in 9.694s)
+2024-07-31 16:01:35,454 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 9.9s)
+2024-07-31 16:01:45,457 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:01:46,028 - NRV DEBUG: Iteration 3, Amp is 2500.0µA (100.0%)... AP Blocked! (in 9.767s)
+2024-07-31 16:01:56,069 - NRV DEBUG: Iteration 4, Amp is 1250.0µA (50.0%)... AP Blocked! (in 9.495s)
+2024-07-31 16:02:05,875 - NRV DEBUG: Iteration 5, Amp is 625.0µA (50.0%)... AP Blocked! (in 9.131s)
+2024-07-31 16:02:17,085 - NRV DEBUG: Iteration 6, Amp is 312.5µA (50.0%)... AP Not Blocked! (in 10.589s)
+2024-07-31 16:02:27,656 - NRV DEBUG: Iteration 7, Amp is 468.75µA (33.33%)... AP Not Blocked! (in 9.884s)
+2024-07-31 16:02:37,911 - NRV DEBUG: Iteration 8, Amp is 546.88µA (14.29%)... AP Blocked! (in 9.622s)
+2024-07-31 16:02:48,441 - NRV DEBUG: Iteration 9, Amp is 507.81µA (7.14%)... AP Blocked! (in 9.893s)
+2024-07-31 16:02:58,368 - NRV DEBUG: Iteration 10, Amp is 488.28µA (3.85%)... AP Not Blocked! (in 9.313s)
+2024-07-31 16:03:08,219 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:03:08,651 - NRV DEBUG: Iteration 11, Amp is 498.05µA (1.96%)... AP Not Blocked! (in 9.652s)
+2024-07-31 16:03:19,275 - NRV DEBUG: Iteration 12, Amp is 502.93µA (0.97%)... AP Blocked! (in 10.024s)
+2024-07-31 16:03:19,276 - NRV DEBUG: Activation threshold is 500.49µA (0.97%), found in 12 iterations (124.72s).
+2024-07-31 16:17:13,255 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 16:17:14,185 - NRV DEBUG: Mesh properties:
+2024-07-31 16:17:14,185 - NRV DEBUG: Number of processes : 3
+2024-07-31 16:17:14,186 - NRV DEBUG: Number of entities : 36
+2024-07-31 16:17:14,186 - NRV DEBUG: Number of nodes : 11046
+2024-07-31 16:17:14,186 - NRV DEBUG: Number of elements : 77665
+2024-07-31 16:17:14,187 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:17:14,688 - NRV DEBUG: FEN4NRV: setup the bilinear form
+2024-07-31 16:17:14,695 - NRV DEBUG: FEN4NRV: setup the linear form
+2024-07-31 16:17:14,706 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:17:14,706 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-31 16:17:21,746 - NRV DEBUG: FEN4NRV: solved in 7.549724340438843 s
+2024-07-31 16:17:31,931 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 16:18:17,856 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 16:18:18,735 - NRV DEBUG: Mesh properties:
+2024-07-31 16:18:18,736 - NRV DEBUG: Number of processes : 3
+2024-07-31 16:18:18,736 - NRV DEBUG: Number of entities : 36
+2024-07-31 16:18:18,736 - NRV DEBUG: Number of nodes : 11038
+2024-07-31 16:18:18,736 - NRV DEBUG: Number of elements : 77690
+2024-07-31 16:18:18,737 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:18:19,209 - NRV DEBUG: FEN4NRV: setup the bilinear form
+2024-07-31 16:18:19,216 - NRV DEBUG: FEN4NRV: setup the linear form
+2024-07-31 16:18:19,226 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:18:19,227 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-31 16:18:25,632 - NRV DEBUG: FEN4NRV: solved in 6.885150909423828 s
+2024-07-31 16:18:34,272 - NRV DEBUG: Iteration 1, Amp is 1000µA ...
+2024-07-31 16:18:51,242 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:18:51,244 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:18:51,244 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:18:51,245 - /Users/louisregnacq/Documents/Work/Model/NRV/nrv/nmod/results/axons_results.py:925: RankWarning: Polyfit may be poorly conditioned
+  p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
+
+2024-07-31 16:18:51,608 - NRV DEBUG: Iteration 1, Amp is 1000µA (100.0%)... AP Blocked! (in 16.913s)
+2024-07-31 16:19:09,379 - NRV DEBUG: Iteration 1, Amp is 100µA ...
+2024-07-31 16:19:10,363 - NRV DEBUG: Mesh properties:
+2024-07-31 16:19:10,364 - NRV DEBUG: Number of processes : 3
+2024-07-31 16:19:10,364 - NRV DEBUG: Number of entities : 36
+2024-07-31 16:19:10,364 - NRV DEBUG: Number of nodes : 11068
+2024-07-31 16:19:10,364 - NRV DEBUG: Number of elements : 77916
+2024-07-31 16:19:10,365 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:19:10,823 - NRV DEBUG: FEN4NRV: setup the bilinear form
+2024-07-31 16:19:10,831 - NRV DEBUG: FEN4NRV: setup the linear form
+2024-07-31 16:19:10,839 - NRV DEBUG: Static/Quasi-Static electrical current problem
+2024-07-31 16:19:10,840 - NRV DEBUG: FEN4NRV: solving electrical potential
+2024-07-31 16:19:18,541 - NRV DEBUG: FEN4NRV: solved in 8.169312953948975 s
+2024-07-31 16:19:28,136 - NRV DEBUG: Iteration 1, Amp is 100µA (100.0%)... AP Blocked! (in 18.117s)
+2024-07-31 16:19:36,346 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 7.851s)
+2024-07-31 16:19:45,728 - NRV DEBUG: Iteration 3, Amp is 50.0µA (100.0%)... AP Blocked! (in 8.987s)
+2024-07-31 16:19:56,067 - NRV DEBUG: Iteration 4, Amp is 25.0µA (50.0%)... AP Not Blocked! (in 9.827s)
+2024-07-31 16:20:07,152 - NRV DEBUG: Iteration 5, Amp is 37.5µA (33.33%)... AP Blocked! (in 10.544s)
+2024-07-31 16:20:17,398 - NRV DEBUG: Iteration 6, Amp is 31.25µA (16.67%)... AP Not Blocked! (in 9.826s)
+2024-07-31 16:20:26,023 - NRV DEBUG: Iteration 7, Amp is 34.38µA (9.09%)... AP Not Blocked! (in 8.252s)
+2024-07-31 16:20:35,048 - NRV DEBUG: Iteration 8, Amp is 35.94µA (4.35%)... AP Blocked! (in 8.415s)
+2024-07-31 16:20:45,973 - NRV DEBUG: Iteration 9, Amp is 35.16µA (2.17%)... AP Blocked! (in 10.522s)
+2024-07-31 16:20:54,390 - NRV DEBUG: Iteration 10, Amp is 34.77µA (1.11%)... AP Not Blocked! (in 8.072s)
+2024-07-31 16:21:02,197 - NRV DEBUG: Iteration 11, Amp is 34.96µA (0.56%)... AP Blocked! (in 7.459s)
+2024-07-31 16:21:02,198 - NRV DEBUG: Activation threshold is 34.86µA (0.56%), found in 11 iterations (112.82s).
+2024-07-31 16:21:02,198 - NRV DEBUG: Iteration 1, Amp is 100µA ...
+2024-07-31 16:21:18,293 - NRV DEBUG: Iteration 1, Amp is 100µA (100.0%)... AP Blocked! (in 15.687s)
+2024-07-31 16:21:34,449 - NRV DEBUG: Iteration 2, Amp is 0µA (100.0%)... AP Not Blocked! (in 15.788s)
+2024-07-31 16:21:49,845 - NRV DEBUG: Iteration 3, Amp is 50.0µA (100.0%)... AP Blocked! (in 15.023s)
+2024-07-31 16:22:05,466 - NRV DEBUG: Iteration 4, Amp is 25.0µA (50.0%)... AP Not Blocked! (in 15.15s)
+2024-07-31 16:22:21,592 - NRV DEBUG: Iteration 5, Amp is 37.5µA (33.33%)... AP Not Blocked! (in 15.693s)
+2024-07-31 16:22:38,739 - NRV DEBUG: Iteration 6, Amp is 43.75µA (14.29%)... AP Blocked! (in 16.772s)
+2024-07-31 16:22:55,120 - NRV DEBUG: Iteration 7, Amp is 40.62µA (7.14%)... AP Blocked! (in 15.996s)
+2024-07-31 16:23:12,080 - NRV DEBUG: Iteration 8, Amp is 39.06µA (3.85%)... AP Not Blocked! (in 16.57s)
+2024-07-31 16:23:27,248 - NRV DEBUG: Iteration 9, Amp is 39.84µA (1.96%)... AP Blocked! (in 14.811s)
+2024-07-31 16:23:41,911 - NRV DEBUG: Iteration 10, Amp is 39.45µA (0.98%)... AP Not Blocked! (in 14.292s)
+2024-07-31 16:23:41,912 - NRV DEBUG: Activation threshold is 39.65µA (0.98%), found in 10 iterations (159.72s).

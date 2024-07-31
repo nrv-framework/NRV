@@ -19,7 +19,6 @@ class unmyelinated_results(axon_results):
         return unmyelinated(**self)
 
 
-
     def plot_x_t(self, axes: plt.axes, key:str="V_mem", color: str="k", n_lines:int=20,**kwgs)->None:
         x_index = np.int32(np.linspace(0,len(self.x_rec)-1,n_lines))
         x_pos = self.x_rec[x_index]

@@ -27,7 +27,7 @@ z_c_1 = 0
 x_1_offset = (length_1)/2
 elec_1 = nrv.LIFE_electrode('LIFE_1', D_1, length_1, x_1_offset, y_c_1, z_c_1)
 # stimulus def
-freq = 10
+freq = 5
 amp = 100
 start = 1
 duration = t_sim
@@ -43,4 +43,4 @@ duration = 0.1
 amplitude = 5
 nerve.insert_I_Clamp(position, t_start, duration, amplitude)
 
-nerve.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/', postproc_script="vmem_plot", postproc_kwargs={'freq': freq})
+nerve.simulate(t_sim=t_sim, save_path='./unitary_tests/figures/', postproc_script="vmem_plot", postproc_kwargs={'freq': freq},dt =0.005)
