@@ -29,7 +29,7 @@ The following snippet shows one possible usage of the :func:`~nrv.utils.cell.CL_
                                             update_func = my_update_function, args_update=my_arg_stim)
 
 .. tip::
-    Some usage examples of :func:`~nrv.utils.cell.CL_simulations.axon_AP_threshold` are provided in :doc:`Example 16 <../examples/generic/example_16>`.
+    Some usage examples of :func:`~nrv.utils.cell.CL_simulations.axon_AP_threshold` are provided in :doc:`Example 16 <../examples/generic/16_activation_thresholds_arbitrary>`.
 
 
 Search threshold dispatching functions
@@ -55,7 +55,7 @@ The following snippet shows one possible usage of the :func:`~nrv.utils.cell.CL_
         my_thresholds = nrv.threshold_search_dispatcher(my_process_threshold,my_param_list)
 
 .. tip::
-    Some usage examples of :func:`~nrv.utils.cell.CL_simulations.search_threshold_dispatcher` are provided in :doc:`Example 17 <../examples/generic/example_17>`.
+    Some usage examples of :func:`~nrv.utils.cell.CL_simulations.search_threshold_dispatcher` are provided in :doc:`Example 17 <../examples/generic/17_threshold_search_dispatcher>`.
 
 
 .. warning::

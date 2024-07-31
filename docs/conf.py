@@ -82,16 +82,19 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.autodoc",
-    'sphinx.ext.autosummary',
+    "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
     "sphinx.ext.intersphinx",
     "sphinx_mdinclude",
-    'sphinx_copybutton',
+    "sphinx_copybutton",
+    "nbsphinx",
+    "sphinx_gallery.load_style",
+    #"sphinx_nbexamples",
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site

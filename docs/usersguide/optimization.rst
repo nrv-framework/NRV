@@ -97,13 +97,13 @@ Several `context modifiers` have been implemented in NRV for general use. They a
         - See Also
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`
         - Generic context modifiers targeting the modification of an electrode stimulus. This modification can either be done by interpolation the input vector or by generating a specific stimulus from this vector.
-        - :doc:`o02 </examples/optim/example_o02>` :doc:`T5 </tutorials/5_first_optimization>`
+        - :doc:`o02 </examples/optim/o02_stimulus_CM>` :doc:`T5 </tutorials/5_first_optimization>`
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM`
         - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.biphasic_pulse` to an electrode of the static context.
-        - :doc:`o03 </examples/optim/example_o03>` :doc:`T5 </tutorials/5_first_optimization>`
+        - :doc:`o03 </examples/optim/o03_biphasic_stimulus_CM>` :doc:`T5 </tutorials/5_first_optimization>`
     *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_CM`
         - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
-        - :doc:`o04 </examples/optim/example_o04>`
+        - :doc:`o04 </examples/optim/o04_harmonic_stimulus_CM>`
 
 For a fully customize optimization problem, it is also possible to use user-defined `context modifiers`. Such a function should follow the structure bellow:
 

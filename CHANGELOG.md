@@ -26,6 +26,7 @@ All notable changes to NRV are sumed up in this file.
 - deprecated ``firing_threshold_point_source`` and ``firing_threshold_from_axon``from ``CL_simulations`` as they are replaced by the more generalized version ``axon_AP_threshold``. 
 - Added CL simulation documentation.
 - Added the ``search_threshold_dispatcher`` function to parallelize the exploration to parameter effect on threshold + doc & example (see Example 17)
+- Doc gallery for examples. Examples have been relocated to ``docs/examples``
 
 ### Fixed
 - issues with mcore optimization
