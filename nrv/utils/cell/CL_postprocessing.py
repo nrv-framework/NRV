@@ -1050,7 +1050,7 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
     return results
 
 
-def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_results:
+def is_recruited(results:axon_results)->axon_results:
     """
     Evaluate if each fibre is recruited by a stimulation (see `axon_results.is_recruited`) and remove most of the `axon_results` keys to alliviate RAM usage.
 
@@ -1104,30 +1104,9 @@ def is_recruited(results:axon_results,save:bool=False, fdir:str="")->axon_result
     "recruited",
     }
     results.remove_key(keys_to_keep=list_keys)
-    if save:
-        if fdir[-1] != "/":
-            fdir += "/"
-        file_object = open(fdir + "block_summary.csv", "a")
-        line = ""
-        line += (
-            str(results["ID"])
-            + "\t"
-            + str(results["y"])
-            + "\t"
-            + str(results["z"])
-            + "\t"
-            + str(results["diameter"])
-            + "\t"
-            + str(results["myelinated"])
-            + "\t"
-            + str(results["recruited"])
-            + "\n"
-        )
-        file_object.write(line)
-        file_object.close()
     return(results)
 
-def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
+def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
     """
     Evaluate the impact od a blocking stimulation on axon (see `axon_results.block_summary`) and remove most of the `axon_results` keys to alliviate RAM usage.
 
@@ -1213,33 +1192,6 @@ def is_blocked(results:axon_results, save:bool=False, fdir:str="", AP_start:floa
     "n_onset",
     }
     results.remove_key(keys_to_keep=list_keys)
-
-
-    if save:
-        if fdir[-1] != "/":
-            fdir += "/"
-        file_object = open(fdir + "block_summary.csv", "a")
-        line = ""
-        line += (
-            str(results["ID"])
-            + "\t"
-            + str(results["y"])
-            + "\t"
-            + str(results["z"])
-            + "\t"
-            + str(results["diameter"])
-            + "\t"
-            + str(results["myelinated"])
-            + "\t"
-            + str(results["blocked"])
-            + "\t"
-            + str(results["has_onset"])
-            + "\t"
-            + str(results["n_onset"])
-            + "\n"
-        )
-        file_object.write(line)
-        file_object.close()
     return(results)
 
 

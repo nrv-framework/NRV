@@ -513,6 +513,13 @@ def get_axon_combinaisons(ids: np.array)->np.array:
     """
     return(np.asarray(list(combinations(ids,2))))
 
+def get_axon_other_id(ids: np.array)->np.array:
+    """
+    For each axon, get ids all other axon: N*(N-1) - Internal use only
+    """
+    Nax = len(ids)
+    return(np.asarray(list(combinations(ids,Nax-1))))
+
 """def get_axon_interdistance(
         pos: np.array,
         ids_pairs: np.array
@@ -584,6 +591,38 @@ def get_colliding_ids(pos:np.array,id_pairs:np.array,diam_pairs:np.array,delta:n
     get ids of colliding axons - Internal use only
     """
     return(id_pairs[get_deltad_pairs(pos, id_pairs) < (diam_pairs+delta)])
+
+def get_distance_in_range(pos:np.array,id_others:np.array,diam:np.array,delta:np.float32)-> np.array:
+
+    id = np.arange(len(pos[0]))
+    id = np.flip(id)
+
+    r_comb = (diam[id_others] + diam[id][:,None])/2
+
+    y_dis = pos[0][id][:,None] - pos[0][id_others] 
+    x_dis = pos[1][id][:,None] - pos[1][id_others]
+    dist = np.sqrt(y_dis**2 + x_dis**2) - r_comb
+
+    stop_c = 1.2*delta
+    if stop_c < 1:
+        stop_c = 1
+    #low_bound = np.min(dist,axis = 1)>0.95*delta
+    #up_bound = np.min(dist,axis = 1)<2*delta
+    #print(np.min(dist,axis = 1))
+    #exit()
+    return(np.max(np.min(dist,axis = 1))<stop_c)
+
+
+
+    #print(len(id_others[up_bound]))
+    #exit()
+
+    #if len(id_others[low_bound & up_bound]) == len(id):    
+    #if len(id_others[up_bound]) == len(id):     
+    #    return True
+    #else:
+    #    return False
+
 
 def update_axon_packing(pos:np.array,
                         id_pairs:np.array,
@@ -659,6 +698,9 @@ def axon_packer(diameters: np.array,
     id_pairs = get_axon_combinaisons(ids)
     diam_pair = get_axon_inter_radius(diameters,id_pairs)
     Naxon = len(pos[0])
+
+    id_others = get_axon_other_id(ids)
+
     #for _ in tqdm(range (n_iter)):
     #    pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
     if monitor:
@@ -667,12 +709,20 @@ def axon_packer(diameters: np.array,
         fig.add_axes(ax)
     for i in tqdm(range (n_iter)):
         pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
+        
         if monitor and i %n_monitor == 0:
             y_prov = pos[0].copy()
             z_prov = pos[1].copy()
             ax.cla()
             plot_population(diameters, y_prov, z_prov,ax,max_pos, y_gc=y_gc, z_gc=z_gc)
             plt.savefig(monitoring_Folder+"vignette_"+str(i)+".png")
+        
+        '''
+        if (get_distance_in_range(pos,id_others,diameters,delta)):
+        #t.append(get_distance_in_range(pos,id_others,diameters,delta))
+            pass_info("Stop criterion reached!")
+            break
+        '''
     y_axons = pos[0].copy()
     z_axons = pos[1].copy()
     pass_info("Packing done!")

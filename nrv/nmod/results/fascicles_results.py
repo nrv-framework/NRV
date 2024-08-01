@@ -48,8 +48,8 @@ class fascicle_results(sim_results):
             rise_error(f"Axon type specified not recognized. Recognized types are: {recognized_axon_types}")
         all_keys = self.keys()
         axon_keys = [ i for i in all_keys if ("axon" in i and number_in_str(i)) ]
-        if ax_type is not 'all':
-            if ax_type is 'unmyelinated':
+        if ax_type != 'all':
+            if ax_type == 'unmyelinated':
                 axon_keys = [ i for i in axon_keys if self[i].myelinated == False]
             else:
                 axon_keys = [ i for i in axon_keys if self[i].myelinated == True]
@@ -332,14 +332,13 @@ class fascicle_results(sim_results):
     
     def plot_block_summary( self, axes:plt.axes,AP_start:float, freq:float=None, 
                            t_refractory:float = 1, contour_color:str="k", num:bool=False) -> None:
-
         """
         plot the block_summary of the fascicle in the Y-Z plane (transverse section)
         Color code: 
-            - Green: fiber is blocked without any onset
-            - Blue: fiber is blocked with some onset
-            - Red: fiber is not blocked but has onset
-            - Grey: Fiber is nor blocked nor has onset
+        Green: fiber is blocked without any onset
+        Blue: fiber is blocked with some onset
+        Red: fiber is not blocked but has onset
+        Grey: Fiber is nor blocked nor has onset
 
         A cross-mark on the fiber means block state can't be evaluted (is_blocked returned None)
         Alpha colorfill represents number of onset APs.
