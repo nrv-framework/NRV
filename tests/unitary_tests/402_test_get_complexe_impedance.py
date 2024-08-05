@@ -170,4 +170,4 @@ if nrv.MCH.do_master_only_work():
         plt.figure(4)
         plt.loglog(freq, 1/Ynrv0[:,i], color=c[i])
         plt.loglog(freq, 1/Ynrv2[:,i], ":", color=c[i])
-    plt.show()
+    #plt.show()

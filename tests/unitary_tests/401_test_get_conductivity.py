@@ -46,15 +46,16 @@ if nrv.MCH.do_master_only_work():
     f_umem = nrv.from_nrv_unit(u_res["f_mem"][C], "Hz")
     t = u_res["t"]
     x_rex = u_res["x_rec"]
-    mat = u_res.get_membrane_material(t=(t_start+t_sim)/2)
+    mat = u_res.get_membrane_material(t=2.5)
     
 
-    x_plot = np.linspace(0,Lu, 100)
-    print(mat.is_func)
-    plt.plot(x_plot, mat.sigma_func(x_plot))
+    x_ = np.linspace(0,Lu, 100)
+    x_plot = np.vstack((x_, 0*x_, 0*x_))
 
-exit()
-if 1:
+    plt.figure()
+    plt.plot(x_plot[0,:], mat.sigma_func(x_plot))
+    plt.savefig(fig_file+"D_tocheck.png")
+
 
     i_max = np.argmax(g_umem)
     f_umem_0 = f_umem[0]
@@ -93,7 +94,7 @@ if 1:
 
 
 
-    fig, axs = plt.subplots()
+    fig1, axs = plt.subplots()
     axs.plot(t, g_umem, color="r")
     axs.plot([1], [u_res.get_membrane_conductivity(Lu/2, 1)], "o",color="r")
     axs.plot([2], [u_res.get_membrane_conductivity(Lu/2, 2)], "o",color="r")
@@ -110,7 +111,7 @@ if 1:
     axs.plot([2], [m_res.get_membrane_conductivity(x_C, 2)], "o",color="b")
     axs.plot([3], [m_res.get_membrane_conductivity(x_C, 3)], "o",color="b")
     axs.plot([4], [m_res.get_membrane_conductivity(x_C, 4)], "o",color="b")
-    fig.savefig(fig_file+"A.png")
+    fig1.savefig(fig_file+"A.png")
 
 
 
@@ -140,9 +141,9 @@ fascicle_1.fill_with_population(axons_diameters, axons_type, fit_to_size=True,de
 fascicle_1.generate_random_NoR_position()
 nerve_1.add_fascicle(fascicle=fascicle_1, y=fasc1_y, z=fasc1_z)
 
-fig, ax = plt.subplots(1, 1, figsize=(6,6))
+fig2, ax = plt.subplots(1, 1, figsize=(6,6))
 nerve_1.plot(ax)
-fig.savefig(fig_file+"B.png")
+fig2.savefig(fig_file+"B.png")
 
 
 t_start = 1
@@ -164,20 +165,20 @@ if nrv.MCH.do_master_only_work():
     get_sigma_c_t = lambda i_t: np.concatenate([[res_nrv[f_key][a_key]["g_mem"][i_x_rec, i_t] for a_key in res_nrv[f_key].get_axons_key()] for f_key in res_nrv.get_fascicle_key()])
 
 
-    fig, axs = plt.subplots(1, 1)
+    fig3, ax = plt.subplots(1, 1)
     g_t_4 = res_nrv.get_membrane_conductivity(nerve_l/3, 4)
     c = ["b", "y", "r", "g", "k"]
     for i in range(4):
         plt.plot(res_nrv.fascicle0.axon0.t[T], get_sigma_c_t(T)[i,:], color=c[i])
 
 
-        plt.plot([3],[res_nrv.get_membrane_conductivity(nerve_l/3, 3)[i]], "o", color=c[i])
-        plt.plot([4],[res_nrv.get_membrane_conductivity(nerve_l/3, 4)[i]], "o", color=c[i])
-        plt.plot([5],[res_nrv.get_membrane_conductivity(nerve_l/3, 5)[i]], "o", color=c[i])
-        plt.plot([6],[res_nrv.get_membrane_conductivity(nerve_l/3, 6)[i]], "o", color=c[i])
+        ax.plot([3],[res_nrv.get_membrane_conductivity(nerve_l/3, 3)[i]], "o", color=c[i])
+        ax.plot([4],[res_nrv.get_membrane_conductivity(nerve_l/3, 4)[i]], "o", color=c[i])
+        ax.plot([5],[res_nrv.get_membrane_conductivity(nerve_l/3, 5)[i]], "o", color=c[i])
+        ax.plot([6],[res_nrv.get_membrane_conductivity(nerve_l/3, 6)[i]], "o", color=c[i])
 
-    plt.yscale("log")
-    plt.savefig(fig_file+"C.png")
+    ax.set_yscale("log")
+    fig3.savefig(fig_file+"C.png")
 
 
     print(u_res.get_membrane_capacitance(), "uF/cm2")
@@ -187,4 +188,4 @@ if nrv.MCH.do_master_only_work():
     print(u_res.get_membrane_capacitance("F/m"), "F/m")
     print(m_res.get_membrane_capacitance("F/m"), "F/m")
     print(res_nrv.get_membrane_capacitance("F/m"), "F/m")
-    plt.show()
+    #plt.show()
