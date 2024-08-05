@@ -2,7 +2,7 @@
 
 All notable changes to NRV are sumed up in this file.
 
-## [1.1.1] - XXXX
+## [1.1.1] - 20204-08-05
 
 ### Added
 - Updated the way axons post-processing is handled during fascicle and nerve simulation:
