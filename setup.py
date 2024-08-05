@@ -65,7 +65,6 @@ setup(
     packages=[
         "nrv",
         "nrv._misc",
-        "nrv._misc.OTF_PP",
         "nrv._misc.comsol_templates",
         "nrv._misc.geom",
         "nrv._misc.log",
