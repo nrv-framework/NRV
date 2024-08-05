@@ -38,7 +38,7 @@ del ax1
 Nnodes = res.axonnodes
 
 res.compute_f_mem()
-res.get_myeline_properties(endo_mat="endoneurium_bhadra")
+res.get_myelin_properties(endo_mat="endoneurium_bhadra")
 
 
 

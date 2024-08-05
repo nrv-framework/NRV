@@ -85,7 +85,7 @@ class myelinated_results(axon_results):
         return n_center
 
 
-    def get_myeline_properties(self, endo_mat=None):
+    def get_myelin_properties(self, endo_mat=None):
         """
         compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
         NB: The frequency is computed in [kHz]
@@ -100,18 +100,18 @@ class myelinated_results(axon_results):
             value of the cutoff frequency of the axon's membrane
         """
         if self["rec"] == "nodes":
-            rise_warning("No myeline in the axon simulated, None returned")
+            rise_warning("No myelin in the axon simulated, None returned")
             return None
 
         ax = self.generate_axon()
-        self["g_mye"] = ax.get_myeline_conductance()
+        self["g_mye"] = ax.get_myelin_conductance()
         if endo_mat is not None:
             if not is_mat(endo_mat):
                 endo_mat = load_material(endo_mat)
             I = np.isclose(self["g_mye"], 1e+10)
             self["g_mye"][I] *= 0.
             self["g_mye"][I] += convert(endo_mat.sigma, "S/m**2", "S/cm**2")
-        self["c_mye"] = ax.get_myeline_capacitance()
+        self["c_mye"] = ax.get_myelin_capacitance()
         self["f_mye"] = self["g_mye"] / (2 * np.pi * self["c_mye"])
 
         # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]

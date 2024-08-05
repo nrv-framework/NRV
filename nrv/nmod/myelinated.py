@@ -123,7 +123,7 @@ def get_length_from_nodes(diameter, nodes):
 
 class myelinated(axon):
     """
-    Myelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
+    Myelinated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
 
     Parameters
@@ -1496,14 +1496,14 @@ class myelinated(axon):
         """
         return self.__get_var_from_mod("_ref_cm")
 
-    def get_myeline_conductance(self):
+    def get_myelin_conductance(self):
         """
         get the membrane capacitance
         NB: [S/cm^{2}] (see Neuron unit)
         """
         return self.__get_var_from_mod("_ref_xg")
 
-    def get_myeline_capacitance(self):
+    def get_myelin_capacitance(self):
         """
         get the membrane capacitance
         NB: [uF/cm^{2}] (see Neuron unit)

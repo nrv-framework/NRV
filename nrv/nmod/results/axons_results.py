@@ -6,7 +6,9 @@ import numpy as np
 from numpy.typing import NDArray
 from itertools import combinations
 import matplotlib.pyplot as plt
+from copy import deepcopy
 
+from ...fmod.FEM.fenics_utils.f_materials import f_material, mat_from_interp
 from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
 from ...backend.log_interface import rise_warning, rise_error
@@ -1480,7 +1482,7 @@ class axon_results(sim_results):
         return self["f_mem"]
 
 
-    def get_membrane_conductivity(self, x:float=0, t:float=0, unit:str="S/cm**2", mem_th:float=7*nm)->float:
+    def get_membrane_conductivity(self, x:float|None=0, t:float|None=0, unit:str="S/cm**2", mem_th:float=7*nm)->float:
         """
         get the membrane conductivity at a position x and a time t
     
@@ -1508,8 +1510,15 @@ class axon_results(sim_results):
             return None
 
         n_t = len(self["g_mem"][0])
-        i_t = int(n_t*t/self["t_sim"])
-        i_x = np.argmin(abs(self["x_rec"] - x))
+        n_x = len(self["g_mem"][:,0])
+        if t is None:
+            i_t = np.arange(n_t)
+        else:
+            i_t = int(n_t*t/self["t_sim"])
+        if x is None:
+            i_x = np.arange(n_x)
+        else:
+            i_x = np.argmin(abs(self["x_rec"] - x))
         g = self["g_mem"][i_x, i_t]
 
         # Surface conductivity in [S]/([m]*[m])
@@ -1583,6 +1592,21 @@ class axon_results(sim_results):
             Y *= from_nrv_unit(mem_th, "cm")
             return convert(Y, "S/cm", unit)
 
+    def get_membrane_material(self, t:float=0, unit:str="S/m", mem_th:float=7*nm, **interp_kwargs)->f_material:
+
+        n_t = len(self["g_mem"][0])
+        i_t = int(n_t*t/self["t_sim"])
+        x_ = self["x_rec"]
+        g_ = deepcopy(self["g_mem"][:,i_t])
+
+        # Surface conductivity in [S]/([m]*[m])
+        if "2" in unit:
+            g_ = convert(g_, "S/cm**2", unit)
+        # conductivity in [S]/[m]
+        else:
+            g_ *= from_nrv_unit(mem_th, "cm")
+            g_ = convert(g_, "S/cm", unit)
+        return mat_from_interp(x_, g_, **interp_kwargs)
 
     #####################
     ## Ploting methods ##

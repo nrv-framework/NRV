@@ -5,6 +5,7 @@ NRV-:class:`.nerve_results` handling.
 
 from ...backend.NRV_Results import sim_results
 from .fascicles_results import fascicle_results
+from .axons_results import axon_results
 from ...backend.log_interface import rise_error, rise_warning, pass_info
 from ...backend.MCore import MCH
 from ...utils.units import nm, convert, from_nrv_unit
@@ -53,20 +54,53 @@ class nerve_results(sim_results):
             _n_ax += self[key].n_ax
         return _n_ax
 
+
+    @property
+    def axons_type(self)->np.ndarray:
+        """
+        type of axons of each fascicles
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 2)
+            _description_
+        """
+        fasc_keys = self.fascicle_keys
+        _mye = np.zeros((self.n_ax, 2))
+        _offset = 0
+        for key in fasc_keys:
+            fasc_mye = np.vstack(
+                (
+                    self[key].ID*np.ones(self[key].n_ax),
+                    self[key].axons_type, 
+                )
+            )
+            _mye[:, _offset:_offset+self[key].n_ax] = fasc_mye.T
+            _offset += self[key].n_ax
+        return _mye
+
     def get_fascicle_results(self, ID: int) -> fascicle_results:
         if ID not in self.fascicles_IDs:
             rise_error(("Fascicle ID does not exists."))
         else:
-            return(self[f'fascicle{ID}'])
+            return self[f"fascicle{ID}"]
 
+    def get_fascicle_results(self, fasc_ID: int, ax_ID:int) -> axon_results:
+        if fasc_ID not in self.fascicles_IDs:
+            rise_error(f"Fascicle ID: {fasc_ID} does not exists.")
+        else:
+            if ax_ID >= self[f"fascicle{fasc_ID}"].n_ax:
+                rise_error(f"Axon ID: {ax_ID} does not exists in Fascicle {fasc_ID} .")
+            else:
+                return self[f"fascicle{fasc_ID}"][f"axon{ax_ID}"]
 
     def get_fascicle_key(self) ->list:
         all_keys = self.keys()
-        fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i)) ]
+        fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i))]
         return(fascicle_keys)
 
 
-    def get_recruited_axons(self, ax_type:str = 'all', normalize:bool=False) ->  int|float:
+    def get_recruited_axons(self, ax_type:str = "all", normalize:bool=False) -> int|float:
         """
         Return the number or the ratio of recruited axons in the nerve
 
@@ -87,7 +121,7 @@ class nerve_results(sim_results):
         float
             number of recruited axons
         """
-        fasc_keys = self.get_fascicle_key()
+        fasc_keys = self.fascicle_keys
         for key in fasc_keys:
             fasc_res = self[key]
             n_recr += fasc_res.get_recruited_axons(ax_type=ax_type, normalize=normalize)

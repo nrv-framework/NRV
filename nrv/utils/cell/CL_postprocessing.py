@@ -828,7 +828,7 @@ def compute_f_mem(results):
     return results["f_mem"]
 
 
-def get_myeline_properties(results):
+def get_myelin_properties(results):
     """
     compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
     NB: The frequency is computed in [kHz]
@@ -846,15 +846,15 @@ def get_myeline_properties(results):
 
     rise_warning(
         "DeprecationWarning: ",
-        "get_myeline_properties is obsolete use method from axon_result objects instead"
+        "get_myelin_properties is obsolete use method from axon_result objects instead"
     )
     if not results["myelinated"] or results["rec"] == "node":
-        rise_warning("No myeline in the axon simulated, None returned")
+        rise_warning("No myelin in the axon simulated, None returned")
         return None
 
     ax = generate_axon_from_results(results)
-    results["g_mye"] = ax.get_myeline_conductance()
-    results["c_mye"] = ax.get_myeline_capacitance()
+    results["g_mye"] = ax.get_myelin_conductance()
+    results["c_mye"] = ax.get_myelin_capacitance()
     results["f_mye"] = results["g_mye"] / (2 * np.pi * results["c_mye"])
 
     # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]

@@ -74,7 +74,7 @@ class FENICS_lumped_impedance_model(FENICS_model):
         self.axons = {}
         self.axons_gmem = {}
 
-        self.Myeline_mat = "endoneurium_ranck"
+        self.Myelin_mat = "endoneurium_ranck"
         self.Axoplasmic_mat = 1 / 70
 
     def reshape_axon(
@@ -133,13 +133,13 @@ class FENICS_lumped_impedance_model(FENICS_model):
         Endoneurium_mat=None,
         Perineurium_mat=None,
         Electrodes_mat=None,
-        Myeline_mat=None,
+        Myelin_mat=None,
         Axoplasmic_mat=None,
     ):
         super().set_materials(
             Outer_mat, Epineurium_mat, Endoneurium_mat, Perineurium_mat, Electrodes_mat
         )
-        self.Myeline_mat = Myeline_mat or self.Myeline_mat
+        self.Myelin_mat = Myelin_mat or self.Myelin_mat
         self.Axoplasmic_mat = Axoplasmic_mat or self.Axoplasmic_mat
 
     def set_axon_membrane(id, gmem_pty):

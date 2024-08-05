@@ -42,9 +42,9 @@ del axon_sensory
 res_mrg.compute_f_mem()
 res_motor.compute_f_mem()
 res_sensory.compute_f_mem()
-res_mrg.get_myeline_properties()
-res_motor.get_myeline_properties()
-res_sensory.get_myeline_properties()
+res_mrg.get_myelin_properties()
+res_motor.get_myelin_properties()
+res_sensory.get_myelin_properties()
 
 seq_types_mrg = res_mrg['axon_path_type']
 seq_types_motor = res_motor['axon_path_type']

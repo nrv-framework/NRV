@@ -11,7 +11,7 @@ from ..backend.NRV_Class import is_empty_iterable
 
 class unmyelinated(axon):
     """
-    Unmyelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
+    Unmyelinated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
 
     Parameters

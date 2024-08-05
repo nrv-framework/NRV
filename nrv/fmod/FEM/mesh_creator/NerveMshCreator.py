@@ -931,7 +931,7 @@ class NerveMshCreator(MshCreator):
         """
         
         """
-        # First set the field for unmyelinated axon or myeline
+        # First set the field for unmyelinated axon or myelin
         fields = [
             self.refine_entities(
                 ent_ID=axon["volume"],
