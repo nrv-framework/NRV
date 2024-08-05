@@ -5,7 +5,11 @@ All notable changes to NRV are sumed up in this file.
 ## [1.1.1] - XXXX
 
 ### Added
-- Removed OTF_PP etc etc --> Thomas 
+- Updated the way axons post-processing is handled during fascicle and nerve simulation:
+    - These must now be defined as functions instead of external Python scripts.
+    - For backward compatibility, some built-in postprocessing functions can be called using str (see ``builtin_postproc_functions``).
+    - The ``postproc_script`` attribute has been retained to set the postprocessing as either ``str`` or ``function`` regardless of the type.
+    - The postproc function must at least take an ``axon_results`` as argument and return an ``axon_results``, evantual key arguments can be added to the ``postproc_kwargs`` attribute.
 - Add ``block_summary`` method in ``axons_results`` which returns axon block characteristics: blocked, onset response, number of onset APs.
 - Add ``getAPspeed`` and ``get_avg_AP_speed`` methods in ``axons_results`` to measure AP propagation velocity. Should be used instead of ``speed`` (deprecated method)
 - Add ``is_blocked`` method in ``axons_results`` to detect AP propagation block. Should be used instead of ``block`` (deprecated method)
@@ -51,6 +55,7 @@ All notable changes to NRV are sumed up in this file.
 ### Fixed
 - issues with type hints on documentation generation
 - code troubles with DOLFINx v0.8.0 now resolved, versions below are not supported anymore
+- most of the parameters of fascicles (and nerve) can now also be set at the instantiation. (see doc)
 
 ## [1.0.1] - 2024-01-26
 
