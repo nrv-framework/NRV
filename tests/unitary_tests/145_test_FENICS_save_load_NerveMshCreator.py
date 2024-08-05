@@ -42,7 +42,7 @@ print("save meshed ok")
 
 t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
-mesh2.get_mesh_info(verbose=True)
+mesh2.get_info(verbose=True)
 del mesh2
 
 
@@ -54,7 +54,7 @@ mesh3.save(mesh_file)
 
 t3 = time.time()
 print('mesh reloaded in '+str(t3 - t2)+' s')
-mesh3.get_mesh_info(verbose=True)
+mesh3.get_info(verbose=True)
 
 
 

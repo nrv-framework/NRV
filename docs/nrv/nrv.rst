@@ -14,10 +14,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :glob:
    :maxdepth: 3
 
-   nrv.backend
-   nrv.fmod
-   nrv.nmod
-   nrv.optim
-   nrv.utils
+   */nrv.*

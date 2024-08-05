@@ -8,6 +8,7 @@ from ..backend.NRV_Class import load_any
 from ..backend.NRV_Simulable import NRV_simulable
 from ..fmod.stimulus import stimulus
 from .fascicles import *
+from .results.nerve_results import nerve_results
 
 
 #################
@@ -43,12 +44,16 @@ class nerve(NRV_simulable):
         super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
-        self.save_path = ""
         self.verbose = True
-        self.postproc_script = "default"
-        self.return_parameters_only = True
-        self.save_results = True
         self.loaded_footprints = True
+        self.return_parameters_only = False
+        self.save_results = False
+        self.save_path = ""
+
+        self.postproc_label = "default"
+        self.postproc_function = None
+        self.postproc_script = None
+        self.postproc_kwargs = {}
 
         self.type = "nerve"
         self.L = length
@@ -61,6 +66,9 @@ class nerve(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
+
+        # Update parameters with kwargs
+        self.set_parameters(**kwargs)
 
         # Fascicular content
         self.fascicles_IDs = []
@@ -163,6 +171,11 @@ class nerve(NRV_simulable):
             Pyhton dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
+
+        bl += ["postproc_function", "postproc_script"]
+        if self.postproc_label not in builtin_postproc_functions:
+            rise_warning("custom axon postprocessing cannot be save. Be carefull to set the postproc_function again when reloading fascicle")
+
         if not intracel_context:
             bl += [
                 "N_intra",
@@ -763,13 +776,16 @@ class nerve(NRV_simulable):
         for fasc in self.fascicles.values():
             fasc.t_sim = self.t_sim
             fasc.record_V_mem = self.record_V_mem
-            fasc.record_I_mem = (self.record_I_mem,)
+            fasc.record_I_mem = self.record_I_mem
             fasc.record_I_ions = self.record_I_ions
             fasc.record_g_mem = self.record_g_mem
             fasc.record_g_ions = self.record_g_ions
             fasc.record_particles = self.record_particles
+
             fasc.postproc_script = self.postproc_script
-            fasc.save_results = self.save_results,
+            fasc.postproc_label = self.postproc_label
+            fasc.postproc_function = self.postproc_function
+            fasc.save_results = self.save_results
             fasc.return_parameters_only = self.return_parameters_only
             fasc.verbose = self.verbose
 
@@ -800,7 +816,7 @@ class nerve(NRV_simulable):
     def simulate(
         self,
         **kwargs,
-    ):
+    )->nerve_results:
         """
         Simulate the nerve with the proposed extracellular context. Top level method for large
         scale neural simulation.
@@ -818,15 +834,19 @@ class nerve(NRV_simulable):
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
         if not MCH.do_master_only_work():
-            nerve_sim = sim_results({"dummy_res":1})
-        if self.save_results:
+            nerve_sim = nerve_results({"dummy_res":1})
+        
+        if self.save_path:                                                          #LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
             if MCH.do_master_only_work():
                 create_folder(folder_name)
+
+        if self.save_results:
+            folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
+            if MCH.do_master_only_work():
                 config_filename = folder_name + "/00_Nerve_config.json"
                 self.save(config_filename, fascicles_context=False)
-            else:
-                pass
+
         # run FEM model
         if self.verbose:
             pass_info("...computing electrodes footprint")
@@ -834,7 +854,7 @@ class nerve(NRV_simulable):
         synchronize_processes()
         # Simulate all fascicles
         fasc_kwargs = kwargs
-        if self.save_results:
+        if self.save_path:
             fasc_kwargs["save_path"] = folder_name
         has_pbar = False
         if self.verbose:

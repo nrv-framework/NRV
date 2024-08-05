@@ -3,6 +3,7 @@ Miscellaneous functions usefull functions used in and to use with NRV
 """
 
 import numpy as np
+from numpy.typing import NDArray
 
 
 #############################
@@ -55,6 +56,66 @@ def distance_point2line(x_p, y_p, a, b):
     d = np.abs(a * x_p - y_p + b) / (np.sqrt(a**2 + 1))
     return d
 
+
+def nearest_idx(array:NDArray, val:float ) -> int:
+    """
+    Return index of neareast value 
+
+    Parameters
+    ----------
+    array : NDArray
+        array of values 
+    val : float
+        neareast value to find index
+
+    Returns
+    -------
+    int
+        index of the neareast value
+    """
+    return (np.absolute(array-val)).argmin()
+ 
+def nearest_greater_idx(array:NDArray, val:float ) -> int:
+    """
+    Return index of neareast greater value 
+
+    Parameters
+    ----------
+    array : NDArray
+        array of values 
+    val : float
+        neareast greater value to find index
+
+    Returns
+    -------
+    int
+        index of the neareast greater value
+    """
+    diff = array-val
+    mask = np.ma.MaskedArray(diff, diff<0)
+    return mask.argmin()
+
+def in_tol(test:float,ref:float,tol:float = 0.1) -> bool:
+    """
+    Check if a value is equal to a value +- a tol (excluded). 
+
+    Parameters
+    ----------
+    test : float
+        Value to test
+    ref : float
+        Reference value 
+    tol : float, optional
+        Tolerance, expressed as a proportion of ref. By default 0.1
+
+    Returns
+    -------
+    bool
+        True if within tolerance, else False.
+    """
+    up_bound = ref *(1+tol)
+    down_bound =  ref *(1-tol)
+    return (np.abs(test)<up_bound and np.abs(test)>down_bound)
 
 ####################################################
 ############# nmod related functions ###############

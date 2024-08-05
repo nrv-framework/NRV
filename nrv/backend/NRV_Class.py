@@ -79,8 +79,6 @@ def is_NRV_class_dict(x):
 ##########################################
 #           check dictionaries           #
 ##########################################
-
-
 def is_NRV_dict(x):
     """
     Check if the object x is a dictionary of saved ``NRV_class``.
@@ -162,8 +160,6 @@ def is_NRV_object_dict(x):
 ######################################
 #       numpy compatibility          #
 ######################################
-
-
 def is_empty_iterable(x):
     """
     check if the object x is an empty iterable
@@ -255,6 +251,7 @@ class NRV_class(metaclass=ABCMeta):
                     key_dic[key] = {}
                     for i in self.__dict__[key]:
                         key_dic[key][i] = self.__dict__[key][i].save(**kwargs)
+                
                 else:
                     key_dic[key] = deepcopy(self.__dict__[key])
         if save:

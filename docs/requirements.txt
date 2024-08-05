@@ -1,3 +1,6 @@
 sphinx_rtd_theme
 furo
 sphinx_mdinclude
+sphinx_copybutton
+nbsphinx
+sphinx_gallery.load_style

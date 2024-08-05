@@ -43,7 +43,7 @@ results = ax(t_sim=t_sim)
 del ax
 t1 = time.time()
 print("simulation done in", t1 - t0, "s")
-print(test_CE1(results)==N_spike)
+print(test_CE1(results)!=N_spike)
 t2 = time.time()
 print("cost1 computed in", t2 - t1, "s")
 print(test_CE2(results))

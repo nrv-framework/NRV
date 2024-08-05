@@ -20,7 +20,7 @@ kwarg_sim = {
     "save_path":fig_DIR, 
     "return_parameters_only":False,
     "save_results":False,
-    "postproc_script":"is_excited"
+    "postproc_script":"is_recruited"
 }
 
 cost_function = nrv.cost_function(

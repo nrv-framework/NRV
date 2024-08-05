@@ -79,9 +79,9 @@ print(np.allclose(gks_sensory[:,:-1],results2['g_k'][:,1:]))
 print(np.allclose(gm_sensory[:,:-1],results2['g_mem'][:,1:]))
 
 
-nrv.compute_f_mem(results)
+results.compute_f_mem()
 print(np.allclose(fc_motor[:,:-1],results['f_mem'][:,1:]))
-nrv.compute_f_mem(results2)
+results2.compute_f_mem()
 print(np.allclose(fc_sensory[:,:-1],results2['f_mem'][:,1:]))
 
 

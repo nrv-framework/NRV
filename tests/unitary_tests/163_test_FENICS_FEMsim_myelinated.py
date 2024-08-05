@@ -28,7 +28,7 @@ mesh.compute_mesh()
 mesh.save(mesh_file)
 
 t2 = time.time()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 
 
 ax1 = nrv.myelinated(d=10, L=L, rec="all", t_sim=5, Nseg_per_sec=1,record_g_mem=True)
@@ -38,7 +38,7 @@ del ax1
 Nnodes = res.axonnodes
 
 res.compute_f_mem()
-res.get_myeline_properties(endo_mat="endoneurium_bhadra")
+res.get_myelin_properties(endo_mat="endoneurium_bhadra")
 
 
 

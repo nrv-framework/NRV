@@ -186,11 +186,11 @@ def interpolate_Npts(
 
     Note
     ----
-    If :math:`I_{i}` and :math:`t_{i}` are the time and amplitude of the :math:`ith` point the position vector :math:`\mathcal{X}` should be:
+    If :math:`t_{i}` and :math:`I_{i}` are the time and amplitude of the :math:`ith` point the position vector :math:`\mathcal{X}` should be:
 
     .. math::
 
-        \mathcal{X} = \begin{pmatrix} I_{1} & t_{1} & I_{2} & t_{2} & ... & I_{N} & t_{N}   \end{pmatrix}
+        \mathcal{X} = \begin{pmatrix} t_{1} & I_{1} & t_{2} & I_{2} & ... & t_{N} & I_{N}   \end{pmatrix}
 
     Parameters
     ----------

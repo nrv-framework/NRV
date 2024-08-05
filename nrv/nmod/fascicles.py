@@ -14,10 +14,13 @@ from ..backend.NRV_Simulable import NRV_simulable, sim_results
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.cell.CL_postprocessing import *
+from ..backend.inouts import check_function_kwargs
 from .axons import *
 from .axon_pop_generator import *
 from .myelinated import *
 from .unmyelinated import *
+from .results.fascicles_results import fascicle_results
+from .results.axons_results import axon_results
 
 
 # Parallel computing options
@@ -29,8 +32,22 @@ if not MCH.is_alone():
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
-OTF_PP_path = os.environ["NRVPATH"] + "/_misc/OTF_PP/"
-OTF_PP_library = os.listdir(OTF_PP_path)
+builtin_postproc_functions = {
+    "default": default_PP,
+    "default_PP": default_PP,
+    "rmv_keys": rmv_keys,
+    "is_recruited": is_recruited,
+    "is_blocked": is_blocked,
+    "is_onset": is_blocked,
+    "sample_g_mem": sample_g_mem,
+    "vmem_plot": vmem_plot,
+    "raster_plot": raster_plot,
+}
+
+deprecated_builtin_postproc_functions = {
+    "is_excited": "is_recruited",
+    "save_gmem": "sample_g_mem",
+}
 
 #####################
 ## Fasscicle class ##
@@ -55,15 +72,141 @@ def is_fascicle(object):
 
 
 class fascicle(NRV_simulable):
-    """
+    r"""
     Class for Fascicle, defined as a group of axons near one to the other in the same Perineurium Sheath. All axons are independant of each other, no ephaptic coupling.
 
-    Parameters
-    ----------
-    diameter              : float
-        Fascicle diameter, in um
-    ID    : int
-        Fascicle unique identifier
+
+    See Also
+    --------
+    :doc:`Simulables</usersguide/simulables>`: First optimization problem using NRV
+    
+    :class:`.nerve.nerve`
+    
+    :class:`.axons.axon`
+
+
+    .. rubric:: Customizable Attributes:
+
+    .. list-table::
+       :widths: 10 10 10 70
+       :header-rows: 1
+
+       * - Attributes
+         - Type
+         - Default
+         - Description
+       * - ``ID``
+         - ``int``
+         - 0
+         - Identification number of the fascicle.
+       *
+         - ``L``
+         - ``float``
+         - None
+         - Length of the fascicle.
+       * 
+         - ``D``
+         - ``float``
+         - None
+         - Diameter of the fascicle.
+       * 
+         - ``y_grav_center``
+         - ``float``
+         - 0
+         - y-position of the fascicle center.
+       * 
+         - ``z_grav_center``
+         - ``float``
+         - 0
+         - z-position of the fascicle center.
+       * 
+         - ``postproc_label``
+         - ``str``
+         - None
+         - Label of the axon postprocessing funtion, used for the buildin postproc functions.
+       * 
+         - ``postproc_function``
+         - ``function``
+         - None
+         - Axon postprocessing funtion, used for the custom postproc functions.
+       * 
+         - ``postproc_script``
+         - ``str`` | ``function``
+         - None
+         - Either postprocessing funtion or postprocessing funtion label, automatically set depending on the type
+       * 
+         - ``postproc_kwargs``
+         - ``dict``
+         - None
+         - key arguments of the postporcessing function
+       * 
+         - ``save_results``
+         - ``bool``
+         - False
+         - If ``True``, fascicle configuration and all axon simulations results are saved in ``save_path`` directory.
+       * 
+         - ``save_path``
+         - ``str``
+         - ""
+         - Path of the directory where simulation results should be saved.
+       * 
+         - ``return_parameters_only``
+         - ``bool``
+         - False
+         - If ``True`` (and ``save_results`` also ``True``), only the parameters should be returned from the simulation.
+       * 
+         - ``loaded_footprints``
+         - ``bool``
+         - False
+         - If ``False``, the footprints already computed are favored over new footprint computation.
+       * 
+         - ``verbose``
+         - ``bool``
+         - False
+         - Plot or not.
+
+
+    Note
+    ----
+    Customizable Attributes can be either be set 
+
+
+
+    .. rubric:: Methods:
+
+    .. autosummary::
+
+        save
+        load
+        set_ID
+        define_length
+        define_circular_contour
+        get_circular_contour
+        fit_circular_contour
+        define_ellipsoid_contour
+        import_contour
+        fill_with_population
+        fit_population_to_size
+        translate_axons
+        translate_fascicle
+        rotate_axons
+        rotate_fascicle
+        set_axons_parameters
+        get_axons_parameters
+        remove_unmyelinated_axons
+        remove_myelinated_axons
+        remove_axons_size_threshold
+        plot
+        attach_extracellular_stimulation
+        remove_axons_electrode_overlap
+        change_stimulus_from_electrode
+        insert_I_Clamp
+        attach_extracellular_recorder
+        shut_recorder_down
+        generate_random_NoR_position
+        generate_ligned_NoR_position
+        simulate
+
     """
 
     def __init__(self, diameter=None, ID=0, **kwargs):
@@ -75,13 +218,16 @@ class fascicle(NRV_simulable):
         # to add to a fascicle/nerve common mother class
         self.save_path = ""
         self.verbose = False
-        self.postproc_script = "default"
-        self.return_parameters_only = True
-        self.loaded_footprints = True
-        self.save_results = True
+        self.return_parameters_only = False
+        self.loaded_footprints = False
+        self.save_results = False
+
+        self.postproc_label = "default"
+        self.postproc_function = None
+        self.postproc_script = None
+        self.postproc_kwargs = {}
 
         self.config_filename = ""
-        self.type = "fascicle"
         self.ID = ID
         self.type = None
         self.L = None
@@ -89,6 +235,10 @@ class fascicle(NRV_simulable):
         # geometric properties
         self.y_grav_center = 0
         self.z_grav_center = 0
+
+        # Update parameters with kwargs
+        self.set_parameters(**kwargs)
+
         # axonal content
         self.axons_diameter = np.array([])
         self.axons_type = np.array([], dtype=int)
@@ -181,6 +331,12 @@ class fascicle(NRV_simulable):
             Python dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
+        to_save = (save and _fasc_save) and MCH.do_master_only_work()
+
+        bl += ["postproc_function", "postproc_script"]
+        if self.postproc_label not in builtin_postproc_functions:
+            rise_warning("custom axon postprocessing cannot be save. Be carefull to set the postproc_function again when reloading fascicle")
+
         if not intracel_context:
             bl += [
                 "N_intra",
@@ -197,7 +353,6 @@ class fascicle(NRV_simulable):
         if not rec_context:
             bl += ["record", "recorder"]
 
-        to_save = (save and _fasc_save) and MCH.do_master_only_work()
         return super().save(fname=fname, save=to_save, blacklist=bl)
 
     def load(
@@ -293,6 +448,9 @@ class fascicle(NRV_simulable):
 
     @property
     def N(self):
+        """
+        :meta private:
+        """
         rise_warning(
             "DeprecationWarning: ",
             "fascicle.N property is obsolete use fascicle.n_ax instead"
@@ -333,7 +491,7 @@ class fascicle(NRV_simulable):
                 "Modifying length of a fascicle with extra or intra cellular context can lead to error"
             )
         self.L = L
-        self.set_axons_parameters(unmyelinated_nseg=self.L // 25)
+        self.unmyelinated_param["Nseg_per_sec"] == self.L // 25
 
     ## generate stereotypic Fascicle
     def define_circular_contour(self, D, y_c=None, z_c=None):
@@ -581,13 +739,17 @@ class fascicle(NRV_simulable):
                     n_iter=n_iter
                 )
             if (fit_to_size):
-                d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
-                if (d_pop) < self.D:
-                    exp_factor = 0.99*(self.D/d_pop)
-                    y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+                if self.D is not None:
+                    d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
+                    if (d_pop) < self.D:
+                        exp_factor = 0.99*(self.D/d_pop)
+                        y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
+                else:
+                    rise_warning("Can't fit population to size, fascicle diameter is not defined.")
             
             axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
-            axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
+            if self.D is not None:
+                axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
         else:
             axons_diameter = None
             axons_type = None
@@ -1160,20 +1322,63 @@ class fascicle(NRV_simulable):
     def get_electrodes_footprints_on_axons(
         self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
     ):
+        """
+        :meta private:
+        """
         rise_warning(
+            DeprecationWarning,
             "Deprecation method get_electrodes_footprints_on_axons",
-            "\nuse get_electrodes_footprints_on_axons instead",
+            "\nuse compute_electrodes_footprints instead",
         )
         self.compute_electrodes_footprints(
             save_ftp_only=save_ftp_only, filename=filename, **kwargs
         )
 
+    def __init_axon_postprocessing(self):
+        """
+            Internal use only: initialize the axon on-the-fly postprocessing.
+        """
+        # Set the axon postprocessing label and function
+        # self.postproc_script, self.postproc_function or self.postproc_label should have been set by self.set_parameters
+        if callable(self.postproc_script):
+            self.postproc_function = self.postproc_script
+        elif isinstance(self.postproc_script, str):
+            self.postproc_label = self.postproc_script
+        self.postproc_script = None
+
+        if callable(self.postproc_function):
+            self.postproc_label = self.postproc_function.__name__
+        else:
+            # Custom postproc is ca
+            if self.postproc_label in globals():
+                self.postproc_function = globals()[self.postproc_label]
+            else:
+                if isinstance(self.postproc_label,str):
+                    self.postproc_label = self.postproc_label.lower()
+                if self.postproc_label in deprecated_builtin_postproc_functions:
+                    rise_warning(DeprecationWarning, self.postproc_label," is a deprecated, use", deprecated_builtin_postproc_functions[self.postproc_label], "instead")
+                    self.postproc_label = deprecated_builtin_postproc_functions[self.postproc_label]
+                elif self.postproc_label not in builtin_postproc_functions:
+                    rise_warning(self.postproc_label," isn't a buitin function, default post processing will be used instead")
+                    self.postproc_label = "default"
+                self.postproc_function = builtin_postproc_functions[self.postproc_label]
+
+        # update and check function_kwargs
+        ## !!See if this part should be kept ##
+        if "save" not in self.postproc_kwargs.keys():
+            self.postproc_kwargs["save"] = len(self.save_path) > 0
+        if "fdir" not in self.postproc_kwargs.keys():
+            self.postproc_kwargs["fdir"] = self.save_path + "Fascicle_" + str(self.ID)
+        ##  ##
+        self.postproc_kwargs = check_function_kwargs(self.postproc_function, self.postproc_kwargs)
+
     def __sim_axon(
         self,
         k,
+        folder_name,
         is_master_slave=False,
         **kwargs,
-    ):
+    )->axon_results:
         """
         Internal use only simumlated one axon of the fascicle
 
@@ -1290,14 +1495,19 @@ class fascicle(NRV_simulable):
             loaded_footprints=axon_ftpt,
         )
         del axon
+        self.axons_diameter
+
+        axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
+        if self.save_results:
+                ax_fname = "sim_axon_" + str(k) + ".json"
+                axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
         return axon_sim
 
     def simulate(
         self,
-        PostProc_Filtering=None,
         save_V_mem=False,
         **kwargs,
-    ):
+    )->fascicle_results:
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead
@@ -1351,13 +1561,11 @@ class fascicle(NRV_simulable):
             fasc_sim    : sim_results
                 results of the simulation
         """
-        if self.postproc_script is not None:
-            import nrv  # not ideal at all but gives direct acces to nrv in the postprocessing script
         fasc_sim = super().simulate(**kwargs)
         if not MCH.do_master_only_work():
             fasc_sim = sim_results({"dummy_res":1})
         # disable the result storage only if results are fully return
-        # To use with caution (mostly for optimisatino)
+        # To use with caution (mostly for optimisation)
         if not self.save_results:
             if self.return_parameters_only:
                 rise_warning(
@@ -1367,12 +1575,16 @@ class fascicle(NRV_simulable):
                 )
                 self.save_results = True
 
+        self.__init_axon_postprocessing()
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if MCH.do_master_only_work() and self.save_results:
+        if len(self.save_path) and MCH.do_master_only_work():          #LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             create_folder(folder_name)
+
+        if MCH.do_master_only_work() and self.save_results:
+            #create_folder(folder_name)
             self.config_filename = folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
         else:
@@ -1462,27 +1674,11 @@ class fascicle(NRV_simulable):
                 ## SLAVES ##
                 try:
                     for k in this_core_mask:
-                        axon_sim = self.__sim_axon(k, is_master_slave)
-                        # postprocessing and data reduction
-                        # (cannot be added to __sim.axon beceause nrv would not be global anymore)
-                        if self.postproc_script.lower() in OTF_PP_library:
-                            self.postproc_script = (
-                                OTF_PP_path + self.postproc_script.lower()
-                            )
-                        elif self.postproc_script.lower() + ".py" in OTF_PP_library:
-                            self.postproc_script = (
-                                OTF_PP_path + self.postproc_script.lower() + ".py"
-                            )
-                        with open(self.postproc_script) as f:
-                            code = compile(f.read(), self.postproc_script, "exec")
-                            exec(code, globals(), locals())
-                        if self.save_results:
-                            ## store results
-                            ax_fname = "sim_axon_" + str(k) + ".json"
-                            # save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
-                            axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
+                        axon_sim = self.__sim_axon(k, folder_name,is_master_slave)
                         if not self.return_parameters_only:
                             fasc_sim.update({"axon" + str(k): axon_sim})
+
+
                     data = {"rank": MCH.rank, "status": "success"}
                     MCH.send_data_to_master(data)
                 except KeyboardInterrupt:
@@ -1514,23 +1710,8 @@ class fascicle(NRV_simulable):
                 has_pbar = True
             ## perform simulations
             for k in this_core_mask:
-                axon_sim = self.__sim_axon(k, is_master_slave)
-                # postprocessing and data reduction
-                # (cannot be added to __sim.axon beceause nrv would not be global anymore)
-                if self.postproc_script.lower() in OTF_PP_library:
-                    self.postproc_script = OTF_PP_path + self.postproc_script.lower()
-                elif self.postproc_script.lower() + ".py" in OTF_PP_library:
-                    self.postproc_script = (
-                        OTF_PP_path + self.postproc_script.lower() + ".py"
-                    )
-                with open(self.postproc_script) as f:
-                    code = compile(f.read(), self.postproc_script, "exec")
-                    exec(code, globals(), locals())
+                axon_sim = self.__sim_axon(k, folder_name, is_master_slave)
                 ## store results
-                if self.save_results:
-                    ax_fname = "sim_axon_" + str(k) + ".json"
-                    # save_axon_results_as_json(axon_sim, folder_name + "/" + ax_fname)
-                    axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
                 if not self.return_parameters_only:
                     fasc_sim.update({"axon" + str(k): axon_sim})
                 if has_pbar:

@@ -8,6 +8,7 @@ import numpy as np
 from ..backend.log_interface import rise_warning
 from ..backend.NRV_Class import is_empty_iterable
 from .axons import *
+from ..utils.misc import nearest_idx
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_g = np.asarray(
@@ -122,7 +123,7 @@ def get_length_from_nodes(diameter, nodes):
 
 class myelinated(axon):
     """
-    Myelineated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
+    Myelinated axon class. Automatic refinition of all neuron sections and properties. User-friendly object including model definition
     Inherit from axon class. see axon for further detail.
 
     Parameters
@@ -864,6 +865,7 @@ class myelinated(axon):
         x_nodes = []
         nodes_index = []
         self.rec_position_list = []
+        #print(self.axon_path_type)
         for k in range(len(self.axon_path_type)):
             sec_type = self.axon_path_type[k]
             sec_index = self.axon_path_index[k]
@@ -917,7 +919,11 @@ class myelinated(axon):
                 x_offset += self.STIN[sec_index].L
         self.x = np.asarray(x)
         self.x_nodes = np.asarray(x_nodes)
-        self.node_index = np.asarray(nodes_index)
+        #self.node_index = np.asarray(nodes_index)
+
+        self.node_index = [nearest_idx(self.x, x_n) for x_n in x_nodes]         #LR: to avoid duplicates in node_index calculated previously...
+        
+        
 
     def __get_rec_positions(self):
         """
@@ -1490,14 +1496,14 @@ class myelinated(axon):
         """
         return self.__get_var_from_mod("_ref_cm")
 
-    def get_myeline_conductance(self):
+    def get_myelin_conductance(self):
         """
         get the membrane capacitance
         NB: [S/cm^{2}] (see Neuron unit)
         """
         return self.__get_var_from_mod("_ref_xg")
 
-    def get_myeline_capacitance(self):
+    def get_myelin_capacitance(self):
         """
         get the membrane capacitance
         NB: [uF/cm^{2}] (see Neuron unit)

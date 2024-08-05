@@ -28,7 +28,8 @@ if nrv.MCH.do_master_only_work():
 
         #mesh.reshape_axon(d=10, y=1100, z=200, ID=1, res=3)
 
-        mesh.add_electrode(elec_type="CUFF MEA", N=3, x_c=L/2, y_c=0, z_c=0, size = size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
+        #mesh.add_electrode(elec_type="CUFF MEA", N=3, x_c=L/2, y_c=0, z_c=0, size = size_elec, inactive=True, inactive_L=3000, inactive_th=500,res=50)
+        mesh.add_electrode(elec_type="CUFF MP", N=3, x_c=L/2, contact_width = 1000, contact_length = 100,res=50)
 
         mesh.compute_mesh()
 

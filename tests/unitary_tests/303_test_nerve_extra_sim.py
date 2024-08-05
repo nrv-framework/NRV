@@ -2,6 +2,7 @@ import nrv
 import matplotlib.pyplot as plt
 import time
 import numpy as np
+import os
 
 #nrv.parameters.set_nrv_verbosity(4)
 
@@ -39,7 +40,7 @@ amp = 10
 start = 0
 duration = 10
 stim1 = nrv.stimulus()
-stim1.sinus(start=start, duration=duration, amplitude=amp, freq=freq, dt=0.001)
+stim1.sinus(start=start, duration=duration, amplitude=amp, freq=freq, dt=0.005)
 stim1.t = np.round(stim1.t, 4)
 LIFE_stim.add_electrode(elec_1, stim1)
 
@@ -60,6 +61,12 @@ nerve.change_stimulus_from_electrode(1,stimulus=stim2)
 t1 = time.time()
 if nrv.MCH.do_master_only_work():
     print("Nerve preparation time "+str(t1-t0))
+
+"""output_path = f'./unitary_tests/figures/nerve_{test_num}/'
+
+if not os.path.exists(output_path):
+    os.makedirs(output_path)"""
+
 
 nerve.simulate(t_sim=5, save_path='./unitary_tests/figures/', postproc_script="vmem_plot")
 t2 = time.time()

@@ -1,20 +1,24 @@
 Examples
 ========
 
-Here are few example scripts to highlight possibilities toward using NRV in scientific life (for teaching about electrophysiology or biomedical research)
+Here are few example scripts to highlight possibilities toward using NRV in scientific life (for teaching about electrophysiology or biomedical research).
 
 
+.. Tip::
+
+    Examples are grouped by category into the following galleries:
+
+    - :doc:`Generic Examples </examples/00_generic>`
+    - :doc:`Optimization Examples </examples/o00_optim>`
+
+
+
+
+Examples Full List
+------------------
 .. toctree::
-   :caption: Generic examples:
    :glob:
-   :maxdepth: 1
+   :maxdepth: 2
 
-   examples/generic/*
-
-
-.. toctree::
-   :caption: Optimization examples:
-   :glob:
-   :maxdepth: 1
-
-   examples/optim/*
+   examples/00_generic
+   examples/o00_optim

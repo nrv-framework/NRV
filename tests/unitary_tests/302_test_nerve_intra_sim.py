@@ -12,12 +12,12 @@ nerve.fit_circular_contour()
 
 
 
-
 position = 0.5
-t_start = 3
+t_start = 1
 duration = 0.5
 amplitude = 4
 nerve.insert_I_Clamp(position, t_start, duration, amplitude)
+
 
 
 nerve.simulate(t_sim=5, save_path='./unitary_tests/figures/', postproc_script='raster_plot')

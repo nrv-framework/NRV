@@ -1,0 +1,4 @@
+--- Bugs in NRV, please consider reported errors before simulations
+--- list of failed tests : [070_test_fascicular_state.py, 115_test_FENICS_eval_field.py, 160_test_FENICS_NerveMshCreator_myelinated.py, 161_test_FENICS_NerveMshCreator_myelinated.py, 162_test_FENICS_NerveMshCreator_myelinated_method2.py, 165_test_layered_material.py, 403_test_eit_reconstruc.py, 404_test_sigma_func copy.py, 518_test_nerves_results.py]
+--- Bugs in NRV, please consider reported errors before simulations
+--- list of failed tests : [160_test_FENICS_NerveMshCreator_myelinated.py, 165_test_layered_material.py]

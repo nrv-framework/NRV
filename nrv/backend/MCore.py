@@ -89,6 +89,9 @@ class Mcore_handler(metaclass=NRV_singleton):
         ----------
         len_arrays  : int
             length of the array containing the full job to perform in parallel
+        stype       : str
+            method used to split the array:
+                "comb": 
 
         Returns
         -------

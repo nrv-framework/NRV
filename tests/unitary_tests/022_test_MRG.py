@@ -40,7 +40,9 @@ plt.plot(results2['t'],results2['V_mem'][10],color='tab:gray')
 plt.plot(results2['t'],results2['V_mem'][18],color='b')
 plt.ylim(-80,-75.5)
 plt.xlim(4.5,13)
-
-
 plt.savefig('./unitary_tests/figures/22_B.png')
+
+fig, ax = plt.subplots()
+results2.plot_x_t(ax)
+plt.savefig('./unitary_tests/figures/22_C.png')
 #plt.show()

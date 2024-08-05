@@ -32,7 +32,7 @@ t2 = time.time()
 print('mesh generated in '+str(t2 - t1)+' s')
 #mesh.visualize()
 
-mesh.get_mesh_info(True)
+mesh.get_info(True)
 
 # FEM Simulation
 

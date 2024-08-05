@@ -1,84 +1,31 @@
 """
 NRV-Cellular Level postprocessing.
+.. warning::
+
+    CL_postprocessing functions are deprecated. Use axon_results and associated methods instead.
 """
+
 import faulthandler
 from collections.abc import Iterable
 
 import numpy as np
-from numba import jit
+#from numba import jit
+import matplotlib.pyplot as plt
 from scipy import signal
 
 from ...backend.file_handler import is_iterable, json_dump, json_load
 from ...backend.log_interface import pass_info, rise_warning, rise_error
 from ...backend.NRV_Class import load_any
 from ..units import MHz
+from ...backend.file_handler import rmv_ext
 from ..misc import distance_point2line
 from ...nmod.unmyelinated import unmyelinated
 from ...nmod.myelinated import myelinated
+from ...nmod.results.axons_results import axon_results
 
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
-
-
-
-
-#####################################
-## SAVE AND LOAD RESULTS FUNCTIONS ##
-#####################################
-
-
-def save_axon_results_as_json(results, filename):
-    """
-    save dictionary as a json file
-
-    Parameters
-    ----------
-    results     : dictionary
-        stuff to save
-    filename    : str
-        name of the file where results are saved
-    """
-    json_dump(results, filename)
-
-
-def load_simulation_from_json(filename):
-    """
-    load results of individual axon simulation from a json. This function is specific to axons simulation as some identified results are automatically converted as numpy arrays.
-
-    Parameters
-    ----------
-    filename    : str
-        name of the file where axons simulations are saved
-    """
-    results = json_load(filename)
-
-    # convert iterables to numpy arrays
-    int_iterables = [
-        "node_index",
-        "Markov_Nav_modeled_NoR",
-        "V_mem_raster_position",
-        "V_mem_filtered_raster_position",
-        "V_mem_raster_time_index",
-        "V_mem_filtered_raster_time_index",
-    ]
-    for key, value in results.items():
-        if is_iterable(value) and not isinstance(results[key], dict):
-            if key in int_iterables:
-                results[key] = np.asarray(value, dtype=np.int16)
-            else:
-                if len(value) == 0:
-                    results[key] = []
-                elif isinstance(value[0], str):
-                    results[key] = value
-                else:
-                    if key in "rec_position_list":
-                        results[key] = value
-                    else:
-                        results[key] = np.asarray(value, dtype=np.float32)
-        else:
-            results[key] = value
-    return results
 
 
 ##############################################
@@ -95,6 +42,11 @@ def remove_key(my_dict, key, verbose=False):
     key     : str
         name of the key to delete
     """
+    
+    rise_warning(
+        "DeprecationWarning: ",
+        "remove_key is obsolete use method from axon_result objects instead"
+    )
     # if isinstance(key, Iterable):
     #    for k in key:
     #        del my_dict[k]
@@ -115,6 +67,11 @@ def remove_non_NoR_zones(my_dict, key):
     key     : str
         name of the key to clean
     """
+
+    rise_warning(
+            "DeprecationWarning: ",
+            "remove_non_NoR_zones is obsolete use method from axon_result objects instead"
+        )
     if "V_mem" in key:
         if my_dict["Axon_type"] == "Myelinated":
             new_entry = []
@@ -145,6 +102,11 @@ def generate_axon_from_results(results):
     ax              : unmyelinated or myelinated
         blank axon with the same dimensions as in the results
     """
+
+    # rise_warning(
+    #     "DeprecationWarning: ",
+    #     "generate_axon_from_results property is obsolete use method from axon_result objects instead"
+    # )
     if not results["myelinated"]:
         ax = unmyelinated(**results)
     else:
@@ -172,6 +134,11 @@ def filter_freq(my_dict, my_key, freq, Q=10):
     Q       : float
         quality factor of the filter, by default set to 10
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "filter_freq is obsolete use method from axon_result objects instead"
+    )
     if isinstance(freq, Iterable):
         f0 = np.asarray(freq)
     else:
@@ -229,6 +196,11 @@ def rasterize(
         threshold for spike dection, in mV. If 0 is specified the threshold associated with the axon is automatically chosen. By default set to 0.
         Note that if a 0 value is wanted as threshold, a insignificat value (eg. 1e-12) should be specified.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "rasterize is obsolete use method from axon_result objects instead"
+    )
     if t_stop == 0:
         t_stop = int(my_dict["t_sim"] / my_dict["dt"])
     else:
@@ -254,7 +226,7 @@ def rasterize(
         my_dict[my_key + "_raster_x_position"],
         my_dict[my_key + "_raster_time_index"],
         my_dict[my_key + "_raster_time"],
-    ) = spike_detection(
+    ) = AP_detection(
         my_dict[my_key],
         my_dict["t"],
         x,
@@ -268,13 +240,18 @@ def rasterize(
     )
 
 
-@jit(nopython=True, fastmath=True)
-def spike_detection(
+#@jit(nopython=True, fastmath=True)
+def AP_detection(
     Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
 ):
     """
     Internal use only, spike detection just in time compiled to speed up the process
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "AP_detection is obsolete use method from axon_result objects instead"
+    )
     raster_position = []
     raster_x_position = []
     raster_time_index = []
@@ -305,176 +282,6 @@ def spike_detection(
     )
 
 
-def find_spike_origin(
-    my_dict, my_key=None, t_start=0, t_stop=0, x_min=None, x_max=None
-):
-    """
-    Find the start time and position of a spike or a spike train. Only work on rasterized keys
-
-    Parameters
-    ----------
-    my_dict : dictionary
-        dictionary where the quantity should be rasterized
-    key     : str
-        name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-    t_start : float
-        time at which the spikes are processed, in ms. By default 0
-    t_stop  : float
-        maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-    x_min   : float
-        minimum position for spike processing, in um. If none is specified, the spike are processed starting at the 0 position. By default set to None.
-    x_max   : float
-        minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-    Returns
-    -------
-    start_time          : float
-        first occurance time in ms
-    start_x_position    : float
-        first occurance position in um
-    """
-    # define max timing if not already defined
-    if t_stop == 0:
-        t_stop = my_dict["t_sim"]
-    # find the best raster plot
-    if my_key == None:
-        if "V_mem_filtered_raster_position" in my_dict:
-            good_key_prefix = "V_mem_filtered_raster"
-        elif "V_mem_raster_position" in my_dict:
-            good_key_prefix = "V_mem_raster"
-        else:
-            # there is no rasterized voltage, nothing to find
-            return False
-    else:
-        good_key_prefix = my_key
-    # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
-    good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    good_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
-    good_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
-    # get data only in the z window if applicable
-    if x_min != None:
-        sup_xmin_indexes = np.where(good_spike_positions > x_min)
-    else:
-        sup_xmin_indexes = np.arange(len(good_spike_positions))
-    if x_max != None:
-        inf_xmax_indexes = np.where(good_spike_positions < x_max)
-    else:
-        inf_xmax_indexes = np.arange(len(good_spike_positions))
-    good_x_indexes = np.intersect1d(sup_xmin_indexes, inf_xmax_indexes)
-    considered_spike_times = good_spike_times[good_x_indexes]
-    considered_spike_positions = good_spike_positions[good_x_indexes]
-    # fin the minimum time corresponding to spike initiation
-    start_index = np.where(considered_spike_times == np.amin(considered_spike_times))
-    start_time = considered_spike_times[start_index]
-    start_x_position = considered_spike_positions[start_index]
-    return start_time, start_x_position
-
-
-def find_spike_last_occurance(
-    my_dict, my_key=None, t_start=0, t_stop=0, direction="up", x_start=0
-):
-    """
-    Find the last position of a spike occurance for rasterized data
-
-    Parameters
-    ----------
-    my_dict     : dictionary
-        dictionary where the quantity should be rasterized
-    key         : str
-        name of the key to consider, if None is specified, the rasterized is automatically chose with preference for filtered-rasterized keys.
-    t_start     : float
-        time at which the spikes are processed, in ms. By default 0
-    t_stop      : float
-        maximum time at which the spikes are processed, in ms. If zero is specified, the spike detection is applied to the full signal duration. By default set to 0.
-    direction   : str
-        Direction of the spike propagation, chose between:
-            'up'    -> spike propagating to higher x-coordinate values
-            'down'  -> spike propagating to lower x-coordinate values
-    x_start     : float
-        minimum position for spike processing, in um. If None is specified, spikes are processed on the full axon length . By default set to 0.
-
-    Returns
-    -------
-    t_last      : float
-        last occurance time in ms
-    x_last  : float
-        last occurance position in um
-    """
-    # define max timing if not already defined
-    if t_stop == 0:
-        t_stop = my_dict["t_sim"]
-    # find the best raster plot
-    if my_key == None:
-        if "V_mem_filtered_raster_position" in my_dict:
-            good_key_prefix = "V_mem_filtered_raster"
-        elif "V_mem_raster_position" in my_dict:
-            good_key_prefix = "V_mem_raster"
-        else:
-            # there is no rasterized voltage, nothing to find
-            return False
-    else:
-        good_key_prefix = my_key
-    # get x_start, eventually t_start
-    if x_start == 0:
-        t_start, x_start = find_spike_origin(
-            my_dict, my_key=good_key_prefix, t_start=t_start, t_stop=t_stop
-        )
-    # get data only in time windows
-    sup_indexes = np.where(my_dict[good_key_prefix + "_time"] > t_start)
-    inf_indexes = np.where(my_dict[good_key_prefix + "_time"] < t_stop)
-    good_indexes = np.intersect1d(sup_indexes, inf_indexes)
-    considered_spike_times = my_dict[good_key_prefix + "_time"][good_indexes]
-    considered_spike_positions = my_dict[good_key_prefix + "_x_position"][good_indexes]
-    if direction == "up":
-        # find the spike in the upper region of the start
-        upper_spike_index = np.where(considered_spike_positions > x_start)
-        upper_spike_times = considered_spike_times[upper_spike_index]
-        upper_spike_positions = considered_spike_positions[upper_spike_index]
-        # find the last occurance
-        last_spike_index = np.where(upper_spike_times == np.amax(upper_spike_times))
-        t_last = upper_spike_times[last_spike_index]
-        x_last = upper_spike_positions[last_spike_index]
-    elif direction == "down":
-        # find the spike in the upper region of the start
-        lower_spike_index = np.where(considered_spike_positions < x_start)
-        lower_spike_times = considered_spike_times[lower_spike_index]
-        lower_spike_positions = considered_spike_positions[lower_spike_index]
-        # find the last occurance
-        last_spike_index = np.where(lower_spike_times == np.amax(lower_spike_times))
-        t_last = lower_spike_times[last_spike_index]
-        x_last = lower_spike_positions[last_spike_index]
-    else:
-        # find the spike in the upper region of the start
-        upper_spike_index = np.where(considered_spike_positions > x_start)
-        upper_spike_times = considered_spike_times[upper_spike_index]
-        upper_spike_positions = considered_spike_positions[upper_spike_index]
-        # find the spike in the upper region of the start
-        lower_spike_index = np.where(considered_spike_positions < x_start)
-        lower_spike_times = considered_spike_times[lower_spike_index]
-        lower_spike_positions = considered_spike_positions[lower_spike_index]
-        # find the last occurances
-        last_upper_spike_index = np.where(
-            upper_spike_times == np.amax(upper_spike_times)
-        )
-        last_lower_spike_index = np.where(
-            lower_spike_times == np.amax(lower_spike_times)
-        )
-        t_last = np.asarray(
-            [
-                lower_spike_times[last_lower_spike_index][0],
-                lower_spike_times[last_upper_spike_index],
-            ][0]
-        )
-        x_last = np.asarray(
-            [
-                lower_spike_positions[last_lower_spike_index][0],
-                lower_spike_positions[last_upper_spike_index],
-            ][0]
-        )
-    return t_last, x_last
-
 
 def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
     """
@@ -504,6 +311,11 @@ def speed(my_dict, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
     ----
     the velocity is computed with first and last occurance of a spike, be careful specifying the computation window if multiple spikes. This function will not see velocity variation.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "speed is obsolete use method from axon_result objects instead"
+    )
     # define max timing if not already defined
     if t_stop == 0:
         t_stop = my_dict["t_sim"]
@@ -569,6 +381,11 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
     flag 	: bool or None
         True if the axon is blocked, False if not blocked and None if the test spike does not cross the stimulation near point in the simulation (no possibility to check for the axon state)
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "block is obsolete use method from axon_result objects instead"
+    )
     position_max = 0
     blocked_spike_positionlist = []
     if t_stop == 0:
@@ -633,6 +450,10 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    rise_warning(
+        "DeprecationWarning: ",
+        "max_spike_position is obsolete use method from axon_result objects instead"
+    )
     if spike_begin == "down":
         while blocked_spike_positionlist[
             position_max + 1
@@ -651,11 +472,16 @@ def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="do
         return position_max
 
 
-@jit(nopython=True, fastmath=True)
+#@jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
     """
     spike counting, just in time compiled. For internal use only.
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "count_spike is obsolete use method from axon_result objects instead"
+    )
     if len(onset_position) == 0:
         spike_number = 0
         return 0
@@ -683,6 +509,11 @@ def check_test_AP(results_sim):
     test_AP     : float or None
         time in ms of the first test AP during the simulation. None if no test AP found
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "check_test_AP is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
     if "intra_stim_starts" not in results_sim:
@@ -724,6 +555,11 @@ def detect_start_extrastim(results_sim, threshold=None):
     t_start     : list or float or None
         list of stimulation starting time in ms, float if only one stimulation and None if no stimulation
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "detect_start_extrastim is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -759,6 +595,11 @@ def extra_stim_properties(results_sim):
         dictonry containing the position (x, y, z), the stimulation start (ms) and maximum value (uA)
         for each electrodes
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "extra_stim_properties is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -794,6 +635,11 @@ def axon_state(results_sim, save=False, saving_file="axon_state.json"):
     axon_state       : dict
         dictionary containing axon caracteristics
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "axon_state is obsolete use method from axon_result objects instead"
+    )
     if type(results_sim) == str:
         results_sim = load_simulation_from_json(results_sim)
 
@@ -891,6 +737,11 @@ def get_index_myelinated_sequence(results, n):
     n_center              : int
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "get_index_myelinated_sequence is obsolete use method from axon_result objects instead"
+    )
     if not results["myelinated"] or results["rec"] == "node":
         return "node"
     else:
@@ -921,6 +772,11 @@ def find_central_node_index(results):
     n_center              : int
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "find_central_node_index is obsolete use method from axon_result objects instead"
+    )
     n_center = len(results["x_rec"]) // 2
     if not results["myelinated"] or results["rec"] == "node":
         return n_center
@@ -950,6 +806,10 @@ def compute_f_mem(results):
         value of the cutoff frequency of the axon's membrane
     """
 
+    rise_warning(
+        "DeprecationWarning: ",
+        "compute_f_mem is obsolete use method from axon_result objects instead"
+    )
     if "g_mem" not in results:
         rise_warning("f_mem cannot be computed computed without membrane conductivity")
         return None
@@ -968,7 +828,7 @@ def compute_f_mem(results):
     return results["f_mem"]
 
 
-def get_myeline_properties(results):
+def get_myelin_properties(results):
     """
     compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
     NB: The frequency is computed in [kHz]
@@ -983,13 +843,18 @@ def get_myeline_properties(results):
     f_mem              : np.ndarray
         value of the cutoff frequency of the axon's membrane
     """
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "get_myelin_properties is obsolete use method from axon_result objects instead"
+    )
     if not results["myelinated"] or results["rec"] == "node":
-        rise_warning("No myeline in the axon simulated, None returned")
+        rise_warning("No myelin in the axon simulated, None returned")
         return None
 
     ax = generate_axon_from_results(results)
-    results["g_mye"] = ax.get_myeline_conductance()
-    results["c_mye"] = ax.get_myeline_capacitance()
+    results["g_mye"] = ax.get_myelin_conductance()
+    results["c_mye"] = ax.get_myelin_capacitance()
     results["f_mye"] = results["g_mye"] / (2 * np.pi * results["c_mye"])
 
     # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
@@ -1005,12 +870,21 @@ def plot_Nav_states(ax, values, title=""):
     """
     Plot the state machine for kinetic (Markov) Nav 1.1 to 1.9 values
 
-    Parameters:
-    -----------
-    ax      : matplotlib axis object
+    Parameters
+    ----------
+    ax : matplotlib axis object
         axes of the figure to work on
-    values  : list, array, numpy array
+    values : list, array, numpy array
+        
+    title : str, optional
+        Title of the plot, by default ""
     """
+
+
+    rise_warning(
+        "DeprecationWarning: ",
+        "plot_Nav_states is obsolete use method from axon_result objects instead"
+    )
     states = [r"$I_1$", r"$I_2$", r"$C_1$", r"$C_2$", r"$O_1$", r"$O_2$"]
 
     X = [-1, -3, 0, 1, 0, 3]
@@ -1096,3 +970,398 @@ def plot_Nav_states(ax, values, title=""):
     ax.set_yticks([])
     ax.set_title(title)
     ax.axis("off")
+
+
+################################
+## usefull methods on results ##
+################################
+
+def default_PP (results:axon_results)->axon_results:
+    """
+    Default postprocessing function. Rasterize data and remove v_mem to alliviate RAM usage
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+
+    Returns
+    -------
+    axon_results
+        updated results of the axon simulation.
+    """
+    results.rasterize()
+    results.remove_key("V_mem")
+    return(results)
+
+def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+    """
+    remove most of the results key to save computing memory.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `intra_stim_starts`
+     - `intra_stim_positions`
+
+
+    Warning
+    -------
+    This function removes a large amount of data from the `results` object. Some methods included in the results may not be used afterwards
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    keys_to_remove : str | list[str], optional
+        key or set of key that should be removed, by default []
+    keys_to_keep : str | list[str], optional
+        If None only keys_to_remove are removed. Otherwise, all key exept those in this list are deleted, by default None.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+
+    results.rasterize("V_mem")
+    default_list_keys = {
+    "ID",
+    "L",
+    "V_mem_raster_position",
+    "V_mem_raster_x_position",
+    "V_mem_raster_time_index",
+    "V_mem_raster_time",
+    "myelinated",
+    "intra_stim_starts",
+    "intra_stim_positions",
+    }
+
+    default_list_keys.update(set(keys_to_keep))
+    default_list_keys -= set(keys_to_remove)
+    results.remove_key(keys_to_keep=default_list_keys)
+    return results
+
+
+def is_recruited(results:axon_results)->axon_results:
+    """
+    Evaluate if each fibre is recruited by a stimulation (see `axon_results.is_recruited`) and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `y`
+     - `z`
+     - `diameter`
+     - `intra_stim_starts`
+     - `tstop`
+     - `intra_stim_positions`
+     - `extracellular_electrode_x`
+     - `recruited`
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    results.is_recruited(vm_key="V_mem")
+
+    # remove non nevessary data
+    list_keys = {
+    "ID",
+    "L",
+    "V_mem_raster_position",
+    "V_mem_raster_x_position",
+    "V_mem_raster_time_index",
+    "V_mem_raster_time",
+    "myelinated",
+    "y",
+    "z",
+    "diameter",
+    "intra_stim_starts",
+    "tstop",
+    "intra_stim_positions",
+    "extracellular_electrode_x",
+    "recruited",
+    }
+    results.remove_key(keys_to_keep=list_keys)
+    return(results)
+
+def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
+    """
+    Evaluate the impact od a blocking stimulation on axon (see `axon_results.block_summary`) and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `ID`
+     - `L`
+     - `V_mem_raster_position`
+     - `V_mem_raster_x_position`
+     - `V_mem_raster_time_index`
+     - `V_mem_raster_time`
+     - `myelinated`
+     - `y`
+     - `z`
+     - `diameter`
+     - `intra_stim_starts`
+     - `tstop`
+     - `intra_stim_positions`
+     - `extracellular_electrode_x`
+     - `blocked`
+     - `has_onset`
+     - `n_onset`
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+block_summary.csv`, by default ""
+
+    Note
+    ----
+    If `save` is true, the data arranged as column of a same line in the following order:
+     - `ID`
+     - `y`
+     - `z`
+     - `diameter`
+     - `myelinated`
+     - `is_blocked`
+     - `has_onset`
+     - `n_onset`
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    ## TO CHANGE WHEN is block is developped
+    #results.axon_state(save=False)
+    
+    if AP_start is None :
+        if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
+            AP_start = results["intra_stim_starts"][0]
+    
+    vm_key = "V_mem"
+    if freq is not None:
+        vm_key += "_filtered"
+    
+
+    results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
+    
+    # remove non nevessary data
+    list_keys = {
+    "ID",
+    "L",
+    #f"{vm_key}_raster_position",
+    #f"{vm_key}raster_x_position",
+    #f"{vm_key}_raster_time_index",
+    #f"{vm_key}_raster_time",
+    "myelinated",
+    "y",
+    "z",
+    "diameter",
+    "intra_stim_starts",
+    "tstop",
+    "intra_stim_positions",
+    "extracellular_electrode_x",
+    "is_blocked",
+    "has_onset",
+    "n_onset",
+    }
+    results.remove_key(keys_to_keep=list_keys)
+    return(results)
+
+
+def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None)->axon_results:
+    """
+    Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `g_mem`
+     - `x_rec`
+     - `rec`
+     - `Nseg_per_sec`
+     - `axon_path_type`
+     - `t_sim`
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    t_start_rec : float, optional
+        Lower time at whitch `g_mem` should be stored, by default 0
+    t_stop_rec : float, optional
+        Upper time at whitch `g_mem` should be stored, by default -1
+    sample_dt : None | float, optional
+        Time sample rate at which `g_mem` should be stored if None simulation dt is kept, by default None
+    x_bounds : None | tuple[float], optional
+        x-positions where to store `g_mem`, possible option:
+         - float: The values of `g_mem` are only stored at the nearest position in `x_rec`.
+         - tupple: `g_mem` values are stored for all positions included between the two boundaries.
+         - None (default): `g_mem` values are stored for all positions.
+
+    Warning
+    -------
+    ``sample_dt`` should be at multiple of the simulation ``dt`` to allow a correct undersampling. 
+    If the not ``sample_dt`` choosen will be the closer multiple of ``dt``.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    if not results["record_g_mem"]:
+        rise_error("gmem not recorded nothing will be done")
+    else:
+        if t_stop_rec < 0:
+            t_stop_rec=results.t_sim
+
+        if sample_dt is None:
+            sample_dt=results.dt
+
+        if x_bounds is None:
+            x_bounds=(0,results.L)
+
+        if np.iterable(x_bounds):
+            I_x = np.argwhere((results["x_rec"]>x_bounds[0])&(results["x_rec"]<x_bounds[1]))[:,0]
+        else:
+            x_bounds = [x_bounds]
+            I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
+
+        N_x = len(I_x)
+        i_t_min = np.argwhere(results["t"]>t_start_rec)[0][0]
+        i_t_max = np.argwhere(results["t"]<t_stop_rec)[-1][0]
+
+        t_APs = [k for k in range(i_t_min,i_t_max)]
+        t_APs = t_APs[::int(sample_dt/results.dt)]
+        N_t = len(t_APs)
+
+
+        # Under sampling to reduce memory consumption
+        results["x_rec"] = results["x_rec"][I_x] - x_bounds[0]
+        results["t"] = results["t"][t_APs]
+        results["g_mem"] = results["g_mem"][np.ix_(I_x, t_APs)]
+
+        ###############################
+        ## remove non nevessary data ##
+        ###############################
+        list_keys = {
+        "g_mem",
+        "x_rec",
+        "rec",
+        "Nseg_per_sec",
+        "axon_path_type",
+        "t_sim",
+        }
+        if results.ID==0:
+            list_keys.update({"t"})
+        results.remove_key(keys_to_keep=list_keys)
+    return results
+
+def vmem_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str=""):
+    """
+    Plot and save the membrane potential along each axon of the fascicle
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    freq : float, optional
+            Filter vmem at the specified frequency, by default None
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+"block_summary.csv"`, by default ""
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    vm_key = "V_mem"
+    if (freq is not None):
+        results.filter_freq("V_mem",freq , Q= 2)
+        vm_key += "_filtered"
+    
+    fig, ax = plt.subplots()
+    results.plot_x_t(ax, key=vm_key)
+    if results.myelinated:
+        title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    else:                                                                           #colormap for unmyelinated fibers as plot_x_t are unreadable
+        title = f"Unmyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    
+    #print(fdir)
+    ax.set_title(title)
+    if save:
+        fig.tight_layout()
+        fig_name = fdir + "/Activity_axon_" + str(results.ID) + ".png"
+        fig.savefig(fig_name)
+        plt.close(fig)
+    return results
+
+def raster_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str=""):
+    """
+    Plot and save the raster plot along each axon of the fascicle.
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    freq : float, optional
+            Filter vmem at the specified frequency, by default None
+    save : bool, optional
+        if true, the block status is saved as a line in a `.csv` file, by default False
+    fdir : str, optional
+        Path where the conductivity should be saved, the saving file will be `fdir+block_summary.csv`, by default ""
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+
+    vm_key = "V_mem"
+    if (freq is not None):
+        results.filter_freq("V_mem",freq , Q= 2)
+        vm_key += "_filtered"
+    fig, ax = plt.subplots()
+
+    results.raster_plot(ax, key=vm_key)
+    if results.myelinated:
+        title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+    else:
+        title = f"Unyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
+
+    #print(fdir)
+    ax.set_title(title)
+    if save:
+        fig.tight_layout()
+        fig_name = fdir + "/Rasterplot_axon_" + str(results.ID) + ".png"
+        fig.savefig(fig_name)
+        plt.close(fig)
+    return results

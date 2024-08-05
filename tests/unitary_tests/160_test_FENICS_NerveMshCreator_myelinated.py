@@ -22,7 +22,7 @@ ax1 = nrv.myelinated(d=10, L=L, rec="all", t_sim=5, Nseg_per_sec=1,record_g_mem=
 res = ax1()
 del ax1
 res.compute_f_mem()
-res.get_myeline_properties(endo_mat="endoneurium_bhadra")
+res.get_myelin_properties(endo_mat="endoneurium_bhadra")
 
 
 mye = res.g_mye # S.cm-2
@@ -62,7 +62,7 @@ mesh.compute_mesh()
 mesh.save(mesh_file)
 
 t2 = time.time()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 print('mesh generated in '+str(t2 - t1)+' s')
 
 param = nrv.FEMParameters(D=3, mesh_file=mesh_file)

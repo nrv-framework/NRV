@@ -26,6 +26,12 @@ cbar = plt.colorbar(map)
 cbar.set_label('membrane voltage (mV)')
 plt.savefig('./unitary_tests/figures/33_A.png')
 
+fig, ax = plt.subplots()
+results.plot_x_t(ax)
+plt.show()
+exit()
+plt.savefig('./unitary_tests/figures/25_C.png')
+
 plt.figure()
 plt.plot(results['t'],results['V_mem'][25], label=str(round(results['x_rec'][25]))+'um')
 plt.plot(results['t'],results['V_mem'][50], label=str(round(results['x_rec'][50]))+'um')
@@ -89,9 +95,9 @@ ax2.legend()
 fig2.savefig('./unitary_tests/figures/33_D.png')
 
 fc = results['g_mem']/(2*np.pi*1) * nrv.MHz
-fc2 = nrv.compute_f_mem(results)
+fc2 = results.compute_f_mem()
 
-print(np.allclose(fc, nrv.compute_f_mem(results)))
+print(np.allclose(fc, results.compute_f_mem()))
 
 plt.figure(figsize=(9,7))
 plt.subplot(3,1,1)

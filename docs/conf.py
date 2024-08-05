@@ -82,14 +82,19 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
     "sphinx_rtd_theme",
     "sphinx.ext.intersphinx",
     "sphinx_mdinclude",
+    "sphinx_copybutton",
+    "nbsphinx",
+    "sphinx_gallery.load_style",
+    #"sphinx_nbexamples",
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
@@ -113,3 +118,4 @@ html_css_files = ["custom.css"]  # extra style files to apply
 napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
 autodoc_member_order = 'bysource' # keep the order of class and function source files
 #                                   (thus don't use alphabetical order)
+autosummary_generate = True

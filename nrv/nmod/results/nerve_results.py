@@ -5,6 +5,7 @@ NRV-:class:`.nerve_results` handling.
 
 from ...backend.NRV_Results import sim_results
 from .fascicles_results import fascicle_results
+from .axons_results import axon_results
 from ...backend.log_interface import rise_error, rise_warning, pass_info
 from ...backend.MCore import MCH
 from ...utils.units import nm, convert, from_nrv_unit
@@ -27,39 +28,106 @@ class nerve_results(sim_results):
         super().__init__(context)
 
 
+    @property
+    def fascicle_keys(self)->list:
+        """
+        Number of fascicles in the fascicle
+        """
+        all_keys = self.keys()
+        return [i for i in all_keys if ("fascicle" in i and number_in_str(i))]
+
+    @property
+    def n_fasc(self)->int:
+        """
+        Number of fascicles in the fascicle
+        """
+        return len(self.fascicles)
+
+    @property
+    def n_ax(self)->int:
+        """
+        Number of axons in the fascicle
+        """
+        fasc_keys = self.fascicle_keys
+        _n_ax = 0
+        for key in fasc_keys:
+            _n_ax += self[key].n_ax
+        return _n_ax
+
+
+    @property
+    def axons_type(self)->np.ndarray:
+        """
+        type of axons of each fascicles
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 2)
+            _description_
+        """
+        fasc_keys = self.fascicle_keys
+        _mye = np.zeros((self.n_ax, 2))
+        _offset = 0
+        for key in fasc_keys:
+            fasc_mye = np.vstack(
+                (
+                    self[key].ID*np.ones(self[key].n_ax),
+                    self[key].axons_type, 
+                )
+            )
+            _mye[:, _offset:_offset+self[key].n_ax] = fasc_mye.T
+            _offset += self[key].n_ax
+        return _mye
+
     def get_fascicle_results(self, ID: int) -> fascicle_results:
         if ID not in self.fascicles_IDs:
             rise_error(("Fascicle ID does not exists."))
         else:
-            return(self[f'fascicle{ID}'])
+            return self[f"fascicle{ID}"]
 
+    def get_fascicle_results(self, fasc_ID: int, ax_ID:int) -> axon_results:
+        if fasc_ID not in self.fascicles_IDs:
+            rise_error(f"Fascicle ID: {fasc_ID} does not exists.")
+        else:
+            if ax_ID >= self[f"fascicle{fasc_ID}"].n_ax:
+                rise_error(f"Axon ID: {ax_ID} does not exists in Fascicle {fasc_ID} .")
+            else:
+                return self[f"fascicle{fasc_ID}"][f"axon{ax_ID}"]
 
     def get_fascicle_key(self) ->list:
         all_keys = self.keys()
-        fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i)) ]
+        fascicle_keys = [ i for i in all_keys if ("fascicle" in i and number_in_str(i))]
         return(fascicle_keys)
 
 
-    ## Representation methods
-    def plot_recruited_fibers(
-        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
-    ):
+    def get_recruited_axons(self, ax_type:str = "all", normalize:bool=False) -> int|float:
         """
+        Return the number or the ratio of recruited axons in the nerve
 
+        Parameters
+        ----------
+        diam : float
+            diameter above wich axon should be counted.
+        ax_type : str, optional
+            type of axon counted,possible options:
+             - "all" (default)
+             - "unmyelinated"
+             - "myelinated"
+        normalize : bool, optional
+            if False the total number of recruited axons is returned, else the ratio is returned, by default False
+
+        Returns
+        -------
+        float
+            number of recruited axons
         """
-        if MCH.do_master_only_work():
-            ## plot contour
-            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,color=contour_color,
-                                fill=False,linewidth=4,))
-            fasc_keys = self.get_fascicle_key()
-            for key in fasc_keys:
-                fasc_res = self[key]
-                fasc_res.plot_recruited_fibers(axes=axes,contour_color="grey",
-                    myel_color=myel_color,unmyel_color=unmyel_color,num=num,)
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
-            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
-            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
+        fasc_keys = self.fascicle_keys
+        for key in fasc_keys:
+            fasc_res = self[key]
+            n_recr += fasc_res.get_recruited_axons(ax_type=ax_type, normalize=normalize)
+        if normalize:
+            n_recr /= self.n_fasc
+        return n_recr
 
 
     # impeddance related methods
@@ -153,3 +221,24 @@ class nerve_results(sim_results):
             else:
                 return None
         return Y
+    
+    ## Representation methods
+    def plot_recruited_fibers(
+        self, axes:plt.axes, contour_color:str="k", myel_color:str="r", unmyel_color:str="b", elec_color:str="gold",num:bool=False, **kwgs
+    ):
+        """
+
+        """
+        if MCH.do_master_only_work():
+            ## plot contour
+            axes.add_patch(plt.Circle((self.y_grav_center, self.z_grav_center),self.D/2,color=contour_color,
+                                fill=False,linewidth=4,))
+            fasc_keys = self.get_fascicle_key()
+            for key in fasc_keys:
+                fasc_res = self[key]
+                fasc_res.plot_recruited_fibers(axes=axes,contour_color="grey",
+                    myel_color=myel_color,unmyel_color=unmyel_color,num=num,)
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))

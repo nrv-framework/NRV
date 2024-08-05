@@ -264,7 +264,6 @@ class NerveMshCreator(MshCreator):
                     self.add_CUFF(ID=i, **electrode["kwargs"])
                 elif "LIFE" in electrode["type"]:
                     self.add_LIFE(ID=i, **electrode["kwargs"])
-
             self.fragment(verbose=False)
             self.is_geo = True
 
@@ -932,7 +931,7 @@ class NerveMshCreator(MshCreator):
         """
         
         """
-        # First set the field for unmyelinated axon or myeline
+        # First set the field for unmyelinated axon or myelin
         fields = [
             self.refine_entities(
                 ent_ID=axon["volume"],

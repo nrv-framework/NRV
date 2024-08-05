@@ -19,16 +19,18 @@ mesh.reshape_axon(d=10, y=1100, z=200, ID=1, res=3)
 #mesh.reshape_axon(d=6, y=-900, z=150, ID=2, res=2)
 #mesh.reshape_axon(d=12, y=1300, z=-300, ID=3, res=3)
 
-mesh.add_electrode(elec_type="CUFF MEA", N=10, x_c=L/2, y_c=0, z_c=0, size = (1000, 500), inactive=True, inactive_L=3000, inactive_th=500,res=50)
-mesh.add_electrode(elec_type="CUFF MEA", N=6, x_c=L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
-mesh.add_electrode(elec_type="CUFF MEA", N=4, x_c=3*L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
+mesh.add_electrode(elec_type="CUFF MP", N=10, x_c=L/2, contact_width = None, contact_length = 100,res=50)
+mesh.add_electrode(elec_type="CUFF MP", N=6, x_c=L/4, contact_width = None, contact_length = 100)
+mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=3*L/4, contact_width = None, contact_length = 100)
+#mesh.add_electrode(elec_type="CUFF MP", N=6, x_c=L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
+#mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=3*L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
 
 mesh.compute_mesh()
 
 mesh.save(mesh_file)
 
 t2 = time.time()
-mesh.get_mesh_info(verbose=True)
+mesh.get_info(verbose=True)
 print('mesh generated in '+str(t2 - t1)+' s')
 
 

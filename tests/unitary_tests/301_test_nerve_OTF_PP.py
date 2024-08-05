@@ -3,9 +3,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 
-test_num = 301
-postproc = ['default', 'rmv_keys', 'Rmv_keys.py', './unitary_tests/sources/test_OTF_PP.py']
+def test_oft_pp(results:nrv.axon_results, num=0):
+    results["comment"] = "Custom PP accessed"
+    results["num"] = num
+    results.remove_key(keys_to_keep={"ID", "comment", "num"})
+    return results
 
+test_num = 301
+postproc = ['default', 'rmv_keys', test_oft_pp, test_oft_pp]
+postproc_kwargs = [{}, {}, {}, {"num":1, "unvalid_arg":404}]
 fascicle = nrv.fascicle(ID=test_num)
 
 # SHAM 1 axon fascicle
@@ -30,7 +36,7 @@ for i in range(len(postproc)):
     # launch sim with
     nerve.simulate(save_path='./unitary_tests/figures/', postproc_script=postproc[i])
     if nrv.MCH.do_master_only_work():
-        print(postproc[i] + ' OFT_PP ok')
+        print(nerve.postproc_label + ' OFT_PP ok')
         sys.stdout.flush()
     del nerve
 
