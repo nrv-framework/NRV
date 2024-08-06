@@ -6,10 +6,18 @@ NRV is pip installable and the hole process should be quite simple. However, to 
 
     conda create -n nrv-env -c anaconda python=3.12 
 
+.. Tip::
+    You can also use `Mamba <https://mamba.readthedocs.io/en/latest/>`_ to speed up the installation. Once Mamba is installed, the installation command line is almost identical:
+    ::
+
+        mamba create -n nrv-env -c anaconda python=3.12 
+
 and activate it before any installation with the command: 
 ::
 
     conda activate nrv-env
+
+
 
 Dependencies
 ------------
@@ -24,7 +32,11 @@ are conda-installable only:
 
     conda install -c conda-forge fenics-dolfinx==0.8.0 mpich
 
+.. Tip::
+    With Mamba, the command is:
+    ::
 
+        mamba install -c conda-forge fenics-dolfinx==0.8.0 mpich
 
 COMSOL Installation
 ^^^^^^^^^^^^^^^^^^^

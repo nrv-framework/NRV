@@ -14,7 +14,7 @@ NRV (or NeuRon Virtualizer) is a pythonic framework to enable fast and user frie
 
 NRV has been optimized for large population of axons, from generating correct population following a specific diameter repartition, through automatic placement to computation and post-processing of the axons activity when a stimulus is applied. Parallel computation, interface with NEURON and COMSOL and FENICS is automatically handled by NRV. For a detailed description and full help on installation, basic usage and API documentation, please visit ou [NRV readthedocs page](https://nrv.readthedocs.io/en/latest/).
 
-NRV has been developped by contributors from the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University, until june 2023 and is now developped and maintained by the Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux, U. Bordeaux.
+NRV has been developped by contributors from the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University, until June 2023 and is now developped and maintained by the Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux, U. Bordeaux.
 
 
 # Installation
@@ -32,7 +32,7 @@ and activate it before any installation with the command:
 ### Open source third-party Dependencies
 
 
-The pip installation takes care of most of the open source third-party dependencies, but the FEM solver (`FenicsX <http://https://fenicsproject.org/.org>`_) and the Message Passing Interface (`MPICH <https://www.mpich.org/>`_)
+The pip installation takes care of most of the open source third-party dependencies, but the FEM solver ([FenicsX](http://https://fenicsproject.org/.org>)) and the Message Passing Interface ([MPICH](https://www.mpich.org/>))
 are conda-installable only:
 
     conda install -c conda-forge fenics-dolfinx==0.8.0 mpich
@@ -42,7 +42,7 @@ are conda-installable only:
 ### COMSOL Installation (optional)
 
 
-NRV can perform computations of FEM with COMSOL. However, the end user has to provide a valid commercial installed license by its own. COMSOL installation can be performed before or after NRV's installation. For using COMSOL, information about the installation must be specified in the ''nrv/_misc'' code folder, by filling the following fields in the ''NRV.ini'' file:
+NRV can perform computations of FEM with COMSOL. However, the end user has to provide a valid commercial installed license by its own. COMSOL installation can be performed before or after NRV's installation. For using COMSOL, information about the installation must be specified in the `nrv/_misc` code folder, by filling the following fields in the 'NRV.ini' file:
 
     [COMSOL]
     COMSOL_STATUS = True
@@ -60,7 +60,7 @@ The use of FenicsX for FEM computations have been extensively tested by NRV's co
 ### Using pip
 
 
-NRV can simply be installed with pip (`nrv-py <https://pypi.org/project/nrv-py/>`_):
+NRV can simply be installed with pip [nrv-py](https://pypi.org/project/nrv-py/>):
 
     pip install nrv-py
 
@@ -98,15 +98,15 @@ You can then create a container using:
 
     docker run --rm -p 8888:8888 nrvframework/lab
 
-Where the -p 8888:8888 maps the port to the local host. This should give you a link and token to load Jupyter from your browser.
+Where the `-p 8888:8888` maps the port to the local host. This should give you a link and token to load Jupyter from your browser.
 
 ### NRV on Windows
 
 
 NRV is not directly installable on Windows due to some FenicsX dependencies not available on windows. 
-However one can easily overcome this problem by using (`WLS2 <https://learn.microsoft.com/en-us/windows/wsl/install>`_). Assuming a blank installation of WLS2 (Ubuntu 22.xx), the following instruction are required to install and use NRV.
+However one can easily overcome this problem by using [WLS2](<https://learn.microsoft.com/en-us/windows/wsl/install>). Assuming a blank installation of WLS2 (Ubuntu 22.xx), the following instruction are required to install and use NRV.
 
-Installation of `micromamba <https://github.com/mamba-org/mamba>`_ (a lighter and faster conda equivalent):
+Installation of [micromamba](https://github.com/mamba-org/mamba) (a lighter and faster conda equivalent):
 
     "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
 
