@@ -8,10 +8,10 @@ from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.materials import *
 from ..fmod.stimulus import *
-from ..nmod.axons import *
-from ..nmod.fascicles import *
-from ..nmod.myelinated import *
-from ..nmod.unmyelinated import *
+from ..nmod._axons import *
+from ..nmod._fascicles import *
+from ..nmod._myelinated import *
+from ..nmod._unmyelinated import *
 
 ###############################################################
 #########################  Loaders  ###########################

@@ -19,9 +19,9 @@ from ...backend.NRV_Class import load_any
 from ..units import MHz
 from ...backend.file_handler import rmv_ext
 from ..misc import distance_point2line
-from ...nmod.unmyelinated import unmyelinated
-from ...nmod.myelinated import myelinated
-from ...nmod.results.axons_results import axon_results
+from ...nmod._unmyelinated import unmyelinated
+from ...nmod._myelinated import myelinated
+from ...nmod.results._axons_results import axon_results
 
 
 # enable faulthandler to ease 'segmentation faults' debug

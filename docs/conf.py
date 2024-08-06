@@ -119,3 +119,5 @@ napoleon_include_special_with_doc = True     # Add __init__, __call__, ... metho
 autodoc_member_order = 'bysource' # keep the order of class and function source files
 #                                   (thus don't use alphabetical order)
 autosummary_generate = True
+
+autosummary_ignore_module_all = False

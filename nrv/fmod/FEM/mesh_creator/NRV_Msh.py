@@ -1,6 +1,6 @@
 from ....backend.log_interface import rise_warning
-from ....nmod.nerve import nerve
-from ....nmod.fascicles import fascicle
+from ....nmod._nerve import nerve
+from ....nmod._fascicles import fascicle
 from ....utils.units import *
 from ...electrodes import *
 from ...extracellular import is_FEM_extra_stim, FEM_stimulation

@@ -5,9 +5,9 @@ from ...fmod.extracellular import extracellular_context
 
 from ...backend.NRV_Class import NRV_class, load_any, abstractmethod
 from ...backend.NRV_Simulable import sim_results
-from ...nmod.results.axons_results import axon_results
-from ...nmod.results.fascicles_results import fascicle_results
-from ...nmod.results.nerve_results import nerve_results
+from ...nmod.results._axons_results import axon_results
+from ...nmod.results._fascicles_results import fascicle_results
+from ...nmod.results._nerve_results import nerve_results
 from ...utils.nrv_function import cost_evaluation
 from ...utils.cell.CL_postprocessing import *
 

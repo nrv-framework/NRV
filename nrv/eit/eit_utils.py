@@ -1,6 +1,6 @@
-from ..nmod.nerve import nerve
-from ..nmod.fascicles import fascicle
-from ..nmod.myelinated import get_MRG_parameters
+from ..nmod._nerve import nerve
+from ..nmod._fascicles import fascicle
+from ..nmod._myelinated import get_MRG_parameters
 
 
 def crop_fascicle(fasc:fascicle, x0:float, new_l:float)->fascicle:

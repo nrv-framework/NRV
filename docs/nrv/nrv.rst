@@ -13,8 +13,7 @@ Module contents
 Subpackages
 -----------
 
-.. toctree::
-   :glob:
-   :maxdepth: 3
+.. autosummary::
+   :toctree: _autosummary
 
-   */nrv.*
+   nmod

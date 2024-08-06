@@ -69,18 +69,18 @@ from .fmod.FEM.fenics_utils.layered_materials import *
 
 ########################################################
 
-from .nmod.axons import *
-from .nmod.unmyelinated import *
-from .nmod.myelinated import *
-from .nmod.fascicles import *
-from .nmod.axon_pop_generator import *
-from .nmod.nerve import *
+from .nmod._axons import *
+from .nmod._unmyelinated import *
+from .nmod._myelinated import *
+from .nmod._fascicles import *
+from .nmod._axon_pop_generator import *
+from .nmod._nerve import *
 
-from .nmod.results.axons_results import *
-from .nmod.results.unmyelinated_results import *
-from .nmod.results.myelinated_results import *
-from .nmod.results.fascicles_results import *
-from .nmod.results.nerve_results import *
+from .nmod.results._axons_results import *
+from .nmod.results._unmyelinated_results import *
+from .nmod.results._myelinated_results import *
+from .nmod.results._fascicles_results import *
+from .nmod.results._nerve_results import *
 
 
 from .utils.saving_handler import *
