@@ -13,6 +13,11 @@ NRV is optimized for large population of axons, from generating correct populati
 
 NRV was developed by contributors from the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University, until june 2023 and is now developed and maintained by the Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux, U. Bordeaux.
 
+.. SeeAlso::
+   - **General information**: `nrv-framework.org <https://nrv-framework.org>`_
+   - **Discussions and queries**: `Forum NRV <https://nrv-framework.org/forum>`_
+   - **Full code**: `Github repository <https://github.com/nrv-framework/NRV>`_
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
