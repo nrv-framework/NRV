@@ -3,7 +3,7 @@ from ..nmod._fascicles import fascicle
 from ..nmod._myelinated import get_MRG_parameters
 
 
-def crop_fascicle(fasc:fascicle, x0:float, new_l:float)->fascicle:
+def crop_fascicle(fasc: fascicle, x0: float, new_l: float) -> fascicle:
     """_summary_
 
     Parameters
@@ -30,7 +30,8 @@ def crop_fascicle(fasc:fascicle, x0:float, new_l:float)->fascicle:
                 fasc.NoR_relative_position -= int(fasc.NoR_relative_position)
     return fasc
 
-def crop_nerve(nerv:nerve, x0:float, new_l:float)->nerve:
+
+def crop_nerve(nerv: nerve, x0: float, new_l: float) -> nerve:
     """_summary_
 
     Parameters
