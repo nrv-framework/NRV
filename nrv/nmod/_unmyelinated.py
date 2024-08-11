@@ -1,6 +1,7 @@
 """
 NRV-:class:`.unmyelinated` handling.
 """
+
 import math
 
 import numpy as np

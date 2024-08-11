@@ -1,6 +1,7 @@
 """
 NRV-:class:`.myelinated` handling.
 """
+
 import math
 
 import numpy as np
@@ -63,11 +64,11 @@ def get_MRG_parameters(diameter):
         nodeD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nodeD, 3))
         paraD1_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD1, 3))
         paraD2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD2, 3))
-        
+
         if diameter < 1.0 or diameter > 14.0:
             # outside of the MRG originla limit, take 1st order approx,
             paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 3))
-            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 2))        
+            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 2))
         else:
             # try to fit a bit better
             paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 5))
@@ -603,19 +604,28 @@ class myelinated(axon):
             blacklist=blacklist,
         )
 
-    def plot(self, axes: plt.axes, color: str="red", node_color: str="lightgray", elec_color="gold", **kwgs) -> None:
-        super().plot(axes, color, elec_color,**kwgs)
+    def plot(
+        self,
+        axes: plt.axes,
+        color: str = "red",
+        node_color: str = "lightgray",
+        elec_color="gold",
+        **kwgs,
+    ) -> None:
+        super().plot(axes, color, elec_color, **kwgs)
         alpha = 1
         if "alpha" in kwgs:
             alpha = kwgs["alpha"]
 
-        axes.add_patch(plt.Circle(
-            (self.y, self.z),
-            self.nodeD / 2,
-            fc=node_color,
-            fill=True,
-            alpha = alpha,
-        ))
+        axes.add_patch(
+            plt.Circle(
+                (self.y, self.z),
+                self.nodeD / 2,
+                fc=node_color,
+                fill=True,
+                alpha=alpha,
+            )
+        )
 
     def __set_model(self, model):
         """
@@ -865,7 +875,7 @@ class myelinated(axon):
         x_nodes = []
         nodes_index = []
         self.rec_position_list = []
-        #print(self.axon_path_type)
+        # print(self.axon_path_type)
         for k in range(len(self.axon_path_type)):
             sec_type = self.axon_path_type[k]
             sec_index = self.axon_path_index[k]
@@ -919,11 +929,11 @@ class myelinated(axon):
                 x_offset += self.STIN[sec_index].L
         self.x = np.asarray(x)
         self.x_nodes = np.asarray(x_nodes)
-        #self.node_index = np.asarray(nodes_index)
+        # self.node_index = np.asarray(nodes_index)
 
-        self.node_index = [nearest_idx(self.x, x_n) for x_n in x_nodes]         #LR: to avoid duplicates in node_index calculated previously...
-        
-        
+        self.node_index = [
+            nearest_idx(self.x, x_n) for x_n in x_nodes
+        ]  # LR: to avoid duplicates in node_index calculated previously...
 
     def __get_rec_positions(self):
         """

@@ -1,6 +1,7 @@
 """
 NRV-:class:`.fascicle` handling.
 """
+
 import faulthandler
 import os
 
@@ -79,9 +80,9 @@ class fascicle(NRV_simulable):
     See Also
     --------
     :doc:`Simulables</usersguide/simulables>`: First optimization problem using NRV
-    
+
     :class:`.nerve.nerve`
-    
+
     :class:`.axons.axon`
 
 
@@ -104,62 +105,62 @@ class fascicle(NRV_simulable):
          - ``float``
          - None
          - Length of the fascicle.
-       * 
+       *
          - ``D``
          - ``float``
          - None
          - Diameter of the fascicle.
-       * 
+       *
          - ``y_grav_center``
          - ``float``
          - 0
          - y-position of the fascicle center.
-       * 
+       *
          - ``z_grav_center``
          - ``float``
          - 0
          - z-position of the fascicle center.
-       * 
+       *
          - ``postproc_label``
          - ``str``
          - None
          - Label of the axon postprocessing funtion, used for the buildin postproc functions.
-       * 
+       *
          - ``postproc_function``
          - ``function``
          - None
          - Axon postprocessing funtion, used for the custom postproc functions.
-       * 
+       *
          - ``postproc_script``
          - ``str`` | ``function``
          - None
          - Either postprocessing funtion or postprocessing funtion label, automatically set depending on the type
-       * 
+       *
          - ``postproc_kwargs``
          - ``dict``
          - None
          - key arguments of the postporcessing function
-       * 
+       *
          - ``save_results``
          - ``bool``
          - False
          - If ``True``, fascicle configuration and all axon simulations results are saved in ``save_path`` directory.
-       * 
+       *
          - ``save_path``
          - ``str``
          - ""
          - Path of the directory where simulation results should be saved.
-       * 
+       *
          - ``return_parameters_only``
          - ``bool``
          - False
          - If ``True`` (and ``save_results`` also ``True``), only the parameters should be returned from the simulation.
-       * 
+       *
          - ``loaded_footprints``
          - ``bool``
          - False
          - If ``False``, the footprints already computed are favored over new footprint computation.
-       * 
+       *
          - ``verbose``
          - ``bool``
          - False
@@ -168,7 +169,7 @@ class fascicle(NRV_simulable):
 
     Note
     ----
-    Customizable Attributes can be either be set 
+    Customizable Attributes can be either be set
 
 
 
@@ -335,7 +336,9 @@ class fascicle(NRV_simulable):
 
         bl += ["postproc_function", "postproc_script"]
         if self.postproc_label not in builtin_postproc_functions:
-            rise_warning("custom axon postprocessing cannot be save. Be carefull to set the postproc_function again when reloading fascicle")
+            rise_warning(
+                "custom axon postprocessing cannot be save. Be carefull to set the postproc_function again when reloading fascicle"
+            )
 
         if not intracel_context:
             bl += [
@@ -453,19 +456,19 @@ class fascicle(NRV_simulable):
         """
         rise_warning(
             "DeprecationWarning: ",
-            "fascicle.N property is obsolete use fascicle.n_ax instead"
+            "fascicle.N property is obsolete use fascicle.n_ax instead",
         )
         return self.n_ax
 
     @property
     def A(self):
         """
-        Area of the fascicle 
+        Area of the fascicle
         """
-        if (self. D is None):
+        if self.D is None:
             return None
-        return (np.pi * (self.D / 2) ** 2)
-    
+        return np.pi * (self.D / 2) ** 2
+
     def set_ID(self, ID):
         """
         set the ID of the fascicle
@@ -545,7 +548,9 @@ class fascicle(NRV_simulable):
         Delta       : float
             distance between farest axon and contour, in um
         """
-        rise_warning("fit_circular_contour method usage is not recommended anymore and will be removed in future release.")
+        rise_warning(
+            "fit_circular_contour method usage is not recommended anymore and will be removed in future release."
+        )
         pass_info("Define fascicle size/shape at object creation instead.")
         N_axons = len(self.axons_diameter)
         D = 2 * Delta
@@ -614,7 +619,9 @@ class fascicle(NRV_simulable):
             optional, if specified, name file to store the population generated
         """
 
-        rise_warning("fill method usage is not recommended anymore and will be removed in future release.")
+        rise_warning(
+            "fill method usage is not recommended anymore and will be removed in future release."
+        )
         pass_info("Use axon_pop_generator methods instead.")
         #### AXON GENERATION: parallelization if resquested ####
         Area_to_fill = 0
@@ -662,7 +669,10 @@ class fascicle(NRV_simulable):
                 save_axon_population(
                     pop_fname, axons_diameter, axons_type, comment=None
                 )
-            axons_y, axons_z, = axon_packer(
+            (
+                axons_y,
+                axons_z,
+            ) = axon_packer(
                 axons_diameter,
                 delta=0.1,
                 y_gc=self.y_grav_center,
@@ -700,15 +710,23 @@ class fascicle(NRV_simulable):
             axons_z = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(
+            axons_diameter
+        ).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(axons_y).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(axons_z).flatten()
 
     def fill_with_population(
-        self, axons_diameter:np.array, axons_type:np.array, delta:float=1,
-        y_axons:np.array=None, z_axons:np.array=None, fit_to_size: bool = False, n_iter: int = 20_000
-    ) -> None: 
+        self,
+        axons_diameter: np.array,
+        axons_type: np.array,
+        delta: float = 1,
+        y_axons: np.array = None,
+        z_axons: np.array = None,
+        fit_to_size: bool = False,
+        n_iter: int = 20_000,
+    ) -> None:
         """
         Fill the fascicle with an axon population
 
@@ -734,22 +752,28 @@ class fascicle(NRV_simulable):
             N = len(axons_diameter)
             if (y_axons is None) and (z_axons is None):
                 y_axons, z_axons = axon_packer(
-                    axons_diameter,
-                    delta=delta,
-                    n_iter=n_iter
+                    axons_diameter, delta=delta, n_iter=n_iter
                 )
-            if (fit_to_size):
+            if fit_to_size:
                 if self.D is not None:
-                    d_pop = get_circular_contour(axons_diameter,y_axons,z_axons, delta)
+                    d_pop = get_circular_contour(
+                        axons_diameter, y_axons, z_axons, delta
+                    )
                     if (d_pop) < self.D:
-                        exp_factor = 0.99*(self.D/d_pop)
+                        exp_factor = 0.99 * (self.D / d_pop)
                         y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
                 else:
-                    rise_warning("Can't fit population to size, fascicle diameter is not defined.")
-            
-            axons_diameter, y_axons, z_axons, axons_type = remove_collision(axons_diameter, y_axons, z_axons, axons_type)
+                    rise_warning(
+                        "Can't fit population to size, fascicle diameter is not defined."
+                    )
+
+            axons_diameter, y_axons, z_axons, axons_type = remove_collision(
+                axons_diameter, y_axons, z_axons, axons_type
+            )
             if self.D is not None:
-                axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(axons_diameter, y_axons, z_axons, axons_type, self.D-delta)
+                axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(
+                    axons_diameter, y_axons, z_axons, axons_type, self.D - delta
+                )
         else:
             axons_diameter = None
             axons_type = None
@@ -757,11 +781,13 @@ class fascicle(NRV_simulable):
             z_axons = None
             N = None
         ## BRODCASTING RESULTS TO ALL PARALLEL OBJECTS
-        self.axons_diameter = MCH.master_broadcasts_array_to_all(axons_diameter).flatten()
+        self.axons_diameter = MCH.master_broadcasts_array_to_all(
+            axons_diameter
+        ).flatten()
         self.axons_type = MCH.master_broadcasts_array_to_all(axons_type).flatten()
         self.axons_y = MCH.master_broadcasts_array_to_all(y_axons).flatten()
         self.axons_z = MCH.master_broadcasts_array_to_all(z_axons).flatten()
-        self.translate_axons(self.y_grav_center,self.z_grav_center)
+        self.translate_axons(self.y_grav_center, self.z_grav_center)
 
     def fit_population_to_size(self, delta: float = 1):
         """
@@ -772,15 +798,19 @@ class fascicle(NRV_simulable):
         delta   : float
             minimum axon to fascicle border distance, in um
         """
-        self.translate_axons(-self.y_grav_center,-self.z_grav_center)
-        d_pop = get_circular_contour(self.axons_diameter,self.axons_y,self.axons_z, delta)
+        self.translate_axons(-self.y_grav_center, -self.z_grav_center)
+        d_pop = get_circular_contour(
+            self.axons_diameter, self.axons_y, self.axons_z, delta
+        )
         if (d_pop) < self.D:
-            exp_factor = 0.99*(self.D/d_pop)
-            self.axons_y, self.axons_z = expand_pop(self.axons_y, self.axons_z, exp_factor)
-        self.translate_axons(self.y_grav_center,self.z_grav_center)
+            exp_factor = 0.99 * (self.D / d_pop)
+            self.axons_y, self.axons_z = expand_pop(
+                self.axons_y, self.axons_z, exp_factor
+            )
+        self.translate_axons(self.y_grav_center, self.z_grav_center)
 
     ## Move methods
-    def translate_axons(self, y, z): 
+    def translate_axons(self, y, z):
         """
         Move axons only in a fascicle by group translation
 
@@ -954,7 +984,13 @@ class fascicle(NRV_simulable):
 
     ## Representation methods
     def plot(
-        self, axes, contour_color="k", myel_color="r", unmyel_color="b", elec_color="gold", num=False
+        self,
+        axes,
+        contour_color="k",
+        myel_color="r",
+        unmyel_color="b",
+        elec_color="gold",
+        num=False,
     ):
         """
         plot the fascicle in the Y-Z plane (transverse section)
@@ -974,13 +1010,15 @@ class fascicle(NRV_simulable):
         """
         if MCH.do_master_only_work():
             ## plot contour
-            axes.add_patch(plt.Circle(
-                (self.y_grav_center, self.z_grav_center),
-                self.D/2,
-                color=contour_color,
-                fill=False,
-                linewidth=2,
-            ))
+            axes.add_patch(
+                plt.Circle(
+                    (self.y_grav_center, self.z_grav_center),
+                    self.D / 2,
+                    color=contour_color,
+                    fill=False,
+                    linewidth=2,
+                )
+            )
             ## plot axons
             circles = []
             for k in range(self.n_ax):
@@ -1009,12 +1047,10 @@ class fascicle(NRV_simulable):
             if num:
                 for k in range(self.n_ax):
                     axes.text(self.axons_y[k], self.axons_z[k], str(k))
-            axes.set_xlim((-1.1*self.D/2, 1.1*self.D/2))
-            axes.set_ylim((-1.1*self.D/2, 1.1*self.D/2))
+            axes.set_xlim((-1.1 * self.D / 2, 1.1 * self.D / 2))
+            axes.set_ylim((-1.1 * self.D / 2, 1.1 * self.D / 2))
 
-    def plot_x(
-        self, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"
-    ):
+    def plot_x(self, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"):
         """
         plot the fascicle's axons along Xline (longitudinal)
 
@@ -1070,7 +1106,9 @@ class fascicle(NRV_simulable):
                     for electrode in self.extra_stim.electrodes:
                         if not is_FEM_electrode(electrode):
                             axes.plot(
-                                electrode.x * np.ones(2), [0, self.n_ax - 1], color="gold"
+                                electrode.x * np.ones(2),
+                                [0, self.n_ax - 1],
+                                color="gold",
                             )
                 axes.set_xlabel("x (um)")
                 axes.set_ylabel("axon ID")
@@ -1195,7 +1233,7 @@ class fascicle(NRV_simulable):
         self.N_intra += 1
 
     ## RECORDING MECHANIMS
-    def attach_extracellular_recorder(self, rec:recorder):
+    def attach_extracellular_recorder(self, rec: recorder):
         """
         attach an extracellular recorder to the axon
 
@@ -1336,7 +1374,7 @@ class fascicle(NRV_simulable):
 
     def __init_axon_postprocessing(self):
         """
-            Internal use only: initialize the axon on-the-fly postprocessing.
+        Internal use only: initialize the axon on-the-fly postprocessing.
         """
         # Set the axon postprocessing label and function
         # self.postproc_script, self.postproc_function or self.postproc_label should have been set by self.set_parameters
@@ -1353,13 +1391,24 @@ class fascicle(NRV_simulable):
             if self.postproc_label in globals():
                 self.postproc_function = globals()[self.postproc_label]
             else:
-                if isinstance(self.postproc_label,str):
+                if isinstance(self.postproc_label, str):
                     self.postproc_label = self.postproc_label.lower()
                 if self.postproc_label in deprecated_builtin_postproc_functions:
-                    rise_warning(DeprecationWarning, self.postproc_label," is a deprecated, use", deprecated_builtin_postproc_functions[self.postproc_label], "instead")
-                    self.postproc_label = deprecated_builtin_postproc_functions[self.postproc_label]
+                    rise_warning(
+                        DeprecationWarning,
+                        self.postproc_label,
+                        " is a deprecated, use",
+                        deprecated_builtin_postproc_functions[self.postproc_label],
+                        "instead",
+                    )
+                    self.postproc_label = deprecated_builtin_postproc_functions[
+                        self.postproc_label
+                    ]
                 elif self.postproc_label not in builtin_postproc_functions:
-                    rise_warning(self.postproc_label," isn't a buitin function, default post processing will be used instead")
+                    rise_warning(
+                        self.postproc_label,
+                        " isn't a buitin function, default post processing will be used instead",
+                    )
                     self.postproc_label = "default"
                 self.postproc_function = builtin_postproc_functions[self.postproc_label]
 
@@ -1370,7 +1419,9 @@ class fascicle(NRV_simulable):
         if "fdir" not in self.postproc_kwargs.keys():
             self.postproc_kwargs["fdir"] = self.save_path + "Fascicle_" + str(self.ID)
         ##  ##
-        self.postproc_kwargs = check_function_kwargs(self.postproc_function, self.postproc_kwargs)
+        self.postproc_kwargs = check_function_kwargs(
+            self.postproc_function, self.postproc_kwargs
+        )
 
     def __sim_axon(
         self,
@@ -1378,7 +1429,7 @@ class fascicle(NRV_simulable):
         folder_name,
         is_master_slave=False,
         **kwargs,
-    )->axon_results:
+    ) -> axon_results:
         """
         Internal use only simumlated one axon of the fascicle
 
@@ -1499,15 +1550,15 @@ class fascicle(NRV_simulable):
 
         axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
         if self.save_results:
-                ax_fname = "sim_axon_" + str(k) + ".json"
-                axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
+            ax_fname = "sim_axon_" + str(k) + ".json"
+            axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
         return axon_sim
 
     def simulate(
         self,
         save_V_mem=False,
         **kwargs,
-    )->fascicle_results:
+    ) -> fascicle_results:
         """
         Simulates the fascicle using neuron framework. Parallel computing friendly. Does not return
         results (possibly too large in memory and complex with parallel computing), but instead
@@ -1563,7 +1614,7 @@ class fascicle(NRV_simulable):
         """
         fasc_sim = super().simulate(**kwargs)
         if not MCH.do_master_only_work():
-            fasc_sim = sim_results({"dummy_res":1})
+            fasc_sim = sim_results({"dummy_res": 1})
         # disable the result storage only if results are fully return
         # To use with caution (mostly for optimisation)
         if not self.save_results:
@@ -1580,11 +1631,13 @@ class fascicle(NRV_simulable):
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if len(self.save_path) and MCH.do_master_only_work():          #LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
+        if (
+            len(self.save_path) and MCH.do_master_only_work()
+        ):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             create_folder(folder_name)
 
         if MCH.do_master_only_work() and self.save_results:
-            #create_folder(folder_name)
+            # create_folder(folder_name)
             self.config_filename = folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
         else:
@@ -1674,10 +1727,9 @@ class fascicle(NRV_simulable):
                 ## SLAVES ##
                 try:
                     for k in this_core_mask:
-                        axon_sim = self.__sim_axon(k, folder_name,is_master_slave)
+                        axon_sim = self.__sim_axon(k, folder_name, is_master_slave)
                         if not self.return_parameters_only:
                             fasc_sim.update({"axon" + str(k): axon_sim})
-
 
                     data = {"rank": MCH.rank, "status": "success"}
                     MCH.send_data_to_master(data)
@@ -1725,9 +1777,11 @@ class fascicle(NRV_simulable):
             fasc_sim = MCH.gather_jobs(fasc_sim)
             if MCH.do_master_only_work():
                 if "extra_stim" in fasc_sim:
-                    fasc_sim['extra_stim'] = load_any(fasc_sim['extra_stim']) #dirty hack to force NRV_class instead of dict
+                    fasc_sim["extra_stim"] = load_any(
+                        fasc_sim["extra_stim"]
+                    )  # dirty hack to force NRV_class instead of dict
                 if self.record:
-                    fasc_sim['recorder'] = load_any(fasc_sim['recorder'])   #idem
+                    fasc_sim["recorder"] = load_any(fasc_sim["recorder"])  # idem
         if MCH.is_alone() and self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True

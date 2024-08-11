@@ -13,13 +13,16 @@ from ...backend.NRV_Results import sim_results
 from ...backend.file_handler import json_dump
 from ...backend.log_interface import rise_warning, rise_error
 from ...utils.units import to_nrv_unit, from_nrv_unit, convert, nm
-from ...utils.misc import distance_point2line, membrane_capacitance_from_model, compute_complex_admitance,nearest_greater_idx
+from ...utils.misc import (
+    distance_point2line,
+    membrane_capacitance_from_model,
+    compute_complex_admitance,
+    nearest_greater_idx,
+)
+
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
-    rise_warning(
-        "DeprecationWarning: ",
-        "max_spike_position is obsolete"
-    )
+    rise_warning("DeprecationWarning: ", "max_spike_position is obsolete")
     if spike_begin == "down":
         while blocked_spike_positionlist[
             position_max + 1
@@ -37,6 +40,7 @@ def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="do
             position_max = position_max + 1
         return position_max
 
+
 def AP_detection(
     Voltage, t, x, list_to_parse, thr, dt, t_start, t_stop, t_refractory, t_min_spike
 ):
@@ -44,10 +48,7 @@ def AP_detection(
     Internal use only, detects an AP
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "AP_detection is obsolete"
-    )
+    rise_warning("DeprecationWarning: ", "AP_detection is obsolete")
     raster_position = []
     raster_x_position = []
     raster_time_index = []
@@ -79,16 +80,13 @@ def AP_detection(
     )
 
 
-#@jit(nopython=True, fastmath=True)
+# @jit(nopython=True, fastmath=True)
 def count_spike(onset_position):
     """
     spike counting, just in time compiled. For internal use only.
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "AP_detection is obsolete"
-    )
+    rise_warning("DeprecationWarning: ", "AP_detection is obsolete")
     if len(onset_position) == 0:
         spike_number = 0
         return 0
@@ -100,8 +98,17 @@ def count_spike(onset_position):
                     spike_number = spike_number + 1
     return spike_number
 
-def rasterize(y_data: np.array, x_data: np.array, t_data: np.array,threshold: np.float64,
-              t_min_AP = 0.1, t_refractory = 0.5,t_start: np.float64 = None, t_stop: np.float64 = None) -> np.array:
+
+def rasterize(
+    y_data: np.array,
+    x_data: np.array,
+    t_data: np.array,
+    threshold: np.float64,
+    t_min_AP=0.1,
+    t_refractory=0.5,
+    t_start: np.float64 = None,
+    t_stop: np.float64 = None,
+) -> np.array:
     """
     Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with AP detection.
 
@@ -126,55 +133,74 @@ def rasterize(y_data: np.array, x_data: np.array, t_data: np.array,threshold: np
     """
 
     if t_start is not None:
-        t_start_idx = np.where(t_data>=t_start)[0][0]
+        t_start_idx = np.where(t_data >= t_start)[0][0]
     else:
         t_start_idx = 0
 
     if t_stop is not None:
-        t_stop_idx = np.where(t_data<=t_stop)[0][0]
+        t_stop_idx = np.where(t_data <= t_stop)[0][0]
     else:
         t_stop_idx = -1
 
-    t_ap = np.array([],np.int32)
-    x_idx_AP = np.array([],np.int32)
+    t_ap = np.array([], np.int32)
+    x_idx_AP = np.array([], np.int32)
 
-    for x_val,v in enumerate(y_data):
+    for x_val, v in enumerate(y_data):
         v = v[t_start_idx:t_stop_idx]
-        th_idx = np.where(v >= threshold)[0]                 #find vmem above threshold
-        if (len(th_idx)):
-            end_cons_idx = np.where(np.diff(th_idx) != 1)[0]     #find when indexes are not consecutive (ie multiple APs) @Warning: might not work when AP "jumps" above nodes
-            start_APs_idx = th_idx[end_cons_idx+1]               #get start index of each APs
-            end_APs_idx = th_idx[end_cons_idx]                   #get stop index of each APs
+        th_idx = np.where(v >= threshold)[0]  # find vmem above threshold
+        if len(th_idx):
+            end_cons_idx = np.where(np.diff(th_idx) != 1)[
+                0
+            ]  # find when indexes are not consecutive (ie multiple APs) @Warning: might not work when AP "jumps" above nodes
+            start_APs_idx = th_idx[end_cons_idx + 1]  # get start index of each APs
+            end_APs_idx = th_idx[end_cons_idx]  # get stop index of each APs
 
-            start_APs_idx = np.concatenate([[th_idx[0]],start_APs_idx])  #add index 0 for start idxs
-            end_APs_idx = np.concatenate([end_APs_idx,[th_idx[-1]]])     #add index -1 in stop idxs
-            dur_APs = t_data[end_APs_idx] - t_data[start_APs_idx]           #get duration of each APs
-            dur_inter_APs = t_data[np.diff(start_APs_idx)]                  #get inter APs duration
+            start_APs_idx = np.concatenate(
+                [[th_idx[0]], start_APs_idx]
+            )  # add index 0 for start idxs
+            end_APs_idx = np.concatenate(
+                [end_APs_idx, [th_idx[-1]]]
+            )  # add index -1 in stop idxs
+            dur_APs = (
+                t_data[end_APs_idx] - t_data[start_APs_idx]
+            )  # get duration of each APs
+            dur_inter_APs = t_data[np.diff(start_APs_idx)]  # get inter APs duration
 
-            AP_mask = np.where(dur_APs<t_min_AP)[0]                         #mask when AP duration is too small
-            AP_mask2 = np.where(dur_inter_APs<t_refractory)[0]+1            #mask when inter APs duration is too small
-            AP_mask = np.concatenate([AP_mask,AP_mask2])
+            AP_mask = np.where(dur_APs < t_min_AP)[
+                0
+            ]  # mask when AP duration is too small
+            AP_mask2 = (
+                np.where(dur_inter_APs < t_refractory)[0] + 1
+            )  # mask when inter APs duration is too small
+            AP_mask = np.concatenate([AP_mask, AP_mask2])
 
-            start_APs_idx = np.delete(start_APs_idx,AP_mask)
-            end_APs_idx = np.delete(end_APs_idx,AP_mask)
-            dur_APs= np.delete(dur_APs,AP_mask)
+            start_APs_idx = np.delete(start_APs_idx, AP_mask)
+            end_APs_idx = np.delete(end_APs_idx, AP_mask)
+            dur_APs = np.delete(dur_APs, AP_mask)
 
-            t_ap = np.concatenate([t_ap,start_APs_idx])
-            x_idx_AP = np.concatenate([x_idx_AP,np.ones(np.size(start_APs_idx))*x_val])
-        
+            t_ap = np.concatenate([t_ap, start_APs_idx])
+            x_idx_AP = np.concatenate(
+                [x_idx_AP, np.ones(np.size(start_APs_idx)) * x_val]
+            )
+
     t_ap = np.int32(t_ap)
     x_idx_AP = np.int32(x_idx_AP)
 
     if len(t_data) > 5:
-        return(x_idx_AP,x_data[x_idx_AP],t_ap,t_data[t_ap])
+        return (x_idx_AP, x_data[x_idx_AP], t_ap, t_data[t_ap])
     else:
-        return([],[],[],[])
+        return ([], [], [], [])
 
 
-def get_first_AP(x_APs: np.array, x_idx_APs: np.array, t_APs: np.array,
-                 t_idx_APs: np.array, t_refract: np.float64 = .5) -> NDArray|NDArray|NDArray:
+def get_first_AP(
+    x_APs: np.array,
+    x_idx_APs: np.array,
+    t_APs: np.array,
+    t_idx_APs: np.array,
+    t_refract: np.float64 = 0.5,
+) -> NDArray | NDArray | NDArray:
     """
-    Extract time and position of the first rasterized AP 
+    Extract time and position of the first rasterized AP
 
     Parameters
     ----------
@@ -203,94 +229,106 @@ def get_first_AP(x_APs: np.array, x_idx_APs: np.array, t_APs: np.array,
         index position of the AP
     """
 
-    if (len(t_APs)==1):
-        return(np.array(x_APs),[0],np.array(t_APs),[0],[0])
-        
-    if (len(t_APs)<1):
-        return([],[],[],[],[])
-    
-    ordered_t_idx = np.argsort(t_APs)               #sort time indexes 
+    if len(t_APs) == 1:
+        return (np.array(x_APs), [0], np.array(t_APs), [0], [0])
 
-    x_ordered = x_APs[ordered_t_idx]                #sort x positions accordingly
-    t_ordered = t_APs[ordered_t_idx]                #sort t positions accordingly
-    x_idx_ordered = x_idx_APs[ordered_t_idx]        #sort x positions idx accordingly
-    t_idx_ordered = t_idx_APs[ordered_t_idx]        #sort t positions idx accordingly
+    if len(t_APs) < 1:
+        return ([], [], [], [], [])
 
-    x_0 = x_ordered[0]                      #get x-position of the first AP in time
+    ordered_t_idx = np.argsort(t_APs)  # sort time indexes
+
+    x_ordered = x_APs[ordered_t_idx]  # sort x positions accordingly
+    t_ordered = t_APs[ordered_t_idx]  # sort t positions accordingly
+    x_idx_ordered = x_idx_APs[ordered_t_idx]  # sort x positions idx accordingly
+    t_idx_ordered = t_idx_APs[ordered_t_idx]  # sort t positions idx accordingly
+
+    x_0 = x_ordered[0]  # get x-position of the first AP in time
     idx_unique = np.sort(np.unique(x_ordered, return_index=True, axis=0)[1])
-    t_min = t_refract 
+    t_min = t_refract
     x_ordered_unique = x_ordered[idx_unique]
     x_ordered_unique.sort()
-    x_min = np.min(np.abs(np.diff(x_ordered_unique)))*5    
+    x_min = np.min(np.abs(np.diff(x_ordered_unique))) * 5
 
-    
-
-    msk_unique = np.arange(len(t_ordered)-1)
+    msk_unique = np.arange(len(t_ordered) - 1)
     msk_unique = [i for i in msk_unique if i not in idx_unique]
-    
-    #get upward APs
+
+    # get upward APs
     idx_up = []
-    idx_up.append(0)                           #add the first one
-    mask = np.full(x_ordered.shape, False)  
-    mask[msk_unique] = True                   
-    mask[np.where(x_ordered<x_0)[0] ] = True   #mask downward APs
-        
-    mask[0] = True                             #mask first AP
-    x_ordered_cpy = x_ordered.copy()           #copy data
-    x_ordered_cpy[mask]=np.nan                 #add nan where mask is true
-    keep_going = True
-    
-    while (keep_going):
-        if ((np.isnan(x_ordered_cpy).sum())==len(x_ordered_cpy)):   #check if array is full of nan
-           keep_going = False
-        else: 
-            idx = np.nanargmin((x_ordered_cpy - x_0))               #get closest value
-            x_ordered_cpy[idx]=np.nan                               #mask it   
-            
-            if (t_ordered[idx]-t_ordered[idx_up[-1]]>=0):                       #if time val is greater than previous then we reached of end of the AP
-                if (t_ordered[idx]-t_ordered[idx_up[-1]]<t_min):                #if time than the AP refractory period then it doesn't belong to the AP
-                    if (np.abs(x_ordered[idx]-x_ordered[idx_up[-1]])<x_min):    #if it "jumps" to far then it doesn't belong to the AP
-                        idx_up.append(idx)                                
-    
-    #get downward APs
+    idx_up.append(0)  # add the first one
     mask = np.full(x_ordered.shape, False)
-    idx_neg = np.where(x_ordered>x_0)[0] 
+    mask[msk_unique] = True
+    mask[np.where(x_ordered < x_0)[0]] = True  # mask downward APs
+
+    mask[0] = True  # mask first AP
+    x_ordered_cpy = x_ordered.copy()  # copy data
+    x_ordered_cpy[mask] = np.nan  # add nan where mask is true
+    keep_going = True
+
+    while keep_going:
+        if (np.isnan(x_ordered_cpy).sum()) == len(
+            x_ordered_cpy
+        ):  # check if array is full of nan
+            keep_going = False
+        else:
+            idx = np.nanargmin((x_ordered_cpy - x_0))  # get closest value
+            x_ordered_cpy[idx] = np.nan  # mask it
+
+            if (
+                t_ordered[idx] - t_ordered[idx_up[-1]] >= 0
+            ):  # if time val is greater than previous then we reached of end of the AP
+                if (
+                    t_ordered[idx] - t_ordered[idx_up[-1]] < t_min
+                ):  # if time than the AP refractory period then it doesn't belong to the AP
+                    if (
+                        np.abs(x_ordered[idx] - x_ordered[idx_up[-1]]) < x_min
+                    ):  # if it "jumps" to far then it doesn't belong to the AP
+                        idx_up.append(idx)
+
+    # get downward APs
+    mask = np.full(x_ordered.shape, False)
+    idx_neg = np.where(x_ordered > x_0)[0]
     mask[idx_neg] = True
     mask[0] = True
-    mask[msk_unique] = True 
+    mask[msk_unique] = True
     x_ordered_cpy = x_ordered.copy()
-    x_ordered_cpy[mask]=np.nan
+    x_ordered_cpy[mask] = np.nan
     idx_down = []
     idx_down.append(0)
     keep_going = True
-    while (keep_going):
-        if ((np.isnan(x_ordered_cpy).sum())==len(x_ordered_cpy)):
-           keep_going = False
-        else: 
+    while keep_going:
+        if (np.isnan(x_ordered_cpy).sum()) == len(x_ordered_cpy):
+            keep_going = False
+        else:
             idx = np.nanargmin(-(x_ordered_cpy - x_0))
-            x_ordered_cpy[idx]=np.nan
-            if ((t_ordered[idx]-t_ordered[idx_down[-1]])>=0):
-                if (t_ordered[idx]-t_ordered[idx_down[-1]])<=t_min:         
-                    if (np.abs(x_ordered[idx]-x_ordered[idx_down[-1]])<x_min): 
-                        idx_down.append(idx)                              
-    
-    idx_APs = idx_up+idx_down
+            x_ordered_cpy[idx] = np.nan
+            if (t_ordered[idx] - t_ordered[idx_down[-1]]) >= 0:
+                if (t_ordered[idx] - t_ordered[idx_down[-1]]) <= t_min:
+                    if np.abs(x_ordered[idx] - x_ordered[idx_down[-1]]) < x_min:
+                        idx_down.append(idx)
+
+    idx_APs = idx_up + idx_down
     AP_indexes = np.int32(idx_APs)
     AP_indexes = np.unique(idx_APs)
 
-    return(x_ordered[AP_indexes],x_idx_ordered[AP_indexes],t_ordered[AP_indexes],t_idx_ordered[AP_indexes],ordered_t_idx[AP_indexes])
+    return (
+        x_ordered[AP_indexes],
+        x_idx_ordered[AP_indexes],
+        t_ordered[AP_indexes],
+        t_idx_ordered[AP_indexes],
+        ordered_t_idx[AP_indexes],
+    )
+
 
 class axon_results(sim_results):
-    """
+    """ """
 
-    """
     def __init__(self, context=None):
         super().__init__(context)
 
     def generate_axon(self):
-        return eval(self.nrv_type[:self.nrv_type]+"(**kwargs)")
+        return eval(self.nrv_type[: self.nrv_type] + "(**kwargs)")
 
-    def is_recruited(self,vm_key:str="V_mem") -> bool:
+    def is_recruited(self, vm_key: str = "V_mem") -> bool:
         """
         Return True if an AP is detected, else False.
 
@@ -299,19 +337,21 @@ class axon_results(sim_results):
         is_recruited                : bool
             Return True if an AP is detected, else False.
         """
-        
+
         if not "recruited" in self:
             self["recruited"] = self.count_APs(vm_key) != 0
         return self["recruited"]
 
-    def is_blocked(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> bool|None:
+    def is_blocked(
+        self, AP_start: float, freq: float = None, t_refractory: float = 1
+    ) -> bool | None:
         """
-        check if the axon is blocked or not. 
-        
+        check if the axon is blocked or not.
+
         Warning
         -------
-        A test pulse must be added to generate an AP propagating through the axon. This test AP is used to 
-        validate or not the neural conduction of the axon. 
+        A test pulse must be added to generate an AP propagating through the axon. This test AP is used to
+        validate or not the neural conduction of the axon.
 
         Parameters
         ----------
@@ -329,58 +369,82 @@ class axon_results(sim_results):
         """
         if not "blocked" in self:
             vm_key = "V_mem"
-            if (freq is not None):
-                self.filter_freq("V_mem",freq , Q= 2)
+            if freq is not None:
+                self.filter_freq("V_mem", freq, Q=2)
                 vm_key += "_filtered"
-            self.rasterize(vm_key = vm_key)
-            _,t_starts = self.get_start_APs(vm_key)
-            n_APs = len(t_starts[t_starts>=AP_start])
-            if n_APs >0:
-                test_AP_idx = nearest_greater_idx(t_starts,AP_start)        #get idx of test AP in the APs list
-                x_APs,_,t_APs,_ = self.split_APs(vm_key)
+            self.rasterize(vm_key=vm_key)
+            _, t_starts = self.get_start_APs(vm_key)
+            n_APs = len(t_starts[t_starts >= AP_start])
+            if n_APs > 0:
+                test_AP_idx = nearest_greater_idx(
+                    t_starts, AP_start
+                )  # get idx of test AP in the APs list
+                x_APs, _, t_APs, _ = self.split_APs(vm_key)
                 x_AP_test = x_APs[test_AP_idx]
                 t_AP_test = t_APs[test_AP_idx]
-                _,t_AP_start = self.get_start_AP(x_AP_test,t_AP_test)
+                _, t_AP_start = self.get_start_AP(x_AP_test, t_AP_test)
 
             delta = 0.3
             if self.myelinated:
                 delta = 0.1
-            if (n_APs == 0 or (t_AP_start >= AP_start + delta)):       #warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
-                rise_warning(f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response.")
-                return(None)
-            if (n_APs > 2):
-                rise_warning(f"is_blocked in Axon {self.ID}: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization.")
+            if n_APs == 0 or (
+                t_AP_start >= AP_start + delta
+            ):  # warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
+                rise_warning(
+                    f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response."
+                )
+                return None
+            if n_APs > 2:
+                rise_warning(
+                    f"is_blocked in Axon {self.ID}: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization."
+                )
 
-            if (self.has_AP_reached_end(x_AP_test,t_AP_test)):  #test AP has reached the end --> is not blocked
+            if self.has_AP_reached_end(
+                x_AP_test, t_AP_test
+            ):  # test AP has reached the end --> is not blocked
                 self["blocked"] = False
                 return self["blocked"]
             else:
-                if not self.is_AP_in_timeframe(x_AP_test,t_AP_test):    #
-                    rise_warning(f"is_blocked in Axon {self.ID}: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. ")
-                    return(None)
-                _,_,coll_list = self.get_collision_pts(vm_key)
+                if not self.is_AP_in_timeframe(x_AP_test, t_AP_test):  #
+                    rise_warning(
+                        f"is_blocked in Axon {self.ID}: Test AP didn't not reach axon ends within the simulation timeframe. Consider increasing simulation time or start the test stimulus earlier. "
+                    )
+                    return None
+                _, _, coll_list = self.get_collision_pts(vm_key)
                 if coll_list[test_AP_idx]:
-                    rise_warning(f"is_blocked in Axon {self.ID}: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus.")
-                    return(None)
-                
-                t_AP_test_max = np.max(t_AP_test) #test AP last time position:
-                
-                if len(t_starts[t_starts<AP_start]):
-                    if np.min(np.abs(t_starts[t_starts<AP_start]-t_AP_test_max)) < t_refractory: #check if test AP is during refractory period
-                        rise_warning(f"is_blocked in Axon{self.ID}: Test AP occures during axon's refractory period, probably due to onset response. Consider increasing the duration between start of block stimulus and test stimulus.")      
-                        return(None)
+                    rise_warning(
+                        f"is_blocked in Axon {self.ID}: Test AP is colliding with an other AP, probably onset response. Consider increasing the duration between start of block stimulus and test stimulus."
+                    )
+                    return None
 
-                if len(t_starts[t_starts>t_AP_start]): #AP jump
-                    if np.min(np.abs(t_starts[t_starts>AP_start]-t_AP_test_max)) < t_refractory: 
-                        #todo: make sure that the jumping AP is reaching the over side of the axon
+                t_AP_test_max = np.max(t_AP_test)  # test AP last time position:
+
+                if len(t_starts[t_starts < AP_start]):
+                    if (
+                        np.min(np.abs(t_starts[t_starts < AP_start] - t_AP_test_max))
+                        < t_refractory
+                    ):  # check if test AP is during refractory period
+                        rise_warning(
+                            f"is_blocked in Axon{self.ID}: Test AP occures during axon's refractory period, probably due to onset response. Consider increasing the duration between start of block stimulus and test stimulus."
+                        )
+                        return None
+
+                if len(t_starts[t_starts > t_AP_start]):  # AP jump
+                    if (
+                        np.min(np.abs(t_starts[t_starts > AP_start] - t_AP_test_max))
+                        < t_refractory
+                    ):
+                        # todo: make sure that the jumping AP is reaching the over side of the axon
                         self["blocked"] = False
                         return self["blocked"]
                 self["blocked"] = True
                 return self["blocked"]
         return self["blocked"]
 
-    def split_APs(self,vm_key:str="V_mem") -> list[np.array] | list[np.array] | list[np.array] | list[np.array] :
-        """        
+    def split_APs(
+        self, vm_key: str = "V_mem"
+    ) -> list[np.array] | list[np.array] | list[np.array] | list[np.array]:
+        """
         Detects individual Action potential in vm_key and split them in lists
 
         Parameters
@@ -390,7 +454,7 @@ class axon_results(sim_results):
 
         Returns
         -------
-        list[np.array] 
+        list[np.array]
             list of the x_pos of each AP
         list[np.array]
             list of the x index of each AP
@@ -399,8 +463,8 @@ class axon_results(sim_results):
         list[np.array]
             list of the time index of each AP
         """
-        #if not vm_key + "_raster_x_position" in self:
-        self.rasterize(vm_key=vm_key,clear_artifacts=False)
+        # if not vm_key + "_raster_x_position" in self:
+        self.rasterize(vm_key=vm_key, clear_artifacts=False)
         x_APs = []
         x_idx_APs = []
         t_APs = []
@@ -411,12 +475,19 @@ class axon_results(sim_results):
         t_idx_raster = self[vm_key + "_raster_time_index"].copy()
 
         min_size = self._get_min_AP_length()
-        
-        if len(x_raster)>min_size:
-            while len(x_raster)>min_size:   
-                x_AP,x_idx_AP,t_AP,t_idx_AP,AP_idx = get_first_AP(x_raster,x_idx_raster,t_raster,t_idx_raster) 
-                AP_len = np.max([self.get_AP_upward_len(x_AP,t_AP),self.get_AP_downward_len(x_AP,t_AP)])
-                if (AP_len>=min_size):   
+
+        if len(x_raster) > min_size:
+            while len(x_raster) > min_size:
+                x_AP, x_idx_AP, t_AP, t_idx_AP, AP_idx = get_first_AP(
+                    x_raster, x_idx_raster, t_raster, t_idx_raster
+                )
+                AP_len = np.max(
+                    [
+                        self.get_AP_upward_len(x_AP, t_AP),
+                        self.get_AP_downward_len(x_AP, t_AP),
+                    ]
+                )
+                if AP_len >= min_size:
                     x_APs.append(x_AP)
                     t_APs.append(t_AP)
                     x_idx_APs.append(x_idx_AP)
@@ -425,10 +496,10 @@ class axon_results(sim_results):
                 t_raster = np.delete(t_raster, AP_idx)
                 x_idx_raster = np.delete(x_idx_raster, AP_idx)
                 t_idx_raster = np.delete(t_idx_raster, AP_idx)
-  
-        return(x_APs,x_idx_APs,t_APs,t_idx_APs)
 
-    def count_APs(self,vm_key:str="V_mem") -> int:     #**kwargs
+        return (x_APs, x_idx_APs, t_APs, t_idx_APs)
+
+    def count_APs(self, vm_key: str = "V_mem") -> int:  # **kwargs
         """
         Count number of APs detected in vm_key
 
@@ -442,11 +513,11 @@ class axon_results(sim_results):
         int
             number of APs detected
         """
-        x,_,_,_ = self.split_APs(vm_key)
-        return(len(x))
-    
-    def _get_min_AP_length(self, min_size: float = .1) -> int:
-        """ 
+        x, _, _, _ = self.split_APs(vm_key)
+        return len(x)
+
+    def _get_min_AP_length(self, min_size: float = 0.1) -> int:
+        """
         Returns the minimum propation length of an AP, set to 10% of the axon length by default
 
         Parameters
@@ -463,9 +534,9 @@ class axon_results(sim_results):
             n_x = len(self.node_index)
         else:
             n_x = len(self.x_rec)
-        return(int(n_x*min_size))
+        return int(n_x * min_size)
 
-    def get_start_AP(self,x_AP:np.array, t_AP:np.array) -> float|float:
+    def get_start_AP(self, x_AP: np.array, t_AP: np.array) -> float | float:
         """
         Returns the x,t start values of the AP
 
@@ -484,9 +555,9 @@ class axon_results(sim_results):
             t start value of the AP
         """
         start_idx = t_AP.argmin()
-        return(x_AP[start_idx],t_AP[start_idx])
+        return (x_AP[start_idx], t_AP[start_idx])
 
-    def get_start_APs(self,vm_key:str="V_mem") -> NDArray|NDArray:
+    def get_start_APs(self, vm_key: str = "V_mem") -> NDArray | NDArray:
         """
         Return list of (x,t) start positions of each detected APs
 
@@ -504,18 +575,16 @@ class axon_results(sim_results):
         NDArray
             Array of the start t-position of each APs
         """
-        x_APs,_,t_APs,_ = self.split_APs(vm_key)
+        x_APs, _, t_APs, _ = self.split_APs(vm_key)
         x_AP_start = []
         t_AP_start = []
-        for x_AP,t_AP in zip(x_APs,t_APs):
-            x_AP_s,t_AP_s = self.get_start_AP(x_AP,t_AP)
+        for x_AP, t_AP in zip(x_APs, t_APs):
+            x_AP_s, t_AP_s = self.get_start_AP(x_AP, t_AP)
             x_AP_start.append(x_AP_s)
             t_AP_start.append(t_AP_s)
-        return(np.array(x_AP_start),np.array(t_AP_start))
+        return (np.array(x_AP_start), np.array(t_AP_start))
 
-        
-
-    def get_xmax_AP(self,x_AP:np.array ,t_AP:np.array) -> float|float:
+    def get_xmax_AP(self, x_AP: np.array, t_AP: np.array) -> float | float:
         """
         Returns the x,t values the maximum AP x-position
 
@@ -534,9 +603,9 @@ class axon_results(sim_results):
             t value of the maximum AP x-position
         """
         max_idx = x_AP.argmax()
-        return(x_AP[max_idx],t_AP[max_idx])
+        return (x_AP[max_idx], t_AP[max_idx])
 
-    def get_xmin_AP(self,x_AP:np.array ,t_AP:np.array) -> float|float:
+    def get_xmin_AP(self, x_AP: np.array, t_AP: np.array) -> float | float:
         """
         Returns the x,t values the minimum AP x-position
 
@@ -555,9 +624,9 @@ class axon_results(sim_results):
             t value of the minimum AP x-position
         """
         min_idx = x_AP.argmin()
-        return(x_AP[min_idx],t_AP[min_idx])
-    
-    def get_AP_upward_len(self,x_AP:np.array ,t_AP:np.array) -> int:
+        return (x_AP[min_idx], t_AP[min_idx])
+
+    def get_AP_upward_len(self, x_AP: np.array, t_AP: np.array) -> int:
         """
         Returns the length (number of x pts) of the AP in the upward direction
 
@@ -573,12 +642,12 @@ class axon_results(sim_results):
         int
             number of AP x-pos points in the upward direction
         """
-        x_start,_= self.get_start_AP(x_AP,t_AP)
-        x_max,_= self.get_xmax_AP(x_AP,t_AP)
-        len_upward = x_AP[((x_AP>= x_start) & (x_AP<= x_max))]
-        return(len(len_upward))
-        
-    def get_AP_downward_len(self,x_AP:np.array ,t_AP:np.array) -> int:
+        x_start, _ = self.get_start_AP(x_AP, t_AP)
+        x_max, _ = self.get_xmax_AP(x_AP, t_AP)
+        len_upward = x_AP[((x_AP >= x_start) & (x_AP <= x_max))]
+        return len(len_upward)
+
+    def get_AP_downward_len(self, x_AP: np.array, t_AP: np.array) -> int:
         """
         Returns the length (number of x pts) of the AP in the downward direction
 
@@ -594,12 +663,12 @@ class axon_results(sim_results):
         int
             number of AP x-pos points in the downward direction
         """
-        x_start,_= self.get_start_AP(x_AP,t_AP)
-        x_max,_= self.get_xmax_AP(x_AP,t_AP)
-        len_downward = x_AP[((x_AP<= x_start) & (x_AP>= x_max))]
-        return(len(len_downward)) 
+        x_start, _ = self.get_start_AP(x_AP, t_AP)
+        x_max, _ = self.get_xmax_AP(x_AP, t_AP)
+        len_downward = x_AP[((x_AP <= x_start) & (x_AP >= x_max))]
+        return len(len_downward)
 
-    def has_AP_reached_end(self,x_AP:np.array ,t_AP:np.array) -> bool:
+    def has_AP_reached_end(self, x_AP: np.array, t_AP: np.array) -> bool:
         """
         Return true if the AP has reached the end of the axon in both direction, else false
 
@@ -618,11 +687,11 @@ class axon_results(sim_results):
         x = self.get_axon_xrec()
         x_max = np.max(x)
         x_min = np.min(x)
-        x_max_AP,_ = self.get_xmax_AP(x_AP,t_AP)
-        x_min_AP,_ = self.get_xmin_AP(x_AP,t_AP)
-        return(x_max==x_max_AP and x_min_AP==x_min)
-    
-    def APs_reached_end(self,vm_key:str="V_mem") -> bool:
+        x_max_AP, _ = self.get_xmax_AP(x_AP, t_AP)
+        x_min_AP, _ = self.get_xmin_AP(x_AP, t_AP)
+        return x_max == x_max_AP and x_min_AP == x_min
+
+    def APs_reached_end(self, vm_key: str = "V_mem") -> bool:
         """
         Return true if ALL APs have reached the both ends of the axon
 
@@ -637,14 +706,14 @@ class axon_results(sim_results):
             True if ALL APs have reached the both ends of the axon, else False
         """
 
-        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
-        if (len(x_APs)):
-            for x_AP,t_AP in zip(x_APs,t_APs):
-                if (not self.has_AP_reached_end(x_AP,t_AP)):
+        x_APs, _, t_APs, _ = self.split_APs(vm_key=vm_key)
+        if len(x_APs):
+            for x_AP, t_AP in zip(x_APs, t_APs):
+                if not self.has_AP_reached_end(x_AP, t_AP):
                     return False
         return True
-    
-    def is_AP_in_timeframe(self,x_AP:np.array ,t_AP:np.array) -> bool:
+
+    def is_AP_in_timeframe(self, x_AP: np.array, t_AP: np.array) -> bool:
         """
         Return true if AP has reached it's last position (in both direction) within the simulation timeframe, else False
 
@@ -660,29 +729,29 @@ class axon_results(sim_results):
         bool
             true if AP has reached its last position (in both direction) within the simulation timeframe, else False
         """
-        if (self.has_AP_reached_end(x_AP,t_AP)):
+        if self.has_AP_reached_end(x_AP, t_AP):
             return True
         else:
-            up_len = self.get_AP_upward_len(x_AP,t_AP)
-            down_len = self.get_AP_downward_len(x_AP,t_AP)
-            _,t_start = self.get_start_AP(x_AP,t_AP)
-            if (up_len>down_len):
-                _,t_stop = self.get_xmax_AP(x_AP,t_AP)
-                dt_AP = (t_stop - t_start)/up_len
+            up_len = self.get_AP_upward_len(x_AP, t_AP)
+            down_len = self.get_AP_downward_len(x_AP, t_AP)
+            _, t_start = self.get_start_AP(x_AP, t_AP)
+            if up_len > down_len:
+                _, t_stop = self.get_xmax_AP(x_AP, t_AP)
+                dt_AP = (t_stop - t_start) / up_len
             else:
-                _,t_stop = self.get_xmin_AP(x_AP,t_AP)
-                dt_AP = (t_stop - t_start)/down_len 
-            
-            if (dt_AP<0.5):
-                dt_AP = 0.5
-            _,t_xmax_AP = self.get_xmax_AP(x_AP,t_AP)
-            _,t_xmin_AP = self.get_xmin_AP(x_AP,t_AP)
-            tmax = np.max(self.t)
-            if ((t_xmax_AP+dt_AP > tmax) or (t_xmin_AP+dt_AP > 10*tmax)):
-                return(False)
-            return(True)
+                _, t_stop = self.get_xmin_AP(x_AP, t_AP)
+                dt_AP = (t_stop - t_start) / down_len
 
-    def APs_in_timeframe(self,vm_key:str="V_mem") -> bool:
+            if dt_AP < 0.5:
+                dt_AP = 0.5
+            _, t_xmax_AP = self.get_xmax_AP(x_AP, t_AP)
+            _, t_xmin_AP = self.get_xmin_AP(x_AP, t_AP)
+            tmax = np.max(self.t)
+            if (t_xmax_AP + dt_AP > tmax) or (t_xmin_AP + dt_AP > 10 * tmax):
+                return False
+            return True
+
+    def APs_in_timeframe(self, vm_key: str = "V_mem") -> bool:
         """
         Return true if ALL APs have reached their last position (in both direction) within the simulation timeframe, else False
 
@@ -696,17 +765,17 @@ class axon_results(sim_results):
         bool
             True if ALL APs have reached their last position (in both direction) within the simulation timeframe, else False
         """
-        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
-        if (len(x_APs)):
-            for x_AP,t_AP in zip(x_APs,t_APs):
-                if (not self.is_AP_in_timeframe(x_AP,t_AP)):
+        x_APs, _, t_APs, _ = self.split_APs(vm_key=vm_key)
+        if len(x_APs):
+            for x_AP, t_AP in zip(x_APs, t_APs):
+                if not self.is_AP_in_timeframe(x_AP, t_AP):
                     return False
         return True
-        
-    def get_collision_pts(self,vm_key:str="V_mem") -> list[float]|list[float]:
+
+    def get_collision_pts(self, vm_key: str = "V_mem") -> list[float] | list[float]:
         """
         Returns three lists: - two containing the x,t coordinates of the interAPs colliding coordinates
-                             - one boolean list where true means the AP is colliding, else false 
+                             - one boolean list where true means the AP is colliding, else false
 
         Parameters
         ----------
@@ -722,36 +791,40 @@ class axon_results(sim_results):
         list[bool]
             list of colliding APs: true when colliding else false
         """
-        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
+        x_APs, _, t_APs, _ = self.split_APs(vm_key=vm_key)
         x_APs_coll = []
         t_APs_coll = []
         idx_coll = []
-        colliding_list =  [False for i in range(len(x_APs))]
+        colliding_list = [False for i in range(len(x_APs))]
         idx_APs = np.arange(len(x_APs))
-        
-        for x_AP,t_AP,idx_AP in zip(x_APs,t_APs,idx_APs):
-            if (not self.has_AP_reached_end(x_AP,t_AP)):
+
+        for x_AP, t_AP, idx_AP in zip(x_APs, t_APs, idx_APs):
+            if not self.has_AP_reached_end(x_AP, t_AP):
                 x_APs_coll.append(x_AP)
                 t_APs_coll.append(t_AP)
                 idx_coll.append(idx_AP)
-        if len(x_APs_coll)<=1: #need at least 2 APs to get a collision 
-            return([],[],colliding_list)
+        if len(x_APs_coll) <= 1:  # need at least 2 APs to get a collision
+            return ([], [], colliding_list)
         ids = np.arange(len(x_APs_coll))
-        comb_list = list(combinations(ids,2))
+        comb_list = list(combinations(ids, 2))
         x_coll_l = []
         t_coll_l = []
         for idx_comb in comb_list:
-            x_inter, t_inter = self.get_interAPs_collision(x_APs_coll[idx_comb[0]],t_APs_coll[idx_comb[0]],
-                                        x_APs_coll[idx_comb[1]],t_APs_coll[idx_comb[1]])
-            if (x_inter and t_inter)>0:
+            x_inter, t_inter = self.get_interAPs_collision(
+                x_APs_coll[idx_comb[0]],
+                t_APs_coll[idx_comb[0]],
+                x_APs_coll[idx_comb[1]],
+                t_APs_coll[idx_comb[1]],
+            )
+            if (x_inter and t_inter) > 0:
                 x_coll_l.append(x_inter)
                 t_coll_l.append(t_inter)
                 colliding_list[idx_coll[idx_comb[1]]] = True
                 colliding_list[idx_coll[idx_comb[0]]] = True
 
-        return(x_coll_l,t_coll_l,colliding_list)
-    
-    def detect_AP_collisions(self,vm_key:str="V_mem") -> bool:
+        return (x_coll_l, t_coll_l, colliding_list)
+
+    def detect_AP_collisions(self, vm_key: str = "V_mem") -> bool:
         """
         Return True is at least one collision between two APs is detected, else False
 
@@ -765,12 +838,14 @@ class axon_results(sim_results):
         bool
             True if an interAP collision is detected, else False
         """
-        _,t_coll,_ = self.get_collision_pts(vm_key)
+        _, t_coll, _ = self.get_collision_pts(vm_key)
         if len(t_coll):
-            return(True)
-        return(False)
-    
-    def get_interAPs_collision(self, x_AP1:NDArray, t_AP1:NDArray, x_AP2:NDArray, t_AP2:NDArray) -> float|float:
+            return True
+        return False
+
+    def get_interAPs_collision(
+        self, x_AP1: NDArray, t_AP1: NDArray, x_AP2: NDArray, t_AP2: NDArray
+    ) -> float | float:
         """
         Returns the estimated collision coordinates of two APs. Returns (0,0) if the collision is out of scope.
 
@@ -791,35 +866,45 @@ class axon_results(sim_results):
         float
             t position of the intersection (collision) point. Is 0 is the position is out of scope
         """
-        poly_up_1,poly_down_1 = self.linfit_AP(x_AP1,t_AP1)
-        poly_up_2,poly_down_2 = self.linfit_AP(x_AP2,t_AP2)
-        x_inter1,t_inter1 = self.get_1dpoly_intersec(poly_up_1,poly_down_2)
-        x_inter2,t_inter2 = self.get_1dpoly_intersec(poly_up_2,poly_down_1)
+        poly_up_1, poly_down_1 = self.linfit_AP(x_AP1, t_AP1)
+        poly_up_2, poly_down_2 = self.linfit_AP(x_AP2, t_AP2)
+        x_inter1, t_inter1 = self.get_1dpoly_intersec(poly_up_1, poly_down_2)
+        x_inter2, t_inter2 = self.get_1dpoly_intersec(poly_up_2, poly_down_1)
 
-        x1_max,t1_max = self.get_xmax_AP(x_AP1,t_AP1)
-        x1_min,t1_min = self.get_xmin_AP(x_AP1,t_AP1)
+        x1_max, t1_max = self.get_xmax_AP(x_AP1, t_AP1)
+        x1_min, t1_min = self.get_xmin_AP(x_AP1, t_AP1)
 
-        x2_max,t2_max = self.get_xmax_AP(x_AP2,t_AP2)
-        x2_min,t2_min = self.get_xmin_AP(x_AP2,t_AP2)
+        x2_max, t2_max = self.get_xmax_AP(x_AP2, t_AP2)
+        x2_min, t2_min = self.get_xmin_AP(x_AP2, t_AP2)
 
-        if self._pts_in_sim_range(x_inter1,t_inter1) and self._pts_in_sim_range(x_inter2,t_inter2):
-            if t_inter2>t_inter1:
-                if self._AP_pt_in_range(x1_max,t1_max,x_inter2,t_inter2) and self._AP_pt_in_range(x2_min,t2_min,x_inter2,t_inter2):
+        if self._pts_in_sim_range(x_inter1, t_inter1) and self._pts_in_sim_range(
+            x_inter2, t_inter2
+        ):
+            if t_inter2 > t_inter1:
+                if self._AP_pt_in_range(
+                    x1_max, t1_max, x_inter2, t_inter2
+                ) and self._AP_pt_in_range(x2_min, t2_min, x_inter2, t_inter2):
                     if t_inter2 > (t1_max and t2_min):
                         return x_inter2, t_inter2
-                if self._AP_pt_in_range(x1_min,t1_min,x_inter2,t_inter2) and self._AP_pt_in_range(x2_max,t2_max,x_inter2,t_inter2):
+                if self._AP_pt_in_range(
+                    x1_min, t1_min, x_inter2, t_inter2
+                ) and self._AP_pt_in_range(x2_max, t2_max, x_inter2, t_inter2):
                     if t_inter2 > (t1_min and t2_max):
                         return x_inter2, t_inter2
             else:
-                if self._AP_pt_in_range(x1_max,t1_max,x_inter1,t_inter1) and self._AP_pt_in_range(x2_min,t2_min,x_inter1,t_inter1):
+                if self._AP_pt_in_range(
+                    x1_max, t1_max, x_inter1, t_inter1
+                ) and self._AP_pt_in_range(x2_min, t2_min, x_inter1, t_inter1):
                     if t_inter1 > (t1_max and t2_min):
                         return x_inter1, t_inter1
-                if self._AP_pt_in_range(x1_min,t1_min,x_inter1,t_inter1) and self._AP_pt_in_range(x2_max,t2_max,x_inter1,t_inter1):
+                if self._AP_pt_in_range(
+                    x1_min, t1_min, x_inter1, t_inter1
+                ) and self._AP_pt_in_range(x2_max, t2_max, x_inter1, t_inter1):
                     if t_inter1 > (t1_min and t2_max):
                         return x_inter1, t_inter1
         return 0, 0
 
-    def _pts_in_sim_range(self, x:float,t:float) -> bool:
+    def _pts_in_sim_range(self, x: float, t: float) -> bool:
         """
         Returns true if the (x,t) point is within the simulation range
 
@@ -837,9 +922,11 @@ class axon_results(sim_results):
         """
         x_max = np.max(self.get_axon_xrec())
         t_max = np.max(self.t)
-        return((x < x_max) and (x > 0) and (t > 0) and (t < t_max))
+        return (x < x_max) and (x > 0) and (t > 0) and (t < t_max)
 
-    def _AP_pt_in_range(self, x1:float, t1:float, x2:float, t2:float, tol:float = 0.12) -> bool:
+    def _AP_pt_in_range(
+        self, x1: float, t1: float, x2: float, t2: float, tol: float = 0.12
+    ) -> bool:
         """
         Return true is the point (x1,t1) and (x2,t2) are within a range, set by tol
 
@@ -861,10 +948,9 @@ class axon_results(sim_results):
         bool
             True if the two points are within the range
         """
-        return(np.abs(x1-x2)<=tol*x1 and np.abs(t1-t2)<=tol*t1)
+        return np.abs(x1 - x2) <= tol * x1 and np.abs(t1 - t2) <= tol * t1
 
-
-    def get_1dpoly_intersec(self, poly1:np.poly1d, poly2:np.poly1d) -> float|float:
+    def get_1dpoly_intersec(self, poly1: np.poly1d, poly2: np.poly1d) -> float | float:
         """
         Returns the intersection points of two 1D poly
 
@@ -882,10 +968,10 @@ class axon_results(sim_results):
         float
             x intersection point
         """
-        x_inter = (poly2.c[1]-poly1.c[1])/(poly1.c[0]-poly2.c[0])
-        return(poly1(x_inter),x_inter)
+        x_inter = (poly2.c[1] - poly1.c[1]) / (poly1.c[0] - poly2.c[0])
+        return (poly1(x_inter), x_inter)
 
-    def linfit_AP(self, x_AP:NDArray, t_AP:NDArray) -> np.poly1d|np.poly1d:
+    def linfit_AP(self, x_AP: NDArray, t_AP: NDArray) -> np.poly1d | np.poly1d:
         """
         Fit the AP with two 1D polynomial equations: one for the upward propagation, one for the downward propagation
 
@@ -903,12 +989,12 @@ class axon_results(sim_results):
         np.poly1d
             AP downward direction 1D poly fit
         """
-        x_max,_ = self.get_xmax_AP(x_AP,t_AP)
-        x_min,_ = self.get_xmin_AP(x_AP,t_AP)
-        x_start,_ = self.get_start_AP(x_AP,t_AP)
+        x_max, _ = self.get_xmax_AP(x_AP, t_AP)
+        x_min, _ = self.get_xmin_AP(x_AP, t_AP)
+        x_start, _ = self.get_start_AP(x_AP, t_AP)
 
-        #fit upward AP
-        upward_idx = np.argwhere((x_AP>= x_start) & (x_AP<= x_max))
+        # fit upward AP
+        upward_idx = np.argwhere((x_AP >= x_start) & (x_AP <= x_max))
         upward_idx = [x[0] for x in upward_idx]
         x_AP_up = x_AP[upward_idx]
         t_AP_up = t_AP[upward_idx]
@@ -917,8 +1003,8 @@ class axon_results(sim_results):
         x_AP_up = x_AP_up[idx_sorted]
         p_up = np.poly1d(np.polyfit(t_AP_up, x_AP_up, 1))
 
-        #fit downward AP
-        downward_idx = np.argwhere((x_AP<= x_start) & (x_AP>= x_min))
+        # fit downward AP
+        downward_idx = np.argwhere((x_AP <= x_start) & (x_AP >= x_min))
         downward_idx = [x[0] for x in downward_idx]
         x_AP_down = x_AP[downward_idx]
         t_AP_down = t_AP[downward_idx]
@@ -926,7 +1012,7 @@ class axon_results(sim_results):
         t_AP_down = t_AP_down[idx_sorted]
         x_AP_down = x_AP_down[idx_sorted]
         p_down = np.poly1d(np.polyfit(t_AP_down, x_AP_down, 1))
-        return(p_up,p_down)
+        return (p_up, p_down)
 
     def get_axon_xrec(self) -> NDArray:
         """
@@ -946,9 +1032,9 @@ class axon_results(sim_results):
                 x = self["x_rec"]
         else:
             x = self["x_rec"]
-        return(x)
+        return x
 
-    def get_avg_AP_speed(self,vm_key:str="V_mem") -> float : 
+    def get_avg_AP_speed(self, vm_key: str = "V_mem") -> float:
         """
         Returns the averaged propagtion speed of each APs, in m/s.
 
@@ -964,14 +1050,14 @@ class axon_results(sim_results):
         """
         ap_speed = self.getAPspeed(vm_key)
         if len(ap_speed):
-            return np.round(np.mean(ap_speed),3)
+            return np.round(np.mean(ap_speed), 3)
         else:
             rise_warning("No AP detected, can't evaluate AP propagation speed.")
-            return(0.0)
+            return 0.0
 
-    def getAPspeed(self,vm_key:str="V_mem") -> list[float]:
+    def getAPspeed(self, vm_key: str = "V_mem") -> list[float]:
         """
-        Return the propagtion speed of each APs, in m/s 
+        Return the propagtion speed of each APs, in m/s
 
         Parameters
         ----------
@@ -981,20 +1067,20 @@ class axon_results(sim_results):
         Returns
         -------
         list[float]
-            list of propagation speed of each APs, in m/s 
-        """  
-        x_APs,_,t_APs,_ = self.split_APs(vm_key=vm_key)
+            list of propagation speed of each APs, in m/s
+        """
+        x_APs, _, t_APs, _ = self.split_APs(vm_key=vm_key)
         APspeed = []
-        if (len(x_APs)):
-            for x_AP,t_AP in zip(x_APs,t_APs):
-                APspeed.append(np.round(self._APspeed(x_AP,t_AP),3))
+        if len(x_APs):
+            for x_AP, t_AP in zip(x_APs, t_APs):
+                APspeed.append(np.round(self._APspeed(x_AP, t_AP), 3))
         if len(APspeed):
-            return(APspeed)
+            return APspeed
         else:
             rise_warning("No AP detected, can't evaluate AP propagation speed.")
-            return([])
-        
-    def _APspeed(self, x_AP:NDArray, t_AP:NDArray) -> float:
+            return []
+
+    def _APspeed(self, x_AP: NDArray, t_AP: NDArray) -> float:
         """
         Evaluate the propagation speed of one AP, in m/s
 
@@ -1010,15 +1096,15 @@ class axon_results(sim_results):
         float
             propagation of the AP, in m/s
         """
-        x_start,t_start = self.get_start_AP(x_AP,t_AP)
-        #if self.get_AP_upward_len(x_AP,t_AP) > self.get_AP_downward_len(x_AP,t_AP):
-        x_stop,t_stop  = self.get_xmax_AP(x_AP,t_AP)
-        #else:
+        x_start, t_start = self.get_start_AP(x_AP, t_AP)
+        # if self.get_AP_upward_len(x_AP,t_AP) > self.get_AP_downward_len(x_AP,t_AP):
+        x_stop, t_stop = self.get_xmax_AP(x_AP, t_AP)
+        # else:
         #    x_stop,t_stop  = self.get_xmin_AP(x_AP,t_AP)
-        speed = np.abs(x_stop-x_start)/(t_stop-t_start)
-        return(speed*1e-3)
+        speed = np.abs(x_stop - x_start) / (t_stop - t_start)
+        return speed * 1e-3
 
-    def remove_raster_artifacts(self,vm_key:str="V_mem") -> None:     #**kwargs
+    def remove_raster_artifacts(self, vm_key: str = "V_mem") -> None:  # **kwargs
         """
         Remove artifacts (non-APs) rasterized points.
 
@@ -1027,24 +1113,26 @@ class axon_results(sim_results):
         vm_key : str, optional
             Rasterized Vmembrane key , by default "V_mem"
         """
-        x_APs,x_idx,t_APs,t_idx = self.split_APs(vm_key)
+        x_APs, x_idx, t_APs, t_idx = self.split_APs(vm_key)
         x_clean = []
         x_idx_clean = []
         t_clean = []
         t_idx_clean = []
 
-        for i,_ in enumerate(x_APs):
-            x_clean+=list(x_APs[i])
-            x_idx_clean+=list(x_idx[i]) 
-            t_clean+=list(t_APs[i]) 
-            t_idx_clean+=list(t_idx[i]) 
-            
+        for i, _ in enumerate(x_APs):
+            x_clean += list(x_APs[i])
+            x_idx_clean += list(x_idx[i])
+            t_clean += list(t_APs[i])
+            t_idx_clean += list(t_idx[i])
+
         self[vm_key + "_raster_position"] = np.array(x_idx_clean)
         self[vm_key + "_raster_x_position"] = np.array(x_clean)
         self[vm_key + "_raster_time_index"] = np.array(t_idx_clean)
         self[vm_key + "_raster_time"] = np.array(t_clean)
 
-    def rasterize(self, vm_key:str="V_mem", clear_artifacts:bool = True,**kwargs) -> None :
+    def rasterize(
+        self, vm_key: str = "V_mem", clear_artifacts: bool = True, **kwargs
+    ) -> None:
         """
         Rasterize a membrane potential (or filtered or any quantity processed from membrane voltage), with AP detection.
         This function adds 4 items to the class, with the key termination '_raster_position', '_raster_x_position', '_raster_time_index', '_raster_time' concatenated to the original key.
@@ -1063,7 +1151,7 @@ class axon_results(sim_results):
         clear_artifacts : bool
             if True, remove artifacts (non-APs) rasterized points. By default True.
 
-        **kwargs: 
+        **kwargs:
             - threshold: (float) threshold for AP detection, in mV. Default value is taken from axon model
             - t_min_AP: (float) minimum AP duration, in ms. Default is 0.1ms
             - t_refractory: (float) inter-AP duration, in ms. Default is 0.5ms
@@ -1081,17 +1169,17 @@ class axon_results(sim_results):
             if "t_min_AP" in kwargs:
                 t_min_AP = kwargs["t_min_AP"]
             else:
-                t_min_AP=0.1
+                t_min_AP = 0.1
 
             if "t_refractory" in kwargs:
                 t_refractory = kwargs["t_refractory"]
             else:
-                t_refractory=0.5
+                t_refractory = 0.5
 
             t_start = None
             if "t_start" in kwargs:
                 t_start = kwargs["t_start"]
-            
+
             t_stop = None
             if "t_stop" in kwargs:
                 t_start = kwargs["t_stop"]
@@ -1108,13 +1196,23 @@ class axon_results(sim_results):
             else:
                 x = self["x_rec"]
 
-            (self[vm_key + "_raster_position"],self[vm_key + "_raster_x_position"],
-            self[vm_key + "_raster_time_index"],self[vm_key + "_raster_time"]) = rasterize(y_data=vm,x_data=x,
-                                t_data=self.t,threshold=threshold,t_min_AP=t_min_AP,t_refractory=t_refractory,t_start=t_start,
-                                t_stop=t_stop)
-            if (clear_artifacts):
+            (
+                self[vm_key + "_raster_position"],
+                self[vm_key + "_raster_x_position"],
+                self[vm_key + "_raster_time_index"],
+                self[vm_key + "_raster_time"],
+            ) = rasterize(
+                y_data=vm,
+                x_data=x,
+                t_data=self.t,
+                threshold=threshold,
+                t_min_AP=t_min_AP,
+                t_refractory=t_refractory,
+                t_start=t_start,
+                t_stop=t_stop,
+            )
+            if clear_artifacts:
                 self.remove_raster_artifacts(vm_key)
-
 
     def speed(self, position_key=None, t_start=0, t_stop=0, x_start=0, x_stop=0):
         """
@@ -1144,8 +1242,8 @@ class axon_results(sim_results):
         """
 
         rise_warning(
-        "DeprecationWarning: ",
-        "speed is obsolete, please use get_avg_AP_speed() instead"
+            "DeprecationWarning: ",
+            "speed is obsolete, please use get_avg_AP_speed() instead",
         )
         # define max timing if not already defined
         if t_stop == 0:
@@ -1178,7 +1276,9 @@ class axon_results(sim_results):
         inf_position_indexes = np.where(
             self[good_key_prefix + "_x_position"][good_indexes_time] <= x_stop
         )
-        good_indexes_position = np.intersect1d(sup_position_indexes, inf_position_indexes)
+        good_indexes_position = np.intersect1d(
+            sup_position_indexes, inf_position_indexes
+        )
         good_indexes = np.intersect1d(good_indexes_position, good_indexes_time)
         good_spike_times = self[good_key_prefix + "_time"][good_indexes]
         good_spike_positions = self[good_key_prefix + "_x_position"][good_indexes]
@@ -1190,7 +1290,6 @@ class axon_results(sim_results):
             / (good_spike_times[max_time] - good_spike_times[min_time])
         )
         return speed
-
 
     def block(self, position_key=None, t_start=0, t_stop=0):
         """
@@ -1287,7 +1386,6 @@ class axon_results(sim_results):
         else:
             rise_error("intra_stim_positions is not in dictionnary")
 
-
     def check_test_AP(self):
         """
         Check if a test AP is correctely triggered during an axon simulation and if so return the\
@@ -1304,10 +1402,7 @@ class axon_results(sim_results):
             time in ms of the first test AP during the simulation. None if no test AP found
         """
 
-        rise_warning(
-        "DeprecationWarning: ",
-        "check_test_AP is obsolete"
-        )
+        rise_warning("DeprecationWarning: ", "check_test_AP is obsolete")
         if type(self) == str:
             self = self.load_simulation_from_json()
         if "intra_stim_starts" not in self:
@@ -1331,7 +1426,6 @@ class axon_results(sim_results):
                 test_AP = None
             return test_AP
 
-
     def detect_start_extrastim(self, threshold=None):
         """
         Returns the starting time of extracellular stimulation from axon simulation results
@@ -1350,10 +1444,7 @@ class axon_results(sim_results):
             list of stimulation starting time in ms, float if only one stimulation and None if no stimulation
         """
 
-        rise_warning(
-        "DeprecationWarning: ",
-        "detect_start_extrastim is obsolete"
-        )
+        rise_warning("DeprecationWarning: ", "detect_start_extrastim is obsolete")
         t_start = []
         if "extracellular_stimuli" in self:
             for i in range(len(self["extracellular_stimuli"])):
@@ -1370,7 +1461,6 @@ class axon_results(sim_results):
         elif len(t_start) == 1:
             t_start = t_start[0]
         return t_start
-
 
     def extra_stim_properties(self):
         """
@@ -1390,17 +1480,15 @@ class axon_results(sim_results):
             electrode["y"] = self["extracellular_electrode_y"]
             electrode["z"] = self["extracellular_electrode_z"]
             electrode["start"] = self.detect_start_extrastim(self)
-            electrode["max amplitude"] = [
-                max(s) for s in self["extracellular_stimuli"]
-            ]
+            electrode["max amplitude"] = [max(s) for s in self["extracellular_stimuli"]]
 
         return electrode
 
-
-    def block_summary(self, AP_start:float, freq:float=None, t_refractory:float = 1) -> dict:
-        
+    def block_summary(
+        self, AP_start: float, freq: float = None, t_refractory: float = 1
+    ) -> dict:
         """
-        Return axon block characteristics: blocked, onset response, number of APs) 
+        Return axon block characteristics: blocked, onset response, number of APs)
 
         Parameters
         ----------
@@ -1414,35 +1502,43 @@ class axon_results(sim_results):
         Returns
         -------
         axon_state       : dict
-            tuple containing the block characteristics: is_blocked (bool), has_onset (bool), n_onset (int) 
+            tuple containing the block characteristics: is_blocked (bool), has_onset (bool), n_onset (int)
         """
 
-        if {'is_blocked','has_onset','n_onset'} not in self:
+        if {"is_blocked", "has_onset", "n_onset"} not in self:
             required_keys = {"V_mem"}
             if required_keys in self:
                 vm_key = "V_mem"
-                if (freq is not None):
-                    self.filter_freq("V_mem",freq , Q= 2)
+                if freq is not None:
+                    self.filter_freq("V_mem", freq, Q=2)
                     vm_key += "_filtered"
 
-                blocked = self.is_blocked(AP_start,freq,t_refractory)
+                blocked = self.is_blocked(AP_start, freq, t_refractory)
                 n_APs = self.count_APs(vm_key) - 1
-                if n_APs<0:
+                if n_APs < 0:
                     n_APs = 0
                 onset = n_APs > 0
 
-                axon_state = { 'is_blocked':blocked,
-                                'has_onset':onset,
-                                'n_onset':n_APs}
+                axon_state = {
+                    "is_blocked": blocked,
+                    "has_onset": onset,
+                    "n_onset": n_APs,
+                }
                 self.update(axon_state)
             else:
-                rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
+                rise_warning(
+                    "The following keys are missing.",
+                    required_keys - set(self.keys()),
+                    " Please check the simulation parameters",
+                )
                 return None
-                        
+
         else:
-            axon_state = { 'is_blocked':self.is_blocked,
-                            'has_onset':self.has_onset,
-                            'n_onset':self.n_onset} 
+            axon_state = {
+                "is_blocked": self.is_blocked,
+                "has_onset": self.has_onset,
+                "n_onset": self.n_onset,
+            }
         return axon_state
 
     ##################################
@@ -1466,7 +1562,9 @@ class axon_results(sim_results):
         """
 
         if "g_mem" not in self:
-            rise_warning("f_mem cannot be computed computed without membrane conductivity")
+            rise_warning(
+                "f_mem cannot be computed computed without membrane conductivity"
+            )
             return None
         if "f_mem" not in self:
             ax = self.generate_axon()
@@ -1482,11 +1580,16 @@ class axon_results(sim_results):
         self["f_mem"] = to_nrv_unit(f_mem, "MHz")
         return self["f_mem"]
 
-
-    def get_membrane_conductivity(self, x:float|None=0, t:float|None=0, unit:str="S/cm**2", mem_th:float=7*nm)->float:
+    def get_membrane_conductivity(
+        self,
+        x: float | None = 0,
+        t: float | None = 0,
+        unit: str = "S/cm**2",
+        mem_th: float = 7 * nm,
+    ) -> float:
         """
         get the membrane conductivity at a position x and a time t
-    
+
 
         Parameters
         ----------
@@ -1511,11 +1614,11 @@ class axon_results(sim_results):
             return None
 
         n_t = len(self["g_mem"][0])
-        n_x = len(self["g_mem"][:,0])
+        n_x = len(self["g_mem"][:, 0])
         if t is None:
             i_t = np.arange(n_t)
         else:
-            i_t = int(n_t*t/self["t_sim"])
+            i_t = int(n_t * t / self["t_sim"])
         if x is None:
             i_x = np.arange(n_x)
         else:
@@ -1530,8 +1633,9 @@ class axon_results(sim_results):
             g *= from_nrv_unit(mem_th, "cm")
             return convert(g, "S/cm", unit)
 
-
-    def get_membrane_capacitance(self, unit:str="uF/cm**2", mem_th:float=7*nm)->float:
+    def get_membrane_capacitance(
+        self, unit: str = "uF/cm**2", mem_th: float = 7 * nm
+    ) -> float:
         """
         get the axon membrane capacitance or permitivity
 
@@ -1559,7 +1663,14 @@ class axon_results(sim_results):
             c_mem *= from_nrv_unit(mem_th, "cm")
             return convert(c_mem, "S/cm", unit)
 
-    def get_membrane_complexe_admitance(self, f:float=1., x:float=0, t:float=0, unit:str="S/m", mem_th:float=7*nm)->np.array:
+    def get_membrane_complexe_admitance(
+        self,
+        f: float = 1.0,
+        x: float = 0,
+        t: float = 0,
+        unit: str = "S/m",
+        mem_th: float = 7 * nm,
+    ) -> np.array:
         """
         get the membran complexe admitance of each axon at a position x and a time t for a given frequency
 
@@ -1578,7 +1689,7 @@ class axon_results(sim_results):
         """
         c = self.get_membrane_capacitance(mem_th=mem_th)
         g = self.get_membrane_conductivity(x=x, t=t, mem_th=mem_th)
-        f_mem = g/(2*np.pi*c)
+        f_mem = g / (2 * np.pi * c)
 
         # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
         # [MHz] to convert to [kHz]
@@ -1593,12 +1704,14 @@ class axon_results(sim_results):
             Y *= from_nrv_unit(mem_th, "cm")
             return convert(Y, "S/cm", unit)
 
-    def get_membrane_material(self, t:float=0, unit:str="S/m", mem_th:float=7*nm, **interp_kwargs)->f_material:
+    def get_membrane_material(
+        self, t: float = 0, unit: str = "S/m", mem_th: float = 7 * nm, **interp_kwargs
+    ) -> f_material:
 
         n_t = len(self["g_mem"][0])
-        i_t = int(n_t*t/self["t_sim"])
+        i_t = int(n_t * t / self["t_sim"])
         x_ = self["x_rec"]
-        g_ = deepcopy(self["g_mem"][:,i_t])
+        g_ = deepcopy(self["g_mem"][:, i_t])
 
         # Surface conductivity in [S]/([m]*[m])
         if "2" in unit:
@@ -1613,28 +1726,39 @@ class axon_results(sim_results):
     ## Ploting methods ##
     #####################
 
-    def raster_plot(self, axes: plt.axes, key:str="V_mem",**kwgs)->None:
+    def raster_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> None:
         required_keys = {key, "tstop", "L"}
         if required_keys in self:
             self.rasterize(key)
-            axes.scatter(self[key+"_raster_time"], self[key+"_raster_x_position"], **kwgs)
+            axes.scatter(
+                self[key + "_raster_time"], self[key + "_raster_x_position"], **kwgs
+            )
             axes.set_xlim(0, self["tstop"])
             axes.set_ylim(0, self["L"])
         else:
-            rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
+            rise_warning(
+                "The following keys are missing.",
+                required_keys - set(self.keys()),
+                " Please check the simulation parameters",
+            )
 
-
-    def colormap_plot(self, axes: plt.axes, key:str="V_mem",**kwgs)->plt.colorbar:
-        required_keys = {key, "tstop", "L","t"}
+    def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
+        required_keys = {key, "tstop", "L", "t"}
         if required_keys in self:
-            map = axes.pcolormesh(self['t'], self.get_axon_xrec(), self[key] ,shading='auto', **kwgs)
-            axes.set_xlabel('Time (ms)')
-            axes.set_ylabel('Position (µm)')
+            map = axes.pcolormesh(
+                self["t"], self.get_axon_xrec(), self[key], shading="auto", **kwgs
+            )
+            axes.set_xlabel("Time (ms)")
+            axes.set_ylabel("Position (µm)")
             axes.set_xlim(0, self["tstop"])
             axes.set_ylim(0, self["L"])
             cbar = plt.colorbar(map)
             cbar.set_label(key)
-            return(cbar)
+            return cbar
         else:
-            rise_warning("The following keys are missing.", required_keys - set(self.keys()), " Please check the simulation parameters")
-        return(None)
+            rise_warning(
+                "The following keys are missing.",
+                required_keys - set(self.keys()),
+                " Please check the simulation parameters",
+            )
+        return None

@@ -7,10 +7,15 @@ from ._fascicles_results import fascicle_results
 from ._nerve_results import nerve_results
 
 
-
 submodules = []
 
-classes = ["axon_results", "unmyelinated_results", "myelinated_results", "fascicle_results", "nerve_results"]
+classes = [
+    "axon_results",
+    "unmyelinated_results",
+    "myelinated_results",
+    "fascicle_results",
+    "nerve_results",
+]
 
 functions = []
 

@@ -9,10 +9,10 @@ from ...backend.log_interface import rise_warning
 from ...fmod.materials import is_mat, load_material
 from ...utils.units import to_nrv_unit, convert
 
-class myelinated_results(axon_results):
-    """
 
-    """
+class myelinated_results(axon_results):
+    """ """
+
     def __init__(self, context=None):
         super().__init__(context)
 
@@ -46,8 +46,6 @@ class myelinated_results(axon_results):
             else:
                 return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
-
-
     def find_central_node_coordinate(self):
         """
         Returns the index of the closer node from the center
@@ -80,7 +78,6 @@ class myelinated_results(axon_results):
         rise_warning("No node found in the axon")
         return n_center
 
-
     def get_myelin_properties(self, endo_mat=None):
         """
         compute the cutoff frequency of the axon's membrane and add it to the simulation results dictionnary
@@ -104,8 +101,8 @@ class myelinated_results(axon_results):
         if endo_mat is not None:
             if not is_mat(endo_mat):
                 endo_mat = load_material(endo_mat)
-            I = np.isclose(self["g_mye"], 1e+10)
-            self["g_mye"][I] *= 0.
+            I = np.isclose(self["g_mye"], 1e10)
+            self["g_mye"][I] *= 0.0
             self["g_mye"][I] += convert(endo_mat.sigma, "S/m**2", "S/cm**2")
         self["c_mye"] = ax.get_myelin_capacitance()
         self["f_mye"] = self["g_mye"] / (2 * np.pi * self["c_mye"])
@@ -115,23 +112,25 @@ class myelinated_results(axon_results):
         self["f_mye"] = to_nrv_unit(self["f_mye"], "MHz")
         return self["g_mye"], self["c_mye"], self["f_mye"]
 
-
-    def plot_x_t(self, axes: plt.axes, key:str="V_mem", color: str="k",**kwgs)->None:
+    def plot_x_t(
+        self, axes: plt.axes, key: str = "V_mem", color: str = "k", **kwgs
+    ) -> None:
         node_x = self.x[self.node_index]
-        dx = np.abs(node_x[1]-node_x[0])
+        dx = np.abs(node_x[1] - node_x[0])
         rec_idx = self.node_index
         if not "ALL" in self.rec.upper():
             rec_idx = np.arange(len(node_x))
-        norm_fac = dx/(np.max(abs(self[key]))*1.1)
-        offset = np.abs(np.min(self[key][0]*norm_fac))
-        for node,node_idx in zip(node_x,rec_idx):
+        norm_fac = dx / (np.max(abs(self[key])) * 1.1)
+        offset = np.abs(np.min(self[key][0] * norm_fac))
+        for node, node_idx in zip(node_x, rec_idx):
             axes.plot(
-                self["t"], self[key][node_idx]*norm_fac + node + offset, color=color, **kwgs
+                self["t"],
+                self[key][node_idx] * norm_fac + node + offset,
+                color=color,
+                **kwgs
             )
 
-
-
-    def plot_Nav_states(ax: plt.axes) ->None:
+    def plot_Nav_states(ax: plt.axes) -> None:
         """
         Plot the state machine for kinetic (Markov) Nav 1.1 to 1.9 values
 
@@ -160,12 +159,26 @@ class myelinated_results(axon_results):
         )
         ax.text(-2, 0.2, "$I_2I_1$", ha="center", va="center", alpha=0.4)
         ax.arrow(
-            -1.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+            -1.5,
+            -0.03,
+            -1,
+            0,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
         )
         ax.text(-2, -0.2, "$I_1I_2$", ha="center", va="center", alpha=0.4)
 
         ax.arrow(
-            -0.83, 0.25, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+            -0.83,
+            0.25,
+            0.5,
+            0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
         )
         ax.text(-0.9, 0.6, "$I_1C_1$", ha="center", va="center", alpha=0.4)
         ax.arrow(
@@ -181,11 +194,25 @@ class myelinated_results(axon_results):
         ax.text(-0.45, 0.25, r"$C_1I_1$", ha="center", va="center", alpha=0.4)
 
         ax.arrow(
-            0.72, 0.25, -0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+            0.72,
+            0.25,
+            -0.5,
+            0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
         )
         ax.text(0.9, 0.6, r"$C_1C_2$", ha="center", va="center", alpha=0.4)
         ax.arrow(
-            0.33, 0.75, 0.5, -0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+            0.33,
+            0.75,
+            0.5,
+            -0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
         )
         ax.text(0.45, 0.25, r"$C_2C_1$", ha="center", va="center", alpha=0.4)
 
@@ -201,7 +228,14 @@ class myelinated_results(axon_results):
         )
         ax.text(0.9, -0.6, r"$C_2O_1$", ha="center", va="center", alpha=0.4)
         ax.arrow(
-            0.22, -0.75, 0.5, 0.5, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+            0.22,
+            -0.75,
+            0.5,
+            0.5,
+            linewidth=1,
+            alpha=0.5,
+            head_width=0.02,
+            head_length=0.02,
         )
         ax.text(0.45, -0.25, r"$O_1C_2$", ha="center", va="center", alpha=0.4)
 
@@ -217,7 +251,9 @@ class myelinated_results(axon_results):
         )
         ax.text(-0.9, -0.6, r"$O_1I_1$", ha="center", va="center", alpha=0.4)
 
-        ax.arrow(1.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02)
+        ax.arrow(
+            1.5, 0.03, 1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
+        )
         ax.text(2, 0.2, r"$C_20_2$", ha="center", va="center", alpha=0.4)
         ax.arrow(
             2.5, -0.03, -1, 0, linewidth=1, alpha=0.5, head_width=0.02, head_length=0.02
