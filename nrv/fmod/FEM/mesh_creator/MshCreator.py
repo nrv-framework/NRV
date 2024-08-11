@@ -1,6 +1,7 @@
 """
 NRV-:class:`.MshCreator` handling.
 """
+
 import math
 import os
 
@@ -417,7 +418,7 @@ class MshCreator(NRV_class):
             id of the added object
         """
         if self.D == 3:
-            parameters = {"x": x, "y": y, "z": z, "L": L, "R1": R1, "R2":R2}
+            parameters = {"x": x, "y": y, "z": z, "L": L, "R1": R1, "R2": R2}
             cone = self.model.occ.addCone(x, y, z, L, 0, 0, R1, R2)
             self.model.occ.synchronize()
             bounds = self.model.getEntities(dim=2)[-3:]
@@ -431,7 +432,6 @@ class MshCreator(NRV_class):
         else:
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
-
 
     def rotate(self, volume, angle, x=0, y=0, z=0, ax=0, ay=0, az=0, rad=True):
         """
@@ -540,17 +540,17 @@ class MshCreator(NRV_class):
 
     @property
     def domains_1D(self):
-        I = np.where(self.dim_domains==1)
+        I = np.where(self.dim_domains == 1)
         return self.id_domains[I]
 
     @property
     def domains_2D(self):
-        I = np.where(self.dim_domains==2)
+        I = np.where(self.dim_domains == 2)
         return self.id_domains[I]
 
     @property
     def domains_3D(self):
-        I = np.where(self.dim_domains==3)
+        I = np.where(self.dim_domains == 3)
         return self.id_domains[I]
 
     ##############################################################################################

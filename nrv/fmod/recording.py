@@ -1,6 +1,7 @@
 """
 NRV-:class:`.recorder` handling.
 """
+
 import faulthandler
 
 import numpy as np

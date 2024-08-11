@@ -10,12 +10,12 @@ from dolfinx.io.gmshio import model_to_mesh
 from dolfinx.io.utils import XDMFFile, VTXWriter, VTKFile
 from dolfinx.cpp.mesh import entities_to_geometry
 from dolfinx.geometry import (
-bb_tree,
-compute_colliding_cells,
-compute_collisions_points,
-compute_closest_entity,
-compute_distance_gjk,
-create_midpoint_tree,
+    bb_tree,
+    compute_colliding_cells,
+    compute_collisions_points,
+    compute_closest_entity,
+    compute_distance_gjk,
+    create_midpoint_tree,
 )
 from mpi4py import MPI
 
@@ -29,8 +29,6 @@ from ..mesh_creator.MshCreator import (
     is_MshCreator,
     clear_gmsh,
 )
-
-
 
 
 ###############
@@ -53,7 +51,7 @@ def is_sim_res(result):
     return isinstance(result, FEMResults)
 
 
-def save_sim_res_list(sim_res_list, fname, dt=1.):
+def save_sim_res_list(sim_res_list, fname, dt=1.0):
     r"""
     save a list of SimResults in a .bp folder which can be open with PrarView
 
@@ -63,14 +61,14 @@ def save_sim_res_list(sim_res_list, fname, dt=1.):
         list of :class:`.FEMResults` to be saved
     fname : str
         File name and path
-    ftype : str 
+    ftype : str
         - if True .bp folder, else saved in a .xdmf file.
     dt : float
         time step between each results
 
     Warning
     -------
-    For this function to work dolfinx and ParaView must be up to date: 
+    For this function to work dolfinx and ParaView must be up to date:
         -   dolfinx \\(\\geq\\) 0.8.0
         -   ParaView \\(\\geq\\) 5.12.0
     """
@@ -82,7 +80,6 @@ def save_sim_res_list(sim_res_list, fname, dt=1.):
         vcp = sim_res_list[i].vout
         vtxf.write(i * dt)
     vtxf.close()
-
 
 
 def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
@@ -149,13 +146,14 @@ def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
 
 
 def closest_point_in_mesh(mesh, point, tree, tdim, midpoint_tree):
-    points = np.reshape(point, (1,3))
+    points = np.reshape(point, (1, 3))
     entity = compute_closest_entity(tree, midpoint_tree, mesh, points)
     mesh_geom = mesh.geometry.x
     geom_dofs = entities_to_geometry(mesh._cpp_object, tdim, entity, False)
     mesh_nodes = mesh_geom[geom_dofs][0]
     displacement = compute_distance_gjk(points, mesh_nodes)
     return entity, points[0] - displacement
+
 
 class FEMResults(NRV_class):
     """
@@ -217,7 +215,7 @@ class FEMResults(NRV_class):
 
     def save(self, file, ftype="vtx", overwrite=True, t=0.0):
         fname = rmv_ext(file)
-        if ftype.lower() == "vtx": #and dfx_utd:
+        if ftype.lower() == "vtx":  # and dfx_utd:
             fname += ".bp"
             with VTXWriter(self.domain.comm, fname, self.vout, "bp4") as f:
                 f.write(t)
@@ -300,8 +298,10 @@ class FEMResults(NRV_class):
         cells = []
         points_on_proc = []
         tdim = self.domain.geometry.dim
-        n_entities_local = self.domain.topology.index_map(tdim).size_local\
+        n_entities_local = (
+            self.domain.topology.index_map(tdim).size_local
             + self.domain.topology.index_map(tdim).num_ghosts
+        )
         entities = np.arange(n_entities_local, dtype=np.int32)
         midpoint_tree = create_midpoint_tree(self.domain, tdim, entities)
         tree = bb_tree(self.domain, tdim)
@@ -317,13 +317,15 @@ class FEMResults(NRV_class):
                     points_on_proc.append(X[i])
                     cells.append(cells_colliding.links(i)[0])
             else:
-                #point not in the mesh
+                # point not in the mesh
                 if len(cell) == 0:
-                    cell, x_closest = closest_point_in_mesh(self.domain, X[i], tree, tdim, midpoint_tree)
+                    cell, x_closest = closest_point_in_mesh(
+                        self.domain, X[i], tree, tdim, midpoint_tree
+                    )
                     rise_warning(
                         X[i], " not found in mesh, value of ", x_closest, " reused"
                     )
-                    #compute_colliding_cells(self.domain, cells_candidates, X)
+                    # compute_colliding_cells(self.domain, cells_candidates, X)
                     cells += [cell[0]]
                 else:
                     cells += [cell[0]]

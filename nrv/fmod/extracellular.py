@@ -1,6 +1,7 @@
 """
 NRV-:class:`.extracellular_context` handling.
 """
+
 import faulthandler
 
 import numpy as np
@@ -284,8 +285,7 @@ class extracellular_context(NRV_class):
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
         for electrode in self.electrodes:
-            electrode.plot(axes, color , **kwgs)
-
+            electrode.plot(axes, color, **kwgs)
 
 
 class stimulation(extracellular_context):
@@ -359,8 +359,8 @@ class FEM_stimulation(extracellular_context):
     """
     FEM_based_simulation object are designed to connect all other objects required to compute the external potential voltage for axons using FEM :
 
-    - Shape and positon of the nerve 
-    - Shape and position of each fascicle 
+    - Shape and positon of the nerve
+    - Shape and position of each fascicle
     - the materials for the FEM stimulation : endoneurium, perineurium, epineurium and external material
     - a list of electrode(s)
     - a list of corresponding current stimuli
@@ -546,7 +546,13 @@ class FEM_stimulation(extracellular_context):
                 )
 
     def reshape_fascicle(
-        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=None, res="default"
+        self,
+        Fascicle_D,
+        y_c=0,
+        z_c=0,
+        ID=None,
+        Perineurium_thickness=None,
+        res="default",
     ):
         """
         Reshape a fascicle of the FEM simulation
@@ -560,7 +566,7 @@ class FEM_stimulation(extracellular_context):
         z_c         : float
             Fascicle center y-coodinate in µm, 0 by default
         Perineurium_thickness   :float
-            Thickness of the Perineurium sheet surounding the fascicles in µm. If None, thickness is determined according to the fascicle diameter 
+            Thickness of the Perineurium sheet surounding the fascicles in µm. If None, thickness is determined according to the fascicle diameter
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in COMSOL
         res         : float or "default"
@@ -583,9 +589,7 @@ class FEM_stimulation(extracellular_context):
                     self.model.set_parameter(
                         "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
                     )
-                self.model.set_parameter(
-                    "Perineurium_thickness", str(p_th) + "[um]"
-                )
+                self.model.set_parameter("Perineurium_thickness", str(p_th) + "[um]")
             else:
                 self.model.reshape_fascicle(
                     Fascicle_D=Fascicle_D,

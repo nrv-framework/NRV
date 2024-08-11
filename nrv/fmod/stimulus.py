@@ -1,6 +1,7 @@
 """
 NRV-:class:`.stimulus` handling.
 """
+
 import faulthandler
 
 import numpy as np
@@ -218,7 +219,7 @@ class stimulus(NRV_class):
         self.s = self.s[i_mask]
         self.t = self.t[i_mask]
 
-    def plot(self, ax:plt.axes, scatter=False, **ax_kwargs):
+    def plot(self, ax: plt.axes, scatter=False, **ax_kwargs):
         """
         Plot the stimulus
         """
@@ -226,8 +227,6 @@ class stimulus(NRV_class):
             ax.scatter(self.t, self.s, **ax_kwargs)
         else:
             ax.step(self.t, self.s, where="post", **ax_kwargs)
-
-
 
     #####################
     ## special methods ##
@@ -547,15 +546,15 @@ class stimulus(NRV_class):
             sampling time period to generate the sinusoidal shape. If equal to 0,
             dt is automatically set to match 100 samples per sinusoid period by default set to 0
         """
-        Nb_pts = 2*int(duration / freq) - 1
-        dt = 1 / (2*freq)
+        Nb_pts = 2 * int(duration / freq) - 1
+        dt = 1 / (2 * freq)
         t = np.linspace(0, duration, num=Nb_pts)
-        s = np.ones(Nb_pts)*amplitude
+        s = np.ones(Nb_pts) * amplitude
         k_start = 0
         if anod_first:
             k_start = 1
         for k in range(k_start, len(s), 2):
-            s[k]*=-1
+            s[k] *= -1
         s += offset
         self.concatenate(s, t, t_shift=start)
 

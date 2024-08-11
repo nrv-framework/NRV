@@ -1,6 +1,7 @@
 """
 NRV-:class:`.FEMSimulation` handling.
 """
+
 import os
 import time
 import numpy as np
@@ -339,7 +340,12 @@ class FEMSimulation(FEMParameters):
             if self.inbound:
                 self.Nspace = self.Ninboundaries + 1
                 ME = [
-                    element(self.elem[0], self.domain.basix_cell(), self.elem[1], dtype=ScalarType)
+                    element(
+                        self.elem[0],
+                        self.domain.basix_cell(),
+                        self.elem[1],
+                        dtype=ScalarType,
+                    )
                     for _ in range(self.Nspace)
                 ]
                 self.multi_elem = mixed_element(ME)
@@ -529,7 +535,13 @@ class FEMSimulation(FEMParameters):
         return self.petsc_opt
 
     def set_solver_opt(
-        self, ksp_type=None, pc_type=None, ksp_rtol=None, ksp_atol=None, ksp_max_it=None, **kwargs,
+        self,
+        ksp_type=None,
+        pc_type=None,
+        ksp_rtol=None,
+        ksp_atol=None,
+        ksp_max_it=None,
+        **kwargs,
     ):
         """
         set krylov solver options
@@ -653,22 +665,22 @@ class FEMSimulation(FEMParameters):
         self.__set_material_map()
         V_sigma = self.V
         od = order or self.elem[1]
-        V_sigma = functionspace(
-            self.domain, ("DG", od)
-        )
+        V_sigma = functionspace(self.domain, ("DG", od))
         sigma_out = []
         for i_space in range(self.Nspace):
             sigma = Function(V_sigma)
             for i_domain in self.domainsID:
                 dom_cells = self.subdomains.find(i_domain)
-                dom_dofs = locate_dofs_topological(V_sigma, self.domain.topology.dim, dom_cells)
+                dom_dofs = locate_dofs_topological(
+                    V_sigma, self.domain.topology.dim, dom_cells
+                )
                 i_mat = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
                 mat = self.mat_map[i_mat].mat
                 if mat.is_isotropic():
                     val = np.full_like(dom_dofs, mat.sigma, dtype=default_scalar_type)
                 elif not mat.is_func:
-                    #val = mat.sigma_fen.value
-                    _sig = sum(mat.sigma ** 2) ** 0.5
+                    # val = mat.sigma_fen.value
+                    _sig = sum(mat.sigma**2) ** 0.5
                     val = np.full_like(dom_dofs, _sig, dtype=default_scalar_type)
                 elif mat.is_func:
                     sig_ = Function(V_sigma)
@@ -716,7 +728,7 @@ class FEMSimulation(FEMParameters):
         S = assemble_scalar(form(1 * self.ds(dom_id)))
         if self.comm == MPI.COMM_WORLD:
             S = self.comm.reduce(S, op=MPI.SUM, root=0)
-            S = self.comm.bcast(S, root=0)  
+            S = self.comm.bcast(S, root=0)
         return S
 
     def get_domain_potential(self, dom_id, dim=2, space=0):

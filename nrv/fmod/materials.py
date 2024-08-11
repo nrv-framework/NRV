@@ -1,6 +1,7 @@
 """
 NRV-:class:`.material` handling.
 """
+
 import faulthandler
 import os
 import numpy as np
@@ -94,11 +95,11 @@ def load_material(f_material):
     return mat_obj
 
 
-def compute_effective_conductivity(sigma:float, epsilon:float, freq:float)->float:
+def compute_effective_conductivity(sigma: float, epsilon: float, freq: float) -> float:
     r"""
     return the effective conductivity of the material.
     Two cases are psooible:
-    
+
         - purely conductive material (when both `epsilon` or `freq` are set)
 
         .. math:: \sigma_{eff} = \sigma
@@ -112,9 +113,10 @@ def compute_effective_conductivity(sigma:float, epsilon:float, freq:float)->floa
     sigma   : float
         conductivity
     """
-    if epsilon is None or freq is None :
+    if epsilon is None or freq is None:
         return sigma
-    return abs(sigma+2j*pi*freq*epsilon_0*epsilon)
+    return abs(sigma + 2j * pi * freq * epsilon_0 * epsilon)
+
 
 ####################
 ## material class ##
@@ -123,7 +125,7 @@ class material(NRV_class):
     """
     a class for material, where all the physical properties constants are stored.
 
-    by default materials in NRV are considerated as purely conductive. Yet, 
+    by default materials in NRV are considerated as purely conductive. Yet,
     """
 
     def __init__(self):
@@ -146,7 +148,6 @@ class material(NRV_class):
         self.epsilon = None
         self.freq = None
 
-
     @property
     def sigma(self):
         """
@@ -155,13 +156,11 @@ class material(NRV_class):
         if not self.is_isotropic():
             return np.array([self.sigma_xx, self.sigma_yy, self.sigma_zz])
         return compute_effective_conductivity(
-            sigma=self._sigma,
-            epsilon=self.epsilon,
-            freq=self.freq
+            sigma=self._sigma, epsilon=self.epsilon, freq=self.freq
         )
 
     @property
-    def sigma_xx(self)->float:
+    def sigma_xx(self) -> float:
         """
         get the conductivity of the material along ox
         """
@@ -169,14 +168,11 @@ class material(NRV_class):
             rise_warning("Isotropic conductor sigma_xx is sigma")
             return self.sigma
         return compute_effective_conductivity(
-            sigma=self._sigma_xx,
-            epsilon=self.epsilon,
-            freq=self.freq
+            sigma=self._sigma_xx, epsilon=self.epsilon, freq=self.freq
         )
 
-
     @property
-    def sigma_yy(self)->float:
+    def sigma_yy(self) -> float:
         """
         get the conductivity of the material along oy
         """
@@ -184,14 +180,11 @@ class material(NRV_class):
             rise_warning("Isotropic conductor sigma_yy is sigma")
             return self.sigma
         return compute_effective_conductivity(
-            sigma=self._sigma_yy,
-            epsilon=self.epsilon,
-            freq=self.freq
+            sigma=self._sigma_yy, epsilon=self.epsilon, freq=self.freq
         )
 
-
     @property
-    def sigma_zz(self)->float:
+    def sigma_zz(self) -> float:
         """
         get the conductivity of the material along oz
         """
@@ -199,12 +192,8 @@ class material(NRV_class):
             rise_warning("Isotropic conductor sigma_zz is sigma")
             return self.sigma
         return compute_effective_conductivity(
-            sigma=self._sigma_zz,
-            epsilon=self.epsilon,
-            freq=self.freq
+            sigma=self._sigma_zz, epsilon=self.epsilon, freq=self.freq
         )
-
-
 
     def save_material(self, save=False, fname="material.json"):
         rise_warning("save_material is a deprecated method use save")
@@ -214,7 +203,7 @@ class material(NRV_class):
         rise_warning("load_material is a deprecated method use load")
         self.load(data=data)
 
-    def set_name(self, name:str)->None:
+    def set_name(self, name: str) -> None:
         """
         set a name to a material
 
@@ -225,7 +214,7 @@ class material(NRV_class):
         """
         self.name = name
 
-    def set_source(self, source:str)->None:
+    def set_source(self, source: str) -> None:
         """
         set a source to a material. Note that this source is a string without spaces
 
@@ -236,7 +225,7 @@ class material(NRV_class):
         """
         self.source = source
 
-    def set_isotropic_conductivity(self, sigma:float)-> None:
+    def set_isotropic_conductivity(self, sigma: float) -> None:
         """
         set the conductivity for an isotropic material
 
@@ -248,7 +237,9 @@ class material(NRV_class):
         self.isotrop_cond = True
         self._sigma = float(sigma)
 
-    def set_anisotropic_conductivity(self, sigma_xx:float, sigma_yy:float, sigma_zz:float)->None:
+    def set_anisotropic_conductivity(
+        self, sigma_xx: float, sigma_yy: float, sigma_zz: float
+    ) -> None:
         """
         set the conductivity tensor for an anisotropic material
 
@@ -266,7 +257,7 @@ class material(NRV_class):
         self._sigma_yy = float(sigma_yy)
         self._sigma_zz = float(sigma_zz)
 
-    def is_isotropic(self)->bool:
+    def is_isotropic(self) -> bool:
         """
         check that the material is isotropic or not, return true if isotropic, else false
 
@@ -278,7 +269,7 @@ class material(NRV_class):
         return self.isotrop_cond
 
     ## Permitivity relatied methods
-    def set_permitivity(self, epsilon:float)->None:
+    def set_permitivity(self, epsilon: float) -> None:
         """
         set the relative permitivity of the material.
 
@@ -294,7 +285,7 @@ class material(NRV_class):
         """
         self.epsilon = float(epsilon)
 
-    def set_frequency(self, freq:float)->None:
+    def set_frequency(self, freq: float) -> None:
         """
         set the frequency of the electric field in the material
 
@@ -305,7 +296,7 @@ class material(NRV_class):
         """
         self.freq = float(freq)
 
-    def clear_frequency(self)->None:
+    def clear_frequency(self) -> None:
         """
         set the woking frequency to None
 
@@ -321,4 +312,3 @@ class material(NRV_class):
         check if the material permitivity and the electric field frequency are set
         """
         return self.epsilon is not None and self.freq is not None
-

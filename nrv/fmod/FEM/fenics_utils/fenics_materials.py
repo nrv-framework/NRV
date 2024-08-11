@@ -1,6 +1,7 @@
 """
 NRV-fenics_materials class handling.
 """
+
 import faulthandler
 import os
 
@@ -23,7 +24,6 @@ faulthandler.enable()
 dir_path = os.environ["NRVPATH"] + "/_misc"
 
 
-
 ####################
 ## material class ##
 ####################
@@ -39,7 +39,7 @@ class fenics_material(NRV_class):
         generate the fenics material from mat attribute
     """
 
-    def __init__(self, mat:any=None):
+    def __init__(self, mat: any = None):
         """
         initialisation of the fenics_material
         """
@@ -48,7 +48,6 @@ class fenics_material(NRV_class):
         self._sigma_fen = None
         self.elem = ("Discontinuous Lagrange", 1)
         self.UN = 1
-
 
     ## Save and Load mehtods
     def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):
@@ -162,4 +161,4 @@ class fenics_material(NRV_class):
                     ]
                 )
             else:
-                    self._sigma_fen.interpolate(_sig)
+                self._sigma_fen.interpolate(_sig)

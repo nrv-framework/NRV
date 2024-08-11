@@ -8,15 +8,15 @@ from .NerveMshCreator import *
 
 
 def mesh_from_electrode(
-    elec:FEM_electrode,
-    mesh:NerveMshCreator=None,
-    Length:float=10000,
-    Outer_D:float=5,
-    Nerve_D:float=4000,
-    y_c:float=0,
-    z_c:float=0,
-    res:float | str="default",
-)->NerveMshCreator:
+    elec: FEM_electrode,
+    mesh: NerveMshCreator = None,
+    Length: float = 10000,
+    Outer_D: float = 5,
+    Nerve_D: float = 4000,
+    y_c: float = 0,
+    z_c: float = 0,
+    res: float | str = "default",
+) -> NerveMshCreator:
     """
     returns the corresponding mesh from a nrv.facsicle
     """
@@ -31,16 +31,17 @@ def mesh_from_electrode(
         elec.parameter_model(mesh, res=res)
     return mesh
 
+
 def mesh_from_extracellular_context(
-    extracel_context:FEM_stimulation,
-    mesh:NerveMshCreator|None=None,
-    Length:float=10000,
-    Outer_D:float=5,
-    Nerve_D:float=4000,
-    y_c:float=0,
-    z_c:float=0,
-    res_elec:list[float]|float|str="default",
-)->NerveMshCreator:
+    extracel_context: FEM_stimulation,
+    mesh: NerveMshCreator | None = None,
+    Length: float = 10000,
+    Outer_D: float = 5,
+    Nerve_D: float = 4000,
+    y_c: float = 0,
+    z_c: float = 0,
+    res_elec: list[float] | float | str = "default",
+) -> NerveMshCreator:
     """
     returns the corresponding mesh from a nrv.facsicle
     """
@@ -75,20 +76,20 @@ def mesh_from_extracellular_context(
 
 
 def mesh_from_fascicle(
-    fascicle:fascicle,
-    mesh:NerveMshCreator|None=None,
-    Length:float=10000,
-    Outer_D:float=5,
-    Nerve_D:float=4000,
-    y_c:float=0,
-    z_c:float=0,
-    add_axons:bool=True,
-    add_context:bool=False,
-    res_nerve:float|str="default",
-    res_fasc:float|str="default",
-    res_ax:list[float]|float|str="default",
-    res_elec:list[float]|float|str="default",
-)->NerveMshCreator:
+    fascicle: fascicle,
+    mesh: NerveMshCreator | None = None,
+    Length: float = 10000,
+    Outer_D: float = 5,
+    Nerve_D: float = 4000,
+    y_c: float = 0,
+    z_c: float = 0,
+    add_axons: bool = True,
+    add_context: bool = False,
+    res_nerve: float | str = "default",
+    res_fasc: float | str = "default",
+    res_ax: list[float] | float | str = "default",
+    res_elec: list[float] | float | str = "default",
+) -> NerveMshCreator:
     """
     returns the corresponding mesh from a nrv.facsicle
     """
@@ -119,28 +120,26 @@ def mesh_from_fascicle(
             mye = bool(fascicle.axons_type[i_ax])
             if isinstance(res_ax, str) and res_ax != "default":
                 res_ax = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
-            mesh.reshape_axon(d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_sift=node_sift, res=res_ax)
+            mesh.reshape_axon(
+                d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_sift=node_sift, res=res_ax
+            )
     if add_context and fascicle.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
-            fascicle.extra_stim,
-            mesh=mesh,
-            res_elec=res_elec
+            fascicle.extra_stim, mesh=mesh, res_elec=res_elec
         )
     return mesh
 
 
 def mesh_from_nerve(
-    nerve:nerve,
-    length:float=None,
-    add_axons:bool=True,
-    res_nerve:float|str="default",
-    res_fasc:list[float]|float|str="default",
-    res_ax:list[float]|float|str="default",
-    res_elec:list[float]|float|str="default",
-)->NerveMshCreator:
-    """
-    
-    """
+    nerve: nerve,
+    length: float = None,
+    add_axons: bool = True,
+    res_nerve: float | str = "default",
+    res_fasc: list[float] | float | str = "default",
+    res_ax: list[float] | float | str = "default",
+    res_elec: list[float] | float | str = "default",
+) -> NerveMshCreator:
+    """ """
     nerve = load_any(nerve, extracel_context=True)
     length = length or nerve.L
     mesh = NerveMshCreator(
@@ -173,8 +172,6 @@ def mesh_from_nerve(
         )
     if "extra_stim" in nerve.__dict__ and nerve.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
-            nerve.extra_stim,
-            mesh=mesh,
-            res_elec=res_elec
-            )
+            nerve.extra_stim, mesh=mesh, res_elec=res_elec
+        )
     return mesh

@@ -1,6 +1,7 @@
 """
 NRV-fenics_materials class handling.
 """
+
 import faulthandler
 import os
 
@@ -25,7 +26,7 @@ faulthandler.enable()
 ###############
 
 
-def is_lay_mat(mat:object)->bool:
+def is_lay_mat(mat: object) -> bool:
     """
     check if an object is a fenics_material, return True if yes, else False
 
@@ -43,15 +44,14 @@ def is_lay_mat(mat:object)->bool:
 
 
 def get_sig_ap(sig_in, sig_lay, alpha_lay):
-    """
+    """ """
 
-    """
-
-    _alpha_lay = 1/alpha_lay
-    _alpha_in = 1/(1-1/_alpha_lay)
+    _alpha_lay = 1 / alpha_lay
+    _alpha_in = 1 / (1 - 1 / _alpha_lay)
     _sig1 = sig_in * _alpha_in
     _sig2 = sig_lay * _alpha_lay
-    return (_sig1 * _sig2)/(_sig1 + _sig2)
+    return (_sig1 * _sig2) / (_sig1 + _sig2)
+
 
 ####################
 ## material class ##
@@ -69,7 +69,9 @@ class layered_material(f_material):
         generate the fenics material from mat attribute
     """
 
-    def __init__(self, mat_in:any=None, mat_lay:any=None, alpha_lay:float=0.01):
+    def __init__(
+        self, mat_in: any = None, mat_lay: any = None, alpha_lay: float = 0.01
+    ):
         """
         initialisation of the fenics_material
         """
@@ -82,10 +84,10 @@ class layered_material(f_material):
     def is_isotropic(self) -> bool:
         return self.mat_in.is_isotropic() and self.mat_lay.is_isotropic()
 
-    def is_function_defined(self)->bool:
+    def is_function_defined(self) -> bool:
         return self.mat_in.is_func or self.mat_lay.is_func
-    
-    def set_frequency(self, freq: float, set_in: bool=False) -> None:
+
+    def set_frequency(self, freq: float, set_in: bool = False) -> None:
         self.mat_lay.set_frequency(freq)
         if set_in:
             self.mat_in.set_frequency(freq)

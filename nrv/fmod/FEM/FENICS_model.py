@@ -1,6 +1,7 @@
 """
 NRV-:class:`.FENICS_model` handling.
 """
+
 import configparser
 import os
 import time
@@ -35,7 +36,8 @@ FENICS_Status = machine_config.get("FENICS", "FENICS_STATUS") == "True"
 
 fem_verbose = True
 
-def check_sim_dom(sim:FEMSimulation, mesh:NerveMshCreator):
+
+def check_sim_dom(sim: FEMSimulation, mesh: NerveMshCreator):
     """
     Check if all the physical domains of a mesh are linked to a material property.
     This function can either prevent errors or help to debbug
@@ -112,7 +114,7 @@ class FENICS_model(FEM_model):
         self.Perineurium_mat = "perineurium"
         self.Electrodes_mat = 1  # "platinum"
 
-        self.default_fascicle = {"d": 250, "y_c": 0, "z_c": 0, "res": 250/3}
+        self.default_fascicle = {"d": 250, "y_c": 0, "z_c": 0, "res": 250 / 3}
         self.default_electrode = {
             "elec_type": "LIFE",
             "x_c": self.L / 2,
@@ -368,7 +370,13 @@ class FENICS_model(FEM_model):
             self.__update_parameters()
 
     def reshape_fascicle(
-        self, Fascicle_D, y_c=0, z_c=0, ID=None, Perineurium_thickness=None, res="default"
+        self,
+        Fascicle_D,
+        y_c=0,
+        z_c=0,
+        ID=None,
+        Perineurium_thickness=None,
+        res="default",
     ):
         """
         Reshape a fascicle of the FEM simulation
@@ -632,9 +640,13 @@ class FENICS_model(FEM_model):
                 for i_elec in self.j_electrode:
                     if i_elec == "E" + str(E):
                         e_dom = (
-                            ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * E)
+                            ENT_DOM_offset["Surface"]
+                            + ENT_DOM_offset["Electrode"]
+                            + (2 * E)
                         )
-                        self.j_electrode[i_elec] = self.i_stim/self.sim.get_surface(e_dom)
+                        self.j_electrode[i_elec] = self.i_stim / self.sim.get_surface(
+                            e_dom
+                        )
                     else:
                         self.j_electrode[i_elec] = 0
                 self.sim.setup_sim(**self.j_electrode)

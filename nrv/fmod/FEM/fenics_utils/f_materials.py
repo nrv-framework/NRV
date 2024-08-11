@@ -1,6 +1,7 @@
 """
 NRV-fenics_materials class handling.
 """
+
 import faulthandler
 import os
 
@@ -75,11 +76,10 @@ class f_material(material):
     @property
     def sigma_func(self):
         return compute_effective_conductivity(
-            sigma=self._sigma_func,
-            epsilon=self.epsilon,
-            freq=self.freq
+            sigma=self._sigma_func, epsilon=self.epsilon, freq=self.freq
         )
-    def set_conductivity_function(self, sigma_func:nrv_function)->None:
+
+    def set_conductivity_function(self, sigma_func: nrv_function) -> None:
         """
         set the conductivity space function for an anisotropic material
 
@@ -91,7 +91,7 @@ class f_material(material):
         self.isotrop_cond = False
         self._sigma_func = sigma_func
 
-    def is_function_defined(self)->bool:
+    def is_function_defined(self) -> bool:
         """
         check that the material conductivity is define as a function
 
@@ -107,7 +107,8 @@ class f_material(material):
 ## Functions ##
 ###############
 
-def is_f_mat(mat:object)->bool:
+
+def is_f_mat(mat: object) -> bool:
     """
     check if an object is a fenics_material, return True if yes, else False
 
@@ -126,9 +127,9 @@ def is_f_mat(mat:object)->bool:
 
 def mat_from_interp(
     X, Y, kind="linear", dx=0.01, interpolator=None, dxdy=None, scale=None, columns=0
-)->f_material:
+) -> f_material:
     """
-    Return a fenics material with a conductivity space function define as the 
+    Return a fenics material with a conductivity space function define as the
     :class:`~nrv.utils.nrv_function.nrv_interp` of X and Y
 
     Parameters
@@ -161,9 +162,9 @@ def mat_from_interp(
     return mat_obj
 
 
-def mat_from_csv(fname:str, **kwargs)->f_material:
+def mat_from_csv(fname: str, **kwargs) -> f_material:
     """
-    Return a fenics material with a conductivity space function define as the 
+    Return a fenics material with a conductivity space function define as the
     :class:`~nrv.utils.nrv_function.nrv_interp` from the value of a .csv file
 
     Parameters
@@ -185,7 +186,8 @@ def mat_from_csv(fname:str, **kwargs)->f_material:
 
     return mat_from_interp(X, Y, **kwargs)
 
-def load_f_material(X:any=None, **kwargs)->f_material:
+
+def load_f_material(X: any = None, **kwargs) -> f_material:
     """
     Return fenics material from an object X
 
@@ -216,15 +218,17 @@ def load_f_material(X:any=None, **kwargs)->f_material:
         mat.set_isotropic_conductivity(X)
     elif np.iterable(X):
         if len(X) == 2:
-            mat = mat_from_interp(X[0,:], X[1,:], **kwargs)
+            mat = mat_from_interp(X[0, :], X[1, :], **kwargs)
         elif len(X) == 3:
             mat = f_material()
             mat.set_anisotropic_conductivity(X[0], X[1], X[2])
     elif hasattr(X, "mat"):
         mat = load_f_material(X.mat)
     if mat is None:
-        rise_warning(TypeError,
-                     f"{type(X)} not convertible in f_material\n",
-                     "empty material generated")
-        mat=f_material()
+        rise_warning(
+            TypeError,
+            f"{type(X)} not convertible in f_material\n",
+            "empty material generated",
+        )
+        mat = f_material()
     return mat
