@@ -3,6 +3,7 @@ log_interface handling.
 
 For the moment, the log interface is managed using the pyswarms reporter class to avoid interference between loggers.
 """
+
 import logging
 import os
 import sys
@@ -249,22 +250,22 @@ def pass_debug_info(*args, **kwargs):
             sys.stdout.flush()
 
 
-
-
 ########
 # pbar #
 ########
-class pbar():
+class pbar:
     """
     Progess bar object compatible with MPI
     """
+
     instanciate = True
+
     def __init__(self, n_tot, label=""):
         if not MCH.is_alone():
             label = f"{MCH.rank}: " + label
         self.__instantiate_delay()
         self._pbar = tqdm.tqdm(total=n_tot, desc=label, position=MCH.rank)
-    
+
     def __del__(self):
         del self._pbar
         if MCH.do_master_only_work():
@@ -273,8 +274,8 @@ class pbar():
             sys.stdout.flush()
 
     def __instantiate_delay(self):
-        # Dirty hack to prevent skiping two lines 
-        sleep(0.05*(MCH.rank))
+        # Dirty hack to prevent skiping two lines
+        sleep(0.05 * (MCH.rank))
 
     def set_label(self, label=""):
         if not MCH.is_alone():
@@ -334,7 +335,7 @@ def prompt_debug(*args):
     ic(*args)
 
 
-def clear_prompt_line(n:int=1) -> None:
+def clear_prompt_line(n: int = 1) -> None:
     """
     Clear lines of the prompt, to overwrite stuffs.
 
@@ -343,7 +344,7 @@ def clear_prompt_line(n:int=1) -> None:
     n : int, optional
         Number of line to clear, by default 1
     """
-    LINE_UP = '\033[1A'
-    LINE_CLEAR = '\x1b[2K'
+    LINE_UP = "\033[1A"
+    LINE_CLEAR = "\x1b[2K"
     for i in range(n):
         print(LINE_UP, end=LINE_CLEAR)

@@ -4,7 +4,6 @@ import inspect
 from .log_interface import rise_warning
 
 
-
 def set_attributes(my_object, attributes_dict):
     for key, value in attributes_dict.items():
         if key in my_object.__dict__:
@@ -19,7 +18,7 @@ def set_attributes(my_object, attributes_dict):
     return 0
 
 
-def check_function_kwargs(func:Callable, kwargs:dict)->dict:
+def check_function_kwargs(func: Callable, kwargs: dict) -> dict:
     """
     check that the keys of a dictionnary are arguments of a function and return an updated dictionnary with only valide keys
 
@@ -35,17 +34,19 @@ def check_function_kwargs(func:Callable, kwargs:dict)->dict:
     dict
         updated kwargs dictionnary
     """
-    func_kwargs_set = set(func.__code__.co_varnames[:func.__code__.co_argcount])
+    func_kwargs_set = set(func.__code__.co_varnames[: func.__code__.co_argcount])
     kwargs_set = set(kwargs.keys())
     not_valid_kwargs_set = kwargs_set - func_kwargs_set
     for k in not_valid_kwargs_set:
         kwargs.pop(k)
     return kwargs
 
-def function_to_str(func:Callable)->str:
+
+def function_to_str(func: Callable) -> str:
     lines = inspect.getsource(func)
     return lines
 
-def str_to_function(lines:str)->Callable:
+
+def str_to_function(lines: str) -> Callable:
     lines
     return lines

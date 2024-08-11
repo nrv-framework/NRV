@@ -45,11 +45,10 @@ class NRV_results(NRV_class, dict):
 
         if "nrv_type" in context:
             context["result_type"] = context.pop("nrv_type")
-        
+
         # Discard saving for empty results (mostly fo Mcore)
         self.update(context)
         self.__sync()
-
 
     @property
     def to_save(self):
@@ -90,7 +89,12 @@ class NRV_results(NRV_class, dict):
                 del self.__dict__[key]
             super().__delitem__(key)
 
-    def remove_key(self, keys_to_remove:str|set[str]=[], keys_to_keep:set[str]|None=None, verbose:bool=False):
+    def remove_key(
+        self,
+        keys_to_remove: str | set[str] = [],
+        keys_to_keep: set[str] | None = None,
+        verbose: bool = False,
+    ):
         """
         Remove a key or a list of keys from the results
 
@@ -109,11 +113,17 @@ class NRV_results(NRV_class, dict):
         else:
             if isinstance(keys_to_remove, str):
                 del self[keys_to_remove]
-                pass_info("removed the following key from results: ", keys_to_remove, verbose=verbose)
+                pass_info(
+                    "removed the following key from results: ",
+                    keys_to_remove,
+                    verbose=verbose,
+                )
             else:
                 for key in keys_to_remove:
                     del self[key]
-                    pass_info("removed the following key from results: ", key, verbose=verbose)
+                    pass_info(
+                        "removed the following key from results: ", key, verbose=verbose
+                    )
 
     def update(self, __m, **kwargs) -> None:
         """

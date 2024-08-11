@@ -1,6 +1,7 @@
 """
 Access and modify NRV Parameters.
 """
+
 import configparser
 import os
 from .NRV_Singleton import NRV_singleton
@@ -74,6 +75,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         set gmsh core number
         """
         self.GMSH_Ncores = n
+
 
 ###########################
 #   Parameter singleton   #

@@ -4,7 +4,6 @@ NRV-:class:`.NRV_simulable` handling.
 A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`)
 """
 
-
 from .NRV_Class import NRV_class
 from .NRV_Results import generate_results, sim_results
 
@@ -24,6 +23,7 @@ def is_NRV_simulable(x):
     """
     return isinstance(x, NRV_simulable)
 
+
 def simulable(x):
     """
     Check if the object x is a :class:`.NRV_simulable`.
@@ -39,11 +39,12 @@ def simulable(x):
     """
     return isinstance(x, NRV_simulable)
 
+
 class NRV_simulable(NRV_class):
     """
     Generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`).
     This class gather commun features to all the simulable object, in particular the :func:`.NRV_simulable.simulate` method.
-    
+
     Note
     ----
     -   All NRV_simulable instance are callable object. When called, the instance :func:`.NRV_simulable.simulate` method is called.

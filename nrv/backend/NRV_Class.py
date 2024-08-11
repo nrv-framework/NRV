@@ -2,6 +2,7 @@
 Module containing a top class from which all other NRV classes inherit.
 This is mainly used to create generic methods such as save and load.
 """
+
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
@@ -251,7 +252,7 @@ class NRV_class(metaclass=ABCMeta):
                     key_dic[key] = {}
                     for i in self.__dict__[key]:
                         key_dic[key][i] = self.__dict__[key][i].save(**kwargs)
-                
+
                 else:
                     key_dic[key] = deepcopy(self.__dict__[key])
         if save:
@@ -298,7 +299,7 @@ class NRV_class(metaclass=ABCMeta):
         ----------
         ***kwargs
             Key arguments containing one or multiple parameters to set.
-            
+
         Examples
         --------
         As the :class:`~nrv.nmod.myelinated.myelinated` inherits from NRV_class-class parameters, such as diameter and lenght can be set with `set_parameters`.
@@ -345,7 +346,7 @@ def load_any(data, **kwargs):
     -------
     nrv_obj: any (NRV_class)
 
-    
+
     """
     if isinstance(data, str):
         key_dic = json_load(data)

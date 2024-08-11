@@ -1,6 +1,7 @@
 """
 NRV-Multi-Core/Parallel computing handling.
 """
+
 import numpy as np
 from .NRV_Singleton import NRV_singleton
 
@@ -101,7 +102,7 @@ class Mcore_handler(metaclass=NRV_singleton):
         if self.is_alone():
             mask = np.arange(len_arrays)
         else:
-            if stype=="comb":
+            if stype == "comb":
                 mask = np.arange(len_arrays)
                 mask = np.where(self.rank == mask % self.size)[0]
             else:
