@@ -1,6 +1,7 @@
 """
 NRV-:class:`nrv_function` handling.
 """
+
 from abc import abstractmethod
 
 import numpy as np
@@ -156,9 +157,9 @@ class gaussian(function_1D):
 
         f(x) = e^{-\frac{(x-\mu)^2}{2*\sigma^2}}
     """
+
     def __init__(self, mu=0, sigma=1):
-        """
-        """
+        """ """
         super().__init__()
         self.mu = mu
         self.sigma = sigma
@@ -213,7 +214,6 @@ class function_2D(nrv_function):
         super().__init__()
         self.f_type = "function_2D"
         self.dim = 2
-
 
     @staticmethod
     def call_method(self, X):
@@ -310,7 +310,6 @@ class function_ND(nrv_function):
         super().__init__()
         self.f_type = "function_ND"
         self.dim = "N"
-
 
     @staticmethod
     def call_method(self, *X):
@@ -544,39 +543,39 @@ class nrv_interp(nrv_function):
                 rise_error(
                     "Not implemented: operations of nrv_iterp with different X_scale"
                 )
-        else: 
-            Y = self.Y_values+b
+        else:
+            Y = self.Y_values + b
         return nrv_interp(
-            X_values = self.X_values,
-            Y_values = Y,
-            interpolator = self.interpolator,
-            kind = self.kind,
-            dx = self.dx,
-            dxdy = None,
-            scale = self.scale,
-            columns = self.columns,
+            X_values=self.X_values,
+            Y_values=Y,
+            interpolator=self.interpolator,
+            kind=self.kind,
+            dx=self.dx,
+            dxdy=None,
+            scale=self.scale,
+            columns=self.columns,
         )
 
     def __mul__(self, b):
         if isinstance(b, nrv_interp):
             if np.allclose(b.X_values, self.X_values):
-                Y =  self.Y_values*b.Y_values
+                Y = self.Y_values * b.Y_values
                 # TO ADD: computation of dxdy when both are set
             else:
                 rise_error(
                     "Not implemented: operations of nrv_iterp with different X_scale"
                 )
-        else: 
-            Y = self.Y_values*b
+        else:
+            Y = self.Y_values * b
         return nrv_interp(
-            X_values = self.X_values,
-            Y_values = Y,
-            interpolator = self.interpolator,
-            kind = self.kind,
-            dx = self.dx,
-            dxdy = None,
-            scale = self.scale,
-            columns = self.columns,
+            X_values=self.X_values,
+            Y_values=Y,
+            interpolator=self.interpolator,
+            kind=self.kind,
+            dx=self.dx,
+            dxdy=None,
+            scale=self.scale,
+            columns=self.columns,
         )
 
     def __truediv__(self, b):
@@ -592,16 +591,16 @@ class nrv_interp(nrv_function):
                     "operations of nrv_iterp with different X_scale",
                 )
         else:
-            Y = self.Y_values/b
+            Y = self.Y_values / b
         return nrv_interp(
-            X_values = self.X_values,
-            Y_values = Y,
-            interpolator = self.interpolator,
-            kind = self.kind,
-            dx = self.dx,
-            dxdy = None,
-            scale = self.scale,
-            columns = self.columns,
+            X_values=self.X_values,
+            Y_values=Y,
+            interpolator=self.interpolator,
+            kind=self.kind,
+            dx=self.dx,
+            dxdy=None,
+            scale=self.scale,
+            columns=self.columns,
         )
 
     def __rtruediv__(self, b):
@@ -609,7 +608,7 @@ class nrv_interp(nrv_function):
             rise_error(ZeroDivisionError, " float division by zero in Python")
         if isinstance(b, nrv_interp):
             if np.allclose(b.X_values, self.X_values):
-                Y = b.Y_values/self.Y_values
+                Y = b.Y_values / self.Y_values
                 # TO ADD: computation of dxdy when both are set
             else:
                 rise_error(
@@ -617,28 +616,27 @@ class nrv_interp(nrv_function):
                     "operations of nrv_iterp with different X_scale",
                 )
         else:
-            Y = b/self.Y_values
+            Y = b / self.Y_values
         return nrv_interp(
-            X_values = self.X_values,
-            Y_values = Y,
-            interpolator = self.interpolator,
-            kind = self.kind,
-            dx = self.dx,
-            dxdy = self.dxdy,
-            scale = self.scale,
-            columns = self.columns,
+            X_values=self.X_values,
+            Y_values=Y,
+            interpolator=self.interpolator,
+            kind=self.kind,
+            dx=self.dx,
+            dxdy=self.dxdy,
+            scale=self.scale,
+            columns=self.columns,
         )
-
 
     def __radd__(self, b):
         return self.__add__(b)
 
     def __rmul__(self, b):
         return self.__mul__(b)
-    
+
     def __sub__(self, b):
         return self.__add__(-b)
-    
+
     def __rsub__(self, b):
         return self.__sub__(b)
 

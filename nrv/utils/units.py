@@ -33,6 +33,7 @@ The folowing table details the default units used in NRV and the lists of units 
             - F, mF, pF, nF
 
 """
+
 import numpy as np
 from copy import deepcopy
 
@@ -212,6 +213,7 @@ def to_nrv_unit(value, unit):
     else:
         return value * unit
 
+
 def convert(value, unitin, unitout):
     """
     Convert a quantity ``value`` from ``unitin`` to ``unitout``.
@@ -246,7 +248,8 @@ def convert(value, unitin, unitout):
         return cp_value
     else:
         return from_nrv_unit(to_nrv_unit(value, unitin), unitout)
-    
+
+
 def sci_round(value, digits=3):
     """
     Rounds one or several values to ``digits`` significant digits.

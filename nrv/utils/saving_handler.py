@@ -3,6 +3,7 @@ NRV-Cellular Level simulations
 Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
+
 from ..backend.MCore import *
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *

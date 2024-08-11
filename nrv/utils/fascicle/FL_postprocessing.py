@@ -1,6 +1,7 @@
 """
 NRV-Facsiclular Level postprocessing.
 """
+
 import faulthandler
 import os
 
@@ -35,12 +36,10 @@ def ls_axons_results(dir_path):
         list of axons result files
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "ls_axons_results is deprecated."
-    )
+    rise_warning("DeprecationWarning: ", "ls_axons_results is deprecated.")
     list_files = [file for file in os.listdir(dir_path) if file[0:9] == "sim_axon_"]
     return list_files
+
 
 def ls_csv(dir_path):
     """
@@ -56,10 +55,7 @@ def ls_csv(dir_path):
     files        :list of str
         list of axons result files
     """
-    rise_warning(
-        "DeprecationWarning: ",
-        "ls_csv is depecrated."
-    )
+    rise_warning("DeprecationWarning: ", "ls_csv is depecrated.")
     list_files = [file for file in os.listdir(dir_path) if file[-4:] == ".csv"]
     return list_files
 
@@ -75,10 +71,7 @@ def rm_file(file_path, verbose=True):
     verbose     : str
         pass information when file is deleted
     """
-    rise_warning(
-        "DeprecationWarning: ",
-        "rm_file is deprecated."
-    )
+    rise_warning("DeprecationWarning: ", "rm_file is deprecated.")
     os.remove(file_path)
     pass_info("folowing file removed :" + file_path, verbose=verbose)
 
@@ -96,10 +89,7 @@ def rm_sim_dir(dir_path, verbose=True):
         pass information when file is deleted
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "rm_sim_dir is deprecated."
-    )
+    rise_warning("DeprecationWarning: ", "rm_sim_dir is deprecated.")
     if os.path.exists(dir_path):
         # messaging saying folder not empty
         if os.path.exists(
@@ -107,7 +97,7 @@ def rm_sim_dir(dir_path, verbose=True):
         ):
             rm_file(dir_path + "00_Fascicle_config.json", verbose)
 
-        for file in ls_axons_results(dir_path)+ls_csv(dir_path):
+        for file in ls_axons_results(dir_path) + ls_csv(dir_path):
             rm_file(dir_path + file, verbose)
         # checking whether the folder is empty or not
         if len(os.listdir(dir_path)) == 0:
@@ -123,6 +113,7 @@ def rm_sim_dir(dir_path, verbose=True):
         # file not found message
         pass_info("Folder not found in the directory", verbose=verbose)
 
+
 def rm_sim_dir_from_results(results, verbose=True):
     """
     Delete directory
@@ -135,18 +126,17 @@ def rm_sim_dir_from_results(results, verbose=True):
     verbose     : str
         pass information when file is deleted
     """
-    rise_warning(
-        "DeprecationWarning: ",
-        "rm_sim_dir_from_results is deprecated."
-    )
-    fasc_dir = results["save_path"] + "Fascicle_" +str(results["ID"]) + "/"
+    rise_warning("DeprecationWarning: ", "rm_sim_dir_from_results is deprecated.")
+    fasc_dir = results["save_path"] + "Fascicle_" + str(results["ID"]) + "/"
     rm_sim_dir(dir_path=fasc_dir, verbose=verbose)
 
-def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinated=False,\
-    index=True):
+
+def CAP_time_detection(
+    Voltage, t, t_stim=0, stim_duration=0, tol=0.05, myelinated=False, index=True
+):
     """
     internal use, Return index in the time scale or time of the start and stop of
-    a Compound Action Potentiel 
+    a Compound Action Potentiel
 
     Parameters
     ----------
@@ -164,25 +154,22 @@ def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinate
         if true the time index is returned, else the time value
     """
 
-    rise_warning(
-        "DeprecationWarning: ",
-        "CAP_time_detection is deprecated."
-    )
+    rise_warning("DeprecationWarning: ", "CAP_time_detection is deprecated.")
     i_start_unm, i_stop_unm = 0, 0
     i_start_m, i_stop_m = 0, 0
     dt = t[1] - t[0]
-    offset = int((t_stim + stim_duration)/dt)+1
+    offset = int((t_stim + stim_duration) / dt) + 1
 
     S = Voltage
     N = len(S) - offset
 
-    for i in range(N-1):
-        if i_start_unm == 0 and S[i+offset]- S[-1] > tol:
-            i_start_unm = i+offset
-        if i_stop_unm == 0 and abs(S[len(S)-i-1])- abs(S[-1]) > tol:
+    for i in range(N - 1):
+        if i_start_unm == 0 and S[i + offset] - S[-1] > tol:
+            i_start_unm = i + offset
+        if i_stop_unm == 0 and abs(S[len(S) - i - 1]) - abs(S[-1]) > tol:
             i_stop_unm = len(S) - i - 1
 
-    if myelinated is False: 
+    if myelinated is False:
         i_max = i_start_unm + np.argmax(Voltage[i_start_unm:i_stop_unm])
         i_min = i_start_unm + np.argmin(Voltage[i_start_unm:i_stop_unm])
         if index:
@@ -193,15 +180,15 @@ def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinate
         ## No unmyelinated CAP found
         if i_start_unm == 0:
             i_stop_m = i_stop_unm
-            for i in range(N-1):
-                if i_start_m == 0 and abs(S[i+offset])-abs(S[-1])> tol:
-                    i_start_m = i+offset
+            for i in range(N - 1):
+                if i_start_m == 0 and abs(S[i + offset]) - abs(S[-1]) > tol:
+                    i_start_m = i + offset
         else:
             N = i_start_unm - offset
-            for i in range(N-1):
-                if i_start_m == 0 and abs(S[i+offset])- abs(S[-1]) > tol:
-                    i_start_m = i+offset
-                if i_stop_m == 0 and abs(S[i_start_unm-i-1])- abs(S[-1]) > tol:
+            for i in range(N - 1):
+                if i_start_m == 0 and abs(S[i + offset]) - abs(S[-1]) > tol:
+                    i_start_m = i + offset
+                if i_stop_m == 0 and abs(S[i_start_unm - i - 1]) - abs(S[-1]) > tol:
                     i_stop_m = i_start_unm - i - 1
         i_max = np.argmax(Voltage[offset:])
         i_min = i_start_m + np.argmin(Voltage[i_start_m:i_stop_m])
@@ -210,6 +197,7 @@ def CAP_time_detection(Voltage, t, t_stim=0, stim_duration=0,tol=0.05, myelinate
             return i_start_m, i_max, i_min, i_stop_m
         else:
             return t[i_start_m], t[i_max], t[i_min], t[i_stop_m]
+
 
 #############################
 ##### Result processing #####
@@ -240,14 +228,14 @@ def fascicular_state(
 
     rise_warning(
         "DeprecationWarning: ",
-        "fascicular_state is deprecated, use block_summary from axon_results instead."
+        "fascicular_state is deprecated, use block_summary from axon_results instead.",
     )
 
     fascicular = json_load(dir_path + "00_Fascicle_config.json")
     facsicular_state = {"-1": fascicular}
     N_ax = len(fascicular["axons_diameter"])
     for i in range(N_ax):
-        file = "sim_axon_"+ str(i) + ".json"
+        file = "sim_axon_" + str(i) + ".json"
         if "extra_stim" not in facsicular_state["-1"]:
             facsicular_state["-1"]["extra_stim"] = extra_stim_properties(
                 dir_path + file
@@ -296,7 +284,7 @@ def plot_fasc_state(
 
     rise_warning(
         "DeprecationWarning: ",
-        "plot_fasc_state is deprecated, use plot_block_summary from fascicules_results instead."
+        "plot_fasc_state is deprecated, use plot_block_summary from fascicules_results instead.",
     )
 
     fasc = facsicular_state["-1"]
@@ -326,12 +314,15 @@ def plot_fasc_state(
     alpha = [1 - (i / (1 + max(alpha))) for i in alpha]
 
     ## plot contour
-    axes.add_patch(plt.Circle(
-                (fasc["y_grav_center"], fasc["z_grav_center"]),
-                fasc["D"]/2,
-                color=contour_color,
-                fill=False,
-                linewidth=2,))
+    axes.add_patch(
+        plt.Circle(
+            (fasc["y_grav_center"], fasc["z_grav_center"]),
+            fasc["D"] / 2,
+            color=contour_color,
+            fill=False,
+            linewidth=2,
+        )
+    )
     ## plot axons
     circles = []
     for k in range(N):

@@ -57,14 +57,14 @@ def distance_point2line(x_p, y_p, a, b):
     return d
 
 
-def nearest_idx(array:NDArray, val:float ) -> int:
+def nearest_idx(array: NDArray, val: float) -> int:
     """
-    Return index of neareast value 
+    Return index of neareast value
 
     Parameters
     ----------
     array : NDArray
-        array of values 
+        array of values
     val : float
         neareast value to find index
 
@@ -73,16 +73,17 @@ def nearest_idx(array:NDArray, val:float ) -> int:
     int
         index of the neareast value
     """
-    return (np.absolute(array-val)).argmin()
- 
-def nearest_greater_idx(array:NDArray, val:float ) -> int:
+    return (np.absolute(array - val)).argmin()
+
+
+def nearest_greater_idx(array: NDArray, val: float) -> int:
     """
-    Return index of neareast greater value 
+    Return index of neareast greater value
 
     Parameters
     ----------
     array : NDArray
-        array of values 
+        array of values
     val : float
         neareast greater value to find index
 
@@ -91,20 +92,21 @@ def nearest_greater_idx(array:NDArray, val:float ) -> int:
     int
         index of the neareast greater value
     """
-    diff = array-val
-    mask = np.ma.MaskedArray(diff, diff<0)
+    diff = array - val
+    mask = np.ma.MaskedArray(diff, diff < 0)
     return mask.argmin()
 
-def in_tol(test:float,ref:float,tol:float = 0.1) -> bool:
+
+def in_tol(test: float, ref: float, tol: float = 0.1) -> bool:
     """
-    Check if a value is equal to a value +- a tol (excluded). 
+    Check if a value is equal to a value +- a tol (excluded).
 
     Parameters
     ----------
     test : float
         Value to test
     ref : float
-        Reference value 
+        Reference value
     tol : float, optional
         Tolerance, expressed as a proportion of ref. By default 0.1
 
@@ -113,14 +115,15 @@ def in_tol(test:float,ref:float,tol:float = 0.1) -> bool:
     bool
         True if within tolerance, else False.
     """
-    up_bound = ref *(1+tol)
-    down_bound =  ref *(1-tol)
-    return (np.abs(test)<up_bound and np.abs(test)>down_bound)
+    up_bound = ref * (1 + tol)
+    down_bound = ref * (1 - tol)
+    return np.abs(test) < up_bound and np.abs(test) > down_bound
+
 
 ####################################################
 ############# nmod related functions ###############
 ####################################################
-def get_perineurial_thickness(fasc_d:float, nerve_type:str="default") -> float:
+def get_perineurial_thickness(fasc_d: float, nerve_type: str = "default") -> float:
     """
     Return a fascicle's perineurium thickness from its diameter.
     Relationship extract from [1]
@@ -165,17 +168,16 @@ def get_perineurial_thickness(fasc_d:float, nerve_type:str="default") -> float:
 
     return fasc_d * thpc
 
+
 def membrane_capacitance_from_model(model):
-    if model in ["MRG", "Gaines_motor", "Gaines_sensory" ]:
+    if model in ["MRG", "Gaines_motor", "Gaines_sensory"]:
         return 2
     if "Schild" in model:
         return 1.326291192
     return 1
 
 
-
-
-def compute_complex_admitance(f:float, g:float, fc:float)->complex:
+def compute_complex_admitance(f: float, g: float, fc: float) -> complex:
     """
     compute the complex admitance of a first oder system (of cutoff frequency fc and conductivity g) at a given frequency f
 
@@ -193,4 +195,4 @@ def compute_complex_admitance(f:float, g:float, fc:float)->complex:
     complex
         complex admitance
     """
-    return g*(1+1j*f/fc)
+    return g * (1 + 1j * f / fc)
