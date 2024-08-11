@@ -14,8 +14,8 @@ from ...utils.nrv_function import nrv_interp
 
 ## interpolation
 def interpolate(
-    y:np.ndarray,
-    x:np.ndarray=[],
+    y: np.ndarray,
+    x: np.ndarray = [],
     scale=4,
     intertype="Spline",
     bounds=(0, 0),
@@ -95,16 +95,16 @@ def interpolate(
 
 
 def interpolate_amp(
-    position:np.ndarray,
-    t_sim:float=100,
-    t_end:float=None,
-    dt:float=0.005,
-    intertype:str="Spline",
-    bounds:tuple[float]=(0, 0),
-    save:bool=False,
-    filename:str="interpolate_part.dat",
-    save_scale:bool=False,
-)->np.ndarray:
+    position: np.ndarray,
+    t_sim: float = 100,
+    t_end: float = None,
+    dt: float = 0.005,
+    intertype: str = "Spline",
+    bounds: tuple[float] = (0, 0),
+    save: bool = False,
+    filename: str = "interpolate_part.dat",
+    save_scale: bool = False,
+) -> np.ndarray:
     """
     genarte a waveform from a particle position using interpolate where the position values are the output waveform amplitudes at constant sample rate
 
@@ -119,7 +119,7 @@ def interpolate_amp(
     intertype   : str
         type of interpolation perform, by default 'Spline'
         type possibly:
-            
+
             - 'Spline'                : Cubic spline interpolation
     bounds      : tupple
         limit range of the interpolation, if both equal no limit,by default (0,0)
@@ -162,22 +162,22 @@ def interpolate_amp(
 
 def interpolate_Npts(
     position,
-    t_sim:float=100,
-    dt:float=0.005,
-    amp_start:float=0,
-    amp_stop:float=1,
-    intertype:str="Spline",
-    bounds:tuple[float]=(0, 0),
-    fixed_order:bool=False,
-    t_end:float=None,
-    t_shift:float=None,
-    save:bool=False,
-    fname:str="interpolate_2pts.dat",
-    plot:bool=False,
-    save_scale:bool=False,
-    generatefigure:bool=True,
-    strict_bounds:bool=True,
-    kwargs_interp:dict={},
+    t_sim: float = 100,
+    dt: float = 0.005,
+    amp_start: float = 0,
+    amp_stop: float = 1,
+    intertype: str = "Spline",
+    bounds: tuple[float] = (0, 0),
+    fixed_order: bool = False,
+    t_end: float = None,
+    t_shift: float = None,
+    save: bool = False,
+    fname: str = "interpolate_2pts.dat",
+    plot: bool = False,
+    save_scale: bool = False,
+    generatefigure: bool = True,
+    strict_bounds: bool = True,
+    kwargs_interp: dict = {},
     **kwargs
 ):
     r"""
@@ -225,7 +225,7 @@ def interpolate_Npts(
     strict_bounds    :bool
         if True values out of bound will be set to closer bound
     kwargs_interp   : dict
-        kwargs to add to the interpollation 
+        kwargs to add to the interpollation
 
     Returns
     -------

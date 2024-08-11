@@ -30,7 +30,9 @@ class context_modifier(NRV_class):
         self.intracel_context = intracel_context
         self.rec_context = rec_context
 
-    def __call__(self, X: np.ndarray, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
+    def __call__(
+        self, X: np.ndarray, static_context: NRV_simulable, **kwargs
+    ) -> NRV_simulable:
         """
         Modify ``static_context`` tunning paramters vector ``X``.
 
@@ -89,14 +91,14 @@ class stimulus_CM(context_modifier):
 
     def __init__(
         self,
-        stim_ID:int=0,
-        interpolator:callable=None,
-        intrep_kwargs:dict={},
-        stim_gen:callable=None,
-        stim_gen_kwargs:dict={},
-        extracel_context:bool=True,
-        intracel_context:bool=False,
-        rec_context:bool=False,
+        stim_ID: int = 0,
+        interpolator: callable = None,
+        intrep_kwargs: dict = {},
+        stim_gen: callable = None,
+        stim_gen_kwargs: dict = {},
+        extracel_context: bool = True,
+        intracel_context: bool = False,
+        rec_context: bool = False,
         **kwargs,
     ):
         super().__init__(
@@ -113,7 +115,7 @@ class stimulus_CM(context_modifier):
             self.intrep_kwargs[key] = kwargs[key]
             self.stim_gen_kwargs[key] = kwargs[key]
 
-    def interpolate(self, X:np.ndarray)->np.ndarray:
+    def interpolate(self, X: np.ndarray) -> np.ndarray:
         """
         interpolate the input vector with the `interpolator`. If not set, the interpolated vector will be the equal to the input vector.
         Parameters
@@ -132,7 +134,7 @@ class stimulus_CM(context_modifier):
             X_interp = X
         return X_interp
 
-    def stimulus_generator(self, X_interp:np.ndarray) -> stimulus:
+    def stimulus_generator(self, X_interp: np.ndarray) -> stimulus:
         """
         generated from interpolated values with  `stim_gen` function. If not set, interpolated values are set for the stimulus amplitude at constant sample rate (from zero to an argument ``t_sim``)
 
@@ -163,7 +165,9 @@ class stimulus_CM(context_modifier):
             else:
                 self.stim_gen_kwargs["t_sim"] = local_sim.t_sim
 
-    def __call__(self, X:np.ndarray, static_sim: NRV_simulable, **kwargs) -> NRV_simulable:
+    def __call__(
+        self, X: np.ndarray, static_sim: NRV_simulable, **kwargs
+    ) -> NRV_simulable:
         """
         Modify ``static_context`` tunning paramters vector ``X``.
 
@@ -235,20 +239,21 @@ class biphasic_stimulus_CM(stimulus_CM):
     :doc:`tutorials 5</tutorials/5_first_optimization>`: First optimization problem using NRV
 
     """
+
     def __init__(
         self,
-        stim_ID:int=0,
-        start:float=1,
-        s_cathod:float|str=100,
-        t_cathod:float|str=60e-3,
-        t_inter:float|str=40e-3,
-        s_anod:float|str=None,
-        s_ratio:float|str=0.2,
-        stim_gen:callable=None,
-        stim_gen_kwargs:dict={},
-        extracel_context:bool=True,
-        intracel_context:bool=False,
-        rec_context:bool=False,
+        stim_ID: int = 0,
+        start: float = 1,
+        s_cathod: float | str = 100,
+        t_cathod: float | str = 60e-3,
+        t_inter: float | str = 40e-3,
+        s_anod: float | str = None,
+        s_ratio: float | str = 0.2,
+        stim_gen: callable = None,
+        stim_gen_kwargs: dict = {},
+        extracel_context: bool = True,
+        intracel_context: bool = False,
+        rec_context: bool = False,
     ):
         super().__init__(
             stim_ID=stim_ID,
@@ -265,7 +270,7 @@ class biphasic_stimulus_CM(stimulus_CM):
         self.s_anod = s_anod
         self.s_ratio = s_ratio
 
-    def __set_values(self, X:np.ndarray):
+    def __set_values(self, X: np.ndarray):
         start = self.start
         s_cathod = self.s_cathod
         t_cathod = self.t_cathod
@@ -326,18 +331,19 @@ class harmonic_stimulus_CM(stimulus_CM):
     rec_context             : bool
         specifies whether to load rec_context with the static context
     """
+
     def __init__(
         self,
-        stim_ID:int=0,
-        start:float=1,
-        amplitude:float=100,
-        t_pulse:float=60e-3,
-        dt:float=0,
-        stim_gen:callable=None,
-        stim_gen_kwargs:dict={},
-        extracel_context:bool=True,
-        intracel_context:bool=False,
-        rec_context:bool=False,
+        stim_ID: int = 0,
+        start: float = 1,
+        amplitude: float = 100,
+        t_pulse: float = 60e-3,
+        dt: float = 0,
+        stim_gen: callable = None,
+        stim_gen_kwargs: dict = {},
+        extracel_context: bool = True,
+        intracel_context: bool = False,
+        rec_context: bool = False,
     ):
         super().__init__(
             stim_ID=stim_ID,
@@ -376,16 +382,16 @@ class harmonic_stimulus_CM(stimulus_CM):
 class harmonic_stimulus_with_pw_CM(stimulus_CM):
     def __init__(
         self,
-        stim_ID:int=0,
-        start:float=1,
-        amplitude:float=100,
-        t_pulse:float=60e-3,
-        dt:float=0,
-        stim_gen:callable=None,
-        stim_gen_kwargs:dict={},
-        extracel_context:bool=True,
-        intracel_context:bool=False,
-        rec_context:bool=False,
+        stim_ID: int = 0,
+        start: float = 1,
+        amplitude: float = 100,
+        t_pulse: float = 60e-3,
+        dt: float = 0,
+        stim_gen: callable = None,
+        stim_gen_kwargs: dict = {},
+        extracel_context: bool = True,
+        intracel_context: bool = False,
+        rec_context: bool = False,
     ):
         super().__init__(
             stim_ID=stim_ID,

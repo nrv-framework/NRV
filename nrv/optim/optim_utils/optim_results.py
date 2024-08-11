@@ -95,7 +95,7 @@ class optim_results(NRV_results):
             pass_info("not found with decimals =", decimals)
         return self.findbestpart(decimals - 1, verbose=verbose, lim_it=lim_it)
 
-    def compute_best_pos(self, cost_function:cost_function, **kwrgs):
+    def compute_best_pos(self, cost_function: cost_function, **kwrgs):
         if MCH.is_alone():
             return cost_function.get_sim_results(self.x)
         else:
@@ -110,7 +110,12 @@ class optim_results(NRV_results):
     ##    plotting methods    ##
     ############################
     def plot_cost_history(
-        self, ax:plt.axes, nitstop:int=-1, xlog:bool=False, ylog:bool=False,**ax_kwargs
+        self,
+        ax: plt.axes,
+        nitstop: int = -1,
+        xlog: bool = False,
+        ylog: bool = False,
+        **ax_kwargs
     ):
         cost = self["cost_history"]
         ax.plot(cost[0:nitstop], **ax_kwargs)

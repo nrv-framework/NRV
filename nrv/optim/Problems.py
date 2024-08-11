@@ -1,6 +1,7 @@
 """
 NRV-:class:`.Problem` handling.
 """
+
 import numpy as np
 import faulthandler
 import traceback
@@ -120,7 +121,7 @@ class Problem(NRV_class):
         pass
 
     # Call method is where the magic happens
-    def __call__(self, **kwargs)->optim_results:
+    def __call__(self, **kwargs) -> optim_results:
         """
         Perform the optimization: minimze the `cost_function` using `optmizer`
 
@@ -168,7 +169,7 @@ class Problem(NRV_class):
                 results.save(save=True, fname=self.problem_fname)
             return results
         else:
-            return optim_results({"dummy_res":1})
+            return optim_results({"dummy_res": 1})
 
     # Mcore handling
     def __check_MCore_CostFunction(self):

@@ -1,6 +1,7 @@
 """
 NRV-:class:`.Optimizer` handling.
 """
+
 from abc import ABCMeta, abstractmethod
 import os
 from typing import Any
@@ -34,7 +35,7 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
         self._method = method
         self.swarm_optimizer = False
 
-    def minimize(self, f:callable, **kwargs)->optim_results:
+    def minimize(self, f: callable, **kwargs) -> optim_results:
         """
         Minimze the function ``f`` using the `optimzer`'s parameters
 
@@ -56,14 +57,13 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
         results["status"] = "Processing"
         return results
 
-    def __call__(self, f:callable, **kwargs: Any) -> optim_results:
+    def __call__(self, f: callable, **kwargs: Any) -> optim_results:
         return self.minimize(f, **kwargs)
 
 
 class scipy_optimizer(Optimizer):
-
     """
-    
+
 
     Parameters
     ----------
@@ -138,22 +138,23 @@ class scipy_optimizer(Optimizer):
 
     [2] `scipy.optimize.minimize <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_
     """
+
     def __init__(
         self,
-        method:str=None,
-        x0:np.ndarray=None,
-        args:tuple=(),
-        jac:callable=None,
-        hess:callable=None,
-        hessp:callable=None,
-        bounds:tuple=None,
-        constraints:dict=(),
-        tol:float=None,
-        callback:callable=None,
-        maxiter:int=None,
-        options:dict=None,
-        dimension:int=None,
-        normalize:bool=False,
+        method: str = None,
+        x0: np.ndarray = None,
+        args: tuple = (),
+        jac: callable = None,
+        hess: callable = None,
+        hessp: callable = None,
+        bounds: tuple = None,
+        constraints: dict = (),
+        tol: float = None,
+        callback: callable = None,
+        maxiter: int = None,
+        options: dict = None,
+        dimension: int = None,
+        normalize: bool = False,
     ):
         if method is None:
             super().__init__("scipy_default")
@@ -218,7 +219,7 @@ class scipy_optimizer(Optimizer):
         results["scale_homothety"] = self.scale_homothety
         results["scaled_bounds"] = self.scaled_bounds
 
-    def minimize(self, f:callable, **kwargs)->optim_results:
+    def minimize(self, f: callable, **kwargs) -> optim_results:
         results = super().minimize(f, **kwargs)
         if self.maxiter is not None:
             self.options["maxiter"] = self.maxiter
@@ -339,6 +340,7 @@ class PSO_optimizer(Optimizer):
 
         [2] `Pyswams handlers <https://pyswarms.readthedocs.io/en/latest/api/pyswarms.handlers.html>`_
     """
+
     def __init__(
         self,
         n_particles=5,
@@ -421,7 +423,7 @@ class PSO_optimizer(Optimizer):
                 print("Terminated")
                 return False
 
-    def minimize(self, f_swarm:callable, **kwargs)-> optim_results:
+    def minimize(self, f_swarm: callable, **kwargs) -> optim_results:
         """
         Perform a Particle swarm optimization
 

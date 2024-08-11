@@ -1,6 +1,7 @@
 """
 NRV-:class:`.cost_function` handling.
 """
+
 import numpy as np
 from ..backend.NRV_Class import NRV_class, load_any
 from ..backend.NRV_Simulable import NRV_simulable, sim_results
@@ -26,7 +27,7 @@ class cost_function(NRV_class):
         function calculating a cost from a axon simulation results, parameters:
             >>> cost_evaluation(results: sim_results, **kwargs) -> float:
     simulation  : funct
-        optional 
+        optional
     kwargs_CM           : dict
         key word arguments of context_modifier function, by default {}
     kwargs_S           : dict
@@ -88,13 +89,12 @@ class cost_function(NRV_class):
         self.__check_mch()
         self.__synchronise_t_sim()
 
-
     ####################################
     ###### automating methods ##########
     ####################################
     def __clear_results(self):
         """
-            clear result for re-use
+        clear result for re-use
         """
         del self.simulation_context
         del self.results
@@ -103,7 +103,7 @@ class cost_function(NRV_class):
 
     def __check_mch(self):
         """
-            check is the simulation will be handle in single or multiple cores
+        check is the simulation will be handle in single or multiple cores
         """
         if self.static_context is not None:
             static_context = load_any(self.static_context)
@@ -127,8 +127,6 @@ class cost_function(NRV_class):
         self.kwargs_CE["t_sim"] = self.global_t_sim
         pass
 
-
-
     @property
     def __cost_function_ok(self):
         s_status = []
@@ -138,14 +136,17 @@ class cost_function(NRV_class):
             s_status += ["context_modifier"]
         if self.cost_evaluation is None:
             s_status += ["cost_evaluation"]
-        if len(s_status)==0:
+        if len(s_status) == 0:
             return True
         else:
-            rise_warning("Cost function cannot be called because the following parameters are not defined: ",s_status)
+            rise_warning(
+                "Cost function cannot be called because the following parameters are not defined: ",
+                s_status,
+            )
             return False
 
     ## Setters
-    def set_static_context(self, static_context:str|dict, **kwgs):
+    def set_static_context(self, static_context: str | dict, **kwgs):
         """
         set the cost static_context after the instantiation
 
@@ -161,7 +162,7 @@ class cost_function(NRV_class):
         self.__check_mch()
         self.__synchronise_t_sim()
 
-    def set_context_modifier(self, context_modifier:callable, **kwgs):
+    def set_context_modifier(self, context_modifier: callable, **kwgs):
         """
         set the cost context modifier after the instantiation
 
@@ -175,7 +176,7 @@ class cost_function(NRV_class):
         self.kwargs_CM = kwgs
         self.__synchronise_t_sim()
 
-    def set_cost_evaluation(self, cost_evaluation:callable, **kwgs):
+    def set_cost_evaluation(self, cost_evaluation: callable, **kwgs):
         """
         set the cost evalutation function after the instantiation
 
@@ -189,9 +190,8 @@ class cost_function(NRV_class):
         self.kwargs_CE = kwgs
         self.__synchronise_t_sim()
 
-
     def simulate_context(self):
-        ## See what's the use of simulation 
+        ## See what's the use of simulation
         if callable(self.simulation):
             results = self.simulation(self.simulation_context, **self.kwargs_S)
         if self.simulation is None:
@@ -201,14 +201,12 @@ class cost_function(NRV_class):
             if "save_results" not in self.kwargs_S:
                 self.kwargs_S["save_results"] = False
             results = self.simulation_context(**self.kwargs_S)
-        return results    
-
-
+        return results
 
     #############################
     ###### Call method ##########
     #############################
-    def get_sim_results(self, X:np.ndarray)->sim_results:
+    def get_sim_results(self, X: np.ndarray) -> sim_results:
         """
         Simulated the static context modified with the tuning paramters X
 
@@ -242,9 +240,7 @@ class cost_function(NRV_class):
         self.__clear_results()
         return results
 
-
-
-    def __call__(self, X:np.ndarray)->float:
+    def __call__(self, X: np.ndarray) -> float:
         """
         When called cost function evaluate the impact of tuning
         parameters X on static context and evaluate a cost from the simulation results using

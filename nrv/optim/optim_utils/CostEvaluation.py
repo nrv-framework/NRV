@@ -17,6 +17,7 @@ class raster_count_CE(cost_evaluation):
     Create a callable object which returne the number of spike from the result
     of a simulation
     """
+
     def __init__(self):
         super().__init__()
 
@@ -95,11 +96,10 @@ class recrutement_count_CE(cost_evaluation):
         if isinstance(results, axon_results):
             cost = self.count_axon_activation(results)
         else:
-            cost = results.get_recruited_axons(ax_type= 'all', normalize=False)
+            cost = results.get_recruited_axons(ax_type="all", normalize=False)
             if self.reverse:
                 cost = results.n_ax - cost
         return cost
-
 
 
 class charge_quantity_CE(cost_evaluation):
@@ -112,6 +112,7 @@ class charge_quantity_CE(cost_evaluation):
 
     with :math:`t_k` is the discrete time step of the simulation
     """
+
     def __init__(self, id_elec=None, dt_res=0.0001):
         super().__init__()
         self.id_elec = id_elec
@@ -151,11 +152,12 @@ class stim_energy_CE(cost_evaluation):
     Parameters
     ----------
     id_elec : None | int | list[int]
-        id or list id of the electrode of the to from which the energy should be computed. If None, 
+        id or list id of the electrode of the to from which the energy should be computed. If None,
     dt_res  : float
         resolotion time step use to compute the cost value
     """
-    def __init__(self, id_elec:None|int|list[int]=None, dt_res:float=0.0001):
+
+    def __init__(self, id_elec: None | int | list[int] = None, dt_res: float = 0.0001):
         super().__init__()
         self.id_elec = id_elec
         self.dt_res = dt_res
@@ -180,4 +182,3 @@ class stim_energy_CE(cost_evaluation):
         for i in self.id_elec:
             cost += self.compute_stimulus_cost(extra_stim.stimuli[i])
         return cost
-
