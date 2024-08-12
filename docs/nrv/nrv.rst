@@ -17,3 +17,4 @@ Subpackages
    :toctree: _autosummary
 
    nmod
+   backend
