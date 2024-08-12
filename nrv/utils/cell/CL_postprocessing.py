@@ -13,11 +13,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 
-from ...backend.file_handler import is_iterable, json_dump, json_load
-from ...backend.log_interface import pass_info, rise_warning, rise_error
-from ...backend.NRV_Class import load_any
+from ...backend._file_handler import is_iterable, json_dump, json_load
+from ...backend._log_interface import pass_info, rise_warning, rise_error
+from ...backend._NRV_Class import load_any
 from ..units import MHz
-from ...backend.file_handler import rmv_ext
+from ...backend._file_handler import rmv_ext
 from ..misc import distance_point2line
 from ...nmod._unmyelinated import unmyelinated
 from ...nmod._myelinated import myelinated

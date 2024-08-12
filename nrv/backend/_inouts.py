@@ -1,7 +1,7 @@
 from collections.abc import Callable
 import inspect
 
-from .log_interface import rise_warning
+from ._log_interface import rise_warning
 
 
 def set_attributes(my_object, attributes_dict):

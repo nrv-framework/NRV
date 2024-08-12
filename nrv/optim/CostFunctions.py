@@ -3,10 +3,10 @@ NRV-:class:`.cost_function` handling.
 """
 
 import numpy as np
-from ..backend.NRV_Class import NRV_class, load_any
-from ..backend.NRV_Simulable import NRV_simulable, sim_results
-from ..backend.MCore import MCH, synchronize_processes
-from ..backend.log_interface import rise_warning
+from ..backend._NRV_Class import NRV_class, load_any
+from ..backend._NRV_Simulable import NRV_simulable, sim_results
+from ..backend._MCore import MCH, synchronize_processes
+from ..backend._log_interface import rise_warning
 
 
 class cost_function(NRV_class):

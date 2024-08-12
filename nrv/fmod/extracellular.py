@@ -7,10 +7,10 @@ import faulthandler
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..backend.file_handler import json_load
-from ..backend.log_interface import rise_error, rise_warning
-from ..backend.MCore import MCH
-from ..backend.NRV_Class import NRV_class, is_empty_iterable
+from ..backend._file_handler import json_load
+from ..backend._log_interface import rise_error, rise_warning
+from ..backend._MCore import MCH
+from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils.misc import get_perineurial_thickness
 from .electrodes import (
     is_analytical_electrode,

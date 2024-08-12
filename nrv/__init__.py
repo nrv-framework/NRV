@@ -42,10 +42,10 @@ if not os.access(nrv_path + "/nrv2calm", os.X_OK):
 ######################
 #  Public interface  #
 ######################
-from .backend import compileMods
-from .backend.parameters import *
-from .backend.NRV_Class import load_any
-from .backend.wrappers import *
+from .backend import _compileMods
+from .backend._parameters import *
+from .backend._NRV_Class import load_any
+from .backend._wrappers import *
 
 from .fmod.materials import *
 from .fmod.electrodes import *

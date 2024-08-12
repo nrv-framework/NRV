@@ -7,8 +7,8 @@ from time import perf_counter
 from multiprocessing import Pool
 from tqdm import tqdm
 
-from ...backend.log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
-from ...backend.MCore import *
+from ...backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
+from ...backend._MCore import *
 from ...fmod.electrodes import *
 from ...fmod.extracellular import *
 from ...fmod.materials import *

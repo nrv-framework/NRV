@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 from ._axons import *
-from ..backend.NRV_Class import is_empty_iterable
+from ..backend._NRV_Class import is_empty_iterable
 
 
 class unmyelinated(axon):

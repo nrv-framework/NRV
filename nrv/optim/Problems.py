@@ -6,9 +6,9 @@ import numpy as np
 import faulthandler
 import traceback
 
-from ..backend.NRV_Class import NRV_class
-from ..backend.MCore import MCH, synchronize_processes
-from ..backend.log_interface import rise_error, pass_debug_info, set_log_level
+from ..backend._NRV_Class import NRV_class
+from ..backend._MCore import MCH, synchronize_processes
+from ..backend._log_interface import rise_error, pass_debug_info, set_log_level
 from .optim_utils.optim_results import optim_results
 from .CostFunctions import cost_function
 from .Optimizers import Optimizer

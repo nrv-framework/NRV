@@ -2,7 +2,7 @@
 NRV-Wrappers and decorator for code clarity
 """
 
-from .MCore import MCH
+from ._MCore import MCH
 
 
 def singlecore(func):

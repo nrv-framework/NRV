@@ -7,8 +7,8 @@ import os
 import numpy as np
 from scipy.constants import pi, epsilon_0
 
-from ..backend.log_interface import rise_warning
-from ..backend.NRV_Class import NRV_class
+from ..backend._log_interface import rise_warning
+from ..backend._NRV_Class import NRV_class
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

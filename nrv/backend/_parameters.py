@@ -4,7 +4,7 @@ Access and modify NRV Parameters.
 
 import configparser
 import os
-from .NRV_Singleton import NRV_singleton
+from ._NRV_Singleton import NRV_singleton
 
 
 class nrv_parameters(metaclass=NRV_singleton):

@@ -4,9 +4,9 @@ from .OptimFunctions import interpolate_Npts
 from ..CostFunctions import cost_function
 import numpy as np
 
-from ...backend.NRV_Results import NRV_results
-from ...backend.MCore import MCH
-from ...backend.log_interface import pass_info, rise_warning
+from ...backend._NRV_Results import NRV_results
+from ...backend._MCore import MCH
+from ...backend._log_interface import pass_info, rise_warning
 
 
 class optim_results(NRV_results):

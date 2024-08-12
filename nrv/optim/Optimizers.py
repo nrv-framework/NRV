@@ -17,10 +17,10 @@ from pyswarms.backend.topology import Star, Ring
 import scipy.optimize as scpopt
 
 
-from ..backend.NRV_Class import NRV_class
-from ..backend.parameters import parameters
-from ..backend.log_interface import set_log_level, rise_error, rise_warning
-from ..backend.MCore import MCH
+from ..backend._NRV_Class import NRV_class
+from ..backend._parameters import parameters
+from ..backend._log_interface import set_log_level, rise_error, rise_warning
+from ..backend._MCore import MCH
 from .optim_utils.optim_results import optim_results
 
 dir_path = os.environ["NRVPATH"] + "/_misc"

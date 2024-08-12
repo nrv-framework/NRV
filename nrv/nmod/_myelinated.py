@@ -6,8 +6,8 @@ import math
 
 import numpy as np
 
-from ..backend.log_interface import rise_warning
-from ..backend.NRV_Class import is_empty_iterable
+from ..backend._log_interface import rise_warning
+from ..backend._NRV_Class import is_empty_iterable
 from ._axons import *
 from ..utils.misc import nearest_idx
 

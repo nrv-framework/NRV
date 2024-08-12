@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 
 from ...fmod.FEM.fenics_utils.f_materials import f_material, mat_from_interp
-from ...backend.NRV_Results import sim_results
-from ...backend.file_handler import json_dump
-from ...backend.log_interface import rise_warning, rise_error
+from ...backend._NRV_Results import sim_results
+from ...backend._file_handler import json_dump
+from ...backend._log_interface import rise_warning, rise_error
 from ...utils.units import to_nrv_unit, from_nrv_unit, convert, nm
 from ...utils.misc import (
     distance_point2line,

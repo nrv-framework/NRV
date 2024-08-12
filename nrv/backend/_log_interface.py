@@ -11,8 +11,8 @@ import tqdm
 from icecream import ic
 from time import sleep
 
-from .MCore import MCH
-from .parameters import parameters
+from ._MCore import MCH
+from ._parameters import parameters
 
 from pyswarms.utils import Reporter
 

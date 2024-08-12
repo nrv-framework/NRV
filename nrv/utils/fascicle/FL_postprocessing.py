@@ -7,8 +7,8 @@ import os
 
 import matplotlib.pyplot as plt
 
-from ...backend.file_handler import json_load
-from ...backend.log_interface import pass_info
+from ...backend._file_handler import json_load
+from ...backend._log_interface import pass_info
 from ...fmod.electrodes import is_FEM_electrode
 from ..cell.CL_postprocessing import *
 

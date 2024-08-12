@@ -9,10 +9,10 @@ import time
 import numpy as np
 from mpi4py import MPI
 
-from ...backend.file_handler import rmv_ext
+from ...backend._file_handler import rmv_ext
 from ...utils.units import V, mm
 from ...utils.misc import get_perineurial_thickness
-from ...backend.MCore import MCH, synchronize_processes
+from ...backend._MCore import MCH, synchronize_processes
 from .fenics_utils.FEMSimulation import FEMSimulation
 
 from .FENICS_model import FENICS_model

@@ -4,8 +4,8 @@ NRV-:class:`.NRV_simulable` handling.
 A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`)
 """
 
-from .NRV_Class import NRV_class
-from .NRV_Results import generate_results, sim_results
+from ._NRV_Class import NRV_class
+from ._NRV_Results import generate_results, sim_results
 
 
 def is_NRV_simulable(x):

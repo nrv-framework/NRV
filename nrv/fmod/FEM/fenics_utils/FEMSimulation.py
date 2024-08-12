@@ -32,8 +32,8 @@ from ufl import (
 from basix.ufl import element, mixed_element
 
 
-from ....backend.log_interface import pass_info, rise_error, rise_warning
-from ....backend.file_handler import rmv_ext
+from ....backend._log_interface import pass_info, rise_error, rise_warning
+from ....backend._file_handler import rmv_ext
 from ....utils.units import S, V, m
 from .fenics_materials import fenics_material
 from .FEMParameters import FEMParameters

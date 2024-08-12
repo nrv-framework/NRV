@@ -11,8 +11,8 @@ import sys
 import numpy as np
 from numpy import iterable
 
-from .file_handler import json_dump, json_load
-from .log_interface import pass_debug_info
+from ._file_handler import json_dump, json_load
+from ._log_interface import pass_debug_info
 
 ########################################
 #           check object               #

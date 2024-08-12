@@ -8,10 +8,10 @@ import sys
 from collections.abc import Iterable
 from scipy import signal
 
-from .NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
-from .log_interface import rise_warning, pass_info
+from ._NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
+from ._log_interface import rise_warning, pass_info
 from ..fmod.stimulus import stimulus
-from .file_handler import json_load
+from ._file_handler import json_load
 
 
 def generate_results(obj: any, **kwargs):

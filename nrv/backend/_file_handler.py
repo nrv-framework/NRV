@@ -6,7 +6,7 @@ import json
 import os
 import numpy as np
 
-from .log_interface import rise_error, rise_warning, pass_info
+from ._log_interface import rise_error, rise_warning, pass_info
 
 
 #################

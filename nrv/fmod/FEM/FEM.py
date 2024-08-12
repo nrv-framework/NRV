@@ -4,9 +4,9 @@ NRV-:class:`.FEM_model` handling.
 
 from abc import abstractmethod
 
-from ...backend.MCore import MCH
-from ...backend.log_interface import pass_info, rise_warning
-from ...backend.NRV_Class import NRV_class
+from ...backend._MCore import MCH
+from ...backend._log_interface import pass_info, rise_warning
+from ...backend._NRV_Class import NRV_class
 
 ###############
 ## Constants ##

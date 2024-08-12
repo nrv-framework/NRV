@@ -7,9 +7,9 @@ import faulthandler
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..backend.file_handler import json_load
-from ..backend.log_interface import rise_error, rise_warning
-from ..backend.NRV_Class import NRV_class, abstractmethod
+from ..backend._file_handler import json_load
+from ..backend._log_interface import rise_error, rise_warning
+from ..backend._NRV_Class import NRV_class, abstractmethod
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import csv
 
-from ...backend.file_handler import rmv_ext
-from ...backend.log_interface import rise_warning
+from ...backend._file_handler import rmv_ext
+from ...backend._log_interface import rise_warning
 from ...utils.nrv_function import nrv_interp
 
 

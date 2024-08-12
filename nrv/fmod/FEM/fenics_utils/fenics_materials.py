@@ -10,9 +10,9 @@ from dolfinx.fem import Constant, Function, functionspace
 from petsc4py.PETSc import ScalarType
 from ufl import as_tensor
 
-from ....backend.file_handler import json_dump, rmv_ext
-from ....backend.log_interface import rise_warning
-from ....backend.NRV_Class import NRV_class
+from ....backend._file_handler import json_dump, rmv_ext
+from ....backend._log_interface import rise_warning
+from ....backend._NRV_Class import NRV_class
 from ....utils.nrv_function import nrv_interp
 from ...materials import is_mat, load_material
 from .f_materials import load_f_material

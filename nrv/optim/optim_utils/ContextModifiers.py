@@ -1,6 +1,6 @@
 import numpy as np
-from ...backend.NRV_Class import NRV_class, load_any
-from ...backend.NRV_Simulable import NRV_simulable
+from ...backend._NRV_Class import NRV_class, load_any
+from ...backend._NRV_Simulable import NRV_simulable
 from ...fmod.stimulus import stimulus
 
 

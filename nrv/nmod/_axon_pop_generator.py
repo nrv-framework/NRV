@@ -12,7 +12,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats import rv_continuous, gamma
 
-from ..backend.log_interface import pass_info, progression_popup, rise_warning
+from ..backend._log_interface import pass_info, progression_popup, rise_warning
 
 # WARNING:
 # no prompt message for numpy division by zeros: handled in the code !!!

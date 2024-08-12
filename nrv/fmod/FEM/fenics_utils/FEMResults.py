@@ -20,11 +20,11 @@ from dolfinx.geometry import (
 from mpi4py import MPI
 
 
-from ....backend.file_handler import rmv_ext
-from ....backend.log_interface import rise_error, rise_warning
-from ....backend.parameters import parameters
-from ....backend.MCore import MCH, synchronize_processes
-from ....backend.NRV_Class import NRV_class
+from ....backend._file_handler import rmv_ext
+from ....backend._log_interface import rise_error, rise_warning
+from ....backend._parameters import parameters
+from ....backend._MCore import MCH, synchronize_processes
+from ....backend._NRV_Class import NRV_class
 from ..mesh_creator.MshCreator import (
     is_MshCreator,
     clear_gmsh,

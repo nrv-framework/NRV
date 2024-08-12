@@ -1,5 +1,5 @@
-from ..backend.NRV_Class import NRV_class
-from ..backend.log_interface import rise_error
+from ..backend._NRV_Class import NRV_class
+from ..backend._log_interface import rise_error
 
 
 class eit_forward(NRV_class):

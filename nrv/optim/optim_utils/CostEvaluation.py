@@ -3,8 +3,8 @@ import numpy as np
 from ...fmod.stimulus import stimulus, set_common_time_series
 from ...fmod.extracellular import extracellular_context
 
-from ...backend.NRV_Class import NRV_class, load_any, abstractmethod
-from ...backend.NRV_Simulable import sim_results
+from ...backend._NRV_Class import NRV_class, load_any, abstractmethod
+from ...backend._NRV_Simulable import sim_results
 from ...nmod.results._axons_results import axon_results
 from ...nmod.results._fascicles_results import fascicle_results
 from ...nmod.results._nerve_results import nerve_results

@@ -6,13 +6,13 @@ from cmath import phase
 import numpy as np
 from math import log10, floor
 
-from ....backend.NRV_Class import NRV_class, load_any
-from ....backend.log_interface import rise_error, rise_warning
-from ....backend.MCore import MCH
+from ....backend._NRV_Class import NRV_class, load_any
+from ....backend._log_interface import rise_error, rise_warning
+from ....backend._MCore import MCH
 
 # from ....nmod.myelinated import myelinated
 from ....utils.units import mm
-from ....backend.file_handler import rmv_ext
+from ....backend._file_handler import rmv_ext
 from .MshCreator import MshCreator, pi
 
 ENT_DOM_offset = {

@@ -12,9 +12,9 @@ import neuron
 import numpy as np
 
 from .results._axons_results import axon_results
-from ..backend.file_handler import json_dump
-from ..backend.log_interface import rise_error, rise_warning
-from ..backend.NRV_Simulable import NRV_simulable
+from ..backend._file_handler import json_dump
+from ..backend._log_interface import rise_error, rise_warning
+from ..backend._NRV_Simulable import NRV_simulable
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *

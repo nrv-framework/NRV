@@ -3,7 +3,7 @@ NRV-Multi-Core/Parallel computing handling.
 """
 
 import numpy as np
-from .NRV_Singleton import NRV_singleton
+from ._NRV_Singleton import NRV_singleton
 
 try:
     import mpi4py.MPI as mpi

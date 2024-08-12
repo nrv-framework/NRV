@@ -8,14 +8,14 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ..backend.file_handler import *
-from ..backend.log_interface import pass_info, rise_warning, pbar
-from ..backend.MCore import MCH, synchronize_processes
-from ..backend.NRV_Simulable import NRV_simulable, sim_results
+from ..backend._file_handler import *
+from ..backend._log_interface import pass_info, rise_warning, pbar
+from ..backend._MCore import MCH, synchronize_processes
+from ..backend._NRV_Simulable import NRV_simulable, sim_results
 from ..fmod.extracellular import *
 from ..fmod.recording import *
 from ..utils.cell.CL_postprocessing import *
-from ..backend.inouts import check_function_kwargs
+from ..backend._inouts import check_function_kwargs
 from ._axons import *
 from ._axon_pop_generator import *
 from ._myelinated import *

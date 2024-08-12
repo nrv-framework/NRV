@@ -6,8 +6,8 @@ import faulthandler
 
 import numpy as np
 
-from ..backend.log_interface import pass_info, rise_warning, rise_error
-from ..backend.NRV_Class import NRV_class
+from ..backend._log_interface import pass_info, rise_warning, rise_error
+from ..backend._NRV_Class import NRV_class
 import matplotlib.pyplot as plt
 
 # enable faulthandler to ease "segmentation faults" debug

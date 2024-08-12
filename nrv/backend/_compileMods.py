@@ -13,7 +13,7 @@ try:
 
     nrn_version = nrn.__version__  # this fails :)
 except AttributeError:
-    from .log_interface import rise_warning
+    from ._log_interface import rise_warning
 
     # no Neuron or fake neuron
     rise_warning(

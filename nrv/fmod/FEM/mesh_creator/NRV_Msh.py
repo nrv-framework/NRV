@@ -1,4 +1,4 @@
-from ....backend.log_interface import rise_warning
+from ....backend._log_interface import rise_warning
 from ....nmod._nerve import nerve
 from ....nmod._fascicles import fascicle
 from ....utils.units import *

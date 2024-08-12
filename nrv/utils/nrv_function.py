@@ -8,9 +8,9 @@ import numpy as np
 from scipy.interpolate import CubicHermiteSpline, interp1d
 from scipy.special import erf
 
-from ..backend.file_handler import json_dump, json_load
-from ..backend.log_interface import rise_warning, rise_error
-from ..backend.NRV_Class import NRV_class, is_empty_iterable
+from ..backend._file_handler import json_dump, json_load
+from ..backend._log_interface import rise_warning, rise_error
+from ..backend._NRV_Class import NRV_class, is_empty_iterable
 
 #############################
 ## sigma functions classes ##
