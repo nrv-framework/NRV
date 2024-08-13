@@ -20,6 +20,7 @@ import platform
 
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
+import neuron
 # create a dummy object to locate frameworks path
 class DummyClass:
     """Dummy class"""
