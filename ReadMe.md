@@ -2,6 +2,7 @@
 [![Documentation Status](https://readthedocs.org/projects/nrv/badge/?version=latest)](https://nrv.readthedocs.io/en/latest/?badge=latest)
 [![License: CeCill](https://img.shields.io/badge/Licence-CeCill-blue )](https://github.com/fkolbl/NRV/blob/master/Licence.txt)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497741.svg)](https://doi.org/10.5281/zenodo.10497741)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nrv-framework/NRV-demo/main)
 <!---[![DOI](xxxx)](xxx)-->
 <!---[![Build Status](xxxx)](xxx)-->
 
