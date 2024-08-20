@@ -90,12 +90,12 @@ from .utils.cell.CL_postprocessing import *
 from .utils.cell.CL_simulations import *
 from .utils.fascicle.FL_postprocessing import *
 
-from .optim.CostFunctions import *
-from .optim.Optimizers import *
-from .optim.Problems import *
-from .optim.optim_utils.ContextModifiers import *
-from .optim.optim_utils.CostEvaluation import *
-from .optim.optim_utils.OptimFunctions import *
+from .optim._CostFunctions import *
+from .optim._Optimizers import *
+from .optim._Problems import *
+from .optim.optim_utils._ContextModifiers import *
+from .optim.optim_utils._CostEvaluation import *
+from .optim.optim_utils._OptimFunctions import *
 
 
 from .eit._protocol import pyeit_protocol

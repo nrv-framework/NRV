@@ -17,4 +17,6 @@ Subpackages
    :toctree: _autosummary
 
    nmod
+   optim
+   eit
    backend

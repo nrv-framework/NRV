@@ -4,7 +4,7 @@ EIT librairy for Electrical Impedance Tomography models
 
 from ._eit_forward import eit_forward
 from ._eit_inverse import eit_inverse
-from _eit_utils import crop_fascicle, crop_nerve
+from ._eit_utils import crop_fascicle, crop_nerve
 from ._protocol import protocol, pyeit_protocol
 
 submodules = []

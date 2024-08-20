@@ -21,7 +21,7 @@ from ..backend._NRV_Class import NRV_class
 from ..backend._parameters import parameters
 from ..backend._log_interface import set_log_level, rise_error, rise_warning
 from ..backend._MCore import MCH
-from .optim_utils.optim_results import optim_results
+from .optim_utils._OptimResults import optim_results
 
 dir_path = os.environ["NRVPATH"] + "/_misc"
 dir_path + "/log/NRV.log"

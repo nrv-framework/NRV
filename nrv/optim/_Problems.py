@@ -9,9 +9,9 @@ import traceback
 from ..backend._NRV_Class import NRV_class
 from ..backend._MCore import MCH, synchronize_processes
 from ..backend._log_interface import rise_error, pass_debug_info, set_log_level
-from .optim_utils.optim_results import optim_results
-from .CostFunctions import cost_function
-from .Optimizers import Optimizer
+from .optim_utils._OptimResults import optim_results
+from ._CostFunctions import cost_function
+from ._Optimizers import Optimizer
 
 import sys
 

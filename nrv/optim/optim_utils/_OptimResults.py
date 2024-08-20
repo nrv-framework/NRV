@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter, FFMpegWriter
-from .OptimFunctions import interpolate_Npts
-from ..CostFunctions import cost_function
+from ._OptimFunctions import interpolate_Npts
+from .._CostFunctions import cost_function
 import numpy as np
 
 from ...backend._NRV_Results import NRV_results
