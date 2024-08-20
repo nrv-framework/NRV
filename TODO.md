@@ -13,3 +13,4 @@ THIS NEEDS TO BE DONE FOR BIOCAS AND EASE DEMOS!!!
 * CL_simulation rename
 
 * test to deploy on binder -> build an environnement.yaml file with the requirements... to do in emergency !!!
+  * Almost done (technically working, need polish and truly demo file )
