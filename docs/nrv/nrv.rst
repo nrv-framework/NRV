@@ -18,5 +18,6 @@ Subpackages
 
    nmod
    optim
+   optim.optim_utils
    eit
    backend
