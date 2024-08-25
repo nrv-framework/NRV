@@ -659,7 +659,7 @@ class nerve(NRV_simulable):
         self.N_intra += 1
 
     # Extracellular
-    def attach_extracellular_stimulation(self, stimulation: FEM_stimulation):
+    def attach_extracellular_stimulation(self, stimulation): #: FEM_stimulation):
         """
         attach a extracellular context of simulation for an axon.
 

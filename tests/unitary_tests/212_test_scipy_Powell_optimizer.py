@@ -1,5 +1,5 @@
 import nrv
-from nrv.utils.nrv_function import sphere, rosenbock
+from nrv.utils._nrv_function import sphere, rosenbock
 
 import matplotlib.pyplot as plt
 

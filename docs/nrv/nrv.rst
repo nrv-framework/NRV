@@ -20,4 +20,7 @@ Subpackages
    optim
    optim.optim_utils
    eit
+   utils
+   utils.fascicle
+   utils.cell
    backend

@@ -10,8 +10,8 @@ import numpy as np
 from mpi4py import MPI
 
 from ...backend._file_handler import rmv_ext
-from ...utils.units import V, mm
-from ...utils.misc import get_perineurial_thickness
+from ...utils._units import V, mm
+from ...utils._misc import get_perineurial_thickness
 from ...backend._MCore import MCH, synchronize_processes
 from ...backend._log_interface import rise_warning
 from .fenics_utils.FEMSimulation import FEMSimulation

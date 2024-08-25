@@ -7,8 +7,8 @@ from ._fascicles_results import fascicle_results
 from ._axons_results import axon_results
 from ...backend._log_interface import rise_error, rise_warning, pass_info
 from ...backend._MCore import MCH
-from ...utils.units import nm, convert, from_nrv_unit
-from ...utils.misc import membrane_capacitance_from_model
+from ...utils._units import nm, convert, from_nrv_unit
+from ...utils._misc import membrane_capacitance_from_model
 
 
 import matplotlib.pyplot as plt

@@ -4,7 +4,7 @@ import csv
 
 from ...backend._file_handler import rmv_ext
 from ...backend._log_interface import rise_warning
-from ...utils.nrv_function import nrv_interp
+from ...utils._nrv_function import nrv_interp
 
 
 ####################################################################

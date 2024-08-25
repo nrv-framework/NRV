@@ -11,7 +11,7 @@ from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._MCore import MCH
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
-from ..utils.misc import get_perineurial_thickness
+from ..utils._misc import get_perineurial_thickness
 from .electrodes import (
     is_analytical_electrode,
     is_FEM_electrode,

@@ -9,7 +9,7 @@ import numpy as np
 
 from ....backend._file_handler import json_dump, rmv_ext
 from ....backend._log_interface import rise_warning
-from ....utils.nrv_function import nrv_interp
+from ....utils._nrv_function import nrv_interp
 from ...materials import (
     is_mat,
     load_material,

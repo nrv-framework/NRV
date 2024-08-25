@@ -1,7 +1,7 @@
 from ....backend._log_interface import rise_warning
 from ....nmod._nerve import nerve
 from ....nmod._fascicles import fascicle
-from ....utils.units import *
+from ....utils._units import *
 from ...electrodes import *
 from ...extracellular import is_FEM_extra_stim, FEM_stimulation
 from .NerveMshCreator import *

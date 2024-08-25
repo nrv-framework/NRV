@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from ._axons_results import axon_results
 from ...backend._log_interface import rise_warning
 from ...fmod.materials import is_mat, load_material
-from ...utils.units import to_nrv_unit, convert
+from ...utils._units import to_nrv_unit, convert
 
 
 class myelinated_results(axon_results):

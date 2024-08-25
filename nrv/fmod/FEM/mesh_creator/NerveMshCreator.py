@@ -11,7 +11,7 @@ from ....backend._log_interface import rise_error, rise_warning
 from ....backend._MCore import MCH
 
 # from ....nmod.myelinated import myelinated
-from ....utils.units import mm
+from ....utils._units import mm
 from ....backend._file_handler import rmv_ext
 from .MshCreator import MshCreator, pi
 

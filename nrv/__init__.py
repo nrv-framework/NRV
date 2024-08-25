@@ -84,11 +84,11 @@ from .nmod.results._fascicles_results import *
 from .nmod.results._nerve_results import *
 
 
-from .utils.saving_handler import *
-from .utils.nrv_function import *
-from .utils.cell.CL_postprocessing import *
-from .utils.cell.CL_simulations import *
-from .utils.fascicle.FL_postprocessing import *
+from .utils._saving_handler import *
+from .utils._nrv_function import *
+from .utils.cell._CL_postprocessing import *
+from .utils.cell._CL_simulations import *
+from .utils.fascicle._FL_postprocessing import *
 
 from .optim._CostFunctions import *
 from .optim._Optimizers import *

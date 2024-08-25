@@ -9,7 +9,7 @@ import numpy as np
 from ..backend._log_interface import rise_warning
 from ..backend._NRV_Class import is_empty_iterable
 from ._axons import *
-from ..utils.misc import nearest_idx
+from ..utils._misc import nearest_idx
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
 MRG_g = np.asarray(

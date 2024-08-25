@@ -18,7 +18,7 @@ from ..backend._NRV_Simulable import NRV_simulable
 from ..fmod.electrodes import *
 from ..fmod.extracellular import *
 from ..fmod.recording import *
-from ..utils.units import sci_round
+from ..utils._units import sci_round
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

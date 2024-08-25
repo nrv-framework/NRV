@@ -9,7 +9,7 @@ import numpy as np
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._MCore import MCH, synchronize_processes
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
-from ..utils.units import cm, m
+from ..utils._units import cm, m
 from .materials import load_material
 
 # enable faulthandler to ease "segmentation faults" debug
