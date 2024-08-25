@@ -5,10 +5,10 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 """
 
 from ..backend._MCore import *
-from ..fmod.electrodes import *
-from ..fmod.extracellular import *
-from ..fmod.materials import *
-from ..fmod.stimulus import *
+from ..fmod._electrodes import *
+from ..fmod._extracellular import *
+from ..fmod._materials import *
+from ..fmod._stimulus import *
 from ..nmod._axons import *
 from ..nmod._fascicles import *
 from ..nmod._myelinated import *

@@ -5,7 +5,7 @@ NRV-:class:`.fascicle_results` handling.
 from ...backend._NRV_Results import sim_results
 from ...backend._log_interface import pass_info, rise_warning, rise_error
 from ...backend._MCore import MCH
-from ...fmod.electrodes import is_FEM_electrode
+from ...fmod._electrodes import is_FEM_electrode
 from ...utils._units import nm, convert, from_nrv_unit, to_nrv_unit
 from ...utils._misc import membrane_capacitance_from_model, compute_complex_admitance
 import matplotlib.pyplot as plt

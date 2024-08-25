@@ -14,7 +14,7 @@ from ....backend._file_handler import json_dump, rmv_ext
 from ....backend._log_interface import rise_warning
 from ....backend._NRV_Class import NRV_class
 from ....utils._nrv_function import nrv_interp
-from ...materials import is_mat, load_material
+from ..._materials import is_mat, load_material
 from .f_materials import load_f_material
 
 # enable faulthandler to ease "segmentation faults" debug

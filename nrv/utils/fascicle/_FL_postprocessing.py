@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 from ...backend._file_handler import json_load
 from ...backend._log_interface import pass_info
-from ...fmod.electrodes import is_FEM_electrode
+from ...fmod._electrodes import is_FEM_electrode
 from ..cell._CL_postprocessing import *
 
 # enable faulthandler to ease 'segmentation faults' debug

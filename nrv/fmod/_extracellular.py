@@ -12,15 +12,15 @@ from ..backend._log_interface import rise_error, rise_warning
 from ..backend._MCore import MCH
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._misc import get_perineurial_thickness
-from .electrodes import (
+from ._electrodes import (
     is_analytical_electrode,
     is_FEM_electrode,
     check_electrodes_overlap,
 )
 from .FEM.COMSOL_model import COMSOL_model, COMSOL_Status
 from .FEM.FENICS_model import FENICS_model
-from .materials import load_material, is_mat
-from .stimulus import get_equal_timing_copies
+from ._materials import load_material, is_mat
+from ._stimulus import get_equal_timing_copies
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

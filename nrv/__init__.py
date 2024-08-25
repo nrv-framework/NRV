@@ -48,11 +48,11 @@ from .backend._parameters import *
 from .backend._NRV_Class import load_any
 from .backend._wrappers import *
 
-from .fmod.materials import *
-from .fmod.electrodes import *
-from .fmod.stimulus import *
-from .fmod.extracellular import *
-from .fmod.recording import *
+from .fmod._materials import *
+from .fmod._electrodes import *
+from .fmod._stimulus import *
+from .fmod._extracellular import *
+from .fmod._recording import *
 from .fmod.FEM.FEM import *
 from .fmod.FEM.COMSOL_model import *
 from .fmod.FEM.FENICS_model import *

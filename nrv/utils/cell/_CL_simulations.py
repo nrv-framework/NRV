@@ -9,10 +9,10 @@ from tqdm import tqdm
 
 from ...backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
 from ...backend._MCore import *
-from ...fmod.electrodes import *
-from ...fmod.extracellular import *
-from ...fmod.materials import *
-from ...fmod.stimulus import *
+from ...fmod._electrodes import *
+from ...fmod._extracellular import *
+from ...fmod._materials import *
+from ...fmod._stimulus import *
 from ...nmod._axons import *
 from ...nmod._myelinated import *
 from ...nmod._unmyelinated import *

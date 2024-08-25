@@ -12,8 +12,8 @@ from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning, pbar
 from ..backend._MCore import MCH, synchronize_processes
 from ..backend._NRV_Simulable import NRV_simulable, sim_results
-from ..fmod.extracellular import *
-from ..fmod.recording import *
+from ..fmod._extracellular import *
+from ..fmod._recording import *
 from ..utils.cell._CL_postprocessing import *
 from ..backend._inouts import check_function_kwargs
 from ._axons import *

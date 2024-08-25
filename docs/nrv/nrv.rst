@@ -17,6 +17,7 @@ Subpackages
    :toctree: _autosummary
 
    nmod
+   fmod
    optim
    optim.optim_utils
    eit

@@ -1,7 +1,7 @@
 import numpy as np
 from ...backend._NRV_Class import NRV_class, load_any
 from ...backend._NRV_Simulable import NRV_simulable
-from ...fmod.stimulus import stimulus
+from ...fmod._stimulus import stimulus
 
 
 class context_modifier(NRV_class):
