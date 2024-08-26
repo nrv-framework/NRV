@@ -207,5 +207,5 @@ tests/log_NRV_test.txt
 .vscode/settings.json
 tests/log_NRV_test.txt
 .vscode/*
-docs/_autosummary/*
+docs/_nrv/*
 

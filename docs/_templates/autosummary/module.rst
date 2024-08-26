@@ -11,6 +11,7 @@ Subpackages
 -----------
 .. autosummary::
     :toctree: {{ fullname }}/_subpackages
+    :recursive:
     {% for module in modules %}
     {{ module }}
     {% endfor %}

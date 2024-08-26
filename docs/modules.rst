@@ -17,14 +17,15 @@ Subpackages
 -----------
 
 .. autosummary::
-   :toctree: _autosummary
+   :toctree: _nrv
+   :recursive:
 
    nmod
-   fmod
-   optim
-   optim.optim_utils
-   eit
-   utils
-   utils.fascicle
-   utils.cell
-   backend
+..    fmod
+..    optim
+..    optim.optim_utils
+..    eit
+..    utils
+..    utils.fascicle
+..    utils.cell
+..    backend
