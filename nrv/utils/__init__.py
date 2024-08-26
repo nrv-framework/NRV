@@ -31,16 +31,21 @@ from ._nrv_function import (
     nrv_interp,
     MeshCallBack,
 )
-from ._saving_handler import (
-    load_any_fascicle,
-    load_any_axon,
-)
+
 from ._units import (
     print_default_nrv_unit,
     from_nrv_unit,
     to_nrv_unit,
     convert,
     sci_round,
+)
+
+from ..utils._stimulus import (
+    is_stim,
+    set_common_time_series,
+    get_equal_timing_copies,
+    datfile_2_stim,
+    stimulus,
 )
 
 
@@ -65,6 +70,7 @@ classes = [
     "cost_evaluation",
     "nrv_interp",
     "MeshCallBack",
+    "stimulus",
 ]
 
 functions = [
@@ -76,13 +82,15 @@ functions = [
     "get_perineurial_thickness",
     "membrane_capacitance_from_model",
     "compute_complex_admitance",
-    "load_any_fascicle",
-    "load_any_axon",
     "print_default_nrv_unit",
     "from_nrv_unit",
     "to_nrv_unit",
     "convert",
     "sci_round",
+    "is_stim",
+    "set_common_time_series",
+    "get_equal_timing_copies",
+    "datfile_2_stim",
 ]
 
 __all__ = []

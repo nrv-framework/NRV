@@ -50,7 +50,7 @@ from .backend._wrappers import *
 
 from .fmod._materials import *
 from .fmod._electrodes import *
-from .fmod._stimulus import *
+from .utils._stimulus import *
 from .fmod._extracellular import *
 from .fmod._recording import *
 from .fmod.FEM.FEM import *

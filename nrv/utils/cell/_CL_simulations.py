@@ -12,7 +12,7 @@ from ...backend._MCore import *
 from ...fmod._electrodes import *
 from ...fmod._extracellular import *
 from ...fmod._materials import *
-from ...fmod._stimulus import *
+from .._stimulus import *
 from ...nmod._axons import *
 from ...nmod._myelinated import *
 from ...nmod._unmyelinated import *

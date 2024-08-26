@@ -7,7 +7,7 @@ import numpy as np
 from ..backend._log_interface import pass_info, rise_warning
 from ..backend._NRV_Class import load_any
 from ..backend._NRV_Simulable import NRV_simulable
-from ..fmod._stimulus import stimulus
+from ..utils._stimulus import stimulus
 from ._fascicles import *
 from .results._nerve_results import nerve_results
 

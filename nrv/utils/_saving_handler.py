@@ -8,11 +8,12 @@ from ..backend._MCore import *
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._materials import *
-from ..fmod._stimulus import *
+from ._stimulus import *
 from ..nmod._axons import *
 from ..nmod._fascicles import *
 from ..nmod._myelinated import *
 from ..nmod._unmyelinated import *
+from ..backend._log_interface import rise_warning
 
 ###############################################################
 #########################  Loaders  ###########################
@@ -30,6 +31,7 @@ def load_any_fascicle(
     data    : str or dict
         json file path or dictionary containing fascicle information
     """
+    rise_warning(DeprecationWarning, ": use load any intead")
     synchronize_processes()
     if type(data) == str:
         fasc_dic = json_load(data)
@@ -63,6 +65,7 @@ def load_any_axon(
     data    : str or dict
         json file path or dictionary containing axon information
     """
+    rise_warning(DeprecationWarning, ": use load_any function intead")
     if type(data) == str:
         ax_dic = json_load(data)
     else:

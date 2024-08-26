@@ -20,7 +20,7 @@ from ._electrodes import (
 from .FEM.COMSOL_model import COMSOL_model, COMSOL_Status
 from .FEM.FENICS_model import FENICS_model
 from ._materials import load_material, is_mat
-from ._stimulus import get_equal_timing_copies
+from ..utils._stimulus import get_equal_timing_copies
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

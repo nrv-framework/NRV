@@ -10,7 +10,7 @@ from scipy import signal
 
 from ._NRV_Class import NRV_class, load_any, abstractmethod, is_NRV_class
 from ._log_interface import rise_warning, pass_info
-from ..fmod._stimulus import stimulus
+from ..utils._stimulus import stimulus
 from ._file_handler import json_load
 
 

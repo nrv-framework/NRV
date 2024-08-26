@@ -39,13 +39,6 @@ from ._recording import (
     recording_point,
     recorder,
 )
-from ._stimulus import (
-    is_stim,
-    set_common_time_series,
-    get_equal_timing_copies,
-    datfile_2_stim,
-    stimulus,
-)
 
 submodules = [
     "FEM",
@@ -64,7 +57,6 @@ classes = [
     "material",
     "recording_point",
     "recorder",
-    "stimulus"
 ]
 
 functions = [
@@ -85,10 +77,6 @@ functions = [
     "is_recording_point",
     "is_recorder",
     "NodeD_interpol",
-    "is_stim",
-    "set_common_time_series",
-    "get_equal_timing_copies",
-    "datfile_2_stim",
 ]
 
 __all__ = []

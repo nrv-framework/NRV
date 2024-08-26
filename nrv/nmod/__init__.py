@@ -22,7 +22,7 @@ from ._fascicles import fascicle
 from ._nerve import nerve
 from . import results
 
-submodules = ["results"]
+modules = ["results"]
 
 classes = ["axon", "unmyelinated", "myelinated", "fascicle", "nerve"]
 
@@ -42,6 +42,6 @@ functions = [
 
 __all__ = []
 
-__all__ += submodules
+__all__ += modules
 __all__ += classes
 __all__ += functions

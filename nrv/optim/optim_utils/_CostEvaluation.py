@@ -1,6 +1,6 @@
 import numpy as np
 
-from ...fmod._stimulus import stimulus, set_common_time_series
+from ...utils._stimulus import stimulus, set_common_time_series
 from ...fmod._extracellular import extracellular_context
 
 from ...backend._NRV_Class import NRV_class, load_any, abstractmethod
