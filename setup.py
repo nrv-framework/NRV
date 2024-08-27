@@ -83,11 +83,10 @@ setup(
         "nrv.nmod.results",
         "nrv.optim",
         "nrv.optim.optim_utils",
+        "nrv.ui",
         "nrv.utils",
-        "nrv.utils.cell",
-        "nrv.utils.fascicle",
     ],
-    
+
     # non python data to keep
     package_data={
         "nrv": ["nrv2calm"],
@@ -132,6 +131,6 @@ setup(
         "pyswarms",
         "tqdm",
     ],  # external packages as dependencies
-    python_requires=">=3.10",
+    python_requires=">=3.12",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script
 )
