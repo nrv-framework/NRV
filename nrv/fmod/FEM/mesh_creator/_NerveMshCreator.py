@@ -13,7 +13,7 @@ from ....backend._MCore import MCH
 # from ....nmod.myelinated import myelinated
 from ....utils._units import mm
 from ....backend._file_handler import rmv_ext
-from .MshCreator import MshCreator, pi
+from ._MshCreator import MshCreator, pi
 
 ENT_DOM_offset = {
     "Volume": 0,

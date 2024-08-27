@@ -17,8 +17,8 @@ from ._electrodes import (
     is_FEM_electrode,
     check_electrodes_overlap,
 )
-from .FEM.COMSOL_model import COMSOL_model, COMSOL_Status
-from .FEM.FENICS_model import FENICS_model
+from .FEM._COMSOL_model import COMSOL_model, COMSOL_Status
+from .FEM._FENICS_model import FENICS_model
 from ._materials import load_material, is_mat
 from ..utils._stimulus import get_equal_timing_copies
 

@@ -13,7 +13,7 @@ from ...backend._file_handler import rmv_ext
 from ...backend._MCore import MCH
 from ...backend._log_interface import rise_warning
 from ...utils._units import V
-from .FEM import *
+from ._FEM import *
 
 # built in COMSOL models
 dir_path = os.environ["NRVPATH"] + "/_misc"

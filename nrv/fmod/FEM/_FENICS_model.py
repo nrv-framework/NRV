@@ -16,9 +16,9 @@ from ...backend._MCore import MCH, synchronize_processes
 from ...backend._log_interface import rise_warning
 from .fenics_utils.FEMSimulation import FEMSimulation
 
-from .FEM import FEM_model
+from ._FEM import FEM_model
 from .fenics_utils.FEMResults import save_sim_res_list
-from .mesh_creator.NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
+from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
 
 # built in FENICS models
 dir_path = os.environ["NRVPATH"] + "/_misc"

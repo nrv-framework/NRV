@@ -15,9 +15,9 @@ from ...utils._misc import get_perineurial_thickness
 from ...backend._MCore import MCH, synchronize_processes
 from .fenics_utils.FEMSimulation import FEMSimulation
 
-from .FENICS_model import FENICS_model
+from ._FENICS_model import FENICS_model
 from .fenics_utils.FEMResults import save_sim_res_list
-from .mesh_creator.NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
+from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
 
 # built in FENICS models
 dir_path = os.environ["NRVPATH"] + "/_misc"

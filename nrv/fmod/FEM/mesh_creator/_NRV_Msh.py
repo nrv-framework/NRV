@@ -4,7 +4,7 @@ from ....nmod._fascicles import fascicle
 from ....utils._units import *
 from ..._electrodes import *
 from ..._extracellular import is_FEM_extra_stim, FEM_stimulation
-from .NerveMshCreator import *
+from ._NerveMshCreator import *
 
 
 def mesh_from_electrode(

@@ -21,7 +21,7 @@ Subpackages
    :recursive:
 
    nmod
-..    fmod
+   fmod
 ..    optim
 ..    optim.optim_utils
 ..    eit

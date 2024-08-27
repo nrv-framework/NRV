@@ -25,7 +25,7 @@ from ....backend._log_interface import rise_error, rise_warning
 from ....backend._parameters import parameters
 from ....backend._MCore import MCH, synchronize_processes
 from ....backend._NRV_Class import NRV_class
-from ..mesh_creator.MshCreator import (
+from ..mesh_creator._MshCreator import (
     is_MshCreator,
     clear_gmsh,
 )

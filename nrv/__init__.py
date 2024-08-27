@@ -53,14 +53,14 @@ from .fmod._electrodes import *
 from .utils._stimulus import *
 from .fmod._extracellular import *
 from .fmod._recording import *
-from .fmod.FEM.FEM import *
-from .fmod.FEM.COMSOL_model import *
-from .fmod.FEM.FENICS_model import *
+from .fmod.FEM._FEM import *
+from .fmod.FEM._COMSOL_model import *
+from .fmod.FEM._FENICS_model import *
 
 ######### May not be requiered at the end ###############
-from .fmod.FEM.mesh_creator.MshCreator import *
-from .fmod.FEM.mesh_creator.NerveMshCreator import *
-from .fmod.FEM.mesh_creator.NRV_Msh import *
+from .fmod.FEM.mesh_creator._MshCreator import *
+from .fmod.FEM.mesh_creator._NerveMshCreator import *
+from .fmod.FEM.mesh_creator._NRV_Msh import *
 from .fmod.FEM.fenics_utils.FEMSimulation import *
 from .fmod.FEM.fenics_utils.FEMParameters import *
 from .fmod.FEM.fenics_utils.FEMResults import *
