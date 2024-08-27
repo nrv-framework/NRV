@@ -14,10 +14,10 @@ from ...utils._units import V, mm
 from ...utils._misc import get_perineurial_thickness
 from ...backend._MCore import MCH, synchronize_processes
 from ...backend._log_interface import rise_warning
-from .fenics_utils.FEMSimulation import FEMSimulation
+from .fenics_utils._FEMSimulation import FEMSimulation
 
 from ._FEM import FEM_model
-from .fenics_utils.FEMResults import save_sim_res_list
+from .fenics_utils._FEMResults import save_sim_res_list
 from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
 
 # built in FENICS models

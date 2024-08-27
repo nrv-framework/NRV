@@ -14,7 +14,7 @@ from ..backend._MCore import MCH, synchronize_processes
 from ..backend._NRV_Simulable import NRV_simulable, sim_results
 from ..fmod._extracellular import *
 from ..fmod._recording import *
-from ..utils.cell._CL_postprocessing import *
+from ..ui._axon_postprocessing import *
 from ..backend._inouts import check_function_kwargs
 from ._axons import *
 from ._axon_pop_generator import *

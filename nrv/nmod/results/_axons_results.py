@@ -8,7 +8,7 @@ from itertools import combinations
 import matplotlib.pyplot as plt
 from copy import deepcopy
 
-from ...fmod.FEM.fenics_utils.f_materials import f_material, mat_from_interp
+from ...fmod.FEM.fenics_utils._f_materials import f_material, mat_from_interp
 from ...backend._NRV_Results import sim_results
 from ...backend._file_handler import json_dump
 from ...backend._log_interface import rise_warning, rise_error

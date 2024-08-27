@@ -16,7 +16,7 @@ from ..._materials import (
     material,
     compute_effective_conductivity,
 )
-from .f_materials import f_material, load_f_material
+from ._f_materials import f_material, load_f_material
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()

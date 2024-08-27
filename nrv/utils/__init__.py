@@ -40,7 +40,7 @@ from ._units import (
     sci_round,
 )
 
-from ..utils._stimulus import (
+from ._stimulus import (
     is_stim,
     set_common_time_series,
     get_equal_timing_copies,

@@ -35,9 +35,9 @@ from basix.ufl import element, mixed_element
 from ....backend._log_interface import pass_info, rise_error, rise_warning
 from ....backend._file_handler import rmv_ext
 from ....utils._units import S, V, m
-from .fenics_materials import fenics_material
-from .FEMParameters import FEMParameters
-from .FEMResults import read_gmsh, FEMResults
+from ._fenics_materials import fenics_material
+from ._FEMParameters import FEMParameters
+from ._FEMResults import read_gmsh, FEMResults
 
 # Lists of available solvers and conditioners
 # go to https://petsc4py.readthedocs.io/en/stable/manual/ksp/ for more info

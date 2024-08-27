@@ -60,13 +60,13 @@ from .fmod.FEM._FENICS_model import *
 ######### May not be requiered at the end ###############
 from .fmod.FEM.mesh_creator._MshCreator import *
 from .fmod.FEM.mesh_creator._NerveMshCreator import *
-from .fmod.FEM.mesh_creator._NRV_Msh import *
-from .fmod.FEM.fenics_utils.FEMSimulation import *
-from .fmod.FEM.fenics_utils.FEMParameters import *
-from .fmod.FEM.fenics_utils.FEMResults import *
-from .fmod.FEM.fenics_utils.fenics_materials import *
-from .fmod.FEM.fenics_utils.f_materials import *
-from .fmod.FEM.fenics_utils.layered_materials import *
+from .ui._NRV_Msh import *
+from .fmod.FEM.fenics_utils._FEMSimulation import *
+from .fmod.FEM.fenics_utils._FEMParameters import *
+from .fmod.FEM.fenics_utils._FEMResults import *
+from .fmod.FEM.fenics_utils._fenics_materials import *
+from .fmod.FEM.fenics_utils._f_materials import *
+from .fmod.FEM.fenics_utils._layered_materials import *
 
 ########################################################
 
@@ -86,9 +86,9 @@ from .nmod.results._nerve_results import *
 
 from .utils._saving_handler import *
 from .utils._nrv_function import *
-from .utils.cell._CL_postprocessing import *
-from .utils.cell._CL_simulations import *
-from .utils.fascicle._FL_postprocessing import *
+from .ui._axon_postprocessing import *
+from .ui._axon_simulations import *
+from .ui._fascicle_postprocessing import *
 
 from .optim._CostFunctions import *
 from .optim._Optimizers import *

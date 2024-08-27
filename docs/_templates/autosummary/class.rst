@@ -9,7 +9,7 @@
 Attributes
 ----------
 .. autosummary::
-    :toctree: {{ fullname }}/_attributes
+    :toctree: {{ name }}
 {% for item in attributes %}
     {{ name }}.{{ item }}
 {% endfor %}
@@ -21,7 +21,7 @@ Attributes
 Methods
 -------
 .. autosummary::
-    :toctree: {{ fullname }}/_methods
+    :toctree: {{ name }}
     
 {% for item in methods %}
     {{ name }}.{{ item }}

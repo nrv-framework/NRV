@@ -7,10 +7,10 @@ import os
 
 import matplotlib.pyplot as plt
 
-from ...backend._file_handler import json_load
-from ...backend._log_interface import pass_info
-from ...fmod._electrodes import is_FEM_electrode
-from ..cell._CL_postprocessing import *
+from ..backend._file_handler import json_load
+from ..backend._log_interface import pass_info
+from ..fmod._electrodes import is_FEM_electrode
+from ._axon_postprocessing import *
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()

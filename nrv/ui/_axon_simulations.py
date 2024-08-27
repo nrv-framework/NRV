@@ -7,17 +7,17 @@ from time import perf_counter
 from multiprocessing import Pool
 from tqdm import tqdm
 
-from ...backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
-from ...backend._MCore import *
-from ...fmod._electrodes import *
-from ...fmod._extracellular import *
-from ...fmod._materials import *
-from .._stimulus import *
-from ...nmod._axons import *
-from ...nmod._myelinated import *
-from ...nmod._unmyelinated import *
-from .._saving_handler import *
-from ._CL_postprocessing import *
+from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
+from ..backend._MCore import *
+from ..fmod._electrodes import *
+from ..fmod._extracellular import *
+from ..fmod._materials import *
+from ..nmod._axons import *
+from ..nmod._myelinated import *
+from ..nmod._unmyelinated import *
+from ..utils._stimulus import *
+from ..utils._saving_handler import *
+from ._axon_postprocessing import *
 
 unmyelinated_models = [
     "HH",

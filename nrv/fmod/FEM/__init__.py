@@ -15,6 +15,7 @@ from ._FENICS_lumped_impedance_model import (
     FENICS_lumped_impedance_model
 )
 
+from . import fenics_utils, mesh_creator
 submodules = [
     "fenics_utils",
     "mesh_creator",

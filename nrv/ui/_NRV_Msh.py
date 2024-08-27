@@ -1,10 +1,10 @@
-from ....backend._log_interface import rise_warning
-from ....nmod._nerve import nerve
-from ....nmod._fascicles import fascicle
-from ....utils._units import *
-from ..._electrodes import *
-from ..._extracellular import is_FEM_extra_stim, FEM_stimulation
-from ._NerveMshCreator import *
+from ..backend._log_interface import rise_warning
+from ..nmod._nerve import nerve
+from ..nmod._fascicles import fascicle
+from ..utils._units import *
+from ..fmod._electrodes import *
+from ..fmod._extracellular import is_FEM_extra_stim, FEM_stimulation
+from ..fmod.FEM.mesh_creator._NerveMshCreator import *
 
 
 def mesh_from_electrode(

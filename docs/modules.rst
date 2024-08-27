@@ -22,10 +22,8 @@ Subpackages
 
    nmod
    fmod
-..    optim
-..    optim.optim_utils
-..    eit
-..    utils
-..    utils.fascicle
-..    utils.cell
-..    backend
+   optim
+   eit
+   utils
+   ui
+   backend

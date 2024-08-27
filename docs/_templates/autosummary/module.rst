@@ -10,7 +10,7 @@ Description
 Subpackages
 -----------
 .. autosummary::
-    :toctree: {{ fullname }}/_subpackages
+    :toctree: {{ name }}
     :recursive:
     {% for module in modules %}
     {{ module }}
@@ -23,7 +23,7 @@ Subpackages
 Classes
 -------
 .. autosummary::
-    :toctree: {{ fullname }}/_classes
+    :toctree: {{ name }}
     {% for class in classes %}
     {{ class }}
     {% endfor %}
@@ -34,7 +34,7 @@ Functions
 ---------
 
 .. autosummary:: 
-    :toctree: {{ fullname }}/_functions
+    :toctree: {{ name }}
     {% for function in functions %}
     {{ function }}
     {% endfor %}

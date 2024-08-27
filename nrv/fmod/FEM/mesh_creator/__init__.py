@@ -1,12 +1,7 @@
 """ NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
 """ fmod-FEM-mesh_creator librairy"""
 
-from ._NRV_Msh import (
-    mesh_from_electrode,
-    mesh_from_extracellular_context,
-    mesh_from_fascicle,
-    mesh_from_nerve,
-)
+
 from ._MshCreator import (
     is_MshCreator,
     clear_gmsh,

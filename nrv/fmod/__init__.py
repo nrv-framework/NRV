@@ -40,6 +40,7 @@ from ._recording import (
     recorder,
 )
 
+from . import FEM
 submodules = [
     "FEM",
 ]

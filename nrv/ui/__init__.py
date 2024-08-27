@@ -1,9 +1,8 @@
 """ NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+""" User interface librairy"""
 
-""" Utils.Cell librairy"""
 
-
-from ._CL_simulations import (
+from ._axon_simulations import (
     search_threshold_dispatcher,
     axon_AP_threshold,
     axon_block_threshold,
@@ -14,7 +13,8 @@ from ._CL_simulations import (
     blocking_threshold_from_axon,
     para_blocking_threshold,
 )
-from ._CL_postprocessing import (
+
+from ._axon_postprocessing import (
     remove_key,
     remove_non_NoR_zones,
     generate_axon_from_results,
@@ -43,6 +43,23 @@ from ._CL_postprocessing import (
     raster_plot,
 )
 
+from ._fascicle_postprocessing import(
+    ls_axons_results,
+    ls_csv,
+    rm_file,
+    rm_sim_dir,
+    rm_sim_dir_from_results,
+    CAP_time_detection,
+    fascicular_state,
+    plot_fasc_state,
+)
+
+from ._NRV_Msh import (
+    mesh_from_electrode,
+    mesh_from_extracellular_context,
+    mesh_from_fascicle,
+    mesh_from_nerve,
+)
 
 submodules = []
 
@@ -84,6 +101,18 @@ functions = [
     "sample_g_mem",
     "vmem_plot",
     "raster_plot",
+    "ls_axons_results",
+    "ls_csv",
+    "rm_file",
+    "rm_sim_dir",
+    "rm_sim_dir_from_results",
+    "CAP_time_detection",
+    "fascicular_state",
+    "plot_fasc_state",
+    "mesh_from_electrode",
+    "mesh_from_extracellular_context",
+    "mesh_from_fascicle",
+    "mesh_from_nerve",
 ]
 
 __all__ = []
