@@ -1,5 +1,5 @@
 import nrv
-from nrv.utils.nrv_function import sphere, rosenbock, rastrigin
+from nrv.utils._nrv_function import sphere, rosenbock, rastrigin
 
 import matplotlib.pyplot as plt
 

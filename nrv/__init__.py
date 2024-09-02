@@ -20,6 +20,7 @@ import platform
 
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
+import neuron
 # create a dummy object to locate frameworks path
 class DummyClass:
     """Dummy class"""
@@ -42,59 +43,59 @@ if not os.access(nrv_path + "/nrv2calm", os.X_OK):
 ######################
 #  Public interface  #
 ######################
-from .backend import compileMods
-from .backend.parameters import *
-from .backend.NRV_Class import load_any
-from .backend.wrappers import *
+from .backend import _compileMods
+from .backend._parameters import *
+from .backend._NRV_Class import load_any
+from .backend._wrappers import *
 
-from .fmod.materials import *
-from .fmod.electrodes import *
-from .fmod.stimulus import *
-from .fmod.extracellular import *
-from .fmod.recording import *
-from .fmod.FEM.FEM import *
-from .fmod.FEM.COMSOL_model import *
-from .fmod.FEM.FENICS_model import *
+from .fmod._materials import *
+from .fmod._electrodes import *
+from .utils._stimulus import *
+from .fmod._extracellular import *
+from .fmod._recording import *
+from .fmod.FEM._FEM import *
+from .fmod.FEM._COMSOL_model import *
+from .fmod.FEM._FENICS_model import *
 
 ######### May not be requiered at the end ###############
-from .fmod.FEM.mesh_creator.MshCreator import *
-from .fmod.FEM.mesh_creator.NerveMshCreator import *
-from .fmod.FEM.mesh_creator.NRV_Msh import *
-from .fmod.FEM.fenics_utils.FEMSimulation import *
-from .fmod.FEM.fenics_utils.FEMParameters import *
-from .fmod.FEM.fenics_utils.FEMResults import *
-from .fmod.FEM.fenics_utils.fenics_materials import *
-from .fmod.FEM.fenics_utils.f_materials import *
-from .fmod.FEM.fenics_utils.layered_materials import *
+from .fmod.FEM.mesh_creator._MshCreator import *
+from .fmod.FEM.mesh_creator._NerveMshCreator import *
+from .ui._NRV_Msh import *
+from .fmod.FEM.fenics_utils._FEMSimulation import *
+from .fmod.FEM.fenics_utils._FEMParameters import *
+from .fmod.FEM.fenics_utils._FEMResults import *
+from .fmod.FEM.fenics_utils._fenics_materials import *
+from .fmod.FEM.fenics_utils._f_materials import *
+from .fmod.FEM.fenics_utils._layered_materials import *
 
 ########################################################
 
-from .nmod.axons import *
-from .nmod.unmyelinated import *
-from .nmod.myelinated import *
-from .nmod.fascicles import *
-from .nmod.axon_pop_generator import *
-from .nmod.nerve import *
+from .nmod._axons import *
+from .nmod._unmyelinated import *
+from .nmod._myelinated import *
+from .nmod._fascicles import *
+from .nmod._axon_pop_generator import *
+from .nmod._nerve import *
 
-from .nmod.results.axons_results import *
-from .nmod.results.unmyelinated_results import *
-from .nmod.results.myelinated_results import *
-from .nmod.results.fascicles_results import *
-from .nmod.results.nerve_results import *
-
-
-from .utils.saving_handler import *
-from .utils.nrv_function import *
-from .utils.cell.CL_postprocessing import *
-from .utils.cell.CL_simulations import *
-from .utils.fascicle.FL_postprocessing import *
-
-from .optim.CostFunctions import *
-from .optim.Optimizers import *
-from .optim.Problems import *
-from .optim.optim_utils.ContextModifiers import *
-from .optim.optim_utils.CostEvaluation import *
-from .optim.optim_utils.OptimFunctions import *
+from .nmod.results._axons_results import *
+from .nmod.results._unmyelinated_results import *
+from .nmod.results._myelinated_results import *
+from .nmod.results._fascicles_results import *
+from .nmod.results._nerve_results import *
 
 
-from .eit.Protocol import pyeit_protocol
+from .utils._saving_handler import *
+from .utils._nrv_function import *
+from .ui._axon_postprocessing import *
+from .ui._axon_simulations import *
+from .ui._fascicle_postprocessing import *
+
+from .optim._CostFunctions import *
+from .optim._Optimizers import *
+from .optim._Problems import *
+from .optim.optim_utils._ContextModifiers import *
+from .optim.optim_utils._CostEvaluation import *
+from .optim.optim_utils._OptimFunctions import *
+
+
+from .eit._protocol import pyeit_protocol

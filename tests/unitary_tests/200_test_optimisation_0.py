@@ -1,4 +1,4 @@
-import nrv.utils.nrv_function as oobj
+import nrv.utils._nrv_function as oobj
 import numpy as np
 import matplotlib.pyplot as plt
 
