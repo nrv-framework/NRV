@@ -46,6 +46,7 @@ submodules = [
 ]
 
 classes = [
+    "material",
     "electrode",
     "point_source_electrode",
     "FEM_electrode",
@@ -55,7 +56,6 @@ classes = [
     "extracellular_context",
     "stimulation",
     "FEM_stimulation",
-    "material",
     "recording_point",
     "recorder",
 ]
@@ -65,18 +65,18 @@ functions = [
     "is_CUFF_electrode",
     "is_LIFE_electrode",
     "is_analytical_electrode",
-    "load_any_electrode",
-    "check_electrodes_overlap",
     "is_extra_stim",
     "is_analytical_extra_stim",
     "is_FEM_extra_stim",
-    "load_any_extracel_context",
     "is_mat",
-    "get_mat_file_as_dict",
-    "load_material",
-    "compute_effective_conductivity",
     "is_recording_point",
     "is_recorder",
+    "load_any_electrode",
+    "load_any_extracel_context",
+    "load_material",
+    "check_electrodes_overlap",
+    "get_mat_file_as_dict",
+    "compute_effective_conductivity",
     "NodeD_interpol",
 ]
 

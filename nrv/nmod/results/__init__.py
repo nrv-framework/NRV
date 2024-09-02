@@ -1,4 +1,11 @@
-""" NRV-Nmod-Results librairy for neural models"""
+""" nmod Results: standardized result gathering for nmod simulations.
+
+nmod.results defines classes to gather results from nmod object simulations.
+Result classes are defined for axons (myelinated and unlyelinated), fascicles
+and nerves. All computed values, state variables and electrical quantities are
+stored and exportable as dictionaries (json format).
+
+"""
 
 from ._axons_results import axon_results
 from ._unmyelinated_results import unmyelinated_results
