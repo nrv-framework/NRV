@@ -9,6 +9,7 @@ All notable changes to NRV are sumed up in this file.
 - Help restructuration to have a API description more user firendly.
 
 ### Fixed
+- small fix in filter_freq to avoid filtering artifact
 
 ### Removed
 - methods such as load_any_axon, load_any_electrode... (load_any_ + somthing) are deprecated, though not removed for backward compatibility. Please only use load_any function.

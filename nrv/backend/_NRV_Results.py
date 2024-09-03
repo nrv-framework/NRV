@@ -186,19 +186,23 @@ class sim_results(NRV_results):
             fs = 1 / self["dt"]
             if isinstance(f0, Iterable):
                 new_sig = np.zeros(self[my_key].shape)
-                for k in range(len(self[my_key])):
+                for k in range(len(self[my_key])): 
                     new_sig[k, :] = self[my_key][k]
+                    offset = self[my_key][k][0]
+                    new_sig[k, :] = new_sig[k, :] - offset
                     for f in f0:
                         b_notch, a_notch = signal.iirnotch(f, Q, fs)
                         new_sig[k, :] = signal.lfilter(
                             b_notch, a_notch, new_sig[k, :][k]
                         )
+                    new_sig[k, :] = new_sig[k, :] + offset
             else:
                 ##  NOTCH at the stimulation frequency
                 b_notch, a_notch = signal.iirnotch(f0, Q, fs)
                 new_sig = np.zeros(self[my_key].shape)
                 for k in range(len(self[my_key])):
-                    new_sig[k, :] = signal.lfilter(b_notch, a_notch, self[my_key][k])
+                    offset = self[my_key][k][0]
+                    new_sig[k, :] = signal.lfilter(b_notch, a_notch, self[my_key][k] - offset) + offset
             self[my_key + "_filtered"] = new_sig
 
     def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):
