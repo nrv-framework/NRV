@@ -94,12 +94,12 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc", "__logo/__build"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
 html_title = f"{project} {version}"  # document title
-html_logo = "images/logo.png"  # project logo
+html_logo = "__logo/logo.png"  # project logo
 
 # Rendering options
 myst_heading_anchors = 2  # Generate link anchors for sections.

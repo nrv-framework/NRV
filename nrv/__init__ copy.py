@@ -74,33 +74,24 @@ if "NRVPATH" not in os.environ:
 ######################
 #  Public interface  #
 ######################
+
+# automated compilation of .mod files if not already done
 from .backend import _compileMods
-from .backend._parameters import *
+# direct access to backend (remote unnecessary stuff here)
 from .backend._NRV_Class import load_any
+from .backend._parameters import *
 from .backend._wrappers import *
 
+# direct access to fmod
 from .fmod._materials import *
 from .fmod._electrodes import *
-from .utils._stimulus import *
 from .fmod._extracellular import *
 from .fmod._recording import *
 from .fmod.FEM._FEM import *
 from .fmod.FEM._COMSOL_model import *
 from .fmod.FEM._FENICS_model import *
 
-######### May not be requiered at the end ###############
-from .fmod.FEM.mesh_creator._MshCreator import *
-from .fmod.FEM.mesh_creator._NerveMshCreator import *
-from .ui._NRV_Msh import *
-from .fmod.FEM.fenics_utils._FEMSimulation import *
-from .fmod.FEM.fenics_utils._FEMParameters import *
-from .fmod.FEM.fenics_utils._FEMResults import *
-from .fmod.FEM.fenics_utils._fenics_materials import *
-from .fmod.FEM.fenics_utils._f_materials import *
-from .fmod.FEM.fenics_utils._layered_materials import *
-
-########################################################
-
+# direct acces to nmod
 from .nmod._axons import *
 from .nmod._unmyelinated import *
 from .nmod._myelinated import *
@@ -108,6 +99,26 @@ from .nmod._fascicles import *
 from .nmod._axon_pop_generator import *
 from .nmod._nerve import *
 
+# direct access to optim
+from .optim._CostFunctions import *
+from .optim._Optimizers import *
+from .optim._Problems import *
+from .optim.optim_utils._ContextModifiers import *
+from .optim.optim_utils._CostEvaluation import *
+from .optim.optim_utils._OptimFunctions import *
+
+# direct access to simple of objects utils
+from .utils._stimulus import *
+from .utils._saving_handler import *
+from .utils._nrv_function import *
+
+# direct access to user interface
+from .ui._NRV_Msh import *
+from .ui._axon_postprocessing import *
+from .ui._axon_simulations import *
+from .ui._fascicle_postprocessing import *
+
+# direct acces to results
 from .nmod.results._axons_results import *
 from .nmod.results._unmyelinated_results import *
 from .nmod.results._myelinated_results import *
@@ -115,18 +126,21 @@ from .nmod.results._fascicles_results import *
 from .nmod.results._nerve_results import *
 
 
-from .utils._saving_handler import *
-from .utils._nrv_function import *
-from .ui._axon_postprocessing import *
-from .ui._axon_simulations import *
-from .ui._fascicle_postprocessing import *
+######### May not be requiered at the end ###############
+from .fmod.FEM.mesh_creator._MshCreator import *
+from .fmod.FEM.mesh_creator._NerveMshCreator import *
+from .fmod.FEM.fenics_utils._FEMSimulation import *
+from .fmod.FEM.fenics_utils._FEMParameters import *
+from .fmod.FEM.fenics_utils._FEMResults import *
+from .fmod.FEM.fenics_utils._fenics_materials import *
+from .fmod.FEM.fenics_utils._f_materials import *
+from .fmod.FEM.fenics_utils._layered_materials import *
+########################################################
 
-from .optim._CostFunctions import *
-from .optim._Optimizers import *
-from .optim._Problems import *
-from .optim.optim_utils._ContextModifiers import *
-from .optim.optim_utils._CostEvaluation import *
-from .optim.optim_utils._OptimFunctions import *
+
+
+
+
 
 
 from .eit._protocol import pyeit_protocol
