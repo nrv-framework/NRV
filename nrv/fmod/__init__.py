@@ -3,11 +3,13 @@
 fmod hosts the code to compute extracellular electrical fields and quantities.
 Such quantity can result from both:
 
-  - electrical stimulation, handled by injecting stimulation current waveforms
-  on electrodes. Associated computations can be performed using analitical approach
-  (fast but relying on strong hypotheses), or using Finite Element models,
-  - the activity of the cells. In this second case, computations are for the moment
-  only performed with an analitical approach.
+
+* electrical stimulation, handled by injecting stimulation current waveforms
+  on electrodes. Associated computations can be performed using analitical 
+  approach (fast but relying on strong hypotheses), or using Finite Element 
+  models,
+* the activity of the cells. In this second case, computations are for the 
+  moment only performed with an analitical approach.
 
 
 Finite Elements solver can be chosen between COMSOL (requieres extra license, 

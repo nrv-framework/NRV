@@ -1,5 +1,17 @@
-"""
-EIT librairy for Electrical Impedance Tomography models
+"""Electrical Impedance Tomography - eit: models for neural impedance imaging
+
+eit provides high level models for imaging techniques based on electrical
+impedance sensing for neural activity reconstruction. Tissue properties are
+computed taking into account the temporal and frequencial evolution of neural
+membranes conductivity. Models are based on both Finite Differences (NEURON)
+computations and FEM models.
+
+
+.. warning::
+  The eit sb-package is currently under construction and scientific validation.
+  The code can change fast, results not guaranteed, and developpers do not
+  ensure backwards compatibility.
+
 """
 
 from ._eit_forward import eit_forward

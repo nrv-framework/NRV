@@ -1,5 +1,10 @@
-""" NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
-""" User interface librairy"""
+""" User Interface - ui: end user pre- or post processing code
+
+ui provides classes and functions for pre- (meshing for instance) or
+post-processing computations. Basic or recurent simulation encapuslated
+as function are also accessible.
+
+"""
 
 
 from ._axon_simulations import (

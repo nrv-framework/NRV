@@ -1,4 +1,11 @@
-""" NRV Backend library """
+""" backend: code for IO, machine and classes handling
+
+the backend sub-package is dedicated to handling the magic behind all NRV
+computations. The code developed here is not meant to be used directly by the
+end-user, but internally to develop new functionality or maintain other
+sub-packages.
+
+"""
 
 from ._file_handler import (
     is_iterable,

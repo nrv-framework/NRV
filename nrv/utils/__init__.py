@@ -1,5 +1,8 @@
-""" NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
-""" Utils librairy"""
+""" Utils: general purpose functions and classes
+
+utils provides some classes and functions for runing and interconnecting code
+from the scientific sub-packages.
+"""
 
 from ._misc import (
     distance_point2point,
