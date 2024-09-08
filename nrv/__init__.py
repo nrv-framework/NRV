@@ -24,18 +24,24 @@ until june 2023, and is now primarily developed and maintained by the
 Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux,
 U. of Bordeaux.
 
-to cite NRV:
-Couppey T., Regnacq L., Giraud R., Romain O., Bornat Y., and Kolbl F. (2024)
-NRV: An opem framework for in silico evaluation of peripheral nerve electrical
-stimulation strategies. PLOS Computational Biology 20(7): e1011826.
-https://doi.org/10.1371/journal.pcbi.1011826
 
-For further detail, help and contact, please visit our website:
-http://nrv-framework.org
+.. note::
+  to cite NRV:
+  Couppey T., Regnacq L., Giraud R., Romain O., Bornat Y., and Kolbl F. (2024)
+  NRV: An opem framework for in silico evaluation of peripheral nerve electrical
+  stimulation strategies. PLOS Computational Biology 20(7): e1011826.
+  https://doi.org/10.1371/journal.pcbi.1011826
 
-We ask developpers and users to respect our code of conduct, accessible
-from the following address:
-https://nrv-framework.org/?page_id=96
+
+.. SeeAlso::
+   - **General information**: `nrv-framework.org <https://nrv-framework.org>`_
+   - **Discussions and queries**: `Forum NRV <https://nrv-framework.org/forum>`_
+   - **Full code**: `Github repository <https://github.com/nrv-framework/NRV>`_
+
+
+.. note::
+  We kindly ask developpers and users to respect our code of conduct, accessible
+  from the following page: `Code of conduct <https://nrv-framework.org/?page_id=96>`_
 
 """
 

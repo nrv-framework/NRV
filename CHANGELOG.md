@@ -6,13 +6,13 @@ All notable changes to NRV are sumed up in this file.
 
 ### Added
 - 'ui', a subpackage for user interface to separate from utils which are ment to stay internal.
-- Help restructuration to have a API description more user firendly.
+- Help restructuration to have a API description more user friendly.
 
 ### Fixed
 - small fix in filter_freq to avoid filtering artifact
 
 ### Removed
-- methods such as load_any_axon, load_any_electrode... (load_any_ + somthing) are deprecated, though not removed for backward compatibility. Please only use load_any function.
+- methods such as load_any_axon, load_any_electrode... (``load_any_`` + something) are deprecated, though not removed for backward compatibility. Please only use ``load_any`` function.
 
 
 
