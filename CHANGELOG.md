@@ -7,6 +7,7 @@ All notable changes to NRV are sumed up in this file.
 ### Added
 - 'ui', a subpackage for user interface to separate from utils which are ment to stay internal.
 - Help restructuration to have a API description more user friendly.
+- nrv.CONFIG as a singleton object gathering configuration related data, parameters and methods.
 
 ### Fixed
 - small fix in filter_freq to avoid filtering artifact
