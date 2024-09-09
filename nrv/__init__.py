@@ -65,17 +65,18 @@ import platform
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 import neuron
-# create a dummy object to locate frameworks path
-class DummyClass:
-    """Dummy class"""
 
-    pass
 
-nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
-root_path = nrv_path.replace("/nrv/", "")
+# load configuration module
+from .backend._config import nrv_config
+# get source code location
+backend_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(nrv_config)))
+root_path = backend_path.replace("/backend", "")
 # create the environnement variable NRVPATH if it does not exist
 if "NRVPATH" not in os.environ:
     os.environ["NRVPATH"] = nrv_path
+# instanciate configuration
+CONFIG = nrv_config()
 
 ######################
 #  Public interface  #

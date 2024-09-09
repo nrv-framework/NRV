@@ -7,6 +7,7 @@ sub-packages.
 
 """
 
+from ._config import nrv_config
 from ._file_handler import (
     is_iterable,
     rmv_ext,
@@ -59,6 +60,7 @@ from ._wrappers import singlecore
 submodules = []
 
 classes = [
+    "nrv_config",
     "NRV_Encoder",
     "bcolors",
     "pbar",

@@ -176,6 +176,9 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
     *   - 500
         - 509
         - Various functions
+    *   - 900
+        - 950
+        - Machine and autoconfig
 
 
 Public roadmap
