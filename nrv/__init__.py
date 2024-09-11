@@ -54,13 +54,8 @@ __contributors__ = __authors__
 __project__ = "NeuRon Virtualizer (NRV)"
 
 #####################################
-#  check environnement variables    #
 #  check correct NRV configuration  #
 #####################################
-import os
-import inspect
-import platform
-
 
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
@@ -69,9 +64,6 @@ from .backend._parameters import parameters
 
 # load configuration module
 from .backend._config import nrv_config
-# get source code location
-backend_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(nrv_config)))
-root_path = backend_path.replace("/backend", "")
 
 # instanciate configuration
 CONFIG = nrv_config()
