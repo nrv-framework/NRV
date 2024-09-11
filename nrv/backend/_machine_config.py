@@ -193,7 +193,10 @@ Float representation style: {self.float_repr_style}"""
         self.MEMORY_free = psutil.virtual_memory().free / self.MEMORY_unit_value
         self.MEMORY_active = psutil.virtual_memory().active / self.MEMORY_unit_value
         self.MEMORY_inactive = psutil.virtual_memory().inactive / self.MEMORY_unit_value
-        self.MEMORY_wired = psutil.virtual_memory().wired / self.MEMORY_unit_value
+        if "linux" not in self.OS_name:
+            self.MEMORY_wired = psutil.virtual_memory().wired / self.MEMORY_unit_value
+        else:
+            self.MEMORY_wired = None
 
     def memory_update(self):
         current_MEMORY_available = (
