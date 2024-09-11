@@ -15,6 +15,7 @@ from .results._axons_results import axon_results
 from ..backend._file_handler import json_dump
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._NRV_Simulable import NRV_simulable
+from ..backend._parameters import parameters
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._recording import *
@@ -24,7 +25,7 @@ from ..utils._units import sci_round
 faulthandler.enable()
 
 # instructions for Neuron, find mod files and hide GUI
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 neuron.load_mechanisms(dir_path + "/mods")
 neuron.h.load_file("stdrun.hoc")
 

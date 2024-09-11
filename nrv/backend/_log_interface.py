@@ -30,7 +30,7 @@ class bcolors:
 
 
 def init_reporter():
-    rep_nrv = Reporter(log_path=dir_path + "/log/NRV.log")
+    rep_nrv = Reporter(log_path=parameters.nrv_path + "/_misc/log/NRV.log")
     rep_nrv._default_config["handlers"]["default"]["level"] = "CRITICAL"
     rep_nrv._default_config["formatters"]["standard"][
         "format"
@@ -50,7 +50,6 @@ def set_log_level(level, clear_log_file=False):
     return rep_nrv
 
 
-dir_path = os.environ["NRVPATH"] + "/_misc"
 rep_nrv = init_reporter()
 
 

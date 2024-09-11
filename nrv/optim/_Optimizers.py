@@ -23,7 +23,7 @@ from ..backend._log_interface import set_log_level, rise_error, rise_warning
 from ..backend._MCore import MCH
 from .optim_utils._OptimResults import optim_results
 
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 dir_path + "/log/NRV.log"
 # mymodule.py
 

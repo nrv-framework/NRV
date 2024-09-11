@@ -12,11 +12,12 @@ import numpy as np
 from ...backend._file_handler import rmv_ext
 from ...backend._MCore import MCH
 from ...backend._log_interface import rise_warning
+from ...backend._parameters import parameters
 from ...utils._units import V
 from ._FEM import *
 
 # built in COMSOL models
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 material_library = os.listdir(dir_path + "/comsol_templates/")
 
 ###############

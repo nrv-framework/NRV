@@ -13,6 +13,7 @@ from scipy.optimize import curve_fit
 from scipy.stats import rv_continuous, gamma
 
 from ..backend._log_interface import pass_info, progression_popup, rise_warning
+from ..backend._parameters import parameters
 
 # WARNING:
 # no prompt message for numpy division by zeros: handled in the code !!!
@@ -25,7 +26,7 @@ fg_verbose = True
 faulthandler.enable()
 
 # get the built-in material librairy
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 stat_library = os.listdir(dir_path + "/stats/")
 
 #################################################

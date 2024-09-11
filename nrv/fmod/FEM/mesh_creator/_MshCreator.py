@@ -13,7 +13,7 @@ from ....backend._log_interface import pass_info, rise_error, rise_warning
 from ....backend._NRV_Class import NRV_class
 from ....backend._parameters import parameters
 
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 
 
 ###############

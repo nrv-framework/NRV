@@ -13,6 +13,7 @@ from ufl import as_tensor
 from ....backend._file_handler import json_dump, rmv_ext
 from ....backend._log_interface import rise_warning
 from ....backend._NRV_Class import NRV_class
+from ....backend._parameters import parameters
 from ....utils._nrv_function import nrv_interp
 from ..._materials import is_mat, load_material
 from ._f_materials import load_f_material
@@ -21,7 +22,7 @@ from ._f_materials import load_f_material
 faulthandler.enable()
 
 # get the built-in material librairy
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 
 
 ####################

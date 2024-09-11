@@ -65,16 +65,14 @@ import platform
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 import neuron
-
+from .backend._parameters import parameters
 
 # load configuration module
 from .backend._config import nrv_config
 # get source code location
 backend_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(nrv_config)))
 root_path = backend_path.replace("/backend", "")
-# create the environnement variable NRVPATH if it does not exist
-if "NRVPATH" not in os.environ:
-    os.environ["NRVPATH"] = nrv_path
+
 # instanciate configuration
 CONFIG = nrv_config()
 
@@ -82,7 +80,6 @@ CONFIG = nrv_config()
 #  Public interface  #
 ######################
 from .backend import _compileMods
-from .backend._parameters import *
 from .backend._NRV_Class import load_any
 from .backend._wrappers import *
 

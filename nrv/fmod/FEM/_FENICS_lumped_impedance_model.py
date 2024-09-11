@@ -13,6 +13,7 @@ from ...backend._file_handler import rmv_ext
 from ...utils._units import V, mm
 from ...utils._misc import get_perineurial_thickness
 from ...backend._MCore import MCH, synchronize_processes
+from ...backend._parameters import parameters
 from .fenics_utils._FEMSimulation import FEMSimulation
 
 from ._FENICS_model import FENICS_model
@@ -20,7 +21,7 @@ from .fenics_utils._FEMResults import save_sim_res_list
 from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
 
 # built in FENICS models
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 # material_library = os.listdir(dir_path+"/fenics_templates/")
 
 ###############

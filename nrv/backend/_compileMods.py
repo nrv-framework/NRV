@@ -5,6 +5,7 @@ Contains functions called after the installation to compile neuron .mod files
 """
 
 import os
+from ._parameters import parameters
 
 # test if neuron correctly installed
 # warning: difficult as neuron can be 'mocked' on github and rtd for delploy and help
@@ -21,7 +22,7 @@ except AttributeError:
     )
 else:
     # if true neuron installation
-    dir_path = os.environ["NRVPATH"] + "/_misc/mods/"
+    dir_path = parameters.nrv_path + "/_misc/mods/"
     ls = os.listdir(dir_path)
     test_mods = False
     i = 0
@@ -32,7 +33,7 @@ else:
     def NeuronCompile():
         # path2compiled_mods =  dir_path + "/mods/x86_64"
         path2_mods = dir_path
-        os.system("chmod +x " + os.environ["NRVPATH"] + "/nrv2calm")
+        os.system("chmod +x " + parameters.nrv_path + "/nrv2calm")
         os.system("cd " + path2_mods + "&& nrnivmodl")
 
     if not test_mods:

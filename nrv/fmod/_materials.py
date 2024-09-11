@@ -9,12 +9,13 @@ from scipy.constants import pi, epsilon_0
 
 from ..backend._log_interface import rise_warning
 from ..backend._NRV_Class import NRV_class
+from ..backend._parameters import parameters
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
 # get the built-in material librairy
-dir_path = os.environ["NRVPATH"] + "/_misc"
+dir_path = parameters.nrv_path + "/_misc"
 material_library = os.listdir(dir_path + "/materials/")
 
 ###############

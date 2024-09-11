@@ -67,9 +67,6 @@ class DummyClass:
 
 nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
 root_path = nrv_path.replace("/nrv/", "")
-# create the environnement variable NRVPATH if it does not exist
-if "NRVPATH" not in os.environ:
-    os.environ["NRVPATH"] = nrv_path
 
 ######################
 #  Public interface  #
