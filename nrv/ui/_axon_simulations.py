@@ -294,9 +294,9 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
         update_func(axon,current_amp,**args_update)
 
         verb = parameters.get_nrv_verbosity()
-        parameters.set_nrv_verbosity(2)
+        #parameters.set_nrv_verbosity(2)
         results = axon.simulate(t_sim=t_sim)
-        parameters.set_nrv_verbosity(verb)
+        #parameters.set_nrv_verbosity(verb)
 
         is_blocked = results.is_blocked(AP_start=AP_start, freq=freq)
         if save_path:
@@ -370,7 +370,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     t_stop = perf_counter()
     if verbose:
         clear_prompt_line(1)
-        pass_info(f"Activation threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
+        pass_info(f"Block threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
                   + f" found in {Niter-1} iterations ({np.round(t_stop-t_start,2)}s).")
     return current_amp
 
