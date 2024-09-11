@@ -131,6 +131,7 @@ setup(
         "icecream",
         "pyswarms",
         "tqdm",
+        "psutil",
     ],  # external packages as dependencies
     python_requires=">=3.10",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script
