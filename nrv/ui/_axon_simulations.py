@@ -6,8 +6,12 @@ from typing import Callable
 from time import perf_counter
 from multiprocessing import Pool
 from tqdm import tqdm
+from functools import partial
+from itertools import repeat
 
+from ..backend._file_handler import is_iterable
 from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
+from ..backend._parameters import parameters
 from ..backend._MCore import *
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
@@ -29,7 +33,11 @@ unmyelinated_models = [
 ]
 myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]
 
-def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None)->list[any]:
+
+def set_args_kwargs(func, args, kwargs):   
+    return func(*args, **kwargs)
+
+def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None, **kwargs)->list[any]:
     """
     Automatically dispatches any search threshold callable object on available cpu cores. 
 
@@ -47,18 +55,39 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
     list[any]
         List of ordered thresholds.
     """
-    tot = len(parameter_list)
+    
+    l_kwargs = []
+    c_kwargs = {}
+    tot = len(list(parameter_list))
     if ncore is not None:
         tot = ncore
+    for k in range(tot):
+        n_kwargs = {}
+        for key in kwargs:
+            if is_iterable(kwargs[key]):
+                if len (kwargs[key]) == tot:
+                    n_kwargs[key] = kwargs[key][k]
+                else:
+                    rise_warning(f"length of kwargs {key} in {__name__} is inconsistant. Got {len (kwargs[key])}, expected {tot}.")
+                    pass_info(f"Used {key}[0] in pool")
+                    c_kwargs[key] = kwargs[key][0]
+            else:
+                c_kwargs[key] = kwargs[key]
+            l_kwargs.append(n_kwargs)
+    
+    p_search_func = partial(search_func,**c_kwargs)
     with Pool(tot) as pool: 
-        results = list(tqdm(pool.imap(search_func, parameter_list), total=len(parameter_list)))
+        args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
+        results = list(tqdm(pool.starmap(set_args_kwargs,args_for_starmap)))
         pool.close()
         pool.join()
         return(results)
 
+
+
 def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
-                      t_sim: float = 5, tol: float = 1,
-                      verbose: bool = True, args_update = None ,**kwargs) -> np.float64 :
+                      t_sim: float = 5, tol: float = 1, t_start = None, freq = None,
+                      verbose: bool = True, args_update = None, save_path: str|None = None, **kwargs) -> np.float64 :
     """
     Find the activation threshold of an axon with arbitrary stimulation settings.
 
@@ -78,6 +107,8 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
         Verbosity of the search, by default True
     args_update : arg, optional
         update_func arguments, by default None
+    save_path : str, optional
+        if not none, raster_plot and plot_x_t of axon results are saved in save_path
 
     Returns
     -------
@@ -99,6 +130,10 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     amplitude_min_th = amp_min
     amplitude_tol = tol
 
+    vm_key = "V_mem"
+    if (freq is not None):
+        vm_key += "_filtered"
+
     # Dichotomy initialization
     previous_amp = amp_min
     delta_amp = np.abs(amp_max - amp_min)
@@ -112,7 +147,31 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
             pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA ...")
             
         update_func(axon,current_amp,**args_update)
+        verb = parameters.get_nrv_verbosity()
+        parameters.set_nrv_verbosity(2)
         results = axon.simulate(t_sim=t_sim)
+        parameters.set_nrv_verbosity(verb)
+
+        if freq is not None:
+            results.filter_freq("V_mem", freq, Q=2)
+
+        if save_path:
+            fig, ax = plt.subplots(1)
+            results.raster_plot(ax,key = vm_key)
+            ax.set_title(f"Amplitude: {np.round(current_amp,2)}µA")
+            amp_str = str(np.round(current_amp,2)).replace(".", "_")
+            fig.tight_layout()
+            fig_name = save_path + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig.savefig(fig_name)
+            plt.close(fig)
+
+            fig, ax = plt.subplots(1)
+            results.plot_x_t(ax,key = vm_key)
+            ax.set_title(f"Amplitude: {np.round(current_amp,2)}µA")
+            fig.tight_layout()
+            fig_name = save_path + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig.savefig(fig_name)
+            plt.close(fig)
 
         if verbose:
             clear_prompt_line(1)
@@ -136,7 +195,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if results.is_recruited("V_mem"):
+        if results.is_recruited(vm_key=vm_key,t_start=t_start):
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
@@ -233,14 +292,20 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
             pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA ...")
             
         update_func(axon,current_amp,**args_update)
+
+        verb = parameters.get_nrv_verbosity()
+        parameters.set_nrv_verbosity(2)
         results = axon.simulate(t_sim=t_sim)
+        parameters.set_nrv_verbosity(verb)
+
         is_blocked = results.is_blocked(AP_start=AP_start, freq=freq)
         if save_path:
             fig, ax = plt.subplots(1)
             results.raster_plot(ax,key = vm_key)
             ax.set_title(f"Block Amplitude: {np.round(current_amp,2)}µA")
+            amp_str = str(np.round(current_amp,2)).replace(".", "_")
             fig.tight_layout()
-            fig_name = save_path + f"raster_plot_axon_{axon.ID}_iter_{Niter}.png"
+            fig_name = save_path + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
             fig.savefig(fig_name)
             plt.close(fig)
 
@@ -248,7 +313,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
             results.plot_x_t(ax,key = vm_key)
             ax.set_title(f"Block Amplitude: {np.round(current_amp,2)}µA")
             fig.tight_layout()
-            fig_name = save_path + f"vmen_plot_axon_{axon.ID}_iter_{Niter}.png"
+            fig_name = save_path + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
             fig.savefig(fig_name)
             plt.close(fig)
 

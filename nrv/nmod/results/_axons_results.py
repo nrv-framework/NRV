@@ -7,6 +7,7 @@ from numpy.typing import NDArray
 from itertools import combinations
 import matplotlib.pyplot as plt
 from copy import deepcopy
+from scipy.signal import find_peaks
 
 from ...fmod.FEM.fenics_utils._f_materials import f_material, mat_from_interp
 from ...backend._NRV_Results import sim_results
@@ -142,52 +143,26 @@ def rasterize(
     else:
         t_stop_idx = -1
 
-    t_ap = np.array([], np.int32)
+    t_idx_AP = np.array([], np.int32)
     x_idx_AP = np.array([], np.int32)
 
+    dt = t_data[1]-t_data[0]
+    dis = int(t_refractory/dt)
+    width = int(t_min_AP/dt)
+    #width = None
+    height = [-20,70]     #min/max heigh of AP
+
     for x_val, v in enumerate(y_data):
-        v = v[t_start_idx:t_stop_idx]
-        th_idx = np.where(v >= threshold)[0]  # find vmem above threshold
-        if len(th_idx):
-            end_cons_idx = np.where(np.diff(th_idx) != 1)[
-                0
-            ]  # find when indexes are not consecutive (ie multiple APs) @Warning: might not work when AP "jumps" above nodes
-            start_APs_idx = th_idx[end_cons_idx + 1]  # get start index of each APs
-            end_APs_idx = th_idx[end_cons_idx]  # get stop index of each APs
-
-            start_APs_idx = np.concatenate(
-                [[th_idx[0]], start_APs_idx]
-            )  # add index 0 for start idxs
-            end_APs_idx = np.concatenate(
-                [end_APs_idx, [th_idx[-1]]]
-            )  # add index -1 in stop idxs
-            dur_APs = (
-                t_data[end_APs_idx] - t_data[start_APs_idx]
-            )  # get duration of each APs
-            dur_inter_APs = t_data[np.diff(start_APs_idx)]  # get inter APs duration
-
-            AP_mask = np.where(dur_APs < t_min_AP)[
-                0
-            ]  # mask when AP duration is too small
-            AP_mask2 = (
-                np.where(dur_inter_APs < t_refractory)[0] + 1
-            )  # mask when inter APs duration is too small
-            AP_mask = np.concatenate([AP_mask, AP_mask2])
-
-            start_APs_idx = np.delete(start_APs_idx, AP_mask)
-            end_APs_idx = np.delete(end_APs_idx, AP_mask)
-            dur_APs = np.delete(dur_APs, AP_mask)
-
-            t_ap = np.concatenate([t_ap, start_APs_idx])
-            x_idx_AP = np.concatenate(
-                [x_idx_AP, np.ones(np.size(start_APs_idx)) * x_val]
-            )
-
-    t_ap = np.int32(t_ap)
+        data = v[t_start_idx:t_stop_idx]
+        peak_idxs, _ = find_peaks(data, height=height,distance=dis, width=width)
+        t_idx_AP = np.concatenate([t_idx_AP, peak_idxs])
+        x_idx_AP = np.concatenate([x_idx_AP, np.ones(np.size(peak_idxs)) * x_val])
+        
+    t_idx_AP = np.int32(t_idx_AP)
     x_idx_AP = np.int32(x_idx_AP)
 
-    if len(t_data) > 5:
-        return (x_idx_AP, x_data[x_idx_AP], t_ap, t_data[t_ap])
+    if len(t_data) :
+        return (x_idx_AP, x_data[x_idx_AP], t_idx_AP, t_data[t_idx_AP])
     else:
         return ([], [], [], [])
 
@@ -328,7 +303,7 @@ class axon_results(sim_results):
     def generate_axon(self):
         return eval(self.nrv_type[: self.nrv_type] + "(**kwargs)")
 
-    def is_recruited(self, vm_key: str = "V_mem") -> bool:
+    def is_recruited(self, vm_key: str = "V_mem", t_start: float = None) -> bool:
         """
         Return True if an AP is detected, else False.
 
@@ -339,7 +314,15 @@ class axon_results(sim_results):
         """
 
         if not "recruited" in self:
-            self["recruited"] = self.count_APs(vm_key) != 0
+            n_aps = self.count_APs(vm_key) != 0
+            if n_aps :
+                if t_start is None: 
+                    self["recruited"] = n_aps
+                else:
+                    _,t_starts = self.get_start_APs(vm_key= vm_key)
+                    self["recruited"] = len(t_starts>=t_start) > 0 
+            else:
+                self["recruited"] = n_aps
         return self["recruited"]
 
     def is_blocked(
@@ -372,9 +355,11 @@ class axon_results(sim_results):
             if freq is not None:
                 self.filter_freq("V_mem", freq, Q=2)
                 vm_key += "_filtered"
-            self.rasterize(vm_key=vm_key)
+            self.rasterize(vm_key=vm_key,clear_artifacts = False)   #artifacts clearing produces strange results :(
             _, t_starts = self.get_start_APs(vm_key)
             n_APs = len(t_starts[t_starts >= AP_start])
+
+            t_AP_start = None
             if n_APs > 0:
                 test_AP_idx = nearest_greater_idx(
                     t_starts, AP_start
@@ -384,19 +369,19 @@ class axon_results(sim_results):
                 t_AP_test = t_APs[test_AP_idx]
                 _, t_AP_start = self.get_start_AP(x_AP_test, t_AP_test)
 
-            delta = 0.3
-            if self.myelinated:
-                delta = 0.1
+            delta = 1
+            
             if n_APs == 0 or (
-                t_AP_start >= AP_start + delta
-            ):  # warning: AP start detection is tight (expected after 0.1ms of the test pulse; this might cause issue when triggered by extracellular stimulation)
+                t_AP_start is not None and t_AP_start>= AP_start + delta
+            ):  
                 rise_warning(
-                    f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response."
+                    f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response. \n ... Fiber considered as blocked."
                 )
-                return None
+                self["blocked"] = True
+                return self["blocked"]
             if n_APs > 2:
                 rise_warning(
-                    f"is_blocked in Axon {self.ID}: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. Consider increasing axon's spatial discretization."
+                    f"is_blocked in Axon {self.ID}: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. \n ... Consider increasing axon's spatial discretization."
                 )
 
             if self.has_AP_reached_end(
@@ -475,7 +460,7 @@ class axon_results(sim_results):
         t_idx_raster = self[vm_key + "_raster_time_index"].copy()
 
         min_size = self._get_min_AP_length()
-
+        #plt.figure()
         if len(x_raster) > min_size:
             while len(x_raster) > min_size:
                 x_AP, x_idx_AP, t_AP, t_idx_AP, AP_idx = get_first_AP(
@@ -487,6 +472,8 @@ class axon_results(sim_results):
                         self.get_AP_downward_len(x_AP, t_AP),
                     ]
                 )
+                #print(f"upward: {self.get_AP_upward_len(x_AP, t_AP)} - downward: {self.get_AP_downward_len(x_AP, t_AP)}")
+                #plt.scatter(t_AP,x_AP)
                 if AP_len >= min_size:
                     x_APs.append(x_AP)
                     t_APs.append(t_AP)
@@ -496,7 +483,8 @@ class axon_results(sim_results):
                 t_raster = np.delete(t_raster, AP_idx)
                 x_idx_raster = np.delete(x_idx_raster, AP_idx)
                 t_idx_raster = np.delete(t_idx_raster, AP_idx)
-
+        #plt.show()
+        #exit()
         return (x_APs, x_idx_APs, t_APs, t_idx_APs)
 
     def count_APs(self, vm_key: str = "V_mem") -> int:  # **kwargs
@@ -664,8 +652,8 @@ class axon_results(sim_results):
             number of AP x-pos points in the downward direction
         """
         x_start, _ = self.get_start_AP(x_AP, t_AP)
-        x_max, _ = self.get_xmax_AP(x_AP, t_AP)
-        len_downward = x_AP[((x_AP <= x_start) & (x_AP >= x_max))]
+        x_min, _ = self.get_xmin_AP(x_AP, t_AP)
+        len_downward = x_AP[((x_AP <= x_start) & (x_AP >= x_min))]
         return len(len_downward)
 
     def has_AP_reached_end(self, x_AP: np.array, t_AP: np.array) -> bool:
@@ -1159,6 +1147,7 @@ class axon_results(sim_results):
             - t_stop: (float) stop time for rasterize, in ms. Default is simulation time.
         """
 
+        #clear_artifacts = False
         if not vm_key + "_raster_position" in self:
 
             if "threshold" in kwargs:

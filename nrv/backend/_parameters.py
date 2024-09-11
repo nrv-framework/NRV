@@ -5,6 +5,7 @@ Access and modify NRV Parameters.
 import configparser
 import os
 from ._NRV_Singleton import NRV_singleton
+from pathlib import Path
 
 
 class nrv_parameters(metaclass=NRV_singleton):
@@ -16,7 +17,10 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         Initialize the class for parameters
         """
-        self.dir_path = os.environ["NRVPATH"] + "/_misc"
+        self.dir_path = str(Path(os.path.dirname(__file__)).parent.absolute()) + "/_misc"
+        #self.dir_path = str(path.parent.absolute())
+        #print(self.dir_path)
+        #self.dir_path = os.environ["NRVPATH"] + "/_misc"
         self.config_fname = self.dir_path + "/NRV.ini"
         self.load()
 
