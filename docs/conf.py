@@ -63,6 +63,7 @@ deps = (
     "ufl.finiteelement",
     "basix",
     "basix.ufl",
+    "psutil"
 )
 for package in deps:
     sys.modules[package] = MagicMock()
