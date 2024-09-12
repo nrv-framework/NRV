@@ -41,7 +41,7 @@ for i, x in enumerate(X):
     test_stim = ax.extra_stim.stimuli[0]
     '''
     plt.plot(test_stim.t,test_stim.s)
-    plt.show()
+    #plt.show()
     exit()
     '''
     results = ax(t_sim=t_sim)

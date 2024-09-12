@@ -61,5 +61,5 @@ plt.ylabel(r'position along the axon($\mu m$)')
 plt.xlim(0,results['tstop'])
 plt.ylim(0,results['L'])
 
-plt.show()
+#plt.show()
 

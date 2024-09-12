@@ -62,13 +62,13 @@ f_results = fascicle_1.simulate(t_sim=t_sim, verbose=False, postproc_script = "i
 #f_results.save(save=True,fname="test.json")
 #f_results = nrv.load_any("test.json")
 
-fig,ax = plt.subplots(1)
-fig.set_size_inches(5, 5)
+if nrv.MCH.do_master_only_work():
+    fig,ax = plt.subplots(1)
+    fig.set_size_inches(5, 5)
+    f_results.plot_block_summary(ax, AP_start = t_start, freq = block_freq, num=True)
 
-f_results.plot_block_summary(ax, AP_start = t_start, freq = block_freq, num=True)
-
-fig.tight_layout()
-fig.savefig("./unitary_tests/figures/70_A.png")
+    fig.tight_layout()
+    fig.savefig("./unitary_tests/figures/70_A.png")
 #plt.show()
 
 #print(f_results)

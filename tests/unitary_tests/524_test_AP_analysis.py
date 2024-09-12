@@ -432,4 +432,4 @@ fig.savefig('./unitary_tests/figures/524_J.png')
 
 
 
-plt.show()
+#plt.show()

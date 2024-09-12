@@ -295,13 +295,20 @@ def get_first_AP(
 
 
 class axon_results(sim_results):
-    """ """
+    """"""
 
     def __init__(self, context=None):
         super().__init__(context)
 
     def generate_axon(self):
-        return eval(self.nrv_type[: self.nrv_type] + "(**kwargs)")
+        """
+        generate from the results new version of the simulated axon. Axon generated has the same parameters but is not simulated yet.
+
+        Note
+        ----
+        This function is not defined in ``axon_results`` but in ``unmyelinated_results`` and ``myelinated_results``.
+        """
+        pass
 
     def is_recruited(self, vm_key: str = "V_mem", t_start: float = None) -> bool:
         """
@@ -312,7 +319,6 @@ class axon_results(sim_results):
         is_recruited                : bool
             Return True if an AP is detected, else False.
         """
-
         if not "recruited" in self:
             n_aps = self.count_APs(vm_key) != 0
             if n_aps :

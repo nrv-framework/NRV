@@ -16,7 +16,7 @@ from .results._nerve_results import nerve_results
 ## Nerve class ##
 #################
 class nerve(NRV_simulable):
-    """
+    r"""
     A nerve in NRV is defined as:
         - a list of :class:`.fascicle`
         - an `analytical` :class:`~nrv.fmod.extracellular.stimulation` or a :class:`~nrv.fmod.extracellular.FEM_stimulation` context
@@ -25,6 +25,99 @@ class nerve(NRV_simulable):
 
     The extracellular context of the nerve is automatically generated from the context of its
     fascicles and an optional context added directly to the nerve.
+
+    See Also
+    --------
+    :doc:`Simulables users guide</usersguide/simulables>`, :class:`Fascicle-class<._fascicles.fascicle>`, :class:`Axon-class<._axons.axon>`
+
+
+    .. rubric:: Customizable Attributes:
+
+    .. list-table::
+       :widths: 10 10 10 70
+       :header-rows: 1
+
+       * - Attributes
+         - Type
+         - Default
+         - Description
+       * - ``ID``
+         - ``int``
+         - 0
+         - Identification number of the nerve.
+       *
+         - ``L``
+         - ``float``
+         - None
+         - Length of the nerve.
+       *
+         - ``D``
+         - ``float``
+         - None
+         - Diameter of the nerve.
+       *
+         - ``y_grav_center``
+         - ``float``
+         - 0
+         - y-position of the nerve center.
+       *
+         - ``z_grav_center``
+         - ``float``
+         - 0
+         - z-position of the nerve center.
+       *
+         - ``postproc_label``
+         - ``str``
+         - None
+         - Label of the axon postprocessing funtion, used for the buildin postproc functions.
+       *
+         - ``postproc_function``
+         - ``function``
+         - None
+         - Axon postprocessing funtion, used for the custom postproc functions.
+       *
+         - ``postproc_script``
+         - ``str`` | ``function``
+         - None
+         - Either postprocessing funtion or postprocessing funtion label, automatically set depending on the type
+       *
+         - ``postproc_kwargs``
+         - ``dict``
+         - None
+         - key arguments of the postporcessing function
+       *
+         - ``save_results``
+         - ``bool``
+         - False
+         - If ``True``, nerve configuration and all axon simulations results are saved in ``save_path`` directory.
+       *
+         - ``save_path``
+         - ``str``
+         - ""
+         - Path of the directory where simulation results should be saved.
+       *
+         - ``return_parameters_only``
+         - ``bool``
+         - False
+         - If ``True`` (and ``save_results`` also ``True``), only the parameters should be returned from the simulation.
+       *
+         - ``loaded_footprints``
+         - ``bool``
+         - False
+         - If ``False``, the footprints already computed are favored over new footprint computation.
+       *
+         - ``verbose``
+         - ``bool``
+         - False
+         - Plot or not.
+
+    Note
+    ----
+    Customizable attributes can either be set using :meth:`nerve.set_parameters` or simply by reafecting the value of the attribute.
+
+    Tip
+    ---
+    Additional simulation parameters can be changed using (:meth:`.nerve.set_axons_parameters`, :meth:`.nerve.change_stimulus_from_electrode`, ...).
 
     Parameters
     ----------
@@ -270,9 +363,42 @@ class nerve(NRV_simulable):
     ## Nerve property method
     @property
     def n_fasc(self):
-        return len(self.fascicles)
+        """
+        Number of fascicles in the nerves
 
-    def get_n_ax(self, id_fasc=None):
+        Returns
+        -------
+        int
+            Number of fascicles.
+        """
+        return len(self.fascicles)
+    
+    @property
+    def n_ax(self):
+        """
+        Number of axons in the nerves
+
+        Returns
+        -------
+        int
+            Number of axons.
+        """
+        return self.get_n_ax()
+
+    def get_n_ax(self, id_fasc:int|None=None)->int:
+        """
+        Returns the number of axons in a given fascicle or in all the nerve
+
+        Parameters
+        ----------
+        id_fasc : _type_, optional
+            ID of the fascicle from which the number of axons is returned; if None, number of all axons in the nerve is returned, by default None
+
+        Returns
+        -------
+        int
+            Number of axons.
+        """
         n = 0
         if id_fasc is None:
             id_fasc = self.fascicles.keys()
@@ -283,8 +409,6 @@ class nerve(NRV_simulable):
                 fasc = self.fascicles[i_fasc]
                 n += fasc.n_ax
         return n
-
-    n_ax = property(get_n_ax)
 
     def set_ID(self, ID):
         """
@@ -299,12 +423,12 @@ class nerve(NRV_simulable):
 
     def define_length(self, L):
         """
-        set the length over the x axis of the nerve
+        Set the length over the x axis of the nerve
 
         Parameters
         ----------
         L   : float
-            length of the nerve in um
+            length of the nerve in um.
         """
         if self.extra_stim is not None or self.N_intra > 0:
             rise_warning(
@@ -418,6 +542,19 @@ class nerve(NRV_simulable):
 
     ## Fascicles handling methods
     def get_fascicles(self, ID_only=False):
+        """
+        Return a :class:`._fascicle.fascicle` object from it ID in the nerve
+
+        Parameters
+        ----------
+        ID_only : bool, optional
+            ID of the fascicle, by default False
+
+        Returns
+        -------
+        _type_
+            _description_
+        """
         if ID_only:
             return self.fascicles_IDs
         else:

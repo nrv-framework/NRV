@@ -79,11 +79,7 @@ class fascicle(NRV_simulable):
 
     See Also
     --------
-    :doc:`Simulables</usersguide/simulables>`: First optimization problem using NRV
-
-    :class:`.nerve.nerve`
-
-    :class:`.axons.axon`
+    :doc:`Simulables users guide</usersguide/simulables>`, :class:`Nerve-class<._nerve.nerve>`, :class:`Axon-class<._axons.axon>`
 
 
     .. rubric:: Customizable Attributes:
@@ -169,44 +165,13 @@ class fascicle(NRV_simulable):
 
     Note
     ----
-    Customizable Attributes can be either be set
+    Customizable attributes can either be set using :meth:`.fascicle.set_parameters` or simply by reafecting the value of the attribute.
+
+    Tip
+    ---
+    Additional simulation parameters can be changed using (:meth:`.fascicle.set_axons_parameters`, :meth:`.fascicle.change_stimulus_from_electrode`, ...).
 
 
-
-    .. rubric:: Methods:
-
-    .. autosummary::
-
-        save
-        load
-        set_ID
-        define_length
-        define_circular_contour
-        get_circular_contour
-        fit_circular_contour
-        define_ellipsoid_contour
-        import_contour
-        fill_with_population
-        fit_population_to_size
-        translate_axons
-        translate_fascicle
-        rotate_axons
-        rotate_fascicle
-        set_axons_parameters
-        get_axons_parameters
-        remove_unmyelinated_axons
-        remove_myelinated_axons
-        remove_axons_size_threshold
-        plot
-        attach_extracellular_stimulation
-        remove_axons_electrode_overlap
-        change_stimulus_from_electrode
-        insert_I_Clamp
-        attach_extracellular_recorder
-        shut_recorder_down
-        generate_random_NoR_position
-        generate_ligned_NoR_position
-        simulate
 
     """
 
@@ -1781,7 +1746,14 @@ class fascicle(NRV_simulable):
                         fasc_sim["extra_stim"]
                     )  # dirty hack to force NRV_class instead of dict
                 if self.record:
-                    fasc_sim["recorder"] = load_any(fasc_sim["recorder"])  # idem
+                    fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
+                # Remove the "dummy_res" key from results in the master and add to the other process
+                # see if can improve (by not generating the dummy_res at the beginning of simulate)
+                if "dummy_res" in fasc_sim:
+                    fasc_sim.pop("dummy_res")
+            else:
+                #
+                fasc_sim = fascicle_results({"dummy_res": 1})# idem
         if MCH.is_alone() and self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True

@@ -28,8 +28,6 @@ plt.savefig('./unitary_tests/figures/33_A.png')
 
 fig, ax = plt.subplots()
 results.plot_x_t(ax)
-plt.show()
-exit()
 plt.savefig('./unitary_tests/figures/25_C.png')
 
 plt.figure()

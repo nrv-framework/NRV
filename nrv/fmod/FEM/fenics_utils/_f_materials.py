@@ -64,7 +64,7 @@ class f_material(material):
 
     @property
     def is_func(self):
-        return not self.sigma_func is None
+        return not self._sigma_func is None
 
     @property
     def sigma(self):

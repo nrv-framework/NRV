@@ -6,7 +6,7 @@ import math
 
 import numpy as np
 
-from ._axons import *
+from ._axons import axon, neuron, unmyelinated_models, create_Nseg_freq_shape, d_lambda_rule
 from ..backend._NRV_Class import is_empty_iterable
 
 

@@ -16,6 +16,11 @@ class myelinated_results(axon_results):
     def __init__(self, context=None):
         super().__init__(context)
 
+    def generate_axon(self):
+        if "myelinated" not in globals():
+            from .._myelinated import myelinated
+        return myelinated(**self)
+
     def get_index_myelinated_sequence(self, n):
         """
         Returns the simulated myelination sequence of the axon corresponding to a calculation
@@ -129,6 +134,14 @@ class myelinated_results(axon_results):
                 color=color,
                 **kwgs
             )
+
+    def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
+        if self.rec == "all":
+            return super().colormap_plot(axes, key, **kwgs)
+        else: 
+            rise_warning("colormap_plot be myelined.rec is not 'all'")
+            return None
+    
 
     def plot_Nav_states(ax: plt.axes) -> None:
         """

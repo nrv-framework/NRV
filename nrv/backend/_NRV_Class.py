@@ -304,13 +304,12 @@ class NRV_class(metaclass=ABCMeta):
         --------
         As the :class:`~nrv.nmod.myelinated.myelinated` inherits from NRV_class-class parameters, such as diameter and lenght can be set with `set_parameters`.
 
-        >>> import nrv
         >>> ax = nrv.myelinated()
-        >>> ax.d
-        10
+        >>> print(ax.d, ax.L)
+        10, 10000
         >>> ax.set_parameters(d=6, L=1000)
-        >>> ax.d
-        6
+        >>> print(ax.d, ax.L)
+        6, 1000
         """
         for key in kawrgs:
             if key in self.__dict__:

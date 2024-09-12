@@ -13,6 +13,11 @@ class unmyelinated_results(axon_results):
     def __init__(self, context=None):
         super().__init__(context)
 
+    def generate_axon(self):
+        if "unmyelinated" not in globals():
+            from .._unmyelinated import unmyelinated
+        return unmyelinated(**self)
+
     def plot_x_t(
         self,
         axes: plt.axes,
