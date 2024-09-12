@@ -15,21 +15,21 @@ postproc_kwargs = [{}, {}, {}, {"num":1, "unvalid_arg":404}]
 fascicle = nrv.fascicle(ID=test_num)
 
 # SHAM 1 axon fascicle
-fascicle.axons_diameter = np.asarray([5.7])
-fascicle.axons_type = np.asarray([1])
-fascicle.axons_y = np.asarray([0])
-fascicle.axons_z = np.asarray([0])
-fascicle.define_circular_contour(D=6)
+fascicle.axons_diameter = np.asarray([5.7, .5, 1])
+fascicle.axons_type = np.asarray([1, 0, 0])
+fascicle.axons_y = np.asarray([0, 0, 10])
+fascicle.axons_z = np.asarray([0, 10, 0])
+fascicle.define_circular_contour(D=50)
 fasc_dic = fascicle.save(save=False)
 
 for i in range(len(postproc)):
     id = test_num*10 + i
     nerve = nrv.nerve(Length=10000)
     nerve.set_ID(id)
-    nerve.add_fascicle(fasc_dic, ID=1, y=-6)
-    nerve.add_fascicle(fasc_dic, ID=2, y=6)
-    nerve.add_fascicle(fasc_dic, ID=3, z=-6)
-    nerve.add_fascicle(fasc_dic, ID=4, z=6)
+    nerve.add_fascicle(fasc_dic, ID=1, y=-50)
+    nerve.add_fascicle(fasc_dic, ID=2, y=50)
+    nerve.add_fascicle(fasc_dic, ID=3, z=-50)
+    nerve.add_fascicle(fasc_dic, ID=4, z=50)
     nerve.fit_circular_contour()
 
 

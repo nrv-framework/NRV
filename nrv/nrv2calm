@@ -25,6 +25,7 @@ import time
 
 # import nrv
 from nrv import backend
+from nrv import parameters
 
 # test for possibility of parallel computing
 try:
@@ -69,7 +70,7 @@ machine_config = configparser.ConfigParser()
 if args.config != None:
     config_fname = args.config
 else:
-    config_fname = os.environ["NRVPATH"] + "/_misc/NRV.ini"
+    config_fname = parameters.nrv_path + "/_misc/NRV.ini"
 machine_config.read(config_fname)
 
 

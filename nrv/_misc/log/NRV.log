@@ -1,0 +1,5 @@
+2024-08-19 12:45:57,152 - Matplotlib is building the font cache; this may take a moment.
+2024-08-19 12:46:08,161 - Failed to extract font properties from /System/Library/Fonts/Apple Color Emoji.ttc: In FT2Font: Could not set the fontsize (invalid pixel size; error code 0x17)
+2024-08-19 12:46:08,307 - Failed to extract font properties from /System/Library/Fonts/Supplemental/NISC18030.ttf: In FT2Font: Could not set the fontsize (invalid pixel size; error code 0x17)
+2024-08-19 12:46:08,548 - Failed to extract font properties from /System/Library/Fonts/LastResort.otf: tuple indices must be integers or slices, not str
+2024-08-19 12:46:08,653 - generated new fontManager

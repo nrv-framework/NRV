@@ -1,7 +1,51 @@
 # pylint: skip-file
-""" NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+""" NRV: NeuRon Virtualizer, modeling of the Nervous System,
 
-__copyright__ = "2023, Florian Kolbl"
+NRV is a pythonic framework for simulating bio-electronic phenomena and
+interface-systems, taking into account both neural dynamics and extracellular
+fields. NRV is designed to be accessible to end-user with a basic knowledge of
+python and object-oriented programming, and focuses on providing tools to
+describe a electrophysiological setup (axons, fascicles, nerves...) and
+electrical interfaces (electrodes for stimulation, recording and even
+electrical impedance measurements). Simulations can be performed automatically,
+and optimization algorithms can be interfaced to a simulation to improve
+possibilities of designer novel biomedical approaches.
+
+NRV is open source (under CeCILL license), and developpers pay attention to
+limit the dependencies to open source ressources as well. For scientific
+comparison with existing solutions, NRV has been designed to interface COMSOL,
+however associated code in only maintained and not further developped now. NRV
+relies on NEURON for simulation of neural cell properties, and FenicsX for
+Finite Element computations.
+
+NRV has been developped by contributors from the CELL reserach group at the
+Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University (France)
+until june 2023, and is now primarily developed and maintained by the
+Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux,
+U. of Bordeaux.
+
+
+.. note::
+  to cite NRV:
+  Couppey T., Regnacq L., Giraud R., Romain O., Bornat Y., and Kolbl F. (2024)
+  NRV: An opem framework for in silico evaluation of peripheral nerve electrical
+  stimulation strategies. PLOS Computational Biology 20(7): e1011826.
+  https://doi.org/10.1371/journal.pcbi.1011826
+
+
+.. SeeAlso::
+   - **General information**: `nrv-framework.org <https://nrv-framework.org>`_
+   - **Discussions and queries**: `Forum NRV <https://nrv-framework.org/forum>`_
+   - **Full code**: `Github repository <https://github.com/nrv-framework/NRV>`_
+
+
+.. note::
+  We kindly ask developpers and users to respect our code of conduct, accessible
+  from the following page: `Code of conduct <https://nrv-framework.org/?page_id=96>`_
+
+"""
+
+__copyright__ = "2023, nrv-framework.org"
 __license__ = "CeCILL"
 __version__ = "1.1.1"
 __title__ = "NeuRon Virtualizer"
@@ -10,91 +54,75 @@ __contributors__ = __authors__
 __project__ = "NeuRon Virtualizer (NRV)"
 
 #####################################
-#  check environnement variables    #
 #  check correct NRV configuration  #
 #####################################
-import os
-import inspect
-import platform
-
 
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
-# create a dummy object to locate frameworks path
-class DummyClass:
-    """Dummy class"""
+import neuron
+from .backend._parameters import parameters
 
-    pass
+# load configuration module
+from .backend._config import nrv_config
 
-nrv_path = os.path.dirname(os.path.abspath(inspect.getsourcefile(DummyClass)))
-root_path = nrv_path.replace("/nrv/", "")
-# create the environnement variable NRVPATH if it does not exist
-if "NRVPATH" not in os.environ:
-    os.environ["NRVPATH"] = nrv_path
+# instanciate configuration
+CONFIG = nrv_config()
 
-# change the permissions on nrv2calm --> shouldn't be needed anymore
-'''
-if not os.access(nrv_path + "/nrv2calm", os.X_OK):
-    mode = os.stat(nrv_path + "/nrv2calm").st_mode
-    mode |= (mode & 0o444) >> 2  # copy R bits to X
-    os.chmod(nrv_path + "/nrv2calm", mode)
-'''
 ######################
 #  Public interface  #
 ######################
-from .backend import compileMods
-from .backend.parameters import *
-from .backend.NRV_Class import load_any
-from .backend.wrappers import *
+from .backend import _compileMods
+from .backend._NRV_Class import load_any
+from .backend._wrappers import *
 
-from .fmod.materials import *
-from .fmod.electrodes import *
-from .fmod.stimulus import *
-from .fmod.extracellular import *
-from .fmod.recording import *
-from .fmod.FEM.FEM import *
-from .fmod.FEM.COMSOL_model import *
-from .fmod.FEM.FENICS_model import *
+from .fmod._materials import *
+from .fmod._electrodes import *
+from .utils._stimulus import *
+from .fmod._extracellular import *
+from .fmod._recording import *
+from .fmod.FEM._FEM import *
+from .fmod.FEM._COMSOL_model import *
+from .fmod.FEM._FENICS_model import *
 
 ######### May not be requiered at the end ###############
-from .fmod.FEM.mesh_creator.MshCreator import *
-from .fmod.FEM.mesh_creator.NerveMshCreator import *
-from .fmod.FEM.mesh_creator.NRV_Msh import *
-from .fmod.FEM.fenics_utils.FEMSimulation import *
-from .fmod.FEM.fenics_utils.FEMParameters import *
-from .fmod.FEM.fenics_utils.FEMResults import *
-from .fmod.FEM.fenics_utils.fenics_materials import *
-from .fmod.FEM.fenics_utils.f_materials import *
-from .fmod.FEM.fenics_utils.layered_materials import *
+from .fmod.FEM.mesh_creator._MshCreator import *
+from .fmod.FEM.mesh_creator._NerveMshCreator import *
+from .ui._NRV_Msh import *
+from .fmod.FEM.fenics_utils._FEMSimulation import *
+from .fmod.FEM.fenics_utils._FEMParameters import *
+from .fmod.FEM.fenics_utils._FEMResults import *
+from .fmod.FEM.fenics_utils._fenics_materials import *
+from .fmod.FEM.fenics_utils._f_materials import *
+from .fmod.FEM.fenics_utils._layered_materials import *
 
 ########################################################
 
-from .nmod.axons import *
-from .nmod.unmyelinated import *
-from .nmod.myelinated import *
-from .nmod.fascicles import *
-from .nmod.axon_pop_generator import *
-from .nmod.nerve import *
+from .nmod._axons import *
+from .nmod._unmyelinated import *
+from .nmod._myelinated import *
+from .nmod._fascicles import *
+from .nmod._axon_pop_generator import *
+from .nmod._nerve import *
 
-from .nmod.results.axons_results import *
-from .nmod.results.unmyelinated_results import *
-from .nmod.results.myelinated_results import *
-from .nmod.results.fascicles_results import *
-from .nmod.results.nerve_results import *
-
-
-from .utils.saving_handler import *
-from .utils.nrv_function import *
-from .utils.cell.CL_postprocessing import *
-from .utils.cell.CL_simulations import *
-from .utils.fascicle.FL_postprocessing import *
-
-from .optim.CostFunctions import *
-from .optim.Optimizers import *
-from .optim.Problems import *
-from .optim.optim_utils.ContextModifiers import *
-from .optim.optim_utils.CostEvaluation import *
-from .optim.optim_utils.OptimFunctions import *
+from .nmod.results._axons_results import *
+from .nmod.results._unmyelinated_results import *
+from .nmod.results._myelinated_results import *
+from .nmod.results._fascicles_results import *
+from .nmod.results._nerve_results import *
 
 
-from .eit.Protocol import pyeit_protocol
+from .utils._saving_handler import *
+from .utils._nrv_function import *
+from .ui._axon_postprocessing import *
+from .ui._axon_simulations import *
+from .ui._fascicle_postprocessing import *
+
+from .optim._CostFunctions import *
+from .optim._Optimizers import *
+from .optim._Problems import *
+from .optim.optim_utils._ContextModifiers import *
+from .optim.optim_utils._CostEvaluation import *
+from .optim.optim_utils._OptimFunctions import *
+
+
+from .eit._protocol import pyeit_protocol

@@ -2,6 +2,22 @@
 
 All notable changes to NRV are sumed up in this file.
 
+## [1.1.2] - 2024-09-??
+
+### Added
+- 'ui', a subpackage for user interface to separate from utils which are ment to stay internal.
+- Help restructuration to have a API description more user friendly.
+- nrv.CONFIG as a singleton object gathering configuration related data, parameters and methods.
+
+### Fixed
+- small fix in filter_freq to avoid filtering artifact
+
+### Removed
+- methods such as load_any_axon, load_any_electrode... (``load_any_`` + something) are deprecated, though not removed for backward compatibility. Please only use ``load_any`` function.
+
+
+
+
 ## [1.1.1] - 2024-08-05
 
 ### Added

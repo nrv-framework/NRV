@@ -94,12 +94,12 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc", "__logo/__build"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
 html_title = f"{project} {version}"  # document title
-html_logo = "images/logo.png"  # project logo
+html_logo = "__logo/logo.png"  # project logo
 
 # Rendering options
 myst_heading_anchors = 2  # Generate link anchors for sections.
@@ -119,3 +119,5 @@ napoleon_include_special_with_doc = True     # Add __init__, __call__, ... metho
 autodoc_member_order = 'bysource' # keep the order of class and function source files
 #                                   (thus don't use alphabetical order)
 autosummary_generate = True
+
+autosummary_ignore_module_all = False
