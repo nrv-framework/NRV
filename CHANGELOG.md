@@ -2,15 +2,27 @@
 
 All notable changes to NRV are sumed up in this file.
 
+## [1.1.3] - XXXX-XX-XX
+### Added
+
+
+### Fixed
+
+
+### Removed
+- `myelinated_results.find_central_node_index`-method replaced by `axon_results.find_central_index` with, for `myelinated_results`, the argument `node` to obtain former results
+
+
+
 ## [1.1.2] - 2024-09-12
 
 ### Added
-- 'ui', a subpackage for user interface to separate from utils which are ment to stay internal.
-- Help restructuration to have a API description more user friendly.
+- `ui`, a subpackage for user interface to separate from `utils` which are ment to stay internal.
+- Help restructuration to have an API description more user-friendly.
 - nrv.CONFIG as a singleton object gathering configuration related data, parameters and methods.
 
 ### Fixed
-- small fix in filter_freq to avoid filtering artifact
+- small fix in filter_freq to avoid filtering artefact
 
 ### Removed
 - methods such as load_any_axon, load_any_electrode... (``load_any_`` + something) are deprecated, though not removed for backward compatibility. Please only use ``load_any`` function.
@@ -51,9 +63,6 @@ All notable changes to NRV are sumed up in this file.
 - Fix duplicate node count in node_index of myelinated axons
 - ``fit_to_size`` parameter in ``fill_with_population`` is not considered if fascicle diameter is None
 - ``remove_outliers`` parameter in ``fill_with_population`` is not called if fascicle diameter is None
-
-
-### Removed
 
 
 ## [1.1.0] - 2024-05-27

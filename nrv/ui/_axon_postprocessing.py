@@ -758,13 +758,13 @@ def get_index_myelinated_sequence(results, n):
             return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
 
-def find_central_node_index(results):
+def find_central_node_index(results:axon_results)->int:
     """
     Returns the index of the closer node from the center from a dictionnary results
 
     Parameters
     ----------
-    results_sim     : dict
+    axon_results     : dict
         results of axon.simulate method
 
     Returns
@@ -777,17 +777,7 @@ def find_central_node_index(results):
         "DeprecationWarning: ",
         "find_central_node_index is obsolete use method from axon_result objects instead"
     )
-    n_center = len(results["x_rec"]) // 2
-    if not results["myelinated"] or results["rec"] == "node":
-        return n_center
-    else:
-        for i in range(n_center):
-            if get_index_myelinated_sequence(results, n_center + i) == "node":
-                return n_center + i
-            elif get_index_myelinated_sequence(results, n_center - i) == "node":
-                return n_center - i
-    rise_warning("No node found in the axon")
-    return n_center
+    return results.find_central_index()
 
 
 def compute_f_mem(results):

@@ -51,7 +51,7 @@ seq_types_motor = res_motor['axon_path_type']
 seq_types_sensory = res_sensory['axon_path_type']
 print(seq_types_motor[:11], res_motor['Nsec'])
 
-C = res_motor.find_central_node_index()
+C = res_motor.find_central_index()
 print(C)
 
 

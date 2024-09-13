@@ -1457,7 +1457,7 @@ class axon_results(sim_results):
             t_start = t_start[0]
         return t_start
 
-    def extra_stim_properties(self):
+    def extra_stim_properties(self)->dict:
         """
         Return elect caracteristics (blocked, Onset response, ...)
 
@@ -1535,6 +1535,18 @@ class axon_results(sim_results):
                 "n_onset": self.n_onset,
             }
         return axon_state
+    
+    def find_central_index(self)->int:
+        """
+        Returns the index of the closer node from the center
+
+        Returns
+        -------
+        int
+            index of `x_rec` of the closer node from the center
+        """
+        n_center = len(self["x_rec"]) // 2
+        return n_center
 
     ##################################
     ## Impedance properties methods ##

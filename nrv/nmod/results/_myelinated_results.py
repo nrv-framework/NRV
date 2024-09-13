@@ -51,7 +51,7 @@ class myelinated_results(axon_results):
             else:
                 return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
-    def find_central_node_coordinate(self):
+    def find_central_node_coordinate(self, node=True):
         """
         Returns the index of the closer node from the center
 
@@ -60,27 +60,30 @@ class myelinated_results(axon_results):
         float
             x-position of the closer node from the center
         """
-        return self["x_rec"][self.find_central_node_index()]
+        return self["x_rec"][self.find_central_index(node=node)]
 
-    def find_central_node_index(self):
+    def find_central_index(self, node:bool=True)->int:
         """
-        Returns the index of the closer node from the center
+        Returns the central indec
+
+        Parameters
+        ----------
+        node : bool
+            If true, the index of the closer node from the center is return, by default True
 
         Returns
         -------
         int
             index of `x_rec` of the closer node from the center
         """
-        n_center = len(self["x_rec"]) // 2
-        if self["rec"] == "nodes":
-            return n_center
-        else:
+        n_center = super().find_central_index()
+        if node and self["rec"] == "all":
             for i in range(n_center):
                 if self.get_index_myelinated_sequence(n_center + i) == "node":
                     return n_center + i
                 elif self.get_index_myelinated_sequence(n_center - i) == "node":
                     return n_center - i
-        rise_warning("No node found in the axon")
+            rise_warning("No node found in the axon")
         return n_center
 
     def get_myelin_properties(self, endo_mat=None):

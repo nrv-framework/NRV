@@ -3,3 +3,2137 @@
 2024-08-19 12:46:08,307 - Failed to extract font properties from /System/Library/Fonts/Supplemental/NISC18030.ttf: In FT2Font: Could not set the fontsize (invalid pixel size; error code 0x17)
 2024-08-19 12:46:08,548 - Failed to extract font properties from /System/Library/Fonts/LastResort.otf: tuple indices must be integers or slices, not str
 2024-08-19 12:46:08,653 - generated new fontManager
+2024-09-13 10:33:15,708 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 0 out of 3
+2024-09-13 10:33:15,709 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-09-13 10:33:15,741 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 2 out of 3
+2024-09-13 10:33:15,741 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 1 out of 3
+2024-09-13 10:33:16,285 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-09-13 10:33:16,343 - NRV INFO: Starting nerve simulation
+ from process 0 out of 3
+2024-09-13 10:33:16,343 - NRV INFO: ...computing electrodes footprint
+ from process 0 out of 3
+2024-09-13 10:33:16,448 - NRV INFO: Starting nerve simulation
+ from process 2 out of 3
+2024-09-13 10:33:16,448 - NRV INFO: Starting nerve simulation
+ from process 1 out of 3
+2024-09-13 10:33:16,449 - NRV INFO: ...computing electrodes footprint
+ from process 2 out of 3
+2024-09-13 10:33:16,449 - NRV INFO: ...computing electrodes footprint
+ from process 1 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 10:33:17,050 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 10:33:17,051 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 10:33:17,052 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 10:33:17,227 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,227 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 10:33:17,227 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 10:33:17,227 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 10:33:17,228 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 10:33:17,229 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 10:33:17,369 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 10:33:17,370 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 10:33:17,371 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 10:33:17,633 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 10:33:17,634 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 10:33:17,830 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,830 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 10:33:17,830 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 10:33:17,830 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:17,830 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 10:33:17,831 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 10:33:17,832 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 10:33:17,947 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 10:33:17,947 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 10:33:17,947 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 10:33:17,947 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 10:33:17,947 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 10:33:17,948 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 10:33:17,949 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:18,216 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 10:33:18,217 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 10:33:18,218 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 10:33:18,411 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 10:33:18,412 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 10:33:18,413 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 10:33:18,540 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 10:33:18,540 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 10:33:18,540 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 10:33:18,540 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 10:33:18,540 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 10:33:18,541 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 10:33:18,542 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 10:33:18,799 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 10:33:18,800 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 10:33:18,801 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 10:33:18,869 - NRV INFO: ...Done!
+ from process 1 out of 3
+2024-09-13 10:33:18,869 - NRV INFO: ...Done!
+ from process 2 out of 3
+2024-09-13 10:33:18,897 - NRV INFO: ...Done!
+ from process 0 out of 3
+2024-09-13 11:39:12,824 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 0 out of 3
+2024-09-13 11:39:12,824 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 1 out of 3
+2024-09-13 11:39:12,824 - NRV INFO: Axon packing initiated. This might take a while...
+ from process 0 out of 3
+2024-09-13 11:39:12,825 - NRV INFO: On 10 axons to generate, there are 0 Myelinated and 10 Unmyelinated
+ from process 2 out of 3
+2024-09-13 11:39:13,407 - NRV INFO: Packing done!
+ from process 0 out of 3
+2024-09-13 11:39:13,461 - NRV INFO: Starting nerve simulation
+ from process 0 out of 3
+2024-09-13 11:39:13,461 - NRV INFO: ...computing electrodes footprint
+ from process 0 out of 3
+2024-09-13 11:39:13,571 - NRV INFO: Starting nerve simulation
+ from process 2 out of 3
+2024-09-13 11:39:13,571 - NRV INFO: Starting nerve simulation
+ from process 1 out of 3
+2024-09-13 11:39:13,572 - NRV INFO: ...computing electrodes footprint
+ from process 2 out of 3
+2024-09-13 11:39:13,572 - NRV INFO: ...computing electrodes footprint
+ from process 1 out of 3
+2024-09-13 11:39:14,187 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 11:39:14,187 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:14,187 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 11:39:14,188 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 11:39:14,189 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 11:39:14,398 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 11:39:14,398 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 11:39:14,399 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 11:39:14,400 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:14,401 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 11:39:14,536 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 11:39:14,536 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 11:39:14,537 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:14,538 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 11:39:14,809 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 11:39:14,810 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 11:39:14,811 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 11:39:15,014 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 11:39:15,014 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 11:39:15,014 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 11:39:15,015 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:15,016 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,129 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 11:39:15,129 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:15,130 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:15,131 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:15,411 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 11:39:15,412 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 11:39:15,413 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 11:39:15,633 - NRV INFO: removed the following key from results: freq_min
+ from process 1 out of 3
+2024-09-13 11:39:15,633 - NRV INFO: removed the following key from results: Nrec
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: V_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: y
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: model
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: Nseg
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: record_g_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: record_V_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: record_particles
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: record_I_ions
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: created
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: t
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: freq
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: L
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: rec_position_list
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:15,634 - NRV INFO: removed the following key from results: mesh_shape
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: x
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: d
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: tstop
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: v_init
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: z
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: record_g_ions
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: t_len
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: threshold
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: result_type
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: nrv_type
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: diameter
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: timeVector
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: d_lambda
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: myelinated
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: node_index
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: type
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: dt
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: alpha_max
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: ID
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: T
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: sim_time
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: np_keys
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: Simulation_state
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: Nsec
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 1 out of 3
+2024-09-13 11:39:15,635 - NRV INFO: removed the following key from results: record_I_mem
+ from process 1 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: Nsec
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: d_lambda
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: z
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: mesh_shape
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: alpha_max
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: d
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: node_index
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: nrv_type
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: t
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: model
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: Nrec
+ from process 2 out of 3
+2024-09-13 11:39:15,733 - NRV INFO: removed the following key from results: record_particles
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: x
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: v_init
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: y
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: threshold
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: T
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: np_keys
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: record_V_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: V_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: record_I_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: myelinated
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: record_g_ions
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: created
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: sim_time
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: ID
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: type
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: L
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: Nseg
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: diameter
+ from process 2 out of 3
+2024-09-13 11:39:15,734 - NRV INFO: removed the following key from results: dt
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: record_I_ions
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: record_g_mem
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: freq_min
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: t_len
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: result_type
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: rec_position_list
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: timeVector
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: tstop
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: freq
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 2 out of 3
+2024-09-13 11:39:15,735 - NRV INFO: removed the following key from results: Simulation_state
+ from process 2 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: Nsec
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: intra_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: intra_current_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: record_V_mem
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: ID
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: rec_position_list
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: intra_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: created
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: node_index
+ from process 0 out of 3
+2024-09-13 11:39:16,020 - NRV INFO: removed the following key from results: alpha_max
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: V_mem
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: intra_voltage_stim_position
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: dt
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: loaded_footprints
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: freq
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: record_I_mem
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: d
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: sim_time
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: record_g_ions
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: threshold
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: freq_min
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: t
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: t_len
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: nrv_type
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: type
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: model
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: diameter
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: tstop
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: Simulation_state
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: v_init
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: intra_current_stim_amplitudes
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: intra_current_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: timeVector
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: x
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: intra_stim_starts
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: myelinated
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: y
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: Nrec
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: intra_stim_durations
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: result_type
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: z
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: d_lambda
+ from process 0 out of 3
+2024-09-13 11:39:16,021 - NRV INFO: removed the following key from results: record_particles
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: intra_voltage_stim_stimulus
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: L
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: record_I_ions
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: Nseg
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: np_keys
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: record_g_mem
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: intra_current_stim_positions
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: mesh_shape
+ from process 0 out of 3
+2024-09-13 11:39:16,022 - NRV INFO: removed the following key from results: T
+ from process 0 out of 3
+2024-09-13 11:39:16,080 - NRV INFO: ...Done!
+ from process 1 out of 3
+2024-09-13 11:39:16,080 - NRV INFO: ...Done!
+ from process 2 out of 3
+2024-09-13 11:39:16,123 - NRV INFO: ...Done!
+ from process 0 out of 3
+2024-09-13 13:27:37,078 - results/unmye_speed_APduration_dZ_dict.json not found cannot be load
+2024-09-13 13:27:47,833 - results/unmye_speed_APduration_dZ_dict.json not found cannot be load

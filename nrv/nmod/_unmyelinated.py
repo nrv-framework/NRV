@@ -7,6 +7,7 @@ import math
 import numpy as np
 
 from ._axons import axon, neuron, unmyelinated_models, create_Nseg_freq_shape, d_lambda_rule
+from .results._unmyelinated_results import unmyelinated_results
 from ..backend._NRV_Class import is_empty_iterable
 
 
@@ -941,3 +942,8 @@ class unmyelinated(axon):
             if self.model == "Schild_94":
                 results += [self.__get_recorders_from_list(self.l_naf_reclist)]
         return results
+
+
+    # Simulate method, for output type 
+    def simulate(self, **kwargs) -> unmyelinated_results:
+        return super().simulate(**kwargs)

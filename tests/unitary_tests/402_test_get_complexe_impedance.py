@@ -42,8 +42,8 @@ if nrv.MCH.do_master_only_work():
     u_res = ax_u.simulate(dt=dt, t_sim=t_sim, record_particles=True, record_g_ions=True, record_g_mem=True)
 
     del ax_u
-    C = nrv.find_central_node_index(u_res)
-    nrv.compute_f_mem(u_res)
+    C = u_res.find_central_index()
+    u_res.compute_f_mem()
     V_umem = u_res["V_mem"][C]
     g_umem = u_res["g_mem"][C]
     f_umem = u_res["f_mem"][C]
@@ -74,9 +74,9 @@ if nrv.MCH.do_master_only_work():
     m_res = ax_m.simulate(dt=dt, t_sim=t_sim, record_particles=True, record_g_ions=True, record_g_mem=True)
 
     del ax_m
-    C = nrv.find_central_node_index(m_res)
+    C = m_res.find_central_index()
     x_C = m_res.find_central_node_coordinate()
-    nrv.compute_f_mem(m_res)
+    m_res.compute_f_mem(m_res)
     V_mmem = m_res["V_mem"][C]
     g_mmem = m_res["g_mem"][C]
     f_mmem = nrv.from_nrv_unit(m_res["f_mem"][C], "Hz")

@@ -5,10 +5,21 @@ NRV-:class:`.myelinated` handling.
 import math
 
 import numpy as np
+import matplotlib.pyplot as plt
 
+from nrv.nmod.results._axons_results import axon_results
+
+from ._axons import (
+    axon,
+    neuron,
+    myelinated_models,
+    rotate_list,
+    d_lambda_rule,
+    create_Nseg_freq_shape,
+)
+from .results._myelinated_results import myelinated_results
 from ..backend._log_interface import rise_warning
 from ..backend._NRV_Class import is_empty_iterable
-from ._axons import *
 from ..utils._misc import nearest_idx
 
 MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
@@ -1652,3 +1663,8 @@ class myelinated(axon):
             I1_nav16_ax,
             I2_nav16_ax,
         )
+
+
+    # Simulate method, for output type 
+    def simulate(self, **kwargs) -> myelinated_results:
+        return super().simulate(**kwargs)
