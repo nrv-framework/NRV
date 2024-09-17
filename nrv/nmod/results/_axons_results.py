@@ -326,7 +326,11 @@ class axon_results(sim_results):
                     self["recruited"] = n_aps
                 else:
                     _,t_starts = self.get_start_APs(vm_key= vm_key)
-                    self["recruited"] = len(t_starts>=t_start) > 0 
+                    #print(t_start)
+                    #print(t_starts)
+                    #print(t_starts[t_starts>=t_start])
+                    #print(len(t_starts[t_starts>=t_start])>0)
+                    self["recruited"] = len(t_starts[t_starts>=t_start])>0
             else:
                 self["recruited"] = n_aps
         return self["recruited"]

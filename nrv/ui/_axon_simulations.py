@@ -140,7 +140,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     current_amp = amp_max
     Niter = 1
     keep_going = 1
-    t_start = perf_counter()
+    t_start_cnt = perf_counter()
 
     while keep_going:
         if verbose and Niter == 1:
@@ -223,7 +223,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     if verbose:
         clear_prompt_line(1)
         pass_info(f"Activation threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start,2)}s).")
+                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
     return current_amp
 
 def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_start: float,
@@ -285,7 +285,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     current_amp = amp_max
     Niter = 1
     keep_going = 1
-    t_start = perf_counter()
+    t_start_cnt = perf_counter()
     
     while keep_going:
         if verbose and Niter == 1:
@@ -371,7 +371,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     if verbose:
         clear_prompt_line(1)
         pass_info(f"Block threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start,2)}s).")
+                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
     return current_amp
 
 def firing_threshold_point_source(
