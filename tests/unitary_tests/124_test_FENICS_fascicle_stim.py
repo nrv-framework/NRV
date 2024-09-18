@@ -13,7 +13,7 @@ if __name__ == '__main__':
     Outer_D = 5
     test_stim.reshape_outerBox(Outer_D)
     #### Nerve and fascicle geometry
-    L = 50_000
+    L = 10_000
     Nerve_D = 250
     Fascicle_D = 220
     test_stim.reshape_nerve(Nerve_D, L)

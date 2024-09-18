@@ -8,6 +8,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 from functools import partialmethod
+from tqdm import tqdm
 import multiprocessing as mp
 
 
@@ -1641,7 +1642,7 @@ class fascicle(NRV_simulable):
 
             print(self.n_ax, self.L)
             with mp.Pool(n_core) as pool:
-                results = list(pool.imap(self.sim_axon, mask))
+                results = list(tqdm(pool.imap(self.sim_axon, mask), total=self.n_ax))
                 pool.close()
                 pool.join()
                 ## store results
