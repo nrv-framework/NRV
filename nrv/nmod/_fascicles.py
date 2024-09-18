@@ -7,6 +7,10 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
+from functools import partialmethod
+import multiprocessing as mp
+
+
 
 from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning, pbar
@@ -32,6 +36,7 @@ if not MCH.is_alone():
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
+n_core = 4
 
 builtin_postproc_functions = {
     "default": default_PP,
@@ -1281,40 +1286,35 @@ class fascicle(NRV_simulable):
                 self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
             )
 
-            if MCH.do_master_only_work() or mp_computation:
-                self.extra_stim.run_model()
-
-        if MCH.do_master_only_work() or mp_computation:
-            self.set_axons_parameters(**kwargs)
-            for k in range(len(self.axons_diameter)):
-                if self.axons_type[k] == 0:
-                    axon = unmyelinated(
-                        self.axons_y[k],
-                        self.axons_z[k],
-                        round(self.axons_diameter[k], 2),
-                        self.L,
-                        ID=k,
-                        **self.unmyelinated_param,
-                    )
-                else:
-                    axon = myelinated(
-                        self.axons_y[k],
-                        self.axons_z[k],
-                        round(self.axons_diameter[k], 2),
-                        self.L,
-                        ID=k,
-                        **self.myelinated_param,
-                    )
-                axon.attach_extracellular_stimulation(self.extra_stim)
-                footprints[k] = axon.get_electrodes_footprints_on_axon(
-                    save_ftp_only=save_ftp_only, filename=filename
+        self.extra_stim.run_model()
+        print("non non non non!!")
+        self.set_axons_parameters(**kwargs)
+        for k in range(len(self.axons_diameter)):
+            if self.axons_type[k] == 0:
+                axon = unmyelinated(
+                    self.axons_y[k],
+                    self.axons_z[k],
+                    round(self.axons_diameter[k], 2),
+                    self.L,
+                    ID=k,
+                    **self.unmyelinated_param,
                 )
-                del axon
-            if save_ftp_only:
-                json_dump(footprints, filename)
-        else:
-            pass
-        synchronize_processes()
+            else:
+                axon = myelinated(
+                    self.axons_y[k],
+                    self.axons_z[k],
+                    round(self.axons_diameter[k], 2),
+                    self.L,
+                    ID=k,
+                    **self.myelinated_param,
+                )
+            axon.attach_extracellular_stimulation(self.extra_stim)
+            footprints[k] = axon.get_electrodes_footprints_on_axon(
+                save_ftp_only=save_ftp_only, filename=filename
+            )
+            del axon
+        if save_ftp_only:
+            json_dump(footprints, filename)
         if not mp_computation:
             self.footprints = MCH.master_broadcasts_array_to_all(footprints)
         else:
@@ -1388,12 +1388,11 @@ class fascicle(NRV_simulable):
             self.postproc_function, self.postproc_kwargs
         )
 
-    def __sim_axon(
+    def sim_axon(
         self,
         k,
-        folder_name,
+        folder_name="",
         is_master_slave=False,
-        **kwargs,
     ) -> axon_results:
         """
         Internal use only simumlated one axon of the fascicle
@@ -1578,10 +1577,6 @@ class fascicle(NRV_simulable):
                 results of the simulation
         """
         fasc_sim = super().simulate(**kwargs)
-        if not MCH.do_master_only_work():
-            fasc_sim = sim_results({"dummy_res": 1})
-        # disable the result storage only if results are fully return
-        # To use with caution (mostly for optimisation)
         if not self.save_results:
             if self.return_parameters_only:
                 rise_warning(
@@ -1596,12 +1591,10 @@ class fascicle(NRV_simulable):
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if (
-            len(self.save_path) and MCH.do_master_only_work()
-        ):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
+        if len(self.save_path):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             create_folder(folder_name)
 
-        if MCH.do_master_only_work() and self.save_results:
+        if self.save_results:
             # create_folder(folder_name)
             self.config_filename = folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
@@ -1620,141 +1613,54 @@ class fascicle(NRV_simulable):
             mp_computation = (
                 self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
             )
-        if mp_computation and not self.loaded_footprints:
+        if not self.loaded_footprints:
             self.compute_electrodes_footprints()
             self.loaded_footprints = True
         # create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
 
-        # FEM STIMULATION IN PARALLEL: master computes FEM (only one COMSOL licence, other computes axons)
-        if (
-            self.extra_stim is not None
-            and self.loaded_footprints == False
-            and not is_analytical_extra_stim(self.extra_stim)
-            and not MCH.is_alone()
-            and not mp_computation
-        ):
-            is_master_slave = True
-            # master solves FEM model
-            if MCH.do_master_only_work():
-                self.extra_stim.run_model()
-            else:
-                if self.extra_stim.fenics:
-                    self.extra_stim.run_model()
-            # synchronize all process
-            synchronize_processes()
-            # split the job
-            this_core_mask = MCH.split_job_from_arrays_to_slaves(
-                len(self.axons_diameter)
-            )
-            ## Axons simulation handle with Master/Slaves configuration:
-            # Master: acts as a server, accepting request to compute external potential
-            #   Also, update status of slaves when simulations complete
-            # Slaves: computes neurons sending requests to the master
-            #   (see FEM_stimulation.compute_electrodes_footprints)
-            #   When simulations completed or interupted by an error,
-            #   send status update ('success' or 'error') to Master
-            ## MASTER ##
-            if MCH.do_master_only_work():
-                self.processes_status = ["server"] + [
-                    "computing" for _ in range(MCH.size - 1)
-                ]
-                while "computing" in self.processes_status:
-                    data = MCH.recieve_data_from_slave()
-                    if "status" in data:
-                        self.processes_status[data["rank"]] = data["status"]
-                    else:
-                        this_core_mask[data["ID"]] = True
-                        V = self.extra_stim.model.get_potentials(
-                            data["x"], data["y"], data["z"]
-                        )
-                        back_data = {"V": V}
-                        MCH.send_back_array_to_dest(back_data, data["rank"])
-                if "error" in self.processes_status:
-                    errors_rank = [
-                        i for i, x in enumerate(self.processes_status) if x == "error"
-                    ]
-                    errors_ax = [i for i, x in enumerate(this_core_mask) if x == False]
-                    rise_warning(errors_ax)
-                    if len(errors_ax) > 0:
-                        rise_warning(
-                            "an issue occured during the simulation in rank: ",
-                            errors_rank,
-                            "\nThe following axons could not be computed: ",
-                            errors_ax,
-                        )
-
-                    self.processes_status[data["rank"]]
-                    self.processes_status[0] = ["error"]
-                else:
-                    self.processes_status[0] = ["success"]
-            else:
-                ## SLAVES ##
-                try:
-                    for k in this_core_mask:
-                        axon_sim = self.__sim_axon(k, folder_name, is_master_slave)
-                        if not self.return_parameters_only:
-                            fasc_sim.update({"axon" + str(k): axon_sim})
-
-                    data = {"rank": MCH.rank, "status": "success"}
-                    MCH.send_data_to_master(data)
-                except KeyboardInterrupt:
-                    raise KeyboardInterrupt
-                except:
-                    data = {"rank": MCH.rank, "status": "error"}
-                    MCH.send_data_to_master(data)
-                    rise_warning(traceback.format_exc())
-                # sum up all recorded extracellular potential if applicable
-
-            synchronize_processes()
-            if self.record:
-                self.recorder.gather_all_recordings(master_computed=False)
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
-        else:
+        if 1:
             is_master_slave = False
             ## split the job between Cores/Computation nodes
-            this_core_mask = MCH.split_job_from_arrays(len(self.axons_diameter))
+            mask = list(np.arange(len(self.axons_diameter)))
             ## Set pbar
-            has_pbar = False
-            if self.verbose:
-                if "pbar" in kwargs:
-                    _pbar = kwargs["pbar"]
-                    _pbar.reset(n_tot=len(this_core_mask))
-                    self.verbose = False
-                else:
-                    pass_info("Simulating axons in fascicle " + str(self.ID))
-                    _pbar = pbar(n_tot=len(this_core_mask))
-                has_pbar = True
             ## perform simulations
-            for k in this_core_mask:
-                axon_sim = self.__sim_axon(k, folder_name, is_master_slave)
+            sim_axon_kwgs = {
+                "folder_name":folder_name, 
+
+            }
+            # simfunction = partialmethod(self.sim_axon, sim_axon_kwgs)
+
+            ### TO CHANGE !!!!!!!!!!!
+            del self.extra_stim.model.sim
+            del self.extra_stim.model.sim_res
+            del self.extra_stim.model.comm
+            self.extra_stim.model.get_timers()
+            ### _TO CHANGE !!!!!!!!!!!
+
+            print(self.n_ax, self.L)
+            with mp.Pool(n_core) as pool:
+                results = list(pool.imap(self.sim_axon, mask))
+                pool.close()
+                pool.join()
                 ## store results
-                if not self.return_parameters_only:
-                    fasc_sim.update({"axon" + str(k): axon_sim})
-                if has_pbar:
-                    _pbar.update()
-            # sum up all recorded extracellular potential if applicable
-            synchronize_processes()
+            if not self.return_parameters_only:
+                for k in mask:
+                    fasc_sim.update({"axon" + str(k): results[k]})
+
             if self.record:
                 self.recorder.gather_all_recordings()
         if not self.return_parameters_only:
-            synchronize_processes()
             fasc_sim = MCH.gather_jobs(fasc_sim)
-            if MCH.do_master_only_work():
-                if "extra_stim" in fasc_sim:
-                    fasc_sim["extra_stim"] = load_any(
-                        fasc_sim["extra_stim"]
-                    )  # dirty hack to force NRV_class instead of dict
-                if self.record:
-                    fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
-                # Remove the "dummy_res" key from results in the master and add to the other process
-                # see if can improve (by not generating the dummy_res at the beginning of simulate)
-                if "dummy_res" in fasc_sim:
-                    fasc_sim.pop("dummy_res")
-            else:
-                #
-                fasc_sim = fascicle_results({"dummy_res": 1})# idem
-        if MCH.is_alone() and self.verbose:
+            if "extra_stim" in fasc_sim:
+                fasc_sim["extra_stim"] = load_any(
+                    fasc_sim["extra_stim"]
+                )  # dirty hack to force NRV_class instead of dict
+            if self.record:
+                fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
+
+        if self.verbose:
             pass_info("... Simulation done")
             fasc_sim["is_simulated"] = True
         self.is_simulated = True

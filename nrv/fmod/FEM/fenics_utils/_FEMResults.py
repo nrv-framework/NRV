@@ -5,6 +5,8 @@ NRV-:class:`.FEMResults` handling.
 import gmsh
 import numpy as np
 import scipy
+from time import perf_counter
+
 from dolfinx.fem import Expression, Function, functionspace
 from dolfinx.io.gmshio import model_to_mesh
 from dolfinx.io.utils import XDMFFile, VTXWriter, VTKFile
@@ -293,6 +295,7 @@ class FEMResults(NRV_class):
         """
         Eval the result field at X position
         """
+        t0 = perf_counter()
         X = np.array(X)
         N = len(X)
         cells = []
@@ -307,57 +310,31 @@ class FEMResults(NRV_class):
         tree = bb_tree(self.domain, tdim)
         # Find cells whose bounding-box collide with the the points
         cells_candidates = compute_collisions_points(tree, X)
-
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
+        t1 = perf_counter()
         for i in range(N):
             cell = cells_colliding.links(i)
-            if is_multi_proc:
-                if len(cell) > 0:
-                    points_on_proc.append(X[i])
-                    cells.append(cells_colliding.links(i)[0])
+            # point not in the mesh
+            if len(cell) == 0:
+                cell, x_closest = closest_point_in_mesh(
+                    self.domain, X[i], tree, tdim, midpoint_tree
+                )
+                rise_warning(
+                    X[i], " not found in mesh, value of ", x_closest, " reused"
+                )
+                # compute_colliding_cells(self.domain, cells_candidates, X)
+                cells += [cell[0]]
             else:
-                # point not in the mesh
-                if len(cell) == 0:
-                    cell, x_closest = closest_point_in_mesh(
-                        self.domain, X[i], tree, tdim, midpoint_tree
-                    )
-                    rise_warning(
-                        X[i], " not found in mesh, value of ", x_closest, " reused"
-                    )
-                    # compute_colliding_cells(self.domain, cells_candidates, X)
-                    cells += [cell[0]]
-                else:
-                    cells += [cell[0]]
-        if is_multi_proc:
-            points_on_proc = np.array(points_on_proc, dtype=np.float64)
-            s_values = self.vout.eval(points_on_proc, cells)
-            if len(points_on_proc) > 0:
-                m_values = np.concatenate((points_on_proc.T, s_values.T)).T
-            else:
-                m_values = np.array([])
-            m_values = self.comm.gather(m_values.tolist(), root=0)
-            if MCH.do_master_only_work():
-                val = []
-                for i in range(len(m_values)):
-                    for j in range(len(m_values[i])):
-                        val += [m_values[i][j]]
-                val = np.array(val)
-                values = np.empty((N), dtype="float64")
-                for i, p in enumerate(X):
-                    i_p = np.where((np.isclose(val[:, :3], p)).all(axis=1))[0]
-                    if len(i_p > 0):
-                        values[i] = val[i_p[0], 3]
-                    else:
-                        values[i] = values[i - 1]
-            else:
-                values = np.empty((N), dtype="float64")
-            synchronize_processes()
-            self.comm.Bcast(values, root=0)
-        else:
-            values = self.vout.eval(X, cells)
-            if N > 1:
-                values = values[:, 0]
+                cells += [cell[0]]
+        t2 = perf_counter()
+        values = self.vout.eval(X, cells)
+        if N > 1:
+            values = values[:, 0]
+        t3= perf_counter()
+        print("init=", t1-t0)
+        print("loop=", t2-t1)
+        print("eval=", t3-t2)
         return values
 
     #####################
