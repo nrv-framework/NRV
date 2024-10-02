@@ -102,6 +102,10 @@ class NRV_simulable(NRV_class):
 
         self.dt = dt
 
+    @property
+    def has_FEM_extracel(self) -> bool:
+        return self.extracel_status() and issubclass(self.extra_stim.nrv_type == "FEM_stimulation")
+
     def extracel_status(self):
         """
         Check if an extracellular context is attached to the instance

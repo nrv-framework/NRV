@@ -7,7 +7,6 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-from functools import partialmethod
 from tqdm import tqdm
 import multiprocessing as mp
 
@@ -15,7 +14,7 @@ import multiprocessing as mp
 
 from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning, pbar
-from ..backend._MCore import MCH, synchronize_processes
+from ..backend._MCore import MCH
 from ..backend._NRV_Simulable import NRV_simulable, sim_results
 from ..fmod._extracellular import *
 from ..fmod._recording import *
@@ -193,6 +192,7 @@ class fascicle(NRV_simulable):
         self.return_parameters_only = False
         self.loaded_footprints = False
         self.save_results = False
+        self.result_folder_name:str = ""
 
         self.postproc_label = "default"
         self.postproc_function = None
@@ -1288,7 +1288,6 @@ class fascicle(NRV_simulable):
             )
 
         self.extra_stim.run_model()
-        print("non non non non!!")
         self.set_axons_parameters(**kwargs)
         for k in range(len(self.axons_diameter)):
             if self.axons_type[k] == 0:
@@ -1388,11 +1387,11 @@ class fascicle(NRV_simulable):
         self.postproc_kwargs = check_function_kwargs(
             self.postproc_function, self.postproc_kwargs
         )
+        
 
     def sim_axon(
         self,
         k,
-        folder_name="",
         is_master_slave=False,
     ) -> axon_results:
         """
@@ -1510,18 +1509,18 @@ class fascicle(NRV_simulable):
             record_particles=self.record_particles,
             loaded_footprints=axon_ftpt,
         )
+        #print(axon.recorder.save())
+
         del axon
-        self.axons_diameter
 
         axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
         if self.save_results:
             ax_fname = "sim_axon_" + str(k) + ".json"
-            axon_sim.save(save=True, fname=folder_name + "/" + ax_fname)
+            axon_sim.save(save=True, fname=self.result_folder_name + "/" + ax_fname)
         return axon_sim
 
     def simulate(
         self,
-        save_V_mem=False,
         **kwargs,
     ) -> fascicle_results:
         """
@@ -1591,13 +1590,13 @@ class fascicle(NRV_simulable):
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()
         # create folder and save fascicle config
-        folder_name = self.save_path + "Fascicle_" + str(self.ID)
+        self.result_folder_name = self.save_path + "Fascicle_" + str(self.ID)
         if len(self.save_path):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
-            create_folder(folder_name)
+            create_folder(self.result_folder_name)
 
         if self.save_results:
             # create_folder(folder_name)
-            self.config_filename = folder_name + "/00_Fascicle_config.json"
+            self.config_filename = self.result_folder_name + "/00_Fascicle_config.json"
             fasc_sim.save(save=True, fname=self.config_filename)
         else:
             pass
@@ -1608,52 +1607,41 @@ class fascicle(NRV_simulable):
             kwargs["unmyelinated_nseg"] = self.unmyelinated_param["Nseg_per_sec"]
         self.set_axons_parameters(**kwargs)
         self.processes_status = ["computing" for _ in range(MCH.size)]
-        # Check if FEM should be done in parallel and do it if required
-        mp_computation = False
-        if is_FEM_extra_stim(self.extra_stim):
-            mp_computation = (
-                self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
-            )
-        if not self.loaded_footprints:
+
+        bckup = None
+
+        if not self.loaded_footprints and self.has_FEM_extracel:
             self.compute_electrodes_footprints()
             self.loaded_footprints = True
+            bckup = self.extra_stim.model       #Can't be passed to mp pool :'(
+            del self.extra_stim.model
+
         # create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
 
         ###### NO STIM OR ANALYTICAL STIM: all in parallel, OR FEM STIM NO PARALLEL
-        if 1:
-            is_master_slave = False
-            ## split the job between Cores/Computation nodes
-            mask = list(np.arange(len(self.axons_diameter)))
-            ## Set pbar
-            ## perform simulations
-            sim_axon_kwgs = {
-                "folder_name":folder_name, 
+        ## Set pbar
+        ## perform simulations
 
-            }
-            # simfunction = partialmethod(self.sim_axon, sim_axon_kwgs)
 
-            ### TO CHANGE !!!!!!!!!!!
-            del self.extra_stim.model.sim
-            del self.extra_stim.model.sim_res
-            del self.extra_stim.model.comm
-            self.extra_stim.model.get_timers()
-            ### _TO CHANGE !!!!!!!!!!!
 
-            print(self.n_ax, self.L)
-            with mp.Pool(n_core) as pool:
-                results = list(tqdm(pool.imap(self.sim_axon, mask), total=self.n_ax))
-                pool.close()
-                pool.join()
-                ## store results
-            if not self.return_parameters_only:
-                for k in mask:
-                    fasc_sim.update({"axon" + str(k): results[k]})
 
-            if self.record:
-                self.recorder.gather_all_recordings()
+        with mp.Pool(n_core) as pool:
+            results = list(tqdm(pool.imap(self.sim_axon, axons_ID), total=self.n_ax))
+            pool.close()
+            pool.join()
+            ## store results
+        if bckup is not None:
+            self.extra_stim.model = bckup
+
+
         if not self.return_parameters_only:
-            fasc_sim = MCH.gather_jobs(fasc_sim)
+            for k in axons_ID:
+                fasc_sim.update({"axon" + str(k): results[k]})
+        if self.record:
+            self.recorder.gather_all_recordings(results)
+
+        if not self.return_parameters_only:
             if "extra_stim" in fasc_sim:
                 fasc_sim["extra_stim"] = load_any(
                     fasc_sim["extra_stim"]
