@@ -11,7 +11,7 @@ from ....backend._log_interface import rise_error, rise_warning
 from ....backend._MCore import MCH
 
 # from ....nmod.myelinated import myelinated
-from ....utils._units import mm
+from ....utils._units import mm, sci_round
 from ....backend._file_handler import rmv_ext
 from ._MshCreator import MshCreator, pi
 
@@ -44,6 +44,12 @@ def is_NerveMshCreator(object):
     """
     return isinstance(object, NerveMshCreator)
 
+def get_node_physical_id(id_ax:int, i_node:int, volume:bool=False)->int:
+    id_ax_volume = id_ax-id_ax%2
+    i_node_str = str(2*i_node)
+    while len(i_node_str)<3:
+        i_node_str = "0" + i_node_str
+    return int(str(id_ax_volume)+i_node_str)
 
 class NerveMshCreator(MshCreator):
     """
@@ -104,6 +110,8 @@ class NerveMshCreator(MshCreator):
         self.fascicles = {}
         self.N_axon = 0
         self.axons = {}
+
+        self._continuous_myelin = True
 
         self.N_electrode = 0
         self.electrodes = {}
@@ -583,7 +591,7 @@ class NerveMshCreator(MshCreator):
 
         # test good diameter
         size_test = np.allclose(
-            [dx, dy, dz], [axon["node_l"], axon["node_d"], axon["node_d"]]
+            [dx, dy, dz], [axon["node_l"], axon["node_d"], axon["node_d"]], atol=0.001
         )
 
         # test first and last node
@@ -837,11 +845,9 @@ class NerveMshCreator(MshCreator):
             self.add_domains(obj_IDs=ax["face"], phys_ID=id_ph, dim=2)
             # adding one physical domain by node
             if ax["myelinated"]:
-                for i_node in range(len(ax["nodes_volume"])):
-                    node_id = 2 * i_node
-                    n = floor(log10(node_id + 1) + 1)
-                    ax_id = (ENT_DOM_offset["Axon"] + (2 * j)) * 10**n
-                    id_ph = node_id + ax_id
+                id_ax = id_ph
+                for i_node in range(ax["n_nodes"]):
+                    id_ph = get_node_physical_id(id_ax, i_node)
                     self.add_domains(
                         obj_IDs=ax["nodes_volume"][i_node], phys_ID=id_ph, dim=3
                     )
@@ -1001,6 +1007,41 @@ class NerveMshCreator(MshCreator):
     ################################################################
     ############## complex volumes adding methods ##################
     ################################################################
+    def __add_mye_section(self, i_sec:int, sec:str, x, ax_pties:dict, l_sec:float):
+        """_summary_
+
+        Parameters
+        ----------
+        i_sec : int
+            section index
+        sec : str
+            section label
+        x : _type_
+            x position
+        ax_pties : dict
+            axon properties
+        l_sec : float
+            length of the section
+        r_sec : float
+            radius of the section
+        """
+        if sec =="MYSA":
+            neighbour_sec = {"node", "FLUT"}
+            if i_sec == 0:
+                next_sec = ax_pties["path_type"][1]
+                neighbour_sec -= {next_sec}
+                prev_sec = neighbour_sec.pop()
+            else:
+                prev_sec = ax_pties["path_type"][i_sec-1]
+                neighbour_sec -= {prev_sec}
+                next_sec = neighbour_sec.pop()
+            r_1 = ax_pties[prev_sec]["r"]
+            r_2 = ax_pties[next_sec]["r"]
+
+            self.add_cone(x, ax_pties["y"], ax_pties["z"], l_sec, r_1, r_2)
+        else:
+            self.add_cylinder(x, ax_pties["y"], ax_pties["z"], l_sec, ax_pties[sec]["r"])
+
     def add_axon(self, ID):
         """
         Add an axon to the mesh.
@@ -1013,7 +1054,6 @@ class NerveMshCreator(MshCreator):
         ----------
         """
         axon = self.axons[ID]
-        res_min = axon["res_node"]
         if not axon["myelinated"]:
             self.add_cylinder(0, axon["y"], axon["z"], self.L, axon["d"] / 2)
         else:
@@ -1026,60 +1066,68 @@ class NerveMshCreator(MshCreator):
                     "nrv_type": "myelinated",
                 }
             )
-            # Ideally it would be easier to use: ax = myelinated(**axon)
+            # !! Ideally it would be easier to use: ax = myelinated(**axon)
             # But myelinated cannot be imported without causing an import loop
             ax = load_any(data=axon)
+            ax_pties = {
+                "d": axon["d"],
+                "y": axon["y"],
+                "z": axon["z"],
+                "path_type": ax.axon_path_type,
+                "n_nodes": ax.n_nodes,
+                "deltax": ax.deltax,
+                "l_first_sec": ax.first_section_size,
+                "l_last_sec": ax.last_section_size,
+                "node":{"r":ax.nodeD / 2, "l":ax.nodelength},
+                "MYSA":{"r":axon["d"] / 2, "l":ax.paralength1},
+                "FLUT":{"r":axon["d"] / 2, "l":ax.paralength2},
+                "STIN":{"r":axon["d"] / 2, "l":ax.interlength},
+                }
             x = ax.first_section_size
-            init_l = 0
-            n_nodes = 0
-            for sec in ax.axon_path_type[1:-1]:
-                if sec == "node":
-                    r_sec = ax.nodeD / 2
-                    l_sec = ax.nodelength
-                    n_nodes += 1
-                else:
-                    r_sec = ax.d / 2
-                    if sec == "MYSA":
-                        l_sec = ax.paralength1
-                    elif sec == "FLUT":
-                        l_sec = ax.paralength2
-                    elif sec == "STIN":
-                        l_sec = ax.interlength
-
-                # mrege the first (last) section with the next (previous) when it is too small
-                if abs(x - l_sec) < res_min:
-                    init_l += l_sec
-                    ax.axon_path_type.pop(0)
-                    x += l_sec
-                elif abs(self.L - (l_sec + x)) < res_min:
-                    ax.axon_path_type.pop(-1)
-                else:
-                    self.add_cylinder(x, ax.y, ax.z, l_sec, r_sec)
-                    x += l_sec
-            # adding first section
-            if ax.axon_path_type[0] == "node":
-                r_sec = ax.nodeD / 2
-                n_nodes += 1
-                self.axons[ID]["first_node_l"] = ax.first_section_size + init_l
-            else:
-                r_sec = ax.d / 2
-            self.add_cylinder(0, ax.y, ax.z, ax.first_section_size + init_l, r_sec)
-            # adding first section
-            if ax.axon_path_type[-1] == "node":
-                r_sec = ax.nodeD / 2
-                n_nodes += 1
-                self.axons[ID]["last_node_l"] = self.L - x
-            else:
-                r_sec = ax.d / 2
-            self.add_cylinder(x, ax.y, ax.z, self.L - x, r_sec)
-
-            self.axons[ID]["node_d"] = ax.nodeD
-            self.axons[ID]["node_l"] = ax.nodelength
-            self.axons[ID]["deltax"] = ax.deltax
-            self.axons[ID]["n_nodes"] = n_nodes
-            self.axons[ID]["nodes_volume"] = [None for _ in range(n_nodes)]
-            self.axons[ID]["nodes_face"] = [None for _ in range(n_nodes)]
             del ax
+
+            axon["res_node"] = min(axon["res_node"], ax_pties["node"]["l"])
+            res_min = axon["res_node"]
+
+            ## adding 1st section
+            # merge the two first sections when the first is too small
+            if x < res_min:
+
+                if ax_pties["path_type"].pop(0) == "node":
+                    ax_pties["n_nodes"] -= 1
+                ax_pties["path_type"].pop(0)
+                sec = ax_pties["path_type"][0] 
+                x += ax_pties[sec]["l"]
+            else:
+                sec = ax_pties["path_type"][0]
+            l_sec = x
+            r_sec = ax_pties[sec]["r"]
+            if sec == "node":
+                self.axons[ID]["first_node_l"] = l_sec
+            self.add_cylinder(0, ax_pties["y"], ax_pties["z"], l_sec, r_sec)
+            self.__add_mye_section(i_sec=0, sec=sec, x=0, ax_pties=ax_pties, l_sec=l_sec)
+
+            ## adding mid sections
+            for i_sec, sec in enumerate(ax_pties["path_type"][1:]):
+                l_sec = ax_pties[sec]["l"]
+                # merge the two last sections when it the last is too small
+                if abs(self.L - (l_sec + x)) < res_min:
+                    l_sec = self.L - x
+                    if ax_pties["path_type"].pop(-1) == "node":
+                        ax_pties["n_nodes"] -= 1
+                    if ax_pties["path_type"][-1] == "node":
+                        self.axons[ID]["last_node_l"] = l_sec
+                elif l_sec > self.L - x:
+                    l_sec = self.L - x
+                self.__add_mye_section(i_sec=i_sec+1, sec=sec, x=x, ax_pties=ax_pties, l_sec=l_sec)
+                x += l_sec
+
+            self.axons[ID]["node_d"] = 2*ax_pties["node"]["r"]
+            self.axons[ID]["node_l"] = ax_pties["node"]["l"]
+            self.axons[ID]["deltax"] = ax_pties["deltax"]
+            self.axons[ID]["n_nodes"] = ax_pties["n_nodes"]
+            self.axons[ID]["nodes_volume"] = [None for _ in range(ax_pties["n_nodes"])]
+            self.axons[ID]["nodes_face"] = [None for _ in range(ax_pties["n_nodes"])]
 
     def add_LIFE(
         self, ID=None, x_c=0, y_c=0, z_c=0, length=1000, d=25, is_volume=False

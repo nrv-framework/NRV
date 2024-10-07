@@ -1600,8 +1600,7 @@ class axon_results(sim_results):
     ) -> float:
         """
         get the membrane conductivity at a position x and a time t
-
-
+         
         Parameters
         ----------
         x : float, optional
@@ -1635,7 +1634,7 @@ class axon_results(sim_results):
         else:
             i_x = np.argmin(abs(self["x_rec"] - x))
         g = self["g_mem"][i_x, i_t]
-
+    
         # Surface conductivity in [S]/([m]*[m])
         if "2" in unit:
             return convert(g, "S/cm**2", unit)

@@ -13,7 +13,7 @@ sim_file = "./unitary_tests/results/outputs/" + N_test + "_simres"
 
 ## Mesh generation
 t1 = time.time()
-L=nrv.get_length_from_nodes(10,4)         #um
+L=300#nrv.get_length_from_nodes(10,4)         #um
 
 
 nrv.parameters.set_gmsh_ncore(3)

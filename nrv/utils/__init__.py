@@ -13,6 +13,8 @@ from ._misc import (
     get_perineurial_thickness,
     membrane_capacitance_from_model,
     compute_complex_admitance,
+    get_MRG_parameters,
+    get_length_from_nodes,
 )
 from ._nrv_function import (
     nrv_function,
@@ -94,6 +96,8 @@ functions = [
     "set_common_time_series",
     "get_equal_timing_copies",
     "datfile_2_stim",
+    "get_MRG_parameters",
+    "get_length_from_nodes",
 ]
 
 __all__ = []

@@ -97,12 +97,41 @@ class MshCreator(NRV_class):
         self.N_nodes = 0
         self.N_elements = 0
 
-        self.Ncore = parameters.GMSH_Ncores
+        self.Ncore = None
+        self.n_core = None
+
+    @property
+    def n_core(self):
+        return self.Ncore
+    
+    @n_core.setter
+    def n_core(self, i:int|None=None):
+        if i is None:
+            self.Ncore = parameters.GMSH_Ncores
+        else:
+            self.Ncore = i
         gmsh.option.setNumber("General.NumThreads", self.Ncore)
         if self.Ncore > 1:
             gmsh.option.set_number("Mesh.Algorithm3D", 10)
         else:
             gmsh.option.set_number("Mesh.Algorithm3D", 1)
+
+    @n_core.deleter
+    def n_core(self):
+        n_core = None
+
+    def set_ncore(self, i:int|None=None)->None:
+        """_summary_
+
+        Parameters
+        ----------
+        i : int | None, optional
+            _description_, by default None
+        """
+
+
+
+
 
     #####################
     ## special methods ##

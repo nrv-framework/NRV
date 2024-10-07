@@ -500,7 +500,7 @@ class fascicle(NRV_simulable):
         D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, Delta=0.1):
+    def fit_circular_contour(self, y_c=None, z_c=None, delta=0.1):
         """
         Define a circular countour to the fascicle
 
@@ -510,7 +510,7 @@ class fascicle(NRV_simulable):
             y coordinate of the circular contour center, in um
         z_c         : float
             z coordinate of the circular contour center, in um
-        Delta       : float
+        delta       : float
             distance between farest axon and contour, in um
         """
         rise_warning(
@@ -518,7 +518,7 @@ class fascicle(NRV_simulable):
         )
         pass_info("Define fascicle size/shape at object creation instead.")
         N_axons = len(self.axons_diameter)
-        D = 2 * Delta
+        D = 2 * delta
 
         if y_c is not None:
             self.y_grav_center = y_c
@@ -536,7 +536,7 @@ class fascicle(NRV_simulable):
                     )
                     ** 0.5
                 )
-                D = max(D, 2 * (dist_max + Delta))
+                D = max(D, 2 * (dist_max + delta))
         self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
