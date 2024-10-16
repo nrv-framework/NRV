@@ -952,8 +952,8 @@ class fascicle(NRV_simulable):
         self,
         axes,
         contour_color="k",
-        myel_color="r",
-        unmyel_color="b",
+        myel_color="b",
+        unmyel_color="r",
         elec_color="gold",
         num=False,
     ):

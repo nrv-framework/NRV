@@ -316,6 +316,8 @@ def get_length_from_nodes(diameter, nodes):
     length      : float
         lenth of the axon with the correct number of nodes in um
     """
+    MRG_fiberD = MRG_data.fiberD.to_numpy()
+    MRG_deltax = MRG_data.deltax.to_numpy()
     if diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
         deltax = MRG_deltax[index]
@@ -334,7 +336,7 @@ def membrane_capacitance_from_model(model):
     return 1
 
 
-def compute_complex_admitance(f: float, g: float, fc: float) -> complex:
+def compute_complex_admitance(f: float|np.ndarray, g: float|np.ndarray, fc: float|np.ndarray) -> complex:
     """
     compute the complex admitance of a first oder system (of cutoff frequency fc and conductivity g) at a given frequency f
 
@@ -352,4 +354,7 @@ def compute_complex_admitance(f: float, g: float, fc: float) -> complex:
     complex
         complex admitance
     """
+    if isinstance(g, np.ndarray):
+        return g * (1 + 1j * f[:, np.newaxis]  / fc)
+
     return g * (1 + 1j * f / fc)
