@@ -3,6 +3,7 @@ import numpy as np
 from time import perf_counter
 nrv.parameters.set_nrv_verbosity(2)
 
+
 # axon def
 y = 0						# axon y position, in [um]
 z = 0						# axon z position, in [um]

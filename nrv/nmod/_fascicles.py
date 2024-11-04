@@ -36,7 +36,7 @@ if not MCH.is_alone():
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
-n_core = 4
+n_core = 2
 
 builtin_postproc_functions = {
     "default": default_PP,

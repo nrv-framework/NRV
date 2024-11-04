@@ -21,14 +21,15 @@ class NRV_subclass2(nrv.NRV_class):
     def __hash__(self):
         return 0
 
-a = NRV_subclass1()
-print(a.save())
-print(a.type=='NRV_subclass1')
+if __name__ == "__main__":
+    a = NRV_subclass1()
+    print(a.save())
+    print(a.type=='NRV_subclass1')
 
-try:
-    c = nrv.NRV_class()
-    print(c)
-except Exception as error:
-    print("--------- THE FOLLOWING ERROR OCCURED (as expected) ----------")
-    print(error)
+    try:
+        c = nrv.NRV_class()
+        print(c)
+    except Exception as error:
+        print("--------- THE FOLLOWING ERROR OCCURED (as expected) ----------")
+        print(error)
 

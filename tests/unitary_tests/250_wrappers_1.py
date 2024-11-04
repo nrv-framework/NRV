@@ -6,4 +6,5 @@ def test(a, b):
     print('computing ', a, ' + ', b, ' = ',a+b)
     return None
 
-test(2, 3)
+if __name__ == "__main__":
+    test(2, 3)

@@ -295,7 +295,6 @@ class FEMResults(NRV_class):
         """
         Eval the result field at X position
         """
-        t0 = perf_counter()
         X = np.array(X)
         N = len(X)
         cells = []
@@ -312,7 +311,6 @@ class FEMResults(NRV_class):
         cells_candidates = compute_collisions_points(tree, X)
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
-        t1 = perf_counter()
         for i in range(N):
             cell = cells_colliding.links(i)
             # point not in the mesh
@@ -327,14 +325,9 @@ class FEMResults(NRV_class):
                 cells += [cell[0]]
             else:
                 cells += [cell[0]]
-        t2 = perf_counter()
         values = self.vout.eval(X, cells)
         if N > 1:
             values = values[:, 0]
-        t3= perf_counter()
-        print("init=", t1-t0)
-        print("loop=", t2-t1)
-        print("eval=", t3-t2)
         return values
 
     #####################
