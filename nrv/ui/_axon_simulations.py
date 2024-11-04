@@ -4,7 +4,7 @@ NRV-Cellular Level simulations.
 import sys
 from typing import Callable
 from time import perf_counter
-from multiprocessing import Pool
+import multiprocessing as mp
 from tqdm import tqdm
 from functools import partial
 from itertools import repeat
@@ -76,7 +76,7 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
             l_kwargs.append(n_kwargs)
     
     p_search_func = partial(search_func,**c_kwargs)
-    with Pool(tot) as pool: 
+    with mp.get_context('spawn').Pool(tot) as pool: 
         args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
         results = list(tqdm(pool.starmap(set_args_kwargs,args_for_starmap)))
         pool.close()
