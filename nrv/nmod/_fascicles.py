@@ -1625,8 +1625,7 @@ class fascicle(NRV_simulable):
 
 
 
-
-        with mp.Pool(n_core) as pool:
+        with mp.get_context('spawn').Pool(n_core) as pool:  #forces spawn mode 
             results = list(tqdm(pool.imap(self.sim_axon, axons_ID), total=self.n_ax))
             pool.close()
             pool.join()
