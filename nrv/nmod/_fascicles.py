@@ -1286,8 +1286,7 @@ class fascicle(NRV_simulable):
             mp_computation = (
                 self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
             )
-
-        self.extra_stim.run_model()
+            self.extra_stim.run_model()
         self.set_axons_parameters(**kwargs)
         for k in range(len(self.axons_diameter)):
             if self.axons_type[k] == 0:

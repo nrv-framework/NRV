@@ -49,6 +49,9 @@ if __name__ == "__main__":
     fascicle_1.axons_type[12] = -1
     # simulation
     #print(fascicle_1.compute_electrodes_footprints())
-    fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
-    t1 = time.time()
-    print('simulation done in ' + str(t1-t0))
+    try:
+        fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
+    except:
+        print('Error as expected')
+    else:
+        assert (0 == 1) #should throw an error

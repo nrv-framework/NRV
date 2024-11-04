@@ -118,6 +118,6 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(figsize=(6,6))
     fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
-    exit()
+
     fascicle_2.plot(ax, num=True)
     plt.savefig(DIR + 'figures/504_B.png')

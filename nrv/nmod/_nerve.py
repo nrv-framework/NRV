@@ -1034,7 +1034,7 @@ class nerve(NRV_simulable):
         # dirty hack to force NRV_class type when saved
         if "extra_stim" in nerve_sim:
             nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"])
-        if self.record:  # recorder not saved in result !!BUG
+        if self.record:  # recorder not saved in   result !!BUG
             nerve_sim["recorder"] = self.recorder
         self.is_simulated = True
         return nerve_sim
