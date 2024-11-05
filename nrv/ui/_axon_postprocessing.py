@@ -1032,6 +1032,7 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
     "myelinated",
     "intra_stim_starts",
     "intra_stim_positions",
+    "recorder"
     }
 
     default_list_keys.update(set(keys_to_keep))

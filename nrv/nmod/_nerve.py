@@ -289,7 +289,7 @@ class nerve(NRV_simulable):
         if not fascicles_context:
             bl += ["fascicles"]
 
-        to_save = save and MCH.do_master_only_work()
+        to_save = save
         return super().save(
             fname=fname,
             save=to_save,
@@ -713,30 +713,29 @@ class nerve(NRV_simulable):
         num             : bool
             if True, the index of each axon is displayed on top of the circle
         """
-        if MCH.do_master_only_work():
-            ## plot contour
-            axes.add_patch(
-                plt.Circle(
-                    (self.y_grav_center, self.z_grav_center),
-                    self.D / 2,
-                    color=contour_color,
-                    fill=False,
-                    linewidth=4,
-                )
+        ## plot contour
+        axes.add_patch(
+            plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D / 2,
+                color=contour_color,
+                fill=False,
+                linewidth=4,
             )
-            for i in self.fascicles:
-                fasc = self.fascicles[i]
-                fasc.plot(
-                    axes=axes,
-                    contour_color="grey",
-                    myel_color=myel_color,
-                    unmyel_color=unmyel_color,
-                    num=num,
-                )
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
-            axes.set_xlim((-1.1 * self.D / 2, 1.1 * self.D / 2))
-            axes.set_ylim((-1.1 * self.D / 2, 1.1 * self.D / 2))
+        )
+        for i in self.fascicles:
+            fasc = self.fascicles[i]
+            fasc.plot(
+                axes=axes,
+                contour_color="grey",
+                myel_color=myel_color,
+                unmyel_color=unmyel_color,
+                num=num,
+            )
+        if self.extra_stim is not None:
+            self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+        axes.set_xlim((-1.1 * self.D / 2, 1.1 * self.D / 2))
+        axes.set_ylim((-1.1 * self.D / 2, 1.1 * self.D / 2))
 
     ## Context handling methods
     def clear_context(
@@ -919,6 +918,7 @@ class nerve(NRV_simulable):
             if self.recorder is not None:
                 fasc.attach_extracellular_recorder(self.recorder)
 
+
     def __set_fascicles_simulation_parameters(self):
         self.__set_fascicles_context()
         for fasc in self.fascicles.values():
@@ -938,6 +938,13 @@ class nerve(NRV_simulable):
             fasc.verbose = self.verbose
 
     # Footprint and mesh
+    @property
+    def __footprint_to_compute(self):
+        """
+        returns True only if loaded footprint are selected AND footprint exist
+        """
+        return not (self.is_footprinted and self.loaded_footprints)
+
     def compute_electrodes_footprints(self, **kwargs):
         """
         compute electrodes footprints
@@ -945,15 +952,9 @@ class nerve(NRV_simulable):
         if not self.is_footprinted:
             self.__set_fascicles_context()
             self.set_axons_parameters(**kwargs)
-
             if self.is_extra_stim:
-                mp_computation = False
                 if is_FEM_extra_stim(self.extra_stim):
-                    mp_computation = (
-                        self.extra_stim.fenics and self.extra_stim.model.is_multi_proc
-                    )
-                    if MCH.do_master_only_work() or mp_computation:
-                        self.extra_stim.run_model()
+                    self.extra_stim.run_model()
                 for fasc in self.fascicles.values():
                     fasc.compute_electrodes_footprints()
             self.is_footprinted = True
@@ -979,28 +980,25 @@ class nerve(NRV_simulable):
             pass_info("Starting nerve simulation")
         nerve_sim = super().simulate(**kwargs)
         self.__set_fascicles_simulation_parameters()
-        if not MCH.do_master_only_work():
-            nerve_sim = nerve_results({"dummy_res": 1})
 
         if (
             self.save_path
         ):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
-            if MCH.do_master_only_work():
-                create_folder(folder_name)
+            create_folder(folder_name)
 
         if self.save_results:
             folder_name = self.save_path + "Nerve_" + str(self.ID) + "/"
-            if MCH.do_master_only_work():
-                config_filename = folder_name + "/00_Nerve_config.json"
-                self.save(config_filename, fascicles_context=False)
+            config_filename = folder_name + "/00_Nerve_config.json"
+            self.save(config_filename, fascicles_context=False)
 
         # run FEM model
         if self.verbose:
             pass_info("...computing electrodes footprint")
         
         bckup = None
-        if not self.loaded_footprints and self.has_FEM_extracel:
+
+        if self.__footprint_to_compute and self.has_FEM_extracel:
             self.compute_electrodes_footprints()
             self.loaded_footprints = True
             bckup = self.extra_stim.model       #Can't be passed to mp pool :'(
@@ -1010,22 +1008,17 @@ class nerve(NRV_simulable):
         fasc_kwargs = kwargs
         if self.save_path:
             fasc_kwargs["save_path"] = folder_name
-        has_pbar = False
         if self.verbose:
             i_pbar = 1
-            _pbar = pbar(n_tot=self.n_fasc, label="fasc")
-            has_pbar = True
+ 
         for fasc in self.fascicles.values():
-            if has_pbar:
-                _pbar.set_label(f"fascicle {i_pbar}/{self.n_fasc}")
+            if self.verbose:
+                fasc_kwargs["pbar_label"] = f"fascicle {i_pbar}/{self.n_fasc}"
                 i_pbar += 1
-                fasc_kwargs["pbar"] = _pbar
             nerve_sim["fascicle" + str(fasc.ID)] = fasc.simulate(
                 in_nerve=True,
                 **fasc_kwargs,
             )
-        if has_pbar:
-            del _pbar
         if self.verbose:
             pass_info("...Done!")
         
@@ -1034,7 +1027,7 @@ class nerve(NRV_simulable):
         # dirty hack to force NRV_class type when saved
         if "extra_stim" in nerve_sim:
             nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"])
-        if self.record:  # recorder not saved in   result !!BUG
+        if self.record:  # recorder not saved in result !!BUG
             nerve_sim["recorder"] = self.recorder
         self.is_simulated = True
         return nerve_sim

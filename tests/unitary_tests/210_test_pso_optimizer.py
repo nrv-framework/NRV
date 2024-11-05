@@ -1,5 +1,6 @@
 import nrv
 from nrv.utils._nrv_function import sphere, rosenbock, rastrigin
+import numpy as np
 
 import matplotlib.pyplot as plt
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
     print(test_prob.compute_cost(1)==1)
     res1 = test_prob(problem_fname=fnam1, **pso_kwargs)
     print(res1.x)
-
+    exit()
 
     test_prob.costfunction = my_cost2
     print(test_prob.compute_cost(1)==0)

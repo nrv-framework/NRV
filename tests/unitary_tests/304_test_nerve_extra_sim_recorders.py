@@ -34,13 +34,15 @@ if __name__ == "__main__":
         nerve.plot(ax)
         plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
 
-        fig = plt.figure(figsize=(8,6))
+        fig = plt.figure(figsize=(8,4))
         axs = []
         for k in range(len(loaded_rec.recording_points)):
-            axs.append(plt.subplot(3,2,k+1))
-            axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording)
+            coordinate = (loaded_rec.recording_points[k].x, loaded_rec.recording_points[k].y, loaded_rec.recording_points[k].z)
+            axs.append(plt.subplot(2, 3, k+1))
+            axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording, label=str(coordinate))
             axs[k].set_xlabel('time (ms)')
-            axs[k].set_ylabel('elec. '+str(k)+' potential (mV)')
+            axs[k].set_ylabel(f'elec. potential (mV)')
+            axs[k].legend()
             axs[k].grid()
         plt.tight_layout()
         plt.savefig('./unitary_tests/figures/'+str(test_num)+'_C.png')
