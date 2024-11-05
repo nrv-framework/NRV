@@ -1,4 +1,4 @@
-import nrv
+from nrv.optim import Problem, PSO_optimizer
 from nrv.utils._nrv_function import sphere, rosenbock, rastrigin
 import numpy as np
 np.random.seed(100000)
@@ -13,12 +13,12 @@ if __name__ == "__main__":
     fnam2 = "./unitary_tests/results/json/" + N_test + "_optim_rosenbock.json"
     fnam3 = "./unitary_tests/results/json/" + N_test + "_optim_rastrigin.json"
 
-    test_prob = nrv.Problem(save_problem_results=True)
+    test_prob = Problem(save_problem_results=True)
 
     my_cost1 = sphere()
     my_cost2 = rosenbock()
     my_cost3 = rastrigin()
-    test_prob.optimizer = nrv.PSO_optimizer()
+    test_prob.optimizer = PSO_optimizer()
 
     pso_kwargs = {
         "dimensions" : 4,

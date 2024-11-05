@@ -11,7 +11,7 @@ from tqdm import tqdm
 import multiprocessing as mp
 
 
-
+from ..backend._parameters import parameters
 from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning, pbar
 from ..backend._NRV_Simulable import NRV_simulable, sim_results
@@ -30,7 +30,7 @@ from .results._axons_results import axon_results
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
-n_core_fascicles = 2
+
 
 builtin_postproc_functions = {
     "default": default_PP,
@@ -1334,8 +1334,8 @@ class fascicle(NRV_simulable):
             __label = kwargs["pbar_label"]
         else:
             __label = f"Fascicle {self.ID}" 
-        __label += f" -- {n_core_fascicles} CPU"
-        if n_core_fascicles > 1:
+        __label += f" -- {parameters.get_nmod_ncore()} CPU"
+        if parameters.get_nmod_ncore() > 1:
             __label += "s"
         return __label
 
@@ -1559,7 +1559,7 @@ class fascicle(NRV_simulable):
         # create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
         ## perform simulations
-        with mp.get_context('spawn').Pool(n_core_fascicles) as pool:  #forces spawn mode 
+        with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode 
             __label = self.__set_pbar_label(**kwargs)
             results = list(tqdm(pool.imap(self.sim_axon, axons_ID), total=self.n_ax, desc=__label))
             pool.close()

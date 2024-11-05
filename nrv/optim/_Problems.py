@@ -6,6 +6,7 @@ import numpy as np
 import faulthandler
 import traceback
 
+from ..backend._parameters import parameters
 from ..backend._NRV_Class import NRV_class
 from ..backend._log_interface import rise_error, pass_debug_info, set_log_level
 from .optim_utils._OptimResults import optim_results
@@ -16,8 +17,6 @@ import sys
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
-
-n_core_optim = None
 
 class Problem(NRV_class):
     """
@@ -160,7 +159,7 @@ class Problem(NRV_class):
         For now, only costfunction can be parallelized. This will be improve in the future
         """
         if n_core is None:
-            n_core = n_core_optim
+            n_core = parameters.get_optim_ncore()
         # parallelizable optimizer
         if "n_processes" in self._Optimizer.__dict__:
             if self.__check_MCore_CostFunction() and costfunction_mp:
@@ -170,7 +169,7 @@ class Problem(NRV_class):
             else:
                 #* To add number of n_core_fascicle = 1
                 #!! Bug cannot compute local method generated from cost_function_swarm_from_particle
-                self._Optimizer.n_processes = n_core_optim
+                self._Optimizer.n_processes = parameters.get_optim_ncore()
                 #!!self._Optimizer.n_processes = None
                 self.mp_type = "optimizer"
         else:
