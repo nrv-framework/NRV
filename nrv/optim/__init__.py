@@ -42,7 +42,7 @@ optimization libraries:
 
 from ._CostFunctions import cost_function
 from ._Optimizers import Optimizer, scipy_optimizer, PSO_optimizer
-from ._Problems import cost_function_swarm_from_particle, Problem
+from ._Problems import Problem
 
 submodules = ["optim_utils"]
 
@@ -54,9 +54,7 @@ classes = [
     "cost_function"
 ]
 
-functions = [
-    "cost_function_swarm_from_particle",
-]
+functions = []
 
 __all__ = []
 

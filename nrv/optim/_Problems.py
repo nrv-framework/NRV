@@ -17,38 +17,7 @@ import sys
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
-n_core_optim = 3
-swarm_CF = None
-
-
-def cost_function_swarm_from_particle(cost_function_part,**kwargs):
-    """
-    Generate a cost function for a swarm from a cost function for a particle
-
-    Parameters
-    ----------
-    cost_function_part    : func
-        cost function return a cost (float) from a particle (1-dimensional array)
-    verbose      : tupple
-        if True, print a progress bar for updated whenby default True
-
-    Returns
-    -------
-    part        : np.ndarray
-        vector of values of the part in the len_part dimension
-    """
-
-    def cost_function_swarm(swarm):
-        s_l = len(swarm)
-        costs = np.zeros((s_l))
-        for i in range(s_l):
-            particle = swarm[i][:]
-            costs[i] = cost_function_part(particle, **kwargs)
-            # print("part=", particle, "c=", costs[i] )
-        return costs
-
-    return cost_function_swarm
-
+n_core_optim = None
 
 class Problem(NRV_class):
     """
@@ -76,7 +45,7 @@ class Problem(NRV_class):
         self._Optimizer = optimizer
         # For cases where optimisation is done on a swarm(groupe) of particle
         self.swarm_optimizer = False
-        self._SwarmCostFunction = None
+        # self._SwarmCostFunction = None
         self.save_problem_results = save_problem_results
         self.problem_fname = problem_fname
         self.mp_type = None
@@ -96,9 +65,18 @@ class Problem(NRV_class):
         # need to add a verification that the cost function is a scallar and so on
         self._CostFunction = cf
 
+    
     @costfunction.deleter
     def costfunction(self):
         self._CostFunction = None
+
+    def _SwarmCostFunction(self, swarm):
+        s_l = len(swarm)
+        costs = np.zeros((s_l))
+        for i in range(s_l):
+            particle = swarm[i][:]
+            costs[i] = self._CostFunction(particle)
+        return costs
 
     def compute_cost(self, X):
         return self._CostFunction(X)
@@ -124,7 +102,7 @@ class Problem(NRV_class):
         pass
 
     # Call method is where the magic happens
-    def __call__(self, _SwarmCostFunction=None, **kwargs) -> optim_results:
+    def __call__(self, **kwargs) -> optim_results:
         """
         Perform the optimization: minimze the `cost_function` using `optmizer`
 
@@ -148,15 +126,9 @@ class Problem(NRV_class):
             kwargs = self.__update_saving_parameters(**kwargs)
             if self.mp_type is None:
                 self.set_multiprocess_type()
-            if not self.swarm_optimizer or self._SwarmCostFunction:
+            if not self.swarm_optimizer:
                 results = self._Optimizer(self._CostFunction, **kwargs)
             else:
-                if _SwarmCostFunction is None:
-                    self._SwarmCostFunction = cost_function_swarm_from_particle(
-                        self._CostFunction
-                    )
-                else:
-                    self._SwarmCostFunction = _SwarmCostFunction
                 results = self._Optimizer(self._SwarmCostFunction, **kwargs)
                 results["status"] = "Completed"
         except KeyboardInterrupt:
@@ -198,29 +170,13 @@ class Problem(NRV_class):
             else:
                 #* To add number of n_core_fascicle = 1
                 #!! Bug cannot compute local method generated from cost_function_swarm_from_particle
-                #!!self._Optimizer.n_processes = n_core_optim
-                self._Optimizer.n_processes = None
+                self._Optimizer.n_processes = n_core_optim
+                #!!self._Optimizer.n_processes = None
                 self.mp_type = "optimizer"
         else:
             #* To add number of n_core_fascicle = n_core
             self.mp_type = "costfunction"
 
-
-
-    # def __wait_for_simulation(self):
-    #     slave_status = {"status": "Wait"}
-    #     try:
-    #         set_log_level("WARNING")
-    #         while slave_status["status"] == "Wait":
-    #             slave_status = MCH.master_broadcasts_to_all(slave_status)
-    #             pass_debug_info(MCH.rank, slave_status)
-    #             sys.stdout.flush()
-    #             if slave_status["status"] == "Simulate":
-    #                 self._CostFunction(slave_status["X"])
-    #                 slave_status["status"] = "Wait"
-    #     except KeyboardInterrupt:
-    #         raise KeyboardInterrupt
-    #     pass_debug_info(MCH.rank, slave_status)
 
     # additional methods
     def __update_saving_parameters(self, **kwargs):
