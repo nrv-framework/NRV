@@ -10,7 +10,6 @@ import numpy as np
 from tqdm import tqdm
 import multiprocessing as mp
 
-
 from ..backend._parameters import parameters
 from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning, pbar
@@ -701,6 +700,12 @@ class fascicle(NRV_simulable):
             axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(
                 axons_diameter, y_axons, z_axons, axons_type, self.D - delta
             )
+        
+        self.axons_diameter = axons_diameter.flatten()
+        self.axons_type = axons_type.flatten()
+        self.axons_y = y_axons.flatten()
+        self.axons_z = z_axons.flatten()
+        self.translate_axons(self.y_grav_center, self.z_grav_center)
 
 
     def fit_population_to_size(self, delta: float = 1):
@@ -1558,13 +1563,15 @@ class fascicle(NRV_simulable):
 
         # create ID for all axons
         axons_ID = np.arange(len(self.axons_diameter))
-        ## perform simulations
+
+        ## perform simulations in //
         with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode 
             __label = self.__set_pbar_label(**kwargs)
             results = list(tqdm(pool.imap(self.sim_axon, axons_ID), total=self.n_ax, desc=__label))
             pool.close()
             pool.join()
-            ## store results
+
+        #results = list(pool_results)
 
         if bckup is not None:
             self.extra_stim.model = bckup

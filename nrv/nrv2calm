@@ -155,7 +155,7 @@ if __name__ == "__main__":
             if args.n != None:
                 Ncore = args.n
             else:
-                Ncore = int(machine_config.get("NRV", "FASCICLE_CPU"))
+                Ncore = int(machine_config.get("NRV", "NMOD_CPU"))
             if Ncore > cpuCount:
                 Ncore = cpuCount
                 if args.verbosity:
