@@ -5,14 +5,15 @@ NRV-Multi-Core/Parallel computing handling.
 import numpy as np
 from ._NRV_Singleton import NRV_singleton
 
-try:
+"""try:
     import mpi4py.MPI as mpi
 
     comm = mpi.COMM_WORLD
     MCore_Flag = True
 except ImportError:
-    MCore_Flag = False
+    MCore_Flag = False"""
 
+MCore_Flag = False
 
 class Mcore_handler(metaclass=NRV_singleton):
     """

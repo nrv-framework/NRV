@@ -37,13 +37,19 @@ def init_reporter():
     ] = "%(asctime)s - %(message)s"
     rep_nrv._load_defaults()
     if MCH.do_master_only_work() and os.path.isfile("report.log"):
-        os.remove("report.log")
+        try:
+            os.remove("report.log")
+        except:
+            pass
     return rep_nrv
 
 
 def set_log_level(level, clear_log_file=False):
     if clear_log_file and MCH.do_master_only_work() and os.path.isfile("report.log"):
-        os.remove("report.log")
+        try:
+            os.remove("report.log")
+        except:
+            pass
     if level is not None:
         rep_nrv._default_config["loggers"][""]["level"] = level
         rep_nrv._load_defaults()

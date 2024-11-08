@@ -319,6 +319,7 @@ class FEMResults(NRV_class):
             self.midpoint_tree = create_midpoint_tree(self.domain, self.tdim, self.entities)
             self.tree = bb_tree(self.domain, self.tdim)
         # Find cells whose bounding-box collide with the the points
+
         cells_candidates = compute_collisions_points(self.tree, X)
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)

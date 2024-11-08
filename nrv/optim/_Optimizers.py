@@ -20,7 +20,7 @@ import scipy.optimize as scpopt
 from ..backend._NRV_Class import NRV_class
 from ..backend._parameters import parameters
 from ..backend._log_interface import set_log_level, rise_error, rise_warning
-from ..backend._MCore import MCH
+
 from .optim_utils._OptimResults import optim_results
 
 dir_path = parameters.nrv_path + "/_misc"
@@ -368,7 +368,6 @@ class PSO_optimizer(Optimizer):
         self.options = options
         self.maxiter = maxiter
         self.n_processes = n_processes
-        self.ncore = MCH.size
         self.bounds = bounds
         self.init_pos = init_pos
         self.print_time = print_time
@@ -400,28 +399,27 @@ class PSO_optimizer(Optimizer):
             min_bound = min(self.bounds) * np.ones(self.dimensions)
             return (min_bound, max_bound)
 
-    def __mproc_handling(self):
-        if not MCH.is_alone():
-            # prevent using MPI and multprocessing at the same time
-            # MPI: parralize inside the cost function
-            # multiprocessing: parralellize the swarm
-            # (!!enhancement: do the latter with MPI parralellizing cost_function_swarm_from_particle)
-            if self.n_processes is not None:
-                rise_warning(
-                    "multiprocessing and MPI should not be mixed",
-                    "n_processes set to None",
-                )
-                self.n_processes = None
-        elif self.n_processes != None and self.n_processes > cpu_count() - 1:
-            answer = input(
-                "Number of process higher than number of cpu\n"
-                + "continue with one process (Y/n)\n"
-            )
-            if answer == "Y":
-                self.n_processes = None
-            else:
-                print("Terminated")
-                return False
+    # def __mproc_handling(self):
+    #         # prevent using MPI and multprocessing at the same time
+    #         # MPI: parralize inside the cost function
+    #         # multiprocessing: parralellize the swarm
+    #         # (!!enhancement: do the latter with MPI parralellizing cost_function_swarm_from_particle)
+    #         if self.n_processes is not None:
+    #             rise_warning(
+    #                 "multiprocessing and MPI should not be mixed",
+    #                 "n_processes set to None",
+    #             )
+    #             self.n_processes = None
+    #     elif self.n_processes != None and self.n_processes > cpu_count() - 1:
+    #         answer = input(
+    #             "Number of process higher than number of cpu\n"
+    #             + "continue with one process (Y/n)\n"
+    #         )
+    #         if answer == "Y":
+    #             self.n_processes = None
+    #         else:
+    #             print("Terminated")
+    #             return False
 
     def minimize(self, f_swarm: callable, **kwargs) -> optim_results:
         """
@@ -440,7 +438,7 @@ class PSO_optimizer(Optimizer):
         optim_results
             results of the optimization
         """
-        self.__mproc_handling()
+        # self.__mproc_handling()
         results = super().minimize(f_swarm, **kwargs)
 
         verbose = parameters.get_nrv_verbosity() > 2

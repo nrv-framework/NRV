@@ -1,4 +1,5 @@
 import nrv
 
-nrv.CONFIG.display_machine_config()
-print('done')
+if __name__ == "__main__":
+    nrv.CONFIG.display_machine_config()
+    print('done')

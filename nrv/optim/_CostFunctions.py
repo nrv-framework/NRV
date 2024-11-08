@@ -5,7 +5,6 @@ NRV-:class:`.cost_function` handling.
 import numpy as np
 from ..backend._NRV_Class import NRV_class, load_any
 from ..backend._NRV_Simulable import NRV_simulable, sim_results
-from ..backend._MCore import MCH, synchronize_processes
 from ..backend._log_interface import rise_warning
 
 
@@ -108,7 +107,7 @@ class cost_function(NRV_class):
         if self.static_context is not None:
             static_context = load_any(self.static_context)
             self.static_t_sim = static_context.t_sim
-            if not MCH.is_alone() and static_context.nrv_type in ["fascicle", "nerve"]:
+            if static_context.nrv_type in ["fascicle", "nerve"]:
                 self._MCore_CostFunction = True
             del static_context
 
@@ -256,16 +255,6 @@ class cost_function(NRV_class):
         float
             cost corresponding to the input parameter
         """
-        # Broadcasting to slave wich are waiting for simulation
-        if MCH.do_master_only_work() and self._MCore_CostFunction:
-            if not self.__cost_function_ok:
-                return -1
-            slave_status = {"status": "Simulate", "X": X}
-            MCH.master_broadcasts_array_to_all(slave_status)
-
-        if self._MCore_CostFunction:
-            synchronize_processes()
-
         # Filter
         if self.filter is not None:
             X_ = self.filter(X)
@@ -281,19 +270,17 @@ class cost_function(NRV_class):
         self.results = self.simulate_context()
 
         # Cost calculation
-        if MCH.do_master_only_work() or not self._MCore_CostFunction:
-            self.cost = self.cost_evaluation(self.results, **self.kwargs_CE)
-            # Savings
-            if self.saver is not None:
-                data = {
-                    "position": X,
-                    "context": self.simulation_context,
-                    "results": self.results,
-                    "cost": self.cost,
-                }
-                self.saver(data, file_name=self.file_name)
-            if not self.keep_results:
-                self.__clear_results()
-            return self.cost
-        else:
-            return 0
+        self.cost = self.cost_evaluation(self.results, **self.kwargs_CE)
+        # Savings
+        if self.saver is not None:
+            data = {
+                "position": X,
+                "context": self.simulation_context,
+                "results": self.results,
+                "cost": self.cost,
+            }
+            self.saver(data, file_name=self.file_name)
+        if not self.keep_results:
+            self.__clear_results()
+        return self.cost
+

@@ -1,60 +1,60 @@
 import nrv
 import time
+if __name__ == "__main__":
+    ## Results mesh_files
+    mesh_file = "./unitary_tests/results/mesh/110_mesh"
+    out_file = "./unitary_tests/results/outputs/110_simfile"
 
-## Results mesh_files
-mesh_file = "./unitary_tests/results/mesh/110_mesh"
-out_file = "./unitary_tests/results/outputs/110_simfile"
+    ## Mesh creation
+    t1 = time.time()
 
-## Mesh creation
-t1 = time.time()
+    L=15000         #um
+    Outer_D = 10    #mm
+    Nerve_D = 5000 #um
 
-L=15000         #um
-Outer_D = 10    #mm
-Nerve_D = 5000 #um
+    contact_length = 1000
 
-contact_length = 1000
+    mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D)
 
-mesh = nrv.NerveMshCreator(Length=L,Outer_D=Outer_D,Nerve_D=Nerve_D)
-
-mesh.reshape_nerve(res=400)
-
-
-mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=L/2, contact_width = None, contact_length = 100,res=50)
-
-mesh.compute_mesh()
-#mesh.save(mesh_file)
-#mesh.visualize()
-
-#del mesh
-
-t2 = time.time()
-print('mesh generated in '+str(t2 - t1)+' s')
-
-## FEM Simulation
-param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
-param.add_domain(mesh_domain=0,mat_file="saline")
-param.add_domain(mesh_domain=2,mat_file="epineurium")
-
-param.add_domain(mesh_domain=100,mat_file="platinum")
-param.add_domain(mesh_domain=102,mat_file="platinum")
-param.add_domain(mesh_domain=104,mat_file="platinum")
-param.add_domain(mesh_domain=106,mat_file="platinum")
-
-param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0)
-param.add_boundary(mesh_domain=103, btype='Neuman', variable='jstim')
-param.add_boundary(mesh_domain=107, btype='Neuman', variable='_jstim')
-
-data = param.save()
-sim1 = nrv.FEMSimulation(data=data, mesh=mesh)
+    mesh.reshape_nerve(res=400)
 
 
-jstim = 2e-3
-sim1.setup_sim(jstim=jstim, _jstim=-jstim)
+    mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=L/2, contact_width = None, contact_length = 100,res=50)
 
-sim1.solve_and_save_sim(out_file)
+    mesh.compute_mesh()
+    #mesh.save(mesh_file)
+    #mesh.visualize()
 
-t3 = time.time()
-print('FEM solved in '+str(t3 - t2)+' s')
+    #del mesh
+
+    t2 = time.time()
+    print('mesh generated in '+str(t2 - t1)+' s')
+
+    ## FEM Simulation
+    param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
+    param.add_domain(mesh_domain=0,mat_file="saline")
+    param.add_domain(mesh_domain=2,mat_file="epineurium")
+
+    param.add_domain(mesh_domain=100,mat_file="platinum")
+    param.add_domain(mesh_domain=102,mat_file="platinum")
+    param.add_domain(mesh_domain=104,mat_file="platinum")
+    param.add_domain(mesh_domain=106,mat_file="platinum")
+
+    param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0)
+    param.add_boundary(mesh_domain=103, btype='Neuman', variable='jstim')
+    param.add_boundary(mesh_domain=107, btype='Neuman', variable='_jstim')
+
+    data = param.save()
+    sim1 = nrv.FEMSimulation(data=data, mesh=mesh)
+
+
+    jstim = 2e-3
+    sim1.setup_sim(jstim=jstim, _jstim=-jstim)
+
+    sim1.solve_and_save_sim(out_file)
+
+    t3 = time.time()
+    print('FEM solved in '+str(t3 - t2)+' s')
 
 
 

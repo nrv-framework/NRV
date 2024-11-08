@@ -781,16 +781,17 @@ class recorder(NRV_class):
         else:
             pass
 
-    def gather_all_recordings(self, master_computed=True):
+    def gather_all_recordings(self, results:list[dict]):
         """
         Gather all recordings computed by each cores in case of parallel simulation (fascicle
         level), sum de result and propagate final extracellular potential to each core.
         """
         if not self.is_empty():
-            if not master_computed:
-                self.__update_master_t()
-
-            for point in self.recording_points:
+            reclist = [res["recorder"] for res in results]
+            self.t = reclist[0]["t"]
+            for i, point in enumerate(self.recording_points):
                 if point.recording is None:
                     point.recording = 0.0
-                point.recording = MCH.sum_jobs(point.recording)
+                for rec in reclist:
+                    point.recording += np.array(rec["recording_points"][i]["recording"])
+
