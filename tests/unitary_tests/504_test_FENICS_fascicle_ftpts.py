@@ -15,6 +15,14 @@ if __name__ == "__main__":
     t_start = time.time()
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
 
+    LIFEfile = DIR + 'figures/504_fascicle_LIFE.json'
+
+    PSfile = DIR + 'figures/504_fascicle_PS.json'
+
+    N = 75
+    t_start = time.time()
+    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(N, M_stat="Ochoa_M")
+
 
     t1 = time.time()
     t2 = time.time()
@@ -28,7 +36,7 @@ if __name__ == "__main__":
     fascicle_1.define_length(L)
     fascicle_1.define_circular_contour(d)
     fascicle_1.fill_with_population(axons_diameters, axons_type, delta=0.4)
-    fascicle_1.fit_circular_contour(Delta = 0.1)
+    fascicle_1.fit_circular_contour(delta = 0.1)
     fascicle_1.generate_random_NoR_position()
     t2 = time.time()
 
@@ -118,6 +126,6 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(figsize=(6,6))
     fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
-    exit()
     fascicle_2.plot(ax, num=True)
     plt.savefig(DIR + 'figures/504_B.png')
+

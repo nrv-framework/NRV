@@ -61,18 +61,35 @@ class nerve_results(sim_results):
         np.ndarray (self.n_ax, 2)
             _description_
         """
+        return self.axons_pop_properties[:,[0,2]]
+
+    @property
+    def axons_pop_properties(self) -> np.ndarray:
+        """
+        Porperties of axons population of each fascicles
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 6)
+            ndarray gathering, for all axons in the nerve, corresponding fascicle and axon IDs, myelinating type, diameter and y and z positions.
+        """
         fasc_keys = self.fascicle_keys
-        _mye = np.zeros((self.n_ax, 2))
+        _mye = np.zeros((self.n_ax, 6))
         _offset = 0
         for key in fasc_keys:
-            fasc_mye = np.vstack(
+            fasc_n_ax = self[key].n_ax
+            fasc_axons = np.vstack(
                 (
-                    self[key].ID * np.ones(self[key].n_ax),
+                    self[key].ID * np.ones(fasc_n_ax),
+                    np.arange(fasc_n_ax),
                     self[key].axons_type,
+                    self[key].axons_diameter,
+                    self[key].axons_y,
+                    self[key].axons_z,
                 )
-            )
-            _mye[:, _offset : _offset + self[key].n_ax] = fasc_mye.T
-            _offset += self[key].n_ax
+            ).T
+            _mye[_offset : _offset + fasc_n_ax, :] = fasc_axons
+            _offset += fasc_n_ax
         return _mye
 
     def get_fascicle_results(self, ID: int) -> fascicle_results:
@@ -81,7 +98,9 @@ class nerve_results(sim_results):
         else:
             return self[f"fascicle{ID}"]
 
-    def get_fascicle_results(self, fasc_ID: int, ax_ID: int) -> axon_results:
+    def get_axon_results(self, fasc_ID: int, ax_ID: int) -> axon_results:
+        fasc_ID = int(fasc_ID)
+        ax_ID = int(ax_ID)
         if fasc_ID not in self.fascicles_IDs:
             rise_error(f"Fascicle ID: {fasc_ID} does not exists.")
         else:

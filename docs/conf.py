@@ -46,6 +46,7 @@ deps = (
     "numpy.core.multiarray",
     "numpy.linalg",
     "numpy.typing",
+    "pandas",
     "petsc4py",
     "petsc4py.PETSc",
     "psutil"

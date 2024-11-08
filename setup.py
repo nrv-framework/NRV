@@ -117,20 +117,22 @@ setup(
         'Topic :: Scientific/Engineering :: Medical Science Apps.',
         'Natural Language :: English',
     ],
-    # dependencies
+    # dependencies 
+    # * sorted by alphabetical order *
     install_requires=[
-        "gmsh",
-        "mph",
-        "numpy",
-        "scipy",
-        "neuron",
-        "matplotlib",
-        "numba",
         "ezdxf",
+        "gmsh",
         "icecream",
-        "pyswarms",
-        "tqdm",
+        "matplotlib",
+        "mph",
+        "neuron",
+        "numba",
+        "numpy",
+        "pandas",
         "psutil",
+        "pyswarms",
+        "scipy",
+        "tqdm",
     ],  # external packages as dependencies
     python_requires=">=3.12",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script

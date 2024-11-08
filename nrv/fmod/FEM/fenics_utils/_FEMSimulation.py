@@ -731,13 +731,15 @@ class FEMSimulation(FEMParameters):
             S = self.comm.bcast(S, root=0)
         return S
 
-    def get_domain_potential(self, dom_id, dim=2, space=0):
+    def get_domain_potential(self, dom_id, dim=2, space=0, surf=None):
         if dim == 2:
             do = self.ds
         elif dim == 3:
             do = self.dx
-        Surf = self.get_surface(dom_id)
+        if surf is None:
+            surf = self.get_surface(dom_id)
         if self.to_merge:
-            return assemble_scalar(form(self.vout * do(dom_id))) / Surf * V
+            v_surf = assemble_scalar(form(self.vout * do(dom_id)))
         else:
-            return assemble_scalar(form(self.vout[space] * do(dom_id))) / Surf * V
+            v_surf = assemble_scalar(form(self.vout[space] * do(dom_id))) 
+        return v_surf / surf * V

@@ -24,11 +24,12 @@ if __name__ == "__main__":
     D = 500				# diameter, in um
     L = 10000 			# length, in um
 
+
     fascicle_1 = nrv.fascicle(ID=76)
     fascicle_1.define_length(L)
     fascicle_1.define_circular_contour(D)
     fascicle_1.fill_with_population(axons_diameters, axons_type, delta=0.4)
-    fascicle_1.fit_circular_contour(Delta = 0.1)
+    fascicle_1.fit_circular_contour(delta = 0.1)
     fascicle_1.generate_random_NoR_position()
     t2 = time.time()
 

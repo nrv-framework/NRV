@@ -24,11 +24,19 @@ if __name__ == "__main__":
     d = 500				# diameter, in um
     L = 10000 			# length, in um
 
+    t1 = time.time()
+    t2 = time.time()
+    print('Population of '+str(N)+' axons generated in '+str(t1 - t_start)+' s')
+
+
+    d = 500				# diameter, in um
+    L = 10000 			# length, in um
+
     fascicle_1 = nrv.fascicle(ID=504)
     fascicle_1.define_length(L)
     fascicle_1.define_circular_contour(d)
     fascicle_1.fill_with_population(axons_diameters, axons_type, delta=0.4)
-    fascicle_1.fit_circular_contour(Delta = 0.1)
+    fascicle_1.fit_circular_contour(delta = 0.1)
     fascicle_1.generate_random_NoR_position()
     t2 = time.time()
 
@@ -118,6 +126,6 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(figsize=(6,6))
     fascicle_2.simulate(t_sim=10, save_path='./unitary_tests/figures/', verbose=True)
-
     fascicle_2.plot(ax, num=True)
     plt.savefig(DIR + 'figures/504_B.png')
+

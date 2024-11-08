@@ -199,6 +199,15 @@ class FEMResults(NRV_class):
         self.elem = elem
         self.vout = vout
         self.comm = comm
+        
+        #For eval() serialized calls acceleration
+        self.is_evaluated = False
+        self.tdim = None
+        self.n_entities_local = None
+        self.entities = None
+        self.midpoint_tree = None
+        self.tree = None
+
 
     def set_sim_result(
         self, mesh_file="", domain=None, V=None, elem=None, vout=None, comm=None
@@ -299,16 +308,19 @@ class FEMResults(NRV_class):
         N = len(X)
         cells = []
         points_on_proc = []
-        tdim = self.domain.geometry.dim
-        n_entities_local = (
-            self.domain.topology.index_map(tdim).size_local
-            + self.domain.topology.index_map(tdim).num_ghosts
-        )
-        entities = np.arange(n_entities_local, dtype=np.int32)
-        midpoint_tree = create_midpoint_tree(self.domain, tdim, entities)
-        tree = bb_tree(self.domain, tdim)
+        if self.is_evaluated is False:
+            self.is_evaluated = True
+            self.tdim = self.domain.geometry.dim
+            self.n_entities_local = (
+            self.domain.topology.index_map(self.tdim).size_local
+            + self.domain.topology.index_map(self.tdim).num_ghosts
+            )
+            self.entities = np.arange(self.n_entities_local, dtype=np.int32)
+            self.midpoint_tree = create_midpoint_tree(self.domain, self.tdim, self.entities)
+            self.tree = bb_tree(self.domain, self.tdim)
         # Find cells whose bounding-box collide with the the points
-        cells_candidates = compute_collisions_points(tree, X)
+
+        cells_candidates = compute_collisions_points(self.tree, X)
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):
@@ -316,7 +328,7 @@ class FEMResults(NRV_class):
             # point not in the mesh
             if len(cell) == 0:
                 cell, x_closest = closest_point_in_mesh(
-                    self.domain, X[i], tree, tdim, midpoint_tree
+                    self.domain, X[i], self.tree, self.tdim, self.midpoint_tree
                 )
                 rise_warning(
                     X[i], " not found in mesh, value of ", x_closest, " reused"

@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import time
 
 if __name__ == "__main__":
-    #nrv.parameters.set_nrv_verbosity(4)
+
+#nrv.parameters.set_nrv_verbosity(4)
     test_num = 506
     DIR = "./unitary_tests/"
     fasc_file = DIR + "figures/506_fascicle_1.json"
@@ -28,7 +29,7 @@ if __name__ == "__main__":
     fascicle_1.define_length(L)
     fascicle_1.define_circular_contour(d)
     fascicle_1.fill_with_population(axons_diameters, axons_type, delta=5)
-    fascicle_1.fit_circular_contour(Delta = 0.1)
+    fascicle_1.fit_circular_contour(delta = 0.1)
     fascicle_1.generate_random_NoR_position()
     t2 = time.time()
 
@@ -104,8 +105,8 @@ if __name__ == "__main__":
 
     for k in range(len(loaded_rec.recording_points)):
         print(len(loaded_rec.t)==len(loaded_rec.recording_points[k].recording))
-    exit()
-        
+
+
     if nrv.MCH.do_master_only_work():
         fig, ax = plt.subplots(figsize=(6,6))
         fascicle_2.plot(ax, num=True)
@@ -120,11 +121,3 @@ if __name__ == "__main__":
 
         fig = plt.figure(figsize=(8,6))
         axs = []
-        for k in range(len(loaded_rec.recording_points)):
-            axs.append(plt.subplot(3,1,k+1))
-            axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording)
-            axs[k].set_xlabel("time (ms)")
-            axs[k].set_ylabel("elec. "+str(k)+" potential (mV)")
-            axs[k].grid()
-        plt.tight_layout()
-        plt.savefig("./unitary_tests/figures/506_C.png")

@@ -1593,15 +1593,16 @@ class axon_results(sim_results):
 
     def get_membrane_conductivity(
         self,
-        x: float | None = 0,
-        t: float | None = 0,
+        x: float | None = None,
+        t: float | None = None,
+        i_x: int | np.ndarray | None = None,
+        i_t: int | np.ndarray | None = None,
         unit: str = "S/cm**2",
         mem_th: float = 7 * nm,
     ) -> float:
         """
         get the membrane conductivity at a position x and a time t
-
-
+         
         Parameters
         ----------
         x : float, optional
@@ -1627,15 +1628,17 @@ class axon_results(sim_results):
         n_t = len(self["g_mem"][0])
         n_x = len(self["g_mem"][:, 0])
         if t is None:
-            i_t = np.arange(n_t)
+            if i_t is None:
+                i_t = np.arange(n_t)
         else:
             i_t = int(n_t * t / self["t_sim"])
         if x is None:
-            i_x = np.arange(n_x)
+            if i_x is None:
+                i_x = np.arange(n_x)
         else:
             i_x = np.argmin(abs(self["x_rec"] - x))
         g = self["g_mem"][i_x, i_t]
-
+    
         # Surface conductivity in [S]/([m]*[m])
         if "2" in unit:
             return convert(g, "S/cm**2", unit)
@@ -1677,8 +1680,10 @@ class axon_results(sim_results):
     def get_membrane_complexe_admitance(
         self,
         f: float = 1.0,
-        x: float = 0,
-        t: float = 0,
+        x: float | None = None,
+        t: float | None = None,
+        i_x: int | np.ndarray | None = None,
+        i_t: int | np.ndarray | None = None,
         unit: str = "S/m",
         mem_th: float = 7 * nm,
     ) -> np.array:
@@ -1699,7 +1704,7 @@ class axon_results(sim_results):
             membrane thickness in um, by default 7*nm
         """
         c = self.get_membrane_capacitance(mem_th=mem_th)
-        g = self.get_membrane_conductivity(x=x, t=t, mem_th=mem_th)
+        g = self.get_membrane_conductivity(x=x, t=t, i_x=i_x, i_t=i_t, mem_th=mem_th)
         f_mem = g / (2 * np.pi * c)
 
         # in [MHz] as g_mem in [S/cm^{2}] and c_mem [uF/cm^{2}]
