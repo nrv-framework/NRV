@@ -354,7 +354,7 @@ def compute_complex_admitance(f: float|np.ndarray, g: float|np.ndarray, fc: floa
     complex
         complex admitance
     """
-    if isinstance(g, np.ndarray):
+    if isinstance(g, np.ndarray) and isinstance(f, np.ndarray):
         return g * (1 + 1j * f[:, np.newaxis]  / fc)
 
     return g * (1 + 1j * f / fc)

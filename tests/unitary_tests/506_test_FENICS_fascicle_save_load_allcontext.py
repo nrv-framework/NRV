@@ -92,12 +92,14 @@ if __name__ == "__main__":
     fascicle_1.save(fname=fasc_file,extracel_context=True,intracel_context=True, rec_context=True)
     nrv.synchronize_processes()
     #fascicle_2 = nrv.fascicle()
-    fascicle_2 = nrv.load_any(fasc_file,extracel_context=True,intracel_context=True, rec_context=True)
+    fascicle_2 = nrv.load_fascicle(fasc_file,extracel_context=True,intracel_context=True, rec_context=True)
+
+    
 
 
     t4 = time.time()
     print("fascicle saved in "+str(t4 - t0)+" s")
-    fascicle_2.simulate(t_sim=5, save_path="./unitary_tests/figures/", verbose=True)
+    f_results = fascicle_2.simulate(t_sim=5, save_path="./unitary_tests/figures/", verbose=True)
     t5 = time.time()
     print("Total time "+str(t5 - t0)+" s")
     loaded_rec = fascicle_2.recorder
@@ -107,17 +109,14 @@ if __name__ == "__main__":
         print(len(loaded_rec.t)==len(loaded_rec.recording_points[k].recording))
 
 
-    if nrv.MCH.do_master_only_work():
-        fig, ax = plt.subplots(figsize=(6,6))
-        fascicle_2.plot(ax, num=True)
 
-        DIR_fasc = "./unitary_tests/figures/Fascicle_"+str(test_num)+"/"
-        plt.savefig(DIR+ "figures/506_A.png")
+    fig, ax = plt.subplots(figsize=(6,6))
+    fascicle_2.plot(ax, num=True)
 
-        fasc_state = nrv.fascicular_state(DIR_fasc, save=True, saving_file=DIR_fasc+"506_Facsicular_state.json")
-        fig, ax = plt.subplots(figsize=(8,8))
-        nrv.plot_fasc_state(fasc_state, ax, num=True)
-        plt.savefig("./unitary_tests/figures/506_B.png")
 
-        fig = plt.figure(figsize=(8,6))
-        axs = []
+    fig, ax = plt.subplots(figsize=(8,8))
+    f_results.plot_recruited_fibers(ax)
+    plt.savefig("./unitary_tests/figures/506_B.png")
+
+    fig = plt.figure(figsize=(8,6))
+    axs = []

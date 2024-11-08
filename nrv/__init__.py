@@ -113,9 +113,11 @@ from .nmod.results._nerve_results import *
 
 from .utils._saving_handler import *
 from .utils._nrv_function import *
+from .utils._units import *
 from .ui._axon_postprocessing import *
 from .ui._axon_simulations import *
 from .ui._fascicle_postprocessing import *
+from .ui._spec_loaders import *
 
 from .optim._CostFunctions import *
 from .optim._Optimizers import *
