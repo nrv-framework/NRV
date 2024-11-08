@@ -5,6 +5,7 @@ All notable changes to NRV are sumed up in this file.
 ## [1.1.3] - XXXX-XX-XX
 ### Added
 - improved `eval` in `_FEMResults` for serialized calls (added state variables)
+- `spec_loader.py` mostly for typing
 
 ### Fixed
 

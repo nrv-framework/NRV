@@ -326,7 +326,7 @@ class NRV_class(metaclass=ABCMeta):
         return self.__dict__
 
 
-def load_any(data, **kwargs):
+def load_any(data, **kwargs)->NRV_class:
     """
     loads any type of NRV object from a json file or a dictionary generated with NRV_class.save
 

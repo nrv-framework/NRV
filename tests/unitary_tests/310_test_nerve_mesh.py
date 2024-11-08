@@ -25,7 +25,6 @@ if nrv.MCH.do_master_only_work():
     print(mesh.n_core)
     mesh.compute_mesh()
     mesh.save(mesh_file_m)
-    exit()
 
     fascicle = nrv.fascicle(ID=test_num)
     fascicle.axons_diameter = np.asarray([1, 1, 2])
@@ -42,7 +41,7 @@ if nrv.MCH.do_master_only_work():
     mesh = nrv.mesh_from_fascicle(fascicle, Length=100,Outer_D=None, Nerve_D=400)
     print(mesh.n_core)
     mesh.compute_mesh()
-    mesh.save(mesh_file)
-    plt.show()
+    mesh.save(mesh_file_u)
+    # plt.show()
 
 
