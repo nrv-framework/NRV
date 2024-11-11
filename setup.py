@@ -131,8 +131,8 @@ setup(
         "pandas",
         "psutil",
         "pyswarms",
+        "rich",
         "scipy",
-        "tqdm",
     ],  # external packages as dependencies
     python_requires=">=3.12",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script

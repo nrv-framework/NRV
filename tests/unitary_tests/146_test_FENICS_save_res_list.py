@@ -1,6 +1,6 @@
 import nrv
 import time
-from tqdm import tqdm
+from rich.progress import track
 
 if __name__ == "__main__":
     nrv.parameters.set_nrv_verbosity(2)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     sim1 = nrv.FEMSimulation(data=data, elem=("Lagrange", 1))
     res = []
     elec = {"E0":jstim, "E1":0, "E2":0, "E3":0}
-    for i in tqdm(range(4)):
+    for i in track(range(4)):
         elec["E"+str(i%4)] = jstim
         elec["E"+str((i-1)%4)] = 0
         sim1.setup_sim(**elec)

@@ -7,7 +7,7 @@ For the moment, the log interface is managed using the pyswarms reporter class t
 import logging
 import os
 import sys
-import tqdm
+from rich.progress import track
 from icecream import ic
 from time import sleep
 
@@ -269,7 +269,7 @@ class pbar:
         if not MCH.is_alone():
             label = f"{MCH.rank}: " + label
         self.__instantiate_delay()
-        self._pbar = tqdm.tqdm(total=n_tot, desc=label, position=MCH.rank)
+        self._pbar = track(total=n_tot, desc=label, position=MCH.rank)
 
     def __del__(self):
         del self._pbar

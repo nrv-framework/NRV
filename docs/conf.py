@@ -54,6 +54,8 @@ deps = (
     "pyswarms",
     "pyswarms.backend.topology",
     "pyswarms.utils",
+    "rich",
+    "rich.progress",
     "scipy",
     "scipy.constants",
     "scipy.interpolate",
@@ -63,7 +65,6 @@ deps = (
     "scipy.sparse.csgraph",
     "scipy.spatial",
     "scipy.stats",
-    "tqdm",
     "ufl",
     "ufl.finiteelement",
 )

@@ -5,6 +5,7 @@ import sys
 from typing import Callable
 from time import perf_counter
 import multiprocessing as mp
+from rich.progress import track
 from tqdm import tqdm
 from functools import partial
 from itertools import repeat
@@ -78,7 +79,7 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
     p_search_func = partial(search_func,**c_kwargs)
     with mp.get_context('spawn').Pool(tot) as pool: 
         args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
-        results = list(tqdm(pool.starmap(set_args_kwargs,args_for_starmap)))
+        results = list(track(pool.starmap(set_args_kwargs,args_for_starmap)))
         pool.close()
         pool.join()
         return(results)

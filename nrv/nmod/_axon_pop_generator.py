@@ -4,7 +4,7 @@ Axon population generator usefull functions.
 import faulthandler 
 import math
 import os
-from tqdm import tqdm
+from rich.progress import track
 
 import matplotlib.pyplot as plt
 from itertools import combinations
@@ -702,13 +702,13 @@ def axon_packer(diameters: np.array,
 
     id_others = get_axon_other_id(ids)
 
-    #for _ in tqdm(range (n_iter)):
+    #for _ in track(range (n_iter)):
     #    pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
     if monitor:
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.set_axis_off()
         fig.add_axes(ax)
-    for i in tqdm(range (n_iter)):
+    for i in track(range (n_iter)):
         pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
         
         if monitor and i %n_monitor == 0:

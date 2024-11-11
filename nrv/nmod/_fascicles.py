@@ -7,8 +7,8 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-from tqdm import tqdm
 import multiprocessing as mp
+from rich import progress
 
 from ..backend._parameters import parameters
 from ..backend._file_handler import *
@@ -1562,25 +1562,39 @@ class fascicle(NRV_simulable):
                 del self.extra_stim.model
 
         # create ID for all axons
-        axons_ID = np.arange(len(self.axons_diameter))
+        axons_ID = np.arange(len(self.axons_diameter), )
 
         ## perform simulations in //
-        with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode 
+        results = []
+        # Todo add upperlevel progress handler in nerve.simulate()
+        with progress.Progress(
+            "[progress.description]{task.description}",
+            "{task.completed} / {task.total}",
+            progress.BarColumn(),
+            "[progress.percentage]{task.percentage:>3.0f}%",
+            progress.TimeRemainingColumn(),
+            progress.TimeElapsedColumn(),
+        ) as pg:
             __label = self.__set_pbar_label(**kwargs)
-            results = list(tqdm(pool.imap(self.sim_axon, axons_ID), total=self.n_ax, desc=__label))
-            pool.close()
-            pool.join()
+            task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
+            with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
+                for result in pool.imap(self.sim_axon, axons_ID):
+                    results.append(result)            
+                    pg.advance(task_id)
+                    pg.refresh()
+                pool.close()
+                pool.join()
 
         #results = list(pool_results)
 
         if bckup is not None:
             self.extra_stim.model = bckup
-
+        # Todo see if it can be added to // for loop
         if self.record:
             self.recorder.gather_all_recordings(results)
             for i in range(self.n_ax):
                 results[i].pop("recorder")
-
+        # Todo see if it can be added to // for loop
         if not self.return_parameters_only:
             for k in axons_ID:
                 fasc_sim.update({"axon" + str(k): results[k]})

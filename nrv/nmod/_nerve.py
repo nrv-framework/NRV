@@ -999,13 +999,10 @@ class nerve(NRV_simulable):
         if self.verbose:
             pass_info("...computing electrodes footprint")
         
-        bckup = None
 
         if self.__footprint_to_compute and self.has_FEM_extracel:
             self.compute_electrodes_footprints()
             self.loaded_footprints = True
-            bckup = self.extra_stim.model       #Can't be passed to mp pool :'(
-            del self.extra_stim.model
 
         # Simulate all fascicles
         fasc_kwargs = kwargs
@@ -1024,9 +1021,6 @@ class nerve(NRV_simulable):
             )
         if self.verbose:
             pass_info("...Done!")
-        
-        if bckup is not None:
-            self.extra_stim.model = bckup
         # dirty hack to force NRV_class type when saved
         if "extra_stim" in nerve_sim:
             nerve_sim["extra_stim"] = load_any(nerve_sim["extra_stim"])
