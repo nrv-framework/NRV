@@ -235,7 +235,7 @@ class nerve_gen_two_gamma(rv_continuous):
         )
 
 
-def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
+def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None, one_gamma:bool = False):
     """
     Create a statistical generator (type rv_continuous) for a given statistic.
 
@@ -249,7 +249,9 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         minimal diameter to consider, in um. If None, the minimal value of the statistic is taken
     dmax        : float
         minimal diameter to consider, in um. If None, the maximal value of the statistic plus bin size is taken
-
+    one_gamma    : bool
+        If true, the stat generator is forced to one gamma only
+        
     Returns
     -------
     generator   : rv_continuous
@@ -269,7 +271,7 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         bin_size = diameters[1] - diameters[0]
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
-    if myelinated and dmax > 10:
+    if myelinated and dmax > 10 and not one_gamma:
         popt1, pcov1 = curve_fit(
             two_Gamma,
             xdata=diameters,
