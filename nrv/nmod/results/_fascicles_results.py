@@ -361,9 +361,9 @@ class fascicle_results(sim_results):
                         alpha=alpha,
                     )
                 )
-
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+            if "extra_stim" in self:
+                if self.extra_stim is not None:
+                    self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
             if num:
                 for k in range(self.n_ax):
                     axes.text(

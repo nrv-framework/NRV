@@ -12,8 +12,8 @@ from rich import progress
 
 from ..backend._parameters import parameters
 from ..backend._file_handler import *
-from ..backend._log_interface import pass_info, rise_warning, pbar
-from ..backend._NRV_Simulable import NRV_simulable, sim_results
+from ..backend._log_interface import pass_info, rise_warning
+from ..backend._NRV_Simulable import NRV_simulable
 from ..fmod._extracellular import *
 from ..fmod._recording import *
 from ..ui._axon_postprocessing import *
@@ -38,7 +38,7 @@ builtin_postproc_functions = {
     "is_recruited": is_recruited,
     "is_blocked": is_blocked,
     "is_onset": is_blocked,
-    "sample_g_mem": sample_g_mem,
+    "sample_keys": sample_keys,
     "vmem_plot": vmem_plot,
     "raster_plot": raster_plot,
 }
@@ -1148,6 +1148,17 @@ class fascicle(NRV_simulable):
         self.intra_stim_amplitude.append(amplitude)
         self.intra_stim_ON.append(ax_list)
         self.N_intra += 1
+
+    def clear_I_clamp(self):
+        """
+        Clear any I-clamp attached to the fascicle
+        """
+        self.N_intra = 0
+        self.intra_stim_position = []
+        self.intra_stim_t_start = []
+        self.intra_stim_duration = []
+        self.intra_stim_amplitude = []
+        self.intra_stim_ON = []
 
     ## RECORDING MECHANIMS
     def attach_extracellular_recorder(self, rec: recorder):

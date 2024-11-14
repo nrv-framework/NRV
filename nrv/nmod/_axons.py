@@ -1222,6 +1222,25 @@ class axon(NRV_simulable):
                 axon_sim["extracellular_stimuli"] = stimuli_list
                 axon_sim["extracellular_stimuli_t"] = stimuli_time_list
         return axon_sim
+    
+
+    def clear_I_Clamp(self):
+        """
+        Clear any I-clamp attached to the axon
+        """
+        self.intra_current_stim = []
+        self.intra_current_stim_positions = []
+        self.intra_current_stim_starts = []
+        self.intra_current_stim_durations = []
+        self.intra_current_stim_amplitudes = []
+
+    def clear_V_Clamp(self):
+        """
+        Clear any V-clamp attached to the axon
+        """
+        self.intra_voltage_stim = None
+        self.intra_voltage_stim_position = []
+        self.intra_voltage_stim_stimulus = None
 
     ###########################
     ## Axon abstract methods ##

@@ -910,6 +910,16 @@ class myelinated(axon):
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
+    def clear_I_Clamp(self):
+        """
+        Clear any I-clamp attached to the axon
+        """
+        self.intra_current_stim = []
+        self.intra_current_stim_positions = []
+        self.intra_current_stim_starts = []
+        self.intra_current_stim_durations = []
+        self.intra_current_stim_amplitudes = []
+
     def insert_V_Clamp_node(self, index, stimulus):
         """
         Insert a V clamp stimulation
@@ -944,6 +954,14 @@ class myelinated(axon):
         # adapt position to the number of sections
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_V_Clamp_node(index, stimulus)
+
+    def clear_V_Clamp(self):
+        """
+        Clear any V-clamp attached to the axon
+        """
+        self.intra_voltage_stim = None
+        self.intra_voltage_stim_position = []
+        self.intra_voltage_stim_stimulus = None
 
     ##############################
     ## Result recording methods ##

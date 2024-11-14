@@ -797,6 +797,14 @@ class nerve(NRV_simulable):
             )
         self.N_intra += 1
 
+    def clear_I_clamp(self):
+        """
+        Clear any I-clamp attached to the nerve
+        """
+        for fasc in self.fascicles.values():
+            fasc.clear_I_clamp()
+        self.N_intra = 0  
+
     # Extracellular
     def attach_extracellular_stimulation(self, stimulation): #: FEM_stimulation):
         """

@@ -138,6 +138,7 @@ class nerve_results(sim_results):
             number of recruited axons
         """
         fasc_keys = self.fascicle_keys
+        n_recr = 0
         for key in fasc_keys:
             fasc_res = self[key]
             n_recr += fasc_res.get_recruited_axons(ax_type=ax_type, normalize=normalize)
@@ -282,7 +283,9 @@ class nerve_results(sim_results):
                     unmyel_color=unmyel_color,
                     num=num,
                 )
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
+            
+            if "extra_stim" in self:
+                if self.extra_stim is not None:
+                    self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)
             axes.set_xlim((-1.1 * self.D / 2, 1.1 * self.D / 2))
             axes.set_ylim((-1.1 * self.D / 2, 1.1 * self.D / 2))
