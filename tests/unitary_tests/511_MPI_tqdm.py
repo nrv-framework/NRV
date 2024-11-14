@@ -4,19 +4,22 @@ import random
 from concurrent.futures import ProcessPoolExecutor
 from time import sleep
 import nrv
+import numpy as np 
 
 from rich import progress
-
 
 def long_running_fn(progress, task_id):
     len_of_task = random.randint(3, 20)  # take some random length of time
     for n in range(0, len_of_task):
-        sleep(1)  # sleep for a bit to simulate work
+        sleep(0.3)  # sleep for a bit to simulate work
         progress[task_id] = {"progress": n + 1, "total": len_of_task}
+    return np.random.rand(3)
 
 
 if __name__ == "__main__":
     n_workers = nrv.parameters.nmod_Ncores  # set this to the number of cores you have on your machine
+    n_it = 10
+    res = np.zeros((n_it, 3))
 
     with progress.Progress(
         "[progress.description]{task.description}",
@@ -34,7 +37,7 @@ if __name__ == "__main__":
             overall_progress_task = progress.add_task("[green]All jobs progress:")
 
             with ProcessPoolExecutor(max_workers=n_workers) as executor:
-                for n in range(0, 10):  # iterate over the jobs we need to run
+                for n in range(0, n_it):  # iterate over the jobs we need to run
                     # set visible false so we don't have a lot of bars all at once:
                     task_id = progress.add_task(f"task {n}", visible=False)
                     futures.append(executor.submit(long_running_fn, _progress, task_id))
@@ -59,4 +62,6 @@ if __name__ == "__main__":
 
                 # raise any errors:
                 for future in futures:
-                    future.result()
+                    print(task_id)
+                    res[task_id-1,:] += future.result()
+    print(type(res))

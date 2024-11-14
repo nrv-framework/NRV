@@ -1186,6 +1186,95 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     return(results)
 
 
+
+def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+    """
+    Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `g_mem`
+     - `x_rec`
+     - `rec`
+     - `Nseg_per_sec`
+     - `axon_path_type`
+     - `t_sim`
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    t_start_rec : float, optional
+        Lower time at whitch `g_mem` should be stored, by default 0
+    t_stop_rec : float, optional
+        Upper time at whitch `g_mem` should be stored, by default -1
+    sample_dt : None | float, optional
+        Time sample rate at which `g_mem` should be stored if None simulation dt is kept, by default None
+    x_bounds : None | tuple[float], optional
+        x-positions where to store `g_mem`, possible option:
+         - float: The values of `g_mem` are only stored at the nearest position in `x_rec`.
+         - tupple: `g_mem` values are stored for all positions included between the two boundaries.
+         - None (default): `g_mem` values are stored for all positions.
+
+    Warning
+    -------
+    ``sample_dt`` should be at multiple of the simulation ``dt`` to allow a correct undersampling. 
+    If the not ``sample_dt`` choosen will be the closer multiple of ``dt``.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    if not results["record_g_mem"]:
+        rise_error("gmem not recorded nothing will be done")
+    else:
+        if t_stop_rec < 0:
+            t_stop_rec=results.t_sim
+
+        if sample_dt is None:
+            sample_dt=results.dt
+
+        if x_bounds is None:
+            x_bounds=(0,results.L)
+
+        if np.iterable(x_bounds):
+            I_x = np.argwhere((results["x_rec"]>x_bounds[0])&(results["x_rec"]<x_bounds[1]))[:,0]
+        else:
+            x_bounds = [x_bounds]
+            I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
+
+        N_x = len(I_x)
+        i_t_min = np.argwhere(results["t"]>t_start_rec)[0][0]
+        i_t_max = np.argwhere(results["t"]<t_stop_rec)[-1][0]
+
+        t_APs = [k for k in range(i_t_min,i_t_max)]
+        t_APs = t_APs[::int(sample_dt/results.dt)]
+
+        # Under sampling to reduce memory consumption
+        results["x_rec"] = results["x_rec"][I_x] - x_bounds[0]
+        results["t"] = results["t"][t_APs]
+        for key in keys_to_sample:
+            results[key] = results[key][np.ix_(I_x, t_APs)]
+
+        ###############################
+        ## remove non nevessary data ##
+        ###############################
+        list_keys =  {
+        "x_rec",
+        "rec",
+        "Nseg_per_sec",
+        "axon_path_type",
+        "t_sim",
+        }
+        list_keys.update(keys_to_keep)
+        list_keys.update(keys_to_sample)
+        if results.ID==0:
+            list_keys.update({"t"})
+        results.remove_key(keys_to_keep=list_keys, keys_to_remove=keys_to_remove)
+    return results
+
 def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None)->axon_results:
     """
     Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.

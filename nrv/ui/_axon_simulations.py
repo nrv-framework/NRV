@@ -6,7 +6,6 @@ from typing import Callable
 from time import perf_counter
 import multiprocessing as mp
 from rich.progress import track
-from tqdm import tqdm
 from functools import partial
 from itertools import repeat
 
