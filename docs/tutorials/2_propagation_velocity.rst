@@ -123,7 +123,7 @@ the fiber from this number, rather than specifying its length directly.
     t_sim = 5
     
     ## Simulation
-    results = axon(t_sim=t_sim)
+    results = axon.simulate(t_sim=t_sim)
     
     nrv.rasterize(results, "V_mem")
     myelinated_speed = nrv.speed(results, t_start=0)
@@ -173,7 +173,7 @@ minute to calculate.
         axon1.insert_I_Clamp(0, t_start, duration, amplitude)
     
         ## Simulation
-        results = axon1(t_sim=t_sim)
+        results = axon1.simulate(t_sim=t_sim)
         del axon1
     
         nrv.rasterize(results, "V_mem")
@@ -222,7 +222,7 @@ node-of-ranvier distance increases with diameter.
         axon1.insert_I_Clamp(0, t_start, duration, amplitude)
     
         ## Simulation
-        results = axon1(t_sim=t_sim)
+        results = axon1.simulate(t_sim=t_sim)
         del axon1
     
         nrv.rasterize(results, "V_mem")
@@ -313,7 +313,7 @@ run.
             axon1 = nrv.myelinated(y, z, d, L, model=model)
             axon1.insert_I_Clamp(0, t_start, duration, amplitude)
             ## Simulation
-            results = axon1(t_sim=t_sim)
+            results = axon1.simulate(t_sim=t_sim)
             del axon1
             nrv.rasterize(results, "V_mem")
             myelinated_speed += [nrv.speed(results)]
@@ -370,7 +370,7 @@ unmyelinated models:
         for d in unmyelinated_diameters: 
             axon1 = nrv.unmyelinated(y, z, d, L, model=model)
             axon1.insert_I_Clamp(0, t_start, duration, amplitude)
-            results = axon1(t_sim=t_sim)
+            results = axon1.simulate(t_sim=t_sim)
             del axon1
             nrv.rasterize(results, "V_mem")
             unmyelinated_speed += [nrv.speed(results)]
