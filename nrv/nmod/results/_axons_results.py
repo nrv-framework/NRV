@@ -164,7 +164,7 @@ def rasterize(
     if len(t_data) :
         return (x_idx_AP, x_data[x_idx_AP], t_idx_AP, t_data[t_idx_AP])
     else:
-        return ([], [], [], [])
+        return (np.array([]), np.array([]), np.array([]), np.array([]))
 
 
 def get_first_AP(
@@ -208,7 +208,7 @@ def get_first_AP(
         return (np.array(x_APs), [0], np.array(t_APs), [0], [0])
 
     if len(t_APs) < 1:
-        return ([], [], [], [], [])
+        return (np.array([]), np.array([]), np.array([]), np.array([]), np.array([]))
 
     ordered_t_idx = np.argsort(t_APs)  # sort time indexes
 
@@ -222,7 +222,11 @@ def get_first_AP(
     t_min = t_refract
     x_ordered_unique = x_ordered[idx_unique]
     x_ordered_unique.sort()
+    if len(x_ordered_unique) < 2:
+        return (np.array([]), np.array([]), np.array([]), np.array([]), np.array([]))
+    
     x_min = np.min(np.abs(np.diff(x_ordered_unique))) * 5
+
 
     msk_unique = np.arange(len(t_ordered) - 1)
     msk_unique = [i for i in msk_unique if i not in idx_unique]
@@ -387,12 +391,14 @@ class axon_results(sim_results):
                 rise_warning(
                     f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response. \n ... Fiber considered as blocked."
                 )
-                self["blocked"] = True
+                self["blocked"] = False
                 return self["blocked"]
             if n_APs > 2:
                 rise_warning(
                     f"is_blocked in Axon {self.ID}: More than two APs are detected after the test pulse, likely due to onset response. This can cause erroneous block state estimation. \n ... Consider increasing axon's spatial discretization."
                 )
+                self["blocked"] = False
+                return self["blocked"]
 
             if self.has_AP_reached_end(
                 x_AP_test, t_AP_test
@@ -459,7 +465,8 @@ class axon_results(sim_results):
             list of the time index of each AP
         """
         # if not vm_key + "_raster_x_position" in self:
-        self.rasterize(vm_key=vm_key, clear_artifacts=False)
+        if not vm_key + "_raster_x_position" in self:
+            self.rasterize(vm_key=vm_key, clear_artifacts=False)
         x_APs = []
         x_idx_APs = []
         t_APs = []
@@ -476,12 +483,15 @@ class axon_results(sim_results):
                 x_AP, x_idx_AP, t_AP, t_idx_AP, AP_idx = get_first_AP(
                     x_raster, x_idx_raster, t_raster, t_idx_raster
                 )
-                AP_len = np.max(
-                    [
-                        self.get_AP_upward_len(x_AP, t_AP),
-                        self.get_AP_downward_len(x_AP, t_AP),
-                    ]
-                )
+                if len(x_AP) == 0:
+                    AP_len = 0
+                else:
+                    AP_len = np.max(
+                        [
+                            self.get_AP_upward_len(x_AP, t_AP),
+                            self.get_AP_downward_len(x_AP, t_AP),
+                        ]
+                    )
                 #print(f"upward: {self.get_AP_upward_len(x_AP, t_AP)} - downward: {self.get_AP_downward_len(x_AP, t_AP)}")
                 #plt.scatter(t_AP,x_AP)
                 if AP_len >= min_size:
@@ -489,10 +499,17 @@ class axon_results(sim_results):
                     t_APs.append(t_AP)
                     x_idx_APs.append(x_idx_AP)
                     t_idx_APs.append(t_idx_AP)
-                x_raster = np.delete(x_raster, AP_idx)
-                t_raster = np.delete(t_raster, AP_idx)
-                x_idx_raster = np.delete(x_idx_raster, AP_idx)
-                t_idx_raster = np.delete(t_idx_raster, AP_idx)
+                if len(AP_idx):
+                    x_raster = np.delete(x_raster, AP_idx)
+                    t_raster = np.delete(t_raster, AP_idx)
+                    x_idx_raster = np.delete(x_idx_raster, AP_idx)
+                    t_idx_raster = np.delete(t_idx_raster, AP_idx)
+                else:
+                    x_raster = np.array([])
+                    t_raster = np.array([])
+                    x_idx_raster = np.array([])
+                    t_idx_raster = np.array([])
+
         #plt.show()
         #exit()
         return (x_APs, x_idx_APs, t_APs, t_idx_APs)
@@ -1162,8 +1179,10 @@ class axon_results(sim_results):
 
             if "threshold" in kwargs:
                 threshold = kwargs["threshold"]
-            else:
+            elif "threshold" in self:
                 threshold = self["threshold"]
+            else:
+                threshold = 0
 
             if "t_min_AP" in kwargs:
                 t_min_AP = kwargs["t_min_AP"]
@@ -1505,12 +1524,18 @@ class axon_results(sim_results):
         """
 
         if {"is_blocked", "has_onset", "n_onset"} not in self:
-            required_keys = {"V_mem"}
+            vm_key = "V_mem"
+            if freq is not None: 
+                vm_key += "_filtered"
+            required_keys = {"{vm_key}_raster_position",
+                            f"{vm_key}_raster_x_position",
+                            f"{vm_key}_raster_time_index",
+                            f"{vm_key}_raster_time"}
             if required_keys in self:
-                vm_key = "V_mem"
-                if freq is not None:
-                    self.filter_freq("V_mem", freq, Q=2)
-                    vm_key += "_filtered"
+                #vm_key = "V_mem"
+                #if freq is not None:
+                #    self.filter_freq("V_mem", freq, Q=2)
+                #    vm_key += "_filtered"
 
                 blocked = self.is_blocked(AP_start, freq, t_refractory)
                 n_APs = self.count_APs(vm_key) - 1
