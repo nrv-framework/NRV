@@ -285,7 +285,11 @@ class axon(NRV_simulable):
         self.Nsec = 0
         self.Nseg = 0
         self.myelinated = ""
-        ## stims
+
+        self.set_parameters(**kwargs)
+
+        ## Contexts
+        # Intra stims
         self.intra_current_stim = []
         self.intra_current_stim_positions = []
         self.intra_current_stim_starts = []
@@ -294,6 +298,8 @@ class axon(NRV_simulable):
         self.intra_voltage_stim = None
         self.intra_voltage_stim_position = []
         self.intra_voltage_stim_stimulus = None
+        
+        # Extra stims
         self.extra_stim = None
         self.footprints = None
         ## recording mechanism

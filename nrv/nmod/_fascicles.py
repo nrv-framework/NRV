@@ -180,8 +180,11 @@ class fascicle(NRV_simulable):
         super().__init__(**kwargs)
 
         # to add to a fascicle/nerve common mother class
-        self.save_path = ""
-        self.verbose = False
+
+        #:str: path where the simulation results should be saved
+        self.save_path:str = ""
+        #:str: value: False: verbosity mainly for pbars. Tests more comment
+        self.verbose = False 
         self.return_parameters_only = False
         self.loaded_footprints = False
         self.save_results = False
