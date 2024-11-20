@@ -11,6 +11,8 @@ All notable changes to NRV are sumed up in this file.
 ### Fixed
 - ``axon.__init__``'s ``kwargs``: all parameters can now be set at the instantiation of the axon
 
+ 
+
 
 ### Removed
 - `myelinated_results.find_central_node_index`-method replaced by `axon_results.find_central_index` with, for `myelinated_results`, the argument `node` to obtain former results
