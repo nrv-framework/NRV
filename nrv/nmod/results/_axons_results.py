@@ -10,7 +10,7 @@ from copy import deepcopy
 from scipy.signal import find_peaks
 
 from ...fmod.FEM.fenics_utils._f_materials import f_material, mat_from_interp
-from ...backend._NRV_Results import sim_results
+from ...backend._NRV_Results import sim_results, abstractmethod
 from ...backend._file_handler import json_dump
 from ...backend._log_interface import rise_warning, rise_error
 from ...utils._units import to_nrv_unit, from_nrv_unit, convert, nm
@@ -1783,16 +1783,28 @@ class axon_results(sim_results):
                 " Please check the simulation parameters",
             )
 
-    def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
+    def colormap_plot(self, axes: plt.axes, key: str = "V_mem", switch_axes:bool=False, **kwgs) -> plt.colorbar:
         required_keys = {key, "tstop", "L", "t"}
         if required_keys in self:
+            x_ = self["t"]
+            y_ = self.get_axon_xrec()
+            c_ = self[key]
+
+            if switch_axes:
+                x_, y_, c_ = y_, x_,c_.T
+                axes.set_ylabel("Time (ms)")
+                axes.set_xlabel("Position (µm)")
+                axes.set_ylim(0, self["tstop"])
+                axes.set_xlim(0, self["L"])
+            else:
+                axes.set_xlabel("Time (ms)")
+                axes.set_ylabel("Position (µm)")
+                axes.set_xlim(0, self["tstop"])
+                axes.set_ylim(0, self["L"])
             map = axes.pcolormesh(
-                self["t"], self.get_axon_xrec(), self[key], shading="auto", **kwgs
+                x_, y_, c_, shading="auto", **kwgs
             )
-            axes.set_xlabel("Time (ms)")
-            axes.set_ylabel("Position (µm)")
-            axes.set_xlim(0, self["tstop"])
-            axes.set_ylim(0, self["L"])
+
             cbar = plt.colorbar(map)
             cbar.set_label(key)
             return cbar
@@ -1803,3 +1815,50 @@ class axon_results(sim_results):
                 " Please check the simulation parameters",
             )
         return None
+
+    @abstractmethod
+    def plot_x_t(
+        self,
+        axes: plt.Axes,
+        x_index: np.ndarray,
+        x_pos: np.ndarray,
+        key: str = "V_mem",
+        color: str = "k",
+        switch_axes=False,
+        **kwgs
+    ) -> None:
+        """
+        Plot `key` in time at various position.
+
+        Warning
+        -------
+        This method should only internally called by either `myelinated.plot_x_t` or `unmyelinated.plot_x_t`. Therefore, `x_index`, `x_pos` arguments are automatically set by the daughter class methods
+
+        Parameters
+        ----------
+        axes : plt.Axes
+            axes of the figure to display the fascicle
+        x_index : np.ndarray
+            list of index to plot
+        x_pos : np.ndarray
+            x position that should be ploted
+        key : str, optional
+            key of the results' signal that should be ploted, by default "V_mem"
+        color : str, optional
+            color of the line plot, by default "k"
+        switch_axes : bool, optional
+            _description_, by default False
+        """
+        dx = np.abs(x_pos[1] - x_pos[0])
+        norm_fac = dx / abs(np.max(self[key] - np.min(self[key])) * 1.1)
+        offset = np.abs(np.min(self[key][0] * norm_fac))
+        for x, x_idx in zip(x_pos, x_index):
+            x_ = self["t"]
+            y_ = self[key][x_idx] * norm_fac + x + offset
+            if switch_axes:
+                x_, y_ = y_, x_[::-1]
+            axes.plot(
+                x_,
+                y_,
+                color=color, **kwgs
+            )

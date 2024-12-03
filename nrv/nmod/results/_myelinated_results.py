@@ -121,22 +121,25 @@ class myelinated_results(axon_results):
         return self["g_mye"], self["c_mye"], self["f_mye"]
 
     def plot_x_t(
-        self, axes: plt.axes, key: str = "V_mem", color: str = "k", **kwgs
+        self, axes: plt.axes, key: str = "V_mem", color: str = "k", switch_axes=False, **kwgs
     ) -> None:
-        node_x = self.x[self.node_index]
-        dx = np.abs(node_x[1] - node_x[0])
-        rec_idx = self.node_index
+        x_pos = self.x[self.node_index]
+        x_index = self.node_index
         if not "ALL" in self.rec.upper():
-            rec_idx = np.arange(len(node_x))
-        norm_fac = dx / (np.max(abs(self[key])) * 1.1)
-        offset = np.abs(np.min(self[key][0] * norm_fac))
-        for node, node_idx in zip(node_x, rec_idx):
-            axes.plot(
-                self["t"],
-                self[key][node_idx] * norm_fac + node + offset,
-                color=color,
-                **kwgs
-            )
+            x_index = np.arange(len(x_pos))
+        super().plot_x_t(axes=axes, x_pos=x_pos,x_index=x_index, key=key, color=color, switch_axes=switch_axes, **kwgs)
+
+    def plot_x_t_all_seq(
+        self, axes: plt.axes, key: str = "V_mem", color: str = "k", myelin_color:str="gray", switch_axes=False, **kwgs
+    ) -> None:
+        if self.rec=="all":
+            node_index = self.node_index
+            other_index = np.concatenate([i_x+(self.Nseg_per_sec+1)*np.arange(len(self.this_ax_sequence)) for i_x in node_index])
+            other_index = other_index[other_index<len(self.x_rec)]
+            super().plot_x_t(axes=axes, x_pos=self.x_rec[other_index],x_index=other_index, key=key, color=myelin_color, switch_axes=switch_axes, **kwgs)
+
+        self.plot_x_t(axes=axes, key=key, color=color, switch_axes=switch_axes)
+
 
     def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
         if self.rec == "all":

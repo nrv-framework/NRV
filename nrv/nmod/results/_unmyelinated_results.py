@@ -20,18 +20,18 @@ class unmyelinated_results(axon_results):
 
     def plot_x_t(
         self,
-        axes: plt.axes,
+        axes: plt.Axes,
         key: str = "V_mem",
         color: str = "k",
         n_lines: int = 20,
+        n_jumped_lines: int|None = None,
+        switch_axes=False,
         **kwgs
     ) -> None:
-        x_index = np.int32(np.linspace(0, len(self.x_rec) - 1, n_lines))
+        if n_jumped_lines is not None:
+            x_index = np.arange(len(self.x_rec))
+            x_index = x_index[x_index%n_jumped_lines==0]
+        else:
+            x_index = np.int32(np.linspace(0, len(self.x_rec) - 1, n_lines))
         x_pos = self.x_rec[x_index]
-        dx = np.abs(x_pos[1] - x_pos[0])
-        norm_fac = dx / (np.max(abs(self[key])) * 1.1)
-        offset = np.abs(np.min(self[key][0] * norm_fac))
-        for x, x_idx in zip(x_pos, x_index):
-            axes.plot(
-                self["t"], self[key][x_idx] * norm_fac + x + offset, color=color, **kwgs
-            )
+        super().plot_x_t(axes=axes, x_pos=x_pos,x_index=x_index, key=key, color=color, switch_axes=switch_axes, **kwgs)

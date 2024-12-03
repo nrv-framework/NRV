@@ -36,6 +36,7 @@ The folowing table details the default units used in NRV and the lists of units 
 
 import numpy as np
 from copy import deepcopy
+from math import isnan
 
 ###################
 ## defaulf units ##
@@ -272,5 +273,8 @@ def sci_round(value, digits=3):
             cp_value[i] = sci_round(num, digits)
         return cp_value
     else:
-        power = "{:e}".format(value).split("e")[1]
-        return round(value, -(int(power) - digits + 1))
+        if not isnan(value):
+            power = "{:e}".format(value).split("e")[1]
+            return round(value, -(int(power) - digits + 1))
+        else:
+            return value
