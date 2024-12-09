@@ -1531,7 +1531,6 @@ class fascicle(NRV_simulable):
                     "save anyway",
                 )
                 self.save_results = True
-
         self.__init_axon_postprocessing()
         if len(self.NoR_relative_position) == 0:
             self.generate_random_NoR_position()

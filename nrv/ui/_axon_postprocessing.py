@@ -446,7 +446,7 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
                 else:
                     return False
     else:
-        print("intra_stim_positions is not in dictionnary")
+        pass_info("intra_stim_positions is not in dictionnary")
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
@@ -1227,8 +1227,10 @@ def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_re
     axon_results
         updated results.
     """
-    if not results["record_g_mem"]:
-        rise_error("gmem not recorded nothing will be done")
+    if isinstance(keys_to_sample, str):
+        keys_to_sample = {keys_to_sample}
+    if len(set(keys_to_sample) - set(results.keys())):
+        rise_error(set(keys_to_sample) - set(results.keys()), "keys are missing to apply postprocessing. Please check simulation parameters")
     else:
         if t_stop_rec < 0:
             t_stop_rec=results.t_sim
@@ -1267,7 +1269,12 @@ def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_re
         "Nseg_per_sec",
         "axon_path_type",
         "t_sim",
+        "myelinated",
+        "intra_stim_starts",
+        "intra_stim_positions",
+        "recorder"
         }
+
         list_keys.update(keys_to_keep)
         list_keys.update(keys_to_sample)
         if results.ID==0:

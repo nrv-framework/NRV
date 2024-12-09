@@ -5,6 +5,7 @@ NRV-:class:`.recorder` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._MCore import MCH, synchronize_processes
@@ -794,4 +795,20 @@ class recorder(NRV_class):
                     point.recording = 0.0
                 for rec in reclist:
                     point.recording += np.array(rec["recording_points"][i]["recording"])
+
+    def plot(self, axes: plt.axes, points:int|np.ndarray|None=None,color: str = "k", **kwgs) -> None:
+        if self.t is None:
+            rise_warning("empty recorder canot be ploted")
+        else:
+            if points is None:
+                points = np.arange(len(self.recording_points))
+            if np.iterable(points):
+                for i_pts in points:
+                    self.plot(axes=axes, points=i_pts, color=color, **kwgs)
+            else:
+                if points > len(self.recording_points):
+                    rise_warning(f"recording point {points} does not exits in recorder, and so canot be ploted")
+                else:
+                    axes.plot(self.t, self.recording_points[points].recording, color=color,**kwgs)
+
 

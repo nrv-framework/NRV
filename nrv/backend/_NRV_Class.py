@@ -252,7 +252,6 @@ class NRV_class(metaclass=ABCMeta):
                     key_dic[key] = {}
                     for i in self.__dict__[key]:
                         key_dic[key][i] = self.__dict__[key][i].save(**kwargs)
-
                 else:
                     key_dic[key] = deepcopy(self.__dict__[key])
         if save:
@@ -286,6 +285,8 @@ class NRV_class(metaclass=ABCMeta):
                     self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
+                elif isinstance(self.__dict__[key], set):
+                    self.__dict__[key] = set(key_dic[key])
                 elif is_empty_iterable(key_dic[key]):
                     self.__dict__[key] = eval(self.__dict__[key].__class__.__name__)()
                 else:
