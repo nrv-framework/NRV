@@ -1,67 +1,71 @@
-# From https://www.deanmontgomery.com/2022/03/24/rich-progress-and-multiprocessing/
-import multiprocessing
-import random
-from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import Pool, Manager
+import numpy as np
 from time import sleep
-import nrv
-import numpy as np 
+from rich.live import Live
+from rich.table import Table
+from rich.progress import Progress, BarColumn, TextColumn
 
-from rich import progress
 
-def long_running_fn(progress, task_id):
-    len_of_task = random.randint(3, 20)  # take some random length of time
-    for n in range(0, len_of_task):
-        sleep(0.3)  # sleep for a bit to simulate work
-        progress[task_id] = {"progress": n + 1, "total": len_of_task}
-    return np.random.rand(3)
+def worker(task_info):
+    """Worker function that returns a numpy array."""
+    task_name, task_id, total, progress_dict = task_info
+
+    progress = Progress(
+        TextColumn(f"[cyan]{task_name}"),
+        BarColumn(),
+        "[progress.percentage]{task.percentage:>3.0f}%",
+    )
+    task = progress.add_task(task_name, total=total)
+
+    # Simulate computation to fill a numpy array
+    result_array = np.zeros(10)
+    for i in range(total):
+        sleep(0.05*(1+task_id))  # Simulate work
+        result_array += np.random.rand(10)  # Increment values for demonstration
+        progress.advance(task)
+        # Update the shared progress state
+        progress_dict[task_id] = progress.get_renderable()
+
+    return result_array
+
+
+def rich_multiprocessing_with_pool():
+    """Manages multiprocessing with Rich progress bars using Pool and sums numpy arrays."""
+    num_processes = 3
+    tasks = [{"task_name": f"Task {i+1}", "total": 100, "task_id": i} for i in range(num_processes)]
+
+    manager = Manager()
+    progress_dict = manager.dict()  # Shared dictionary for tracking progress renderables
+
+    # Prepare task info for Pool
+    task_info_list = [
+        (task["task_name"], task["task_id"], task["total"], progress_dict)
+        for task in tasks
+    ]
+
+    with Pool(processes=num_processes) as pool:
+        with Live(refresh_per_second=10) as live:
+            async_results = [pool.apply_async(worker, args=(task_info,)) for task_info in task_info_list]
+
+            while any(not result.ready() for result in async_results):
+                # Build a table to display progress bars
+                table = Table.grid()
+                for task_id, progress in progress_dict.items():
+                    table.add_row(progress)
+                live.update(table)
+            for result in async_results:
+                result.wait()
+                # sleep(0.1)
+
+            # Collect results from all workers
+            arrays = [result.get() for result in async_results]
+
+    # Sum all numpy arrays
+    summed_array = np.sum(arrays, axis=0)
+
+    # Print the resulting summed array
+    print("Summed Array:", summed_array)
 
 
 if __name__ == "__main__":
-    n_workers = nrv.parameters.nmod_Ncores  # set this to the number of cores you have on your machine
-    n_it = 10
-    res = np.zeros((n_it, 3))
-
-    with progress.Progress(
-        "[progress.description]{task.description}",
-        progress.BarColumn(),
-        "[progress.percentage]{task.percentage:>3.0f}%",
-        progress.TimeRemainingColumn(),
-        progress.TimeElapsedColumn(),
-        refresh_per_second=1,  # bit slower updates
-    ) as progress:
-        futures = []  # keep track of the jobs
-        with multiprocessing.Manager() as manager:
-            # this is the key - we share some state between our 
-            # main process and our worker functions
-            _progress = manager.dict()
-            overall_progress_task = progress.add_task("[green]All jobs progress:")
-
-            with ProcessPoolExecutor(max_workers=n_workers) as executor:
-                for n in range(0, n_it):  # iterate over the jobs we need to run
-                    # set visible false so we don't have a lot of bars all at once:
-                    task_id = progress.add_task(f"task {n}", visible=False)
-                    futures.append(executor.submit(long_running_fn, _progress, task_id))
-
-                # monitor the progress:
-                while (n_finished := sum([future.done() for future in futures])) < len(
-                    futures
-                ):
-                    progress.update(
-                        overall_progress_task, completed=n_finished, total=len(futures)
-                    )
-                    for task_id, update_data in _progress.items():
-                        latest = update_data["progress"]
-                        total = update_data["total"]
-                        # update the progress bar for this task:
-                        progress.update(
-                            task_id,
-                            completed=latest,
-                            total=total,
-                            visible=latest < total,
-                        )
-
-                # raise any errors:
-                for future in futures:
-                    print(task_id)
-                    res[task_id-1,:] += future.result()
-    print(type(res))
+    rich_multiprocessing_with_pool()

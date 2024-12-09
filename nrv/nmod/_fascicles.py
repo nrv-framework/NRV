@@ -233,7 +233,6 @@ class fascicle(NRV_simulable):
         self.myelinated_param = {
             "model": "MRG",
             "dt": 0.001,
-            "node_shift": 0,
             "Nseg_per_sec": 3,
             "freq": 100,
             "freq_min": 0,
@@ -862,6 +861,37 @@ class fascicle(NRV_simulable):
             return self.myelinated_param
         return self.unmyelinated_param, self.myelinated_param
 
+    def __generate_axon(self,k:int)->axon:
+        """
+        Internal use only: generate fascicle't kth axon
+
+        Parameters
+        ----------
+        k : int
+            _description_
+        """
+        if self.axons_type[k] == 0:
+            axon = unmyelinated(
+                self.axons_y[k],
+                self.axons_z[k],
+                self.axons_diameter[k],
+                self.L,
+                ID=k,
+                **self.unmyelinated_param,
+            )
+        else:
+            self.myelinated_param["node_shift"] = self.NoR_relative_position[k]
+            axon = myelinated(
+                self.axons_y[k],
+                self.axons_z[k],
+                self.axons_diameter[k],
+                self.L,
+                ID=k,
+                **self.myelinated_param,
+            )
+            self.myelinated_param.pop("node_shift")
+        return axon
+
     def remove_unmyelinated_axons(self):
         """
         Remove all unmyelinated fibers from the fascicle
@@ -971,7 +1001,7 @@ class fascicle(NRV_simulable):
         axes.set_xlim((-1.1 * self.D / 2, 1.1 * self.D / 2))
         axes.set_ylim((-1.1 * self.D / 2, 1.1 * self.D / 2))
 
-    def plot_x(self, axes, myel_color="r", unmyel_color="b", Myelinated_model="MRG"):
+    def plot_x(self, axes, myel_color="b", unmyel_color="r", Myelinated_model="MRG"):
         """
         plot the fascicle's axons along Xline (longitudinal)
 
@@ -986,7 +1016,7 @@ class fascicle(NRV_simulable):
         Myelinated_model : str
             model use for myelinated axon (use to calulated node position)
         """
-        if self.L is None or self.NoR_relative_position != []:
+        if self.L is None or len(self.NoR_relative_position)>0:
             drange = [
                 min(self.axons_diameter.flatten()),
                 max(self.axons_diameter.flatten()),
@@ -994,7 +1024,7 @@ class fascicle(NRV_simulable):
             polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
             for k in range(self.n_ax):
                 relative_pos = self.NoR_relative_position[k]
-                d = round(self.axons_diameter.flatten()[k], 2)
+                d = self.axons_diameter[k]
                 if self.axons_type.flatten()[k] == 0.0:
                     color = unmyel_color
                     size = polysize(d)
@@ -1002,14 +1032,7 @@ class fascicle(NRV_simulable):
                 else:
                     color = myel_color
                     size = polysize(d)
-                    axon = myelinated(
-                        0,
-                        0,
-                        d,
-                        self.L,
-                        model=Myelinated_model,
-                        node_shift=self.NoR_relative_position[k],
-                    )
+                    axon = self.__generate_axon(k)
                     x_nodes = axon.x_nodes
                     node_number = len(x_nodes)
                     del axon
@@ -1020,7 +1043,6 @@ class fascicle(NRV_simulable):
                         marker="x",
                         color=color,
                     )
-
             ## plot electrode(s) if existings
             if self.extra_stim is not None:
                 for electrode in self.extra_stim.electrodes:
@@ -1209,7 +1231,7 @@ class fascicle(NRV_simulable):
             if self.axons_type.flatten()[i] == 0.0:
                 self.NoR_relative_position += [0.0]
             else:
-                d = round(self.axons_diameter.flatten()[i], 2)
+                d = self.axons_diameter[i]
                 node_length = get_MRG_parameters(d)[5]
                 self.NoR_relative_position += [(x - 0.5) % node_length / node_length]
                 # -0.5 to be at the node of Ranvier center as a node is 1um long
@@ -1220,7 +1242,7 @@ class fascicle(NRV_simulable):
         returns True only if loaded footprint are selected AND footprint exist
         """
         return not (self.is_footprinted and self.loaded_footprints)
-    
+
     def compute_electrodes_footprints(
         self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
     ):
@@ -1252,24 +1274,7 @@ class fascicle(NRV_simulable):
             self.extra_stim.run_model()
         self.set_axons_parameters(**kwargs)
         for k in range(len(self.axons_diameter)):
-            if self.axons_type[k] == 0:
-                axon = unmyelinated(
-                    self.axons_y[k],
-                    self.axons_z[k],
-                    round(self.axons_diameter[k], 2),
-                    self.L,
-                    ID=k,
-                    **self.unmyelinated_param,
-                )
-            else:
-                axon = myelinated(
-                    self.axons_y[k],
-                    self.axons_z[k],
-                    round(self.axons_diameter[k], 2),
-                    self.L,
-                    ID=k,
-                    **self.myelinated_param,
-                )
+            axon = self.__generate_axon(k)
             axon.attach_extracellular_stimulation(self.extra_stim)
             footprints[k] = axon.get_electrodes_footprints_on_axon(
                 save_ftp_only=save_ftp_only, filename=filename
@@ -1372,24 +1377,7 @@ class fascicle(NRV_simulable):
         """
         ## test axon axons_type[k]
         assert self.axons_type[k] in [0, 1]
-        if self.axons_type[k] == 0:
-            axon = unmyelinated(
-                self.axons_y[k],
-                self.axons_z[k],
-                round(self.axons_diameter[k], 2),
-                self.L,
-                ID=k,
-                **self.unmyelinated_param,
-            )
-        else:
-            axon = myelinated(
-                self.axons_y[k],
-                self.axons_z[k],
-                round(self.axons_diameter[k], 2),
-                self.L,
-                ID=k,
-                **self.myelinated_param,
-            )
+        axon = self.__generate_axon(k)
         ## add extracellular stimulation
         axon.attach_extracellular_stimulation(self.extra_stim)
         ## add recording mechanism

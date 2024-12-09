@@ -268,8 +268,8 @@ def get_MRG_parameters(diameter:float|NDArray, fit_all:bool=False)->tuple[8]:
             I_OoB = (diameter < 1.0) | (diameter > 14.0)
             paralength2[I_OoB] = paralength2_poly_OoB(diameter[I_OoB])
             deltax[I_OoB] = deltax_poly_OoB(diameter[I_OoB])
-            paralength2[~I_OoB] = paralength2_poly_OoB(diameter[~I_OoB])
-            deltax[~I_OoB] = deltax_poly_OoB(diameter[~I_OoB])
+            paralength2[~I_OoB] = paralength2_poly(diameter[~I_OoB])
+            deltax[~I_OoB] = deltax_poly(diameter[~I_OoB])
             return (
                 g,
                 axonD,

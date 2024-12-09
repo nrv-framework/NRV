@@ -742,4 +742,4 @@ class FEMSimulation(FEMParameters):
             v_surf = assemble_scalar(form(self.vout * do(dom_id)))
         else:
             v_surf = assemble_scalar(form(self.vout[space] * do(dom_id))) 
-        return v_surf / surf * V
+        return v_surf / surf

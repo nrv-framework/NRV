@@ -115,9 +115,12 @@ def mesh_from_fascicle(
         else:
             node_shift = np.zeros(fascicle.n_ax)
         if x_shift is not None:
-            deltaxs = get_MRG_parameters(fascicle.axons_diameter)[5]
-            node_shift += x_shift % deltaxs
-            node_shift %= 1.0
+            i_myel = fascicle.axons_type.astype(bool)
+            __deltaxs = get_MRG_parameters(fascicle.axons_diameter[i_myel])[5]
+            __l1_ = fascicle.NoR_relative_position[i_myel]*__deltaxs
+            __x_l = (__l1_ - x_shift)%__deltaxs
+            node_shift[i_myel] = __x_l / __deltaxs
+
         for i_ax in range(fascicle.n_ax):
             ax_d = round(fascicle.axons_diameter[i_ax], 3)
             ax_y = round(fascicle.axons_y[i_ax], 3)
@@ -176,7 +179,6 @@ def mesh_from_nerve(
         length = length 
     else:
         length = nerve.L
-
     mesh = NerveMshCreator(
         Length=length,
         Outer_D=nerve.Outer_D,
