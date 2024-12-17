@@ -179,7 +179,7 @@ class NerveMshCreator(MshCreator):
         blacklist += [
             "model",
         ]
-        if self.is_generated and save:
+        if self.is_generated and (save or mshfname is not None):
             if mshfname is None:
                 mshfname = rmv_ext(fname) + ".msh"
             super().save(fname=mshfname, generate=False)

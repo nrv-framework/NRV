@@ -1187,7 +1187,7 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
 
 
 
-def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, i_sampled_t:None|np.ndarray=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
     """
     Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.
 
@@ -1232,38 +1232,43 @@ def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_re
     if len(set(keys_to_sample) - set(results.keys())):
         rise_error(set(keys_to_sample) - set(results.keys()), "keys are missing to apply postprocessing. Please check simulation parameters")
     else:
-        if t_stop_rec < 0:
-            t_stop_rec=results.t_sim
-
-        if sample_dt is None:
-            sample_dt=results.dt
-
+        # x - sampling array
         if x_bounds is None:
-            x_bounds=(0,results.L)
-
-        if np.iterable(x_bounds):
+            I_x = np.arange(len(results["x_rec"]))
+            x_bounds = (0, results["x_rec"][-1])
+        elif np.iterable(x_bounds):
             I_x = np.argwhere((results["x_rec"]>x_bounds[0])&(results["x_rec"]<x_bounds[1]))[:,0]
         else:
             x_bounds = [x_bounds]
             I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
-
         N_x = len(I_x)
-        i_t_min = np.argwhere(results["t"]>t_start_rec)[0][0]
-        i_t_max = np.argwhere(results["t"]<t_stop_rec)[-1][0]
 
-        t_APs = [k for k in range(i_t_min,i_t_max)]
-        t_APs = t_APs[::int(sample_dt/results.dt)]
+        # t - sampling array
+        if i_sampled_t is not None:
+            t_APs = i_sampled_t
+        else:
+            if t_stop_rec < 0:
+                i_t_max = len(results["t"])
+            else:
+                i_t_max = np.argwhere(results["t"]<=t_stop_rec)[-1][0]
+            if sample_dt is None:
+                sample_dt=results.dt
+            i_t_min = np.argwhere(results["t"]>=t_start_rec)[0][0]
+             
+            t_APs = [k for k in range(i_t_min,i_t_max)]
+            t_APs = t_APs[::int(sample_dt/results.dt)]
 
         # Under sampling to reduce memory consumption
         results["x_rec"] = results["x_rec"][I_x] - x_bounds[0]
-        results["t"] = results["t"][t_APs]
+        if "t" in results:
+            results["t"] = results["t"][t_APs]
         for key in keys_to_sample:
             results[key] = results[key][np.ix_(I_x, t_APs)]
-
         ###############################
         ## remove non nevessary data ##
         ###############################
         list_keys =  {
+        "ID",
         "x_rec",
         "rec",
         "Nseg_per_sec",

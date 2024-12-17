@@ -334,7 +334,7 @@ class FEMSimulation(FEMParameters):
         if not self.domain_status:
             # RECOVERING THE GEOMETRY
             self.domain, self.subdomains, self.boundaries = read_gmsh(
-                self.mesh, comm=self.comm, rank=self.rank, gdim=3
+                self.mesh, comm=self.comm, rank=self.rank, gdim=self.D
             )
             # SPACE FOR INTEGRATION
             if self.inbound:

@@ -12,7 +12,7 @@ The folowing table details the default units used in NRV and the lists of units 
             - Existing
         *   - Voltage
             - mV
-            - uV, V
+            - uV, V, kV, MV
         *   - Time
             - ms
             - us, s, minute, hour, day
@@ -54,6 +54,8 @@ uF = 1  # default unit for capacitance is uF
 ######################
 uV = 1e-3 * mV
 V = 1e3 * mV
+kV = 1e3 * V
+MV = 1e3 * kV
 
 #############################
 ## time prefixes and units ##

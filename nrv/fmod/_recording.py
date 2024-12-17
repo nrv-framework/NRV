@@ -245,9 +245,10 @@ class recording_point(NRV_class):
             surface = surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
             d_internode = np.gradient(x_axon)
 
-        sx = sigma_yy * sigma_zz
-        sy = sigma_xx * sigma_zz
-        sz = sigma_xx * sigma_yy
+        #!! Modified tc 12/12/24 added **0.5 
+        sx = (sigma_yy * sigma_zz)**.5
+        sy = (sigma_xx * sigma_zz)**.5
+        sz = (sigma_xx * sigma_yy)**.5
 
         electrical_distance = (
             4
@@ -670,6 +671,7 @@ class recorder(NRV_class):
                                 self.sigma_xx,
                                 self.sigma_yy,
                                 self.sigma_zz,
+                                True,
                             )
                     if point.method == "LSA":
                         if self.isotropic:
