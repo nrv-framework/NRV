@@ -1269,6 +1269,7 @@ def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_re
         ###############################
         list_keys =  {
         "ID",
+        "model",
         "x_rec",
         "rec",
         "Nseg_per_sec",

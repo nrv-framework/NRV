@@ -368,4 +368,6 @@ def load_any(data, **kwargs)->NRV_class:
         nrv_obj = []
         for i in key_dic:
             nrv_obj += [load_any(i, **kwargs)]
+    else:
+        nrv_obj = key_dic
     return nrv_obj

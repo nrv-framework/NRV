@@ -12,7 +12,6 @@ from itertools import repeat
 from ..backend._file_handler import is_iterable
 from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
 from ..backend._parameters import parameters
-from ..backend._MCore import *
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._materials import *
@@ -22,16 +21,6 @@ from ..nmod._unmyelinated import *
 from ..utils._stimulus import *
 from ..utils._saving_handler import *
 from ._axon_postprocessing import *
-
-unmyelinated_models = [
-    "HH",
-    "Rattay_Aberham",
-    "Sundt",
-    "Tigerholm",
-    "Schild_94",
-    "Schild_97",
-]
-myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]
 
 
 def set_args_kwargs(func, args, kwargs):   
