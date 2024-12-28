@@ -5,7 +5,7 @@ NRV-:class:`nrv_function` handling.
 from abc import abstractmethod
 
 import numpy as np
-from scipy.interpolate import CubicHermiteSpline, interp1d
+from scipy.interpolate import CubicHermiteSpline, CubicSpline, Akima1DInterpolator, PchipInterpolator, make_interp_spline
 from scipy.special import erf
 
 from ..backend._file_handler import json_dump, json_load
@@ -15,17 +15,15 @@ from ..backend._NRV_Class import NRV_class, is_empty_iterable
 #############################
 ## sigma functions classes ##
 #############################
-spy_interp1D_kind = [
-    "linear",
-    "nearest",
-    "nearest-up",
-    "zero",
-    "slinear",
-    "quadratic",
-    "cubic",
-    "previous",
-    "next",
-]
+spy_interp1D_kind = {
+    "linear":{"f":make_interp_spline, "kwgs":{"k":1}},
+    "akima":{"f":Akima1DInterpolator, "kwgs":{"extrapolate":True}},
+    "pchip":{"f":Akima1DInterpolator, "kwgs":{"extrapolate":True}},
+    "slinear":{"f":make_interp_spline, "kwgs":{"k":1}},
+    "quadratic":{"f":make_interp_spline, "kwgs":{"k":4}},
+    "cubic":{"f":CubicSpline, "kwgs":{"extrapolate":True}},
+    "previous":{"f":make_interp_spline, "kwgs":{"k":0}},
+}
 
 
 class nrv_function(NRV_class):
@@ -502,8 +500,10 @@ class nrv_interp(nrv_function):
         if interpolator is not None:
             self.interpolator = interpolator
         elif self.kind.lower() in spy_interp1D_kind:
-            self.interpolator = interp1d(
-                self.X_values, self.Y_values, kind=self.kind, fill_value="extrapolate"
+            __interp_type = spy_interp1D_kind[self.kind.lower()]["f"]
+            __kwgs = spy_interp1D_kind[self.kind.lower()]["kwgs"]
+            self.interpolator = __interp_type(
+                self.X_values, self.Y_values, **__kwgs
             )
         elif self.kind.lower() in ["hermite", "cardinal", "catmull-rom"]:
             if self.scale is None or self.kind == "catmull-rom":

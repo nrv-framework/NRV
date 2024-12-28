@@ -1662,7 +1662,11 @@ class axon_results(sim_results):
                 i_x = np.arange(n_x)
         else:
             i_x = np.argmin(abs(self["x_rec"] - x))
-        g = self["g_mem"][i_x, i_t]
+        
+        if np.iterable(i_x) and np.iterable(i_t):
+            g = self["g_mem"][np.ix_(i_x, i_t)]
+        else:
+            g = self["g_mem"][i_x, i_t]
     
         # Surface conductivity in [S]/([m]*[m])
         if "2" in unit:

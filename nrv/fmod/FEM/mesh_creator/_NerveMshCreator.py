@@ -156,7 +156,6 @@ class NerveMshCreator(MshCreator):
         self,
         fname="nervemshcreator.json",
         save=True,
-        mshfname=None,
         blacklist=[],
         **kwargs,
     ):
@@ -179,11 +178,13 @@ class NerveMshCreator(MshCreator):
         blacklist += [
             "model",
         ]
-        if self.is_generated and (save or mshfname is not None):
+        mshfname = ".msh" in fname
+        if self.is_generated and (save or mshfname):
             if mshfname is None:
                 mshfname = rmv_ext(fname) + ".msh"
-            super().save(fname=mshfname, generate=False)
+            super().save(fname=fname, generate=False)
         fname = rmv_ext(fname) + ".json"
+        save = save and not mshfname
         return NRV_class.save(
             self, save=save, fname=fname, blacklist=blacklist, **kwargs
         )
