@@ -1116,7 +1116,10 @@ class axon(NRV_simulable):
                     )
                     # compute extra-cellular potential and add it to already computed ones
                 self.recorder.set_time(axon_sim["t"])
-                self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
+                if self.myelinated and self.rec == "all":
+                    self.recorder.add_axon_contribution(axon_sim["I_mem"][axon_sim["node_index"]], self.ID)
+                else:
+                    self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
                 axon_sim["recorder"] = self.recorder.save()
 
         except KeyboardInterrupt:

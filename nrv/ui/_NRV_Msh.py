@@ -51,16 +51,16 @@ def mesh_from_extracellular_context(
     else:
         N_contact = 0
         if np.iterable(res_elec) and not isinstance(res_elec, str):
-            if len(res_elec) == len(fascicle.extra_stim.electrodes):
+            if len(res_elec) == len(extracel_context.electrodes):
                 res = res_elec
             else:
                 rise_warning(
                     "length of res_elec and fascicle.extra_stim.electrodes does not match",
                     "only first value kept",
                 )
-                res = [res_elec[0] for k in range(len(fascicle.extra_stim.electrodes))]
+                res = [res_elec[0] for k in range(len(extracel_context.electrodes))]
         else:
-            res = [res_elec for k in range(len(fascicle.extra_stim.electrodes))]
+            res = [res_elec for k in range(len(extracel_context.electrodes))]
         if mesh is None:
             mesh = NerveMshCreator(
                 Length=Length, Outer_D=Outer_D, Nerve_D=Nerve_D, y_c=y_c, z_c=z_c

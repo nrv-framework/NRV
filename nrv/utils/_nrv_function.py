@@ -18,7 +18,7 @@ from ..backend._NRV_Class import NRV_class, is_empty_iterable
 spy_interp1D_kind = {
     "linear":{"f":make_interp_spline, "kwgs":{"k":1}},
     "akima":{"f":Akima1DInterpolator, "kwgs":{"extrapolate":True}},
-    "pchip":{"f":Akima1DInterpolator, "kwgs":{"extrapolate":True}},
+    "pchip":{"f":PchipInterpolator, "kwgs":{"extrapolate":True}},
     "slinear":{"f":make_interp_spline, "kwgs":{"k":1}},
     "quadratic":{"f":make_interp_spline, "kwgs":{"k":4}},
     "cubic":{"f":CubicSpline, "kwgs":{"extrapolate":True}},

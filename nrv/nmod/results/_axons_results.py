@@ -1829,6 +1829,7 @@ class axon_results(sim_results):
         key: str = "V_mem",
         color: str = "k",
         switch_axes=False,
+        norm=None,
         **kwgs
     ) -> None:
         """
@@ -1854,7 +1855,10 @@ class axon_results(sim_results):
             _description_, by default False
         """
         dx = np.abs(x_pos[1] - x_pos[0])
-        norm_fac = dx / abs(np.max(self[key] - np.min(self[key])) * 1.1)
+        if norm is not None:
+            norm_fac = norm
+        else:
+            norm_fac = dx / abs(np.max(self[key] - np.min(self[key])) * 1.1)
         offset = np.abs(np.min(self[key][0] * norm_fac))
         for x, x_idx in zip(x_pos, x_index):
             x_ = self["t"]
