@@ -6,6 +6,7 @@ import faulthandler
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.patches import Wedge
 
 from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
@@ -633,24 +634,33 @@ class CUFF_MP_electrode(CUFF_electrode):
                 res=res,
             )
 
-    def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+    def plot(self, axes: plt.axes, color: str = "gold", list_e=None, e_label=True, **kwgs) -> None:
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]
-            elec_theta = 0.9 * 2 * np.pi / self.N_contact
-            for i in range(self.N_contact):
-                theta_ = 2 * i * np.pi / self.N_contact
+            if list_e is None:
+                list_e = np.arange(self.N_contact)
+            elif not np.iterable(list_e):
+                list_e = [list_e]
+            # elec_theta = 0.9 * 2 * np.pi / self.N_contact
+            elec_theta = 180*(self.contact_width/(rad))/np.pi
+            for i in list_e:
+                theta_ = np.pi/2 -(2 * i * np.pi / self.N_contact)
+                theta_deg = 180*theta_/np.pi
                 axes.add_patch(
-                    plt.Wedge(
+                    Wedge(
                         (0, 0),
-                        rad,
-                        theta1=theta_,
-                        theta2=theta_ + elec_theta,
+                        1.025*rad,
+                        theta1=theta_deg - elec_theta/2,
+                        theta2=theta_deg + elec_theta/2,
                         color=color,
-                        fill=False,
-                        linewidth=2,
+                        width=.05*rad,
                         **kwgs
                     )
                 )
+                if e_label:
+                    z_ = 1.2*rad*np.exp(1j*theta_)
+                    axes.text(z_.real, z_.imag, f"E{i}", va="center", ha="center")
+
         else:
             rise_warning("Diameter has to be specifie to plot CUFF MP electrodes")
