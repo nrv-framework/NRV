@@ -24,6 +24,37 @@ ENT_DOM_offset = {
     "Electrode": 100,
     "Axon": 1000,
 }
+def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
+    """
+    function returning the corresponding physical domain in the mesh of an object in the context.
+
+    Parameters
+    ----------
+    objtype : str
+        type of object
+    objid : int, optional
+        for facicle, axon or electrode the corresponding id in the nerve, by default 0
+    is_surf : bool, optional
+        if true return the id of the surface dom, by default False
+
+    Returns
+    -------
+    int
+    """
+    domid = 2*objid
+    if objtype.lower() in ["o", "outer", "outerbox"]:
+        domid = ENT_DOM_offset["Outerbox"]
+    elif objtype.lower() in ["n", "nerve"]:
+        domid = ENT_DOM_offset["Nerve"]
+    elif objtype.lower() in ["f", "fasc", "fascicle"]:
+        domid += ENT_DOM_offset["Fascicle"]
+    elif objtype.lower() in ["a", "ax", "axon"]:
+        domid += ENT_DOM_offset["Axon"]
+    elif objtype.lower() in ["e", "elec", "electrode"]:
+        domid += ENT_DOM_offset["Electrode"]
+    if is_surf:
+        domid += 1
+    return domid
 
 ELEC_TYPES = ["CUFF MP", "CUFF", "LIFE"]
 

@@ -364,8 +364,8 @@ class FEMSimulation(FEMParameters):
         NB: DBC cannot be change between simulations
         """
         self.bcs = []
-        for i in self.boundaries_list:
-            bound = self.boundaries_list[i]
+        for i in self.dboundaries_list:
+            bound = self.dboundaries_list[i]
             condition = bound["condition"]
             if condition.lower() == "dirichlet":
                 value = Constant(self.domain, ScalarType(float(bound["value"])))
@@ -394,8 +394,8 @@ class FEMSimulation(FEMParameters):
         NB: Only variable NBC (see FEMParameters.add_boundary) can be changed between simulations
         """
         if not self.neumann_BC_status:
-            for i_bound in self.boundaries_list:
-                bound = self.boundaries_list[i_bound]
+            for i_bound in self.nboundaries_list:
+                bound = self.nboundaries_list[i_bound]
                 condition = bound["condition"]
                 if condition.lower() in "neumann":
                     dom = int(bound["mesh_domain"])
@@ -422,8 +422,8 @@ class FEMSimulation(FEMParameters):
                         ] * self.ds(dom)
             self.neumann_BC_status = True
         else:
-            for i_bound in self.boundaries_list:
-                bound = self.boundaries_list[i_bound]
+            for i_bound in self.nboundaries_list:
+                bound = self.nboundaries_list[i_bound]
                 condition = bound["condition"]
                 if condition.lower() in "neumann" and "variable" in bound:
                     if bound["variable"] in self.args:
