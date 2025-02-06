@@ -126,10 +126,13 @@ def mesh_from_fascicle(
             ax_y = round(fascicle.axons_y[i_ax], 3)
             ax_z = round(fascicle.axons_z[i_ax], 3)
             mye = bool(fascicle.axons_type[i_ax])
+            res_ax_ = res_ax
             if isinstance(res_ax, str) and res_ax != "default":
-                res_ax = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
+                res_ax_ = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
+            elif np.iterable(res_ax) and not isinstance(res_ax, str):
+                res_ax_ = res_ax[i_ax]
             mesh.reshape_axon(
-                d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_shift=node_shift[i_ax], res=res_ax
+                d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_shift=node_shift[i_ax], res=res_ax_
             )
     if add_context and fascicle.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
