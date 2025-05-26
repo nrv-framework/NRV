@@ -60,22 +60,16 @@ if __name__ == "__main__":
     nerve.change_stimulus_from_electrode(1,stimulus=stim2)
 
     t1 = time.time()
-    if nrv.MCH.do_master_only_work():
-        print("Nerve preparation time "+str(t1-t0))
+    print("Nerve preparation time "+str(t1-t0))
 
-    """output_path = f'./unitary_tests/figures/nerve_{test_num}/'
-
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)"""
 
 
     nerve.simulate(t_sim=5, save_path='./unitary_tests/figures/', postproc_script="vmem_plot")
     t2 = time.time()
-    if nrv.MCH.do_master_only_work():
-        print("Nerve simulation time "+str(t2-t1))
-        
-        fig, ax = plt.subplots(figsize=(8,8))
-        nerve.plot(ax)
-        plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
+    print("Nerve simulation time "+str(t2-t1))
+    
+    fig, ax = plt.subplots(figsize=(8,8))
+    nerve.plot(ax)
+    plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
 
     #plt.show()

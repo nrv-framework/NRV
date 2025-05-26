@@ -436,6 +436,8 @@ class nerve(NRV_simulable):
             )
         self.L = L
         self.set_axons_parameters(unmyelinated_nseg=self.L // 25)
+        for fasc in self.fascicles.values():
+            fasc.define_length(L)
         if self.is_extra_stim:
             self.extra_stim.reshape_nerve(
                 Nerve_D=self.D,

@@ -538,8 +538,10 @@ class CUFF_electrode(FEM_electrode):
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]
+            if "linewidth" not in kwgs:
+                kwgs["linewidth"] = 2
             axes.add_patch(
-                plt.Circle((0, 0), rad, color=color, fill=False, linewidth=2, **kwgs)
+                plt.Circle((0, 0), rad, color=color, fill=False, **kwgs)
             )
         else:
             rise_warning("Diameter has to be specifie to plot CUFF electrodes")

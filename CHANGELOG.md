@@ -11,7 +11,6 @@ All notable changes to NRV are sumed up in this file.
 ### Fixed
 - ``axon.__init__``'s ``kwargs``: all parameters can now be set at the instantiation of the axon
 
- 
 
 
 ### Removed

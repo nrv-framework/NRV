@@ -500,7 +500,7 @@ class fascicle(NRV_simulable):
         D = self.D
         return D, y, z
 
-    def fit_circular_contour(self, y_c=None, z_c=None, delta=0.1):
+    def fit_circular_contour(self, y_c=None, z_c=None, delta=0.1, round_dgt=None):
         """
         Define a circular countour to the fascicle
 
@@ -527,16 +527,10 @@ class fascicle(NRV_simulable):
         if N_axons == 0:
             pass_info("No axon to fit fascicul diameter set to " + str(D) + "um")
         else:
-            for axon in range(N_axons):
-                dist_max = (
-                    self.axons_diameter[axon] / 2
-                    + (
-                        (self.y_grav_center - self.axons_y[axon]) ** 2
-                        + (self.z_grav_center - self.axons_z[axon]) ** 2
-                    )
-                    ** 0.5
-                )
-                D = max(D, 2 * (dist_max + delta))
+            dist_axons = np.linalg.norm((self.axons_y, self.axons_z), axis=0) + (self.axons_diameter/2)
+            D = 2 * (dist_axons.max() + delta)
+        if round is not None:
+            D = round(D, round_dgt)
         self.define_circular_contour(D, y_c=None, z_c=None)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
@@ -1273,6 +1267,8 @@ class fascicle(NRV_simulable):
         if is_FEM_extra_stim(self.extra_stim):
             self.extra_stim.run_model()
         self.set_axons_parameters(**kwargs)
+        if len(self.NoR_relative_position) == 0:
+            self.generate_random_NoR_position()
         for k in range(len(self.axons_diameter)):
             axon = self.__generate_axon(k)
             axon.attach_extracellular_stimulation(self.extra_stim)
@@ -1580,7 +1576,7 @@ class fascicle(NRV_simulable):
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
             with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
                 for result in pool.imap(self.sim_axon, axons_ID):
-                    results.append(result)            
+                    results.append(result)
                     pg.advance(task_id)
                     pg.refresh()
                 pool.close()
