@@ -36,6 +36,7 @@ deps = (
     "matplotlib.animation",
     "matplotlib.pylab",
     "matplotlib.pyplot",
+    "matplotlib.patches",
     "mph",
     "mpi4py",
     "neuron",
