@@ -67,11 +67,10 @@ def simulate_nerve(nerve, nproc=4):
 
 
 def prostprocessing(results):
-    fig, axs = plt.subplots(1, 2, figsize=(10,5))
-    results.plot_recruited_fibers(axs[0])
-    results.plot_recruited_fibers(axs[1])
-    axs.set_xlabel("z-axis (µm)")
-    axs.set_ylabel("y-axis (µm)")
+    fig, ax = plt.subplots(1, 1, figsize=(5,5))
+    results.plot_recruited_fibers(ax)
+    ax.set_xlabel("z-axis (µm)")
+    ax.set_ylabel("y-axis (µm)")
     fig.savefig("nerve_postproc.png", dpi=300)
     plt.close(fig)
 
