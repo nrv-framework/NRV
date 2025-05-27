@@ -23,36 +23,20 @@ At this time of development, the following figure indicates what part of the pro
 
 One have to note that the generation and packing of population is for the moment only on one core. Post-processing is usually performed on a limited number of cores, or at least separated from computations when performing large computation, we do not want to change this habit. However, in future versions, we plan to parallelize these task to limit execution time.
 
-At version 1.x.x, the multi-core splitting is handled using the Message Passing Interface (MPI) and the python available library ``mpi4py``. However, this package is not a mandatory requirement for NRV to work: if not installed, the package will only work in single-core mode, without raising any exception nor warning. If correctly installed, the user can specify a number of cores when launching the python scripts, and job splitting is handled internally.
+Before version 1.2, the multi-core splitting was handled using the Message Passing Interface (MPI). This is not the case anymore since version 1.2, where only the python standard API is used to handle parallelization. This means that NRV can be used on any computer, from a laptop to a cluster, without requiring any specific installation.
+
+A huge effort has been made to ensure that axon generation and packing is fast and efficient, and that the user does not have to worry about the time spent by these steps even on populations around 1,000 axons or more on one core. The CPU dispatch of simulation is now fully invisible for the user, who can still specify the number of CPU for main computational steps in the ``NRV.ini`` file. The user can also specify the number of CPU used for each step in python file.
 
 An example with a benchmark script
 ==================================
-In order to illustrate how large computation can be handled, we provide a benchmark example that consist in two files:
+In order to illustrate how large computation can be handled, we provide an example of a nerve simulation. The script is ....
 
-- here is a first python script :download:`for nerve generation ('gen_nerve_benchmark.py') <../scripts/gen_nerve_benchmark.py>`. This script generates a nerve filled with an axon population. The nerve and all geometrical parameters, electrodes and stimuli is saved to a ``.json`` file. This step is not computationally expensive, except for the population generation and packing (see perspectives). For the moment, this is launched in single-core mode
 
-- here is a second python script :download:`with the simulation ('nerve_benchmark.py') <../scripts/nerve_benchmark.py>`. This scripts contains the simulation and post-processing. One can remark a test on function ``nrv.MCH.do_master_only_work()``. This is only true on the CPU core with the lowest rank, defining the so-called *master-core*. The code bellow this instruction is then executed in single-core mode (in the present example, it corresponds to the post-processing).
-
-To launch the code in single core mode, simply use in the command line:
-
-::
-
-    python gen_nerve_benchmark.py
-    python nerve_benchmark.py
-
-To launch the code using several cores for the simulation (here an example on 8 cores):
-
-::
-
-    python gen_nerve_benchmark.py
-    mpirun -n 8 python nerve_benchmark.py
-
-no code adaptation is required. The test on ``nrv.MCH.do_master_only_work()`` can appear unfamiliar to end user, to ease process of parallel computation, we propose two alternatives (with the same results) in the next section.
 
 Pythonic tools and perspectives
 ===============================
 
-Few internall tools have been develop to ease the process of launching large computations, described here below. We also express our wishes as developer for future versions.
+Few internal tools have been developed to ease the process of launching large computations, described here below. We also express our wishes as developer for future versions.
 
 Command line launching
 ----------------------
