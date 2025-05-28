@@ -48,6 +48,8 @@ deps = (
     "numpy.linalg",
     "numpy.typing",
     "pandas",
+    "pathos",
+    "pathos.multiprocessing",
     "petsc4py",
     "petsc4py.PETSc",
     "psutil"

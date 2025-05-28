@@ -120,7 +120,6 @@ setup(
     # dependencies 
     # * sorted by alphabetical order *
     install_requires=[
-        "ezdxf",
         "gmsh",
         "icecream",
         "matplotlib",
