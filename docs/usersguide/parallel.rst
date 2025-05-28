@@ -97,6 +97,8 @@ In order to illustrate how large computation can be handled, we provide an examp
 
 The function basically returns a nerve, which is a simulable-object. This function, if called should basically provide a plot like:
 
+.. image:: images/parallel_nerve_example.png
+
 The next function performs the simulation and enables the end user to directly provide the number of CPU available for the computation. 
 
 .. code:: ipython3
@@ -143,6 +145,10 @@ Performing this small simulation pipeline results in a main program of the form:
         # This is not compultationally intensive,
         # so we can use only on processes
         prostprocessing(results)
+
+The postpocessing step should provide a plot like:
+
+.. image:: images/parallel_nerve_postproc.png
 
 as mentioned in the comments, and as a consequence of explanations with the figure that explains what steps are parallel, only the simulation is automatically split on CPU. All memory access, results gathering and computational step sequences are automatically handled behind the scene.
 
