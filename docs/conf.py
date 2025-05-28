@@ -93,6 +93,7 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
     "sphinx_copybutton",
+    "sphinx.ext.mathjax",
     "sphinx_gallery.load_style",
     "sphinx_mdinclude",
     "sphinx_rtd_theme",
@@ -101,6 +102,8 @@ extensions = [
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc", "__logo/__build"]
+
+source_suffix = [".rst", ".md"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
@@ -119,6 +122,7 @@ pygments_style = "friendly"  # syntax highlight style in light mode
 pygments_dark_style = "stata-dark"  # syntax highlight style in dark mode
 html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
+highlight_language = "python3"
 
 # Sources options
 napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
@@ -127,3 +131,4 @@ autodoc_member_order = 'bysource' # keep the order of class and function source 
 autosummary_generate = True
 
 autosummary_ignore_module_all = False
+nbsphinx_execute = 'never'

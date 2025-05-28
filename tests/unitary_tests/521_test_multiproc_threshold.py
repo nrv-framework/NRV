@@ -46,13 +46,15 @@ if __name__ == '__main__':
     start = perf_counter()
 
     thresholds = []
+
     for pw in pw_l:
         th = process_threshold(pw)
         thresholds.append(th)    
+    
     stop = perf_counter()
     
     start_mp = perf_counter()
-    thresholds_MP = nrv.search_threshold_dispatcher(process_threshold,pw_l)
+    thresholds_MP = nrv.search_threshold_dispatcher(process_threshold,pw_l,ncore=4)
     stop_mp = perf_counter()
 
     print(thresholds_MP)

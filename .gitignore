@@ -209,3 +209,6 @@ tests/log_NRV_test.txt
 .vscode/*
 docs/_nrv/*
 
+*.log
+nrv/_misc/log/*.log
+

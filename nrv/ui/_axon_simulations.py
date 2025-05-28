@@ -4,8 +4,8 @@ NRV-Cellular Level simulations.
 import sys
 from typing import Callable
 from time import perf_counter
-import multiprocessing as mp
-from rich.progress import track
+from pathos.multiprocessing import ProcessingPool as Pool
+from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
 from functools import partial
 from itertools import repeat
 
@@ -26,6 +26,10 @@ from ._axon_postprocessing import *
 def set_args_kwargs(func, args, kwargs):   
     return func(*args, **kwargs)
 
+def _call_wrapper(args):
+    param, kw, func = args
+    return func(param, **kw)
+
 def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None, **kwargs)->list[any]:
     """
     Automatically dispatches any search threshold callable object on available cpu cores. 
@@ -45,32 +49,42 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
         List of ordered thresholds.
     """
     
-    l_kwargs = []
-    c_kwargs = {}
-    tot = len(list(parameter_list))
-    if ncore is not None:
-        tot = ncore
-    for k in range(tot):
-        n_kwargs = {}
-        for key in kwargs:
-            if is_iterable(kwargs[key]):
-                if len (kwargs[key]) == tot:
-                    n_kwargs[key] = kwargs[key][k]
-                else:
-                    rise_warning(f"length of kwargs {key} in {__name__} is inconsistant. Got {len (kwargs[key])}, expected {tot}.")
-                    pass_info(f"Used {key}[0] in pool")
-                    c_kwargs[key] = kwargs[key][0]
-            else:
-                c_kwargs[key] = kwargs[key]
-            l_kwargs.append(n_kwargs)
-    
-    p_search_func = partial(search_func,**c_kwargs)
-    with mp.get_context('spawn').Pool(tot) as pool: 
-        args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
-        results = list(track(pool.starmap(set_args_kwargs,args_for_starmap)))
-        pool.close()
-        pool.join()
-        return(results)
+    total = len(parameter_list)
+    if ncore is None:
+        ncore = total
+
+    # Split constant kwargs variable ones
+    varying_keys = {k: v for k, v in kwargs.items() if is_iterable(v) and len(v) == total}
+    constant_kwargs = {k: v for k, v in kwargs.items() if not (is_iterable(v) and len(v) == total)}
+
+    call_args = []
+    for i in range(total):
+        kw = {k: v[i] for k, v in varying_keys.items()}
+        kw.update(constant_kwargs)
+        call_args.append((parameter_list[i], kw, search_func)) 
+
+    call_args = []
+    for i in range(total):
+        kw = {k: v[i] for k, v in varying_keys.items()}
+        kw.update(constant_kwargs)
+        call_args.append((parameter_list[i], kw, search_func))
+
+    results = []
+    #TODO: display individual search output (for each core, see EIT) instead of "processing search"
+    with Pool(processes=ncore) as pool:
+        with Progress(
+            SpinnerColumn(),
+            BarColumn(),
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+            TimeRemainingColumn(),
+            TextColumn("Processing Search..."),
+        ) as progress:
+            task = progress.add_task("[cyan]Dispatching...", total=total)
+            for result in pool.imap(_call_wrapper, call_args):
+                results.append(result)
+                progress.update(task, advance=1,refresh=True)
+
+    return results
 
 
 

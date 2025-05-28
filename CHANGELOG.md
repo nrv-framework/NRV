@@ -7,9 +7,12 @@ All notable changes to NRV are sumed up in this file.
 - improved `eval` in `_FEMResults` for serialized calls (added state variables)
 - `spec_loader.py` mostly for typing
 - progress bars are now handled with [rich.progress](https://rich.readthedocs.io/en/stable/progress.html)
+- Added automatic translation of Tutorials to the docs in docs/tutorials
 
 ### Fixed
 - ``axon.__init__``'s ``kwargs``: all parameters can now be set at the instantiation of the axon
+- Fixed ``search_threshold_dispatcher``for use in notebooks
+- Remove deprecated function in tutorials and examples
 
 
 
