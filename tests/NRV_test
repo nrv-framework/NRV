@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     nrv_cmd = "nrv2calm "
     if sys.platform == "darwin":
-        python_cmd = "python3 "
+        python_cmd = "python "
     else:
         python_cmd = "python3 "
 
@@ -174,7 +174,7 @@ if __name__ == "__main__":
             ###############################
             nrv_cmd = "nrv2calm "
             if sys.platform == "darwin":
-                python_cmd = "python3 "
+                python_cmd = "python "
             else:
                 python_cmd = "python3 "
 
