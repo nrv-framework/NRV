@@ -1095,7 +1095,7 @@ def is_recruited(results:axon_results)->axon_results:
     "recruited",
     }
     results.remove_key(keys_to_keep=list_keys)
-    return(results)
+    return results
 
 def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
     """
@@ -1150,18 +1150,18 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     """
     ## TO CHANGE WHEN is block is developped
     #results.axon_state(save=False)
-    
+
     if AP_start is None :
         if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
             AP_start = results["intra_stim_starts"][0]
-    
+
     vm_key = "V_mem"
     if freq is not None:
         vm_key += "_filtered"
-    
+
 
     results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
-    
+
     # remove non nevessary data
     list_keys = {
     "ID",
@@ -1183,7 +1183,7 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     "n_onset",
     }
     results.remove_key(keys_to_keep=list_keys)
-    return(results)
+    return results
 
 
 

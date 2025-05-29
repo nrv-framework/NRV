@@ -1527,7 +1527,7 @@ class axon_results(sim_results):
             vm_key = "V_mem"
             if freq is not None: 
                 vm_key += "_filtered"
-            required_keys = {"{vm_key}_raster_position",
+            required_keys = {f"{vm_key}_raster_position",
                             f"{vm_key}_raster_x_position",
                             f"{vm_key}_raster_time_index",
                             f"{vm_key}_raster_time"}
