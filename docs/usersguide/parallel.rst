@@ -38,6 +38,7 @@ Illustrative example
 In order to illustrate how large computation can be handled, we provide an example of a nerve simulation. The script is divided in three functions. The first few lines here below load the libraries and define the nerve geometry definition:
 
 .. code:: ipython3
+
     import nrv
     import matplotlib.pyplot as plt
     
@@ -97,11 +98,12 @@ In order to illustrate how large computation can be handled, we provide an examp
 
 The function basically returns a nerve, which is a simulable-object. This function, if called should basically provide a plot like:
 
-.. image:: images/parallel_nerve_example.png
+.. image:: ../images/parallel_nerve_example.png
 
 The next function performs the simulation and enables the end user to directly provide the number of CPU available for the computation. 
 
 .. code:: ipython3
+
     def simulate_nerve(nerve, nproc=12):
         nrv.parameters.set_nmod_ncore(nproc)
         results = nerve(t_sim=3,postproc_script = "is_recruited")
@@ -110,6 +112,7 @@ The next function performs the simulation and enables the end user to directly p
 The results are then processed to highlight only fibers that trigger an action potential:
 
 .. code:: ipython3
+
     def prostprocessing(results):
         fig, ax = plt.subplots(1, 1, figsize=(5,5))
         results.plot_recruited_fibers(ax)
@@ -118,14 +121,14 @@ The results are then processed to highlight only fibers that trigger an action p
         fig.savefig("nerve_postproc.png", dpi=300)
         plt.close(fig)
 
-Performing this small simulation pipeline results in a main program of the form:
+Performing this small simulation pipeline results in a main program of the form to compute for instance on 12 CPUs:
 
 .. code:: iphython3
+
     if __name__ == "__main__":
         #################
         # PREPROCESSING #
-    #################
-
+        #################
         # This is not compultationally intensive,
         # so we can use only on processes
         sim_nerve = create_nerve()
@@ -133,7 +136,6 @@ Performing this small simulation pipeline results in a main program of the form:
         ##############
         # SIMULATION #
         ##############
-
         # This is computationally intensive,
         # so we can use multiple processes
         results = simulate_nerve(sim_nerve, nproc=12)
@@ -141,16 +143,15 @@ Performing this small simulation pipeline results in a main program of the form:
         ##################
         # POSTPROCESSING #
         ##################
-
         # This is not compultationally intensive,
         # so we can use only on processes
         prostprocessing(results)
 
-The postpocessing step should provide a plot like:
+The post-pocessing step should provide a plot like:
 
-.. image:: images/parallel_nerve_postproc.png
+.. image:: ../images/parallel_nerve_postproc.png
 
-as mentioned in the comments, and as a consequence of explanations with the figure that explains what steps are parallel, only the simulation is automatically split on CPU. All memory access, results gathering and computational step sequences are automatically handled behind the scene.
+As mentioned in the comments, and as a consequence of explanations with the figure that explains what steps are parallel, only the simulation is automatically split on CPU. All memory access, results gathering and computational step sequences are automatically handled behind the scene.
 
 .. note::
     If the specified number of CPU is higher than available on the computational machine, threads will coexist on some CPU. The computation will be performed without consequence on the results, but the overall timing won't be optimum.

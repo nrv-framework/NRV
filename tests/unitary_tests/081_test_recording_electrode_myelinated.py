@@ -28,7 +28,7 @@ if __name__ == "__main__":
 	results = axon1.simulate(t_sim=3)
 
 	plt.figure()
-	for rec in testrec.cording_points:
+	for rec in testrec.recording_points:
 		plt.plot(results['x_rec'], rec.footprints['0'])
 	plt.savefig('./unitary_tests/figures/081_A.png')
 
