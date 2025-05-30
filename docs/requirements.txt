@@ -5,4 +5,4 @@ sphinx_mdinclude
 sphinx_copybutton
 nbsphinx
 sphinx_gallery
-
+psutil
