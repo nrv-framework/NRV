@@ -38,8 +38,8 @@ if __name__ == "__main__":
     # Iclamp test
     position = 0.01
     t_start = 5
-    duration = 0.1
-    amplitude = 3
+    duration = 0.2
+    amplitude = 5
 
 
     # Fascicle declaration

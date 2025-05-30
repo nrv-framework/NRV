@@ -1525,12 +1525,14 @@ class axon_results(sim_results):
 
         if {"is_blocked", "has_onset", "n_onset"} not in self:
             vm_key = "V_mem"
-            if freq is not None: 
-                vm_key += "_filtered"
-            required_keys = {f"{vm_key}_raster_position",
-                            f"{vm_key}_raster_x_position",
-                            f"{vm_key}_raster_time_index",
-                            f"{vm_key}_raster_time"}
+            # if freq is not None: 
+            #     vm_key += "_filtered"
+            # required_keys = {f"{vm_key}_raster_position",
+            #                 f"{vm_key}_raster_x_position",
+            #                 f"{vm_key}_raster_time_index",
+            #                 f"{vm_key}_raster_time"}
+            required_keys = {vm_key}
+
             if required_keys in self:
                 #vm_key = "V_mem"
                 #if freq is not None:

@@ -1159,7 +1159,6 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     if freq is not None:
         vm_key += "_filtered"
 
-
     results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
 
     # remove non nevessary data
@@ -1405,7 +1404,7 @@ def vmem_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str="
     results.plot_x_t(ax, key=vm_key)
     if results.myelinated:
         title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
-    else:                                                                           #colormap for unmyelinated fibers as plot_x_t are unreadable
+    else:       #colormap for unmyelinated fibers as plot_x_t are unreadable
         title = f"Unmyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
     
     #print(fdir)
