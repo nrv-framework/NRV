@@ -51,7 +51,7 @@ deps = (
     "pandas",
     "petsc4py",
     "petsc4py.PETSc",
-    "psutil"
+    "psutil",
     "pylab",
     "pyswarms",
     "pyswarms.backend.topology",
