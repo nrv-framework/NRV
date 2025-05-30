@@ -81,7 +81,7 @@ class nerve_results(sim_results):
         else:
             return self[f"fascicle{ID}"]
 
-    def get_fascicle_results(self, fasc_ID: int, ax_ID: int) -> axon_results:
+    def get_axon_results(self, fasc_ID: int, ax_ID: int) -> axon_results:
         if fasc_ID not in self.fascicles_IDs:
             rise_error(f"Fascicle ID: {fasc_ID} does not exists.")
         else:
