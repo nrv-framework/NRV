@@ -74,7 +74,9 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
             else:
                 c_kwargs[key] = kwargs[key]
             l_kwargs.append(n_kwargs)
-    
+
+    if not l_kwargs:
+        l_kwargs = [{} for _ in range(tot)]
     p_search_func = partial(search_func,**c_kwargs)
     with Pool(tot) as pool: 
         args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
