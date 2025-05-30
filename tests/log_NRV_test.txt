@@ -1,8 +1,0 @@
---- Bugs in NRV, please consider reported errors before simulations
---- list of failed tests : [070_test_fascicular_state.py, 115_test_FENICS_eval_field.py, 160_test_FENICS_NerveMshCreator_myelinated.py, 161_test_FENICS_NerveMshCreator_myelinated.py, 162_test_FENICS_NerveMshCreator_myelinated_method2.py, 165_test_layered_material.py, 403_test_eit_reconstruc.py, 404_test_sigma_func copy.py, 518_test_nerves_results.py]
---- Bugs in NRV, please consider reported errors before simulations
---- list of failed tests : [160_test_FENICS_NerveMshCreator_myelinated.py, 165_test_layered_material.py]
---- Bugs in NRV, please consider reported errors before simulations
---- list of failed tests : [034_test_Sundt.py, 035_test_Tigerholm.py, 036_test_schild_94.py, 037_test_schild_97.py, 070_test_fascicle_block_summary.py, 092_test_g_recorders_MRG.py, 093_test_recorders_Gaines.py, 098_test_rec_all_g_Ext_Gaines.py, 160_test_FENICS_NerveMshCreator_myelinated.py, 163_test_FENICS_FEMsim_myelinated.py, 165_test_layered_material.py, 307_plot_nerve_KES.py, 308_raster_plot_nerve_KES.py, 531_test_colormap_plot.py]
---- Bugs in NRV, please consider reported errors before simulations
---- list of failed tests : [207_test_cost_function_fasc.py]

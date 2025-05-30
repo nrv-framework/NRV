@@ -213,7 +213,7 @@ def load_f_material(X: any = None, **kwargs) -> f_material:
         else:
             mat = f_material()
             mat.load(load_material(X).save(save=False))
-    elif isinstance(X, (float, int)):
+    elif isinstance(X, (complex, float, int)):
         mat = f_material()
         mat.set_isotropic_conductivity(X)
     elif np.iterable(X):
@@ -226,7 +226,7 @@ def load_f_material(X: any = None, **kwargs) -> f_material:
         mat = load_f_material(X.mat)
     if mat is None:
         rise_warning(
-            TypeError,
+            TypeError(),
             f"{type(X)} not convertible in f_material\n",
             "empty material generated",
         )

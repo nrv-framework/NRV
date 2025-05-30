@@ -29,8 +29,13 @@ The pip installation takes care of most of the open source third-party dependenc
 are conda-installable only:
 ::
 
-
     conda install -c conda-forge fenics-dolfinx==0.8.0 mpich
+
+.. Warning::
+    For Linux users, the default `blas` library used in `FenicsX` may not be compatible with the preconditioner used in NRV, which may result in necessary CPU overhead during electric field computation. To avoid this it is thus advised to force the install as bellow
+    ::
+
+        conda install -c conda-forge fenics-dolfinx "libblas=*=*blis"
 
 .. Tip::
     With Mamba, the command is:

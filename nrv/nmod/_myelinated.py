@@ -5,121 +5,26 @@ NRV-:class:`.myelinated` handling.
 import math
 
 import numpy as np
+import matplotlib.pyplot as plt
 
+from nrv.nmod.results._axons_results import axon_results
+
+from ._axons import (
+    axon,
+    neuron,
+    myelinated_models,
+    rotate_list,
+    d_lambda_rule,
+    create_Nseg_freq_shape,
+)
+from .results._myelinated_results import myelinated_results
 from ..backend._log_interface import rise_warning
 from ..backend._NRV_Class import is_empty_iterable
-from ._axons import *
-from ..utils._misc import nearest_idx
-
-MRG_fiberD = np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
-MRG_g = np.asarray(
-    [0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791]
+from ..utils._misc import (
+    nearest_idx,
+    get_MRG_parameters,
+    get_length_from_nodes,
 )
-MRG_axonD = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
-MRG_nodeD = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
-MRG_paraD1 = np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5])
-MRG_paraD2 = np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7])
-MRG_deltax = np.asarray([100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500])
-MRG_paralength2 = np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60])
-MRG_nl = np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150])
-
-
-def get_MRG_parameters(diameter):
-    """
-    Compute the MRG parameters
-
-    Original parameters are listed and used if the input diameter is in the list,
-    parameters are interpolated if the diameter is not in the original list.
-
-    Parameters
-    ----------
-    diameter    : float
-        diameter of the unmylinated axon to implement, in um
-
-    Returns
-    -------
-    g           : float
-    axonD       : float
-    nodeD       : float
-    paraD1      : float
-    paraD2      : float
-    deltax      : float
-    paralength2 : float
-    nl          : float
-    """
-    if diameter in MRG_fiberD:
-        index = np.where(MRG_fiberD == diameter)[0]
-        g = MRG_g[index]
-        axonD = MRG_axonD[index]
-        nodeD = MRG_nodeD[index]
-        paraD1 = MRG_paraD1[index]
-        paraD2 = MRG_paraD2[index]
-        deltax = MRG_deltax[index]
-        paralength2 = MRG_paralength2[index]
-        nl = MRG_nl[index]
-    else:
-        # create fiting polynomyals
-        g_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_g, 3))
-        axonD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_axonD, 3))
-        nodeD_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nodeD, 3))
-        paraD1_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD1, 3))
-        paraD2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paraD2, 3))
-
-        if diameter < 1.0 or diameter > 14.0:
-            # outside of the MRG originla limit, take 1st order approx,
-            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 3))
-            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 2))
-        else:
-            # try to fit a bit better
-            paralength2_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_paralength2, 5))
-            deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 5))
-        nl_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_nl, 3))
-
-        # evaluate for the requested diameter
-        g = g_poly(diameter)
-        axonD = axonD_poly(diameter)
-        nodeD = nodeD_poly(diameter)
-        paraD1 = paraD1_poly(diameter)
-        paraD2 = paraD2_poly(diameter)
-        deltax = deltax_poly(diameter)
-        paralength2 = paralength2_poly(diameter)
-        nl = nl_poly(diameter)
-    return (
-        float(g),
-        float(axonD),
-        float(nodeD),
-        float(paraD1),
-        float(paraD2),
-        float(deltax),
-        float(paralength2),
-        float(nl),
-    )
-
-
-def get_length_from_nodes(diameter, nodes):
-    """
-    Function to compute the length of a myelinated axon to get the correct number of Nodes of Ranvier
-    For Myelinated models only (not compatible with A delta thin myelinated models)
-
-    Parameters
-    ----------
-    diameter    : float
-        diameter of the axon in um
-    nodes       : int
-        number of nodes in the axon
-
-    Returns
-    -------
-    length      : float
-        lenth of the axon with the correct number of nodes in um
-    """
-    if diameter in MRG_fiberD:
-        index = np.where(MRG_fiberD == diameter)[0]
-        deltax = MRG_deltax[index]
-    else:
-        deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
-        deltax = deltax_poly(diameter)
-    return float(math.ceil(deltax * (nodes - 1)))
 
 
 class myelinated(axon):
@@ -570,6 +475,18 @@ class myelinated(axon):
         self.__get_seg_positions()
         self.__get_rec_positions()
 
+    @property
+    def n_nodes(self)->int:
+        """
+        number of nodes of Ranvier
+
+        Returns
+        -------
+        int
+
+        """
+        return len(self.node)
+
     def save(
         self,
         save=False,
@@ -993,6 +910,16 @@ class myelinated(axon):
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
+    def clear_I_Clamp(self):
+        """
+        Clear any I-clamp attached to the axon
+        """
+        self.intra_current_stim = []
+        self.intra_current_stim_positions = []
+        self.intra_current_stim_starts = []
+        self.intra_current_stim_durations = []
+        self.intra_current_stim_amplitudes = []
+
     def insert_V_Clamp_node(self, index, stimulus):
         """
         Insert a V clamp stimulation
@@ -1027,6 +954,14 @@ class myelinated(axon):
         # adapt position to the number of sections
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_V_Clamp_node(index, stimulus)
+
+    def clear_V_Clamp(self):
+        """
+        Clear any V-clamp attached to the axon
+        """
+        self.intra_voltage_stim = None
+        self.intra_voltage_stim_position = []
+        self.intra_voltage_stim_stimulus = None
 
     ##############################
     ## Result recording methods ##
@@ -1652,3 +1587,8 @@ class myelinated(axon):
             I1_nav16_ax,
             I2_nav16_ax,
         )
+
+
+    # Simulate method, for output type 
+    def simulate(self, **kwargs) -> myelinated_results:
+        return super().simulate(**kwargs)

@@ -5,14 +5,14 @@ import sys
 from typing import Callable
 from time import perf_counter
 from multiprocessing import Pool
-from tqdm import tqdm
+# from pathos.multiprocessing import ProcessingPool as Pool
+from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
 from functools import partial
 from itertools import repeat
 
 from ..backend._file_handler import is_iterable
 from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
 from ..backend._parameters import parameters
-from ..backend._MCore import *
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._materials import *
@@ -23,19 +23,13 @@ from ..utils._stimulus import *
 from ..utils._saving_handler import *
 from ._axon_postprocessing import *
 
-unmyelinated_models = [
-    "HH",
-    "Rattay_Aberham",
-    "Sundt",
-    "Tigerholm",
-    "Schild_94",
-    "Schild_97",
-]
-myelinated_models = ["MRG", "Gaines_motor", "Gaines_sensory"]
-
 
 def set_args_kwargs(func, args, kwargs):   
     return func(*args, **kwargs)
+
+def _call_wrapper(args):
+    param, kw, func = args
+    return func(param, **kw)
 
 def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None, **kwargs)->list[any]:
     """
@@ -56,32 +50,42 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
         List of ordered thresholds.
     """
     
-    l_kwargs = []
-    c_kwargs = {}
-    tot = len(list(parameter_list))
-    if ncore is not None:
-        tot = ncore
-    for k in range(tot):
-        n_kwargs = {}
-        for key in kwargs:
-            if is_iterable(kwargs[key]):
-                if len (kwargs[key]) == tot:
-                    n_kwargs[key] = kwargs[key][k]
-                else:
-                    rise_warning(f"length of kwargs {key} in {__name__} is inconsistant. Got {len (kwargs[key])}, expected {tot}.")
-                    pass_info(f"Used {key}[0] in pool")
-                    c_kwargs[key] = kwargs[key][0]
-            else:
-                c_kwargs[key] = kwargs[key]
-            l_kwargs.append(n_kwargs)
-    
-    p_search_func = partial(search_func,**c_kwargs)
-    with Pool(tot) as pool: 
-        args_for_starmap = zip(repeat(p_search_func), zip(parameter_list), l_kwargs)
-        results = list(tqdm(pool.starmap(set_args_kwargs,args_for_starmap)))
-        pool.close()
-        pool.join()
-        return(results)
+    total = len(parameter_list)
+    if ncore is None:
+        ncore = total
+
+    # Split constant kwargs variable ones
+    varying_keys = {k: v for k, v in kwargs.items() if is_iterable(v) and len(v) == total}
+    constant_kwargs = {k: v for k, v in kwargs.items() if not (is_iterable(v) and len(v) == total)}
+
+    call_args = []
+    for i in range(total):
+        kw = {k: v[i] for k, v in varying_keys.items()}
+        kw.update(constant_kwargs)
+        call_args.append((parameter_list[i], kw, search_func)) 
+
+    call_args = []
+    for i in range(total):
+        kw = {k: v[i] for k, v in varying_keys.items()}
+        kw.update(constant_kwargs)
+        call_args.append((parameter_list[i], kw, search_func))
+
+    results = []
+    #TODO: display individual search output (for each core, see EIT) instead of "processing search"
+    with Pool(processes=ncore) as pool:
+        with Progress(
+            SpinnerColumn(),
+            BarColumn(),
+            TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+            TimeRemainingColumn(),
+            TextColumn("Processing Search..."),
+        ) as progress:
+            task = progress.add_task("[cyan]Dispatching...", total=total)
+            for result in pool.imap(_call_wrapper, call_args):
+                results.append(result)
+                progress.update(task, advance=1,refresh=True)
+
+    return results
 
 
 
@@ -140,7 +144,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     current_amp = amp_max
     Niter = 1
     keep_going = 1
-    t_start = perf_counter()
+    t_start_cnt = perf_counter()
 
     while keep_going:
         if verbose and Niter == 1:
@@ -223,7 +227,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     if verbose:
         clear_prompt_line(1)
         pass_info(f"Activation threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start,2)}s).")
+                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
     return current_amp
 
 def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_start: float,
@@ -285,7 +289,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     current_amp = amp_max
     Niter = 1
     keep_going = 1
-    t_start = perf_counter()
+    t_start_cnt = perf_counter()
     
     while keep_going:
         if verbose and Niter == 1:
@@ -371,7 +375,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     if verbose:
         clear_prompt_line(1)
         pass_info(f"Block threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start,2)}s).")
+                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
     return current_amp
 
 def firing_threshold_point_source(
@@ -859,115 +863,6 @@ def firing_threshold_from_axon(
         Niter += 1
     del axon
     return current_amp
-
-
-def para_firing_threshold(
-    diameter,
-    L,
-    material,
-    dist_elec,
-    cath_first=True,
-    cath_time=60e-3,
-    t_inter=40e-3,
-    cath_an_ratio=5,
-    position_elec=0.5,
-    model="MRG",
-    amp_max=2000,
-    amp_min=0,
-    amp_tol=1,
-    verbose=False,
-    f_dlambda=100,
-    dt=0.005,
-):
-    if MCH.is_alone() or MCH.size < 3:
-        if MCH.do_master_only_work():
-            rise_error(
-                "Error: parallel evaluation of a threshold by binary search needs at least 3 parallel processes, but only",
-                MCH.size,
-                "launched",
-            )
-        sys.exit(1)
-    amplitude_max_th = amp_max
-    amplitude_min_th = amp_min
-    amplitude_tol = amp_tol
-    # axon
-    y = 0
-    z = 0
-    # extra cellular
-    extra_material = load_material(material)
-    # Dichotomy initialization
-    Niter = 1
-    values = np.linspace(amplitude_min_th, amplitude_max_th, num=MCH.size)
-    delta_amp = values[-1] - values[0]
-    current_amp = (values[-1] - values[0]) / 2
-    all_values = values
-    while delta_amp > amplitude_tol or Niter == 1:
-        # update toledance
-        delta_amp = values[1] - values[0]
-        # split job
-        current_amp = values[MCH.rank]
-        # create axon
-        if model in unmyelinated_models:
-            axon1 = unmyelinated(y, z, diameter, L, dt=dt, freq=f_dlambda, model=model)
-        elif model in myelinated_models:
-            axon1 = myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
-        else:
-            axon1 = myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
-        # extra-cellular stimulation
-        x_elec = L * position_elec
-        y_elec = dist_elec
-        z_elec = 0
-        elec_1 = point_source_electrode(x_elec, y_elec, z_elec)
-
-        # stimulus def
-        stim_1 = stimulus()
-        start = 1
-        I_cathod = current_amp
-        I_anod = I_cathod / cath_an_ratio
-        stim_1.biphasic_pulse(
-            start, I_cathod, cath_time, I_anod, t_inter, anod_first=(not cath_first)
-        )
-
-        stim_extra = stimulation(extra_material)
-        stim_extra.add_electrode(elec_1, stim_1)
-        axon1.attach_extracellular_stimulation(stim_extra)
-        # simulate axon activity
-        results = axon1.simulate(t_sim=5)
-        del axon1
-        # post-process results
-        # test simulation results, gather results to master
-        if results.is_recruited("V_mem"):
-            spike = np.asarray([True])
-        else:
-            spike = np.asarray([False])
-        all_spikes = MCH.gather_jobs_as_array(spike)
-        if MCH.do_master_only_work():
-            # add the extrema (False at start, True at the end) already computed at the previous step if Niter > 1
-            if Niter > 1:
-                all_spikes = np.insert(np.append(all_spikes, True), 0, False)
-            # find the zone where the spike appears, update min max
-            appear_index = np.argmax(all_spikes == True)
-            amplitude_max_th = all_values[appear_index]
-            amplitude_min_th = all_values[appear_index - 1]
-            # update current amp
-            current_amp = amplitude_min_th + (amplitude_max_th - amplitude_min_th) / 2
-            # compute new values
-            all_values = np.linspace(
-                amplitude_min_th, amplitude_max_th, num=MCH.size + 3
-            )
-            values = all_values[1:-1]
-        # share new values
-        values = MCH.master_broadcasts_array_to_all(values)
-        Niter += 1
-    # adapt Niter for correct return
-    Niter -= 1
-    # share master current amp to all process
-    current_amp = MCH.master_broadcasts_array_to_all(current_amp)
-    return current_amp, Niter
 
 
 def blocking_threshold_point_source(
@@ -1469,104 +1364,3 @@ def blocking_threshold_from_axon(
         Niter += 1
     return current_amp
 
-
-def para_blocking_threshold(
-    diameter,
-    L,
-    material,
-    dist_elec,
-    block_freq,
-    position_elec=0.5,
-    model="MRG",
-    amp_max=2000,
-    amp_min=0,
-    amp_tol=15,
-    verbose=True,
-    f_dlambda=100,
-    dt=0.005,
-):
-    amplitude_max_th = amp_max
-    amplitude_min_th = amp_min
-    amplitude_tol = amp_tol
-    # axon
-    y = 0
-    z = 0
-    # test spike
-    t_start = 20
-    duration = 0.1
-    amplitude = 3
-    # extra cellular
-    extra_material = load_material(material)
-    block_start = 3  # ms
-    block_duration = 20  # ms
-    # Dichotomy initialization
-    Niter = 1
-    values = np.linspace(amplitude_min_th, amplitude_max_th, num=MCH.size)
-    delta_amp = values[-1] - values[0]
-    current_amp = (values[-1] - values[0]) / 2
-    all_values = values
-    while delta_amp > amplitude_tol or Niter == 1:
-        # update toledance
-        delta_amp = values[1] - values[0]
-        # split job
-        current_amp = values[MCH.rank]
-        # create axon
-        if model in unmyelinated_models:
-            axon1 = unmyelinated(y, z, diameter, L, dt=dt, freq=f_dlambda, model=model)
-        elif model in myelinated_models:
-            axon1 = myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
-        else:
-            axon1 = myelinated(
-                y, z, diameter, L, rec="nodes", dt=dt, freq=f_dlambda, model=model
-            )
-        # insert test spike
-        axon1.insert_I_Clamp(0, t_start, duration, amplitude)
-        # extra-cellular stimulation
-        x_elec = L * position_elec
-        y_elec = dist_elec
-        z_elec = 0
-        elec_1 = point_source_electrode(x_elec, y_elec, z_elec)
-        stim_1 = stimulus()
-        stim_1.sinus(
-            block_start,
-            block_duration,
-            current_amp,
-            block_freq,
-            dt=1 / (block_freq * 20),
-        )
-        stim_extra = stimulation(extra_material)
-        stim_extra.add_electrode(elec_1, stim_1)
-        axon1.attach_extracellular_stimulation(stim_extra)
-        # simulate axon activity
-        results = axon1.simulate(t_sim=25)
-        del axon1
-        # post-process results
-
-        # test simulation results, gather results to master
-        blocked = [results.is_blocked(AP_start=t_start, freq=block_freq)]
-        all_blocks = MCH.gather_jobs_as_array(blocked)
-        if MCH.do_master_only_work():
-            # add the extrema (False at start, True at the end) already computed at the previous step if Niter > 1
-            if Niter > 1:
-                all_blocks = np.insert(np.append(all_blocks, True), 0, False)
-            # find the zone where the blocking appears, update min max
-            appear_index = np.argmax(all_blocks == True)
-            amplitude_max_th = all_values[appear_index]
-            amplitude_min_th = all_values[appear_index - 1]
-            # update current amp
-            current_amp = amplitude_min_th + (amplitude_max_th - amplitude_min_th) / 2
-            # compute new values
-            all_values = np.linspace(
-                amplitude_min_th, amplitude_max_th, num=MCH.size + 3
-            )
-            values = all_values[1:-1]
-        # share new values
-        values = MCH.master_broadcasts_array_to_all(values)
-        Niter += 1
-    # adapt Niter for correct return
-    Niter -= 1
-    # share master current amp to all process
-    current_amp = MCH.master_broadcasts_array_to_all(current_amp)
-    return current_amp, Niter

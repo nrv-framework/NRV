@@ -167,7 +167,7 @@ def json_load(filename):
         results = json.load(file_to_read)
     return results
 
-
+## TODO add NRV_decoder to simplify NRV_class save/load methode
 class NRV_Encoder(json.JSONEncoder):
     """
     Json encoding class, specific for NRV2 axon
@@ -183,10 +183,14 @@ class NRV_Encoder(json.JSONEncoder):
             result = float(obj)
         elif isinstance(obj, np.ndarray):
             result = obj.tolist()
+        elif isinstance(obj, set):
+            result = list(obj)
         else:
             # Let the base class Encoder handle the object
             result = json.JSONEncoder.default(self, obj)
         return result
+
+
 
 
 ######################

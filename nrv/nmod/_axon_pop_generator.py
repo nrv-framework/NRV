@@ -4,7 +4,7 @@ Axon population generator usefull functions.
 import faulthandler 
 import math
 import os
-from tqdm import tqdm
+from rich.progress import track
 
 import matplotlib.pyplot as plt
 from itertools import combinations
@@ -235,7 +235,7 @@ class nerve_gen_two_gamma(rv_continuous):
         )
 
 
-def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
+def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None, one_gamma:bool = False):
     """
     Create a statistical generator (type rv_continuous) for a given statistic.
 
@@ -249,7 +249,9 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         minimal diameter to consider, in um. If None, the minimal value of the statistic is taken
     dmax        : float
         minimal diameter to consider, in um. If None, the maximal value of the statistic plus bin size is taken
-
+    one_gamma    : bool
+        If true, the stat generator is forced to one gamma only
+        
     Returns
     -------
     generator   : rv_continuous
@@ -269,7 +271,7 @@ def create_generator_from_stat(stat, myelinated=True, dmin=None, dmax=None):
         bin_size = diameters[1] - diameters[0]
         dmax = max(diameters) + bin_size
     # perform stat fitting and create generator
-    if myelinated and dmax > 10:
+    if myelinated and dmax > 10 and not one_gamma:
         popt1, pcov1 = curve_fit(
             two_Gamma,
             xdata=diameters,
@@ -702,13 +704,13 @@ def axon_packer(diameters: np.array,
 
     id_others = get_axon_other_id(ids)
 
-    #for _ in tqdm(range (n_iter)):
+    #for _ in track(range (n_iter)):
     #    pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
     if monitor:
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.set_axis_off()
         fig.add_axes(ax)
-    for i in tqdm(range (n_iter)):
+    for i in track(range (n_iter)):
         pos = update_axon_packing(pos,id_pairs,diam_pair,gc,v_att,v_rep,delta,Naxon)
         
         if monitor and i %n_monitor == 0:

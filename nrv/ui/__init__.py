@@ -13,10 +13,8 @@ from ._axon_simulations import (
     axon_block_threshold,
     firing_threshold_point_source,
     firing_threshold_from_axon,
-    para_firing_threshold,
     blocking_threshold_point_source,
     blocking_threshold_from_axon,
-    para_blocking_threshold,
 )
 
 from ._axon_postprocessing import (
@@ -76,10 +74,8 @@ functions = [
     "axon_block_threshold",
     "firing_threshold_point_source",
     "firing_threshold_from_axon",
-    "para_firing_threshold",
     "blocking_threshold_point_source",
     "blocking_threshold_from_axon",
-    "para_blocking_threshold",
     "remove_key",
     "remove_non_NoR_zones",
     "generate_axon_from_results",

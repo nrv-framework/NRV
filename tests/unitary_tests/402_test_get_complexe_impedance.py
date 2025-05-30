@@ -6,13 +6,15 @@ mpl.rcParams['hatch.linewidth'] = 4
 
 # add path to nrvdev (remove ater realese)
 import nrv
-test_num = "402"
-fig_file = f"./unitary_tests/figures/{test_num}_"
 
-def compute_Z(fc, g):
-    return lambda f: 1/(g*(1+1j*f/fc))
+if __name__ == "__main__":
+    test_num = "402"
+    fig_file = f"./unitary_tests/figures/{test_num}_"
 
-if nrv.MCH.do_master_only_work():
+    def compute_Z(fc, g):
+        return lambda f: 1/(g*(1+1j*f/fc))
+
+
     # myelinated specific
     du = 1
     Lu = 1000
@@ -42,8 +44,8 @@ if nrv.MCH.do_master_only_work():
     u_res = ax_u.simulate(dt=dt, t_sim=t_sim, record_particles=True, record_g_ions=True, record_g_mem=True)
 
     del ax_u
-    C = nrv.find_central_node_index(u_res)
-    nrv.compute_f_mem(u_res)
+    C = u_res.find_central_index()
+    u_res.compute_f_mem()
     V_umem = u_res["V_mem"][C]
     g_umem = u_res["g_mem"][C]
     f_umem = u_res["f_mem"][C]
@@ -74,9 +76,9 @@ if nrv.MCH.do_master_only_work():
     m_res = ax_m.simulate(dt=dt, t_sim=t_sim, record_particles=True, record_g_ions=True, record_g_mem=True)
 
     del ax_m
-    C = nrv.find_central_node_index(m_res)
+    C = m_res.find_central_index()
     x_C = m_res.find_central_node_coordinate()
-    nrv.compute_f_mem(m_res)
+    m_res.compute_f_mem()
     V_mmem = m_res["V_mem"][C]
     g_mmem = m_res["g_mem"][C]
     f_mmem = nrv.from_nrv_unit(m_res["f_mem"][C], "Hz")
@@ -102,47 +104,46 @@ if nrv.MCH.do_master_only_work():
 
 
 
-###################
-##### Nerve #######
-###################
-nrv.synchronize_processes()
-outer_d = 5 # mm
-nerve_d = 300 # um
-nerve_l = 5100 # um
+    ###################
+    ##### Nerve #######
+    ###################
+    outer_d = 5 # mm
+    nerve_d = 300 # um
+    nerve_l = 5100 # um
 
-fasc1_d = 250 # um
-fasc1_y = 0
-fasc1_z = 0
-n_ax1 = 5
+    fasc1_d = 250 # um
+    fasc1_y = 0
+    fasc1_z = 0
+    n_ax1 = 5
 
-t_sim, dt = 10, 0.001
+    t_sim, dt = 10, 0.001
 
-nerve_1 = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d, t_sim=t_sim, dt=dt)
+    nerve_1 = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d, t_sim=t_sim, dt=dt)
 
-axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax1, percent_unmyel=1, M_stat="Ochoa_M", U_stat="Ochoa_U",)
+    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax1, percent_unmyel=1, M_stat="Ochoa_M", U_stat="Ochoa_U",)
 
-fascicle_1 = nrv.fascicle(ID=0)      #we can add diameter here / no need to call define_circular_contour (not tested)
-fascicle_1.define_circular_contour(fasc1_d)
-fascicle_1.fill_with_population(axons_diameters, axons_type, fit_to_size=True,delta=5)
-fascicle_1.generate_random_NoR_position()
-nerve_1.add_fascicle(fascicle=fascicle_1, y=fasc1_y, z=fasc1_z)
+    fascicle_1 = nrv.fascicle(ID=0)      #we can add diameter here / no need to call define_circular_contour (not tested)
+    fascicle_1.define_circular_contour(fasc1_d)
+    fascicle_1.fill_with_population(axons_diameters, axons_type, fit_to_size=True,delta=5)
+    fascicle_1.generate_random_NoR_position()
+    nerve_1.add_fascicle(fascicle=fascicle_1, y=fasc1_y, z=fasc1_z)
 
-fig, ax = plt.subplots(1, 1, figsize=(6,6))
-nerve_1.plot(ax)
-fig.savefig(fig_file+"B.png")
-
-
-t_start = 1
-duration = 0.2
-amplitude = 5
-nerve_1.insert_I_Clamp(0, t_start, duration, amplitude)
-fasc_dic = nerve_1.save(save=False, intracel_context=True)
-
-res_nrv = nerve_1.simulate(save_path="", sample_dt=2*dt,postproc_script="save_gmem", record_g_mem=True, return_parameters_only=False, save_results=False)
+    fig, ax = plt.subplots(1, 1, figsize=(6,6))
+    nerve_1.plot(ax)
+    fig.savefig(fig_file+"B.png")
 
 
+    t_start = 1
+    duration = 0.2
+    amplitude = 5
+    nerve_1.insert_I_Clamp(0, t_start, duration, amplitude)
+    fasc_dic = nerve_1.save(save=False, intracel_context=True)
 
-if nrv.MCH.do_master_only_work():
+    res_nrv = nerve_1.simulate(save_path="", sample_dt=2*dt,postproc_script="sample_g_mem", record_g_mem=True, return_parameters_only=False, save_results=False)
+
+
+
+
     Ynrv0 = []
     Ynrv2 = []
     t1 = 1
@@ -170,4 +171,4 @@ if nrv.MCH.do_master_only_work():
         plt.figure(4)
         plt.loglog(freq, 1/Ynrv0[:,i], color=c[i])
         plt.loglog(freq, 1/Ynrv2[:,i], ":", color=c[i])
-    #plt.show()
+        #plt.show()

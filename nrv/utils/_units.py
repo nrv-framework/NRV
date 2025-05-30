@@ -12,7 +12,7 @@ The folowing table details the default units used in NRV and the lists of units 
             - Existing
         *   - Voltage
             - mV
-            - uV, V
+            - uV, V, kV, MV
         *   - Time
             - ms
             - us, s, minute, hour, day
@@ -36,6 +36,7 @@ The folowing table details the default units used in NRV and the lists of units 
 
 import numpy as np
 from copy import deepcopy
+from math import isnan
 
 ###################
 ## defaulf units ##
@@ -53,6 +54,8 @@ uF = 1  # default unit for capacitance is uF
 ######################
 uV = 1e-3 * mV
 V = 1e3 * mV
+kV = 1e3 * V
+MV = 1e3 * kV
 
 #############################
 ## time prefixes and units ##
@@ -272,5 +275,8 @@ def sci_round(value, digits=3):
             cp_value[i] = sci_round(num, digits)
         return cp_value
     else:
-        power = "{:e}".format(value).split("e")[1]
-        return round(value, -(int(power) - digits + 1))
+        if not isnan(value):
+            power = "{:e}".format(value).split("e")[1]
+            return round(value, -(int(power) - digits + 1))
+        else:
+            return value

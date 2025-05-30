@@ -285,7 +285,11 @@ class axon(NRV_simulable):
         self.Nsec = 0
         self.Nseg = 0
         self.myelinated = ""
-        ## stims
+
+        self.set_parameters(**kwargs)
+
+        ## Contexts
+        # Intra stims
         self.intra_current_stim = []
         self.intra_current_stim_positions = []
         self.intra_current_stim_starts = []
@@ -294,6 +298,8 @@ class axon(NRV_simulable):
         self.intra_voltage_stim = None
         self.intra_voltage_stim_position = []
         self.intra_voltage_stim_stimulus = None
+        
+        # Extra stims
         self.extra_stim = None
         self.footprints = None
         ## recording mechanism
@@ -1110,7 +1116,11 @@ class axon(NRV_simulable):
                     )
                     # compute extra-cellular potential and add it to already computed ones
                 self.recorder.set_time(axon_sim["t"])
-                self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
+                if self.myelinated and self.rec == "all":
+                    self.recorder.add_axon_contribution(axon_sim["I_mem"][axon_sim["node_index"]], self.ID)
+                else:
+                    self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
+                axon_sim["recorder"] = self.recorder.save()
 
         except KeyboardInterrupt:
             rise_error(
@@ -1221,6 +1231,25 @@ class axon(NRV_simulable):
                 axon_sim["extracellular_stimuli"] = stimuli_list
                 axon_sim["extracellular_stimuli_t"] = stimuli_time_list
         return axon_sim
+    
+
+    def clear_I_Clamp(self):
+        """
+        Clear any I-clamp attached to the axon
+        """
+        self.intra_current_stim = []
+        self.intra_current_stim_positions = []
+        self.intra_current_stim_starts = []
+        self.intra_current_stim_durations = []
+        self.intra_current_stim_amplitudes = []
+
+    def clear_V_Clamp(self):
+        """
+        Clear any V-clamp attached to the axon
+        """
+        self.intra_voltage_stim = None
+        self.intra_voltage_stim_position = []
+        self.intra_voltage_stim_stimulus = None
 
     ###########################
     ## Axon abstract methods ##

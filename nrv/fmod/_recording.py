@@ -5,9 +5,9 @@ NRV-:class:`.recorder` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend._log_interface import rise_error, rise_warning
-from ..backend._MCore import MCH, synchronize_processes
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._units import cm, m
 from ._materials import load_material
@@ -244,9 +244,10 @@ class recording_point(NRV_class):
             surface = surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
             d_internode = np.gradient(x_axon)
 
-        sx = sigma_yy * sigma_zz
-        sy = sigma_xx * sigma_zz
-        sz = sigma_xx * sigma_yy
+        #!! Modified tc 12/12/24 added **0.5 
+        sx = (sigma_yy * sigma_zz)**.5
+        sy = (sigma_xx * sigma_zz)**.5
+        sz = (sigma_xx * sigma_yy)**.5
 
         electrical_distance = (
             4
@@ -669,6 +670,7 @@ class recorder(NRV_class):
                                 self.sigma_xx,
                                 self.sigma_yy,
                                 self.sigma_zz,
+                                True,
                             )
                     if point.method == "LSA":
                         if self.isotropic:
@@ -768,29 +770,35 @@ class recorder(NRV_class):
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
-    def __update_master_t(self):
-        """
-        if the recorder has not been used in the master process:
-        recover the time verctor in the master from an other process (rank 1)
-        """
-        synchronize_processes()
-        if MCH.do_master_only_work():
-            self.t = MCH.recieve_data_from_slave()["t"]
-        elif MCH.rank == 1:
-            MCH.send_data_to_master({"t": self.t})
-        else:
-            pass
 
-    def gather_all_recordings(self, master_computed=True):
+
+    def gather_all_recordings(self, results:list[dict]):
         """
         Gather all recordings computed by each cores in case of parallel simulation (fascicle
         level), sum de result and propagate final extracellular potential to each core.
         """
         if not self.is_empty():
-            if not master_computed:
-                self.__update_master_t()
-
-            for point in self.recording_points:
+            reclist = [res["recorder"] for res in results]
+            self.t = reclist[0]["t"]
+            for i, point in enumerate(self.recording_points):
                 if point.recording is None:
                     point.recording = 0.0
-                point.recording = MCH.sum_jobs(point.recording)
+                for rec in reclist:
+                    point.recording += np.array(rec["recording_points"][i]["recording"])
+
+    def plot(self, axes: plt.axes, points:int|np.ndarray|None=None,color: str = "k", **kwgs) -> None:
+        if self.t is None:
+            rise_warning("empty recorder canot be ploted")
+        else:
+            if points is None:
+                points = np.arange(len(self.recording_points))
+            if np.iterable(points):
+                for i_pts in points:
+                    self.plot(axes=axes, points=i_pts, color=color, **kwgs)
+            else:
+                if points > len(self.recording_points):
+                    rise_warning(f"recording point {points} does not exits in recorder, and so canot be ploted")
+                else:
+                    axes.plot(self.t, self.recording_points[points].recording, color=color,**kwgs)
+
+

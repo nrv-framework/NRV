@@ -18,10 +18,8 @@ care of handling the simulation, potential combination with subpackages
 (such as nmod or eit for instance). Parallel computing is also handled
 internally.
 
-.. note::
-  for scientific details of how nmod works and an overview of the general
-  implementation, refer to the 'Scientific foundations' section of the
-  documentation.
+.. SeeAlso::
+   :doc:`Scientific details</scientific>`, :doc:`Simulables users guide</usersguide/simulables>`
 """
 
 from ._axon_pop_generator import (

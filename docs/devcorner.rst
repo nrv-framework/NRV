@@ -53,7 +53,7 @@ If you add a new functionality, you should add one or several tests, showing tha
 6. Please do not forget to update the documentation if your changes imply knowledge from the end user. To be able to compile the documentation, few dependancies have to be considered:
 ::
 
-    $ pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude
+    $ pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton nbsphinx sphinx_gallery
 
 Once installed, you should be able to build the documentation with the following command:
 ::
@@ -204,8 +204,3 @@ NRV is certainly not perfect, and we hope that the open-science approach can con
     - design wrapper and decorators with simulations to ease systematic tasks in results post-processing
 
 - **Compatibility and marking of results:** provide automated tagging of objects with version and develop routines for versions checking.
-
-- **Parallel computing**
-    - migrate to *multiprocessing* (Python core library)
-    - parallel version of axon population generation and axon packing
-    - design further decorators to clean scripting and make syntax more pythonic

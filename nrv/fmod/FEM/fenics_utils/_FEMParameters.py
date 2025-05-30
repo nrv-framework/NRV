@@ -59,9 +59,11 @@ class FEMParameters(NRV_class):
         self.domains_list = {}
 
         # boundaries
-        self.Nboundaries = 0
-        self.boundariesID = []
-        self.boundaries_list = {}
+        self.Nboundaries = 0 # Todo check if usefull
+        self.dboundariesID = []
+        self.nboundariesID = []
+        self.dboundaries_list = {}
+        self.nboundaries_list = {}
 
         # internal boundaries (thin layer)
         self.inbound = False
@@ -75,68 +77,75 @@ class FEMParameters(NRV_class):
         if data is not None:
             self.load(data)
 
-    def save(self, save=False, fname="FEMParameters.json"):
-        """
-        Return FEMParameters as dictionary and eventually save it as json file
 
-        Parameters
-        ----------
-        save    : bool
-            if True, save in json files
-        fname   : str
-            Path and Name of the saving file, by default "FEMParameters.json"
+    # def save(self, save=False, fname="FEMParameters.json"):
+    #     """
+    #     Return FEMParameters as dictionary and eventually save it as json file
 
-        Returns
-        -------
-        sp_dic : dict
-            dictionary containing all information
-        """
-        sp_dic = {}
-        sp_dic["D"] = self.D
-        sp_dic["file"] = self.mesh_file
-        sp_dic["Ndomains"] = self.Ndomains
-        sp_dic["domainsID"] = self.domainsID
-        sp_dic["domains"] = self.domains_list
-        sp_dic["Nboundaries"] = self.Nboundaries
-        sp_dic["boundariesID"] = self.boundariesID
-        sp_dic["boundaries"] = self.boundaries_list
-        sp_dic["inbound"] = self.inbound
-        sp_dic["Ninboundaries"] = self.Ninboundaries
-        sp_dic["inboundariesID"] = self.inboundariesID
-        sp_dic["inboundaries"] = self.inboundaries_list
-        sp_dic["mat_pty_map"] = self.mat_pty_map
-        if save:
-            json_dump(sp_dic, fname)
-        return sp_dic
+    #     Parameters
+    #     ----------
+    #     save    : bool
+    #         if True, save in json files
+    #     fname   : str
+    #         Path and Name of the saving file, by default "FEMParameters.json"
 
-    def load(self, data):
-        """
-        Load all FEMParameters properties from a dictionary or a json file
+    #     Returns
+    #     -------
+    #     sp_dic : dict
+    #         dictionary containing all information
+    #     """
+    #     sp_dic = {}
+    #     sp_dic["D"] = self.D
+    #     sp_dic["file"] = self.mesh_file
+    #     sp_dic["Ndomains"] = self.Ndomains
+    #     sp_dic["domainsID"] = self.domainsID
+    #     sp_dic["domains"] = self.domains_list
+    #     sp_dic["Nboundaries"] = self.Nboundaries
+    #     sp_dic["boundariesID"] = self.dboundariesID
+    #     sp_dic["boundariesID"] = self.nboundariesID
+    #     sp_dic["dboundaries"] = self.dboundaries_list
+    #     sp_dic["nboundaries"] = self.nboundaries_list
+    #     sp_dic["inbound"] = self.inbound
+    #     sp_dic["Ninboundaries"] = self.Ninboundaries
+    #     sp_dic["inboundariesID"] = self.inboundariesID
+    #     sp_dic["inboundaries"] = self.inboundaries_list
+    #     sp_dic["mat_pty_map"] = self.mat_pty_map
+    #     if save:
+    #         json_dump(sp_dic, fname)
+    #     return sp_dic
 
-        Parameters
-        ----------
-        data    : str or dict
-            json file path or dictionary containing FEMParameters information
-        """
-        if type(data) == str:
-            sp_dic = json_load(data)
-        elif is_sim_param(data):
-            sp_dic = self.save()
-        else:
-            sp_dic = data
-        self.D = sp_dic["D"]
-        self.mesh_file = sp_dic["file"]
-        self.Ndomains = sp_dic["Ndomains"]
-        self.domainsID = sp_dic["domainsID"]
-        self.domains_list = sp_dic["domains"]
-        self.Nboundaries = sp_dic["Nboundaries"]
-        self.boundariesID = sp_dic["boundariesID"]
-        self.boundaries_list = sp_dic["boundaries"]
-        self.inbound = sp_dic["inbound"]
-        self.Ninboundaries = sp_dic["Ninboundaries"]
-        self.inboundariesID = sp_dic["inboundariesID"]
-        self.inboundaries_list = sp_dic["inboundaries"]
-        self.mat_pty_map = sp_dic["mat_pty_map"]
+    # def load(self, data):
+    #     """
+    #     Load all FEMParameters properties from a dictionary or a json file
+
+    #     Parameters
+    #     ----------
+    #     data    : str or dict
+    #         json file path or dictionary containing FEMParameters information
+    #     """
+    #     if type(data) == str:
+    #         sp_dic = json_load(data)
+    #     elif is_sim_param(data):
+    #         sp_dic = self.save()
+    #     else:
+    #         sp_dic = data
+    #     self.D = sp_dic["D"]
+    #     self.mesh_file = sp_dic["file"]
+    #     self.Ndomains = sp_dic["Ndomains"]
+    #     self.domainsID = sp_dic["domainsID"]
+    #     self.domains_list = sp_dic["domains"]
+    #     self.Nboundaries = sp_dic["Nboundaries"]
+    #     self.dboundariesID = sp_dic["dboundariesID"]
+    #     self.nboundariesID = sp_dic["nboundariesID"]
+    #     self.dboundaries_list = sp_dic["dboundaries"]
+    #     self.nboundaries_list = sp_dic["nboundaries"]
+    #     self.inbound = sp_dic["inbound"]
+    #     self.Ninboundaries = sp_dic["Ninboundaries"]
+    #     self.inboundariesID = sp_dic["inboundariesID"]
+    #     self.inboundaries_list = sp_dic["inboundaries"]
+    #     self.mat_pty_map = sp_dic["mat_pty_map"]
+
+
 
     def save_SimParameters(self, save=False, fname="FEMParameters.json"):
         rise_warning("save_SimParameters is a deprecated method use save")
@@ -166,8 +175,10 @@ class FEMParameters(NRV_class):
             IDlist = self.domainsID
         elif lname == "inbound":
             IDlist = self.inboundariesID
-        elif lname == "bound":
-            IDlist = self.boundariesID
+        elif lname == "dbound":
+            IDlist = self.dboundariesID
+        elif lname == "nbound":
+            IDlist = self.nboundariesID
         else:
             rise_error("_update_ID_list failed due to unknow list type")
 
@@ -190,8 +201,10 @@ class FEMParameters(NRV_class):
             self.domainsID = IDlist
         elif lname == "inbound":
             self.inboundariesID = IDlist
-        else:
-            self.boundariesID = IDlist
+        elif lname == "dbound":
+            self.dboundariesID = IDlist
+        elif lname == "nbound":
+            self.nboundariesID = IDlist
         return IDlist[-1]
 
     def add_domain(
@@ -260,16 +273,22 @@ class FEMParameters(NRV_class):
         ID              : int
             ID of the boundary condition
         """
-        IDbound = self.__update_ID_list("bound", mesh_domain)
+        if "d" ==  btype[0].lower():
+            _list = self.dboundaries_list
+            lname = "d" + "bound"
+        elif "n" ==  btype[0].lower():
+            _list = self.nboundaries_list
+            lname = "n" + "bound"
+        IDbound = self.__update_ID_list(lname, mesh_domain)
         if value is not None:
-            self.boundaries_list[IDbound] = {
+            _list[IDbound] = {
                 "mesh_domain": mesh_domain,
                 "condition": btype,
                 "value": value,
                 "mesh_domain_3D": mesh_domain_3D,
             }
         elif variable is not None:
-            self.boundaries_list[IDbound] = {
+            _list[IDbound] = {
                 "mesh_domain": mesh_domain,
                 "condition": btype,
                 "variable": variable,
@@ -277,7 +296,7 @@ class FEMParameters(NRV_class):
             }
         else:
             rise_warning("boundary not set, variable or boundary have to be precised")
-        self.Nboundaries = len(self.boundariesID)
+        self.Nboundaries = len(self.dboundariesID) + len(self.nboundariesID)
 
     def add_inboundary(
         self,

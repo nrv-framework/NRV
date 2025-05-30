@@ -23,6 +23,9 @@ Objects in NRV all inherit from an abstract class (called ``NRV_Class``) that gi
 
 These two points and their consequences on syntax are described hereafter the link on chapters of the user's guide.
 
+.. note::
+    As a good practice, we reconned to place the execution of code in a `if __name__ == "__main__":` block.
+
 Chapters of the User's Guide
 ============================
 

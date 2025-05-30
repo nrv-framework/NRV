@@ -59,6 +59,9 @@ __project__ = "NeuRon Virtualizer (NRV)"
 
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
+import os
+nrn_options = "-nogui"
+os.environ["NEURON_MODULE_OPTIONS"] = nrn_options
 import neuron
 from .backend._parameters import parameters
 
@@ -73,7 +76,6 @@ CONFIG = nrv_config()
 ######################
 from .backend import _compileMods
 from .backend._NRV_Class import load_any
-from .backend._wrappers import *
 
 from .fmod._materials import *
 from .fmod._electrodes import *
@@ -113,9 +115,11 @@ from .nmod.results._nerve_results import *
 
 from .utils._saving_handler import *
 from .utils._nrv_function import *
+from .utils._units import *
 from .ui._axon_postprocessing import *
 from .ui._axon_simulations import *
 from .ui._fascicle_postprocessing import *
+from .ui._spec_loaders import *
 
 from .optim._CostFunctions import *
 from .optim._Optimizers import *

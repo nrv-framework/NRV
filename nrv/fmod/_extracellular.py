@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
-from ..backend._MCore import MCH
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._misc import get_perineurial_thickness
 from ._electrodes import (
@@ -387,7 +386,7 @@ class FEM_stimulation(extracellular_context):
         epi_mat="epineurium",
         ext_mat="saline",
         comsol=True,
-        Ncore=None,
+        n_proc=None,
     ):
 
         super().__init__()
@@ -395,7 +394,7 @@ class FEM_stimulation(extracellular_context):
         self.model_fname = model_fname
         self.setup = False
         self.is_run = False
-        self.Ncore = Ncore
+        self.n_proc = n_proc
         ## get material properties and add to model
 
         if is_mat(endo_mat):
@@ -424,25 +423,15 @@ class FEM_stimulation(extracellular_context):
             self.ext_mat_file = ext_mat
 
         self.type = "FEM_stim"
-
         self.comsol = comsol and not (model_fname is None)
         self.fenics = not self.comsol
         ## load model
         if self.comsol:
-            if MCH.do_master_only_work():
-                self.model = COMSOL_model(self.model_fname, Ncore=self.Ncore)
-            else:
-                # check that COMSOL is not turned OFF in order to continue
-                if not COMSOL_Status:
-                    rise_warning(
-                        "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
-                        abort=True,
-                    )
-                self.model = None
+            self.model = COMSOL_model(self.model_fname, n_proc=self.n_proc)
         else:
-            self.model = FENICS_model(Ncore=self.Ncore)
+            self.model = FENICS_model()
 
-    def set_Ncore(self, N):
+    def set_n_proc(self, N):
         """
         Set the number of cores to use for the FEM
 
@@ -451,7 +440,7 @@ class FEM_stimulation(extracellular_context):
         N       : int
             Number of cores to set
         """
-        self.model.set_Ncore(N=N)
+        self.model.set_n_proc(N=N)
 
     ## Save and Load mehtods
 
@@ -488,17 +477,10 @@ class FEM_stimulation(extracellular_context):
         super().load(data, **kwargs)
 
         if self.fenics:
-            self.set_Ncore(self.Ncore)
+            self.set_n_proc(self.n_proc)
         if C_model:
-            if MCH.do_master_only_work():
-                self.model = COMSOL_model(self.model_fname)
-            else:
-                # check that COMSOL is not turned OFF in order to continue
-                if not COMSOL_Status:
-                    rise_warning(
-                        "Slave process abort as axon is supposed to used a COMSOL FEM and COMSOL turned off",
-                        abort=True,
-                    )
+            self.model = COMSOL_model(self.model_fname)
+
 
     def reshape_outerBox(self, Outer_D, res="default"):
         """
@@ -511,11 +493,10 @@ class FEM_stimulation(extracellular_context):
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
-        if MCH.do_master_only_work():
-            if self.comsol:
-                self.model.set_parameter("Outer_D", str(Outer_D) + "[mm]")
-            else:
-                self.model.reshape_outerBox(Outer_D, res=res)
+        if self.comsol:
+            self.model.set_parameter("Outer_D", str(Outer_D) + "[mm]")
+        else:
+            self.model.reshape_outerBox(Outer_D, res=res)
 
     def reshape_nerve(self, Nerve_D=None, Length=None, y_c=0, z_c=0, res="default"):
         """
@@ -534,16 +515,15 @@ class FEM_stimulation(extracellular_context):
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
-        if MCH.do_master_only_work():
-            if self.comsol:
-                self.model.set_parameter("Nerve_D", str(Nerve_D) + "[um]")
-                self.model.set_parameter("Length", str(Length) + "[um]")
-                self.model.set_parameter("Nerve_y_c", str(y_c) + "[um]")
-                self.model.set_parameter("Nerve_z_c", str(z_c) + "[um]")
-            else:
-                self.model.reshape_nerve(
-                    Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res
-                )
+        if self.comsol:
+            self.model.set_parameter("Nerve_D", str(Nerve_D) + "[um]")
+            self.model.set_parameter("Length", str(Length) + "[um]")
+            self.model.set_parameter("Nerve_y_c", str(y_c) + "[um]")
+            self.model.set_parameter("Nerve_z_c", str(z_c) + "[um]")
+        else:
+            self.model.reshape_nerve(
+                Nerve_D=Nerve_D, Length=Length, y_c=y_c, z_c=z_c, res=res
+            )
 
     def reshape_fascicle(
         self,
@@ -572,33 +552,32 @@ class FEM_stimulation(extracellular_context):
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
-        if MCH.do_master_only_work():
-            p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
-            if self.comsol:
-                if ID is None:
-                    self.model.set_parameter("Fascicle_D", str(Fascicle_D) + "[um]")
-                    self.model.set_parameter("Fascicle_y_c", str(y_c) + "[um]")
-                    self.model.set_parameter("Fascicle_z_c", str(z_c) + "[um]")
-                else:
-                    self.model.set_parameter(
-                        "Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]"
-                    )
-                    self.model.set_parameter(
-                        "Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]"
-                    )
-                    self.model.set_parameter(
-                        "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
-                    )
-                self.model.set_parameter("Perineurium_thickness", str(p_th) + "[um]")
+        p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
+        if self.comsol:
+            if ID is None:
+                self.model.set_parameter("Fascicle_D", str(Fascicle_D) + "[um]")
+                self.model.set_parameter("Fascicle_y_c", str(y_c) + "[um]")
+                self.model.set_parameter("Fascicle_z_c", str(z_c) + "[um]")
             else:
-                self.model.reshape_fascicle(
-                    Fascicle_D=Fascicle_D,
-                    y_c=y_c,
-                    z_c=z_c,
-                    ID=ID,
-                    Perineurium_thickness=p_th,
-                    res=res,
+                self.model.set_parameter(
+                    "Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]"
                 )
+                self.model.set_parameter(
+                    "Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]"
+                )
+                self.model.set_parameter(
+                    "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
+                )
+            self.model.set_parameter("Perineurium_thickness", str(p_th) + "[um]")
+        else:
+            self.model.reshape_fascicle(
+                Fascicle_D=Fascicle_D,
+                y_c=y_c,
+                z_c=z_c,
+                ID=ID,
+                Perineurium_thickness=p_th,
+                res=res,
+            )
 
     def remove_fascicles(self, ID=None):
         """
@@ -609,8 +588,7 @@ class FEM_stimulation(extracellular_context):
         ID          : int, None
             ID number of the fascicle to remove, if None, remove all fascicles, by default None
         """
-        if MCH.do_master_only_work():
-            self.model.remove_fascicles(ID=ID)
+        self.model.remove_fascicles(ID=ID)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -656,7 +634,7 @@ class FEM_stimulation(extracellular_context):
                         self.electrodes_label.append(electrode.label + "_" + str())
                         self.stimuli.append(stimuli[E])
 
-                if self.fenics and MCH.do_master_only_work():
+                if self.fenics:
                     electrode.parameter_model(self.model)
                 self.synchronised = False
                 self.setup = False
@@ -723,12 +701,11 @@ class FEM_stimulation(extracellular_context):
         """
         Set materials properties, build geometry and mesh if not already done and solve the FEM model all in one.
         """
-        if MCH.do_master_only_work() or self.model.is_multi_proc:
-            if not self.setup:
-                self.setup_FEM()
-            if not self.is_run:
-                self.model.solve()
-                self.is_run = True
+        if not self.setup:
+            self.setup_FEM()
+        if not self.is_run:
+            self.model.solve()
+            self.is_run = True
 
     def compute_electrodes_footprints(self, x, y, z, ID):
         """
@@ -746,18 +723,11 @@ class FEM_stimulation(extracellular_context):
             ID of the axon
         """
 
-        if MCH.do_master_only_work() or (self.fenics and self.model.is_multi_proc):
-            # test if the model is not solve and run simulation
-            if not self.model.is_computed:
-                self.run_model()
-            # get all potentials
-            V = self.model.get_potentials(x, y, z)
-        else:
-            # send a request to the master to get all potentials
-            data = {"rank": MCH.rank, "x": x, "y": y, "z": z, "ID": ID}
-            MCH.send_data_to_master(data)
-            # listen to the master to get V
-            V = MCH.recieve_potential_array_from_master()["V"]
+        # test if the model is not solve and run simulation
+        if not self.model.is_computed:
+            self.run_model()
+        # get all potentials
+        V = self.model.get_potentials(x, y, z)
         if len(self.electrodes) > 1:
             # sort electrodes by alphabetical order (COMSOL files should perform the parametric sweep by alphabetical order)
             sorter = np.argsort(self.electrodes_label)

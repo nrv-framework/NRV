@@ -6,8 +6,8 @@ mesh_file = "./unitary_tests/results/mesh/117_mesh"
 fig_file = "./unitary_tests/figures/117_A.png"
 out_file = "./unitary_tests/results/outputs/117_res"
 
-## Mesh creation
-if nrv.MCH.do_master_only_work():
+if __name__ == "__main__":
+    ## Mesh creation
     is_mesh = False
     if not is_mesh:
         print('Building mesh')
@@ -41,53 +41,51 @@ if nrv.MCH.do_master_only_work():
         t2 = time.time()
         print('mesh generated in '+str(t2 - t1)+' s')
 
-nrv.synchronize_processes()
 
-# FEM Simulation
-param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
-param.add_domain(mesh_domain=0,mat_file="saline")
-param.add_domain(mesh_domain=2,mat_file="epineurium")
-param.add_domain(mesh_domain=12,mat_file="endoneurium_ranck")
-param.add_domain(mesh_domain=14,mat_file="endoneurium_ranck")
-#param.add_domain(mesh_domain=1002,mat_file="endoneurium_ranck")
+    # FEM Simulation
+    param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
+    param.add_domain(mesh_domain=0,mat_file="saline")
+    param.add_domain(mesh_domain=2,mat_file="epineurium")
+    param.add_domain(mesh_domain=12,mat_file="endoneurium_ranck")
+    param.add_domain(mesh_domain=14,mat_file="endoneurium_ranck")
+    #param.add_domain(mesh_domain=1002,mat_file="endoneurium_ranck")
 
-param.add_domain(mesh_domain=100,mat_file="platinum")
-param.add_domain(mesh_domain=102,mat_file="platinum")
-param.add_domain(mesh_domain=104,mat_file="platinum")
+    param.add_domain(mesh_domain=100,mat_file="platinum")
+    param.add_domain(mesh_domain=102,mat_file="platinum")
+    param.add_domain(mesh_domain=104,mat_file="platinum")
 
-# Adding internal boundaries
-param.add_inboundary(mesh_domain=13,mat_file="perineurium", thickness=0.005, in_domains=[12])
-param.add_inboundary(mesh_domain=15,mat_file="perineurium", thickness=0.005, in_domains=[14])
+    # Adding internal boundaries
+    param.add_inboundary(mesh_domain=13,mat_file="perineurium", thickness=0.005, in_domains=[12])
+    param.add_inboundary(mesh_domain=15,mat_file="perineurium", thickness=0.005, in_domains=[14])
 
-param.add_boundary(mesh_domain=0, btype='Dirichlet', value=0, variable=None)
-param.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim')
-param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='_jstim')
-
-
-
-data = param.save()
-
-mxd_dom = param.get_mixedspace_domain()
-mxd_mf = param.get_mixedspace_mat_pty()
-
-mxd_dom_0 = param.get_mixedspace_domain(0)
-mxd_dom_1 = param.get_mixedspace_domain(1)
-mxd_dom_02 = param.get_mixedspace_domain(0, 2)
-mxd_mf_02 = param.get_mixedspace_mat_pty(0, 2)
-mxd_mf_1 = param.get_mixedspace_mat_pty(1)
-
-sod_2 = param.get_space_of_domain(2)
-sod_14 = param.get_space_of_domain(14)
-
-sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 2))
-jstim = 20
-sim1.setup_sim(jstim=jstim, _jstim=-jstim)
+    param.add_boundary(mesh_domain=0, btype='Dirichlet', value=0, variable=None)
+    param.add_boundary(mesh_domain=101, btype='Neuman', value=None, variable='jstim')
+    param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='_jstim')
 
 
 
-sim1.solve_and_save_sim(out_file)
+    data = param.save()
 
-if nrv.MCH.do_master_only_work():
+    mxd_dom = param.get_mixedspace_domain()
+    mxd_mf = param.get_mixedspace_mat_pty()
+
+    mxd_dom_0 = param.get_mixedspace_domain(0)
+    mxd_dom_1 = param.get_mixedspace_domain(1)
+    mxd_dom_02 = param.get_mixedspace_domain(0, 2)
+    mxd_mf_02 = param.get_mixedspace_mat_pty(0, 2)
+    mxd_mf_1 = param.get_mixedspace_mat_pty(1)
+
+    sod_2 = param.get_space_of_domain(2)
+    sod_14 = param.get_space_of_domain(14)
+
+    sim1 = nrv.FEMSimulation(data=data, elem=('Lagrange', 2))
+    jstim = 20
+    sim1.setup_sim(jstim=jstim, _jstim=-jstim)
+
+
+
+    sim1.solve_and_save_sim(out_file)
+
     t3 = time.time()
     print('FEM solved in '+str(t3 - t2)+' s')
 

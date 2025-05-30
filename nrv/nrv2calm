@@ -84,7 +84,6 @@ if __name__ == "__main__":
 
     # launch commands
     PYTHON_EXEC = "python3"
-    MPI_EXEC = "mpirun -np"
 
     # Launch COMSOL Server
     if args.Start_Comsol:
@@ -156,7 +155,7 @@ if __name__ == "__main__":
             if args.n != None:
                 Ncore = args.n
             else:
-                Ncore = int(machine_config.get("NRV", "FASCICLE_CPU"))
+                Ncore = int(machine_config.get("NRV", "NMOD_CPU"))
             if Ncore > cpuCount:
                 Ncore = cpuCount
                 if args.verbosity:
@@ -165,10 +164,10 @@ if __name__ == "__main__":
                         + str(Ncore)
                         + " cores"
                     )
-            mpicmd = (
-                MPI_EXEC + " " + str(Ncore) + " " + PYTHON_EXEC + " " + args.file[0]
+            runcmd = (
+                PYTHON_EXEC + " " + args.file[0]
             )
-            mpirun_out = os.system(mpicmd)
+            mpirun_out = os.system(runcmd)
             if mpirun_out != 0:
                 sys.exit(args.file[0] + ": Computation failed")
         else:

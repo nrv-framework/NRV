@@ -103,7 +103,6 @@ setup(
     include_package_data=True,
     # classifiers
     classifiers=[
-        'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
         'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
@@ -117,20 +116,21 @@ setup(
         'Topic :: Scientific/Engineering :: Medical Science Apps.',
         'Natural Language :: English',
     ],
-    # dependencies
+    # dependencies 
+    # * sorted by alphabetical order *
     install_requires=[
         "gmsh",
-        "mph",
-        "numpy",
-        "scipy",
-        "neuron",
-        "matplotlib",
-        "numba",
-        "ezdxf",
         "icecream",
-        "pyswarms",
-        "tqdm",
+        "matplotlib",
+        "mph",
+        "neuron",
+        "numba",
+        "numpy",
+        "pandas",
         "psutil",
+        "pyswarms",
+        "rich",
+        "scipy",
     ],  # external packages as dependencies
     python_requires=">=3.12",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script

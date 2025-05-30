@@ -18,7 +18,7 @@ from dolfinx.fem import (
     locate_dofs_topological,
 )
 from dolfinx.fem.petsc import LinearProblem
-from mpi4py import MPI
+from mpi4py.MPI import COMM_WORLD, COMM_SELF, SUM
 from petsc4py.PETSc import ScalarType, Viewer
 from ufl import (
     Measure,
@@ -140,7 +140,7 @@ class FEMSimulation(FEMParameters):
         Usefull to link the update materials conductivity as in NRV conductivities are in S/m
         but NerveMshCreator space scale is um)
     comm            : int
-        The MPI communicator to use for mesh creation, by default MPI.COMM_SELF
+        The MPI communicator to use for mesh creation, by default COMM_SELF
     rank            : int
         The rank the Gmsh model is initialized on, by default 0
     """
@@ -153,7 +153,7 @@ class FEMSimulation(FEMParameters):
         data=None,
         elem=None,
         ummesh=True,
-        comm=MPI.COMM_SELF,
+        comm=COMM_SELF,
         rank=0,
     ):
         """
@@ -334,7 +334,7 @@ class FEMSimulation(FEMParameters):
         if not self.domain_status:
             # RECOVERING THE GEOMETRY
             self.domain, self.subdomains, self.boundaries = read_gmsh(
-                self.mesh, comm=self.comm, rank=self.rank, gdim=3
+                self.mesh, comm=self.comm, rank=self.rank, gdim=self.D
             )
             # SPACE FOR INTEGRATION
             if self.inbound:
@@ -364,8 +364,8 @@ class FEMSimulation(FEMParameters):
         NB: DBC cannot be change between simulations
         """
         self.bcs = []
-        for i in self.boundaries_list:
-            bound = self.boundaries_list[i]
+        for i in self.dboundaries_list:
+            bound = self.dboundaries_list[i]
             condition = bound["condition"]
             if condition.lower() == "dirichlet":
                 value = Constant(self.domain, ScalarType(float(bound["value"])))
@@ -394,8 +394,8 @@ class FEMSimulation(FEMParameters):
         NB: Only variable NBC (see FEMParameters.add_boundary) can be changed between simulations
         """
         if not self.neumann_BC_status:
-            for i_bound in self.boundaries_list:
-                bound = self.boundaries_list[i_bound]
+            for i_bound in self.nboundaries_list:
+                bound = self.nboundaries_list[i_bound]
                 condition = bound["condition"]
                 if condition.lower() in "neumann":
                     dom = int(bound["mesh_domain"])
@@ -422,8 +422,8 @@ class FEMSimulation(FEMParameters):
                         ] * self.ds(dom)
             self.neumann_BC_status = True
         else:
-            for i_bound in self.boundaries_list:
-                bound = self.boundaries_list[i_bound]
+            for i_bound in self.nboundaries_list:
+                bound = self.nboundaries_list[i_bound]
                 condition = bound["condition"]
                 if condition.lower() in "neumann" and "variable" in bound:
                     if bound["variable"] in self.args:
@@ -726,18 +726,20 @@ class FEMSimulation(FEMParameters):
 
     def get_surface(self, dom_id):
         S = assemble_scalar(form(1 * self.ds(dom_id)))
-        if self.comm == MPI.COMM_WORLD:
-            S = self.comm.reduce(S, op=MPI.SUM, root=0)
+        if self.comm == COMM_WORLD:
+            S = self.comm.reduce(S, op=SUM, root=0)
             S = self.comm.bcast(S, root=0)
         return S
 
-    def get_domain_potential(self, dom_id, dim=2, space=0):
+    def get_domain_potential(self, dom_id, dim=2, space=0, surf=None):
         if dim == 2:
             do = self.ds
         elif dim == 3:
             do = self.dx
-        Surf = self.get_surface(dom_id)
+        if surf is None:
+            surf = self.get_surface(dom_id)
         if self.to_merge:
-            return assemble_scalar(form(self.vout * do(dom_id))) / Surf * V
+            v_surf = assemble_scalar(form(self.vout * do(dom_id)))
         else:
-            return assemble_scalar(form(self.vout[space] * do(dom_id))) / Surf * V
+            v_surf = assemble_scalar(form(self.vout[space] * do(dom_id))) 
+        return v_surf / surf

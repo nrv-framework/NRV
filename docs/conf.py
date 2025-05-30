@@ -12,59 +12,65 @@ html_css_files = [
     'custom.css',
 ]
 
-# prevent from unnistalled requierements for nrv
+# Prevent from unnistalled requierements for nrv
+# Please add them in alphabetical order to avoid repetition.
 deps = (
-    "mph",
-    "neuron",
-    "icecream",
-    "numba",
-    "mpi4py",
-    "scipy",
-    "numpy",
-    "ezdxf",
-    "dolfinx",
-    "petsc4py",
-    "ufl",
-    "gmsh",
-    "dolfinx.io",
-    "petsc4py.PETSc",
-    "dolfinx.fem",
-    "dolfinx.fem.petsc",
-    "dolfinx.io.utils",
-    "scipy.interpolate",
-    "scipy.special",
-    "dolfinx.io.gmshio",
-    "dolfinx.geometry",
-    "dolfinx.mesh",
-    "dolfinx.cpp",
-    "dolfinx.cpp.mesh",
-    "numpy.linalg",
-    "numpy.typing",
-    "numpy.core.multiarray",
-    "matplotlib",
-    "matplotlib.pyplot",
-    "matplotlib.pylab",
-    "matplotlib.animation",
-    "numpy.core",
-    "numpy.core._multiarray_umath",
-    "matplotlib._path",
-    "scipy.stats",
-    "scipy.optimize",
-    "scipy.constants",
-    "pylab",
-    "scipy.spatial",
-    "scipy.sparse",
-    "scipy.sparse.csgraph",
-    "scipy.signal",
-    "pyswarms",
-    "pyswarms.utils",
-    "pyswarms.backend.topology",
-    "tqdm",
-    "ufl.finiteelement",
     "basix",
     "basix.ufl",
+    "dolfinx",
+    "dolfinx.cpp",
+    "dolfinx.cpp.mesh",
+    "dolfinx.fem",
+    "dolfinx.fem.petsc",
+    "dolfinx.geometry",
+    "dolfinx.mesh",
+    "dolfinx.io",
+    "dolfinx.io.gmshio",
+    "dolfinx.io.utils",
+    "scipy.special",
+    "ezdxf",
+    "gmsh",
+    "icecream",
+    "matplotlib",
+    "matplotlib._path",
+    "matplotlib.animation",
+    "matplotlib.pylab",
+    "matplotlib.pyplot",
+    "matplotlib.patches",
+    "mph",
+    "mpi4py",
+    "mpi4py.MPI",
+    "neuron",
+    "numba",
+    "numpy",
+    "numpy.core",
+    "numpy.core._multiarray_umath",
+    "numpy.core.multiarray",
+    "numpy.linalg",
+    "numpy.typing",
+    "pandas",
+    "petsc4py",
+    "petsc4py.PETSc",
     "psutil"
+    "pylab",
+    "pyswarms",
+    "pyswarms.backend.topology",
+    "pyswarms.utils",
+    "rich",
+    "rich.progress",
+    "scipy",
+    "scipy.constants",
+    "scipy.interpolate",
+    "scipy.optimize",
+    "scipy.signal",
+    "scipy.sparse",
+    "scipy.sparse.csgraph",
+    "scipy.spatial",
+    "scipy.stats",
+    "ufl",
+    "ufl.finiteelement",
 )
+
 for package in deps:
     sys.modules[package] = MagicMock()
 
@@ -80,22 +86,25 @@ version = release
 # -- General configuration ---------------------------------------------------
 
 extensions = [
-    "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
+    "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.napoleon",
-    "sphinx_rtd_theme",
     "sphinx.ext.intersphinx",
-    "sphinx_mdinclude",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
     "sphinx_copybutton",
-    "nbsphinx",
+    "sphinx.ext.mathjax",
     "sphinx_gallery.load_style",
+    "sphinx_mdinclude",
+    "sphinx_rtd_theme",
     #"sphinx_nbexamples",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "examples/__nodoc", "__logo/__build"]
+
+source_suffix = [".rst", ".md"]
 
 # -- Options for HTML output -------------------------------------------------
 # Web site
@@ -114,6 +123,7 @@ pygments_style = "friendly"  # syntax highlight style in light mode
 pygments_dark_style = "stata-dark"  # syntax highlight style in dark mode
 html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
+highlight_language = "python3"
 
 # Sources options
 napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
@@ -122,3 +132,4 @@ autodoc_member_order = 'bysource' # keep the order of class and function source 
 autosummary_generate = True
 
 autosummary_ignore_module_all = False
+nbsphinx_execute = 'never'

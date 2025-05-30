@@ -7,11 +7,10 @@ For the moment, the log interface is managed using the pyswarms reporter class t
 import logging
 import os
 import sys
-import tqdm
+from rich.progress import track
 from icecream import ic
 from time import sleep
 
-from ._MCore import MCH
 from ._parameters import parameters
 
 from pyswarms.utils import Reporter
@@ -36,14 +35,20 @@ def init_reporter():
         "format"
     ] = "%(asctime)s - %(message)s"
     rep_nrv._load_defaults()
-    if MCH.do_master_only_work() and os.path.isfile("report.log"):
-        os.remove("report.log")
+    if os.path.isfile("report.log"):
+        try:
+            os.remove("report.log")
+        except:
+            pass
     return rep_nrv
 
 
 def set_log_level(level, clear_log_file=False):
-    if clear_log_file and MCH.do_master_only_work() and os.path.isfile("report.log"):
-        os.remove("report.log")
+    if clear_log_file and os.path.isfile("report.log"):
+        try:
+            os.remove("report.log")
+        except:
+            pass
     if level is not None:
         rep_nrv._default_config["loggers"][""]["level"] = level
         rep_nrv._load_defaults()
@@ -96,20 +101,17 @@ def rise_error(*args, out=1, **kwargs):
             error = arg
         else:
             message += str(arg)
-    if MCH.is_alone():
-        if parameters.LOG_Status:
-            rep_nrv.log(message, lvl=logging.ERROR)
-            # logger.error(message, lvl=logging.ERROR)
-        if verbose and parameters.VERBOSITY_LEVEL >= 1:
-            print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
+    if parameters.LOG_Status:
+        rep_nrv.log(message, lvl=logging.ERROR)
+        # logger.error(message, lvl=logging.ERROR)
+    if verbose and parameters.VERBOSITY_LEVEL >= 1:
+        print(bcolors.FAIL + "NRV ERROR: " + message + bcolors.ENDC)
     else:
         err = (
             "NRV ERROR: "
             + message
             + "\n encountered in process "
-            + str(MCH.rank)
-            + " out of "
-            + str(MCH.size)
+            + parameters.proc_label
         )
         if parameters.LOG_Status:
             rep_nrv.log(err, lvl=logging.ERROR)
@@ -143,7 +145,7 @@ def rise_warning(*args, abort=False, **kwargs):
     message = ""
     for arg in args:
         message += str(arg)
-    if MCH.is_alone():
+    if parameters.is_alone:
         if parameters.LOG_Status:
             rep_nrv.log("NRV DEBUG: " + message, lvl=logging.DEBUG)
             # logger.warning("NRV WARNING: " + message)
@@ -154,19 +156,15 @@ def rise_warning(*args, abort=False, **kwargs):
             "NRV WARNING: "
             + message
             + "\n encountered in process "
-            + str(MCH.rank)
-            + " out of "
-            + str(MCH.size)
+            + parameters.proc_label
         )
         if parameters.LOG_Status:
             rep_nrv.log(war, lvl=logging.DEBUG)
             # logger.warning(war)
-        if MCH.do_master_only_work() and parameters.VERBOSITY_LEVEL >= 2:
+        if parameters.VERBOSITY_LEVEL >= 2:
             print(bcolors.WARNING + war + bcolors.ENDC)
-            sys.stdout.flush()
         elif parameters.VERBOSITY_LEVEL >= 4:
             print(bcolors.WARNING + war + bcolors.ENDC)
-            sys.stdout.flush()
     if abort:
         sys.exit(0)
 
@@ -187,7 +185,7 @@ def pass_info(*args, **kwargs):
     message = ""
     for arg in args:
         message += str(arg)
-    if MCH.is_alone():
+    if parameters.is_alone:
         if parameters.LOG_Status:
             rep_nrv.log("NRV DEBUG: " + message, lvl=logging.INFO)
             # logger.info("NRV DEBUG: " + message)
@@ -198,9 +196,7 @@ def pass_info(*args, **kwargs):
             "NRV INFO: "
             + message
             + "\n from process "
-            + str(MCH.rank)
-            + " out of "
-            + str(MCH.size)
+            + parameters.proc_label
         )
         if parameters.LOG_Status:
             rep_nrv.log(inf, lvl=logging.INFO)
@@ -226,7 +222,7 @@ def pass_debug_info(*args, **kwargs):
     message = ""
     for arg in args:
         message += str(arg)
-    if MCH.is_alone():
+    if parameters.is_alone:
         if parameters.LOG_Status and parameters.VERBOSITY_LEVEL >= 4:
             rep_nrv.log("NRV DEBUG: " + message, lvl=logging.DEBUG)
             # logger.info("NRV DEBUG: " + message)
@@ -237,9 +233,7 @@ def pass_debug_info(*args, **kwargs):
             "NRV DEBUG: "
             + message
             + "\n from process "
-            + str(MCH.rank)
-            + " out of "
-            + str(MCH.size)
+            + parameters.proc_label
         )
         if parameters.LOG_Status:
             rep_nrv.log(inf, lvl=logging.DEBUG)
@@ -247,52 +241,6 @@ def pass_debug_info(*args, **kwargs):
         if parameters.VERBOSITY_LEVEL >= 4:
             print(inf)
             sys.stdout.flush()
-
-
-########
-# pbar #
-########
-class pbar:
-    """
-    Progess bar object compatible with MPI
-    """
-
-    instanciate = True
-
-    def __init__(self, n_tot, label=""):
-        if not MCH.is_alone():
-            label = f"{MCH.rank}: " + label
-        self.__instantiate_delay()
-        self._pbar = tqdm.tqdm(total=n_tot, desc=label, position=MCH.rank)
-
-    def __del__(self):
-        del self._pbar
-        if MCH.do_master_only_work():
-            # blanck print for new line
-            print()
-            sys.stdout.flush()
-
-    def __instantiate_delay(self):
-        # Dirty hack to prevent skiping two lines
-        sleep(0.05 * (MCH.rank))
-
-    def set_label(self, label=""):
-        if not MCH.is_alone():
-            label = f"{MCH.rank}: " + label
-        self.__instantiate_delay()
-        self._pbar.set_description(label)
-        sys.stdout.flush()
-
-    def reset(self, n_tot=None):
-        self.__instantiate_delay()
-        if n_tot is None:
-            self._pbar.reset()
-        else:
-            self._pbar.reset(n_tot)
-
-    def update(self, i=1):
-        self._pbar.update(i)
-        sys.stdout.flush()
 
 
 def progression_popup(current, max_iter, begin_message="", end_message="", endl=""):
@@ -312,7 +260,7 @@ def progression_popup(current, max_iter, begin_message="", end_message="", endl=
     endl            : str
         line termination, by default empty string
     """
-    if MCH.is_alone():
+    if parameters.is_alone:
         print(
             begin_message + f"{current + 1}" + "/" + str(max_iter) + end_message,
             end=endl,

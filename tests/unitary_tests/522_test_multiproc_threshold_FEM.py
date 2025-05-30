@@ -12,7 +12,6 @@ def biphasic_pulse_update(axon,amp, pw, start_p = 1, elec_id = 0,t_inter=50e-3):
     axon.change_stimulus_from_electrode(elec_id, stim_1)
 
 def process_threshold(diam):
-
     arg_stim = {'pw':50e-3, 'elec_id':0, 'start_p':1}
     #binary search parameters
     amp_max = 200                   #maximum stimulation amplitude, in µs

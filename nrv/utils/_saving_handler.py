@@ -4,7 +4,6 @@ Authors: Florian Kolbl / Roland Giraud / Louis Regnacq / Thomas Couppey
 (c) ETIS - University Cergy-Pontoise - CNRS
 """
 
-from ..backend._MCore import *
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._materials import *
@@ -32,7 +31,6 @@ def load_any_fascicle(
         json file path or dictionary containing fascicle information
     """
     rise_warning(DeprecationWarning, ": use load any intead")
-    synchronize_processes()
     if type(data) == str:
         fasc_dic = json_load(data)
     else:

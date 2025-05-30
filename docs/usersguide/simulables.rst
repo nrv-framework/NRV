@@ -14,13 +14,13 @@ All these object have in common a method called ``simulate`` that automatically 
 .. note::
   Simulable objects are callable. Calling any simulable object will call the ``simulate``-method. In other words:
 
-  .. code:: ipython3
+  .. code:: python3
 
       my_simulable.simulate(*myargs)
         
   is equivalent to:
 
-  .. code:: ipython3
+  .. code:: python3
 
       my_simulable(*myargs)
 

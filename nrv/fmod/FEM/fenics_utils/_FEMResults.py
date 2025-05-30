@@ -5,6 +5,8 @@ NRV-:class:`.FEMResults` handling.
 import gmsh
 import numpy as np
 import scipy
+from time import perf_counter
+
 from dolfinx.fem import Expression, Function, functionspace
 from dolfinx.io.gmshio import model_to_mesh
 from dolfinx.io.utils import XDMFFile, VTXWriter, VTKFile
@@ -17,13 +19,12 @@ from dolfinx.geometry import (
     compute_distance_gjk,
     create_midpoint_tree,
 )
-from mpi4py import MPI
+from mpi4py.MPI import COMM_WORLD
 
 
 from ....backend._file_handler import rmv_ext
 from ....backend._log_interface import rise_error, rise_warning
 from ....backend._parameters import parameters
-from ....backend._MCore import MCH, synchronize_processes
 from ....backend._NRV_Class import NRV_class
 from ..mesh_creator._MshCreator import (
     is_MshCreator,
@@ -82,7 +83,7 @@ def save_sim_res_list(sim_res_list, fname, dt=1.0):
     vtxf.close()
 
 
-def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
+def read_gmsh(mesh, comm=COMM_WORLD, rank=0, gdim=3):
     """
     Given a mesh_file or a MeshCreator returns mesh cell_tags and facet_tags
     (see dolfinx.io.gmshio.model_to_mesh for more details)
@@ -169,7 +170,7 @@ class FEMResults(NRV_class):
         elem=("Lagrange", 1),
         V=None,
         vout=None,
-        comm=MPI.COMM_WORLD,
+        comm=COMM_WORLD,
     ):
         """
         initialisation of the FEMParameters:
@@ -197,6 +198,15 @@ class FEMResults(NRV_class):
         self.elem = elem
         self.vout = vout
         self.comm = comm
+        
+        #For eval() serialized calls acceleration
+        self.is_evaluated = False
+        self.tdim = None
+        self.n_entities_local = None
+        self.entities = None
+        self.midpoint_tree = None
+        self.tree = None
+
 
     def set_sim_result(
         self, mesh_file="", domain=None, V=None, elem=None, vout=None, comm=None
@@ -234,7 +244,7 @@ class FEMResults(NRV_class):
             mdict = {
                 "mesh_file": self.mesh_file,
                 "element": self.elem,
-                "vout": self.vout.vector[:],
+                "vout": self.vector,
             }
             scipy.io.savemat(fname, mdict)
             return mdict
@@ -248,7 +258,7 @@ class FEMResults(NRV_class):
             self.domain = domain_from_meshfile(self.mesh_file)
             self.V = functionspace(self.domain, self.elem)
         self.vout = Function(self.V)
-        self.vout.vector[:] = mdict["vout"]
+        self.vout.x.array[:] = mdict["vout"]
 
     def save_sim_result(self, file, ftype="vtx", overwrite=True):
         rise_warning("save_sim_result is a deprecated method use save")
@@ -263,7 +273,7 @@ class FEMResults(NRV_class):
     #############
     ## methods ##
     #############
-
+    @property
     def vector(self):
         return self.vout.x.array
 
@@ -278,9 +288,9 @@ class FEMResults(NRV_class):
         """
         if is_sim_res(res2):
             if self.mesh_file == res2.mesh_file:
-                expr = Expression(self.vout, res2.V.element.interpolation_points())
-                self.vout = Function(res2.V)
-                self.vout.interpolate(expr)
+                _vout = Function(res2.V)
+                _vout.interpolate(self.vout)
+                self.vout=_vout
                 self.V = res2.V
             else:
                 rise_error(
@@ -288,6 +298,15 @@ class FEMResults(NRV_class):
                 )
         else:
             rise_error("Mesh function alinment must be done with FEMResults")
+
+    def clone_res(self):
+        return FEMResults(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
 
     def eval(self, X, is_multi_proc=False):
         """
@@ -297,212 +316,133 @@ class FEMResults(NRV_class):
         N = len(X)
         cells = []
         points_on_proc = []
-        tdim = self.domain.geometry.dim
-        n_entities_local = (
-            self.domain.topology.index_map(tdim).size_local
-            + self.domain.topology.index_map(tdim).num_ghosts
-        )
-        entities = np.arange(n_entities_local, dtype=np.int32)
-        midpoint_tree = create_midpoint_tree(self.domain, tdim, entities)
-        tree = bb_tree(self.domain, tdim)
+        if self.is_evaluated is False:
+            self.is_evaluated = True
+            self.tdim = self.domain.geometry.dim
+            self.n_entities_local = (
+            self.domain.topology.index_map(self.tdim).size_local
+            + self.domain.topology.index_map(self.tdim).num_ghosts
+            )
+            self.entities = np.arange(self.n_entities_local, dtype=np.int32)
+            self.midpoint_tree = create_midpoint_tree(self.domain, self.tdim, self.entities)
+            self.tree = bb_tree(self.domain, self.tdim)
         # Find cells whose bounding-box collide with the the points
-        cells_candidates = compute_collisions_points(tree, X)
 
+        cells_candidates = compute_collisions_points(self.tree, X)
         # Choose one of the cells that contains the point
         cells_colliding = compute_colliding_cells(self.domain, cells_candidates, X)
         for i in range(N):
             cell = cells_colliding.links(i)
-            if is_multi_proc:
-                if len(cell) > 0:
-                    points_on_proc.append(X[i])
-                    cells.append(cells_colliding.links(i)[0])
+            # point not in the mesh
+            if len(cell) == 0:
+                cell, x_closest = closest_point_in_mesh(
+                    self.domain, X[i], self.tree, self.tdim, self.midpoint_tree
+                )
+                rise_warning(
+                    X[i], " not found in mesh, value of ", x_closest, " reused"
+                )
+                # compute_colliding_cells(self.domain, cells_candidates, X)
+                cells += [cell[0]]
             else:
-                # point not in the mesh
-                if len(cell) == 0:
-                    cell, x_closest = closest_point_in_mesh(
-                        self.domain, X[i], tree, tdim, midpoint_tree
-                    )
-                    rise_warning(
-                        X[i], " not found in mesh, value of ", x_closest, " reused"
-                    )
-                    # compute_colliding_cells(self.domain, cells_candidates, X)
-                    cells += [cell[0]]
-                else:
-                    cells += [cell[0]]
-        if is_multi_proc:
-            points_on_proc = np.array(points_on_proc, dtype=np.float64)
-            s_values = self.vout.eval(points_on_proc, cells)
-            if len(points_on_proc) > 0:
-                m_values = np.concatenate((points_on_proc.T, s_values.T)).T
-            else:
-                m_values = np.array([])
-            m_values = self.comm.gather(m_values.tolist(), root=0)
-            if MCH.do_master_only_work():
-                val = []
-                for i in range(len(m_values)):
-                    for j in range(len(m_values[i])):
-                        val += [m_values[i][j]]
-                val = np.array(val)
-                values = np.empty((N), dtype="float64")
-                for i, p in enumerate(X):
-                    i_p = np.where((np.isclose(val[:, :3], p)).all(axis=1))[0]
-                    if len(i_p > 0):
-                        values[i] = val[i_p[0], 3]
-                    else:
-                        values[i] = values[i - 1]
-            else:
-                values = np.empty((N), dtype="float64")
-            synchronize_processes()
-            self.comm.Bcast(values, root=0)
-        else:
-            values = self.vout.eval(X, cells)
-            if N > 1:
-                values = values[:, 0]
+                cells += [cell[0]]
+        values = self.vout.eval(X, cells)
+        if N > 1:
+            values = values[:, 0]
         return values
 
     #####################
     ## special methods ##
     #####################
     def __abs__(self):
-        res = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+        res = self.clone_res()
         if self.vout is not None:
-            expr = Expression(abs(self.vout), self.V.element.interpolation_points())
             res.vout = Function(self.V)
-            self.vout.interpolate(expr)
+            res.vout.x.array[:] = abs(self.vout.x.array)
         return res
 
     def __neg__(self):
-        res = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+        res = self.clone_res()
         if self.vout is not None:
-            expr = Expression(-1 * self.vout, self.V.element.interpolation_points())
             res.vout = Function(self.V)
-            self.vout.interpolate(expr)
+            res.vout.x.array[:] = -self.vout.x.array
         return res
 
     def __add__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout + b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout + b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A + B
         return C
 
     def __sub__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout - b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout - b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A - B
         return C
 
     def __mul__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout * b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout * b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A * B
         return C
 
     def __radd__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout + self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b + self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B + A
         return C
 
     def __rsub__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout - self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b - self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B - A
         return C
 
     def __rmul__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout * self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b * self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B * A
         return C
 
     def __eq__(self, b):
         if is_sim_res(b):
             if b.mesh_file == self.mesh_file:
-                if np.allclose(self.vector(), b.vector()):
+                if np.allclose(self.vector, b.vector):
                     return True
         return False
 

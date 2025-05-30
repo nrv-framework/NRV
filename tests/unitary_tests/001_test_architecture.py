@@ -1,4 +1,4 @@
 ''' 
-test to import all NRV2 librairies
+test to import all NRV librairies
 '''
 import nrv

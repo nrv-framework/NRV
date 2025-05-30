@@ -51,7 +51,7 @@ class myelinated_results(axon_results):
             else:
                 return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
-    def find_central_node_coordinate(self):
+    def find_central_node_coordinate(self, node=True):
         """
         Returns the index of the closer node from the center
 
@@ -60,27 +60,30 @@ class myelinated_results(axon_results):
         float
             x-position of the closer node from the center
         """
-        return self["x_rec"][self.find_central_node_index()]
+        return self["x_rec"][self.find_central_index(node=node)]
 
-    def find_central_node_index(self):
+    def find_central_index(self, node:bool=True)->int:
         """
-        Returns the index of the closer node from the center
+        Returns the central indec
+
+        Parameters
+        ----------
+        node : bool
+            If true, the index of the closer node from the center is return, by default True
 
         Returns
         -------
         int
             index of `x_rec` of the closer node from the center
         """
-        n_center = len(self["x_rec"]) // 2
-        if self["rec"] == "nodes":
-            return n_center
-        else:
+        n_center = super().find_central_index()
+        if node and self["rec"] == "all":
             for i in range(n_center):
                 if self.get_index_myelinated_sequence(n_center + i) == "node":
                     return n_center + i
                 elif self.get_index_myelinated_sequence(n_center - i) == "node":
                     return n_center - i
-        rise_warning("No node found in the axon")
+            rise_warning("No node found in the axon")
         return n_center
 
     def get_myelin_properties(self, endo_mat=None):
@@ -118,22 +121,25 @@ class myelinated_results(axon_results):
         return self["g_mye"], self["c_mye"], self["f_mye"]
 
     def plot_x_t(
-        self, axes: plt.axes, key: str = "V_mem", color: str = "k", **kwgs
+        self, axes: plt.axes, key: str = "V_mem", color: str = "k", switch_axes=False, norm=None, **kwgs
     ) -> None:
-        node_x = self.x[self.node_index]
-        dx = np.abs(node_x[1] - node_x[0])
-        rec_idx = self.node_index
+        x_pos = self.x[self.node_index]
+        x_index = self.node_index
         if not "ALL" in self.rec.upper():
-            rec_idx = np.arange(len(node_x))
-        norm_fac = dx / (np.max(abs(self[key])) * 1.1)
-        offset = np.abs(np.min(self[key][0] * norm_fac))
-        for node, node_idx in zip(node_x, rec_idx):
-            axes.plot(
-                self["t"],
-                self[key][node_idx] * norm_fac + node + offset,
-                color=color,
-                **kwgs
-            )
+            x_index = np.arange(len(x_pos))
+        super().plot_x_t(axes=axes, x_pos=x_pos,x_index=x_index, key=key, color=color, switch_axes=switch_axes, norm=norm, **kwgs)
+
+    def plot_x_t_all_seq(
+        self, axes: plt.axes, key: str = "V_mem", color: str = "k", myelin_color:str="gray", switch_axes=False, norm=None, **kwgs
+    ) -> None:
+        if self.rec=="all":
+            node_index = self.node_index
+            other_index = np.concatenate([i_x+(self.Nseg_per_sec+1)*np.arange(len(self.this_ax_sequence)) for i_x in node_index])
+            other_index = other_index[other_index<len(self.x_rec)]
+            super().plot_x_t(axes=axes, x_pos=self.x_rec[other_index],x_index=other_index, key=key, color=myelin_color, switch_axes=switch_axes, norm=norm, **kwgs)
+
+        self.plot_x_t(axes=axes, key=key, color=color, switch_axes=switch_axes, norm=norm)
+
 
     def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
         if self.rec == "all":

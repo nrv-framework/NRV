@@ -16,13 +16,13 @@ When called, NRV ``simulable`` objects return object inhering from the ``NRV_res
 .. note::
   NRV_results behave like a python object and a like dictionary. In other words:
 
-  .. code:: ipython3
+  .. code:: python3
 
       val = my_result.my_key
         
   is equivalent to:
 
-  .. code:: ipython3
+  .. code:: python3
 
       val = my_result['my_key']
 
@@ -270,7 +270,7 @@ The following table describes all the keys/member available in a ``axon_results`
 
 To save some space in the ``axon_results`` object and discarded unnecessary keys, some flags can be set in the ``axon`` object, prior to the simulation: 
 
-.. code:: ipython3
+.. code:: python3
 
     my_axon.record_V_mem = True         #save V_men in the result object
     my_axon.record_I_mem = True         #save I_men in the result object
@@ -297,7 +297,7 @@ fascicle_results
 ``fascicle_results`` object aggregate ``fascicle`` object parameters and every ``axon_result`` correspond to each ``axon`` object simulated 
 in the fascicle. Each ``axon_result`` is available with the following key: 
 
-.. code:: ipython3
+.. code:: python3
 
     my_axon_result = my_fascicle_result.axonx
     my_axon_result = my_fascicle_result['axonx']    #equivalent
@@ -311,7 +311,7 @@ nerve_results
 ``nerve_results`` object aggregate ``nerve`` object parameters and every ``fascicle_result`` correspond to each ``fascicle`` object simulated 
 in the nerve. Each ``fascicle_result`` is available with the following key: 
 
-.. code:: ipython3
+.. code:: python3
 
     my_fascicle_result = my_nerve_result.fasciclex
     my_fascicle_result = my_nerve_result['fasciclex']    #equivalent
@@ -326,7 +326,7 @@ NRV provides a way to run external post-processing script during ``nerve`` or ``
 to each simulate ``axon_result`` object during the simulation. It is mainly used to remove unnecessary keys (after AP detection for example) to alleviate RAM usage during large simulation. 
 Post-processing scripts are selected by setting the ``postproc_script`` class member of ``fascicle`` or ``nerve`` objects:
 
-.. code:: ipython3
+.. code:: python3
 
     my_fascicle.postproc_script = "my_postproc_script"      #for fascicle
     my_nerve.postproc_script = "my_postproc_script"         #for nerve

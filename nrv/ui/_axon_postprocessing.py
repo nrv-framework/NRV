@@ -446,7 +446,7 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
                 else:
                     return False
     else:
-        print("intra_stim_positions is not in dictionnary")
+        pass_info("intra_stim_positions is not in dictionnary")
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
@@ -758,13 +758,13 @@ def get_index_myelinated_sequence(results, n):
             return seq_types[((n - 1) // Nseg_per_sec) % N_sec_type]
 
 
-def find_central_node_index(results):
+def find_central_node_index(results:axon_results)->int:
     """
     Returns the index of the closer node from the center from a dictionnary results
 
     Parameters
     ----------
-    results_sim     : dict
+    axon_results     : dict
         results of axon.simulate method
 
     Returns
@@ -777,17 +777,7 @@ def find_central_node_index(results):
         "DeprecationWarning: ",
         "find_central_node_index is obsolete use method from axon_result objects instead"
     )
-    n_center = len(results["x_rec"]) // 2
-    if not results["myelinated"] or results["rec"] == "node":
-        return n_center
-    else:
-        for i in range(n_center):
-            if get_index_myelinated_sequence(results, n_center + i) == "node":
-                return n_center + i
-            elif get_index_myelinated_sequence(results, n_center - i) == "node":
-                return n_center - i
-    rise_warning("No node found in the axon")
-    return n_center
+    return results.find_central_index()
 
 
 def compute_f_mem(results):
@@ -1042,6 +1032,7 @@ def rmv_keys(results:axon_results, keys_to_remove:str|set[str]={}, keys_to_keep:
     "myelinated",
     "intra_stim_starts",
     "intra_stim_positions",
+    "recorder"
     }
 
     default_list_keys.update(set(keys_to_keep))
@@ -1104,7 +1095,7 @@ def is_recruited(results:axon_results)->axon_results:
     "recruited",
     }
     results.remove_key(keys_to_keep=list_keys)
-    return(results)
+    return results
 
 def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=None, t_refractory:float=1)->axon_results:
     """
@@ -1159,26 +1150,25 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     """
     ## TO CHANGE WHEN is block is developped
     #results.axon_state(save=False)
-    
+
     if AP_start is None :
         if "intra_stim_starts" in results and results["intra_stim_starts"] != []:
             AP_start = results["intra_stim_starts"][0]
-    
+
     vm_key = "V_mem"
     if freq is not None:
         vm_key += "_filtered"
-    
 
     results.block_summary(AP_start=AP_start, freq=freq, t_refractory=t_refractory)
-    
+
     # remove non nevessary data
     list_keys = {
     "ID",
     "L",
-    #f"{vm_key}_raster_position",
-    #f"{vm_key}raster_x_position",
-    #f"{vm_key}_raster_time_index",
-    #f"{vm_key}_raster_time",
+    f"{vm_key}_raster_position",
+    f"{vm_key}_raster_x_position",
+    f"{vm_key}_raster_time_index",
+    f"{vm_key}_raster_time",
     "myelinated",
     "y",
     "z",
@@ -1192,8 +1182,110 @@ def is_blocked(results:axon_results, AP_start:float|None=None, freq:float|None=N
     "n_onset",
     }
     results.remove_key(keys_to_keep=list_keys)
-    return(results)
+    return results
 
+
+
+def sample_keys(results:axon_results, keys_to_sample:str|set[str]={}, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, i_sampled_t:None|np.ndarray=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+    """
+    Undersample the membrane coductivity (``results["g_mem"]``) key and remove most of the `axon_results` keys to alliviate RAM usage.
+
+    Note
+    ----
+    Only the following keys kept by the fuction
+     - `g_mem`
+     - `x_rec`
+     - `rec`
+     - `Nseg_per_sec`
+     - `axon_path_type`
+     - `t_sim`
+
+    Parameters
+    ----------
+    results : axon_results
+        results of the axon simulation.
+    t_start_rec : float, optional
+        Lower time at whitch `g_mem` should be stored, by default 0
+    t_stop_rec : float, optional
+        Upper time at whitch `g_mem` should be stored, by default -1
+    sample_dt : None | float, optional
+        Time sample rate at which `g_mem` should be stored if None simulation dt is kept, by default None
+    x_bounds : None | tuple[float], optional
+        x-positions where to store `g_mem`, possible option:
+         - float: The values of `g_mem` are only stored at the nearest position in `x_rec`.
+         - tupple: `g_mem` values are stored for all positions included between the two boundaries.
+         - None (default): `g_mem` values are stored for all positions.
+
+    Warning
+    -------
+    ``sample_dt`` should be at multiple of the simulation ``dt`` to allow a correct undersampling. 
+    If the not ``sample_dt`` choosen will be the closer multiple of ``dt``.
+
+    Returns
+    -------
+    axon_results
+        updated results.
+    """
+    if isinstance(keys_to_sample, str):
+        keys_to_sample = {keys_to_sample}
+    if len(set(keys_to_sample) - set(results.keys())):
+        rise_error(set(keys_to_sample) - set(results.keys()), "keys are missing to apply postprocessing. Please check simulation parameters")
+    else:
+        # x - sampling array
+        if x_bounds is None:
+            I_x = np.arange(len(results["x_rec"]))
+            x_bounds = (0, results["x_rec"][-1])
+        elif np.iterable(x_bounds):
+            I_x = np.argwhere((results["x_rec"]>x_bounds[0])&(results["x_rec"]<x_bounds[1]))[:,0]
+        else:
+            x_bounds = [x_bounds]
+            I_x = np.array([np.argmin(abs(results["x_rec"]-x_bounds[0]))])
+        N_x = len(I_x)
+
+        # t - sampling array
+        if i_sampled_t is not None:
+            t_APs = i_sampled_t
+        else:
+            if t_stop_rec < 0:
+                i_t_max = len(results["t"])
+            else:
+                i_t_max = np.argwhere(results["t"]<=t_stop_rec)[-1][0]
+            if sample_dt is None:
+                sample_dt=results.dt
+            i_t_min = np.argwhere(results["t"]>=t_start_rec)[0][0]
+             
+            t_APs = [k for k in range(i_t_min,i_t_max)]
+            t_APs = t_APs[::int(sample_dt/results.dt)]
+
+        # Under sampling to reduce memory consumption
+        results["x_rec"] = results["x_rec"][I_x] - x_bounds[0]
+        if "t" in results:
+            results["t"] = results["t"][t_APs]
+        for key in keys_to_sample:
+            results[key] = results[key][np.ix_(I_x, t_APs)]
+        ###############################
+        ## remove non nevessary data ##
+        ###############################
+        list_keys =  {
+        "ID",
+        "model",
+        "x_rec",
+        "rec",
+        "Nseg_per_sec",
+        "axon_path_type",
+        "t_sim",
+        "myelinated",
+        "intra_stim_starts",
+        "intra_stim_positions",
+        "recorder"
+        }
+
+        list_keys.update(keys_to_keep)
+        list_keys.update(keys_to_sample)
+        if results.ID==0:
+            list_keys.update({"t"})
+        results.remove_key(keys_to_keep=list_keys, keys_to_remove=keys_to_remove)
+    return results
 
 def sample_g_mem(results:axon_results, t_start_rec:float=0, t_stop_rec:float=-1, sample_dt:None|float=None, x_bounds:None|float|tuple[float]=None)->axon_results:
     """
@@ -1312,7 +1404,7 @@ def vmem_plot(results:axon_results, freq:float=None, save:bool=False, fdir:str="
     results.plot_x_t(ax, key=vm_key)
     if results.myelinated:
         title = f"Myelinated Axon: {np.round(results.diameter,2)} µm in diameter"
-    else:                                                                           #colormap for unmyelinated fibers as plot_x_t are unreadable
+    else:       #colormap for unmyelinated fibers as plot_x_t are unreadable
         title = f"Unmyelinated Axon: {np.round(results.diameter,2)} µm in diameter"
     
     #print(fdir)
