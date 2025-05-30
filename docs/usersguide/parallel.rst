@@ -37,7 +37,7 @@ Illustrative example
 
 In order to illustrate how large computation can be handled, we provide an example of a nerve simulation. The script is divided in three functions. The first few lines here below load the libraries and define the nerve geometry definition:
 
-.. code:: ipython3
+.. code:: python3
 
     import nrv
     import matplotlib.pyplot as plt
@@ -102,7 +102,7 @@ The function basically returns a nerve, which is a simulable-object. This functi
 
 The next function performs the simulation and enables the end user to directly provide the number of CPU available for the computation. 
 
-.. code:: ipython3
+.. code:: python3
 
     def simulate_nerve(nerve, nproc=12):
         nrv.parameters.set_nmod_ncore(nproc)
@@ -111,7 +111,7 @@ The next function performs the simulation and enables the end user to directly p
 
 The results are then processed to highlight only fibers that trigger an action potential:
 
-.. code:: ipython3
+.. code:: python3
 
     def prostprocessing(results):
         fig, ax = plt.subplots(1, 1, figsize=(5,5))
@@ -123,7 +123,7 @@ The results are then processed to highlight only fibers that trigger an action p
 
 Performing this small simulation pipeline results in a main program of the form to compute for instance on 12 CPUs:
 
-.. code:: iphython3
+.. code:: python3
 
     if __name__ == "__main__":
         #################

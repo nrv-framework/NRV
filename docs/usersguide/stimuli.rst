@@ -26,7 +26,7 @@ At the instantiation, a stimulus only gets its initial value at time
 t=0, and lists ‘s’ and ‘t’ have a length of 1. Here is a minimal example
 of instatiation of a stimulus:
 
-.. code:: ipython3
+.. code:: python3
 
     import nrv
     
@@ -129,7 +129,7 @@ cathodic time, cathodic value of 1, :math:`40\mu s` deadtime between
 cathodic and anodic and a ratio of 5 betwen cathodic and anodic values)
 and a sinusoidal signal at :math:`1kHz` and of amplitude 0.5
 
-.. code:: ipython3
+.. code:: python3
 
     import matplotlib.pyplot as plt
     
@@ -199,7 +199,7 @@ Here below is an example of constant sinusoidal stimulation with
 envelope modulation by a ramp signal, to demonstrate the use of
 operations:
 
-.. code:: ipython3
+.. code:: python3
 
     stim1, stim2 = nrv.stimulus(),nrv.stimulus()
     

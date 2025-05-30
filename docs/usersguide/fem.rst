@@ -28,7 +28,7 @@ size of the outer box.
     To add fascicle to the nerve, simply call the :meth:`~nrv.fmod.extracellular.FEM_stimulation.reshape_fascicle` method
     with a new ``ÌD``:
 
-    .. code:: ipython3
+    .. code:: python3
     
         my_FEM.reshape_fascicle(fascicle_d1, fascicle_y1, fascicle_z1, ID = 0) #create a new fascicle with ID 0
         my_FEM.reshape_fascicle(fascicle_d2, fascicle_y2, fascicle_z2, ID = 1) #create a new fascicle with ID 1
