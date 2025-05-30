@@ -119,6 +119,7 @@ class nerve_results(sim_results):
             number of recruited axons
         """
         fasc_keys = self.fascicle_keys
+        n_recr = 0
         for key in fasc_keys:
             fasc_res = self[key]
             n_recr += fasc_res.get_recruited_axons(ax_type=ax_type, normalize=normalize)
