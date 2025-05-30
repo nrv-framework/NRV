@@ -60,7 +60,6 @@ classes = [
     "nrv_config",
     "NRV_Encoder",
     "bcolors",
-    "Mcore_handler",
     "NRV_class",
     "NRV_results",
     "sim_results",
@@ -104,7 +103,6 @@ functions = [
     "generate_results",
     "is_NRV_simulable",
     "simulable",
-    "singlecore",
 ]
 
 __all__ = []

@@ -2,23 +2,22 @@
 
 All notable changes to NRV are sumed up in this file.
 
-## [1.1.3] - XXXX-XX-XX
+## [1.2.0] - 2025-05-30
 ### Added
 - improved `eval` in `_FEMResults` for serialized calls (added state variables)
 - `spec_loader.py` mostly for typing
 - progress bars are now handled with [rich.progress](https://rich.readthedocs.io/en/stable/progress.html)
 - Added automatic translation of Tutorials to the docs in docs/tutorials
+- automated parallel processing using ``multiprocessing``. All parallelization are handled as a blind process for the end-user, this change has been performed with taking care for the most on backward compatibility. Documentation has been changed in consequence.
 
 ### Fixed
 - ``axon.__init__``'s ``kwargs``: all parameters can now be set at the instantiation of the axon
 - Fixed ``search_threshold_dispatcher``for use in notebooks
 - Remove deprecated function in tutorials and examples
 
-
-
 ### Removed
 - `myelinated_results.find_central_node_index`-method replaced by `axon_results.find_central_index` with, for `myelinated_results`, the argument `node` to obtain former results
-
+- MCore and explicit use of ``mpi4py`` are removed, as parallel processing is handled by Python standard API.
 
 
 ## [1.1.2] - 2024-09-12
