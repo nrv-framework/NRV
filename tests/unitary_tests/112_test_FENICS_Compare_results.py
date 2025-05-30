@@ -57,7 +57,6 @@ if __name__ == "__main__":
     param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
     data = param.save()
-    print(data)
     sim1 = nrv.FEMSimulation(data=data)
 
 
@@ -88,7 +87,6 @@ if __name__ == "__main__":
     param.add_boundary(mesh_domain=107, btype='Neuman', value=None, variable='_jstim')
 
     data = param.save()
-    print(data)
     sim2 = nrv.FEMSimulation(data=data)
 
 
@@ -103,13 +101,12 @@ if __name__ == "__main__":
 
 
     ## Result comparison
-    vout2_expr = fem.Expression(sim2.vout, sim1.V.element.interpolation_points())
     vout2 = fem.Function(sim1.V)
-    vout2.interpolate(vout2_expr)
+    vout2.interpolate(sim2.vout)
 
-    u_expr = fem.Expression(sim1.vout-vout2, sim1.V.element.interpolation_points())
+
     u = fem.Function(sim1.V)
-    u.interpolate(u_expr)
+    u.x.array[:] = sim1.vout.x.array - vout2.x.array
 
 
     with io.XDMFFile(sim1.domain.comm, out_file, "w") as file:

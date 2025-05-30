@@ -40,7 +40,7 @@ if __name__ == "__main__":
     plt.xlim((0.95*L/2, 1.05*L/2))
 
 
-    mat_myel = nrv.mat_from_interp(X=res.x_rec, Y=mye, kind="next")
+    mat_myel = nrv.mat_from_interp(X=res.x_rec, Y=mye, kind="previous")
 
     npts = 30000
     X = np.array([[L*x/npts, 4, 0] for x in range(npts)]).T
@@ -120,7 +120,7 @@ if __name__ == "__main__":
 
 
     resdiff = res2 - res1
-    print(not np.allclose(res1.vector(), res2.vector()))
+    print(not np.allclose(res1.vector, res2.vector))
     resdiff.save(sim_file)
 
     #plt.show()

@@ -46,14 +46,14 @@ if __name__ == "__main__":
     param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
     param.add_domain(mesh_domain=0,mat_file="saline")
     param.add_domain(mesh_domain=2,mat_file="epineurium")
-    param.add_domain(mesh_domain=12,mat_file="silicone")
+    param.add_domain(mesh_domain=12,mat_pty=1e-3)
 
 
-    param.add_domain(mesh_domain=100,mat_file="platinum")
-    param.add_domain(mesh_domain=102,mat_file="platinum")
-    param.add_domain(mesh_domain=104,mat_file="platinum")
-    param.add_domain(mesh_domain=106,mat_file="platinum")
-    param.add_domain(mesh_domain=108,mat_file="platinum")
+    param.add_domain(mesh_domain=100,mat_pty=1000)
+    param.add_domain(mesh_domain=102,mat_pty=1000)
+    param.add_domain(mesh_domain=104,mat_pty=1000)
+    param.add_domain(mesh_domain=106,mat_pty=1000)
+    param.add_domain(mesh_domain=108,mat_pty=1000)
 
     param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
     param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
@@ -78,13 +78,14 @@ if __name__ == "__main__":
     param = nrv.FEMParameters(D=3, mesh_file=mesh_file)
     param.add_domain(mesh_domain=0,mat_file="saline")
     param.add_domain(mesh_domain=2,mat_file="epineurium")
-    param.add_domain(mesh_domain=12,mat_file="platinum")
+    param.add_domain(mesh_domain=12,mat_pty=1e3)
 
-    param.add_domain(mesh_domain=100,mat_file="platinum")
-    param.add_domain(mesh_domain=102,mat_file="platinum")
-    param.add_domain(mesh_domain=104,mat_file="platinum")
-    param.add_domain(mesh_domain=106,mat_file="platinum")
-    param.add_domain(mesh_domain=108,mat_file="platinum")
+
+    param.add_domain(mesh_domain=100,mat_pty=1000)
+    param.add_domain(mesh_domain=102,mat_pty=1000)
+    param.add_domain(mesh_domain=104,mat_pty=1000)
+    param.add_domain(mesh_domain=106,mat_pty=1000)
+    param.add_domain(mesh_domain=108,mat_pty=1000)
 
     param.add_boundary(mesh_domain=101, btype='Dirichlet', value=0, variable=None)
     param.add_boundary(mesh_domain=103, btype='Neuman', value=None, variable='jstim')
@@ -114,7 +115,7 @@ if __name__ == "__main__":
 
     print('Substraction done in '+str(t5 - t4)+' s')
 
-    print(np.shape(res2.vector()))
+    print(np.shape(res2.vector))
     print(res1 != res2)
     print(res2 == res3)
     print(res3 == 2 * res2 - res2)

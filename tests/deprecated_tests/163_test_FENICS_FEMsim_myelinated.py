@@ -46,7 +46,7 @@ if __name__ == "__main__":
     g_mye = min(mye)
     g_nodes = 0.09
 
-    mat_myel = nrv.mat_from_interp(X=res.x_rec, Y=mye, kind="next")
+    mat_myel = nrv.mat_from_interp(X=res.x_rec, Y=mye, kind="previous")
 
     npts = 30000
     X = np.array([[L*x/npts, 4, 0] for x in range(npts)]).T

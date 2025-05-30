@@ -37,5 +37,5 @@ if __name__ == "__main__":
     print(np.all(fasc1.NoR_relative_position>0), np.all(fasc1.NoR_relative_position<1))
     fasc1.plot_x(axs[1])
     
-    plt.show()
+    # plt.show()
 

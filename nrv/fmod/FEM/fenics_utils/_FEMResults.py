@@ -244,7 +244,7 @@ class FEMResults(NRV_class):
             mdict = {
                 "mesh_file": self.mesh_file,
                 "element": self.elem,
-                "vout": self.vout.vector[:],
+                "vout": self.vector,
             }
             scipy.io.savemat(fname, mdict)
             return mdict
@@ -258,7 +258,7 @@ class FEMResults(NRV_class):
             self.domain = domain_from_meshfile(self.mesh_file)
             self.V = functionspace(self.domain, self.elem)
         self.vout = Function(self.V)
-        self.vout.vector[:] = mdict["vout"]
+        self.vout.x.array[:] = mdict["vout"]
 
     def save_sim_result(self, file, ftype="vtx", overwrite=True):
         rise_warning("save_sim_result is a deprecated method use save")
@@ -273,7 +273,7 @@ class FEMResults(NRV_class):
     #############
     ## methods ##
     #############
-
+    @property
     def vector(self):
         return self.vout.x.array
 
@@ -288,9 +288,9 @@ class FEMResults(NRV_class):
         """
         if is_sim_res(res2):
             if self.mesh_file == res2.mesh_file:
-                expr = Expression(self.vout, res2.V.element.interpolation_points())
-                self.vout = Function(res2.V)
-                self.vout.interpolate(expr)
+                _vout = Function(res2.V)
+                _vout.interpolate(self.vout)
+                self.vout=_vout
                 self.V = res2.V
             else:
                 rise_error(
@@ -298,6 +298,15 @@ class FEMResults(NRV_class):
                 )
         else:
             rise_error("Mesh function alinment must be done with FEMResults")
+
+    def clone_res(self):
+        return FEMResults(
+            mesh_file=self.mesh_file,
+            V=self.V,
+            domain=self.domain,
+            elem=self.elem,
+            comm=self.comm,
+        )
 
     def eval(self, X, is_multi_proc=False):
         """
@@ -345,145 +354,95 @@ class FEMResults(NRV_class):
     ## special methods ##
     #####################
     def __abs__(self):
-        res = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+        res = self.clone_res()
         if self.vout is not None:
-            expr = Expression(abs(self.vout), self.V.element.interpolation_points())
             res.vout = Function(self.V)
-            self.vout.interpolate(expr)
+            res.vout.x.array[:] = abs(self.vout.x.array)
         return res
 
     def __neg__(self):
-        res = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+        res = self.clone_res()
         if self.vout is not None:
-            expr = Expression(-1 * self.vout, self.V.element.interpolation_points())
             res.vout = Function(self.V)
-            self.vout.interpolate(expr)
+            res.vout.x.array[:] = -self.vout.x.array
         return res
 
     def __add__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout + b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout + b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A + B
         return C
 
     def __sub__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout - b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout - b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A - B
         return C
 
     def __mul__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(self.vout * b.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(self.vout * b, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = A * B
         return C
 
     def __radd__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout + self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b + self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B + A
         return C
 
     def __rsub__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout - self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b - self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B - A
         return C
 
     def __rmul__(self, b):
         if is_sim_res(b):
             self.aline_V(b)
-            expr = Expression(b.vout * self.vout, self.V.element.interpolation_points())
+            B = b.vout.x.array
         else:
-            expr = Expression(b * self.vout, self.V.element.interpolation_points())
-
-        C = FEMResults(
-            mesh_file=self.mesh_file,
-            V=self.V,
-            domain=self.domain,
-            elem=self.elem,
-            comm=self.comm,
-        )
+            B = b
+        A = self.vout.x.array
+        C = self.clone_res()
         C.vout = Function(self.V)
-        C.vout.interpolate(expr)
+        C.vout.x.array[:] = B * A
         return C
 
     def __eq__(self, b):
         if is_sim_res(b):
             if b.mesh_file == self.mesh_file:
-                if np.allclose(self.vector(), b.vector()):
+                if np.allclose(self.vector, b.vector):
                     return True
         return False
 

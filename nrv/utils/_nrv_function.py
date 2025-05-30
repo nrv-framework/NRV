@@ -496,7 +496,6 @@ class nrv_interp(nrv_function):
         """ """
         if kind is not None:
             self.kind = kind
-
         if interpolator is not None:
             self.interpolator = interpolator
         elif self.kind.lower() in spy_interp1D_kind:
