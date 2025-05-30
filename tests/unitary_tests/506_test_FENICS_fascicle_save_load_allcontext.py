@@ -22,8 +22,8 @@ if __name__ == "__main__":
     print("Population of "+str(N)+" axons generated in "+str(t1 - t0)+" s")
 
 
-    d = 500				# diameter, in um
-    L = 10000 			# length, in um
+    d = 500                # diameter, in um
+    L = 10000             # length, in um
 
     fascicle_1 = nrv.fascicle(ID=test_num)
     fascicle_1.define_length(L)
@@ -90,7 +90,6 @@ if __name__ == "__main__":
     ## Save/Load Fascicle ##
     ########################
     fascicle_1.save(fname=fasc_file,extracel_context=True,intracel_context=True, rec_context=True)
-    nrv.synchronize_processes()
     #fascicle_2 = nrv.fascicle()
     fascicle_2 = nrv.load_fascicle(fasc_file,extracel_context=True,intracel_context=True, rec_context=True)
 

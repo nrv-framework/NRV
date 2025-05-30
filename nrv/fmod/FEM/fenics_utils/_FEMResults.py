@@ -19,13 +19,12 @@ from dolfinx.geometry import (
     compute_distance_gjk,
     create_midpoint_tree,
 )
-from mpi4py import MPI
+from mpi4py.MPI import COMM_WORLD
 
 
 from ....backend._file_handler import rmv_ext
 from ....backend._log_interface import rise_error, rise_warning
 from ....backend._parameters import parameters
-from ....backend._MCore import MCH, synchronize_processes
 from ....backend._NRV_Class import NRV_class
 from ..mesh_creator._MshCreator import (
     is_MshCreator,
@@ -84,7 +83,7 @@ def save_sim_res_list(sim_res_list, fname, dt=1.0):
     vtxf.close()
 
 
-def read_gmsh(mesh, comm=MPI.COMM_WORLD, rank=0, gdim=3):
+def read_gmsh(mesh, comm=COMM_WORLD, rank=0, gdim=3):
     """
     Given a mesh_file or a MeshCreator returns mesh cell_tags and facet_tags
     (see dolfinx.io.gmshio.model_to_mesh for more details)
@@ -171,7 +170,7 @@ class FEMResults(NRV_class):
         elem=("Lagrange", 1),
         V=None,
         vout=None,
-        comm=MPI.COMM_WORLD,
+        comm=COMM_WORLD,
     ):
         """
         initialisation of the FEMParameters:

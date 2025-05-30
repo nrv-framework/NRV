@@ -81,9 +81,9 @@ if __name__ == "__main__":
     ##########
 
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 10					# axon diameter, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 10                    # axon diameter, in [um]
     axonm1 = nrv.myelinated(y,z,d,L_mye,rec='all', dt=0.0003)
     axonm1.attach_extracellular_stimulation(test_stim)
     axonm1.change_stimulus_from_electrode(ID_elec=0, stimulus=stim_m1)
@@ -120,9 +120,9 @@ if __name__ == "__main__":
 
 
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 1					# axon diameter, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 1                    # axon diameter, in [um]
     axonu1 = nrv.unmyelinated(y,z,d,L_mye, dt=0.0003)
     axonu1.attach_extracellular_stimulation(test_stim)
     axonu1.change_stimulus_from_electrode(ID_elec=0, stimulus=stim_u1)

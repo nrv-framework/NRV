@@ -1,4 +1,3 @@
-#pragma parallel
 import nrv
 import time
 
@@ -10,6 +9,5 @@ if __name__ == "__main__":
     start_time = time.time()
     threshold, Niter = nrv.para_firing_threshold(diam,L,material,dist_elec)
     comput_time = time.time() - start_time
-    if nrv.MCH.do_master_only_work():
-        print(threshold)
-        print(comput_time)
+    print(threshold)
+    print(comput_time)

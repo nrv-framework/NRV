@@ -97,21 +97,21 @@ class MshCreator(NRV_class):
         self.N_nodes = 0
         self.N_elements = 0
 
-        self.Ncore = None
+        self.n_proc = None
         self.n_core = None
 
     @property
     def n_core(self):
-        return self.Ncore
+        return self.n_proc
     
     @n_core.setter
     def n_core(self, i:int|None=None):
         if i is None:
-            self.Ncore = parameters.GMSH_Ncores
+            self.n_proc = parameters.GMSH_Ncores
         else:
-            self.Ncore = i
-        gmsh.option.setNumber("General.NumThreads", self.Ncore)
-        if self.Ncore > 1:
+            self.n_proc = i
+        gmsh.option.setNumber("General.NumThreads", self.n_proc)
+        if self.n_proc > 1:
             gmsh.option.set_number("Mesh.Algorithm3D", 10)
         else:
             gmsh.option.set_number("Mesh.Algorithm3D", 1)
@@ -188,11 +188,11 @@ class MshCreator(NRV_class):
         self.N_elements = sum(len(i) for i in elemTags)
         if verbose:
             pass_info("Mesh properties:")
-            pass_info("Number of processes : " + str(self.Ncore))
+            pass_info("Number of processes : " + str(self.n_proc))
             pass_info("Number of entities : " + str(self.N_entities))
             pass_info("Number of nodes : " + str(self.N_nodes))
             pass_info("Number of elements : " + str(self.N_elements))
-        return self.Ncore, self.N_entities, self.N_nodes, self.N_elements
+        return self.n_proc, self.N_entities, self.N_nodes, self.N_elements
 
     def get_mesh_info(self, verbose=False):
         rise_warning("DEPRECATED method use get_info instead")

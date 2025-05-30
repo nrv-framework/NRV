@@ -2,9 +2,9 @@ import nrv
 
 if __name__ == "__main__":
     # electrode def
-    x_elec = 10000/2				# electrode x position, in [um]
-    y_elec = 100				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = 10000/2                # electrode x position, in [um]
+    y_elec = 100                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 
     # load material properties

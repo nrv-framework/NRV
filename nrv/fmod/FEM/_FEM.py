@@ -4,7 +4,6 @@ NRV-:class:`.FEM_model` handling.
 
 from abc import abstractmethod
 
-from ...backend._MCore import MCH
 from ...backend._log_interface import pass_info, rise_warning
 from ...backend._NRV_Class import NRV_class
 
@@ -23,17 +22,17 @@ class FEM_model(NRV_class):
     """
 
     @abstractmethod
-    def __init__(self, Ncore=None):
+    def __init__(self, n_proc=None):
         """
         Creates a instance of FEM_model
 
         Parameters
         ----------
-        Ncore   : int
+        n_proc   : int
             number of cores for computation. If None is specified, this number is taken from the NRV2.ini configuration file. Byu default set to None
         """
         super().__init__()
-        self.Ncore = Ncore
+        self.n_proc = n_proc
         self.is_multi_proc = False
         self.type = "FEM"
 
@@ -80,26 +79,4 @@ class FEM_model(NRV_class):
         pass_info("total duration " + str(total_timer) + " s")
         return self.meshing_timer, self.setup_timer, self.solving_timer, total_timer
 
-    def set_Ncore(self, N):
-        """
-        Set the number of cores to use for the FEM
 
-        Parameters
-        ----------
-        N       : int
-            Number of cores to set
-        """
-        if isinstance(N, bool):
-            if N:
-                N = MCH.size
-            else:
-                N = 1
-        if N is None:
-            N = 1
-        self.Ncore = N
-        if self.Ncore > MCH.size:
-            rise_warning(
-                "MCH size is " + str(MCH.size) + " cannot set FEM on more processes"
-            )
-            self.Ncore = MCH.size
-        self.is_multi_proc = self.Ncore > 1

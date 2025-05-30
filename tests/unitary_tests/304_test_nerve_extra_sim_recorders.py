@@ -29,21 +29,20 @@ if __name__ == "__main__":
 
     nerve.simulate(t_sim=10, save_path='./unitary_tests/figures/', postproc_script='rmv_keys')
     loaded_rec = nerve.recorder
-    if nrv.MCH.do_master_only_work():
-        fig, ax = plt.subplots(figsize=(8,8))
-        nerve.plot(ax)
-        plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
+    fig, ax = plt.subplots(figsize=(8,8))
+    nerve.plot(ax)
+    plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
 
-        fig = plt.figure(figsize=(8,4))
-        axs = []
-        for k in range(len(loaded_rec.recording_points)):
-            coordinate = (loaded_rec.recording_points[k].x, loaded_rec.recording_points[k].y, loaded_rec.recording_points[k].z)
-            axs.append(plt.subplot(2, 3, k+1))
-            axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording, label=str(coordinate))
-            axs[k].set_xlabel('time (ms)')
-            axs[k].set_ylabel(f'elec. potential (mV)')
-            axs[k].legend()
-            axs[k].grid()
-        plt.tight_layout()
-        plt.savefig('./unitary_tests/figures/'+str(test_num)+'_C.png')
-    #plt.show()
+    fig = plt.figure(figsize=(8,4))
+    axs = []
+    for k in range(len(loaded_rec.recording_points)):
+        coordinate = (loaded_rec.recording_points[k].x, loaded_rec.recording_points[k].y, loaded_rec.recording_points[k].z)
+        axs.append(plt.subplot(2, 3, k+1))
+        axs[k].plot(loaded_rec.t,loaded_rec.recording_points[k].recording, label=str(coordinate))
+        axs[k].set_xlabel('time (ms)')
+        axs[k].set_ylabel(f'elec. potential (mV)')
+        axs[k].legend()
+        axs[k].grid()
+    plt.tight_layout()
+    plt.savefig('./unitary_tests/figures/'+str(test_num)+'_C.png')
+#plt.show()

@@ -107,7 +107,6 @@ if __name__ == "__main__":
     ###################
     ##### Nerve #######
     ###################
-    nrv.synchronize_processes()
     outer_d = 5 # mm
     nerve_d = 300 # um
     nerve_l = 5100 # um

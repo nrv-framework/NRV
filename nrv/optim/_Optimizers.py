@@ -399,28 +399,6 @@ class PSO_optimizer(Optimizer):
             min_bound = min(self.bounds) * np.ones(self.dimensions)
             return (min_bound, max_bound)
 
-    # def __mproc_handling(self):
-    #         # prevent using MPI and multprocessing at the same time
-    #         # MPI: parralize inside the cost function
-    #         # multiprocessing: parralellize the swarm
-    #         # (!!enhancement: do the latter with MPI parralellizing cost_function_swarm_from_particle)
-    #         if self.n_processes is not None:
-    #             rise_warning(
-    #                 "multiprocessing and MPI should not be mixed",
-    #                 "n_processes set to None",
-    #             )
-    #             self.n_processes = None
-    #     elif self.n_processes != None and self.n_processes > cpu_count() - 1:
-    #         answer = input(
-    #             "Number of process higher than number of cpu\n"
-    #             + "continue with one process (Y/n)\n"
-    #         )
-    #         if answer == "Y":
-    #             self.n_processes = None
-    #         else:
-    #             print("Terminated")
-    #             return False
-
     def minimize(self, f_swarm: callable, **kwargs) -> optim_results:
         """
         Perform a Particle swarm optimization

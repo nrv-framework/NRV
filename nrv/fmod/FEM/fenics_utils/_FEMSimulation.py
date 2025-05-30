@@ -18,7 +18,7 @@ from dolfinx.fem import (
     locate_dofs_topological,
 )
 from dolfinx.fem.petsc import LinearProblem
-from mpi4py import MPI
+from mpi4py.MPI import COMM_WORLD, COMM_SELF, SUM
 from petsc4py.PETSc import ScalarType, Viewer
 from ufl import (
     Measure,
@@ -140,7 +140,7 @@ class FEMSimulation(FEMParameters):
         Usefull to link the update materials conductivity as in NRV conductivities are in S/m
         but NerveMshCreator space scale is um)
     comm            : int
-        The MPI communicator to use for mesh creation, by default MPI.COMM_SELF
+        The MPI communicator to use for mesh creation, by default COMM_SELF
     rank            : int
         The rank the Gmsh model is initialized on, by default 0
     """
@@ -153,7 +153,7 @@ class FEMSimulation(FEMParameters):
         data=None,
         elem=None,
         ummesh=True,
-        comm=MPI.COMM_SELF,
+        comm=COMM_SELF,
         rank=0,
     ):
         """
@@ -726,8 +726,8 @@ class FEMSimulation(FEMParameters):
 
     def get_surface(self, dom_id):
         S = assemble_scalar(form(1 * self.ds(dom_id)))
-        if self.comm == MPI.COMM_WORLD:
-            S = self.comm.reduce(S, op=MPI.SUM, root=0)
+        if self.comm == COMM_WORLD:
+            S = self.comm.reduce(S, op=SUM, root=0)
             S = self.comm.bcast(S, root=0)
         return S
 

@@ -37,9 +37,8 @@ if __name__ == "__main__":
 
         # launch sim with
         nerve.simulate(save_path='./unitary_tests/figures/', postproc_script=postproc[i])
-        if nrv.MCH.do_master_only_work():
-            print(nerve.postproc_label + ' OFT_PP ok')
-            sys.stdout.flush()
+        print(nerve.postproc_label + ' OFT_PP ok')
+        sys.stdout.flush()
         del nerve
 
     #plt.show()

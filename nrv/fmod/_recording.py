@@ -8,7 +8,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from ..backend._log_interface import rise_error, rise_warning
-from ..backend._MCore import MCH, synchronize_processes
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._units import cm, m
 from ._materials import load_material
@@ -771,18 +770,7 @@ class recorder(NRV_class):
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
-    def __update_master_t(self):
-        """
-        if the recorder has not been used in the master process:
-        recover the time verctor in the master from an other process (rank 1)
-        """
-        synchronize_processes()
-        if MCH.do_master_only_work():
-            self.t = MCH.recieve_data_from_slave()["t"]
-        elif MCH.rank == 1:
-            MCH.send_data_to_master({"t": self.t})
-        else:
-            pass
+
 
     def gather_all_recordings(self, results:list[dict]):
         """

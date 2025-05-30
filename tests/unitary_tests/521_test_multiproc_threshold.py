@@ -5,10 +5,10 @@ nrv.parameters.set_nrv_verbosity(2)
 
 
 # axon def
-y = 0						# axon y position, in [um]
-z = 0						# axon z position, in [um]
-d = 10						# axon diameter, in [um]
-L = 50_000					# axon length, along x axis, in [um]
+y = 0                        # axon y position, in [um]
+z = 0                        # axon z position, in [um]
+d = 10                        # axon diameter, in [um]
+L = 50_000                    # axon length, along x axis, in [um]
 axon1 = nrv.myelinated(y,z,d,L,T=37,rec='nodes',dt=0.005)
 
 #electrode

@@ -21,16 +21,16 @@ if __name__ == "__main__":
     print('Population of '+str(N)+' axons generated in '+str(t1 - t_start)+' s')
 
 
-    d = 500				# diameter, in um
-    L = 10000 			# length, in um
+    d = 500                # diameter, in um
+    L = 10000             # length, in um
 
     t1 = time.time()
     t2 = time.time()
     print('Population of '+str(N)+' axons generated in '+str(t1 - t_start)+' s')
 
 
-    d = 500				# diameter, in um
-    L = 10000 			# length, in um
+    d = 500                # diameter, in um
+    L = 10000             # length, in um
 
     fascicle_1 = nrv.fascicle(ID=504)
     fascicle_1.define_length(L)
@@ -45,9 +45,9 @@ if __name__ == "__main__":
 
 
     ## Point source electrode definition
-    x_elec = L/2				# electrode x position, in [um]
-    y_elec = 500				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = L/2                # electrode x position, in [um]
+    y_elec = 500                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     elec_2 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
     # load material properties
     epineurium = nrv.load_material('endoneurium_bhadra')

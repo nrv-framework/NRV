@@ -5,15 +5,15 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     #nrv.parameters.set_nrv_verbosity(4)
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 1						# axon diameter, in [um]
-    L = 5000					# axon length, along x axis, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 1                        # axon diameter, in [um]
+    L = 5000                    # axon length, along x axis, in [um]
     axon1 = nrv.unmyelinated(y,z,d,L)
     # electrode def
-    x_elec = L/2				# electrode x position, in [um]
-    y_elec = 100				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = L/2                # electrode x position, in [um]
+    y_elec = 100                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
 
     # load material properties

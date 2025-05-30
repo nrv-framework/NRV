@@ -28,7 +28,7 @@ if __name__ == "__main__":
     I_anod = I_cathod/5
     T_cathod = 60e-3
     T_inter = 40e-3
-    stim1 = nrv.FEM_stimulation(Ncore=False)
+    stim1 = nrv.FEM_stimulation(n_proc=False)
     stim1.reshape_outerBox(Outer_D)
     stim1.reshape_nerve(Nerve_D, L)
     stim1.reshape_fascicle(Fascicle_D)#, res=220/10)
@@ -49,14 +49,13 @@ if __name__ == "__main__":
     #print(fascicle_1.extra_stim.model.is_multi_proc)
     fascicle_1.compute_electrodes_footprints()
 
-    if nrv.MCH.do_master_only_work():
-        _, _, _, t_fem = fascicle_1.extra_stim.model.get_timers(verbose=False)
+    _, _, _, t_fem = fascicle_1.extra_stim.model.get_timers(verbose=False)
     del fascicle_1
 
 
 
     #stim2 = nrv.load_any(stim1.save())
-    stim2 = nrv.FEM_stimulation(Ncore=True)
+    stim2 = nrv.FEM_stimulation(n_proc=True)
     stim2.reshape_outerBox(Outer_D)
     stim2.reshape_nerve(Nerve_D, L)
     stim2.reshape_fascicle(Fascicle_D)
@@ -65,12 +64,10 @@ if __name__ == "__main__":
     fascicle_2.set_ID(Ntest*10+1)
     fascicle_2.attach_extracellular_stimulation(stim2)
     fascicle_2.compute_electrodes_footprints()
-    if nrv.MCH.do_master_only_work():
-        _, _, _, t_fem_mp = fascicle_2.extra_stim.model.get_timers(verbose=False)
-        n_proc = fascicle_2.extra_stim.model.Ncore
-        print(f"Single proc simulation : {t_fem} s\n {n_proc}-proc simulation:{t_fem_mp} s")
+    _, _, _, t_fem_mp = fascicle_2.extra_stim.model.get_timers(verbose=False)
+    n_proc = fascicle_2.extra_stim.model.n_proc
+    print(f"Single proc simulation : {t_fem} s\n {n_proc}-proc simulation:{t_fem_mp} s")
 
 
     #fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
 
-    nrv.synchronize_processes()

@@ -3,7 +3,7 @@ from sources.OTF_PP_stim_intra import stim_intra
 
 if __name__ == '__main__':
     # Fascicle config
-    L = 10000 			# length, in um
+    L = 10000             # length, in um
     source_file = './unitary_tests/sources/56_fasc.json'
     # intra cellular stimulation parameters
     position = 0.5

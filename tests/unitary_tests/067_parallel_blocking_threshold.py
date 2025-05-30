@@ -11,6 +11,5 @@ if __name__ == "__main__":
     start_time = time.time()
     threshold = nrv.para_blocking_threshold(diam,L,material,dist_elec,freq,amp_tol=1)
     comput_time = time.time() - start_time
-    if nrv.MCH.do_master_only_work():
-        print(threshold)
-        print(comput_time)
+    print(threshold)
+    print(comput_time)

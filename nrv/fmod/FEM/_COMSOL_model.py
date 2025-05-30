@@ -10,7 +10,6 @@ import mph
 import numpy as np
 
 from ...backend._file_handler import rmv_ext
-from ...backend._MCore import MCH
 from ...backend._log_interface import rise_warning
 from ...backend._parameters import parameters
 from ...utils._units import V
@@ -37,7 +36,7 @@ class COMSOL_model(FEM_model):
     A class for COMSOL Finite Element Models, inherits from FEM_model.
     """
 
-    def __init__(self, fname, Ncore=None, handle_server=False):
+    def __init__(self, fname, n_proc=None, handle_server=False):
         """
         Creates a instance of a COMSOL Finite Element Model object.
 
@@ -45,14 +44,14 @@ class COMSOL_model(FEM_model):
         ----------
         fname   : str
             path to the COMSOL (.mph) model file
-        Ncore   : int
+        n_proc   : int
             number of COMSOL cores for computation. If None is specified, this number is taken from the NRV2.ini configuration file. Byu default set to None
         handle_server   : bool
             if True, the instantiation creates the server, else a external server is used. Usefull for multiple cells sharing the same model
         """
         if COMSOL_Status:
             t0 = time.time()
-            super().__init__(Ncore=Ncore)
+            super().__init__(n_proc=n_proc)
             self.type = "COMSOL"
             self.model_path = fname
             f_in_librairy = rmv_ext(str(fname)) + ".mph"
@@ -64,18 +63,17 @@ class COMSOL_model(FEM_model):
             else:
                 self.fname = fname
             # self.model_path = fname
-            if self.Ncore is None:
-                self.Ncore = COMSOL_Ncores
-            self.is_multi_proc = self.Ncore > 1 and not MCH.is_alone()
+            if self.n_proc is None:
+                self.n_proc = COMSOL_Ncores
             self.handle_server = handle_server
             # start client and server
             pass_info("Starting COMSOL server/client, this may take few seconds")
             if self.handle_server:
-                self.server = mph.Server(cores=self.Ncore)
+                self.server = mph.Server(cores=self.n_proc)
                 self.__has_server = True
             else:
                 self.server = None
-            self.client = mph.start(cores=self.Ncore)
+            self.client = mph.start(cores=self.n_proc)
             self.__has_client = True
             self.client.caching(True)
             pass_info("... loading the COMSOL model")

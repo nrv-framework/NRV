@@ -7,16 +7,16 @@ if __name__ == "__main__":
     # Fascicle config
     dt = 0.001
     t_sim = 25
-    L = 10000 			# length, in um
+    L = 10000             # length, in um
     source_file = './unitary_tests/sources/56_fasc.json'
     ID = 70
 
 
     # extra cellular stimulation parameters
     # electrode def
-    x_elec = L/2				# electrode x position, in [um]
-    y_elec = 0				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = L/2                # electrode x position, in [um]
+    y_elec = 0                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
     # load material properties
     epineurium = nrv.load_material('endoneurium_ranck')
@@ -76,9 +76,8 @@ if __name__ == "__main__":
     """
     fasc_state = nrv.fascicular_state(DIR, save=True, saving_file=DIR+"70_Facsicular_state.json")
 
-    if nrv.MCH.do_master_only_work():
-        fig, ax = plt.subplots(figsize=(8,8))
-        nrv.plot_fasc_state(fasc_state, ax, num=True)
-        plt.savefig("./unitary_tests/figures/70_A.png")
+    fig, ax = plt.subplots(figsize=(8,8))
+    nrv.plot_fasc_state(fasc_state, ax, num=True)
+    plt.savefig("./unitary_tests/figures/70_A.png")
 
     """

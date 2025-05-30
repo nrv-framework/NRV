@@ -4,7 +4,6 @@ NRV-:class:`.fascicle_results` handling.
 
 from ...backend._NRV_Results import sim_results
 from ...backend._log_interface import pass_info, rise_warning, rise_error
-from ...backend._MCore import MCH
 from ...fmod._electrodes import is_FEM_electrode
 from ...utils._units import nm, convert, from_nrv_unit, to_nrv_unit
 from ...utils._misc import membrane_capacitance_from_model, compute_complex_admitance
@@ -335,59 +334,58 @@ class fascicle_results(sim_results):
         unmyel_color: str = "b",
         num: bool = False,
     ) -> None:
-        if MCH.do_master_only_work():
-            ## plot contour
+        ## plot contour
+        axes.add_patch(
+            plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D / 2,
+                color=contour_color,
+                fill=False,
+                linewidth=2,
+            )
+        )
+        ## plot axons
+        axon_diam, axon_type, axon_y, axon_z, axon_recruited = self.get_axons()
+        for k, _ in enumerate(axon_diam):
+            color = unmyel_color
+            if axon_type[k]:
+                color = myel_color
+            alpha = 0.1
+            if axon_recruited[k]:
+                alpha = 1
             axes.add_patch(
                 plt.Circle(
-                    (self.y_grav_center, self.z_grav_center),
-                    self.D / 2,
-                    color=contour_color,
-                    fill=False,
-                    linewidth=2,
+                    (axon_y[k], axon_z[k]),
+                    axon_diam[k] / 2,
+                    color=color,
+                    fill=True,
+                    alpha=alpha,
                 )
             )
-            ## plot axons
-            axon_diam, axon_type, axon_y, axon_z, axon_recruited = self.get_axons()
-            for k, _ in enumerate(axon_diam):
-                color = unmyel_color
-                if axon_type[k]:
-                    color = myel_color
-                alpha = 0.1
-                if axon_recruited[k]:
-                    alpha = 1
-                axes.add_patch(
-                    plt.Circle(
-                        (axon_y[k], axon_z[k]),
-                        axon_diam[k] / 2,
-                        color=color,
-                        fill=True,
-                        alpha=alpha,
-                    )
+        if "extra_stim" in self:
+            if self.extra_stim is not None:
+                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+        if num:
+            for k in range(self.n_ax):
+                axes.text(
+                    self.axons_y[k],
+                    self.axons_z[k],
+                    str(k),
+                    horizontalalignment="center",
+                    verticalalignment="center",
                 )
-            if "extra_stim" in self:
-                if self.extra_stim is not None:
-                    self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
-            if num:
-                for k in range(self.n_ax):
-                    axes.text(
-                        self.axons_y[k],
-                        self.axons_z[k],
-                        str(k),
-                        horizontalalignment="center",
-                        verticalalignment="center",
-                    )
-            axes.set_xlim(
-                (
-                    -1.1 * self.D / 2 + self.y_grav_center,
-                    1.1 * self.D / 2 + self.y_grav_center,
-                )
+        axes.set_xlim(
+            (
+                -1.1 * self.D / 2 + self.y_grav_center,
+                1.1 * self.D / 2 + self.y_grav_center,
             )
-            axes.set_ylim(
-                (
-                    -1.1 * self.D / 2 + self.z_grav_center,
-                    1.1 * self.D / 2 + self.z_grav_center,
-                )
+        )
+        axes.set_ylim(
+            (
+                -1.1 * self.D / 2 + self.z_grav_center,
+                1.1 * self.D / 2 + self.z_grav_center,
             )
+        )
 
     def plot_block_summary(
         self,
@@ -425,74 +423,73 @@ class fascicle_results(sim_results):
             if True, the index of each axon is displayed on top of the circle
         """
 
-        if MCH.do_master_only_work():
-            ## plot contour
+        ## plot contour
+        axes.add_patch(
+            plt.Circle(
+                (self.y_grav_center, self.z_grav_center),
+                self.D / 2,
+                color=contour_color,
+                fill=False,
+                linewidth=2,
+            )
+        )
+        ## plot axons
+        axon_diam, _, axon_y, axon_z, is_blocked, n_onset = (
+            self.get_block_summary_axons(
+                AP_start=AP_start, freq=freq, t_refractory=t_refractory
+            )
+        )
+        alpha_g = 1 / np.max(n_onset)
+
+        # cmap = plt.get_cmap('viridis')
+        # norm = plt.Normalize(min(n_onset), max(n_onset))
+        # line_colors = cmap((n_onset))
+
+        for k, _ in enumerate(axon_diam):
+            if is_blocked[k] is not True:
+                if n_onset[k] == 0:
+                    c = "grey"
+                    alpha = 0.5
+                else:
+                    c = "orangered"
+                    alpha = n_onset[k] * alpha_g
+                if is_blocked[k] is None:
+                    axes.scatter(axon_y[k], axon_z[k], marker="x", s=20, c="k")
+
+            else:
+                if n_onset[k] == 0:
+                    c = "seagreen"
+                    alpha = 1
+                else:
+                    c = "steelblue"
+                    alpha = n_onset[k] * alpha_g
+
             axes.add_patch(
                 plt.Circle(
-                    (self.y_grav_center, self.z_grav_center),
-                    self.D / 2,
-                    color=contour_color,
-                    fill=False,
-                    linewidth=2,
+                    (axon_y[k], axon_z[k]),
+                    axon_diam[k] / 2,
+                    color=c,
+                    fill=True,
+                    alpha=alpha,
                 )
             )
-            ## plot axons
-            axon_diam, _, axon_y, axon_z, is_blocked, n_onset = (
-                self.get_block_summary_axons(
-                    AP_start=AP_start, freq=freq, t_refractory=t_refractory
-                )
+
+        if self.extra_stim is not None:
+            self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+        if num:
+            for k in range(self.n_ax):
+                axes.text(
+                    self.axons_y[k], self.axons_z[k], str(k)
+                )  # horizontalalignment='center',verticalalignment='center')
+        axes.set_xlim(
+            (
+                -1.1 * self.D / 2 + self.y_grav_center,
+                1.1 * self.D / 2 + self.y_grav_center,
             )
-            alpha_g = 1 / np.max(n_onset)
-
-            # cmap = plt.get_cmap('viridis')
-            # norm = plt.Normalize(min(n_onset), max(n_onset))
-            # line_colors = cmap((n_onset))
-
-            for k, _ in enumerate(axon_diam):
-                if is_blocked[k] is not True:
-                    if n_onset[k] == 0:
-                        c = "grey"
-                        alpha = 0.5
-                    else:
-                        c = "orangered"
-                        alpha = n_onset[k] * alpha_g
-                    if is_blocked[k] is None:
-                        axes.scatter(axon_y[k], axon_z[k], marker="x", s=20, c="k")
-
-                else:
-                    if n_onset[k] == 0:
-                        c = "seagreen"
-                        alpha = 1
-                    else:
-                        c = "steelblue"
-                        alpha = n_onset[k] * alpha_g
-
-                axes.add_patch(
-                    plt.Circle(
-                        (axon_y[k], axon_z[k]),
-                        axon_diam[k] / 2,
-                        color=c,
-                        fill=True,
-                        alpha=alpha,
-                    )
-                )
-
-            if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
-            if num:
-                for k in range(self.n_ax):
-                    axes.text(
-                        self.axons_y[k], self.axons_z[k], str(k)
-                    )  # horizontalalignment='center',verticalalignment='center')
-            axes.set_xlim(
-                (
-                    -1.1 * self.D / 2 + self.y_grav_center,
-                    1.1 * self.D / 2 + self.y_grav_center,
-                )
+        )
+        axes.set_ylim(
+            (
+                -1.1 * self.D / 2 + self.z_grav_center,
+                1.1 * self.D / 2 + self.z_grav_center,
             )
-            axes.set_ylim(
-                (
-                    -1.1 * self.D / 2 + self.z_grav_center,
-                    1.1 * self.D / 2 + self.z_grav_center,
-                )
-            )
+        )

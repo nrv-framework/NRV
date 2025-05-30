@@ -13,7 +13,7 @@ key_to_check_custom = {"ID", "comment", "num"}
 
 if __name__ == "__main__":
     # parameters for the test fascicle
-    L = 10000 			# length, in um
+    L = 10000             # length, in um
     fascicles = []
     for i in range(4):
         fascicles += [nrv.fascicle(return_parameters_only=False, ID=57*10+i)]
@@ -27,27 +27,23 @@ if __name__ == "__main__":
 
     # launch sim with
     res = fascicles[0].simulate(save_path='./unitary_tests/figures/')
-    if nrv.MCH.do_master_only_work():
-        print('default OFT_PP:')
-        print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
+    print('default OFT_PP:')
+    print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
     del fascicles[0], res
 
     res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script='rmv_keys')
-    if nrv.MCH.do_master_only_work():
-        print('rmv_keys OFT_PP:')
-        print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
+    print('rmv_keys OFT_PP:')
+    print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
     del fascicles[0], res
 
     res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp)
-    if nrv.MCH.do_master_only_work():
-        print('Custom OFT_PP:')
-        print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
+    print('Custom OFT_PP:')
+    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
     del fascicles[0], res
 
     res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":1, "unvalid_arg":404})
-    if nrv.MCH.do_master_only_work():
-        print('Custom OFT_PP with kwargs:')
-        print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
+    print('Custom OFT_PP with kwargs:')
+    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
     del fascicles, res
 
 
@@ -60,6 +56,5 @@ if __name__ == "__main__":
     fasc.axons_z = np.asarray([0])
 
     res = fasc()
-    if nrv.MCH.do_master_only_work():
-        print('Custom OFT_PP with kwargs (set when instantiated):')
-        print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
+    print('Custom OFT_PP with kwargs (set when instantiated):')
+    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)

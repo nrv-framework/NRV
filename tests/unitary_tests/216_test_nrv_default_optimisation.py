@@ -49,9 +49,8 @@ if __name__ == "__main__":
     test_prob.costfunction = my_cost1
     res = test_prob(**cg_kwargs)
 
-    if nrv.MCH.do_master_only_work():
-        print(res.x)
-        fig,ax = plt.subplots(1)
-        res.plot_cost_history(ax)
-        ax.legend()
-        fig.savefig(figdir+"A.png")
+    print(res.x)
+    fig,ax = plt.subplots(1)
+    res.plot_cost_history(ax)
+    ax.legend()
+    fig.savefig(figdir+"A.png")

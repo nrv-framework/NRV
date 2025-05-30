@@ -38,9 +38,9 @@ if __name__ == "__main__":
     ## axon ##
     ##########
     # axon def
-    y = 100						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 6.5						# axon diameter, in [um]
+    y = 100                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 6.5                        # axon diameter, in [um]
     axon1 = nrv.myelinated(y,z,d,L,rec='all')
     axon1.attach_extracellular_stimulation(test_stim)
 

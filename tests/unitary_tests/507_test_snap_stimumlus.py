@@ -12,9 +12,9 @@ if __name__ == "__main__":
     # ### Simulation box size
     d = 25
     length = 1000
-    x_elec = 0				# electrode x position, in [um]
-    y_elec = 100				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = 0                # electrode x position, in [um]
+    y_elec = 100                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     elec_1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
     # stimulus def
     freq = 10
@@ -27,9 +27,9 @@ if __name__ == "__main__":
 
     x_2_offset = (length)/2
     # electrode def
-    x_elec = L/2				# electrode x position, in [um]
-    y_elec = 100				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = L/2                # electrode x position, in [um]
+    y_elec = 100                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     elec_2 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
     start = 0
     I_cathod = 40

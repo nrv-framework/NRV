@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     if nrv.COMSOL_Status:
         # axon def
-        y = 0						# axon y position, in [um]
-        z = 0						# axon z position, in [um]
-        d = 16						# axon diameter, in [um]
+        y = 0                        # axon y position, in [um]
+        z = 0                        # axon z position, in [um]
+        d = 16                        # axon diameter, in [um]
         L=nrv.get_length_from_nodes(d,20)                # get length for 20 nodes of ranvier
 
         dt = 0.001
@@ -28,12 +28,12 @@ if __name__ == "__main__":
         ##### electrode and stimulus definition
 
         # electrode def
-        z_elec = 0				# electrode x position, in [um]
-        y_elec = 500				# electrode y position, in [um]
+        z_elec = 0                # electrode x position, in [um]
+        y_elec = 500                # electrode y position, in [um]
         model = 'MRG'
 
         axon1 = nrv.myelinated(y,z,d,L,rec='all',dt=dt,freq=f_dlambda,model=model)
-        x_elec = axon1.x_nodes[10]	# electrode y position, in [um]
+        x_elec = axon1.x_nodes[10]    # electrode y position, in [um]
         # first electrode
         D_1 = 25
         length_1 = 1000

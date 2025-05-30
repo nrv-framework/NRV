@@ -4,6 +4,8 @@ from time import sleep
 from rich.live import Live
 from rich.table import Table
 from rich.progress import Progress, BarColumn, TextColumn
+from multiprocessing import current_process, parent_process, active_children
+import os
 
 
 def worker(task_info):
@@ -11,7 +13,8 @@ def worker(task_info):
     task_name, task_id, total, progress_dict = task_info
 
     progress = Progress(
-        TextColumn(f"[cyan]{task_name}"),
+        TextColumn(f"{parent_process().name}"),
+        TextColumn(f"[cyan]{current_process().name}: {task_name}"),
         BarColumn(),
         "[progress.percentage]{task.percentage:>3.0f}%",
     )
@@ -31,10 +34,13 @@ def worker(task_info):
 
 def rich_multiprocessing_with_pool():
     """Manages multiprocessing with Rich progress bars using Pool and sums numpy arrays."""
-    num_processes = 3
+    num_processes = 4
     tasks = [{"task_name": f"Task {i+1}", "total": 100, "task_id": i} for i in range(num_processes)]
 
+    print(current_process().name=="MainProcess", active_children())
     manager = Manager()
+    print(current_process().name=="MainProcess", active_children())
+
     progress_dict = manager.dict()  # Shared dictionary for tracking progress renderables
 
     # Prepare task info for Pool
@@ -44,6 +50,7 @@ def rich_multiprocessing_with_pool():
     ]
 
     with Pool(processes=num_processes) as pool:
+        print(current_process().name=="MainProcess", active_children())
         with Live(refresh_per_second=10) as live:
             async_results = [pool.apply_async(worker, args=(task_info,)) for task_info in task_info_list]
 

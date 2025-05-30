@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 1						# axon diameter, in [um]
-    L = 5000					# axon length, along x axis, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 1                        # axon diameter, in [um]
+    L = 5000                    # axon length, along x axis, in [um]
     axon1 = nrv.unmyelinated(y,z,d,L,dt=0.002)
 
     # load material properties

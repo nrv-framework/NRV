@@ -6,10 +6,10 @@ if __name__ == "__main__":
     t_sim = 10
 
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 10						# axon diameter, in [um]
-    L = 25_000					# axon length, along x axis, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 10                        # axon diameter, in [um]
+    L = 25_000                    # axon length, along x axis, in [um]
     axon1 = nrv.myelinated(y,z,d,L,T=37,rec='nodes',dt=0.001,Nseg_per_sec=3)
 
     #electrode
@@ -68,10 +68,10 @@ if __name__ == "__main__":
     t_sim = 25
 
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 1						# axon diameter, in [um]
-    L = 5_000					# axon length, along x axis, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 1                        # axon diameter, in [um]
+    L = 5_000                    # axon length, along x axis, in [um]
     axon1 = nrv.unmyelinated(y,z,d,L)
 
     x_elec = 5_000//2

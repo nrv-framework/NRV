@@ -46,18 +46,17 @@ if __name__ == "__main__":
     fascicle_2.simulate(t_sim=15, save_path='./unitary_tests/figures/')
     t3 = time.time()
     print('fascicle simulated in '+ str(nrv.sci_round(t3-t2,2))+' s')
-    if nrv.MCH.do_master_only_work():
-        fig = plt.figure(figsize=(8,6))
-        axs = []
-        for k in range(len(loadedrec.recording_points)):
-            axs.append(plt.subplot(3,1,k+1))
-            axs[k].plot(loadedrec.t,loadedrec.recording_points[k].recording)
-            axs[k].set_xlabel('time (ms)')
-            axs[k].set_ylabel('elec. '+str(k)+' potential (mV)')
-            axs[k].set_ylim(-0.06,0.03)
-            axs[k].set_xlim(0,15)
-            axs[k].grid()
-        plt.tight_layout()
-        plt.savefig('./unitary_tests/figures/087_A.png')
+    fig = plt.figure(figsize=(8,6))
+    axs = []
+    for k in range(len(loadedrec.recording_points)):
+        axs.append(plt.subplot(3,1,k+1))
+        axs[k].plot(loadedrec.t,loadedrec.recording_points[k].recording)
+        axs[k].set_xlabel('time (ms)')
+        axs[k].set_ylabel('elec. '+str(k)+' potential (mV)')
+        axs[k].set_ylim(-0.06,0.03)
+        axs[k].set_xlim(0,15)
+        axs[k].grid()
+    plt.tight_layout()
+    plt.savefig('./unitary_tests/figures/087_A.png')
 
         #plt.show()

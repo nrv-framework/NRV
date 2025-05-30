@@ -8,7 +8,6 @@ from math import log10, floor
 
 from ....backend._NRV_Class import NRV_class, load_any
 from ....backend._log_interface import rise_error, rise_warning
-from ....backend._MCore import MCH
 
 # from ....nmod.myelinated import myelinated
 from ....utils._units import mm, sci_round
@@ -240,15 +239,14 @@ class NerveMshCreator(MshCreator):
         if self.is_generated and self.file != "":
             super().load(self.file)
 
-    def compute_mesh(self, master_only=True):
+    def compute_mesh(self):
         """
         Compute mesh geometry, domains and resolution and then generate the mesh
         """
-        if MCH.do_master_only_work() or not master_only:
-            self.compute_geo()
-            self.compute_domains()
-            self.compute_res()
-            self.generate()
+        self.compute_geo()
+        self.compute_domains()
+        self.compute_res()
+        self.generate()
 
     def set_gnd_facet(self, outfacet=None, lfacet=None, rfacet=None):
         """

@@ -76,7 +76,6 @@ CONFIG = nrv_config()
 ######################
 from .backend import _compileMods
 from .backend._NRV_Class import load_any
-from .backend._wrappers import *
 
 from .fmod._materials import *
 from .fmod._electrodes import *

@@ -6,9 +6,11 @@ import configparser
 import os
 from ._NRV_Singleton import NRV_singleton
 from pathlib import Path
+from multiprocessing import Process, current_process, parent_process, active_children, Lock
 
+is_master_proc = current_process().name=="MainProcess"
 
-class nrv_parameters():
+class nrv_parameters(metaclass=NRV_singleton):
     """
     A class for NRV parameters used to gather parameters
     """
@@ -17,10 +19,13 @@ class nrv_parameters():
         """
         Initialize the class for parameters
         """
-        self.nrv_path = str(Path(os.path.dirname(__file__)).parent.absolute()) 
-        self.dir_path = self.nrv_path + "/_misc"
-        self.config_fname = self.dir_path + "/NRV.ini"
-        self.load()
+        if type(self) in nrv_parameters._instances:
+            self = self._instances[type(self)]
+        else:
+            self.nrv_path = str(Path(os.path.dirname(__file__)).parent.absolute()) 
+            self.dir_path = self.nrv_path + "/_misc"
+            self.config_fname = self.dir_path + "/NRV.ini"
+            self.load()
 
     def save(self):
         """
@@ -70,6 +75,18 @@ class nrv_parameters():
         NB: to add Debug verbosity to the log VERBOSITY_LEVEL has to be set to 4
         """
         self.VERBOSITY_LEVEL = i
+
+
+    ############################
+    # Multi process parameters #
+    ############################
+    @property
+    def is_alone(self):
+        return current_process().name=="MainProcess" and len(active_children())==0
+    
+    @property
+    def proc_label(self):
+        return current_process().name
 
     def get_gmsh_ncore(self):
         """

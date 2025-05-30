@@ -3,13 +3,13 @@ from sources.OTF_PP_stim_intra import stim_intra
 
 if __name__ == '__main__':
     # Fascicle config
-    L = 10000 			# length, in um
+    L = 10000             # length, in um
     source_file = './unitary_tests/sources/56_fasc.json'
     # extra cellular stimulation parameters
     # electrode def
-    x_elec = L/2				# electrode x position, in [um]
-    y_elec = 12				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    x_elec = L/2                # electrode x position, in [um]
+    y_elec = 12                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)
     # load material properties
     epineurium = nrv.load_material('endoneurium_ranck')

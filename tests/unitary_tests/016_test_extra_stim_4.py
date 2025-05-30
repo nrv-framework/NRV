@@ -3,18 +3,18 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     # axon def
-    y = 0						# axon y position, in [um]
-    z = 0						# axon z position, in [um]
-    d = 1						# axon diameter, in [um]
-    L = 5000					# axon length, along x axis, in [um]
+    y = 0                        # axon y position, in [um]
+    z = 0                        # axon z position, in [um]
+    d = 1                        # axon diameter, in [um]
+    L = 5000                    # axon length, along x axis, in [um]
     axon1 = nrv.unmyelinated(y,z,d,L)
 
     # electrode def
     x_elec1 = L/2
     x_elec2 = L*5/8
     x_elec3 = L*3/8
-    y_elec = 100				# electrode y position, in [um]
-    z_elec = 0					# electrode y position, in [um]
+    y_elec = 100                # electrode y position, in [um]
+    z_elec = 0                    # electrode y position, in [um]
     E1 = nrv.point_source_electrode(x_elec1,y_elec,z_elec)
     E2 = nrv.point_source_electrode(x_elec2,y_elec,z_elec)
     E3 = nrv.point_source_electrode(x_elec3,y_elec,z_elec)

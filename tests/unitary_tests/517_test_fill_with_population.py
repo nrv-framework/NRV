@@ -8,7 +8,7 @@ if __name__ == "__main__":
     y_axons, z_axons = nrv.axon_packer(axons_diameters,delta = 10)
     d_fasc = nrv.get_circular_contour(axons_diameters,y_axons,z_axons,delta = 10)
 
-    L = 10000 			# length, in um
+    L = 10000             # length, in um
 
     #Axon pop is already packed
     fascicle_1 = nrv.fascicle(diameter=d_fasc)

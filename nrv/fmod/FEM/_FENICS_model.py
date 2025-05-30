@@ -7,12 +7,11 @@ import os
 import time
 
 import numpy as np
-from mpi4py import MPI
+from mpi4py.MPI import COMM_WORLD, COMM_SELF
 
 from ...backend._file_handler import rmv_ext
 from ...utils._units import V, mm
 from ...utils._misc import get_perineurial_thickness
-from ...backend._MCore import MCH, synchronize_processes
 from ...backend._log_interface import rise_warning
 from ...backend._parameters import parameters
 from .fenics_utils._FEMSimulation import FEMSimulation
@@ -77,7 +76,7 @@ class FENICS_model(FEM_model):
     def __init__(
         self,
         fname=None,
-        Ncore=None,
+        n_proc=None,
         elem=None,
         comm="default",
         rank=0,
@@ -89,12 +88,12 @@ class FENICS_model(FEM_model):
         ----------
         fname   : str
             path to the mesh file (.msh) file
-        Ncore   : int
+        n_proc   : int
             number of FENICS cores for computation. If None is specified, this number is taken from the NRV2.ini configuration file. Byu default set to None
         handle_server   : bool
             if True, the instantiation creates the server, else a external server is used. Usefull for multiple cells sharing the same model
         """
-        super().__init__(Ncore=Ncore)
+        super().__init__(n_proc=n_proc)
         self.type = "FENICS"
         # Default paramerters
         self.L = 5000
@@ -138,10 +137,10 @@ class FENICS_model(FEM_model):
         self.sim_res = []
 
         # Mcore attributes
-        if self.Ncore is None:
-            self.Ncore = FENICS_Ncores
+        if self.n_proc is None:
+            self.n_proc = FENICS_Ncores
         self.comm = None
-        self.set_Ncore(self.Ncore)
+        self.set_n_proc(self.n_proc)
         if comm != "default":
             self.comm = comm
         self.rank = rank
@@ -232,7 +231,7 @@ class FENICS_model(FEM_model):
     #############################
     ## Access model parameters ##
     #############################
-    def set_Ncore(self, N):
+    def set_n_proc(self, N):
         """
         Set the number of cores to use for the FEM
 
@@ -241,11 +240,25 @@ class FENICS_model(FEM_model):
         N       : int
             Number of cores to set
         """
-        super().set_Ncore(N)
+        if isinstance(N, bool):
+            if N:
+                N = COMM_WORLD.size
+            else:
+                N = 1
+        if N is None:
+            N = 1
+        self.n_proc = N
+        if self.n_proc > COMM_WORLD.size:
+            rise_warning(
+                "MPI was run on " + str(COMM_WORLD.size) + " CPUs, cannot set FEM on more processes"
+            )
+            self.n_proc = COMM_WORLD.size
+        self.is_multi_proc = self.n_proc > 1
+
         if self.is_multi_proc:
-            self.comm = MPI.COMM_WORLD
+            self.comm = COMM_WORLD
         else:
-            self.comm = MPI.COMM_SELF
+            self.comm = COMM_SELF
 
     def get_parameters(self):
         """
@@ -282,19 +295,9 @@ class FENICS_model(FEM_model):
         bcast       : bool
             if true the parameters are updated on all process
         """
-        if MCH.do_master_only_work():
-            if bcast:
-                self.__update_parameters(bcast=False)
-                param = self.get_parameters()
-            else:
-                param = self.mesh.get_parameters()
-        else:
-            param = None
-        if bcast:
-            param = MCH.master_broadcasts_array_to_all(param)
-        if MCH.do_master_only_work() ^ bcast:
-            for key in param:
-                self.__dict__[key] = param[key]
+        param = self.mesh.get_parameters()
+        for key in param:
+            self.__dict__[key] = param[key]
 
     def reset_parameters(self):
         """
@@ -318,16 +321,13 @@ class FENICS_model(FEM_model):
         self.is_computed = False
         del self.mesh
         if not self.mesh_file_status:
-            if MCH.do_master_only_work:
-                self.mesh = NerveMshCreator(
-                    Length=self.L,
-                    Outer_D=self.Outer_D,
-                    Nerve_D=self.Nerve_D,
-                    y_c=self.y_c,
-                    z_c=self.z_c,
+            self.mesh = NerveMshCreator(
+                Length=self.L,
+                Outer_D=self.Outer_D,
+                Nerve_D=self.Nerve_D,
+                y_c=self.y_c,
+                z_c=self.z_c,
                 )
-            else:
-                self.mesh = None
 
     #####################
     ## customize model ##
@@ -442,7 +442,7 @@ class FENICS_model(FEM_model):
             self.rank = rank
         if not self.is_meshed:
             self.build_and_mesh()
-        if not self.is_sim_ready and (MCH.do_master_only_work() or self.is_multi_proc):
+        if not self.is_sim_ready:
             t0 = time.time()
             # SETTING DOMAINS
             # del self.mesh
@@ -620,10 +620,8 @@ class FENICS_model(FEM_model):
                     res=self.default_electrode["res"],
                 )
             self.__update_parameters(bcast=self.is_multi_proc)
-            if MCH.do_master_only_work():
-                self.mesh.compute_mesh()
-            if self.is_multi_proc:
-                synchronize_processes()
+
+            self.mesh.compute_mesh()
             self.is_meshed = True
             self.mesh.get_info(verbose=True)
             self.meshing_timer += time.time() - t0
