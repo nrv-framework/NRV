@@ -38,8 +38,9 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: /docker/nrv/
+        context: .
+        file: ./docker/nrv/Dockerfile
         push: true
-        #tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
+          #tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
         tags: nrvframework/nrv:latest, nrvframework/nrv:${{ 'dev'}}
         platforms: linux/amd64,linux/arm64,windows/amd64
