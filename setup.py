@@ -119,7 +119,7 @@ setup(
     # dependencies 
     # * sorted by alphabetical order *
     install_requires=[
-        "gmsh",
+        #"gmsh",
         "icecream",
         "matplotlib",
         "mph",
