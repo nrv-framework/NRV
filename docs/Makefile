@@ -7,17 +7,28 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = .
 BUILDDIR      = _build
+CODEBUILDDIR  = _nrv
 
-# Put it first so that "make" without argument is like "make help".
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	@echo "Available commands:"
+	@echo "  make html     → Build HTML documentation"
+	@echo "  make clean    → Remove generated files"
+	@echo "  make open     → Open the HTML documentation in your browser"
 
-.PHONY: help Makefile
-
-# Catch-all target: route all unknown targets to Sphinx using the new
-# "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
+html:
 	@echo "Copying notebooks from ../tutorial/"
 	@python3 copy_tutorials.py
 	@python3 clean_outputs.py tutorials/
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html
+	@echo "HTML documentation generated in $(BUILDDIR)/html"
+
+clean:
+	rm -rf $(BUILDDIR)
+	@echo "Directory $(BUILDDIR) has been cleaned"
+	rm -rf $(CODEBUILDDIR)
+	@echo "Directory $(CODEBUILDDIR) has been cleaned"
+
+open:
+	@echo "Opening documentation in browser..."
+	@open $(BUILDDIR)/html/index.html || open $(BUILDDIR)/html/index.html || echo "Please open $(BUILDDIR)/html/index.html manually"
+

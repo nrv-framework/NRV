@@ -2,6 +2,19 @@
 
 All notable changes to NRV are summed up in this file.
 
+## [1.2.0] - 2025-06-xx
+
+### Added
+- Added `backend._NRV_Mproc` to handle parallel processing in NRV
+- Added Github Action `Build and Push Docker Image on Release` to automatically push docker image to Docker Hub on release
+
+### Fixed
+- Cleaned doc Makefile
+  
+
+### Removed
+- Remove `backend.Mcore_handler` 
+
 ## [1.2.0] - 2025-05-30
 
 ### Added
@@ -13,7 +26,7 @@ All notable changes to NRV are summed up in this file.
 
 ### Fixed
 - ``axon.__init__``'s ``kwargs``: all parameters can now be set at the instantiation of the axon
-- Fixed ``search_threshold_dispatcher``for use in notebooks
+- Fixed ``search_threshold_dispatcher`` for use in notebooks
 - Remove deprecated function in tutorials and examples
 
 ### Removed

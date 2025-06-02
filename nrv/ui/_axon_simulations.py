@@ -4,10 +4,7 @@ NRV-Cellular Level simulations.
 import sys
 from typing import Callable
 from time import perf_counter
-# from pathos.multiprocessing import ProcessingPool as Pool
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
-from functools import partial
-from itertools import repeat
 
 from ..backend._file_handler import is_iterable
 from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line

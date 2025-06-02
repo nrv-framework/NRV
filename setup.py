@@ -132,6 +132,7 @@ setup(
         "pyswarms",
         "rich",
         "scipy",
+        "pathos",
     ],  # external packages as dependencies
     python_requires=">=3.12",
     scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script

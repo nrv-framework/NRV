@@ -71,6 +71,8 @@ deps = (
     "scipy.stats",
     "ufl",
     "ufl.finiteelement",
+    "pathos",
+    "pathos.multiprocessing"
 )
 
 for package in deps:
@@ -100,6 +102,8 @@ extensions = [
     "sphinx_gallery.load_style",
     "sphinx_mdinclude",
     "sphinx_rtd_theme",
+    "IPython.sphinxext.ipython_console_highlighting",
+    "IPython.sphinxext.ipython_directive",
     #"sphinx_nbexamples",
 ]
 
