@@ -6,10 +6,10 @@ name: Build and Push Docker Image on Release
 
 
 #!! FOR DEBUG ONLY 
-on:
-  push:
-    branches:
-      - dev
+#on:
+#  push:
+#    branches:
+#      - dev
 
 jobs:
   build-and-push:
@@ -41,6 +41,6 @@ jobs:
         context: .
         file: ./docker/nrv/Dockerfile
         push: true
-          #tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
-        tags: nrvframework/nrv:latest, nrvframework/nrv:${{'dev'}} #!! FOR DEBUG ONLY 
+        tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
+        #tags: nrvframework/nrv:latest, nrvframework/nrv:${{'dev'}} #!! FOR DEBUG ONLY 
         platforms: linux/amd64    #,linux/arm64 #!! FOR DEBUG ONLY 
