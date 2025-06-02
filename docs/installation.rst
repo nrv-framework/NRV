@@ -29,10 +29,10 @@ The pip installation takes care of most of the open source third-party dependenc
 are conda-installable only:
 ::
 
-    conda install -c conda-forge fenics-dolfinx==0.8.0 mpich
+    conda install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
 
 .. Warning::
-    For Linux users, the default `blas` library used in `FenicsX` may not be compatible with the preconditioner used in NRV, which may result in necessary CPU overhead during electric field computation. To avoid this it is thus advised to force the install as bellow
+    For Linux users, the default `blas` library used in `FenicsX` may not be compatible with the preconditioner used in NRV, which may result in necessary CPU overhead during electric field computation. To avoid this it is thus advised to force the installation as bellow
     ::
 
         conda install -c conda-forge fenics-dolfinx "libblas=*=*blis"
@@ -41,7 +41,7 @@ are conda-installable only:
     With Mamba, the command is:
     ::
 
-        mamba install -c conda-forge fenics-dolfinx==0.8.0 mpich
+        mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich mpich python-gmsh ipykernel
 
 COMSOL Installation
 ^^^^^^^^^^^^^^^^^^^

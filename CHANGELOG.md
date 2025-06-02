@@ -1,8 +1,9 @@
 # Version updates
 
-All notable changes to NRV are sumed up in this file.
+All notable changes to NRV are summed up in this file.
 
 ## [1.2.0] - 2025-05-30
+
 ### Added
 - improved `eval` in `_FEMResults` for serialized calls (added state variables)
 - `spec_loader.py` mostly for typing

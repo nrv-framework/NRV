@@ -127,6 +127,7 @@ setup(
         "numba",
         "numpy",
         "pandas",
+        "pathos",
         "psutil",
         "pyswarms",
         "rich",
