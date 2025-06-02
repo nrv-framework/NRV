@@ -40,7 +40,5 @@ jobs:
       with:
         context: /docker/nrv/
         push: true
-        tags: nrvframework/nrv:${{ github.event.release.tag_name }}
-
         tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
         platforms: linux/amd64,linux/arm64,windows/amd64
