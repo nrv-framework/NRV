@@ -470,12 +470,19 @@ class PSO_optimizer(Optimizer):
                 topology=topology,
             )
             optimizer.rep = set_log_level("WARNING", clear_log_file=True)
+            __lab= "PSO optimizer"
+            if self.n_processes is None or self.n_processes == 1:
+                __lab += " - 1 proc"
+            else:
+                __lab += f" - {self.n_processes} procs"
+            optimizer.name  = __lab
+
             # Perform optimization
             t0 = perf_counter()
             cost, pos = optimizer.optimize(
                 f_swarm,
                 iters=self.maxiter,
-                n_processes=self.n_processes,
+                n_processes=None,
                 verbose=verbose,
             )
             t_opt = perf_counter() - t0

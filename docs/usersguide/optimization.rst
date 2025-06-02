@@ -77,7 +77,7 @@ or be generated empty and filled later:
 
 
 .. Warning:: 
-    :class:`~nrv.optim.CostFunctions.cost_function` is one of the few classes in NRV which cannot be saved using the ``save`` method, because of the ``cost_evaluation`` component. 
+    :class:`~nrv.optim._CostFunctions.cost_function` is one of the few classes in NRV which cannot be saved using the ``save`` method, because of the ``cost_evaluation`` component. 
     The option will be added in future version of NRV.
 
 Context Modifier
@@ -85,7 +85,7 @@ Context Modifier
 
 `Context modifiers` are callable objects that adapt the static context according to an input vector. They can modify various aspects of the static context, such as stimulus waveform, electrode geometry, etc...
 
-Several `context modifiers` have been implemented in NRV for general use. They all inherit from a generic context modifier class: :class:`~nrv.optim.optim_utils.ContextModifiers.context_modifier`. A list of existing contexts is given below:
+Several `context modifiers` have been implemented in NRV for general use. They all inherit from a generic context modifier class: :class:`~nrv.optim.optim_utils._ContextModifiers.context_modifier`. A list of existing contexts is given below:
 
 .. list-table:: **List of built-in context modifiers**
     :widths: 10 150 10
@@ -95,14 +95,14 @@ Several `context modifiers` have been implemented in NRV for general use. They a
     *   - Name
         - Description
         - See Also
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`
+    *   - :class:`~nrv.optim.optim_utils._ContextModifiers.stimulus_CM`
         - Generic context modifiers targeting the modification of an electrode stimulus. This modification can either be done by interpolation the input vector or by generating a specific stimulus from this vector.
         - :doc:`o02 </examples/optim/o02_stimulus_CM>` :doc:`T5 </tutorials/5_first_optimization>`
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.biphasic_stimulus_CM`
-        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.biphasic_pulse` to an electrode of the static context.
+    *   - :class:`~nrv.optim.optim_utils._ContextModifiers.biphasic_stimulus_CM`
+        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils._ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.biphasic_pulse` to an electrode of the static context.
         - :doc:`o03 </examples/optim/o03_biphasic_stimulus_CM>` :doc:`T5 </tutorials/5_first_optimization>`
-    *   - :class:`~nrv.optim.optim_utils.ContextModifiers.harmonic_stimulus_CM`
-        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils.ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
+    *   - :class:`~nrv.optim.optim_utils._ContextModifiers.harmonic_stimulus_CM`
+        - Context modifier, inheriting from :class:`~nrv.optim.optim_utils._ContextModifiers.stimulus_CM`, which adds use inputs parameters to tune a :meth:`~nrv.fmod.stimulus.stimulus.harmonic_pulse` to an electrode of the static context.
         - :doc:`o04 </examples/optim/o04_harmonic_stimulus_CM>`
 
 For a fully customize optimization problem, it is also possible to use user-defined `context modifiers`. Such a function should follow the structure bellow:
@@ -131,7 +131,7 @@ For a fully customize optimization problem, it is also possible to use user-defi
 Cost Evaluation
 ---------------
 
-`Cost evaluation` are callable objects that return a cost evaluated from the results of a simulation. As with `context modifiers`, several `cost evaluation` classes have been implemented in NRV. All of these classes inherit from :class:`~nrv.utils.nrv_function.cost_evaluation` which has two main consequences:
+`Cost evaluation` are callable objects that return a cost evaluated from the results of a simulation. As with `context modifiers`, several `cost evaluation` classes have been implemented in NRV. All of these classes inherit from :class:`~nrv.utils._nrv_function.cost_evaluation` which has two main consequences:
  1. These classes are compatible with algebraic operations.
  2. The ``save`` and ``load`` methods **are not** implemented in these classes.
 
@@ -144,17 +144,17 @@ The list of built-in `cost evaluations` is given in the table below:
 
     *   - Name
         - Description
-    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.raster_count_CE`
+    *   - :class:`~nrv.optim.optim_utils._CostEvaluation.raster_count_CE`
         - Count the number of spike by fiber triggered during the simulation.
-    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.recrutement_count_CE`
+    *   - :class:`~nrv.optim.optim_utils._CostEvaluation.recrutement_count_CE`
         - Count the number of fibers activated (or not activated) during the simulation.
-    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.charge_quantity_CE`
+    *   - :class:`~nrv.optim.optim_utils._CostEvaluation.charge_quantity_CE`
         - Evaluate a value proportional to the charge injected by an electrode or a list of electrodes.
-    *   - :class:`~nrv.optim.optim_utils.CostEvaluation.stim_energy_CE`
+    *   - :class:`~nrv.optim.optim_utils._CostEvaluation.stim_energy_CE`
         - Evaluate a value proportional to the energy injected by an electrode or a list of electrodes
 
 .. Warning:: 
-    Because :class:`~nrv.utils.nrv_function.cost_evaluation` inherits from :class:`~nrv.utils.nrv_function.nrv.function`, an instance of this class cannot be saved using a ``save`` method. This option may be added in the future version of NRV.
+    Because :class:`~nrv.utils._nrv_function.cost_evaluation` inherits from :class:`~nrv.utils._nrv_function.nrv_function`, an instance of this class cannot be saved using a ``save`` method. This option may be added in the future version of NRV.
 
 
 As with `context modifiers`, `cost evaluation` can also be user-defined. Such a function should follow the structure below:
@@ -169,7 +169,7 @@ As with `context modifiers`, `cost evaluation` can also be user-defined. Such a 
         return cost
 
 .. note::
-    For user-defined `cost evaluation` classes, it may be preferable to inherit the class from :class:`~nrv.utils.nrv_function.cost_evaluation`, to maintain the compatibility with algebraic operations. 
+    For user-defined `cost evaluation` classes, it may be preferable to inherit the class from :class:`~nrv.utils._nrv_function.cost_evaluation`, to maintain the compatibility with algebraic operations. 
     In this case the above structure should be added to a method named ``call_method``:
 
     ::
@@ -208,7 +208,7 @@ Filters are callable objects which used in the `cost function` to format the inp
 Optimizer
 =========
 
-The second component of an optimization problem in NRV is the optimizer. Two optimizer classes, based on various algorithms, are implemented in NRV. These two classes both inherit from :class:`~nrv.optim.Optimizers.Optimizer` and can be used to minimize a function by calling the ``minimize`` or simply by calling the optimizer.
+The second component of an optimization problem in NRV is the optimizer. Two optimizer classes, based on various algorithms, are implemented in NRV. These two classes both inherit from :class:`~nrv.optim._Optimizers.Optimizer` and can be used to minimize a function by calling the ``minimize`` or simply by calling the optimizer.
 
 .. note::
     As mentioned above:
@@ -234,16 +234,16 @@ The two optimizer classes available in NRV are listed below:
 
     *   - Name
         - Description
-    *   - :class:`~nrv.optim.Optimizers.scipy_optimizer`
+    *   - :class:`~nrv.optim._Optimizers.scipy_optimizer`
         - Class insuring the compatibility between `scipy.optimize.minimize <https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize>`_ optimization algorithms and NRV optimization problems.
-    *   - :class:`~nrv.optim.Optimizers.PSO_optimizer`
+    *   - :class:`~nrv.optim._Optimizers.PSO_optimizer`
         -   Class providing particle swarm optimization based on `Pyswarms <https://pyswarms.readthedocs.io/en/latest/>`_ algorithms, adapted to NRV optimization problems.
 
 .. tip::
     In general, the choice of optimization classes depends on the problem characteristics:
 
-        - :class:`~nrv.optim.Optimizers.scipy_optimizer` is more suitable for **continuous problems**
-        - :class:`~nrv.optim.Optimizers.PSO_optimizer` is preferable for **discontinuous problems** 
+        - :class:`~nrv.optim._Optimizers.scipy_optimizer` is more suitable for **continuous problems**
+        - :class:`~nrv.optim._Optimizers.PSO_optimizer` is preferable for **discontinuous problems** 
 
 .. warning::
     `Pyswarms <https://pyswarms.readthedocs.io/en/latest/>`_ algorithms may be replaced by `scikit-opt <https://scikit-opt.github.io/scikit-opt/#/en/>` in future versions.

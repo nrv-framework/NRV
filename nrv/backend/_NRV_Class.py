@@ -303,7 +303,7 @@ class NRV_class(metaclass=ABCMeta):
 
         Examples
         --------
-        As the :class:`~nrv.nmod.myelinated.myelinated` inherits from NRV_class-class parameters, such as diameter and lenght can be set with `set_parameters`.
+        As the :class:`~nrv.nmod._myelinated.myelinated` inherits from NRV_class-class parameters, such as diameter and lenght can be set with `set_parameters`.
 
         >>> ax = nrv.myelinated()
         >>> print(ax.d, ax.L)

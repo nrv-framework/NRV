@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     ## Cost function definition
-    N_test = "215"
+    N_test = "220"
     figdir = "./unitary_tests/figures/" + N_test + "_"
 
     fnam1 = "./unitary_tests/results/json/" + N_test + "_optim1.json"
