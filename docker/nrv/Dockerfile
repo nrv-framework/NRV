@@ -7,9 +7,10 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
     sh /tmp/miniconda.sh -b -p /opt/conda && \
     rm /tmp/miniconda.sh
 
-RUN apt-get update -y
-RUN apt-get install -y build-essential libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev libxrender1 libxcursor1 libxft2 libxinerama1 make libx11-dev git bison flex automake libtool libxext-dev libncurses-dev xfonts-100dpi cython3 libopenmpi-dev zlib1g-dev
-
+RUN apt-get update && apt-get install -y \
+    build-essential libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev libxrender1 libxcursor1 libxft2 libxinerama1 make libx11-dev git bison flex automake libtool libxext-dev libncurses-dev xfonts-100dpi cython3 libopenmpi-dev zlib1g-dev && \
+    rm -rf /var/lib/apt/lists/*
+    
 ENV PATH=/opt/conda/bin:$PATH
 
 #install mamba
