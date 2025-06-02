@@ -42,5 +42,5 @@ jobs:
         file: ./docker/nrv/Dockerfile
         push: true
           #tags: nrvframework/nrv:latest, nrvframework/nrv:${{ github.event.release.tag_name }}
-        tags: nrvframework/nrv:latest, nrvframework/nrv:${{'dev'}}
+        tags: nrvframework/nrv:latest, nrvframework/nrv:${{'dev'}} #!! FOR DEBUG ONLY 
         platforms: linux/amd64,linux/arm64
