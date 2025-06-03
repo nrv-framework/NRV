@@ -30,7 +30,6 @@ parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="l
 parser.add_argument("-t", "--target", dest="TARGET", type=str, nargs="+" ,default='0', help="ID of the tests to simulate, if a digit is replaced by '_' all the tests")
 parser.add_argument("-F", "--fenics", action="store_true", dest="FENICS_TESTS",help="Launch all and only FEniCS related tests")
 parser.add_argument("-C", "--comsol", action="store_true", dest="COMSOL_TESTS",help="Launch all and only COMSOL related tests")
-parser.add_argument("-p", "--python", action="store_true", dest="FORCE_PYTHON",help="Forces Python as interpreted instead of nrv2calm")
 
 
 if __name__ == "__main__":

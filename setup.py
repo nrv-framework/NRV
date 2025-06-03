@@ -89,7 +89,6 @@ setup(
 
     # non python data to keep
     package_data={
-        "nrv": ["nrv2calm"],
         "nrv._misc": ["NRV.ini"],
         "nrv._misc.comsol_templates": ["*.mph"],
         "nrv._misc.geom": ["*.dxf", "*.png"],
@@ -134,5 +133,5 @@ setup(
         "scipy",
     ],  # external packages as dependencies
     python_requires=">=3.12",
-    scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script
+    scripts=["./tests/NRV_test"]        #script
 )
