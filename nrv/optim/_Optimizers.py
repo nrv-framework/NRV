@@ -8,7 +8,6 @@ from typing import Any
 import numpy as np
 import matplotlib.pyplot as plt
 from time import perf_counter, asctime, localtime
-from multiprocessing import cpu_count
 import traceback
 import json
 import sys

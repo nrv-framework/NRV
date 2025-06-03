@@ -45,13 +45,12 @@ if __name__ == "__main__":
     if args.FENICS_TESTS and args.COMSOL_TESTS:
         included_test_keys += ["FENxCOM"]
 
-    nrv_cmd = "nrv2calm "
     if sys.platform == "darwin":
         python_cmd = "python "
     else:
         python_cmd = "python3 "
 
-    launcher = nrv_cmd
+    launcher = python_cmd
     if args.FORCE_PYTHON:
         launcher = python_cmd
 
@@ -172,7 +171,6 @@ if __name__ == "__main__":
             ###############################
             ## launch the targated tests ##
             ###############################
-            nrv_cmd = "nrv2calm "
             if sys.platform == "darwin":
                 python_cmd = "python "
             else:

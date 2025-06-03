@@ -1,5 +1,3 @@
-import sys
-sys.path.append("../")
 import nrv
 import numpy as np
 from time import perf_counter

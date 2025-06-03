@@ -9,7 +9,7 @@ from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRe
 
 from ..backend._parameters import parameters
 from ..backend._NRV_Class import NRV_class
-from ..backend._NRV_Mproc import Pool
+from ..backend._NRV_Mproc import get_pool
 
 from ..backend._log_interface import rise_error, pass_debug_info, set_log_level
 from .optim_utils._OptimResults import optim_results
@@ -82,9 +82,12 @@ class Problem(NRV_class):
                 particle = swarm[i][:]
                 costs[i] = self._CostFunction(particle)
         else:
-            with Pool(processes=self.n_proc) as pool:
-                for i_c, cost in enumerate(pool.imap(self._CostFunction, swarm)):
-                    costs[i_c] = cost
+            
+            #LR: This still generate PETSC errors (not crashing the script tho). Adding pool.close()/pool.join() crashes everything however
+            with get_pool(n_jobs=self.n_proc) as pool:
+               for i_c, cost in enumerate(pool.imap(self._CostFunction, swarm)):
+                   costs[i_c] = cost
+
         return costs
 
     def compute_cost(self, X):
