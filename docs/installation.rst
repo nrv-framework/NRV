@@ -1,7 +1,7 @@
 Installation
 ============
 
-NRV is pip installable and the hole process should be quite simple. However, to prevent from third packages version conflict we recommend to create a dedicated conda environnement: 
+NRV is pip installable and the whole installation process should be quite simple. However, to prevent from third packages version conflict we recommend to create a dedicated conda environnement: 
 ::
 
     conda create -n nrv-env -c anaconda python=3.12 
@@ -17,6 +17,10 @@ and activate it before any installation with the command:
 
     conda activate nrv-env
 
+.. Warning:: 
+  **For macOS users (June 2025):** 
+ There are known compatibility issues between Xcode versions **higher than 16.2** and the FEM solver used in this project.  
+ If you encounter problems running simulations involving FEM, please **downgrade Xcode to version 16.2** to ensure stability and correct functionality.  
 
 
 Dependencies
@@ -26,7 +30,7 @@ Open source third-party Dependencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The pip installation takes care of most of the open source third-party dependencies, but the FEM solver (`FenicsX <http://https://fenicsproject.org/.org>`_) and the Message Passing Interface (`MPICH <https://www.mpich.org/>`_)
-are conda-installable only:
+are conda-installable only. We also recommend to install gmsh and ipython from conda.
 ::
 
     conda install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
@@ -41,7 +45,7 @@ are conda-installable only:
     With Mamba, the command is:
     ::
 
-        mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich mpich python-gmsh ipykernel
+        mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
 
 COMSOL Installation
 ^^^^^^^^^^^^^^^^^^^
@@ -140,7 +144,7 @@ Activating the environnement and installation the required packages:
 ::
 
     micromamba activate nrv-env
-    micromamba install -c conda-forge fenics-dolfinx==0.8.0  sysroot_linux-64=2.17 mpg
+    micromamba install -c conda-forge fenics-dolfinx==0.9.0  sysroot_linux-64=2.17 mpg mpich python-gmsh ipykernel
 
 Last, one can pip-install NRV:
 ::
