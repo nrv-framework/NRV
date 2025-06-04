@@ -50,8 +50,6 @@ if __name__ == "__main__":
         python_cmd = "python3 "
 
     launcher = python_cmd
-    if args.FORCE_PYTHON:
-        launcher = python_cmd
 
     if args.DEP_TEST:
         ###############################
