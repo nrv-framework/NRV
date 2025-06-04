@@ -1,6 +1,10 @@
 import nrv
 import matplotlib.pyplot as plt
 
+test_num = 312
+figdir = "./unitary_tests/figures/" + test_num + "_"
+
+
 def create_nerve():
     ## parameters
     # nerve parameters
@@ -55,7 +59,7 @@ def create_nerve():
     nerve.plot(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-    fig.savefig("nerve_example.png", dpi=300)
+    fig.savefig(figdir+"A.png", dpi=300)
     plt.close(fig)
     return nerve
 
@@ -71,7 +75,7 @@ def prostprocessing(results):
     results.plot_recruited_fibers(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-    fig.savefig("nerve_postproc.png", dpi=300)
+    fig.savefig(figdir+"B.png", dpi=300)
     plt.close(fig)
 
 if __name__ == "__main__":

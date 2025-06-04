@@ -243,15 +243,15 @@ class NRV_class(metaclass=ABCMeta):
         for key in self.__dict__:
             if key not in blacklist:
                 if is_NRV_class(self.__dict__[key]):
-                    key_dic[key] = self.__dict__[key].save(**kwargs)
+                    key_dic[key] = self.__dict__[key].save(save=False, **kwargs)
                 elif is_NRV_class_list(self.__dict__[key]):
                     key_dic[key] = []
                     for i in range(len(self.__dict__[key])):
-                        key_dic[key] += [self.__dict__[key][i].save(**kwargs)]
+                        key_dic[key] += [self.__dict__[key][i].save(save=False, **kwargs)]
                 elif is_NRV_class_dict(self.__dict__[key]):
                     key_dic[key] = {}
                     for i in self.__dict__[key]:
-                        key_dic[key][i] = self.__dict__[key][i].save(**kwargs)
+                        key_dic[key][i] = self.__dict__[key][i].save(save=False, **kwargs)
                 else:
                     key_dic[key] = deepcopy(self.__dict__[key])
         if save:

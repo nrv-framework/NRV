@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
 
     test_num = 311
+    figdir = "./unitary_tests/figures/" + test_num + "_"
 
     outer_d = 5         # in mm
     nerve_d = 500       # in um
@@ -66,8 +67,9 @@ if __name__ == "__main__":
     nerve.plot(ax)
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
+    fig.savefig(figdir+"A.png")
 
-    
+
     nerve_ppt = nerve.save(save=False,extracel_context=True)
     del nerve
 
@@ -99,5 +101,4 @@ if __name__ == "__main__":
     n_res2.plot_recruited_fibers(axs[1])
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
-
-    plt.show()
+    fig.savefig(figdir+"B.png")

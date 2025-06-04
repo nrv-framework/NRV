@@ -98,6 +98,7 @@ if __name__ == "__main__":
 
     plt.loglog(freq, 1/Ym0, "b")
     plt.loglog(freq, 1/Ym2, ":b")
+    plt.savefig(fig_file+"A.png")
 
     Yu2 = abs(u_res.get_membrane_complexe_admitance(freq, x=Lu/2, t=2, unit="S/m"))
     Yu0 = abs(u_res.get_membrane_complexe_admitance(freq, x=Lu/2, t=0, unit="S/m"))
@@ -148,7 +149,7 @@ if __name__ == "__main__":
     Ynrv2 = []
     t1 = 1
     t2 = 5
-    i_x_rec = res_nrv.unmyelinated_nseg//2
+    i_x_rec = res_nrv["fascicle0"]["axon0"]["g_mem"].shape[0]//2
     x_rec = nerve_l/2
     for f in freq:
         Ynrv0 += [abs(res_nrv.get_membrane_complexe_admitance(f, x=x_rec, t=t1, unit="S/m"))]
@@ -171,4 +172,9 @@ if __name__ == "__main__":
         plt.figure(4)
         plt.loglog(freq, 1/Ynrv0[:,i], color=c[i])
         plt.loglog(freq, 1/Ynrv2[:,i], ":", color=c[i])
-        #plt.show()
+
+    plt.figure(3)
+    plt.savefig(fig_file+"C.png")
+    plt.figure(4)
+    plt.savefig(fig_file+"D.png")
+

@@ -161,7 +161,10 @@ class Problem(NRV_class):
         """
         check if a cost funciton can be parallelized
         """
-        return self._CostFunction.is_m_proc_func
+        if isinstance(self._CostFunction, cost_function):
+            return self._CostFunction.is_m_proc_func
+        else:
+            return False
 
     def set_multiprocess_type(self, costfunction_mp=True, n_core=None):
         """
