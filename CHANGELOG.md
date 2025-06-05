@@ -13,6 +13,7 @@ All notable changes to NRV are summed up in this file.
 ### Fixed
 - Cleaned doc Makefile
 - Fixing [Tutorial 5](docs/tutorials/5_first_optimization.ipynb).
+- Cleaning and refreshing of the docs
 
 ### Removed
 - Remove `backend.Mcore_handler`.

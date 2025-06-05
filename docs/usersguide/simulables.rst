@@ -8,11 +8,11 @@ In NRV, all simulations can be launched by objects that have a physiological mea
 2. **fascicles**: containing one or several axons. 
 3. **nerves**: containing one or several fascicles.
 
-All these object have in common a method called ``simulate`` that automatically performs the simulation, handles computation of extracellular fields if needed, processes the stimuli, records internal variables. For fascicles and nerves, if the script is launched on several CPU cores, the parallelization is automatically handled transparently for the user.
+All these object have in common a method called :meth:`~nrv.nmod.axon.simulate` that automatically performs the simulation, handles computation of extracellular fields if needed, processes the stimuli, records internal variables. For fascicles and nerves, if the script is launched on several CPU cores, the parallelization is automatically handled transparently for the user.
 
 
 .. note::
-  Simulable objects are callable. Calling any simulable object will call the ``simulate``-method. In other words:
+  Simulable objects are callable. Calling any simulable object will call the :meth:`~nrv.nmod.axon.simulate` -method. In other words:
 
   .. code:: python3
 
@@ -28,13 +28,13 @@ All these object have in common a method called ``simulate`` that automatically 
 Axons
 =====
 
-The ``axon`` class is abstract, meaning that the end user cannot directly instantiate an axon. Instead, two daughter classes are accessible for the end-user for myelinated and unmyelinated fibers.
+The :class:`~nrv.nmod._axons.axon` is abstract, meaning that the end user cannot directly instantiate an axon. Instead, two daughter classes are accessible for the end-user for :class:`~nrv.nmod._myelinated.myelinated` and :class:`~nrv.nmod._unmyelinated.unmyelinated` fibers.
 
 Generic parameters for all axons are defined by default and can be changed, as both unmyelinated and myelinated axons inherit from them.
 
 Some useful methods are inherited by both unmyelinated and myelinated fibers:
 
-* The ``simulate`` method that solves the neural model.
+* The :meth:`~nrv.nmod.axon.simulate` method that solves the neural model.
 
   .. list-table:: Arguments of simulate method
       :widths: 15 25 50
@@ -78,12 +78,12 @@ Some useful methods are inherited by both unmyelinated and myelinated fibers:
         - None
         - Dictionary composed of extracellular footprint array, the keys are int value of the corresponding electrode ID, if None, footprints calculated during the simulation,
 
-  The simulate method for axons generate results are stored and returned in a ``axon_results`` object.
+  The simulate method for axons generate results are stored and returned in a :class:`~nrv.nmod.results._axons_results.axon_results` object.
 
-* A method to link an axon to an **extracellular stimulation**. This object provides the description of the extracellular context. It is required for computing the external fields and footprint used to evaluate the axon response. A dedicated chapter of this user's guide s dedicated to extracellular stimulation. This method, called ``attach_extracellular_stimulation`` has a single parameter, the ``stimulation`` object instance.
+* A method to link an axon to an **extracellular stimulation**. This object provides the description of the extracellular context. It is required for computing the external fields and footprint used to evaluate the axon response. A chapter of this user's guide s dedicated to :doc:`extracellular stimulation <fem>`. This method, called :meth:`~nrv.nmod.axon.attach_extracellular_stimulation` has a single parameter, the :meth:`~nrv.fmod.extracellular_context.attach_extracellular_stimulation` object instance.
 
-* A method to change the stimulation waveform from a specific electrode already linked to the axon with the ``attach_extracellular_stimulation`` method. This method is called ``change_stimulus_from_electrode`` and has for arguments:
-    .. list-table:: Arguments of the ``change_stimulus_from_electrode`` method
+* A method to change the stimulation waveform from a specific electrode already linked to the axon with the :meth:`~nrv.nmod.axon.attach_extracellular_stimulation` method. This method is called :meth:`~nrv.nmod.axon.change_stimulus_from_electrode` and has for arguments:
+    .. list-table:: Arguments of the :meth:`~nrv.nmod._axons.axon.change_stimulus_from_electrode` method
        :widths: 15 25 50
        :header-rows: 1
 
@@ -94,7 +94,7 @@ Some useful methods are inherited by both unmyelinated and myelinated fibers:
          - int
          - ID of the electrode which should be changed
        * - stimulus
-         - ``stimulus``
+         - :class:`~nrv.utils._stimulus.stimulus`
          - New stimulus to set
 
 
@@ -116,22 +116,22 @@ The main property of the axon is the diameter, that the user specifies in micron
      - Comment
    * - Hodgkin-Huxley
      - ``"HH"``
-     - model from Hodgkin and Huxley 1952
+     - Model from Hodgkin and Huxley 1952
    * - Rattay-Aberham
      - ``"Rattay_Aberham"``
-     - Comment
+     - Model from Rattay and Aberham 1993
    * - Sundt
      - ``"Sundt"``
      - Comment
    * - Tigerholm
      - ``"Tigerholm"``
-     - Comment
+     - Model from Tigerholm et al. 2014
    * - Schild 1994
      - ``"Schild_94"``
-     - Comment
+     - Model from Schild et al. 1994
    * - Schild 1997
      - ``"Schild_97"``
-     - Comment
+     - Model from Schild et al. 1997
 
 A scientific review of these models is available in the following paper:
 Pelot, N. A., Catherall, D. C., Thio, B. J., Titus, N. D., Liang, E. D., Henriquez, C. S., & Grill, W. M. (2021). Excitation properties of computational models of unmyelinated peripheral axons. Journal of neurophysiology, 125(1), 86-104.
@@ -218,11 +218,11 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - threshold
      - float
      - -40
-     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, see post-processing files for further help
+     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, see the :doc:`post-processing section <postproc>` for further help
 
 For the end-user, two specific methods for intracellular stimulation of unmyelinated axons are available:
 
-* ``insert_I_Clamp`` to perform current clamp stimulation. For the moment only single pulse waveform are available.
+* :meth:`~nrv.nmod.unmyelinated.insert_I_Clamp` to perform current clamp stimulation. For the moment only single pulse waveform are available.
 
     .. list-table:: Arguments of current clamp method
        :widths: 15 25 50
@@ -242,10 +242,10 @@ For the end-user, two specific methods for intracellular stimulation of unmyelin
          - duration of the pulse, in ms
        * - amplitude
          - float
-         - amplitude of the pulse (nA)
+         - amplitude of the pulse, in nA
 
 
-* ``insert_V_Clamp`` to perform voltage clamp stimulation.
+* :meth:`~nrv.nmod.unmyelinated.insert_V_Clamp` to perform voltage clamp stimulation.
 
     .. list-table:: Arguments of voltage clamp method
        :widths: 15 25 50
@@ -258,7 +258,7 @@ For the end-user, two specific methods for intracellular stimulation of unmyelin
          - float
          - relative position over the axon
        * - stimulus
-         - ``Stimulus object``
+         - :class:`~nrv.utils._stimulus.stimulus`
          - stimulus for the clamp, see corresponding page for more information
 
 
@@ -378,85 +378,86 @@ The complete list of tunable parameters for unmyelinated axons is:
    * - threshold
      - float
      - -40
-     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, see post-processing files for further help
+     - voltage threshold in mV for further spike detection in post-processing, by default set to -40mV, the :doc:`post-processing section <postproc>` for further help
 
 Again, for the end-user, four specific methods for intracellular stimulation myelinated axons are available:
 
-* ``insert_I_Clamp_node``, for which the current clamp is directly applied at a node-of-Ranvier, given its number
 
-    .. list-table:: Arguments of current clamp at a node method
-       :widths: 15 25 50
-       :header-rows: 1
+* :meth:`~nrv.nmod.myelinated.insert_I_Clamp_node`, for which the current clamp is directly applied at a node-of-Ranvier, given its number
+  
+  .. list-table:: Arguments of current clamp at a node method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - index
-         - int
-         - node number of the node to stimulate
-       * - t_start
-         - float
-         - starting time, in ms
-       * - duration
-         - float
-         - duration of the pulse, in ms
-       * - amplitude
-         - float
-         - amplitude of the pulse (nA)
+      * - Parameter
+        - Type
+        - Comment
+      * - index
+        - int
+        - node number of the node to stimulate
+      * - t_start
+        - float
+        - starting time, in ms
+      * - duration
+        - float
+        - duration of the pulse, in ms
+      * - amplitude
+        - float
+        - amplitude of the pulse in nA
 
-* ``insert_I_Clamp``, for which the current clamp is applied in the fiber with a normalized position
+* :meth:`~nrv.nmod.myelinated.insert_I_Clamp`, for which the current clamp is applied in the fiber with a normalized position
 
-    .. list-table:: Arguments of current clamp method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of current clamp method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - position
-         - float
-         - relative position over the axon
-       * - t_start
-         - float
-         - starting time, in ms
-       * - duration
-         - float
-         - duration of the pulse, in ms
-       * - amplitude
-         - float
-         - amplitude of the pulse (nA)
+      * - Parameter
+        - Type
+        - Comment
+      * - position
+        - float
+        - relative position over the axon
+      * - t_start
+        - float
+        - starting time, in ms
+      * - duration
+        - float
+        - duration of the pulse, in ms
+      * - amplitude
+        - float
+        - amplitude of the pulse, in nA
 
-* ``insert_V_Clamp_node``, for which the voltage clamp is directly applied at a node-of-Ranvier, given its number
+* :meth:`~nrv.nmod.myelinated.insert_V_Clamp_node`, for which the voltage clamp is directly applied at a node-of-Ranvier, given its number
 
-    .. list-table:: Arguments of voltage clamp method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of voltage clamp method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - index
-         - int
-         - node number of the node to stimulate
-       * - stimulus
-         - ``Stimulus object``
-         - stimulus for the clamp, see corresponding page for more information
+      * - Parameter
+        - Type
+        - Comment
+      * - index
+        - int
+        - node number of the node to stimulate
+      * - stimulus
+        - :class:`~nrv.utils._stimulus.stimulus`
+        - stimulus for the clamp, see corresponding page for more information
 
-* ``insert_V_Clamp``,  for which the voltage clamp is applied in the fiber with a normalized position
+* :meth:`~nrv.nmod.myelinated.insert_V_Clamp`, for which the voltage clamp is applied in the fiber with a normalized position
 
-    .. list-table:: Arguments of voltage clamp method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of voltage clamp method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - position
-         - float
-         - relative position over the axon
-       * - stimulus
-         - ``Stimulus object``
-         - stimulus for the clamp, see corresponding page for more information
+      * - Parameter
+        - Type
+        - Comment
+      * - position
+        - float
+        - relative position over the axon
+      * - stimulus
+        - :class:`~nrv.utils._stimulus.stimulus`
+        - stimulus for the clamp, see corresponding page for more information
 
 
 Fascicles
@@ -482,7 +483,7 @@ In NRV, fascicles consist in an aggregation of axon objects, on which we can per
     - 0
     - fascicle unique identifier 
 
-Once created, the fascicle can be filled with a population of axon. The axon population can be either generated with NRV (see xxx), or by any external means. Axons are added to the fascicle with the ``fill_with_population`` method.
+Once created, the fascicle can be filled with a population of axon. The axon population can be either generated with NRV (see :doc:`Generate axons populations <populations>`), or by any external means. Axons are added to the fascicle with the :meth:`~nrv.nmod.fascicle.fill_with_population` method.
 
 .. list-table:: fill_with_population parameters
   :widths: 10 10 10 50
@@ -529,10 +530,10 @@ Once created, the fascicle can be filled with a population of axon. The axon pop
     - Optional, number of iteration of the packing algorithm 
 
 .. note::
-  If the ``y_axons`` and ``z_axons`` parameters are not specified, the  ``fill_with_population``-method will automatically called the NRV's packing algorithm to place them.
+  If the ``y_axons`` and ``z_axons`` parameters are not specified, the :meth:`~nrv.nmod.fascicle.fill_with_population`-method will automatically called the NRV's packing algorithm to place them.
 
 
-Axon simulation parameters can be specified in a dictionary and pass to the fascicle object with the ``set_axons_parameters`` method:
+Axon simulation parameters can be specified in a dictionary and pass to the fascicle object with the :meth:`~nrv.nmod.fascicle.set_axons_parameters` method:
 
 
 .. list-table:: set_axons_parameters parameters
@@ -560,7 +561,7 @@ Axon simulation parameters can be specified in a dictionary and pass to the fasc
     - kwargs for axon parameters
 
 
-To simulate the fascicle, one option is to use the ``insert_I_Clamp`` method. 
+To stimulate the fascicle, one option is to use the :meth:`~nrv.nmod.fascicle.insert_I_Clamp` method. 
 
 .. list-table:: insert_I_Clamp parameters
   :widths: 10 10 10 50
@@ -597,18 +598,15 @@ To simulate the fascicle, one option is to use the ``insert_I_Clamp`` method.
     - Array to filter axon for I clamp. If None, I clamp is applied to all axons.
 
 
-Extracellular context is attached to a fascicle with the ``attach_extracellular_stimulation`` method, as for the axon (see above). Stimulus can also be changed with the ``change_stimulus_from_electrode`` method. NRV also provides several other methods to manipulate fascicle objects, such as ``remove_myelinated_axons``, ``remove_axons_size_threshold``, ``rotate_fascicle``, ``translate_fascicle``, ``plot``, etc. Full documentation can be found in the API documentation section. 
+Extracellular context is attached to a fascicle with the :meth:`~nrv.nmod.fascicle.attach_extracellular_stimulation` method, as for the axon (see above). Stimulus can also be changed with the :meth:`~nrv.nmod.fascicle.change_stimulus_from_electrode` method. NRV also provides several other methods to manipulate fascicle objects, such as :meth:`~nrv.nmod.fascicle.remove_myelinated_axons`, :meth:`~nrv.nmod.fascicle.remove_axons_size_threshold`, :meth:`~nrv.nmod.fascicle.rotate_fascicle`, :meth:`~nrv.nmod.fascicle.translate_fascicle`, :meth:`~nrv.nmod.fascicle.plot`, etc. 
+Before running simulation, some flags can be set: :attr:`~nrv.nmod.fascicle.save_results`, :attr:`~nrv.nmod.fascicle.return_parameters_only`, :attr:`~nrv.nmod.fascicle.save_path`:
 
+- If :attr:`~nrv.nmod.fascicle.save_results` is `True`, then fascicle simulation results are saved on the hard-drive. 
+- :attr:`~nrv.nmod.fascicle.save_path` specifies where to save the results
+- :attr:`~nrv.nmod.fascicle.return_parameters_only` removes results from the returned :class:`~nrv.nmod.fascicle` object.
 
-Before running simulation, some flags can be set: ``save_results``, ``return_parameters_only`` and ``save_path``:
-
-- If ``save_results`` is True, then fascicle simulation results are saved on the hard-drive. 
-- ``save_path`` specifies where to save the results
-- ``return_parameters_only`` removes results from the returned ``fascicle_results`` object.
-
-Setting correctly those flags are particularly useful for large simulations. It relaxes RAM memory usage and facilities heavy post-processing. Additionally, post-processing scripts can be run during fascicle simulation. Post-processing scripts are set in the fascicle ``simulate`` method with the ``PostProc_Filtering`` parameter. 
-Available post-processing script and how to make a custom one is described in the post-processing section of the documentation. 
-
+Setting correctly those flags are particularly useful for large simulations. It relaxes RAM memory usage and facilities heavy post-processing. Additionally, post-processing scripts can be run during fascicle simulation. Post-processing scripts are set in the fascicle :meth:`~nrv.nmod.fascicle.simulate` method with the ``postproc_script`` parameter. 
+Available post-processing scripts and how to make a custom one is described in the :doc:`post-processing section <postproc>`. 
 
 .. warning::
   We do not recommend attaching extracellular context and running simulation of fascicle directly. Instead, we recommend using nerve object (see below), even for monofascicular nerve.
@@ -616,12 +614,12 @@ Available post-processing script and how to make a custom one is described in th
 Nerves
 ======
 
-A ``nerve`` object in NRV serves two purposes:
+A :class:`~nrv.nmod.nerve` object in NRV serves two purposes:
 
-- Gathering one or multiple ``fascicles`` object
+- Gathering one or multiple :class:`~nrv.nmod.fascicle` objects
 - Ensuring consistency between the FEM model and the neural model
 
-The ``nerve`` object is initialized with the following list of parameters:
+The :class:`~nrv.nmod.nerve` object is initialized with the following list of parameters:
 
 .. list-table:: nerve object initialization parameters list
   :widths: 10 10 10 50
@@ -653,9 +651,7 @@ The ``nerve`` object is initialized with the following list of parameters:
     - nerve unique identifier
 
 
-``fascicle`` objects are incorporated to the nerve with the ``add_fascicle`` method:
-
-
+:class:`~nrv.nmod.fascicle` objects are incorporated to the nerve with the :meth:`~nrv.nmod.nerve.add_fascicle` method:
 
 
 .. list-table:: add_fascicle parameters list
@@ -668,7 +664,7 @@ The ``nerve`` object is initialized with the following list of parameters:
     - Comment
 
   * - fascicle
-    - fascicle
+    - :class:`~nrv.nmod.fascicle`
     - 
     - fascicle object to add to the nerve
 
@@ -688,8 +684,8 @@ The ``nerve`` object is initialized with the following list of parameters:
     - optional, forces fascicle new z coordinate
 
 .. warning::
-  Aggregation of ``fascicle`` objects in the ``nerve`` object uses the Python's deep-copy mechanism. Any modification of one
-  of the fascicle after adding them to the ``nerve`` will also affect the copy added in the latter.
+  Aggregation of :class:`~nrv.nmod.fascicle` objects in the :class:`~nrv.nmod.nerve` object uses the Python's deep-copy mechanism. Any modification of one
+  of the fascicle after adding them to the :class:`~nrv.nmod.nerve` will also affect the copy added in the latter.
 
-The ``nerve`` class includes most of the method available in the ``fascicle`` class: ``set_axons_parameters``, ``plot``, ``insert_I_Clamp``, ``attach_extracellular_stimulation``, etc.
-The ``simulate`` method runs the simulation and returns a ``nerve_results`` object (see post-processing section).
+The :class:`~nrv.nmod.nerve` class includes most of the method available in the :class:`~nrv.nmod.fascicle` class: :meth:`~nrv.nmod.nerve.set_axons_parameters`, :meth:`~nrv.nmod.nerve.plot`, :meth:`~nrv.nmod.nerve.insert_I_Clamp`, :meth:`~nrv.nmod.nerve.attach_extracellular_stimulation`, etc.
+The :meth:`~nrv.nmod.nerve.simulate` method runs the simulation and returns a :meth:`~nrv.nmod.results.nerve_results` object (see the :doc:`post-processing section <postproc>`). 

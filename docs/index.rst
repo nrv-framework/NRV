@@ -7,11 +7,34 @@ Welcome to NeuRon Virtualizer (NRV)'s documentation!
 ====================================================
 
 
-NRV (or NeuRon Virtualizer) is a pythonic framework to enable fast and user-friendly simulations of the Peripheral Nervous System. Axons models are simulated with the NEURON software, and extracellular fields are computed either from analytic equations such as point source approximation or with a more detailed description of the nerve and electrode geometry and Finite Elements Method, either using COMSOL (additional commercial license required) or the FENICS project. All computations are performed with the quasi-static approximation of the Maxwell equations, no ephaptic coupling. Stimulation waveform can be of random shapes, and any kinds of electrode can be combined to model complex stimulation strategies.
+NRV (NeuRon Virtualizer) is a Python-based framework designed to enable fast and user-friendly simulations of the Peripheral Nervous System. Axon models are simulated using the NEURON software, and extracellular fields are computed either from analytical equations (e.g., point source approximation) or through a more detailed description of the nerve and electrode geometry using the Finite Element Method (FEM). FEM simulations can be performed using either COMSOL (a commercial license is required) or the open-source FEniCS project.
 
-NRV is optimized for large population of axons, from generating correct population following a specific diameter distribution, through automatic placement to computation and post-processing of the axons' activity when a stimulus is applied. Parallel computation, interface with NEURON and COMSOL and FENICS is automatically handled by NRV.
+All computations are performed under the quasistatic approximation of Maxwell’s equations, and ephaptic coupling is not considered. Stimulation waveforms can have arbitrary shapes, and any combination of electrodes can be used to model complex stimulation strategies.
 
-NRV was developed by contributors from the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University, until june 2023 and is now developed and maintained by the Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux, U. Bordeaux.
+NRV is optimized for simulations involving large axon populations—from generating realistic axon populations based on specific diameter distributions, to automated spatial placement, computation, and post-processing of axonal responses to stimulation. Parallel computation and interfaces with NEURON, COMSOL, and FEniCS are seamlessly managed by NRV.
+
+NRV was initially developed by contributors from the CELL research group at ETIS Laboratory (UMR CNRS 8051), ENSEA – CY Cergy Paris University, until June 2023. It is now maintained and further developed by the Bioelectronics group at IMS Laboratory (UMR CNRS 5218), INP Bordeaux, University of Bordeaux.
+
+If you use **NRV** in your research, please cite the following paper:
+
+Couppey, T., Regnacq, L., Giraud, R., Romain, O., Bornat, Y., & Kolbl, F. (2024). *NRV: An open framework for in silico evaluation of peripheral nerve electrical stimulation strategies*. PLOS Computational Biology, 20(7), e1011826.  
+`https://doi.org/10.1371/journal.pcbi.1011826 <https://doi.org/10.1371/journal.pcbi.1011826>`_
+
+BibTeX
+------
+
+.. code-block:: bibtex
+
+    @article{couppey2024nrv,
+      title={NRV: An open framework for in silico evaluation of peripheral nerve electrical stimulation strategies},
+      author={Couppey, Thomas and Regnacq, Louis and Giraud, Roland and Romain, Olivier and Bornat, Yannick and Kolbl, Florian},
+      journal={PLOS Computational Biology},
+      volume={20},
+      number={7},
+      pages={e1011826},
+      year={2024},
+      publisher={Public Library of Science San Francisco, CA USA}
+    }
 
 .. SeeAlso::
    - **General information**: `nrv-framework.org <https://nrv-framework.org>`_

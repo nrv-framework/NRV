@@ -18,9 +18,9 @@ and activate it before any installation with the command:
     conda activate nrv-env
 
 .. Warning:: 
-  **For macOS users (June 2025):** 
- There are known compatibility issues between Xcode versions **higher than 16.2** and the FEM solver used in this project.  
- If you encounter problems running simulations involving FEM, please **downgrade Xcode to version 16.2** to ensure stability and correct functionality.  
+    **For macOS users (June 2025):** 
+    There are known compatibility issues between Xcode versions **higher than 16.2** and the FEM solver used in this project.  
+    If you encounter problems running simulations involving FEM, please **downgrade Xcode to version 16.2** to ensure stability and correct functionality.  
 
 
 Dependencies

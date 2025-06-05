@@ -1,39 +1,41 @@
-===============
 Post-processing
 ===============
 
-NRV provides object and method to facilitate simulation post-processing and analysis. This chapter describes how to use those features.
+NRV provides dedicated objects and methods to facilitate simulation post-processing and analysis. This section describes how to use these features effectively.
 
-NRV Result objects
-==================
+NRV Result Objects
+------------------
 
-When called, NRV ``simulable`` objects return object inhering from the ``NRV_results`` class. Specifically:
+When executed, NRV :class:`~nrv.backend.NRV_simulable` objects return instances derived from the base class :class:`~nrv.backend.NRV_results`. Specifically:
 
-- ``axon`` simulations return ``axon_results`` objects
-- ``fascicle`` simulations return ``fascicle_results`` objects
-- ``nerve`` simulations return ``nerve_results`` objects
+- :class:`~nrv.nmod.axon` simulations return :class:`~nrv.nmod.results.axon_results` objects  
+- :class:`~nrv.nmod.fascicle` simulations return :class:`~nrv.nmod.results.fascicle_results` objects  
+- :class:`~nrv.nmod.nerve` simulations return :class:`~nrv.nmod.results.nerve_results` objects  
 
-.. note::
-  NRV_results behave like a python object and a like dictionary. In other words:
+.. note::  
+   Objects inheriting from :class:`~nrv.backend.NRV_results` behave both like Python objects and dictionaries. This means you can access their data using attribute or key syntax interchangeably:
 
-  .. code:: python3
+   .. code-block:: python3
 
-      val = my_result.my_key
-        
-  is equivalent to:
+       val = my_result.my_key
 
-  .. code:: python3
+   is equivalent to:
 
-      val = my_result['my_key']
+   .. code-block:: python3
 
-Those objects contain every parameter of the simulation, e.g axon diameter in a ``axon_results``, axon population description in a ``fascicle_results``,
-fascicles description in ``nerve_results``, etc. Each object inhering from ``NRV_results`` also includes a copy of the extracellular and intracellular context.
-Those objects are described hereafter.
+       val = my_result['my_key']
 
-axon_results
+These result objects store all relevant simulation parameters: for example, a :class:`~nrv.nmod.results.axon_results` object contains axon diameters, a :class:`~nrv.nmod.results.fascicle_results` object contains descriptions of axon populations, and a :class:`~nrv.nmod.results.nerve_results` object contains fascicle descriptions.  
+
+Additionally, each result object includes a copy of the extracellular and intracellular simulation contexts for comprehensive analysis.
+
+Detailed descriptions of these objects follow below.
+
+
+Axon results
 ------------
 
-The following table describes all the keys/member available in a ``axon_results`` object:
+The following table describes all the keys/member available in a :class:`~nrv.nmod.results.axon_results` object:
 
 .. list-table:: axon_results key/member
     :widths: 10 10 150
@@ -45,7 +47,7 @@ The following table describes all the keys/member available in a ``axon_results`
         - content
     *   - `Simulation_state`
         - `str`
-        - Final state of running ``axon.simulate`` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsuccessful".
+        - Final state of running :meth:`~nrv.nmod.axon.simulate`` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsuccessful".
     *   - `Error_from_prompt`
         - `str`
         - If the `simulation_state` is unsuccessful, this key contains the error message that has been returned (and that should also appear in the logfile).
@@ -268,79 +270,184 @@ The following table describes all the keys/member available in a ``axon_results`
         - For myelinated model "Gaines_motor" and "Gaines_sensory". ??? channels current with time at the recorded x axis positions stored in the `x_rec` key.
 
 
-To save some space in the ``axon_results`` object and discarded unnecessary keys, some flags can be set in the ``axon`` object, prior to the simulation: 
+To save space in the :class:`~nrv.nmod.results.axon_results` object and discard unnecessary keys, some flags can be set in the :class:`~nrv.nmod.axon` object prior to the simulation:
 
 .. code:: python3
 
-    my_axon.record_V_mem = True         #save V_men in the result object
-    my_axon.record_I_mem = True         #save I_men in the result object
-    my_axon.record_g_mem = True         #save g_men in the result object
-    my_axon.record_g_ions = True        #save all g_xx in the result object
-    my_axon.record_I_ions = True        #save all I_xx in the result object
-    my_axon.record_particles = True     #save all particles in the result object 
-    
-.. Note::
+    my_axon.record_V_mem = True         # save V_mem in the result object
+    my_axon.record_I_mem = True         # save I_mem in the result object
+    my_axon.record_g_mem = True         # save g_mem in the result object
+    my_axon.record_g_ions = True        # save all g_xx in the result object
+    my_axon.record_I_ions = True        # save all I_xx in the result object
+    my_axon.record_particles = True     # save all particles in the result object
 
-    By default, only the ``record_V_mem`` flag is set to ``True``.
+.. note::
 
-Several methods are implemented in the ``axon_result`` class. It includes the ``is_recruited`` method which returns ``True`` if an action-potential
-is detected in the axon, the ``speed`` method that returns the velocity of the AP, the ``block`` method that detects if an axon has its conduction 
-block or not (using KES for example), the ``rasterize`` method that rasterizes ``V_mem`` to facilitate data analysis, etc. 
-
-.. Note::
-    The ``block`` method required an intracellular pulse to test the conduction of the axon.
+   By default, only the ``record_V_mem`` flag is set to ``True``.
 
 
-fascicle_results
+Several methods are implemented in the :class:`~nrv.nmod.results.axon_results` class. These include:
+
+- :meth:`~nrv.nmod.results.axon_results.is_recruited`: returns ``True`` if an action potential is detected in the axon.
+- :meth:`~nrv.nmod.results.axon_results.get_avg_AP_speed`: returns the conduction velocity of the action potential.
+- :meth:`~nrv.nmod.results.axon_results.is_blocked`: detects if the axon conduction is blocked (for example, using KES stimulation).
+- :meth:`~nrv.nmod.results.axon_results.rasterize`: rasterizes the ``V_mem`` data to facilitate analysis.
+
+An example of using the different methods available in :class:`~nrv.nmod.results.axon_results` is available in the :doc:`examples <../examples/generic/18_Action_Potential_Analysis>` 
+
+
+.. note::
+
+   The :meth:`~nrv.nmod.results.axon_results.is_blocked` method requires *at least* an intracellular pulse to test axon conduction.
+
+
+
+Fascicle results
 ----------------
 
-``fascicle_results`` object aggregate ``fascicle`` object parameters and every ``axon_result`` correspond to each ``axon`` object simulated 
-in the fascicle. Each ``axon_result`` is available with the following key: 
+The :class:`~nrv.nmod.results.fascicle_results` object aggregates parameters from the :class:`~nrv.nmod.fascicle` object and contains an :class:`~nrv.nmod.results.axon_results` for each simulated :class:`~nrv.nmod.axon` of fascicle. Each :class:`~nrv.nmod.results.axon_results` can be accessed using the following keys:
 
 .. code:: python3
 
     my_axon_result = my_fascicle_result.axonx
-    my_axon_result = my_fascicle_result['axonx']    #equivalent
+    my_axon_result = my_fascicle_result['axonx']  # equivalent
 
-where ``x`` ranges from 0 to the number of axon-1 in the fascicle. All available axon keys can be obtained with the ``get_axons_key`` method. Other available methods include 
-the ``get_recruited_axons`` method which returns the proportion (between 0 and 1) of axon recruited in the fascicle. The ``plot_recruited_fibers`` method facilitates plot of activated fiber in the fascicle. 
+where ``x`` ranges from 0 to the total number of axons-1 in the fascicle. You can retrieve all available axon keys using the :meth:`~nrv.nmod.results.fascicle_results.get_axons_key` method. Additional methods include:
 
-nerve_results
+- :meth:`~nrv.nmod.results.fascicle_results.get_recruited_axons`: returns the proportion (between 0 and 1) of recruited axons in the fascicle.
+- :meth:`~nrv.nmod.results.fascicle_results.plot_recruited_fibers`: generates a plot of activated fibers within the fascicle.
+
+Nerve results
 -------------
 
-``nerve_results`` object aggregate ``nerve`` object parameters and every ``fascicle_result`` correspond to each ``fascicle`` object simulated 
-in the nerve. Each ``fascicle_result`` is available with the following key: 
+The :class:`~nrv.nmod.results.nerve_results` object aggregates parameters from the :class:`~nrv.nmod.nerve` object and contains a :class:`~nrv.nmod.results.fascicle_results` for each simulated :class:`~nrv.nmod.nerve` within the nerve. Each :class:`~nrv.nmod.results.fascicle_results` can be accessed with the following keys:
 
 .. code:: python3
 
     my_fascicle_result = my_nerve_result.fasciclex
-    my_fascicle_result = my_nerve_result['fasciclex']    #equivalent
+    my_fascicle_result = my_nerve_result['fasciclex']  # equivalent
 
-where ``x`` ranges from 0 to the number of fascicle-1 in the nerve. All available fascicle keys can be obtained with the ``get_fascicle_key`` method. Other available methods include 
-the ``get_fascicle_results`` method which returns a ``fascicle_result`` of a specified fascicle ID, or the ``plot_recruited_fibers`` method that plots activated fiber in the nerve. 
+where ``x`` ranges from 0 to the total number of fascicles-1 in the nerve. You can retrieve all available fascicle keys using the :meth:`~nrv.nmod.results.nerve_results.get_fascicle_key` method. Other useful methods include:
 
-Post-processing script
-=======================
+- :meth:`~nrv.nmod.results.nerve_results.get_fascicle_results`: returns the :class:`~nrv.nmod.results.fascicle_results` for a specified fascicle ID.
+- :meth:`~nrv.nmod.results.nerve_results.plot_recruited_fibers`: plots activated fibers within the nerve.
 
-NRV provides a way to run external post-processing script during ``nerve`` or ``fascicle`` simulation. Those scripts are meant to apply filtering/post-processing functions
-to each simulate ``axon_result`` object during the simulation. It is mainly used to remove unnecessary keys (after AP detection for example) to alleviate RAM usage during large simulation. 
-Post-processing scripts are selected by setting the ``postproc_script`` class member of ``fascicle`` or ``nerve`` objects:
+Post-processing functions
+-------------------------
 
-.. code:: python3
+NRV allows the use of custom post-processing functions to filter and reduce data after the simulation of each individual :class:`~nrv.nmod.axon` in a :class:`~nrv.nmod.fascicle` or :class:`~nrv.nmod.nerve` object.  
+These functions are called **after each axon simulation**, and operate on the resulting :meth:`~nrv.nmod.results.axon_results` object.
 
-    my_fascicle.postproc_script = "my_postproc_script"      #for fascicle
-    my_nerve.postproc_script = "my_postproc_script"         #for nerve
+This mechanism is mainly used to remove unnecessary keys (e.g., membrane's voltage after action potential detection) in order to **reduce memory usage** during large-scale simulations.
 
-
-Those scripts can be custom, but NRV provides some pre-written scripts: 
-
-- ``default`` : rasterizes ``V_mem`` and remove the ``V_mem`` if the ``record_V_mem`` flag is set. It is the script called by default.  
-- ``ap_detection`` : rasterizes ``V_mem`` and remove all the keys except the rasterized result and axons parameters (type, diameter, position, etc)
-- ``is_blocked`` : rasterizes and detects block state, and remove all the keys except the rasterized result and axons parameters (type, diameter, position, etc)
+.. note::
+   Although we now use post-processing functions, the class member is still called ``postproc_script`` for backward compatibility with earlier versions of NRV.  
 
 .. warning::
-  Post-processing scripts are called "on-the-fly", i.e. any modification of the script during the simulation runtime will impact the post-processing.
+   In future releases, the terminology may evolve to clarify the difference between legacy "scripts" and callable Python functions.
 
-.. warning::
-  Post-processing scripts will be replaced by callable object in future release of the API.
+Usage
+-----
+
+Post-processing functions can be set at the :class:`~nrv.nmod.fascicle` or :class:`~nrv.nmod.nerve` level using the ``postproc_script`` attribute.  
+Optional arguments to the post-processing function can be passed using the ``postproc_kwargs`` attribute.
+
+Built-in functions (formerly scripts)
+-------------------------------------
+
+NRV provides a few built-in post-processing scripts:
+
+- :meth:`~nrv.ui.default_PP`: rasterizes ``V_mem`` and removes it if ``record_V_mem`` is disabled. This is the default behavior.
+- :meth:`~nrv.ui.rmv_keys`: rasterizes ``V_mem`` and removes all keys except minimal axon metadata.
+- :meth:`~nrv.ui.is_recruited`: rasterizes ``V_mem``, performs AP detection, and removes all irrelevant keys.
+- :meth:`~nrv.ui.is_blocked`: rasterizes ``V_mem``, detects conduction block, and keeps only relevant keys.
+- :meth:`~nrv.ui.sample_keys`: Undersample the desired keys and remove most of the :meth:`~nrv.nmod.results.axon_results`-object's other keys to alleviate RAM usage
+- :meth:`~nrv.ui.sample_g_mem`: Undersample the membrane conductivity (``results["g_mem"]``)  and remove most of the `axon_results` other keys to alleviate RAM usage
+- :meth:`~nrv.ui.vmem_plot`: Plot and save the membrane potential along each axon of the fascicle in a specified folder
+- :meth:`~nrv.ui.raster_plot`: Plot and save the raster plot along each axon of the fascicle in a specified folder
+
+
+.. note::
+    Built-in post-processing scripts can be assigned either by directly passing the function or by specifying its name as a string.
+    Both approaches are equivalent and compatible with the internal dispatcher:
+
+    .. code:: python
+
+        my_fasc.postproc_script = default_PP
+
+    is equivalent to:
+
+    .. code:: python
+
+        my_fasc.postproc_script = "default_PP"
+
+Custom post-processing functions
+--------------------------------
+
+You can define your own function with the following signature:
+
+.. code:: python
+
+   def my_custom_postproc(results: nrv.axon_results, **kwargs) -> nrv.axon_results:
+       # modify results in-place or return modified copy
+       return results
+
+The function receives the :meth:`~nrv.nmod.results.axon_results` object and optional keyword arguments.
+
+Examples
+--------
+
+**For a fascicle:**
+
+.. code:: python
+
+   import nrv
+   import numpy as np
+
+   def test_pp(results: nrv.axon_results, num=0):
+       results["comment"] = "Custom PP accessed"
+       results["num"] = num
+       results.remove_key(keys_to_keep={"ID", "comment", "num"})
+       return results
+
+   fasc = nrv.fascicle()
+   fasc.define_length(10000)
+   fasc.axons_diameter = np.array([5.7])
+   fasc.axons_type = np.array([1])
+   fasc.axons_y = np.array([0])
+   fasc.axons_z = np.array([0])
+   fasc.postproc_script = test_pp
+   fasc.postproc_kwargs = {"num": 1}
+
+   results = fasc.simulate()
+
+**For a nerve:**
+
+.. code:: python
+
+   import nrv
+   import numpy as np
+
+   def test_pp(results: nrv.axon_results, num=0):
+       results["comment"] = "Custom PP accessed"
+       results["num"] = num
+       results.remove_key(keys_to_keep={"ID", "comment", "num"})
+       return results
+
+   fasc = nrv.fascicle()
+   fasc.axons_diameter = np.array([5.7, 1.0])
+   fasc.axons_type = np.array([1, 0])
+   fasc.axons_y = np.array([0, 10])
+   fasc.axons_z = np.array([0, 0])
+   fasc.define_circular_contour(D=50)
+
+   nerve = nrv.nerve(Length=10000)
+   nerve.add_fascicle(fasc, ID=1)
+   nerve.postproc_script = test_pp
+   nerve.postproc_kwargs = {"num": 2}
+
+   results = nerve.simulate()
+
+
+
 

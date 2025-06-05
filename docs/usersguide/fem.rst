@@ -1,80 +1,91 @@
+FEM Simulations
 ===============
-FEM simulations
-===============
 
-In NRV, FEM model are described in :class:`~nrv.fmod.extracellular.FEM_stimulation` object. The object defines the shape of the nerve, the number of fascicles and their shapes, etc. 
-If ``model_fname`` in the :class:`~nrv.fmod.extracellular.FEM_stimulation` initialization parameter set to None, NRV will use Fenicsx to solve the FEM. Else, and if ``comsol`` is also True, Comsol will be used 
+In NRV, FEM models are represented by the :class:`~nrv.fmod.FEM_stimulation` object. This class defines the nerve’s geometry, the number and shape of fascicles, and related parameters.
 
-.. Warning:: 
-    Use FEM multiprocessing with caution. We recommend keeping Ncore to None for now.
+If the ``model_fname`` argument is set to ``None`` during instantiation, NRV will use **FEniCSx** to solve the FEM model.  
+You can find the FEniCSx documentation here: `FEniCS Project <https://docs.fenicsproject.org/>`_.
 
+If ``model_fname`` is provided and ``comsol=True``, NRV will instead use **COMSOL** with the corresponding template.  
+More information about COMSOL can be found here: `COMSOL Multiphysics <https://www.comsol.fr/>`_.
 
-If you want to use Comsol, you must provide a parametric comsol ``mph`` file. We currently provide three comsol template files:
+.. warning::  
+    Use FEM multiprocessing with caution. We currently recommend setting ``Ncore=None`` for now.
 
-- ``Nerve_1_Fascicle_1_CUFF.mph`` which describes a monofascicular nerve wrapped with a monopolar cuff electrode
-- ``Nerve_1_Fascicle_1_LIFE.mph`` which describes a monofascicular nerve wrapped with a monopolar LIFE
-- ``Nerve_1_Fascicle_2_LIFE.mph`` which describes a monofascicular nerve wrapped with two monopolar LIFEs
+COMSOL Support
+--------------
 
-.. Warning:: 
-    Use of Comsol for FEM is not recommended. Support of this feature might be removed is future release.
+To use COMSOL-based FEM simulations, you must provide a parametric `.mph` file. NRV currently includes three COMSOL templates:
 
+- ``Nerve_1_Fascicle_1_CUFF.mph`` — Monofascicular nerve with a monopolar CUFF electrode
+- ``Nerve_1_Fascicle_1_LIFE.mph`` — Monofascicular nerve with a single LIFE electrode
+- ``Nerve_1_Fascicle_2_LIFE.mph`` — Monofascicular nerve with two LIFE electrodes
 
+.. warning::  
+    COMSOL support is limited and may be deprecated in future versions.
 
-Nerve and fascicle are parameterized, and their geometrical properties can be modified with the :meth:`~nrv.fmod.extracellular.FEM_stimulation.reshape_nerve` and 
-:meth:`~nrv.fmod.extracellular.FEM_stimulation.reshape_fascicle` methods, respectively. The :meth:`~nrv.fmod.extracellular.FEM_stimulation.reshape_outerBox` can be used to set the 
-size of the outer box.
+Geometry Manipulation
+---------------------
 
-.. Note:: 
-    To add fascicle to the nerve, simply call the :meth:`~nrv.fmod.extracellular.FEM_stimulation.reshape_fascicle` method
-    with a new ``ÌD``:
+You can modify the nerve and fascicle geometries using:
 
-    .. code:: python3
-    
-        my_FEM.reshape_fascicle(fascicle_d1, fascicle_y1, fascicle_z1, ID = 0) #create a new fascicle with ID 0
-        my_FEM.reshape_fascicle(fascicle_d2, fascicle_y2, fascicle_z2, ID = 1) #create a new fascicle with ID 1
-        my_FEM.reshape_fascicle(fascicle_d3, fascicle_y1, fascicle_z1, ID = 0) #change diameter of fascicle 0
-        
+- :meth:`~nrv.fmod.FEM_stimulation.reshape_nerve` — Set the nerve diameter and length
+- :meth:`~nrv.fmod.FEM_stimulation.reshape_fascicle` — Define or update fascicles
+- :meth:`~nrv.fmod.FEM_stimulation.reshape_outerBox` — Set the size of the surrounding simulation box
 
+.. note::  
+    To define multiple fascicles, call :meth:`~nrv.fmod.FEM_stimulation.reshape_nerve` with different ``ID`` values:
 
-Any :class:`~nrv.fmod.electrodes.electrode` object can be added with the :meth:`~nrv.fmod.extracellular.FEM_stimulation.add_electrode` method. This method serves also the purpose to link a :class:`~nrv.fmod.stimulus.stimulus` object to the model.
+    .. code-block:: python3
 
-.. Warning:: 
-    If the :class:`~nrv.fmod.extracellular.FEM_stimulation` is based on a comsol template, only the number of fascicle and the electrode model specified in the template can be parameterized.
+        my_FEM.reshape_fascicle(d1, y1, z1, ID=0)  # Create fascicle ID 0
+        my_FEM.reshape_fascicle(d2, y2, z2, ID=1)  # Create fascicle ID 1
+        my_FEM.reshape_fascicle(d3, y1, z1, ID=0)  # Modify fascicle ID 0
 
+Electrodes
+----------
 
+Any :class:`~nrv.fmod.electrode` object can be added to the FEM model using  
+:meth:`~nrv.fmod.FEM_stimulation.add_electrode`. This method also links the electrode to a corresponding stimulus object.
 
-Usage with a simulable object
-=============================
+.. warning::  
+    If using a COMSOL template, the number of fascicles and electrode model must match the template. These elements cannot be fully customized afterward.
 
-Any :class:`~nrv.fmod.extracellular.FEM_stimulation` object can be attached to any :class:`~nrv.backend.NRV_Simulable.NRV_simulable` object using the ``attach_extracellular_stimulation`` method.
+Usage with a Simulable Object
+-----------------------------
 
-.. note::
-    although technically possible, we do not recommand attaching :class:`~nrv.fmod.extracellular.FEM_stimulation` to a :class:`~nrv.nmod.fascicles.fascicle`. 
-    Instead, use a monofascicular :class:`~nrv.nmod.nerve.nerve` object.
+A :class:`~nrv.fmod.FEM_stimulation` object can be attached to any  
+:class:`~nrv.backend.NRV_simulable` object using  
+:meth:`~nrv.backend.NRV_simulable.attach_extracellular_stimulation`.
 
-The following code snippet shows how to attach a :class:`~nrv.fmod.extracellular.FEM_stimulation` to an :class:`~nrv.nmod.axons.axon`:
+.. note::  
+    Although technically possible, we do **not** recommend attaching a FEM model to a :class:`~nrv.nmod.fascicle` object.  
+    Instead, use a monofascicular :class:`~nrv.nmod.nerve` object.
 
-::
+Example with an Axon
+--------------------
 
-    my_FEM = nrv.FEM_stimulation()                                          #create an FEM model with default Parameters
-    my_FEM.reshape_nerve(nerve_d, nerve_l)                                  #set the diameter and length of the nerve
-    my_FEM.reshape_outerBox(outer_d)                                        #set the diameter of the outer box
-    my_FEM.reshape_fascicle(fascicle_d1, fascicle_y1, fascicle_z1, ID = 0)  #create a new fascicle with ID 0
-    my_FEM.reshape_fascicle(fascicle_d2, fascicle_y2, fascicle_z2, ID = 1)  #create a new fascicle with ID 1
-    my_FEM.add_electrode(my_electrode, my_stimulus)                         #add an electrode
-    my_axon.attach_extracellular_stimulation(my_FEM)                        #attach the FEM model to the axon
-    my_result = my_axon(t_sim)                                              #simulate the axon with the FEM model                       
+.. code-block:: python3
 
-The following code snippet shows how to attach a :class:`~nrv.fmod.extracellular.FEM_stimulation` to a :class:`~nrv.nmod.nerve.nerve`:
+    my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
+    my_FEM.reshape_nerve(nerve_d, nerve_l)                                  # Set nerve geometry
+    my_FEM.reshape_outerBox(outer_d)                                        # Set simulation box size
+    my_FEM.reshape_fascicle(fascicle_d1, y1, z1, ID=0)                       # Add fascicle 0
+    my_FEM.reshape_fascicle(fascicle_d2, y2, z2, ID=1)                       # Add fascicle 1
+    my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
+    my_axon.attach_extracellular_stimulation(my_FEM)                        # Attach FEM model to axon
+    my_result = my_axon(t_sim)                                              # Run simulation
 
-::
+Example with a Nerve
+--------------------
 
-    my_FEM = nrv.FEM_stimulation()                                          #create an FEM model with default Parameters
-    my_FEM.add_electrode(my_electrode, my_stimulus)                         #add an electrode
-    my_nerve.attach_extracellular_stimulation(my_FEM)                       #attach the FEM model to the nerve
-    my_result = my_nerve(t_sim)                                             #simulate the axon with the FEM model  
+.. code-block:: python3
 
-.. note::
-    When attaching a :class:`~nrv.fmod.extracellular.FEM_stimulation` to a :class:`~nrv.nmod.nerve.nerve`, the geometrical parameters 
-    of the nerve (its diameter, number of fascicles, etc) are overwritten with properties specified of the :class:`~nrv.nmod.nerve.nerve` object.
-    This ensures consistency between the geometrical properties of the FEM model and of the neural model.
+    my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
+    my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
+    my_nerve.attach_extracellular_stimulation(my_FEM)                       # Attach FEM model to nerve
+    my_result = my_nerve(t_sim)                                             # Run simulation
+
+.. note::  
+    When attaching a FEM model to a :class:`~nrv.nmod.nerve`, the nerve's geometry (e.g., diameter, number of fascicles) is automatically overwritten  
+    to ensure consistency with the properties of the neural model.
