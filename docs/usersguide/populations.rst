@@ -8,7 +8,14 @@ Simulable objects are either single axons, fascicles and nerve. The last two con
 
 - A packing algorithm that shuffles the generated population on the spacial grid, and that shuffles nodes of Ranvier for myelinated fibers.
 
-It is also possible to use already created and placed populations of fibers:
+.. tip::
+    It is also possible to use already created and placed populations of fibers as shown bellow.
+
+Population generation
+=====================
+
+Axon population
+---------------
 
 Populations of axons are stored in the framework under the path ``nrv/_misc/pops`` as ``.pop`` files. These files follow a CSV-like structure with the following columns:
 
@@ -24,9 +31,13 @@ Populations of axons are stored in the framework under the path ``nrv/_misc/pops
      - (`NaN`)
      - (`NaN`)
 
-The last two columns are placeholders used to maintain compatibility with placed populations (see below) and to ensure consistent data formatting in the code.
+.. note::
+    The last two columns are placeholders used to maintain compatibility with placed populations (see below) and to ensure consistent data formatting in the code.
 
-Six predefined populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+Six predefined unplaced populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+
+Axon placed population
+----------------------
 
 Placed populations of axons are stored under the path ``nrv/_misc/pops`` in ``.pop`` files. These files are similar to CSV files and contain the following columns:
 
@@ -42,7 +53,7 @@ Placed populations of axons are stored under the path ``nrv/_misc/pops`` in ``.p
      - (in µm)
      - (in µm)
 
-Six predefined populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+Six predefined placed populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
 
 
 Diameter distributions
@@ -160,11 +171,11 @@ Loading a ``.ppop`` file can be done using the function :meth:`~nrv.nmod.load_ax
 
 An example demonstrating the proper use of the packer and plotting/saving tools is provided in **example XXX**
 
-.. note::
+.. seealso::
 
    **TODO EXAMPLE**
 
-.. note::
+.. warning::
 
    In a future release of the code, we plan to create an ``axon_population`` class that will encapsulate all these methods. This class will provide a more convenient way to manipulate populations and sub-populations of axons through logical and arithmetic operations, filtering, and more.
 

@@ -47,7 +47,7 @@ The following table describes all the keys/member available in a :class:`~nrv.nm
         - content
     *   - `Simulation_state`
         - `str`
-        - Final state of running :meth:`~nrv.nmod.axon.simulate`` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsuccessful".
+        - Final state of running :meth:`~nrv.nmod.axon.simulate` method. If 'Successful', then the simulation terminated without any error or interruption. Else set to "Unsuccessful".
     *   - `Error_from_prompt`
         - `str`
         - If the `simulation_state` is unsuccessful, this key contains the error message that has been returned (and that should also appear in the logfile).

@@ -61,13 +61,15 @@ If you add a new functionality, you should add one or several tests, showing tha
     pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton nbsphinx sphinx_gallery
 
 Once installed, you should be able to build the documentation with the following command:
-::
+
+.. code:: bash
 
     python3 -m sphinx.cmd.build -b html docs/ docs/_build/
 
 .. tip::
     To document new features, example should be added as `.rst <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ file in the folder ``NRV.docs.examples``. It can be more convenient to write the example in a *jupiter notebook* to check the code and then convert it in using `nbconvert <https://nbconvert.readthedocs.io/en/latest/>`_ and this command line:
-        ::
+
+        .. code:: bash
 
             jupyter nbconvert --to rst your_fname.ipynb
 

@@ -151,10 +151,10 @@ Main Execution Script
 .. note::
     If the number of specified CPUs exceeds those available, threads will share CPU cores. The simulation will still complete correctly, though potentially less efficiently.
 
-.. note::
-    Wrap your code in ``if __name__ == "__main__":`` to ensure proper multiprocessing behavior.
+.. tip::
+    Wrap your code in ``if __name__ == "__main__":`` to ensure proper multiprocessing behaviour.
 
-.. note::
+.. warning::
     Avoid running massively parallel simulations in Jupyter Notebooks. Use standalone scripts for heavy computations. Design and post-processing, however, work well in notebooks.
 
 

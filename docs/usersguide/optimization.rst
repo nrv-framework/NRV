@@ -30,15 +30,17 @@ To evaluate how specific parameters affect simulations and overall cost, NRV def
 
 The optimization problem is managed in NRV using the :class:`~nrv.optim.Problem` class. A typical setup looks like:
 
-.. code-block:: python
+.. autolink-concat:: on
+.. code-block:: python3
 
+    import nrv
     my_prob = nrv.Problem()
     my_prob.costfunction = my_cost
     my_prob.optimizer = my_optimizer
 
 Once defined, the problem can be executed by calling the instance:
 
-.. code-block:: python
+.. code-block:: python3
 
     res_optim = my_prob(**kwargs)
 
@@ -61,7 +63,7 @@ The first component of an optimization problem is the **cost function**. NRV pro
 
 You can instantiate the cost function directly:
 
-.. code-block:: python
+.. code-block:: python3
 
     my_cost = nrv.cost_function(
         static_context=my_static_context,
@@ -74,7 +76,7 @@ You can instantiate the cost function directly:
 
 Or define it incrementally:
 
-.. code-block:: python
+.. code-block:: python3
 
     my_cost = nrv.cost_function()
     my_cost.set_static_context(my_static_context, **kwarg_sim)
@@ -112,7 +114,7 @@ NRV includes several built-in context modifiers, all inheriting from :class:`~nr
 
 You can also define your own modifier:
 
-.. code-block:: python
+.. code-block:: python3
 
     def homemade_context_modifier(X: np.ndarray, static_context: NRV_simulable, **kwargs) -> NRV_simulable:
         local_sim = nrv.load_any(static_context, ...)
@@ -155,7 +157,7 @@ Benefits of subclassing:
 
 You can define a custom evaluation:
 
-.. code-block:: python
+.. code-block:: python3
 
     def homemade_cost_evaluation(results: sim_results, **kwargs) -> float:
         # Analyze `results` and return scalar cost
@@ -163,7 +165,7 @@ You can define a custom evaluation:
 
 Or define a class:
 
-.. code-block:: python
+.. code-block:: python3
 
     class homemade_cost_evaluation(nrv.cost_evaluation):
         def call_method(self, results: sim_results, **kwargs) -> float:
@@ -171,7 +173,7 @@ Or define a class:
 
 Alternatively:
 
-.. code-block:: python
+.. code-block:: python3
 
     def __call__(self, results: sim_results, **kwargs) -> float:
         return cost
@@ -181,7 +183,8 @@ Filter (optional)
 
 **Filters** format the input vector before it is passed to the context modifier.
 
-.. code-block:: python
+.. autolink-skip::
+.. code-block:: python3
 
     my_cost = nrv.cost_function(
         static_context=my_static_context,
@@ -200,7 +203,7 @@ The second major component is the **optimizer**, which defines how to minimize t
 
 You can use either of the following styles:
 
-.. code-block:: python
+.. code-block:: python3
 
     res = my_optimizer.minimize(func_to_minimize, ...)
     # or simply

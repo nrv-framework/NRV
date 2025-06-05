@@ -20,6 +20,7 @@ At instantiation, a stimulus is initialized only with its initial value at time 
 
 Here is a minimal example of stimulus instantiation:
 
+.. autolink-concat:: on
 .. code:: python3
 
     import nrv

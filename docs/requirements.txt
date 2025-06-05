@@ -6,3 +6,4 @@ sphinx_copybutton
 nbsphinx
 sphinx_gallery
 ipython
+sphinx_codeautolink

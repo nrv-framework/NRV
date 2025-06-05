@@ -62,30 +62,46 @@ A :class:`~nrv.fmod.FEM_stimulation` object can be attached to any
     Although technically possible, we do **not** recommend attaching a FEM model to a :class:`~nrv.nmod.fascicle` object.  
     Instead, use a monofascicular :class:`~nrv.nmod.nerve` object.
 
-Example with an Axon
---------------------
+Examples
+--------
+
+**- For an Axon:**
 
 .. code-block:: python3
 
+    import nrv
+    my_axon = nrv.myelinated(...)                                           # Create an axon
     my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
     my_FEM.reshape_nerve(nerve_d, nerve_l)                                  # Set nerve geometry
     my_FEM.reshape_outerBox(outer_d)                                        # Set simulation box size
-    my_FEM.reshape_fascicle(fascicle_d1, y1, z1, ID=0)                       # Add fascicle 0
-    my_FEM.reshape_fascicle(fascicle_d2, y2, z2, ID=1)                       # Add fascicle 1
+    my_FEM.reshape_fascicle(fascicle_d1, y1, z1, ID=0)                      # Add fascicle 0
+    my_FEM.reshape_fascicle(fascicle_d2, y2, z2, ID=1)                      # Add fascicle 1
     my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
     my_axon.attach_extracellular_stimulation(my_FEM)                        # Attach FEM model to axon
     my_result = my_axon(t_sim)                                              # Run simulation
 
+.. seealso::
+    :doc:`Tutorial 3 </tutorials/3_single_fiber_simulation>` — Stimulating single fibers with NRV
+
+
+
 Example with a Nerve
 --------------------
 
+**- For a Nerve:**
+
 .. code-block:: python3
 
+    import nrv
+    my_nerve = nrv.nerve(...)                                                # Create a Nerve
     my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
     my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
     my_nerve.attach_extracellular_stimulation(my_FEM)                       # Attach FEM model to nerve
     my_result = my_nerve(t_sim)                                             # Run simulation
 
+.. seealso::
+    :doc:`Tutorial 4 </tutorials/4_nerve_simulation>` — Stimulating nerves with NRV
+
 .. note::  
-    When attaching a FEM model to a :class:`~nrv.nmod.nerve`, the nerve's geometry (e.g., diameter, number of fascicles) is automatically overwritten  
+    When attaching a FEM model to a :class:`~nrv.nmod.nerve`, the nerve's geometry (e.g., diameter, number of fascicles) is automatically overwritten
     to ensure consistency with the properties of the neural model.

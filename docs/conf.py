@@ -8,9 +8,6 @@ styles = list(get_all_styles())
 
 sys.path.insert(0, os.path.abspath(".."))
 
-html_css_files = [
-    'custom.css',
-]
 
 # Prevent from unnistalled requierements for nrv
 # Please add them in alphabetical order to avoid repetition.
@@ -104,6 +101,7 @@ extensions = [
     "sphinx_rtd_theme",
     "IPython.sphinxext.ipython_console_highlighting",
     "IPython.sphinxext.ipython_directive",
+    "sphinx_codeautolink",
     #"sphinx_nbexamples",
 ]
 
@@ -131,6 +129,13 @@ html_static_path = ["style"]  # folders to include in output
 html_css_files = ["custom.css"]  # extra style files to apply
 highlight_language = "python3"
 
+# Link with other Sphinx docs
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+}
+
 # Sources options
 napoleon_include_special_with_doc = True     # Add __init__, __call__, ... methods to the doc if documented
 autodoc_member_order = 'bysource' # keep the order of class and function source files
@@ -139,3 +144,4 @@ autosummary_generate = True
 
 autosummary_ignore_module_all = False
 nbsphinx_execute = 'never'
+

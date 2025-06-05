@@ -28,7 +28,8 @@ These two points and their consequences on syntax are described hereafter the li
 .. note::
     As a good practice, and especially when using multiprocessing, it is necessary to place code execution inside a Python main guard:
 
-    .. code-block:: python
+    .. autolink-skip::
+    .. code-block:: python3
 
         if __name__ == "__main__":
             # your code here
@@ -58,8 +59,10 @@ Note on object saving
 As introduced above, classes inheriting from the :class:`~nrv.backend._NRV_Class.NRV_class` can be saved and loaded in python dictionary or `json` files. 
 Let's see bellow a first example showing how to save a simple :class:`~nrv.nmod._unmyelinated.unmyelinated` axon object.
 
-.. code-block:: python
+.. autolink-concat:: on
+.. code-block:: python3
 
+    import nrv
     y = 0                       # axon y position, in [um]
     z = 0                       # axon z position, in [um]
     d = 1                       # axon diameter, in [um]
