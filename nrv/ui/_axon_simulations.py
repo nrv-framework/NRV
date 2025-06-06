@@ -69,7 +69,7 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
 
     results = []
     #TODO: display individual search output (for each core, see EIT) instead of "processing search"
-    with get_pool(n_jobs=ncore) as pool:
+    with get_pool(n_jobs=ncore, backend="spawn") as pool:
         with Progress(
             SpinnerColumn(),
             BarColumn(),

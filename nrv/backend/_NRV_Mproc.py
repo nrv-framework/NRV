@@ -11,6 +11,7 @@ from pathos.multiprocessing import ProcessingPool
 #from pathos.multiprocessing import ProcessingPool as Pool
 from multiprocessing import current_process, active_children, get_context
 from psutil import cpu_count
+from typing import Literal
 
 #Not great but remove the resource_tracker warning. Doesn't seem to be an issue
 import warnings
@@ -19,7 +20,7 @@ warnings.filterwarnings("ignore", category=UserWarning, message="resource_tracke
 
 _DEFAULT_BACKEND = "pathos"
 
-def get_pool(n_jobs, backend=None):
+def get_pool(n_jobs, backend:None|Literal["spawn", "pathos", "pp"]=None)->ProcessingPool:
     """
     Return a worker pool based on the specified backend.
 
