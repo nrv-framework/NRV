@@ -115,6 +115,7 @@ The *NRV_test* file is a script that act as a test launcher. It should be called
 This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
   - "-d", "--dependances": Check NEURON and COMSOL installation
   - "-l", "--list": Print the name of all unitary tests, an optional integer can be added to arguments to specify the number of columns used to print
+  - "-f", "--find": Select only tests containing one or multiple substrings
   - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all the tests should be True, numerical values for debug only
   - "-s", "--syntax": Lint nrv syntax source code
   - "-a", "--all": launches even potentially failing tests due to third party softwares such as COMSOL
