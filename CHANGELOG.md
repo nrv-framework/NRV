@@ -2,13 +2,13 @@
 
 All notable changes to NRV are summed up in this file.
 
-## [1.2.1] - 2025-06-xx
+## [1.2.1] - 2025-06-06
 
 ### Added
 - Added `backend._NRV_Mproc` to handle parallel processing in NRV.
 - Added Github Action `Build and Push Docker Image on Release` to automatically push docker image to Docker Hub on release.
 - [Example o06](docs/examples/optim/o06_nerve_optimization.ipynb).
-- 
+- Added Command "-f" in NRV_test to find specific tests
 
 ### Fixed
 - Cleaned doc Makefile
