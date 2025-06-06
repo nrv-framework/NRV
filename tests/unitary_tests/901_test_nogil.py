@@ -5,7 +5,7 @@ def main():
 
     # Check GIL status
     py_version = float(".".join(sys.version.split()[0].split(".")[0:2]))
-
+    status = None
     if py_version >= 3.13:
         status = sys._is_gil_enabled()
     if status is None:

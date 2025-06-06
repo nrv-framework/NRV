@@ -1,7 +1,7 @@
 """
 NRV-:class:`.NRV_simulable` handling.
 
-A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod.fascicle`, :class:`~nrv.nmod.myelinated`)
+A generic class for all NRV simulable classes (:class:`~nrv.nmod.nerve`, :class:`~nrv.nmod._fascicle`, :class:`~nrv.nmod.myelinated`)
 """
 
 from ._NRV_Class import NRV_class

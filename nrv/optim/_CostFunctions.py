@@ -83,7 +83,7 @@ class cost_function(NRV_class):
         self.static_t_sim = 0
         self.global_t_sim = 0
 
-        self._MCore_CostFunction = False
+        self._m_proc_CostFunction = None
         self.keep_results = False
         self.__check_mch()
         self.__synchronise_t_sim()
@@ -100,15 +100,25 @@ class cost_function(NRV_class):
         self.simulation_context = None
         self.results = None
 
+    @property
+    def is_m_proc_func(self)->bool:
+        if self.static_context is not None and self._m_proc_CostFunction is None:
+            static_context = load_any(self.static_context)
+            self.static_t_sim = static_context.t_sim
+            self._m_proc_CostFunction =  static_context.nrv_type in ["fascicle", "nerve"]
+        return self._m_proc_CostFunction
+
+
+
     def __check_mch(self):
         """
         check is the simulation will be handle in single or multiple cores
         """
-        if self.static_context is not None:
+        if self.static_context is not None and self._m_proc_CostFunction is None:
             static_context = load_any(self.static_context)
             self.static_t_sim = static_context.t_sim
             if static_context.nrv_type in ["fascicle", "nerve"]:
-                self._MCore_CostFunction = True
+                self._m_proc_CostFunction = True
             del static_context
 
     def __synchronise_t_sim(self):

@@ -52,3 +52,5 @@ if __name__ == '__main__':
     fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
     t1 = time.time()
     print('simulation done in ' + str(t1-t0))
+
+    del test_stim

@@ -89,7 +89,6 @@ setup(
 
     # non python data to keep
     package_data={
-        "nrv": ["nrv2calm"],
         "nrv._misc": ["NRV.ini"],
         "nrv._misc.comsol_templates": ["*.mph"],
         "nrv._misc.geom": ["*.dxf", "*.png"],
@@ -119,7 +118,7 @@ setup(
     # dependencies 
     # * sorted by alphabetical order *
     install_requires=[
-        "gmsh",
+        #"gmsh",
         "icecream",
         "matplotlib",
         "mph",
@@ -127,11 +126,12 @@ setup(
         "numba",
         "numpy",
         "pandas",
+        "pathos",
         "psutil",
         "pyswarms",
         "rich",
         "scipy",
     ],  # external packages as dependencies
     python_requires=">=3.12",
-    scripts=['./nrv/nrv2calm',"./tests/NRV_test"]        #script
+    scripts=["./tests/NRV_test"]        #script
 )

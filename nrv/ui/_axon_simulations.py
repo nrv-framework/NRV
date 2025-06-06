@@ -4,15 +4,12 @@ NRV-Cellular Level simulations.
 import sys
 from typing import Callable
 from time import perf_counter
-from multiprocessing import Pool
-# from pathos.multiprocessing import ProcessingPool as Pool
 from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
-from functools import partial
-from itertools import repeat
 
 from ..backend._file_handler import is_iterable
 from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
 from ..backend._parameters import parameters
+from ..backend._NRV_Mproc import get_pool
 from ..fmod._electrodes import *
 from ..fmod._extracellular import *
 from ..fmod._materials import *
@@ -72,7 +69,7 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
 
     results = []
     #TODO: display individual search output (for each core, see EIT) instead of "processing search"
-    with Pool(processes=ncore) as pool:
+    with get_pool(n_jobs=ncore, backend="spawn") as pool:
         with Progress(
             SpinnerColumn(),
             BarColumn(),
@@ -84,6 +81,8 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
             for result in pool.imap(_call_wrapper, call_args):
                 results.append(result)
                 progress.update(task, advance=1,refresh=True)
+            pool.close() #LR: Apparently this avoid PETSC Terminate ERROR
+            pool.join()  #LR: but this shouldn't be needed as we are in "with"...
 
     return results
 
@@ -205,7 +204,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 return 0
             if verbose:
                 pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+ 
-                          f" ({np.round(current_tol,2)}%)... AP Detected! (in {np.round(results["sim_time"],3)}s)")
+                          f" ({np.round(current_tol,2)}%)... AP Detected! (in {np.round(results['sim_time'],3)}s)")
                 #pass_info("... Spike triggered")
             amplitude_max_th = previous_amp
             current_amp = (delta_amp / 2) + amplitude_min_th
@@ -215,7 +214,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 return 0
             if verbose:
                 pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+
-                          f" ({np.round(current_tol,2)}%)... AP Not Detected! (in {np.round(results["sim_time"],3)}s)")
+                          f" ({np.round(current_tol,2)}%)... AP Not Detected! (in {np.round(results['sim_time'],3)}s)")
             current_amp = amplitude_max_th - delta_amp / 2
             amplitude_min_th = previous_amp
 
@@ -353,7 +352,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
                 return 0.0
             if verbose:
                 pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+ 
-                          f" ({np.round(current_tol,2)}%)... AP Blocked! (in {np.round(results["sim_time"],3)}s)")
+                          f" ({np.round(current_tol,2)}%)... AP Blocked! (in {np.round(results['sim_time'],3)}s)")
                 #pass_info("... Spike triggered")
             amplitude_max_th = previous_amp
             current_amp = (delta_amp / 2) + amplitude_min_th
@@ -363,7 +362,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
                 return 0.0
             if verbose:
                 pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+
-                          f" ({np.round(current_tol,2)}%)... AP Not Blocked! (in {np.round(results["sim_time"],3)}s)")
+                          f" ({np.round(current_tol,2)}%)... AP Not Blocked! (in {np.round(results['sim_time'],3)}s)")
             current_amp = amplitude_max_th - delta_amp / 2
             amplitude_min_th = previous_amp
 
@@ -638,7 +637,7 @@ def firing_threshold_point_source(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results["sim_time"])
+                + str(results['sim_time'])
                 + " s"
             )
         # post-process results
@@ -818,7 +817,7 @@ def firing_threshold_from_axon(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results["sim_time"])
+                + str(results['sim_time'])
                 + " s"
             )
         # post-process results
@@ -1137,7 +1136,7 @@ def blocking_threshold_point_source(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results["sim_time"])
+                + str(results['sim_time'])
                 + " s"
             )
         # post-process results
@@ -1321,7 +1320,7 @@ def blocking_threshold_from_axon(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results["sim_time"])
+                + str(results['sim_time'])
                 + " s"
             )
         # post-process results

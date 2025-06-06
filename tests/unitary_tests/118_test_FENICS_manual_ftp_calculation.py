@@ -25,7 +25,7 @@ if __name__ == "__main__":
     mesh.add_electrode(elec_type="LIFE", x_c=L/2, y_c=0, z_c=0, length=1000, d=25, res=3)
     mesh.compute_mesh()
 
-    mesh.save(mesh_file)
+    # mesh.save(mesh_file, )
     #print(mesh.get_parameters())
 
     t2 = time.time()
@@ -67,29 +67,29 @@ if __name__ == "__main__":
     ax1 = [[x_ax, y_ax1, z_ax] for x_ax in X_ax]
     ax2 = [[x_ax, y_ax2, z_ax] for x_ax in X_ax]
 
-    V1 = res1.eval(ax1)
-    V2 = res1.eval(ax2)
+    # V1 = res1.eval(ax1)
+    # V2 = res1.eval(ax2)
 
-    plt.figure()
-    plt.plot(X_ax, V1)
-    plt.plot(X_ax, V2)
-
-
-    plt.savefig('./unitary_tests/figures/118_A.png')
-
-    z_ax = 0
-    Y_ax = np.linspace(12.5, 500, 1000)
-    Y_ax = np.concatenate((np.flip(-Y_ax), Y_ax))
-    x_ax = 2500
-
-    ax3 = [[x_ax, y_ax, z_ax] for y_ax in Y_ax]
+    # plt.figure()
+    # plt.plot(X_ax, V1)
+    # plt.plot(X_ax, V2)
 
 
-    V3 = res1.eval(ax3)
+    # plt.savefig('./unitary_tests/figures/118_A.png')
+
+    # z_ax = 0
+    # Y_ax = np.linspace(12.5, 500, 1000)
+    # Y_ax = np.concatenate((np.flip(-Y_ax), Y_ax))
+    # x_ax = 2500
+
+    # ax3 = [[x_ax, y_ax, z_ax] for y_ax in Y_ax]
 
 
-    plt.figure()
-    plt.plot(Y_ax, V3)
+    # V3 = res1.eval(ax3)
 
-    plt.savefig('./unitary_tests/figures/118_B.png')
-    #plt.show()
+
+    # plt.figure()
+    # plt.plot(Y_ax, V3)
+
+    # plt.savefig('./unitary_tests/figures/118_B.png')
+    # #plt.show()

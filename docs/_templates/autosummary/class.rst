@@ -4,6 +4,7 @@
 
 .. autoclass:: {{ objname }}
 
+
 {% block attributes %}
 {% if attributes %}
 Attributes

@@ -7,13 +7,15 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-import multiprocessing as mp
+#import multiprocessing as mp
+from ..backend._NRV_Mproc import get_pool
 from rich import progress
 
 from ..backend._parameters import parameters
 from ..backend._file_handler import *
 from ..backend._log_interface import pass_info, rise_warning
 from ..backend._NRV_Simulable import NRV_simulable
+from ..backend._NRV_Class import load_any
 from ..fmod._extracellular import *
 from ..fmod._recording import *
 from ..ui._axon_postprocessing import *
@@ -24,6 +26,7 @@ from ._myelinated import *
 from ._unmyelinated import *
 from .results._fascicles_results import fascicle_results
 from .results._axons_results import axon_results
+
 
 
 
@@ -1574,13 +1577,14 @@ class fascicle(NRV_simulable):
         ) as pg:
             __label = self.__set_pbar_label(**kwargs)
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
-            with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
+            #with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
+            with get_pool(parameters.get_nmod_ncore(),backend="spawn") as pool: 
                 for result in pool.imap(self.sim_axon, axons_ID):
                     results.append(result)
                     pg.advance(task_id)
                     pg.refresh()
-                pool.close()
-                pool.join()
+                pool.close() #LR: Apparently this avoid PETSC Terminate ERROR
+                pool.join()  #LR: but this shouldn't be needed as we are in "with"...
 
         #results = list(pool_results)
 

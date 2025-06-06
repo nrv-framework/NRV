@@ -33,7 +33,6 @@ else:
     def NeuronCompile():
         # path2compiled_mods =  dir_path + "/mods/x86_64"
         path2_mods = dir_path
-        os.system("chmod +x " + parameters.nrv_path + "/nrv2calm")
         os.system("cd " + path2_mods + "&& nrnivmodl")
 
     if not test_mods:

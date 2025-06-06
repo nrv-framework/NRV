@@ -8,6 +8,5 @@ include nrv/ppops/*
 include nrv/stats/*
 include nrv/materials/*
 include nrv/NRV.ini
-include nrn/nrv2calm/*
 include Licence.txt
 include ReadMe.md

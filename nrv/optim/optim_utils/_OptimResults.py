@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter, FFMpegWriter
-from ._OptimFunctions import interpolate_Npts
 from .._CostFunctions import cost_function
 import numpy as np
 

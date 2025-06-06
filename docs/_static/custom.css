@@ -1,3 +1,11 @@
 .wy-nav-content {
     max-width: none !important;
 }
+.sphinx-codeautolink-a{
+    border-bottom-color: #ccc;
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+}
+.sphinx-codeautolink-a:hover{
+    color: rgb(255, 139, 139);
+}

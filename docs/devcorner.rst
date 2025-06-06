@@ -23,55 +23,63 @@ Here is how to setup NRV for local development:
 1. Fork the NRV repo on GitHub. Official developers are limited to members of the `Bioelectronics group at the laboratory IMS <https://www.ims-bordeaux.fr/research-groups/bioelectronics/>`_
 
 2. Clone your fork locally:
-::
 
-    $ git clone git@github.com:your_name_here/NRV.git
+.. code:: bash
+
+    git clone git@github.com:your_name_here/NRV.git
 
 3. We recommend using a conda environment, to ease the installation of FenicsX. However, a virtualenv should be possible. Assuming you are using a conda environment this is how you set up you development configuration:
-::
 
-    $ conda activate nrv-env
-    $ cd NRV
-    $ source bash_nrv
+.. code:: bash
+
+    conda activate nrv-env
+    cd NRV
+    source bash_nrv
 
 4. Create a branch for local development:
-::
 
-    $ git checkout -b name-of-your-contribution
+.. code:: bash
+
+    git checkout -b name-of-your-contribution
 
 You should be able to make changes locally
 
 5. Once changes are made, you should use the test interface (see bellow for details) to lint and test you code:
-::
 
-    $ cd tests
-    $ ./NRV_test --syntax
-    $ ./NRV_test --all
+.. code:: bash
+
+    cd tests
+    ./NRV_test --syntax
+    ./NRV_test --all
 
 If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
 6. Please do not forget to update the documentation if your changes imply knowledge from the end user. To be able to compile the documentation, few dependancies have to be considered:
-::
 
-    $ pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton nbsphinx sphinx_gallery
+.. code:: bash
+
+    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton nbsphinx sphinx_gallery
 
 Once installed, you should be able to build the documentation with the following command:
-::
+
+.. code:: bash
 
     python3 -m sphinx.cmd.build -b html docs/ docs/_build/
 
 .. tip::
     To document new features, example should be added as `.rst <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ file in the folder ``NRV.docs.examples``. It can be more convenient to write the example in a *jupiter notebook* to check the code and then convert it in using `nbconvert <https://nbconvert.readthedocs.io/en/latest/>`_ and this command line:
-        ::
+
+        .. code:: bash
 
             jupyter nbconvert --to rst your_fname.ipynb
 
 7. Commit your changes and push you branch to GitHub:
-::
 
-    $ git add -A
-    $ git commit -m "Your message containing a description of contribution and changes"
-    $ git push origin name-of-your-contribution
+.. code:: bash
+
+    git add -A
+    git commit -m "Your message containing a description of contribution and changes"
+    git push origin name-of-your-contribution
 
 In brief, commit messages should follow these conventions:
     - Always contain a subject line which briefly describes the changes made. For example “Update CONTRIBUTING.rst”.
@@ -87,7 +95,7 @@ NRV is build with its own custom system for testing and validating new functiona
 
 In the sources of NRV, a *test* folder is dedicated to tests: 
 
-::
+.. code:: bash
 
     NRV/
     ├── docker/
@@ -100,20 +108,20 @@ In the sources of NRV, a *test* folder is dedicated to tests:
 
 The *NRV_test* file is a script that act as a test launcher. It should be called from the command line using:
 
-::
+.. code:: bash
 
     ./NRV_test
 
 This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
   - "-d", "--dependances": Check NEURON and COMSOL installation
   - "-l", "--list": Print the name of all unitary tests, an optional integer can be added to arguments to specify the number of columns used to print
+  - "-f", "--find": Select only tests containing one or multiple substrings
   - "-u", "--unitary_tests": Launch all unitary tests, test result figures are saved in './unitary_test/figures' folder, all the tests should be True, numerical values for debug only
   - "-s", "--syntax": Lint nrv syntax source code
   - "-a", "--all": launches even potentially failing tests due to third party softwares such as COMSOL
   - "-t", "--target": ID of the tests to simulate, if a digit is replaced by '_' all the tests
   - "-F", "--fenics": Launch all and only FEniCS related tests
   - "-C", "--comsol": Launch all and only COMSOL related tests
-  - "-p", "--python": Forces Python as interpreted instead of *nrv2calm*
 
 Note that running all scripts without errors and with all prints set to 'True' (no 'False') is a necessary condition for a PR to be accepted.
 If errors occurred, the list of failed tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
@@ -179,6 +187,50 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
     *   - 900
         - 950
         - Machine and autoconfig
+
+Make a release
+==============
+The following steps must be completed in the correct order to properly launch a release:
+ 1. **Set the master branch**: by merging the dev branch into it. *Authorization from a major contributor is required for this step*.
+
+ 2. **Test the compilation**: by running from the ``NRV/`` directory the following command:
+
+    .. code:: bash
+
+        python3 -m pip install --upgrade build
+        python3 -m build
+
+ 3. **bump2version**: to automatically update the version value in the source code (``setup.py`` and ``NRV/nrv/__init__.py``)
+
+    .. code:: bash
+
+        bump2version type_of_release
+        git push
+
+    .. note::
+        There are three types of release:
+
+        .. code:: bash
+
+            bump2version patch : X.Y.Z ---> X.Y.Z+1
+            bump2version minor : X.Y.Z ---> X.Y+1.0
+            bump2version major : X.Y.Z ---> X+1.0.0
+
+    .. tip::
+        `bump2version <https://pypi.org/project/bump2version/>`_ is pip-installable:
+
+        .. code:: bash
+
+            pip install bump2version
+
+ 4. **Update the release number**: using the following git command:
+
+    .. code:: bash
+
+        git push --tags
+
+    .. warning::
+        Don't forget to run the ``git push`` command between the ``bump2version`` and the ``git push --tags``; otherwise, the publication on PyPI will fail.
 
 
 Public roadmap

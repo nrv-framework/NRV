@@ -2,37 +2,59 @@
 Generate axons populations
 ==========================
 
-Previously simulable objects consists in axons, fascicles and nerve. The last two contain several axons. To create new populations of axons, NRV comes with two functionalities described below:
+Simulable objects are either single axons, fascicles and nerve. The last two contain one more many axons. To create new populations of axons, NRV comes with two functionalities described below:
 
 - Tools for automated generation of populations with controlled diameters, based on experimental observations.
 
 - A packing algorithm that shuffles the generated population on the spacial grid, and that shuffles nodes of Ranvier for myelinated fibers.
 
-It is also possible to use already created and placed populations of fibers:
+.. tip::
+    It is also possible to use already created and placed populations of fibers as shown bellow.
 
-- populations of axons are stored in the framework at the path ``nrv/_misc/pops`` in ``.pop`` files. These files are equivalents to CSV files with the following columns:
+Population generation
+=====================
 
-    1. Diameter of the fiber.
+Axon population
+---------------
 
-    2. The value 1.0 for myelinated fibers, the value 0.0 for unmyelinated fibers.
+Populations of axons are stored in the framework under the path ``nrv/_misc/pops`` as ``.pop`` files. These files follow a CSV-like structure with the following columns:
 
-    3. Not a Number (`Nan`).
+.. list-table:: 
+   :header-rows: 1
 
-    4. Not a Number (`Nan`).
+   * - Fiber diameter
+     - Fiber type
+     - Not a Number
+     - Not a Number
+   * - (in µm)
+     - (1.0 for myelinated / 0.0 for unmyelinated)
+     - (`NaN`)
+     - (`NaN`)
 
-The two last column are present to prevent from confusion with placed populations (see below) and code compatibility. There are 6 different populations for different total number of axons: 100, 200, 500, 1000, 2000, 5000.
+.. note::
+    The last two columns are placeholders used to maintain compatibility with placed populations (see below) and to ensure consistent data formatting in the code.
 
-- placed populations of axons are stored in the path ``nrv/_misc/pops`` in ``.pop`` files.These files are equivalents to CSV files with the following columns:
+Six predefined unplaced populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
 
-    1. Diameter of the fiber.
+Axon placed population
+----------------------
 
-    2. The value 1.0 for myelinated fibers, the value 0.0 for unmyelinated fibers.
+Placed populations of axons are stored under the path ``nrv/_misc/pops`` in ``.pop`` files. These files are similar to CSV files and contain the following columns:
 
-    3. y-axis coordinate of the fiber.
+.. list-table:: 
+   :header-rows: 1
 
-    4. z-axis coordinate of the fiber.
+   * - Fiber diameter
+     - Fiber type
+     - y-axis coordinate
+     - z-axis coordinate
+   * - (in µm)
+     - (1.0 for myelinated / 0.0 for unmyelinated)
+     - (in µm)
+     - (in µm)
 
-There are 6 different populations for different total number of axons: 100, 200, 500, 1000, 2000, 5000.
+Six predefined placed populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+
 
 Diameter distributions
 ======================
@@ -40,27 +62,21 @@ Diameter distributions
 Create ex-novo population
 -------------------------
 
-To create ex-novo population of fibers, a function called ``create_axon_population`` can be used. This function returns:
+To create a new population of fibers from scratch, you can use the function :meth:`~nrv.nmod.create_axon_population`. This function returns four lists:
 
-- a list of axons diameters in :math:`\mu m`
-
-- a list corresponding to axons type as: the value 1.0 for myelinated fibers, the value 0.0 for unmyelinated fibers.
-
-- a list of the subgroup of myelinated fiber diameters,
-
-- a list of the subgroup of myelinated fiber diameters,
+- A list of axon diameters (in :math:`\mu m`).
+- A list indicating axon types, where ``1.0`` corresponds to myelinated fibers and ``0.0`` to unmyelinated fibers.
+- A list of diameters for the subgroup of myelinated fibers.
+- A list of diameters for the subgroup of unmyelinated fibers.
 
 The arguments for the function are:
 
-- N: (``int``) the number of axon to generate for the population (nnmyelinated and myelinated)
+- ``N`` (``int``): Number of axons to generate in the population (both myelinated and unmyelinated).
+- ``percent_unmyel`` (``float``): Ratio of unmyelinated axons in the population. Must be between 0 and 1.
+- ``M_stat`` (``str``): Name of the statistical distribution in the library, or a path to a custom CSV file containing myelinated fiber diameter statistics.
+- ``U_stat`` (``str``): Name of the statistical distribution in the library, or a path to a custom CSV file containing unmyelinated fiber diameter statistics.
 
-- percent_unmyel: (``float``) ratio of unmyelinated axons in the population. Should be between 0 and 1.
-
-- M_stat: (``str``) name of the statistic in the library or path to a new library in csv for myelinated diameter statistics.
-
-- U_stat: (``str``) name of the statistic in the library or path to a new library in csv for unmyelinated diameter statistics.
-
-There are predefined statistics taken from the litterature for unmyelinated fibers. These statistics are then interpolated and used as generators.
+There are predefined statistical distributions available for unmyelinated fibers, derived from literature. These distributions are interpolated and used as random generators for axon diameters.
 
 .. list-table:: pre-defined statistics for unmyelinated fibers
     :widths: 50 150
@@ -108,6 +124,8 @@ These statistics (grey curves), and their interpolations in NRV (blue curves) an
 
 .. image:: ../images/distributions_myelinated.png
 
+The script use to plot those histograms is made available in the :doc:`examples list<../examples/generic/13_axon_distributions>`
+
 The scientific references used are:
 
 - [stat1] Ochoa, J., & Mair, W. G. P. (1969). The normal sural nerve in man: I. Ultrastructure and numbers of fibres and cells. Acta neuropathologica, 13, 197-216.
@@ -115,6 +133,7 @@ The scientific references used are:
 - [stat2] Jacobs, J. M., & Love, S. (1985). Qualitative and quantitative morphology of human sural nerve at different ages. Brain, 108(4), 897-924.
 
 - [stat3] Schellens, R. L., van Veen, B. K., Gabreëls‐Festen, A. A., Notermans, S. L., van't Hof, M. A., & Stegeman, D. F. (1993). A statistical approach to fiber diameter distribution in human sural nerve. Muscle & Nerve: Official Journal of the American Association of Electrodiagnostic Medicine, 16(12), 1342-1350.
+
 
 
 Describe a new statistical law
@@ -134,90 +153,29 @@ Users can find the predefined statistics at the path ``nrv/_misc/stats/``. Addin
 Axon Packing
 ============
 
-Once generated, the population can be packed, i.e. fibers are automatically placed on the y-z plane with a given proximity and with no overlap. Starting on a grid, axons are automatically migrated in the direction of a so-called gravity center during a number of iterations. At each step, a velocity for each axon is computed, considering the attraction to the gravity center and the collisions that can occur between cells with a minimal distance to respect between fibers. The animation below is an example of population packing:
+Once generated, the population can be packed, i.e. fibers are automatically placed on the y-z plane with a given proximity and with no overlap. Starting on a grid, axons are automatically migrated in the direction of a so-called gravity center during a number of iterations. At each step, a velocity for each axon is computed, considering the attraction to the gravity center and the collisions that can occur between cells with a minimal distance to respect between fibers. The animation below is an example of population packing.
 
 .. image:: ../images/packing_anim.gif
 
-the packing is performed with a single function called ``axon_packer``. This function returns:
-
-- y_axons: (numpy.array) an array containing the y coordinates of axons, in :math:`\mu m``
-
-- z_axons: (numpy.array) an array containing the z coordinates of axons, in :math:`\mu m``
-
-This function is designed to interface with the ``create_axon_population`` detailed previously. Especially, the maint inputs of the ``axon_packer`` function are:
-
-- diameters: np.array Array containing all the diameters of the axon population to pack
-
-- y_gc: float y coordinate of the gravity center for the packing, in um
-
-- z_gc: float z coordinate of the gravity center for the packing, in um
-
-- delta: (float) minimal inter-axon distance to respect before considering collision, in um, (by default set to 0.5)
-
-- n_iter: (int) Number of iterations (by default set to 20000, please note that **large population require more iterations**)
-
-Some arguments of the algorithms can be tuned:
-
-- v_att: float vector norm for attraction velocity, in um per iteration
-
-- v_rep: float vector norm for repulsion velocity, in um per iteration
-
-The process can be monitored (*monitoring used to generate the animation above as an example*), using the following arguments:
-
-- monitor: (bool) monitor the packing algorithm by saving regularly plot of the population
-
-- monitoring_Folder: (str) where to save the monitoring plots
-
-- n_monitor: (int) number of iterration between two successive plots when monitoring the algorithm 
+The packing is performed with a single function called :meth:`~nrv.nmod.axon_packer`, and the function is designed to interface with the :meth:`~nrv.nmod.create_axon_population` function detailed previously. 
 
 
 Interacting with populations
 ============================
 
-It is also possible to plot the population on a ``matplotlib`` figure using the function ``plot_population``, with the follwing arguments:
+It is also possible to plot the population on a ``matplotlib`` figure using the function :meth:`~nrv.nmod.plot_population`.
 
-- diameters: (numpy.array) diameters of the axons to display, in um
+Saving a placed population to a ``.ppop`` file can be done with the function :meth:`~nrv.nmod.save_axon_population`, which accepts the following parameters:
 
-- y_axons: (numpy.array) y coordinate of the axons to display, in um
+Loading a ``.ppop`` file can be done using the function :meth:`~nrv.nmod.load_axon_population`.
 
-- z_axons: (numpy.array) z coordinate of the axons to display, in um
+An example demonstrating the proper use of the packer and plotting/saving tools is provided in **example XXX**
 
-- ax: (matplotlib.axes) (sub-) plot of the matplotlib figure
+.. seealso::
 
-- size: (float) size of the window as a square side, in um
+   **TODO EXAMPLE**
 
-- axon_type: (numpy.array) type of the axon (Myelinated = 1; Unmyelinated = 0) - Optionnal
+.. warning::
 
-- title: (str )title of the figure
+   In a future release of the code, we plan to create an ``axon_population`` class that will encapsulate all these methods. This class will provide a more convenient way to manipulate populations and sub-populations of axons through logical and arithmetic operations, filtering, and more.
 
-- y_gc: (float) y coordinate of the gravity, in um
-
-- z_gc: (float) z coordinate of the gravity, in um
-
-Saving a placed population to a ``.ppop`` file can be done using the ``save_axon_population`` function, with the following parameters:
-
-- f_name: (str) name of the file to store the population
-
-- axons_diameters: (np.array) array containing the axons diameters
-
-- axons_type: (np.array) array containing the axons type ('1' for myelinated, '0' for unmyelinated)
-
-- y_axons: (np.array) y coordinate of the axons to store, in um
-
-- z_axons: (np.array) z coordinate of the axons to store, in um
-
-- comment: (str) comment added in the header of the file, optional
-
-Loading a ``.ppop`` file can be done using the function ``load_axon_puplation`` taking as argument a string with the filename or path and returning:
-
-- axons_diameters: (numpy.array) Array containing all the diameters of the generated axon population
-
-- axons_type: (numpy.array) Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-
-- y_axons: (numpy.array) y coordinate of the axons, in um
-
-- z_axons: (numpy.array) z coordinate of the axons, in um
-
-- M_diam_list: (numpy.array) list of myelinated only diameters
-
-- U_diam_list: (numpy.array) list of unmyelinated only diamters

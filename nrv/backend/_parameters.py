@@ -4,11 +4,11 @@ Access and modify NRV Parameters.
 
 import configparser
 import os
-from ._NRV_Singleton import NRV_singleton
 from pathlib import Path
-from multiprocessing import Process, current_process, parent_process, active_children, Lock
 
-is_master_proc = current_process().name=="MainProcess"
+from ._NRV_Mproc import _proc_is_alone, _proc_label
+from ._NRV_Singleton import NRV_singleton
+
 
 class nrv_parameters(metaclass=NRV_singleton):
     """
@@ -82,11 +82,11 @@ class nrv_parameters(metaclass=NRV_singleton):
     ############################
     @property
     def is_alone(self):
-        return current_process().name=="MainProcess" and len(active_children())==0
+        return _proc_is_alone
     
     @property
     def proc_label(self):
-        return current_process().name
+        return _proc_label
 
     def get_gmsh_ncore(self):
         """

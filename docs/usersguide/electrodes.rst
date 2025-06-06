@@ -2,58 +2,79 @@
 Electrodes
 ==========
 
-Electrodes are related to field computation, and are by definition extracellular electrodes in NRV. 
-The implementation does not require the user to worry about computational considerations.
-It is possible for experienced user to add new custom electrodes.
+Electrodes in NRV are associated with field computation and are, by definition, extracellular.  
+The implementation is designed to abstract away numerical and computational details, allowing the user to focus on modeling.  
+However, advanced users can implement and integrate custom electrode types if needed.
 
-Overview of existing electrodes, classes and custom electrodes possibilities
-----------------------------------------------------------------------------
+Overview of Existing Electrodes, Classes, and Custom Electrode Capabilities
+---------------------------------------------------------------------------
 
-There are few classes that handle the electrodes in NRV. 
-Currently, NRV handles 3 electrode families for simulations: Point Source electrodes, LIFE and CUFF.
-The last one can have one or more electrical contacts for simulation only.
+Several classes are available in NRV to handle electrode behavior.  
+Currently, NRV supports three main electrode families for simulation:
 
-A class diagram is given hereafter:
+- **Point Source electrodes**
+- **LIFE electrodes**
+- **CUFF electrodes** (which may contain one or more electrical contacts)
+
+These electrodes are implemented specifically for simulation use.
+
+A class diagram showing the structure and relationships of electrode classes is provided below:
 
 .. image:: ../images/electrodes_classdiagram.png
 
-Two classes are abstract and not accessible by the end user:
+Abstract Base Classes
+~~~~~~~~~~~~~~~~~~~~~
 
-* ``electrodes``: this class is used the interface for simulable object to get simulation performed automatically. Even experienced user should not interface this class.
+Two classes are abstract and not intended for direct use by end users:
 
-* ``FEM_electrodes``: this class is used for automated FEM simulation setup and computations. New electrodes should all be declared as class that inherit from FEM_electrodes.
+* :class:`~nrv.fmod.electrode`: this class serves as the interface between electrodes and simulable objects to automate the simulation process.  
+  Even advanced users should not interact with this class directly.
 
-The last class enables experienced user to define other families of electrodes. 
-It is worth considering that such process implies to dive into the FEM definition of NRV to add electrode geometry to simulations. 
-This process is not described in detail here, and developer should refer to :ref:`API documentation<modules>`.
+* :class:`~nrv.fmod.FEM_electrode`: this class is responsible for automated FEM simulation setup and execution.  
+  Custom electrodes must inherit from this base class.  
+  Implementing new electrodes at this level requires knowledge of NRV's FEM architecture and simulation internals.  
+  For such advanced usage, refer to the :ref:`API documentation <modules>`.
 
-Four classes are directly accessible by the end user:
+Accessible Electrode Classes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ``point_source_electrodes``,
+Four classes are directly accessible to end users:
 
-* ``LIFE_electrodes``,
+* :class:`~nrv.fmod.point_source_electrode`
+* :class:`~nrv.fmod.LIFE_electrode`
+* :class:`~nrv.fmod.CUFF_electrode` – for single-contact CUFF electrodes
+* :class:`~nrv.fmod.CUFF_MP_electrode` – for multipolar CUFF electrodes
 
-* ``CUFF_electrodes``, for CUFF electrodes with one circular contact
+Each class provides specific features and customization options described in detail below.
 
-* ``CUFF_MP_electrodes``, for multipolar CUFF electrodes.
+Common Methods Across All Electrodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-These classes are further detailed bellow.
+All electrode classes share a set of common methods:
 
-Few methods are generic to all electrodes:
+Common Methods Across All Electrodes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* as all electrodes have individual identifiers (ID), there are getter and setter methods: `get_ID_number`, `set_ID_number`,
+All electrode classes share a set of common methods:
 
-* as all electrodes have a footprint (see scientific foundation chapter), there are getter and setter methods: `get_footprint`, `set_footprint`. This last method should be avoided by non-experienced users;
+* **ID management**:
+  
+  - :meth:`~nrv.fmod.electrode.get_ID_number` – Retrieves the electrode's ID.
+  - :meth:`~nrv.fmod.electrode.set_ID_number` – Assigns a new ID to the electrode.
 
-* a method to force footprint computation by clearing the existing one: `clear_footprint`,
+* **Footprint access** (see *Scientific Foundation* section for more details):
+  
+  - :meth:`~nrv.fmod.electrode.get_footprint` – Retrieves the current footprint of the electrode.
+  - :meth:`~nrv.fmod.electrode.set_footprint` – Sets a custom footprint (advanced users only).
 
-* a method to perform geometrical translation `translate` with the following parameters: `
+* **Footprint clearing**:
+  
+  - :meth:`~nrv.fmod.electrode.clear_footprint` – Forces recalculation by clearing the existing footprint.
 
-    * x (float) x-axis value for the translation in µm
+* **Geometrical translation**:
+  
+  - :meth:`~nrv.fmod.electrode.translate` – Translates the electrode in 3D space (in µm).
 
-    * y (float) y-axis value for the translation in µm
-    
-    * z (float) z-axis value for the translation in µm
 
 Point Source Electrodes
 -----------------------
@@ -77,62 +98,64 @@ Point Source Electrode can be declared with the following parameters:
 
 * ID (int) electrode identification number, set to 0 by default. 
 
-**The user should take care of having cohere ID for electrodes.**
+LIFE Electrodes
+---------------
 
+LIFE stands for **Longitudinal Intra-Fascicular Electrodes**.  
+These electrodes are typically inserted into a nerve fascicle using a **thin wire**, which is *not currently modeled* in the simulation. The electrode is assumed to be **aligned longitudinally with the nerve fibers**.
 
-LIFE
-----
+When a LIFE electrode is placed inside a fascicle—or more generally within a nerve—NRV automatically performs a check to **exclude overlapping fibers** from the simulation to ensure anatomical realism.
 
-LIFE stands for Longitudinal Intra-Fascicular Electrodes. 
-These electrodes are usually inserted by a **thin wire that is not taken into account in simulations yet**.
-We assume that these electrodes are parallel to fibers. 
-When setup inside a fascicle, or more generally in a nerve, a test to exclude overlapping fibers from the simulation is automatically performed.
-LIFE and the associated geometrical parameters is illustrated bellow:
+The geometry and configuration of a LIFE electrode is illustrated below:
 
 .. image:: ../images/electrodes_LIFE.png
 
-LIFE can be declared with the following parameters:
+A LIFE electrode can be instantiated using the following parameters:
 
-* label (str) name of the electrode in the COMSOL file (optional)
+* ``label`` (*str*, optional) – name of the electrode (e.g., from the COMSOL geometry)
+* ``D`` (*float*) – diameter of the electrode, in µm
+* ``length`` (*float*) – length of the electrode, in µm
+* ``x_shift`` (*float*) – longitudinal offset from the origin of the simulation domain, in µm
+* ``y_c`` (*float*) – y-coordinate of the electrode center, in µm
+* ``z_c`` (*float*) – z-coordinate of the electrode center, in µm
+* ``ID`` (*int*, optional) – unique identifier of the electrode (default: ``0``)
 
-* D (float) diameter of the electrode, in µm
 
-* length (float) length of the electrode, in µm
-
-* x_shift (float) geometrical offset from the one end (x=0) of the simulation
-
-* y_c (float) y-coordinate of the center of the electrode, in µm
-
-* z_c (float) z-coordinate of the center of the electrode, in µm
-
-* ID (int) electrode identification number, set to 0 by default. 
-
-CUFF electrodes
+CUFF Electrodes
 ---------------
 
-CUFF electrodes are ring electrodes implanted outside the nerve and directly in contact with the epineurium. 
-The schematized description of these electrodes is provided here bellow:
+CUFF electrodes are **ring-shaped electrodes** implanted **externally around the nerve**, in direct contact with the **epineurium**.  
+They are often used for non-penetrating stimulation or recording. A schematic representation is shown below:
 
 .. image:: ../images/electrodes_CUFF.png
 
-* Mono-contact CUFF electrodes: Only one contact surround the nerve. The `CUFF_electrode` can be declared with the following parameters:
+There are two types of CUFF electrodes handled in NRV:
 
-    * label (str): name of the electrode in the COMSOL file (optional)
+**Mono-contact CUFF electrodes**  
+This type includes a single contact encircling the nerve.  
+The :class:`~nrv.fmod.CUFF_electrode` class can be instantiated using the following parameters:
 
-    * x_center (float): x-position of the CUFF center in µm, by default 0 
+* ``label`` (*str*, optional) – name of the electrode (e.g., from the COMSOL geometry)
+* ``x_center`` (*float*) – x-position of the center of the CUFF, in µm (default: ``0``)
+* ``contact_length`` (*float*) – length of the contact site along the x-axis, in µm (default: ``100``)
+* ``is_volume`` (*bool*) – if ``True``, the contact is retained in the mesh as a volume (default: ``True``)
+* ``contact_thickness`` (*float*) – thickness of the contact, in µm (default: ``5``)
+* ``insulator`` (*bool*) – if ``True``, an insulating ring surrounds the contact (default: ``True``)
+* ``insulator_thickness`` (*float*) – thickness of the insulator ring, in µm (default: ``20``)
+* ``insulator_length`` (*float*) – length of the insulating ring along the x-axis, in µm (default: ``1000``)
 
-    * contact_length (float): length (width) along x of the contact site in µm, by default 100
+**Multi-contact CUFF electrodes**  
+These electrodes extend the mono-contact CUFF configuration to include multiple, evenly spaced contacts.  
+The :class:`~nrv.fmod.CUFF_MP_electrode` class inherits from :class:`~nrv.fmod.CUFF_electrode` and introduces an additional parameter:
 
-    * is_volume (bool): if True the contact is kept on the mesh as a volume, by default True
+* ``N_contact`` (*int*) – number of contact sites on the CUFF (default: ``4``)
 
-    * contact_thickness (float): thickness of the contact site in µm, by default 5
+.. note::
 
-    * insulator(bool): insulator ring over the electrode (no conductivity), by default True
+   CUFF electrodes are suitable for simulations involving external stimulation or recording interfaces. As with other electrode types, proper assignment of ``ID`` values is important when using multiple electrodes in a simulation.
 
-    * insulator_thickness (float): thickness of the insulator ring in µm, by default 20
 
-    * insulator_length (float): length (width) along x of the insulator ring in µm, by default 1000
+.. note::
 
-* Multi-contact CUFF electrodes: this class directly inherit from the monopolar CUFF. There is one additional parameter for instantiation:
+   As with all electrode types in NRV, it is the **user's responsibility** to assign consistent and unique ``ID`` values when defining multiple electrodes in a simulation.
 
-    *  N_contact (int): Number of contact site of the electrode, by default 4.

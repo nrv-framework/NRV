@@ -15,6 +15,8 @@ all_tests = sorted(os.listdir(unit_test_folder), reverse=True)
 digits = [str(k) for k in range(10)]
 all_tests [:] = (value for value in all_tests if value[0] in digits)
 all_tests.reverse()
+
+run_all = True  # Without any arg run all tests
 unit_test_figures = "./unitary_tests/figures/"
 unit_test_results = "./unitary_tests/results/"
 out_file = "log_NRV_test.txt"
@@ -24,13 +26,13 @@ out_file = "log_NRV_test.txt"
 parser = argparse.ArgumentParser(description="NeuRon Virtualizer automated test module")
 parser.add_argument("-d", "--dependances", action="store_true", dest="DEP_TEST",help="Check NEURON and COMSOL installation")
 parser.add_argument("-l", "--list", dest="LIST_TEST",type=int, nargs="?",default=-1, help="Print the name of all unitary tests")
+parser.add_argument("-f", "--find", dest="FIND_TEST",type=str, nargs="+",default="", help="Select only tests containing one or multiple substrings")
 parser.add_argument("-u", "--unitary_tests", action="store_true", dest="UNIT_TEST",help="Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only")
 parser.add_argument("-s", "--syntax", action="store_true", dest="SYNTAX_TEST",help="Lint nvr syntax source code")
 parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="launches even potentially failing tests due to third party softwares such as COMSOL")
 parser.add_argument("-t", "--target", dest="TARGET", type=str, nargs="+" ,default='0', help="ID of the tests to simulate, if a digit is replaced by '_' all the tests")
 parser.add_argument("-F", "--fenics", action="store_true", dest="FENICS_TESTS",help="Launch all and only FEniCS related tests")
 parser.add_argument("-C", "--comsol", action="store_true", dest="COMSOL_TESTS",help="Launch all and only COMSOL related tests")
-parser.add_argument("-p", "--python", action="store_true", dest="FORCE_PYTHON",help="Forces Python as interpreted instead of nrv2calm")
 
 
 if __name__ == "__main__":
@@ -45,24 +47,32 @@ if __name__ == "__main__":
     if args.FENICS_TESTS and args.COMSOL_TESTS:
         included_test_keys += ["FENxCOM"]
 
-    nrv_cmd = "nrv2calm "
+    # keep only targeted tests
+    if len(args.FIND_TEST):
+        sel_tests = []
+        if isinstance(args.FIND_TEST, str):
+            args.FIND_TEST = [args.FIND_TEST]
+        sel_tests = [_t for _t in all_tests if all([_f in _t for _f in args.FIND_TEST])]
+        print(f"{len(sel_tests)} contains {args.FIND_TEST}:")
+    else:
+        sel_tests = all_tests
+
     if sys.platform == "darwin":
         python_cmd = "python "
     else:
         python_cmd = "python3 "
 
-    launcher = nrv_cmd
-    if args.FORCE_PYTHON:
-        launcher = python_cmd
+    launcher = python_cmd
 
     if args.DEP_TEST:
+        run_all = False
         ###############################
         ## test neurnon installation ##
         ###############################
         print("Testing NEURON installation")
         try:
             import neuron
-        except Error:
+        except ImportError:
             print("--- Please install neuron (https://www.neuron.yale.edu/neuron/)")
         else:
             version = neuron.__version__
@@ -87,13 +97,15 @@ if __name__ == "__main__":
                 print("Error launching COMSOL: " + err_message)
         else:
             print("--- found access to a COMSOL server")
+
     if not args.LIST_TEST == -1:
+        run_all = False
         if args.LIST_TEST is None:
             N_col = 2
         else:
             N_col = int(args.LIST_TEST)
         tests = []
-        tests[:] = all_tests[:]
+        tests[:] = sel_tests[:]
         i=0
         i_break = 5000
         while i < len(tests) and i_break > 0:
@@ -109,6 +121,7 @@ if __name__ == "__main__":
         args.LIST_TEST = False
 
     if args.TARGET != '0':
+        run_all = False
         N = len(args.TARGET)
         offset = 0
         ########################################
@@ -167,18 +180,17 @@ if __name__ == "__main__":
             if not os.path.exists(unit_test_results+"mesh/"):
                 os.makedirs(unit_test_results+"mesh/")
             if not os.path.exists(unit_test_results+"outputs/"):
-                os.makedirs(unit_test_results+"outputs/") 
+                os.makedirs(unit_test_results+"outputs/")
 
             ###############################
             ## launch the targated tests ##
             ###############################
-            nrv_cmd = "nrv2calm "
             if sys.platform == "darwin":
                 python_cmd = "python "
             else:
                 python_cmd = "python3 "
 
-            for test in all_tests:
+            for test in sel_tests:
                 if str(target_script_key) in test:
                     print(test)
                     test_out = os.system(launcher+unit_test_folder+test)
@@ -187,7 +199,15 @@ if __name__ == "__main__":
     else:
         args.TARGET = False
     
-    if args.UNIT_TEST or (not args.DEP_TEST and not args.LIST_TEST and not args.UNIT_TEST and not args.SYNTAX_TEST and not args.TARGET):
+    # Pylint test
+    if args.SYNTAX_TEST:
+        run_all = False
+        print("Applying pylint to nrv package")
+        test_out = os.system("pylint nrv --disable=C > ./code_review/nrv_lint.txt")
+        print("--- result saved in ./code_review/")
+
+
+    if args.UNIT_TEST or run_all:
         ###################################
         ## clean the test/figures folder ##
         ###################################
@@ -213,7 +233,7 @@ if __name__ == "__main__":
         test_nb = 0
         failed_test = []
 
-        for test in all_tests:
+        for test in sel_tests:
             launch_test = True
             if not args.ALL_TESTS:
                 if args.FENICS_TESTS or args.COMSOL_TESTS:
@@ -248,8 +268,3 @@ if __name__ == "__main__":
         file_object.write(line)
         file_object.close()
 
-
-    if args.SYNTAX_TEST:
-        print("Applying pylint to nrv package")
-        test_out = os.system("pylint nrv --disable=C > ./code_review/nrv_lint.txt")
-        print("--- result saved in ./code_review/")
