@@ -26,7 +26,7 @@ out_file = "log_NRV_test.txt"
 parser = argparse.ArgumentParser(description="NeuRon Virtualizer automated test module")
 parser.add_argument("-d", "--dependances", action="store_true", dest="DEP_TEST",help="Check NEURON and COMSOL installation")
 parser.add_argument("-l", "--list", dest="LIST_TEST",type=int, nargs="?",default=-1, help="Print the name of all unitary tests")
-parser.add_argument("-f", "--find", dest="FIND_TEST",type=str, nargs="+",default="", help="Print the name of all unitary tests")
+parser.add_argument("-f", "--find", dest="FIND_TEST",type=str, nargs="+",default="", help="Select only tests containing one or multiple substrings")
 parser.add_argument("-u", "--unitary_tests", action="store_true", dest="UNIT_TEST",help="Launch all unitary tests, test result figures are saved in ./unitary_test/figures folder, all thest should be True, numerical values for debug only")
 parser.add_argument("-s", "--syntax", action="store_true", dest="SYNTAX_TEST",help="Lint nvr syntax source code")
 parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="launches even potentially failing tests due to third party softwares such as COMSOL")
