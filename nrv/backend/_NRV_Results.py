@@ -190,7 +190,7 @@ class sim_results(NRV_results):
             fs = 1 / self["dt"]
             if isinstance(f0, Iterable):
                 new_sig = np.zeros(self[my_key].shape)
-                for k in range(len(self[my_key])): 
+                for k in range(len(self[my_key])):
                     new_sig[k, :] = self[my_key][k]
                     offset = self[my_key][k][0]
                     new_sig[k, :] = new_sig[k, :] - offset
@@ -206,7 +206,10 @@ class sim_results(NRV_results):
                 new_sig = np.zeros(self[my_key].shape)
                 for k in range(len(self[my_key])):
                     offset = self[my_key][k][0]
-                    new_sig[k, :] = signal.lfilter(b_notch, a_notch, self[my_key][k] - offset) + offset
+                    new_sig[k, :] = (
+                        signal.lfilter(b_notch, a_notch, self[my_key][k] - offset)
+                        + offset
+                    )
             self[my_key + "_filtered"] = new_sig
 
     def plot_stim(self, IDs=None, t_stop=None, N_pts=1000, ax=None, **fig_kwargs):

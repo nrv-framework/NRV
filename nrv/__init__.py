@@ -1,5 +1,5 @@
 # pylint: skip-file
-""" NRV: NeuRon Virtualizer, modeling of the Nervous System,
+"""NRV: NeuRon Virtualizer, modeling of the Nervous System,
 
 NRV is a pythonic framework for simulating bio-electronic phenomena and
 interface-systems, taking into account both neural dynamics and extracellular
@@ -60,6 +60,7 @@ __project__ = "NeuRon Virtualizer (NRV)"
 # GMSH must be imported before neuron to prevent installation issues
 import gmsh
 import os
+
 nrn_options = "-nogui"
 os.environ["NEURON_MODULE_OPTIONS"] = nrn_options
 import neuron

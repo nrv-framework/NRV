@@ -12,6 +12,7 @@ from ._machine_config import MachineConfig
 
 this_machine = MachineConfig()
 
+
 class nrv_parameters(metaclass=NRV_singleton):
     """
     A class for NRV parameters used to gather parameters
@@ -24,7 +25,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         if type(self) in nrv_parameters._instances:
             self = self._instances[type(self)]
         else:
-            self.nrv_path = str(Path(os.path.dirname(__file__)).parent.absolute()) 
+            self.nrv_path = str(Path(os.path.dirname(__file__)).parent.absolute())
             self.dir_path = self.nrv_path + "/_misc"
             self.config_fname = self.dir_path + "/NRV.ini"
             self.load()
@@ -58,7 +59,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         self.LOG_Status = self.machine_config.get("LOG", "LOG_STATUS") == "True"
         self.VERBOSITY_LEVEL = int(self.machine_config.get("LOG", "VERBOSITY_LEVEL"))
 
-    def nmod_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+    def nmod_autoset(self, threshold: float = 20.0, ncore_nojob: int = 0):
         """
         Automatically set nmod core number based on the number of available cores
         and a threshold.
@@ -70,13 +71,16 @@ class nrv_parameters(metaclass=NRV_singleton):
         ncore_nojob : int, optional
             Number of cores preserve from computing with NRV, by default 0
         """
-        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        ncores_auto = (
+            int(this_machine.get_Available_CPU_number(threshold=threshold))
+            - ncore_nojob
+        )
         if ncores_auto > 1:
             self.set_nmod_ncore(ncores_auto)
         else:
             self.set_nmod_ncore(1)
 
-    def optim_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+    def optim_autoset(self, threshold: float = 20.0, ncore_nojob: int = 0):
         """
         Automatically set optim core number based on the number of available cores
         and a threshold.
@@ -88,13 +92,16 @@ class nrv_parameters(metaclass=NRV_singleton):
         ncore_nojob : int, optional
             Number of cores preserve from computing with NRV, by default 0
         """
-        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        ncores_auto = (
+            int(this_machine.get_Available_CPU_number(threshold=threshold))
+            - ncore_nojob
+        )
         if ncores_auto > 1:
             self.set_optim_ncore(ncores_auto)
         else:
             self.set_optim_ncore(1)
 
-    def gmsh_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+    def gmsh_autoset(self, threshold: float = 20.0, ncore_nojob: int = 0):
         """
         Automatically set gmsh core number based on the number of available cores
         and a threshold.
@@ -106,7 +113,10 @@ class nrv_parameters(metaclass=NRV_singleton):
         ncore_nojob : int, optional
             Number of cores preserve from computing with NRV, by default 0
         """
-        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        ncores_auto = (
+            int(this_machine.get_Available_CPU_number(threshold=threshold))
+            - ncore_nojob
+        )
         if ncores_auto > 1:
             self.set_gmsh_ncore(ncores_auto)
         else:
@@ -132,14 +142,13 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         self.VERBOSITY_LEVEL = i
 
-
     ############################
     # Multi process parameters #
     ############################
     @property
     def is_alone(self):
         return _proc_is_alone
-    
+
     @property
     def proc_label(self):
         return _proc_label
@@ -150,7 +159,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         return self.GMSH_Ncores
 
-    def set_gmsh_ncore(self, n:int):
+    def set_gmsh_ncore(self, n: int):
         """
         set gmsh core number
         """
@@ -162,7 +171,7 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         return self.nmod_Ncores
 
-    def set_nmod_ncore(self, n:int):
+    def set_nmod_ncore(self, n: int):
         """
         set nmod core number
         """
@@ -174,13 +183,19 @@ class nrv_parameters(metaclass=NRV_singleton):
         """
         return self.optim_Ncores
 
-    def set_optim_ncore(self, n:int):
+    def set_optim_ncore(self, n: int):
         """
         set optim core number
         """
         self.optim_Ncores = n
 
-    def set_ncores(self, n_nrv:int=None, n_nmod:int=None, n_gmsh:int=None,n_optim:int=None):
+    def set_ncores(
+        self,
+        n_nrv: int = None,
+        n_nmod: int = None,
+        n_gmsh: int = None,
+        n_optim: int = None,
+    ):
         """
         set for all subpakages core number
 
@@ -211,7 +226,14 @@ class nrv_parameters(metaclass=NRV_singleton):
 
 parameters = nrv_parameters()
 
-def ncore_autoset(nmod:bool=True, optim:bool=True, gmsh:bool=True, threshold:float=20.0, ncore_nojob:int=0):
+
+def ncore_autoset(
+    nmod: bool = True,
+    optim: bool = True,
+    gmsh: bool = True,
+    threshold: float = 20.0,
+    ncore_nojob: int = 0,
+):
     """
     Automatically set the number of cores for nmod, optim and gmsh based on the number of available cores
     and a threshold.

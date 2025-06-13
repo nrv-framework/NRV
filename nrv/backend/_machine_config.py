@@ -25,10 +25,7 @@ NRV_PYTHON_VERSION = {
     "patch": 0,
 }
 
-MIN_REQUIREMENTS = {
-    "CPU_ncores": 1,
-    "Memory_size": 8000
-}
+MIN_REQUIREMENTS = {"CPU_ncores": 1, "Memory_size": 8000}
 
 
 class MachineConfig(metaclass=NRV_singleton):
@@ -37,12 +34,13 @@ class MachineConfig(metaclass=NRV_singleton):
     Parameters
     ----------
     memory_unit: int
-        Dividor to express all memomry sizes in a given unit, 
+        Dividor to express all memomry sizes in a given unit,
         Constant already defined, can be:
         * Mem_KBytes (= 1024)
         * Mem_MBytes (= Mem_KBytes**2)
         * Mem_GBytes (= Mem_KBytes**3
     """
+
     def __init__(self, memory_unit=Mem_MBytes):
         self._explore_OS()
         self._explore_Python()
@@ -242,7 +240,9 @@ Float representation style: {self.float_repr_style}"""
         print(self)
 
     def get_Available_CPU_number(self, threshold: float = 20.0):
-        assert threshold >= 0 and threshold <= 100, "Threshold must be between 0 and 100"
+        assert (
+            threshold >= 0 and threshold <= 100
+        ), "Threshold must be between 0 and 100"
         available_CPUs = np.asarray(psutil.cpu_percent(percpu=True)) < threshold
         return np.sum(available_CPUs)
 
@@ -268,4 +268,4 @@ Float representation style: {self.float_repr_style}"""
             )
             print(display_str)
         else:
-            print('Current configuration is compatible with NRV requirements')
+            print("Current configuration is compatible with NRV requirements")

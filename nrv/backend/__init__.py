@@ -1,4 +1,4 @@
-""" backend: code for IO, machine and classes handling
+"""backend: code for IO, machine and classes handling
 
 the backend sub-package is dedicated to handling the magic behind all NRV
 computations. The code developed here is not meant to be used directly by the

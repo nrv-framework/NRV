@@ -167,6 +167,7 @@ def json_load(filename):
         results = json.load(file_to_read)
     return results
 
+
 ## TODO add NRV_decoder to simplify NRV_class save/load methode
 class NRV_Encoder(json.JSONEncoder):
     """
@@ -189,8 +190,6 @@ class NRV_Encoder(json.JSONEncoder):
             # Let the base class Encoder handle the object
             result = json.JSONEncoder.default(self, obj)
         return result
-
-
 
 
 ######################

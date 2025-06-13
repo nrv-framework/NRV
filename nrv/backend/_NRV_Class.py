@@ -247,11 +247,15 @@ class NRV_class(metaclass=ABCMeta):
                 elif is_NRV_class_list(self.__dict__[key]):
                     key_dic[key] = []
                     for i in range(len(self.__dict__[key])):
-                        key_dic[key] += [self.__dict__[key][i].save(save=False, **kwargs)]
+                        key_dic[key] += [
+                            self.__dict__[key][i].save(save=False, **kwargs)
+                        ]
                 elif is_NRV_class_dict(self.__dict__[key]):
                     key_dic[key] = {}
                     for i in self.__dict__[key]:
-                        key_dic[key][i] = self.__dict__[key][i].save(save=False, **kwargs)
+                        key_dic[key][i] = self.__dict__[key][i].save(
+                            save=False, **kwargs
+                        )
                 else:
                     key_dic[key] = deepcopy(self.__dict__[key])
         if save:
@@ -327,7 +331,7 @@ class NRV_class(metaclass=ABCMeta):
         return self.__dict__
 
 
-def load_any(data, **kwargs)->NRV_class:
+def load_any(data, **kwargs) -> NRV_class:
     """
     loads any type of NRV object from a json file or a dictionary generated with NRV_class.save
 
