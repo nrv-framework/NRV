@@ -1,4 +1,4 @@
-name: Super-Linter
+name: Linter
 
 on:
   push:
@@ -7,17 +7,17 @@ on:
 
 jobs:
   super-lint:
-    name: Lint code base
+    name: Blakc Lint code base
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run Super-Linter
-        uses: github/super-linter@v4
-        env:
-          DEFAULT_BRANCH: master
-          VALIDATE_JSCPD: false
-          FILTER_REGEX_INCLUDE: .*nrv/.*
-          FILTER_REGEX_EXCLUDE: .*nrv/_misc/.*
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          src: "./src"
+          env:
+            FILTER_REGEX_INCLUDE: .*nrv/.*
+            FILTER_REGEX_EXCLUDE: .*nrv/_misc/.*
