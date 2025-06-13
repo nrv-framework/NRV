@@ -250,7 +250,9 @@ class FENICS_model(FEM_model):
         self.n_proc = N
         if self.n_proc > COMM_WORLD.size:
             rise_warning(
-                "MPI was run on " + str(COMM_WORLD.size) + " CPUs, cannot set FEM on more processes"
+                "MPI was run on "
+                + str(COMM_WORLD.size)
+                + " CPUs, cannot set FEM on more processes"
             )
             self.n_proc = COMM_WORLD.size
         self.is_multi_proc = self.n_proc > 1
@@ -327,7 +329,7 @@ class FENICS_model(FEM_model):
                 Nerve_D=self.Nerve_D,
                 y_c=self.y_c,
                 z_c=self.z_c,
-                )
+            )
 
     #####################
     ## customize model ##

@@ -672,7 +672,7 @@ class FEMSimulation(FEMParameters):
             for i_domain in self.domainsID:
                 dom_cells = self.subdomains.find(i_domain)
                 dom_dofs = locate_dofs_topological(
-                    V_sigma, self.domain.topology.dim-1, dom_cells
+                    V_sigma, self.domain.topology.dim - 1, dom_cells
                 )
                 i_mat = self.get_mixedspace_domain(i_space=i_space, i_domain=i_domain)
                 mat = self.mat_map[i_mat].mat
@@ -741,5 +741,5 @@ class FEMSimulation(FEMParameters):
         if self.to_merge:
             v_surf = assemble_scalar(form(self.vout * do(dom_id)))
         else:
-            v_surf = assemble_scalar(form(self.vout[space] * do(dom_id))) 
+            v_surf = assemble_scalar(form(self.vout[space] * do(dom_id)))
         return v_surf / surf

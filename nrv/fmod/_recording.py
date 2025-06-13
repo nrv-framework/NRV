@@ -244,10 +244,10 @@ class recording_point(NRV_class):
             surface = surface = np.pi * (d / cm) * (np.gradient(x_axon) / cm)
             d_internode = np.gradient(x_axon)
 
-        #!! Modified tc 12/12/24 added **0.5 
-        sx = (sigma_yy * sigma_zz)**.5
-        sy = (sigma_xx * sigma_zz)**.5
-        sz = (sigma_xx * sigma_yy)**.5
+        #!! Modified tc 12/12/24 added **0.5
+        sx = (sigma_yy * sigma_zz) ** 0.5
+        sy = (sigma_xx * sigma_zz) ** 0.5
+        sz = (sigma_xx * sigma_yy) ** 0.5
 
         electrical_distance = (
             4
@@ -770,9 +770,7 @@ class recorder(NRV_class):
             for point in self.recording_points:
                 point.add_axon_contribution(I_membrane, ID)
 
-
-
-    def gather_all_recordings(self, results:list[dict]):
+    def gather_all_recordings(self, results: list[dict]):
         """
         Gather all recordings computed by each cores in case of parallel simulation (fascicle
         level), sum de result and propagate final extracellular potential to each core.
@@ -786,7 +784,13 @@ class recorder(NRV_class):
                 for rec in reclist:
                     point.recording += np.array(rec["recording_points"][i]["recording"])
 
-    def plot(self, axes: plt.axes, points:int|np.ndarray|None=None,color: str = "k", **kwgs) -> None:
+    def plot(
+        self,
+        axes: plt.axes,
+        points: int | np.ndarray | None = None,
+        color: str = "k",
+        **kwgs,
+    ) -> None:
         if self.t is None:
             rise_warning("empty recorder canot be ploted")
         else:
@@ -797,8 +801,13 @@ class recorder(NRV_class):
                     self.plot(axes=axes, points=i_pts, color=color, **kwgs)
             else:
                 if points > len(self.recording_points):
-                    rise_warning(f"recording point {points} does not exits in recorder, and so canot be ploted")
+                    rise_warning(
+                        f"recording point {points} does not exits in recorder, and so canot be ploted"
+                    )
                 else:
-                    axes.plot(self.t, self.recording_points[points].recording, color=color,**kwgs)
-
-
+                    axes.plot(
+                        self.t,
+                        self.recording_points[points].recording,
+                        color=color,
+                        **kwgs,
+                    )

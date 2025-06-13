@@ -23,7 +23,9 @@ ENT_DOM_offset = {
     "Electrode": 100,
     "Axon": 1000,
 }
-def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
+
+
+def get_mesh_domid(objtype: str, objid: int = 0, is_surf: bool = False) -> int:
     """
     function returning the corresponding physical domain in the mesh of an object in the context.
 
@@ -40,7 +42,7 @@ def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
     -------
     int
     """
-    domid = 2*objid
+    domid = 2 * objid
     if objtype.lower() in ["o", "outer", "outerbox"]:
         domid = ENT_DOM_offset["Outerbox"]
     elif objtype.lower() in ["n", "nerve"]:
@@ -54,6 +56,7 @@ def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
     if is_surf:
         domid += 1
     return domid
+
 
 ELEC_TYPES = ["CUFF MP", "CUFF", "LIFE"]
 
@@ -74,12 +77,14 @@ def is_NerveMshCreator(object):
     """
     return isinstance(object, NerveMshCreator)
 
-def get_node_physical_id(id_ax:int, i_node:int, volume:bool=False)->int:
-    id_ax_volume = id_ax-id_ax%2
-    i_node_str = str(2*i_node)
-    while len(i_node_str)<3:
+
+def get_node_physical_id(id_ax: int, i_node: int, volume: bool = False) -> int:
+    id_ax_volume = id_ax - id_ax % 2
+    i_node_str = str(2 * i_node)
+    while len(i_node_str) < 3:
         i_node_str = "0" + i_node_str
-    return int(str(id_ax_volume)+i_node_str)
+    return int(str(id_ax_volume) + i_node_str)
+
 
 class NerveMshCreator(MshCreator):
     """
@@ -1037,7 +1042,7 @@ class NerveMshCreator(MshCreator):
     ################################################################
     ############## complex volumes adding methods ##################
     ################################################################
-    def __add_mye_section(self, i_sec:int, sec:str, x, ax_pties:dict, l_sec:float):
+    def __add_mye_section(self, i_sec: int, sec: str, x, ax_pties: dict, l_sec: float):
         """_summary_
 
         Parameters
@@ -1055,14 +1060,14 @@ class NerveMshCreator(MshCreator):
         r_sec : float
             radius of the section
         """
-        if sec =="MYSA":
+        if sec == "MYSA":
             neighbour_sec = {"node", "FLUT"}
             if i_sec == 0:
                 next_sec = ax_pties["path_type"][1]
                 neighbour_sec -= {next_sec}
                 prev_sec = neighbour_sec.pop()
             else:
-                prev_sec = ax_pties["path_type"][i_sec-1]
+                prev_sec = ax_pties["path_type"][i_sec - 1]
                 neighbour_sec -= {prev_sec}
                 next_sec = neighbour_sec.pop()
             r_1 = ax_pties[prev_sec]["r"]
@@ -1070,7 +1075,9 @@ class NerveMshCreator(MshCreator):
 
             self.add_cone(x, ax_pties["y"], ax_pties["z"], l_sec, r_1, r_2)
         else:
-            self.add_cylinder(x, ax_pties["y"], ax_pties["z"], l_sec, ax_pties[sec]["r"])
+            self.add_cylinder(
+                x, ax_pties["y"], ax_pties["z"], l_sec, ax_pties[sec]["r"]
+            )
 
     def add_axon(self, ID):
         """
@@ -1108,11 +1115,11 @@ class NerveMshCreator(MshCreator):
                 "deltax": ax.deltax,
                 "l_first_sec": ax.first_section_size,
                 "l_last_sec": ax.last_section_size,
-                "node":{"r":ax.nodeD / 2, "l":ax.nodelength},
-                "MYSA":{"r":axon["d"] / 2, "l":ax.paralength1},
-                "FLUT":{"r":axon["d"] / 2, "l":ax.paralength2},
-                "STIN":{"r":axon["d"] / 2, "l":ax.interlength},
-                }
+                "node": {"r": ax.nodeD / 2, "l": ax.nodelength},
+                "MYSA": {"r": axon["d"] / 2, "l": ax.paralength1},
+                "FLUT": {"r": axon["d"] / 2, "l": ax.paralength2},
+                "STIN": {"r": axon["d"] / 2, "l": ax.interlength},
+            }
             x = ax.first_section_size
             del ax
 
@@ -1126,7 +1133,7 @@ class NerveMshCreator(MshCreator):
                 if ax_pties["path_type"].pop(0) == "node":
                     ax_pties["n_nodes"] -= 1
                 ax_pties["path_type"].pop(0)
-                sec = ax_pties["path_type"][0] 
+                sec = ax_pties["path_type"][0]
                 x += ax_pties[sec]["l"]
             else:
                 sec = ax_pties["path_type"][0]
@@ -1135,7 +1142,9 @@ class NerveMshCreator(MshCreator):
             if sec == "node":
                 self.axons[ID]["first_node_l"] = l_sec
             self.add_cylinder(0, ax_pties["y"], ax_pties["z"], l_sec, r_sec)
-            self.__add_mye_section(i_sec=0, sec=sec, x=0, ax_pties=ax_pties, l_sec=l_sec)
+            self.__add_mye_section(
+                i_sec=0, sec=sec, x=0, ax_pties=ax_pties, l_sec=l_sec
+            )
 
             ## adding mid sections
             for i_sec, sec in enumerate(ax_pties["path_type"][1:]):
@@ -1149,10 +1158,12 @@ class NerveMshCreator(MshCreator):
                         self.axons[ID]["last_node_l"] = l_sec
                 elif l_sec > self.L - x:
                     l_sec = self.L - x
-                self.__add_mye_section(i_sec=i_sec+1, sec=sec, x=x, ax_pties=ax_pties, l_sec=l_sec)
+                self.__add_mye_section(
+                    i_sec=i_sec + 1, sec=sec, x=x, ax_pties=ax_pties, l_sec=l_sec
+                )
                 x += l_sec
 
-            self.axons[ID]["node_d"] = 2*ax_pties["node"]["r"]
+            self.axons[ID]["node_d"] = 2 * ax_pties["node"]["r"]
             self.axons[ID]["node_l"] = ax_pties["node"]["l"]
             self.axons[ID]["deltax"] = ax_pties["deltax"]
             self.axons[ID]["n_nodes"] = ax_pties["n_nodes"]

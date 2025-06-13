@@ -78,5 +78,3 @@ class FEM_model(NRV_class):
         )
         pass_info("total duration " + str(total_timer) + " s")
         return self.meshing_timer, self.setup_timer, self.solving_timer, total_timer
-
-

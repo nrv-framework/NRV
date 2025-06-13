@@ -103,9 +103,9 @@ class MshCreator(NRV_class):
     @property
     def n_core(self):
         return self.n_proc
-    
+
     @n_core.setter
-    def n_core(self, i:int|None=None):
+    def n_core(self, i: int | None = None):
         if i is None:
             self.n_proc = parameters.GMSH_Ncores
         else:
@@ -120,7 +120,7 @@ class MshCreator(NRV_class):
     def n_core(self):
         n_core = None
 
-    def set_ncore(self, i:int|None=None)->None:
+    def set_ncore(self, i: int | None = None) -> None:
         """_summary_
 
         Parameters
@@ -128,10 +128,6 @@ class MshCreator(NRV_class):
         i : int | None, optional
             _description_, by default None
         """
-
-
-
-
 
     #####################
     ## special methods ##

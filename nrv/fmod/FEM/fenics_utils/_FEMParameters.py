@@ -59,7 +59,7 @@ class FEMParameters(NRV_class):
         self.domains_list = {}
 
         # boundaries
-        self.Nboundaries = 0 # Todo check if usefull
+        self.Nboundaries = 0  # Todo check if usefull
         self.dboundariesID = []
         self.nboundariesID = []
         self.dboundaries_list = {}
@@ -76,7 +76,6 @@ class FEMParameters(NRV_class):
 
         if data is not None:
             self.load(data)
-
 
     def save_SimParameters(self, save=False, fname="FEMParameters.json"):
         rise_warning("save_SimParameters is a deprecated method use save")
@@ -204,10 +203,10 @@ class FEMParameters(NRV_class):
         ID              : int
             ID of the boundary condition
         """
-        if "d" ==  btype[0].lower():
+        if "d" == btype[0].lower():
             _list = self.dboundaries_list
             lname = "d" + "bound"
-        elif "n" ==  btype[0].lower():
+        elif "n" == btype[0].lower():
             _list = self.nboundaries_list
             lname = "n" + "bound"
         IDbound = self.__update_ID_list(lname, mesh_domain)

@@ -481,7 +481,6 @@ class FEM_stimulation(extracellular_context):
         if C_model:
             self.model = COMSOL_model(self.model_fname)
 
-
     def reshape_outerBox(self, Outer_D, res="default"):
         """
         Reshape the size of the FEM simulation outer box

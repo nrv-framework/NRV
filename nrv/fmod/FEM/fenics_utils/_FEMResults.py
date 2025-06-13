@@ -198,15 +198,14 @@ class FEMResults(NRV_class):
         self.elem = elem
         self.vout = vout
         self.comm = comm
-        
-        #For eval() serialized calls acceleration
+
+        # For eval() serialized calls acceleration
         self.is_evaluated = False
         self.tdim = None
         self.n_entities_local = None
         self.entities = None
         self.midpoint_tree = None
         self.tree = None
-
 
     def set_sim_result(
         self, mesh_file="", domain=None, V=None, elem=None, vout=None, comm=None
@@ -290,7 +289,7 @@ class FEMResults(NRV_class):
             if self.mesh_file == res2.mesh_file:
                 _vout = Function(res2.V)
                 _vout.interpolate(self.vout)
-                self.vout=_vout
+                self.vout = _vout
                 self.V = res2.V
             else:
                 rise_error(
@@ -320,11 +319,13 @@ class FEMResults(NRV_class):
             self.is_evaluated = True
             self.tdim = self.domain.geometry.dim
             self.n_entities_local = (
-            self.domain.topology.index_map(self.tdim).size_local
-            + self.domain.topology.index_map(self.tdim).num_ghosts
+                self.domain.topology.index_map(self.tdim).size_local
+                + self.domain.topology.index_map(self.tdim).num_ghosts
             )
             self.entities = np.arange(self.n_entities_local, dtype=np.int32)
-            self.midpoint_tree = create_midpoint_tree(self.domain, self.tdim, self.entities)
+            self.midpoint_tree = create_midpoint_tree(
+                self.domain, self.tdim, self.entities
+            )
             self.tree = bb_tree(self.domain, self.tdim)
         # Find cells whose bounding-box collide with the the points
 

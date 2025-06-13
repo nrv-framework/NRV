@@ -226,7 +226,7 @@ class material(NRV_class):
         """
         self.source = source
 
-    def set_isotropic_conductivity(self, sigma: float|complex) -> None:
+    def set_isotropic_conductivity(self, sigma: float | complex) -> None:
         """
         set the conductivity for an isotropic material
 
@@ -240,7 +240,6 @@ class material(NRV_class):
             self._sigma = sigma
         else:
             self._sigma = float(sigma)
-
 
     def set_anisotropic_conductivity(
         self, sigma_xx: float, sigma_yy: float, sigma_zz: float

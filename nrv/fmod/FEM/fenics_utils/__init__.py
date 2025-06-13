@@ -1,4 +1,5 @@
-""" NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+"""NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+
 """ FMOD-FEM-FENICS_UTILS librairy"""
 
 from ._f_materials import (
@@ -34,9 +35,7 @@ from ._layered_materials import (
     layered_material,
 )
 
-submodules = [
-
-]
+submodules = []
 
 classes = [
     "f_material",
@@ -67,4 +66,3 @@ __all__ = []
 __all__ += submodules
 __all__ += classes
 __all__ += functions
-

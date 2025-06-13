@@ -1,4 +1,5 @@
-""" NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+"""NeuRon Virtualizer, large scale modeling of Peripheral Nervous System with random stimulation waveforms"""
+
 """ FEM-fmod librairy"""
 
 from ._FEM import (
@@ -13,6 +14,7 @@ from ._FENICS_model import (
 )
 
 from . import fenics_utils, mesh_creator
+
 submodules = [
     "fenics_utils",
     "mesh_creator",
