@@ -1,4 +1,4 @@
-""" Utils: general purpose functions and classes
+"""Utils: general purpose functions and classes
 
 utils provides some classes and functions for runing and interconnecting code
 from the scientific sub-packages.

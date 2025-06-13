@@ -4,8 +4,7 @@ from ..backend._log_interface import rise_warning
 from ..nmod import fascicle, nerve, axon, myelinated, unmyelinated
 
 
-
-def load_nerve(data, **kwargs)->nerve:
+def load_nerve(data, **kwargs) -> nerve:
     """
     loads a nerve from a json file or a dictionary generated with NRV_class.save
 
@@ -31,7 +30,8 @@ def load_nerve(data, **kwargs)->nerve:
         return None
     return obj
 
-def load_fascicle(data, **kwargs)->fascicle:
+
+def load_fascicle(data, **kwargs) -> fascicle:
     """
     loads a fascicle from a json file or a dictionary generated with NRV_class.save
 
@@ -57,7 +57,7 @@ def load_fascicle(data, **kwargs)->fascicle:
     return obj
 
 
-def load_axon(data, **kwargs)->myelinated|unmyelinated:
+def load_axon(data, **kwargs) -> myelinated | unmyelinated:
     """
     loads a fascicle from a json file or a dictionary generated with NRV_class.save
 
@@ -81,4 +81,3 @@ def load_axon(data, **kwargs)->myelinated|unmyelinated:
         rise_warning(data, " not a loadable axon")
         return None
     return obj
-

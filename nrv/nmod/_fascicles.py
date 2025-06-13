@@ -7,7 +7,8 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-#import multiprocessing as mp
+
+# import multiprocessing as mp
 from ..backend._NRV_Mproc import get_pool
 from rich import progress
 
@@ -26,8 +27,6 @@ from ._myelinated import *
 from ._unmyelinated import *
 from .results._fascicles_results import fascicle_results
 from .results._axons_results import axon_results
-
-
 
 
 # enable faulthandler to ease 'segmentation faults' debug
@@ -185,13 +184,13 @@ class fascicle(NRV_simulable):
         # to add to a fascicle/nerve common mother class
 
         #:str: path where the simulation results should be saved
-        self.save_path:str = ""
+        self.save_path: str = ""
         #:str: value: False: verbosity mainly for pbars. Tests more comment
-        self.verbose = False 
+        self.verbose = False
         self.return_parameters_only = False
         self.loaded_footprints = False
         self.save_results = False
-        self.result_folder_name:str = ""
+        self.result_folder_name: str = ""
 
         self.postproc_label = "default"
         self.postproc_function = None
@@ -300,7 +299,7 @@ class fascicle(NRV_simulable):
             Python dictionary containing all the fascicle information
         """
         bl = [i for i in blacklist]
-        to_save = (save and _fasc_save)
+        to_save = save and _fasc_save
 
         bl += ["postproc_function", "postproc_script"]
         if self.postproc_label not in builtin_postproc_functions:
@@ -530,7 +529,9 @@ class fascicle(NRV_simulable):
         if N_axons == 0:
             pass_info("No axon to fit fascicul diameter set to " + str(D) + "um")
         else:
-            dist_axons = np.linalg.norm((self.axons_y, self.axons_z), axis=0) + (self.axons_diameter/2)
+            dist_axons = np.linalg.norm((self.axons_y, self.axons_z), axis=0) + (
+                self.axons_diameter / 2
+            )
             D = 2 * (dist_axons.max() + delta)
         if round is not None:
             D = round(D, round_dgt)
@@ -604,9 +605,7 @@ class fascicle(NRV_simulable):
         N = len(axons_diameter)
         pass_info("\n ... " + str(N) + " axons generated")
         if pop_fname is not None:
-            save_axon_population(
-                pop_fname, axons_diameter, axons_type, comment=None
-            )
+            save_axon_population(pop_fname, axons_diameter, axons_type, comment=None)
         (
             axons_y,
             axons_z,
@@ -642,7 +641,6 @@ class fascicle(NRV_simulable):
                 comment=None,
             )
 
-
     def fill_with_population(
         self,
         axons_diameter: np.array,
@@ -676,14 +674,10 @@ class fascicle(NRV_simulable):
         """
         N = len(axons_diameter)
         if (y_axons is None) and (z_axons is None):
-            y_axons, z_axons = axon_packer(
-                axons_diameter, delta=delta, n_iter=n_iter
-            )
+            y_axons, z_axons = axon_packer(axons_diameter, delta=delta, n_iter=n_iter)
         if fit_to_size:
             if self.D is not None:
-                d_pop = get_circular_contour(
-                    axons_diameter, y_axons, z_axons, delta
-                )
+                d_pop = get_circular_contour(axons_diameter, y_axons, z_axons, delta)
                 if (d_pop) < self.D:
                     exp_factor = 0.99 * (self.D / d_pop)
                     y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
@@ -699,13 +693,12 @@ class fascicle(NRV_simulable):
             axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(
                 axons_diameter, y_axons, z_axons, axons_type, self.D - delta
             )
-        
+
         self.axons_diameter = axons_diameter.flatten()
         self.axons_type = axons_type.flatten()
         self.axons_y = y_axons.flatten()
         self.axons_z = z_axons.flatten()
         self.translate_axons(self.y_grav_center, self.z_grav_center)
-
 
     def fit_population_to_size(self, delta: float = 1):
         """
@@ -858,7 +851,7 @@ class fascicle(NRV_simulable):
             return self.myelinated_param
         return self.unmyelinated_param, self.myelinated_param
 
-    def __generate_axon(self,k:int)->axon:
+    def __generate_axon(self, k: int) -> axon:
         """
         Internal use only: generate fascicle't kth axon
 
@@ -1013,7 +1006,7 @@ class fascicle(NRV_simulable):
         Myelinated_model : str
             model use for myelinated axon (use to calulated node position)
         """
-        if self.L is None or len(self.NoR_relative_position)>0:
+        if self.L is None or len(self.NoR_relative_position) > 0:
             drange = [
                 min(self.axons_diameter.flatten()),
                 max(self.axons_diameter.flatten()),
@@ -1351,12 +1344,12 @@ class fascicle(NRV_simulable):
         self.postproc_kwargs = check_function_kwargs(
             self.postproc_function, self.postproc_kwargs
         )
-        
+
     def __set_pbar_label(self, **kwargs):
         if "pbar_label" in kwargs:
             __label = kwargs["pbar_label"]
         else:
-            __label = f"Fascicle {self.ID}" 
+            __label = f"Fascicle {self.ID}"
         __label += f" -- {parameters.get_nmod_ncore()} CPU"
         if parameters.get_nmod_ncore() > 1:
             __label += "s"
@@ -1455,7 +1448,7 @@ class fascicle(NRV_simulable):
             record_particles=self.record_particles,
             loaded_footprints=axon_ftpt,
         )
-        #print(axon.recorder.save())
+        # print(axon.recorder.save())
         del axon
 
         axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
@@ -1535,7 +1528,9 @@ class fascicle(NRV_simulable):
             self.generate_random_NoR_position()
         # create folder and save fascicle config
         self.result_folder_name = self.save_path + "Fascicle_" + str(self.ID)
-        if len(self.save_path):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
+        if len(
+            self.save_path
+        ):  # LR: Force folder creation if any save_path is specified --> usefull for some PP functions (ex: scatter_plot)
             create_folder(self.result_folder_name)
 
         if self.save_results:
@@ -1556,13 +1551,17 @@ class fascicle(NRV_simulable):
             self.compute_electrodes_footprints()
 
         if self.has_FEM_extracel:
-            self.loaded_footprints = True   # To set __footprint_to_compute to false
-            if "model" in self.extra_stim.__dict__: #!! for nerve no model to investigate
-                bckup = self.extra_stim.model   # Can't be passed to mp pool :'(
+            self.loaded_footprints = True  # To set __footprint_to_compute to false
+            if (
+                "model" in self.extra_stim.__dict__
+            ):  #!! for nerve no model to investigate
+                bckup = self.extra_stim.model  # Can't be passed to mp pool :'(
                 del self.extra_stim.model
 
         # create ID for all axons
-        axons_ID = np.arange(len(self.axons_diameter), )
+        axons_ID = np.arange(
+            len(self.axons_diameter),
+        )
 
         ## perform simulations in //
         results = []
@@ -1577,16 +1576,16 @@ class fascicle(NRV_simulable):
         ) as pg:
             __label = self.__set_pbar_label(**kwargs)
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
-            #with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
-            with get_pool(parameters.get_nmod_ncore(),backend="spawn") as pool: 
+            # with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
+            with get_pool(parameters.get_nmod_ncore(), backend="spawn") as pool:
                 for result in pool.imap(self.sim_axon, axons_ID):
                     results.append(result)
                     pg.advance(task_id)
                     pg.refresh()
-                pool.close() #LR: Apparently this avoid PETSC Terminate ERROR
-                pool.join()  #LR: but this shouldn't be needed as we are in "with"...
+                pool.close()  # LR: Apparently this avoid PETSC Terminate ERROR
+                pool.join()  # LR: but this shouldn't be needed as we are in "with"...
 
-        #results = list(pool_results)
+        # results = list(pool_results)
 
         if bckup is not None:
             self.extra_stim.model = bckup

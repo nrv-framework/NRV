@@ -53,8 +53,11 @@ class fascicle_results(sim_results):
         return axon_keys
 
     def get_recruited_axons(
-        self, ax_type: str = "all", normalize: bool = False,
-        vm_key: str = "V_mem", t_start: float = None
+        self,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> int | float:
         """
         Return the number or the ratio of recruited axons in the fascicle
@@ -84,8 +87,12 @@ class fascicle_results(sim_results):
         return n_recr
 
     def get_recruited_axons_greater_than(
-        self, diam: float, ax_type: str = "all", normalize: bool = False,
-        vm_key: str = "V_mem", t_start: float = None
+        self,
+        diam: float,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> float:
         """
         Return the number or the ratio of recruited axons with a diameter greater than `diam` in the fascicle
@@ -111,15 +118,19 @@ class fascicle_results(sim_results):
         for axon in axons_keys:
             if self[axon].diameter > diam:
                 n_tot += 1
-                if self[axon].is_recruited(vm_key,t_start):
+                if self[axon].is_recruited(vm_key, t_start):
                     n_recr += 1
         if normalize:
             n_recr /= n_tot
         return n_recr
 
     def get_recruited_axons_lesser_than(
-        self, diam: float, ax_type: str = "all", normalize: bool = False,
-        vm_key: str = "V_mem", t_start: float = None
+        self,
+        diam: float,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> float:
         """
         Return the number or the ratio of recruited axons with a diameter smaller than `diam` in the fascicle
@@ -145,13 +156,13 @@ class fascicle_results(sim_results):
         for axon in axons_keys:
             if self[axon].diameter < diam:
                 n_tot += 1
-                if self[axon].is_recruited(vm_key,t_start):
+                if self[axon].is_recruited(vm_key, t_start):
                     n_recr += 1
         if normalize:
             n_recr /= n_tot
         return n_recr
 
-    def get_axons(self,vm_key: str = "V_mem", t_start: float = None) -> list:
+    def get_axons(self, vm_key: str = "V_mem", t_start: float = None) -> list:
         axons_keys = self.get_axons_key()
         axon_diam = []
         axon_type = []
@@ -159,7 +170,7 @@ class fascicle_results(sim_results):
         axon_z = []
         axon_recruited = []
         for axon in axons_keys:
-            axon_recruited.append(self[axon].is_recruited(vm_key,t_start))
+            axon_recruited.append(self[axon].is_recruited(vm_key, t_start))
             axon_y.append(self[axon].y)
             axon_z.append(self[axon].z)
             axon_diam.append(self[axon].diameter)

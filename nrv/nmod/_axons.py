@@ -298,7 +298,7 @@ class axon(NRV_simulable):
         self.intra_voltage_stim = None
         self.intra_voltage_stim_position = []
         self.intra_voltage_stim_stimulus = None
-        
+
         # Extra stims
         self.extra_stim = None
         self.footprints = None
@@ -1117,7 +1117,9 @@ class axon(NRV_simulable):
                     # compute extra-cellular potential and add it to already computed ones
                 self.recorder.set_time(axon_sim["t"])
                 if self.myelinated and self.rec == "all":
-                    self.recorder.add_axon_contribution(axon_sim["I_mem"][axon_sim["node_index"]], self.ID)
+                    self.recorder.add_axon_contribution(
+                        axon_sim["I_mem"][axon_sim["node_index"]], self.ID
+                    )
                 else:
                     self.recorder.add_axon_contribution(axon_sim["I_mem"], self.ID)
                 axon_sim["recorder"] = self.recorder.save()
@@ -1231,7 +1233,6 @@ class axon(NRV_simulable):
                 axon_sim["extracellular_stimuli"] = stimuli_list
                 axon_sim["extracellular_stimuli_t"] = stimuli_time_list
         return axon_sim
-    
 
     def clear_I_Clamp(self):
         """

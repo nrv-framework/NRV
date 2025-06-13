@@ -84,7 +84,7 @@ def mesh_from_fascicle(
     y_c: float = 0,
     z_c: float = 0,
     add_axons: bool = True,
-    x_shift: float|None = None,
+    x_shift: float | None = None,
     add_context: bool = False,
     res_nerve: float | str = "default",
     res_fasc: float | str = "default",
@@ -117,8 +117,8 @@ def mesh_from_fascicle(
         if x_shift is not None:
             i_myel = fascicle.axons_type.astype(bool)
             __deltaxs = get_MRG_parameters(fascicle.axons_diameter[i_myel])[5]
-            __l1_ = fascicle.NoR_relative_position[i_myel]*__deltaxs
-            __x_l = (__l1_ - x_shift)%__deltaxs
+            __l1_ = fascicle.NoR_relative_position[i_myel] * __deltaxs
+            __x_l = (__l1_ - x_shift) % __deltaxs
             node_shift[i_myel] = __x_l / __deltaxs
 
         for i_ax in range(fascicle.n_ax):
@@ -132,7 +132,12 @@ def mesh_from_fascicle(
             elif np.iterable(res_ax) and not isinstance(res_ax, str):
                 res_ax_ = res_ax[i_ax]
             mesh.reshape_axon(
-                d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_shift=node_shift[i_ax], res=res_ax_
+                d=ax_d,
+                y=ax_y,
+                z=ax_z,
+                myelinated=mye,
+                node_shift=node_shift[i_ax],
+                res=res_ax_,
             )
     if add_context and fascicle.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
@@ -143,9 +148,9 @@ def mesh_from_fascicle(
 
 def mesh_from_nerve(
     nerve: nerve,
-    length: float|None = None,
+    length: float | None = None,
     add_axons: bool = True,
-    x_shift: float|None = None,
+    x_shift: float | None = None,
     res_nerve: float | str = "default",
     res_fasc: list[float] | float | str = "default",
     res_ax: list[float] | float | str = "default",
@@ -179,7 +184,7 @@ def mesh_from_nerve(
     """
     nerve = load_any(nerve, extracel_context=True)
     if length is not None:
-        length = length 
+        length = length
     else:
         length = nerve.L
     mesh = NerveMshCreator(

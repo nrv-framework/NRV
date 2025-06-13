@@ -60,7 +60,7 @@ class nerve_results(sim_results):
         np.ndarray (self.n_ax, 2)
             _description_
         """
-        return self.axons_pop_properties[:,[0,2]]
+        return self.axons_pop_properties[:, [0, 2]]
 
     @property
     def fasc_properties(self) -> np.ndarray:
@@ -76,12 +76,14 @@ class nerve_results(sim_results):
         _fasc = np.zeros((self.n_fasc, 4))
         for i_fasc, key in enumerate(fasc_keys):
             fasc_ = self[key]
-            _fasc[i_fasc, :] = np.array([
-                fasc_.ID,
-                fasc_.D,
-                fasc_.y_grav_center,
-                fasc_.z_grav_center,
-            ])
+            _fasc[i_fasc, :] = np.array(
+                [
+                    fasc_.ID,
+                    fasc_.D,
+                    fasc_.y_grav_center,
+                    fasc_.z_grav_center,
+                ]
+            )
         return _fasc
 
     @property
@@ -303,7 +305,7 @@ class nerve_results(sim_results):
                 unmyel_color=unmyel_color,
                 num=num,
             )
-        
+
         if "extra_stim" in self:
             if self.extra_stim is not None:
                 self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)

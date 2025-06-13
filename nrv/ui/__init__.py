@@ -1,11 +1,10 @@
-""" User Interface - ui: end user pre- or post processing code
+"""User Interface - ui: end user pre- or post processing code
 
 ui provides classes and functions for pre- (meshing for instance) or
 post-processing computations. Basic or recurent simulation encapuslated
 as function are also accessible.
 
 """
-
 
 from ._axon_simulations import (
     search_threshold_dispatcher,
@@ -47,7 +46,7 @@ from ._axon_postprocessing import (
     raster_plot,
 )
 
-from ._fascicle_postprocessing import(
+from ._fascicle_postprocessing import (
     ls_axons_results,
     ls_csv,
     rm_file,

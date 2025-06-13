@@ -1,6 +1,7 @@
 """
 Miscellaneous functions usefull functions used in and to use with NRV
 """
+
 import math
 import numpy as np
 from numpy.typing import NDArray
@@ -170,21 +171,40 @@ def get_perineurial_thickness(fasc_d: float, nerve_type: str = "default") -> flo
     return fasc_d * thpc
 
 
-MRG_data = DataFrame(data={
-"fiberD": np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0]),
-"g": np.asarray(
-    [0.565, 0.585, 0.605, 0.630, 0.661, 0.690, 0.700, 0.719, 0.739, 0.767, 0.791]
-),
-"axonD": np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7]),
-"nodeD": np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5]),
-"paraD1": np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5]),
-"paraD2": np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7]),
-"deltax": np.asarray([100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500]),
-"paralength2": np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60]),
-"nl": np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150])
-})
+MRG_data = DataFrame(
+    data={
+        "fiberD": np.asarray([1, 2, 5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0]),
+        "g": np.asarray(
+            [
+                0.565,
+                0.585,
+                0.605,
+                0.630,
+                0.661,
+                0.690,
+                0.700,
+                0.719,
+                0.739,
+                0.767,
+                0.791,
+            ]
+        ),
+        "axonD": np.asarray([0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7]),
+        "nodeD": np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5]),
+        "paraD1": np.asarray([0.7, 1.4, 1.9, 2.4, 2.8, 3.3, 3.7, 4.2, 4.7, 5.0, 5.5]),
+        "paraD2": np.asarray(
+            [0.8, 1.6, 3.4, 4.6, 5.8, 6.9, 8.1, 9.2, 10.4, 11.5, 12.7]
+        ),
+        "deltax": np.asarray(
+            [100, 200, 500, 750, 1000, 1150, 1250, 1350, 1400, 1450, 1500]
+        ),
+        "paralength2": np.asarray([5, 10, 35, 38, 40, 46, 50, 54, 56, 58, 60]),
+        "nl": np.asarray([15, 20, 80, 100, 110, 120, 130, 135, 140, 145, 150]),
+    }
+)
 
-def get_MRG_parameters(diameter:float|NDArray, fit_all:bool=False)->tuple[8]:
+
+def get_MRG_parameters(diameter: float | NDArray, fit_all: bool = False) -> tuple[8]:
     """
     Compute the MRG geometrical parameters from interpolation of original data [1]
 
@@ -327,7 +347,6 @@ def get_length_from_nodes(diameter, nodes):
     return float(math.ceil(deltax * (nodes - 1)))
 
 
-
 def membrane_capacitance_from_model(model):
     if model in ["MRG", "Gaines_motor", "Gaines_sensory"]:
         return 2
@@ -336,7 +355,9 @@ def membrane_capacitance_from_model(model):
     return 1
 
 
-def compute_complex_admitance(f: float|np.ndarray, g: float|np.ndarray, fc: float|np.ndarray) -> complex:
+def compute_complex_admitance(
+    f: float | np.ndarray, g: float | np.ndarray, fc: float | np.ndarray
+) -> complex:
     """
     compute the complex admitance of a first oder system (of cutoff frequency fc and conductivity g) at a given frequency f
 
@@ -355,6 +376,6 @@ def compute_complex_admitance(f: float|np.ndarray, g: float|np.ndarray, fc: floa
         complex admitance
     """
     if isinstance(g, np.ndarray) and isinstance(f, np.ndarray):
-        return g * (1 + 1j * f[:, np.newaxis]  / fc)
+        return g * (1 + 1j * f[:, np.newaxis] / fc)
 
     return g * (1 + 1j * f / fc)

@@ -1,4 +1,4 @@
-""" NEURON Models - nmod: handles neural fiber models using the NEURON software.
+"""NEURON Models - nmod: handles neural fiber models using the NEURON software.
 
 nmod contains all the code to describe the axonal fibers using .mod mechanisms
 with NEURON. This subpackage contains all primitives to describe:
@@ -44,12 +44,7 @@ from . import results
 
 submodules = ["results"]
 
-classes = [
-    "axon",
-    "unmyelinated",
-    "myelinated",
-    "fascicle",
-    "nerve"]
+classes = ["axon", "unmyelinated", "myelinated", "fascicle", "nerve"]
 
 functions = [
     "create_axon_population",

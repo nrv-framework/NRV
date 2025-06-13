@@ -469,12 +469,12 @@ class PSO_optimizer(Optimizer):
                 topology=topology,
             )
             optimizer.rep = set_log_level("WARNING", clear_log_file=True)
-            __lab= "PSO optimizer"
+            __lab = "PSO optimizer"
             if self.n_processes is None or self.n_processes == 1:
                 __lab += " - 1 proc"
             else:
                 __lab += f" - {self.n_processes} procs"
-            optimizer.name  = __lab
+            optimizer.name = __lab
 
             # Perform optimization
             t0 = perf_counter()

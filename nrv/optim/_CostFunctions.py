@@ -101,14 +101,12 @@ class cost_function(NRV_class):
         self.results = None
 
     @property
-    def is_m_proc_func(self)->bool:
+    def is_m_proc_func(self) -> bool:
         if self.static_context is not None and self._m_proc_CostFunction is None:
             static_context = load_any(self.static_context)
             self.static_t_sim = static_context.t_sim
-            self._m_proc_CostFunction =  static_context.nrv_type in ["fascicle", "nerve"]
+            self._m_proc_CostFunction = static_context.nrv_type in ["fascicle", "nerve"]
         return self._m_proc_CostFunction
-
-
 
     def __check_mch(self):
         """
@@ -293,4 +291,3 @@ class cost_function(NRV_class):
         if not self.keep_results:
             self.__clear_results()
         return self.cost
-

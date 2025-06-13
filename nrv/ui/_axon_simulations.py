@@ -1,13 +1,25 @@
 """
 NRV-Cellular Level simulations.
 """
+
 import sys
 from typing import Callable
 from time import perf_counter
-from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    BarColumn,
+    TextColumn,
+    TimeRemainingColumn,
+)
 
 from ..backend._file_handler import is_iterable
-from ..backend._log_interface import pass_info, rise_error, rise_warning, clear_prompt_line
+from ..backend._log_interface import (
+    pass_info,
+    rise_error,
+    rise_warning,
+    clear_prompt_line,
+)
 from ..backend._parameters import parameters
 from ..backend._NRV_Mproc import get_pool
 from ..fmod._electrodes import *
@@ -21,16 +33,20 @@ from ..utils._saving_handler import *
 from ._axon_postprocessing import *
 
 
-def set_args_kwargs(func, args, kwargs):   
+def set_args_kwargs(func, args, kwargs):
     return func(*args, **kwargs)
+
 
 def _call_wrapper(args):
     param, kw, func = args
     return func(param, **kw)
 
-def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any], ncore: int=None, **kwargs)->list[any]:
+
+def search_threshold_dispatcher(
+    search_func: Callable, parameter_list: list[any], ncore: int = None, **kwargs
+) -> list[any]:
     """
-    Automatically dispatches any search threshold callable object on available cpu cores. 
+    Automatically dispatches any search threshold callable object on available cpu cores.
 
     Parameters
     ----------
@@ -46,20 +62,24 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
     list[any]
         List of ordered thresholds.
     """
-    
+
     total = len(parameter_list)
     if ncore is None:
         ncore = total
 
     # Split constant kwargs variable ones
-    varying_keys = {k: v for k, v in kwargs.items() if is_iterable(v) and len(v) == total}
-    constant_kwargs = {k: v for k, v in kwargs.items() if not (is_iterable(v) and len(v) == total)}
+    varying_keys = {
+        k: v for k, v in kwargs.items() if is_iterable(v) and len(v) == total
+    }
+    constant_kwargs = {
+        k: v for k, v in kwargs.items() if not (is_iterable(v) and len(v) == total)
+    }
 
     call_args = []
     for i in range(total):
         kw = {k: v[i] for k, v in varying_keys.items()}
         kw.update(constant_kwargs)
-        call_args.append((parameter_list[i], kw, search_func)) 
+        call_args.append((parameter_list[i], kw, search_func))
 
     call_args = []
     for i in range(total):
@@ -68,7 +88,7 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
         call_args.append((parameter_list[i], kw, search_func))
 
     results = []
-    #TODO: display individual search output (for each core, see EIT) instead of "processing search"
+    # TODO: display individual search output (for each core, see EIT) instead of "processing search"
     with get_pool(n_jobs=ncore, backend="spawn") as pool:
         with Progress(
             SpinnerColumn(),
@@ -80,17 +100,26 @@ def search_threshold_dispatcher(search_func: Callable, parameter_list: list[any]
             task = progress.add_task("[cyan]Dispatching...", total=total)
             for result in pool.imap(_call_wrapper, call_args):
                 results.append(result)
-                progress.update(task, advance=1,refresh=True)
-            pool.close() #LR: Apparently this avoid PETSC Terminate ERROR
-            pool.join()  #LR: but this shouldn't be needed as we are in "with"...
+                progress.update(task, advance=1, refresh=True)
+            pool.close()  # LR: Apparently this avoid PETSC Terminate ERROR
+            pool.join()  # LR: but this shouldn't be needed as we are in "with"...
 
     return results
 
 
-
-def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
-                      t_sim: float = 5, tol: float = 1, t_start = None, freq = None,
-                      verbose: bool = True, args_update = None, save_path: str|None = None, **kwargs) -> np.float64 :
+def axon_AP_threshold(
+    axon: axon,
+    amp_max: float,
+    update_func: Callable,
+    t_sim: float = 5,
+    tol: float = 1,
+    t_start=None,
+    freq=None,
+    verbose: bool = True,
+    args_update=None,
+    save_path: str | None = None,
+    **kwargs,
+) -> np.float64:
     """
     Find the activation threshold of an axon with arbitrary stimulation settings.
 
@@ -128,13 +157,13 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
         amp_min = kwargs.get("amp_min")
     else:
         amp_min = 0
-    
+
     amplitude_max_th = amp_max
     amplitude_min_th = amp_min
     amplitude_tol = tol
 
     vm_key = "V_mem"
-    if (freq is not None):
+    if freq is not None:
         vm_key += "_filtered"
 
     # Dichotomy initialization
@@ -148,8 +177,8 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     while keep_going:
         if verbose and Niter == 1:
             pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA ...")
-            
-        update_func(axon,current_amp,**args_update)
+
+        update_func(axon, current_amp, **args_update)
         verb = parameters.get_nrv_verbosity()
         parameters.set_nrv_verbosity(2)
         results = axon.simulate(t_sim=t_sim)
@@ -160,19 +189,25 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
 
         if save_path:
             fig, ax = plt.subplots(1)
-            results.raster_plot(ax,key = vm_key)
+            results.raster_plot(ax, key=vm_key)
             ax.set_title(f"Amplitude: {np.round(current_amp,2)}µA")
-            amp_str = str(np.round(current_amp,2)).replace(".", "_")
+            amp_str = str(np.round(current_amp, 2)).replace(".", "_")
             fig.tight_layout()
-            fig_name = save_path + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig_name = (
+                save_path
+                + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            )
             fig.savefig(fig_name)
             plt.close(fig)
 
             fig, ax = plt.subplots(1)
-            results.plot_x_t(ax,key = vm_key)
+            results.plot_x_t(ax, key=vm_key)
             ax.set_title(f"Amplitude: {np.round(current_amp,2)}µA")
             fig.tight_layout()
-            fig_name = save_path + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig_name = (
+                save_path
+                + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            )
             fig.savefig(fig_name)
             plt.close(fig)
 
@@ -181,7 +216,7 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
 
         # post-process results
         delta_amp = np.abs(current_amp - previous_amp)
-        #put in a function
+        # put in a function
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
                 keep_going = 0
@@ -198,14 +233,16 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if results.is_recruited(vm_key=vm_key,t_start=t_start):
+        if results.is_recruited(vm_key=vm_key, t_start=t_start):
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
             if verbose:
-                pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+ 
-                          f" ({np.round(current_tol,2)}%)... AP Detected! (in {np.round(results['sim_time'],3)}s)")
-                #pass_info("... Spike triggered")
+                pass_info(
+                    f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"
+                    + f" ({np.round(current_tol,2)}%)... AP Detected! (in {np.round(results['sim_time'],3)}s)"
+                )
+                # pass_info("... Spike triggered")
             amplitude_max_th = previous_amp
             current_amp = (delta_amp / 2) + amplitude_min_th
         else:
@@ -213,8 +250,10 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
                 rise_warning("Maximum Stimulation Current is too Low!")
                 return 0
             if verbose:
-                pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+
-                          f" ({np.round(current_tol,2)}%)... AP Not Detected! (in {np.round(results['sim_time'],3)}s)")
+                pass_info(
+                    f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"
+                    + f" ({np.round(current_tol,2)}%)... AP Not Detected! (in {np.round(results['sim_time'],3)}s)"
+                )
             current_amp = amplitude_max_th - delta_amp / 2
             amplitude_min_th = previous_amp
 
@@ -225,13 +264,26 @@ def axon_AP_threshold(axon: axon, amp_max: float, update_func: Callable,
     t_stop = perf_counter()
     if verbose:
         clear_prompt_line(1)
-        pass_info(f"Activation threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
+        pass_info(
+            f"Activation threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
+            + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s)."
+        )
     return current_amp
 
-def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_start: float,
-                      t_sim: float = 10, tol: float = 1, freq: float|None = None, verbose: bool = True, 
-                      args_update = dict|None, save_path: str|None = None, **kwargs) -> np.float64 :
+
+def axon_block_threshold(
+    axon: axon,
+    amp_max: float,
+    update_func: Callable,
+    AP_start: float,
+    t_sim: float = 10,
+    tol: float = 1,
+    freq: float | None = None,
+    verbose: bool = True,
+    args_update=dict | None,
+    save_path: str | None = None,
+    **kwargs,
+) -> np.float64:
     """
     Find the block threshold of an axon with arbitrary stimulation settings.
 
@@ -273,13 +325,13 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
         amp_min = kwargs.get("amp_min")
     else:
         amp_min = 0
-    
+
     amplitude_max_th = amp_max
     amplitude_min_th = amp_min
     amplitude_tol = tol
 
     vm_key = "V_mem"
-    if (freq is not None):
+    if freq is not None:
         vm_key += "_filtered"
 
     # Dichotomy initialization
@@ -289,34 +341,40 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     Niter = 1
     keep_going = 1
     t_start_cnt = perf_counter()
-    
+
     while keep_going:
         if verbose and Niter == 1:
             pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA ...")
-            
-        update_func(axon,current_amp,**args_update)
+
+        update_func(axon, current_amp, **args_update)
 
         verb = parameters.get_nrv_verbosity()
-        #parameters.set_nrv_verbosity(2)
+        # parameters.set_nrv_verbosity(2)
         results = axon.simulate(t_sim=t_sim)
-        #parameters.set_nrv_verbosity(verb)
+        # parameters.set_nrv_verbosity(verb)
 
         is_blocked = results.is_blocked(AP_start=AP_start, freq=freq)
         if save_path:
             fig, ax = plt.subplots(1)
-            results.raster_plot(ax,key = vm_key)
+            results.raster_plot(ax, key=vm_key)
             ax.set_title(f"Block Amplitude: {np.round(current_amp,2)}µA")
-            amp_str = str(np.round(current_amp,2)).replace(".", "_")
+            amp_str = str(np.round(current_amp, 2)).replace(".", "_")
             fig.tight_layout()
-            fig_name = save_path + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig_name = (
+                save_path
+                + f"raster_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            )
             fig.savefig(fig_name)
             plt.close(fig)
 
             fig, ax = plt.subplots(1)
-            results.plot_x_t(ax,key = vm_key)
+            results.plot_x_t(ax, key=vm_key)
             ax.set_title(f"Block Amplitude: {np.round(current_amp,2)}µA")
             fig.tight_layout()
-            fig_name = save_path + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            fig_name = (
+                save_path
+                + f"vmen_plot_axon_{axon.ID}_amp_{amp_str}_uA_iter_{Niter}.png"
+            )
             fig.savefig(fig_name)
             plt.close(fig)
 
@@ -325,7 +383,7 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
 
         # post-process results
         delta_amp = np.abs(current_amp - previous_amp)
-        #put in a function
+        # put in a function
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
                 keep_going = 0
@@ -343,17 +401,21 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
         previous_amp = current_amp
         # test simulation results, update dichotomy
         if is_blocked is None:
-            rise_warning("Failed to evaluate block state of the axon! Consider changing the simulation parameters.")
+            rise_warning(
+                "Failed to evaluate block state of the axon! Consider changing the simulation parameters."
+            )
             return 0.0
-        
+
         if is_blocked:
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0.0
             if verbose:
-                pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+ 
-                          f" ({np.round(current_tol,2)}%)... AP Blocked! (in {np.round(results['sim_time'],3)}s)")
-                #pass_info("... Spike triggered")
+                pass_info(
+                    f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"
+                    + f" ({np.round(current_tol,2)}%)... AP Blocked! (in {np.round(results['sim_time'],3)}s)"
+                )
+                # pass_info("... Spike triggered")
             amplitude_max_th = previous_amp
             current_amp = (delta_amp / 2) + amplitude_min_th
         else:
@@ -361,8 +423,10 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
                 rise_warning("Maximum Stimulation Current is too Low!")
                 return 0.0
             if verbose:
-                pass_info(f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"+
-                          f" ({np.round(current_tol,2)}%)... AP Not Blocked! (in {np.round(results['sim_time'],3)}s)")
+                pass_info(
+                    f"Iteration {Niter}, Amp is {np.round(current_amp,2)}µA"
+                    + f" ({np.round(current_tol,2)}%)... AP Not Blocked! (in {np.round(results['sim_time'],3)}s)"
+                )
             current_amp = amplitude_max_th - delta_amp / 2
             amplitude_min_th = previous_amp
 
@@ -373,9 +437,12 @@ def axon_block_threshold(axon: axon, amp_max: float, update_func: Callable, AP_s
     t_stop = perf_counter()
     if verbose:
         clear_prompt_line(1)
-        pass_info(f"Block threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
-                  + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s).")
+        pass_info(
+            f"Block threshold is {np.round(current_amp,2)}µA ({np.round(current_tol,2)}%),"
+            + f" found in {Niter-1} iterations ({np.round(t_stop-t_start_cnt,2)}s)."
+        )
     return current_amp
+
 
 def firing_threshold_point_source(
     diameter,
@@ -385,7 +452,7 @@ def firing_threshold_point_source(
     model="MRG",
     amp_max=2000,
     amp_tol=1,
-    dt = 0.005,
+    dt=0.005,
     verbose=True,
     **kwargs,
 ):
@@ -458,7 +525,7 @@ def firing_threshold_point_source(
 
     rise_warning(
         "DeprecationWarning: ",
-        "firing_threshold_point_source is obsolete use axon_AP_threshold instead"
+        "firing_threshold_point_source is obsolete use axon_AP_threshold instead",
     )
 
     if "t_sim" in kwargs:
@@ -637,7 +704,7 @@ def firing_threshold_point_source(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results['sim_time'])
+                + str(results["sim_time"])
                 + " s"
             )
         # post-process results
@@ -658,7 +725,7 @@ def firing_threshold_point_source(
                 keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
-        if results.is_recruited("V_mem") :
+        if results.is_recruited("V_mem"):
             if current_amp == amp_min:
                 rise_warning("Minimum Stimulation Current is too High!")
                 return 0
@@ -732,7 +799,7 @@ def firing_threshold_from_axon(
 
     rise_warning(
         "DeprecationWarning: ",
-        "firing_threshold_point_source is obsolete use axon_AP_threshold instead"
+        "firing_threshold_point_source is obsolete use axon_AP_threshold instead",
     )
 
     if "elec_id" in kwargs:
@@ -817,11 +884,11 @@ def firing_threshold_from_axon(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results['sim_time'])
+                + str(results["sim_time"])
                 + " s"
             )
         # post-process results
-        
+
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -950,9 +1017,8 @@ def blocking_threshold_point_source(
 
     rise_warning(
         "DeprecationWarning: ",
-        "blocking_threshold_point_source is obsolete use axon_block_threshold instead"
+        "blocking_threshold_point_source is obsolete use axon_block_threshold instead",
     )
-
 
     if "material" in kwargs:
         material = kwargs.get("material")
@@ -1136,12 +1202,12 @@ def blocking_threshold_point_source(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results['sim_time'])
+                + str(results["sim_time"])
                 + " s"
             )
         # post-process results
-        #filter_freq(results, "V_mem", block_freq)
-        #rasterize(results, "V_mem_filtered", threshold=0)
+        # filter_freq(results, "V_mem", block_freq)
+        # rasterize(results, "V_mem_filtered", threshold=0)
         delta_amp = np.abs(current_amp - previous_amp)
         if amp_tol_abs > 0:
             if delta_amp < amp_tol_abs:
@@ -1156,7 +1222,7 @@ def blocking_threshold_point_source(
             if tol <= amp_tol:
                 keep_going = 0
             else:
-                keep_going = 1  
+                keep_going = 1
         previous_amp = current_amp
         # test simulation results, update dichotomy
         if results.is_blocked(AP_start=t_start, freq=block_freq) == False:
@@ -1235,7 +1301,7 @@ def blocking_threshold_from_axon(
 
     rise_warning(
         "DeprecationWarning: ",
-        "blocking_threshold_point_source is obsolete use blocking_threshold_from_axon instead"
+        "blocking_threshold_point_source is obsolete use blocking_threshold_from_axon instead",
     )
 
     if "amp_min" in kwargs:
@@ -1320,7 +1386,7 @@ def blocking_threshold_from_axon(
         if verbose:
             pass_info(
                 "... Iteration simulation performed in "
-                + str(results['sim_time'])
+                + str(results["sim_time"])
                 + " s"
             )
         # post-process results
@@ -1362,4 +1428,3 @@ def blocking_threshold_from_axon(
             current_amp = amp_min
         Niter += 1
     return current_amp
-

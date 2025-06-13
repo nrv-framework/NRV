@@ -372,7 +372,7 @@ class nerve(NRV_simulable):
             Number of fascicles.
         """
         return len(self.fascicles)
-    
+
     @property
     def n_ax(self):
         """
@@ -385,7 +385,7 @@ class nerve(NRV_simulable):
         """
         return self.get_n_ax()
 
-    def get_n_ax(self, id_fasc:int|None=None)->int:
+    def get_n_ax(self, id_fasc: int | None = None) -> int:
         """
         Returns the number of axons in a given fascicle or in all the nerve
 
@@ -805,10 +805,10 @@ class nerve(NRV_simulable):
         """
         for fasc in self.fascicles.values():
             fasc.clear_I_clamp()
-        self.N_intra = 0  
+        self.N_intra = 0
 
     # Extracellular
-    def attach_extracellular_stimulation(self, stimulation): #: FEM_stimulation):
+    def attach_extracellular_stimulation(self, stimulation):  #: FEM_stimulation):
         """
         attach a extracellular context of simulation for an axon.
 
@@ -931,7 +931,6 @@ class nerve(NRV_simulable):
             if self.recorder is not None:
                 fasc.attach_extracellular_recorder(self.recorder)
 
-
     def __set_fascicles_simulation_parameters(self):
         self.__set_fascicles_context()
         for fasc in self.fascicles.values():
@@ -1008,7 +1007,6 @@ class nerve(NRV_simulable):
         # run FEM model
         if self.verbose:
             pass_info("...computing electrodes footprint")
-        
 
         if self.__footprint_to_compute and self.has_FEM_extracel:
             self.compute_electrodes_footprints()
@@ -1020,7 +1018,7 @@ class nerve(NRV_simulable):
             fasc_kwargs["save_path"] = folder_name
         if self.verbose:
             i_pbar = 1
- 
+
         for fasc in self.fascicles.values():
             if self.verbose:
                 fasc_kwargs["pbar_label"] = f"fascicle {i_pbar}/{self.n_fasc}"
