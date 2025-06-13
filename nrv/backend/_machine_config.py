@@ -1,6 +1,7 @@
 import os
 import sys
 import psutil
+import numpy as np
 
 from ._GPU import getGPUs
 from ._NRV_Singleton import NRV_singleton
@@ -136,7 +137,7 @@ Float representation style: {self.float_repr_style}"""
 
     def _explore_CPU(self):
         # get number of cores
-        self.CPU_ncores = os.cpu_count()
+        self.CPU_ncores = psutil.cpu_count(logical=True)
         # get number of bits
         if sys.maxsize == 2**63 - 1:
             self.CPU_nbits = 64
@@ -240,6 +241,11 @@ Float representation style: {self.float_repr_style}"""
     def get_report(self):
         print(self)
 
+    def get_Available_CPU_number(self, threshold: float = 20.0):
+        assert threshold >= 0 and threshold <= 100, "Threshold must be between 0 and 100"
+        available_CPUs = np.asarray(psutil.cpu_percent(percpu=True)) < threshold
+        return np.sum(available_CPUs)
+
     ### Sanity checks ###
     def sanity_check(self):
         # python checks
@@ -261,3 +267,5 @@ Float representation style: {self.float_repr_style}"""
                 + str(NRV_PYTHON_VERSION["patch"])
             )
             print(display_str)
+        else:
+            print('Current configuration is compatible with NRV requirements')

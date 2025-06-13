@@ -8,7 +8,9 @@ from pathlib import Path
 
 from ._NRV_Mproc import _proc_is_alone, _proc_label
 from ._NRV_Singleton import NRV_singleton
+from ._machine_config import MachineConfig
 
+this_machine = MachineConfig()
 
 class nrv_parameters(metaclass=NRV_singleton):
     """
@@ -55,6 +57,60 @@ class nrv_parameters(metaclass=NRV_singleton):
         # LOG
         self.LOG_Status = self.machine_config.get("LOG", "LOG_STATUS") == "True"
         self.VERBOSITY_LEVEL = int(self.machine_config.get("LOG", "VERBOSITY_LEVEL"))
+
+    def nmod_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+        """
+        Automatically set nmod core number based on the number of available cores
+        and a threshold.
+
+        Parameters
+        ----------
+        threshold : float, optional
+            Threshold to determine if a CPU core is available, by default 20.0 (in percent)
+        ncore_nojob : int, optional
+            Number of cores preserve from computing with NRV, by default 0
+        """
+        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        if ncores_auto > 1:
+            self.set_nmod_ncore(ncores_auto)
+        else:
+            self.set_nmod_ncore(1)
+
+    def optim_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+        """
+        Automatically set optim core number based on the number of available cores
+        and a threshold.
+
+        Parameters
+        ----------
+        threshold : float, optional
+            Threshold to determine if a CPU core is available, by default 20.0 (in percent)
+        ncore_nojob : int, optional
+            Number of cores preserve from computing with NRV, by default 0
+        """
+        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        if ncores_auto > 1:
+            self.set_optim_ncore(ncores_auto)
+        else:
+            self.set_optim_ncore(1)
+
+    def gmsh_autoset(self, threshold:float=20.0, ncore_nojob:int=0):
+        """
+        Automatically set gmsh core number based on the number of available cores
+        and a threshold.
+
+        Parameters
+        ----------
+        threshold : float, optional
+            Threshold to determine if a CPU core is available, by default 20.0 (in percent)
+        ncore_nojob : int, optional
+            Number of cores preserve from computing with NRV, by default 0
+        """
+        ncores_auto = int(this_machine.get_Available_CPU_number(threshold=threshold)) - ncore_nojob
+        if ncores_auto > 1:
+            self.set_gmsh_ncore(ncores_auto)
+        else:
+            self.set_gmsh_ncore(1)
 
     def get_nrv_verbosity(self):
         """
@@ -154,3 +210,28 @@ class nrv_parameters(metaclass=NRV_singleton):
 ###########################
 
 parameters = nrv_parameters()
+
+def ncore_autoset(nmod:bool=True, optim:bool=True, gmsh:bool=True, threshold:float=20.0, ncore_nojob:int=0):
+    """
+    Automatically set the number of cores for nmod, optim and gmsh based on the number of available cores
+    and a threshold.
+
+    Parameters
+    ----------
+    nmod : bool, optional
+        If True, set nmod core number, by default True
+    optim : bool, optional
+        If True, set optim core number, by default True
+    gmsh : bool, optional
+        If True, set gmsh core number, by default True
+    threshold : float, optional
+        Threshold to determine if a CPU core is available, by default 20.0 (in percent)
+    ncore_nojob : int, optional
+        Number of cores preserve from computing with NRV, by default 0
+    """
+    if nmod:
+        parameters.nmod_autoset(threshold=threshold, ncore_nojob=ncore_nojob)
+    if optim:
+        parameters.optim_autoset(threshold=threshold, ncore_nojob=ncore_nojob)
+    if gmsh:
+        parameters.gmsh_autoset(threshold=threshold, ncore_nojob=ncore_nojob)

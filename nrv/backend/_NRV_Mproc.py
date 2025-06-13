@@ -4,6 +4,7 @@ Interface between NRV and multiprocessing tools handling.
 .. note::
   In the future, will also be used to handle the compatibility with threading
 """
+from ._machine_config import MachineConfig
 
 from pathos.multiprocessing import ProcessingPool
 #from pathos.pp import ParallelPythonPool
@@ -19,6 +20,8 @@ warnings.filterwarnings("ignore", category=UserWarning, message="resource_tracke
 
 
 _DEFAULT_BACKEND = "pathos"
+
+this_machine = MachineConfig()
 
 def get_pool(n_jobs, backend:None|Literal["spawn", "pathos", "pp"]=None)->ProcessingPool:
     """
@@ -62,8 +65,8 @@ def get_pool(n_jobs, backend:None|Literal["spawn", "pathos", "pp"]=None)->Proces
 
 
 
-_cpu_max_number = cpu_count(logical=True)
+_cpu_max_number = this_machine.CPU_ncores #cpu_count(logical=True)
 
-_proc_is_master = current_process().name=="MainProcess"
-_proc_is_alone = _proc_is_master and len(active_children())==0
+_proc_is_master = current_process().name == "MainProcess"
+_proc_is_alone = _proc_is_master and len(active_children()) == 0
 _proc_label = current_process().name
