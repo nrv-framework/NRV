@@ -2,6 +2,22 @@
 
 All notable changes to NRV are summed up in this file.
 
+## [1.2.2] - 2025-XX-XX
+
+### Added
+- Added elliptic geometry for fascicles.
+- Added `utils.geom`-subpackage to gather geometry related functions and classes.
+- Added `nmod.utils`-subpackage to gather population creation and placement methods and classes.
+- Added `axon_population`-class to handle creation of population and interface with fascicle.
+
+
+### Fixed
+
+
+### Removed
+
+
+
 ## [1.2.1] - 2025-06-06
 
 ### Added

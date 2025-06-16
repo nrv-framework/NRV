@@ -20,10 +20,12 @@ from ..backend._NRV_Class import load_any
 from ..fmod._extracellular import *
 from ..fmod._recording import *
 from ..ui._axon_postprocessing import *
+from ..utils._misc import get_MRG_parameters
 from ..backend._inouts import check_function_kwargs
 from ._axons import *
-from ._axon_pop_generator import *
-from ._myelinated import *
+from .utils._axon_pop_generator import *
+from ._axon_population import axon_population
+from ._myelinated import myelinated
 from ._unmyelinated import *
 from .results._fascicles_results import fascicle_results
 from .results._axons_results import axon_results
@@ -199,21 +201,24 @@ class fascicle(NRV_simulable):
 
         self.config_filename = ""
         self.ID = ID
-        self.type = None
-        self.L = None
-        self.D = diameter
-        # geometric properties
-        self.y_grav_center = 0
-        self.z_grav_center = 0
+
+        self.axons:axon_population|None = None
+
+        # self.type = None
+        # self.L = None
+        # self.D = diameter
+        # # geometric properties
+        # self.y_grav_center = 0
+        # self.z_grav_center = 0
 
         # Update parameters with kwargs
         self.set_parameters(**kwargs)
 
         # axonal content
-        self.axons_diameter = np.array([])
-        self.axons_type = np.array([], dtype=int)
-        self.axons_y = np.array([])
-        self.axons_z = np.array([])
+        # self.axons_diameter = np.array([])
+        # self.axons_type = np.array([], dtype=int)
+        # self.axons_y = np.array([])
+        # self.axons_z = np.array([])
         self.NoR_relative_position = np.array([])
         # Axons objects default parameters
         self.unmyelinated_param = {
@@ -245,6 +250,7 @@ class fascicle(NRV_simulable):
             "T": None,
             "threshold": -40,
         }
+
         self.set_axons_parameters(**kwargs)
 
         # extra-cellular stimulation
@@ -554,7 +560,7 @@ class fascicle(NRV_simulable):
     def fill(
         self,
         percent_unmyel=0.7,
-        FVF=0.55,
+        n_axons=100,
         M_stat="Schellens_1",
         U_stat="Ochoa_U",
         ppop_fname=None,
@@ -585,61 +591,7 @@ class fascicle(NRV_simulable):
         )
         pass_info("Use axon_pop_generator methods instead.")
         #### AXON GENERATION: parallelization if resquested ####
-        Area_to_fill = 0
-        # Note: generate a bit too much axons just in case
-        if self.type == "Circular":
-            Area_to_fill = np.pi * (self.D / 2 + 28) ** 2
-        (
-            axons_diameter,
-            axons_type,
-            M_diam_list,
-            U_diam_list,
-        ) = fill_area_with_axons(
-            Area_to_fill,
-            percent_unmyel=percent_unmyel,
-            FVF=FVF,
-            M_stat=M_stat,
-            U_stat=U_stat,
-        )
-        #### AXON PACKING: never parallel
-        N = len(axons_diameter)
-        pass_info("\n ... " + str(N) + " axons generated")
-        if pop_fname is not None:
-            save_axon_population(pop_fname, axons_diameter, axons_type, comment=None)
-        (
-            axons_y,
-            axons_z,
-        ) = axon_packer(
-            axons_diameter,
-            delta=0.1,
-            y_gc=self.y_grav_center,
-            z_gc=self.z_grav_center,
-            n_iter=20000,
-        )
-
-        N = len(axons_diameter)
-        # check if axons are inside the fascicle
-        inside_axons = (
-            np.power(axons_y - self.y_grav_center, 2)
-            + np.power(axons_z - self.z_grav_center, 2)
-            - np.power(np.ones(N) * (self.D / 2) - axons_diameter / 2, 2)
-        )
-        axons_to_keep = np.argwhere(inside_axons < 0)
-        axons_diameter = axons_diameter[axons_to_keep]
-        axons_type = axons_type[axons_to_keep]
-        axons_y = axons_y[axons_to_keep]
-        axons_z = axons_z[axons_to_keep]
-        N = len(axons_diameter)
-        # save the good population
-        if ppop_fname is not None:
-            save_axon_population(
-                ppop_fname,
-                self.axons_diameter,
-                self.axons_type,
-                self.axons_y,
-                self.axons_z,
-                comment=None,
-            )
+        
 
     def fill_with_population(
         self,
@@ -672,33 +624,7 @@ class fascicle(NRV_simulable):
             number of interation for the packing algorithm if the y-x axon coordinates are not specified
         WARNING: If y_axons and z_axons are not specified then axon-packing algorithm is called within the method.
         """
-        N = len(axons_diameter)
-        if (y_axons is None) and (z_axons is None):
-            y_axons, z_axons = axon_packer(axons_diameter, delta=delta, n_iter=n_iter)
-        if fit_to_size:
-            if self.D is not None:
-                d_pop = get_circular_contour(axons_diameter, y_axons, z_axons, delta)
-                if (d_pop) < self.D:
-                    exp_factor = 0.99 * (self.D / d_pop)
-                    y_axons, z_axons = expand_pop(y_axons, z_axons, exp_factor)
-            else:
-                rise_warning(
-                    "Can't fit population to size, fascicle diameter is not defined."
-                )
-
-        axons_diameter, y_axons, z_axons, axons_type = remove_collision(
-            axons_diameter, y_axons, z_axons, axons_type
-        )
-        if self.D is not None:
-            axons_diameter, y_axons, z_axons, axons_type = remove_outlier_axons(
-                axons_diameter, y_axons, z_axons, axons_type, self.D - delta
-            )
-
-        self.axons_diameter = axons_diameter.flatten()
-        self.axons_type = axons_type.flatten()
-        self.axons_y = y_axons.flatten()
-        self.axons_z = z_axons.flatten()
-        self.translate_axons(self.y_grav_center, self.z_grav_center)
+        
 
     def fit_population_to_size(self, delta: float = 1):
         """

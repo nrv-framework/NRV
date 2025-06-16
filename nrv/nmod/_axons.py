@@ -228,7 +228,7 @@ class axon(NRV_simulable):
     threshold       : int
         membrane voltage threshold for spike detection (mV), by default -40mV
 
-    WARNING
+    Warning
     -------
     do not create more than one axon at a time for one process, to prevent from parameters overlaps in Neuron
     """
