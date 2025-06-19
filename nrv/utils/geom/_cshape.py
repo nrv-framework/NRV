@@ -8,19 +8,53 @@ class CShape(NRV_class):
     Abstract base class for closed-shaped geometries.
     """
     @abstractmethod
-    def __init__(self, Ntheta:int=100):
+    def __init__(self, center:tuple[float, float], radius:float|tuple[float,float]):
         """
         Initializes the CShape with a specified number of points for angular resolution.
 
         :param Ntheta: Number of points to use for angular resolution.
         """
         super().__init__()
-        self.Ntheta = Ntheta
+        self.center = center[:2]
+        self.radius = radius
 
-
+    
     @property
-    def theta(self):
-        return np.linspace(0, 2 * np.pi, self.Ntheta, endpoint=True)
+    def area(self)->float:
+        """
+        Area of the shape in \\(\\mu m^2\\)
+
+        Returns
+        -------
+        float
+        """
+        pass
+
+    def rotate(self, angle:float, degree:bool=False):
+        """
+        Rotate the shape
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle
+        degree : bool, optional
+            if True `angle` is in degree, if False in radian, by default False
+        """
+        pass
+
+    def translate(self, y:float=0, z:float=0):
+        """
+        Translate the shape
+
+        Parameters
+        ----------
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        self.center = self.center[0] + y, self.center[1] + z
 
 
     @abstractmethod
@@ -42,6 +76,7 @@ class CShape(NRV_class):
         """
         pass
 
+
     def get_point_inside(self, n_pts:int=1, delta:float=0)->np.ndarray:
         """
         return n points coordinate randomly picked inside the shape
@@ -59,10 +94,18 @@ class CShape(NRV_class):
         """
         pass
 
-    def get_trace(self) -> tuple[list[float], list[float]]:
+    def get_trace(self, n_theta:int=100) -> tuple[list[float], list[float]]:
         """
-        Get the trace of the ellipse.
+        Get the trace of the shape.
 
-        :return: A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
+        Parameters
+        ----------
+        n_theta : int, optional
+            number of coordinate point returned, by default 100
+
+        Returns
+        -------
+        tuple[list[float], list[float]]
+            A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
         """
         pass

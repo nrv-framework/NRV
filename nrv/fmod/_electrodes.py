@@ -11,6 +11,7 @@ from matplotlib.patches import Wedge
 from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._NRV_Class import NRV_class, abstractmethod
+from ..utils._misc import rotate_2D
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -235,6 +236,21 @@ class electrode(NRV_class):
         if z is not None:
             self.z += z
         self.clear_footprint()
+
+    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+        """
+        rotate electrode around x-axis
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle
+        center : bool, optional
+            Center of the rotation, by default (0,0)
+        degree : bool, optional
+            if True `angle` is in degree, if False in radian, by default False
+        """
+        self.y, self.z = rotate_2D(point=(self.y, self.z), angle=angle, degree=degree, center=center)
 
     @abstractmethod
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:

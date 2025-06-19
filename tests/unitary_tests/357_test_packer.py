@@ -67,7 +67,7 @@ def test_place_eliptic_geom():
     r1 = 300
     r2 = 200
     angle = -np.pi/12
-    ellipse = Ellipse(center, r1, r2, angle)
+    ellipse = Ellipse(center, (r1, r2), angle)
     y_trace, z_trace = ellipse.get_trace()
     # Place witout ax
     n1 = 400

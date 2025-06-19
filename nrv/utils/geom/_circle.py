@@ -7,15 +7,18 @@ class Circle(Ellipse):
     Represents a circle with a center and radius.
     """
 
-    def __init__(self, center: tuple[float, float], radius: float, Ntheta: int=100):
+    def __init__(self, center: tuple[float, float], radius: float):
         """
         Initialize the Circle with a center and radius.
 
         :param center: A tuple (x, y) representing the center of the circle.
         :param radius: The radius of the circle.
         """
-        super().__init__(center=center, r1=radius, r2=radius, rot=0)
+        super().__init__(center=center, radius=(radius, radius), rot=0)
         self.radius = radius
+
+    def rotate(self, angle:float, degree:bool=False):
+        pass
 
 
     def get_point_inside(self, n_pts:int=1, delta:float=0)->np.ndarray:
@@ -28,12 +31,5 @@ class Circle(Ellipse):
             )).T
         X += self.c
         return X
-
-
-    def overlap_with(self, cx, cy, r, delta):
-        """Does the circle overlap with another of radius r at (cx, cy)?"""
-
-        d = np.hypot(cx-self.cx, cy-self.cy)
-        return d < r + self.r + delta
 
 

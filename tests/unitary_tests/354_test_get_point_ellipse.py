@@ -10,11 +10,10 @@ figdir = "unitary_tests/figures/" + test_num + "_"
 
 
 def test_get_point_inside_ellipse():
-    center = (1, 2)
-    r1 = 3
-    r2 = 2
+    center = 1, 2
+    r = 3, 2
     angle = np.pi/4 # Rotation angle in degrees
-    ellipse = geom.Ellipse(center, r1, r2, angle)
+    ellipse = geom.Ellipse(center, r, angle)
 
     y_trace, z_trace = ellipse.get_trace()
     inside_pts = ellipse.get_point_inside(1000, delta=.5)

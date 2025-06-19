@@ -12,11 +12,10 @@ figdir = "unitary_tests/figures/" + test_num + "_"
 
 def test_axon_pop_set_from_stat():
     # 
-    center = (1000, 2000)
-    r1 = 3000
-    r2 = 2000
+    center = 1000, 2000
+    r = 3000, 2000
     angle = -np.pi/12
-    ellipse = geom.Ellipse(center, r1, r2, angle)
+    ellipse = geom.Ellipse(center, r, angle)
 
     pop_1 = axon_population()
 
@@ -28,6 +27,8 @@ def test_axon_pop_set_from_stat():
     pop_1.create_population_from_stat(n_ax=n_ax)
     assert pop_1.has_pop, "Axon population should contain population after setting."
     assert pop_1.n_ax == n_ax, "Wrong number of axons."
+    assert all(pop_1.axon_pop["diameters"] == pop_1["diameters"]), "Issue with getitems"
+    assert all(pop_1.axon_pop.loc[[0]] == pop_1.axon_pop.loc[[0]]), "Issue with loc"
 
 
 
@@ -35,10 +36,9 @@ def test_axon_pop_set_from_stat():
 def test_axon_pop_set_from_data():
     # 
     center = (1000, 2000)
-    r1 = 3000
-    r2 = 2000
+    r = 3000, 2000
     angle = -np.pi/12
-    ellipse = geom.Ellipse(center, r1, r2, angle)
+    ellipse = geom.Ellipse(center, r, angle)
     n_ax = 10
     # Randomly generate axon types and diameters
     ax_type = np.random.randint(0,1,n_ax)
@@ -67,11 +67,10 @@ def test_axon_pop_set_from_data():
 
 def test_axon_pop_set_from_file():
     # 
-    center = (1000, 2000)
-    r1 = 3000
-    r2 = 2000
+    center = 1000, 2000
+    r = 3000, 2000
     angle = -np.pi/12
-    ellipse = geom.Ellipse(center, r1, r2, angle)
+    ellipse = geom.Ellipse(center, r, angle)
     
     fname = test_dir + "sources/52_test.pop"
     # as tupple

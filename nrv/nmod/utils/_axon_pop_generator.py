@@ -75,6 +75,23 @@ def load_stat(stat_name):
     return diameters, presence
 
 
+def get_stat_expected(fname:str)->float:
+    """
+    Get expected value from a stat stored in a file
+
+    Parameters
+    ----------
+    fname : str
+        name of the statistic in the librairy or path to a new librairy in csv
+
+    Returns
+    -------
+    float
+    """
+    diameters, presence = load_stat(fname)
+    return np.mean(diameters*presence)
+
+
 def one_Gamma(x, a1, beta1, c1):
     """
     Gamma function, mono-modal, to interpolate unmyelinated statistics.

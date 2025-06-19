@@ -5,20 +5,43 @@ This is mainly used to create generic methods such as save and load.
 
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-
-# sys used in an eval
-import sys
+from inspect import getcallargs
+from typing import Callable
+import sys      # used in an eval
 import numpy as np
 from numpy import iterable
 
 from ._file_handler import json_dump, json_load
 from ._log_interface import pass_debug_info
+from ._extlib_interface import is_empty_iterable
 
-########################################
+
+
+def kwags_picker(func:Callable, kwgs:dict)->dict:
+    """
+    Get only the key arguments corresponding to function from a `dict` of key arguments.
+
+    Parameters
+    ----------
+    func : Callable
+        funtion or method to check.
+    kwgs : dict
+        Dictionnary containing all the key arguments to check
+
+    Returns
+    -------
+    dict
+        Dictionnary containing only the key arguments required for `func`
+    """
+    rmv_key = kwgs.keys()-getcallargs(func).keys()
+    func_kwgs = deepcopy(kwgs)
+    for k in rmv_key:
+        func_kwgs.pop(k)
+    return func_kwgs
+
+# ------------------------------------ #
 #           check object               #
-########################################
-
-
+# ------------------------------------ #
 def is_NRV_class(x):
     """
     Check if the object x is a ``NRV_class``.
@@ -77,9 +100,10 @@ def is_NRV_class_dict(x):
     return False
 
 
-##########################################
-#           check dictionaries           #
-##########################################
+# ------------------------------------ #
+#         check dictionaries           #
+# ------------------------------------ #
+
 def is_NRV_dict(x):
     """
     Check if the object x is a dictionary of saved ``NRV_class``.
@@ -158,32 +182,10 @@ def is_NRV_object_dict(x):
     return is_NRV_dict(x) or is_NRV_dict_list(x) or is_NRV_dict_dict(x)
 
 
-######################################
-#       numpy compatibility          #
-######################################
-def is_empty_iterable(x):
-    """
-    check if the object x is an empty iterable
+# --------------------------------- #
+#            NRV Class              #
+# --------------------------------- #
 
-    Parameters
-    ----------
-    x : any
-        object to check.
-
-    Returns
-    -------
-    bool
-    """
-    if not np.iterable(x):
-        return False
-    if len(x) == 0:
-        return True
-    return False
-
-
-######################################
-#            NRV Class               #
-######################################
 
 
 class NRV_class(metaclass=ABCMeta):

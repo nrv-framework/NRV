@@ -12,6 +12,7 @@ from ..backend._log_interface import rise_error, rise_warning
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._misc import get_perineurial_thickness
 from ._electrodes import (
+    electrode,
     is_analytical_electrode,
     is_FEM_electrode,
     check_electrodes_overlap,
@@ -19,7 +20,7 @@ from ._electrodes import (
 from .FEM._COMSOL_model import COMSOL_model, COMSOL_Status
 from .FEM._FENICS_model import FENICS_model
 from ._materials import load_material, is_mat
-from ..utils._stimulus import get_equal_timing_copies
+from ..utils._stimulus import stimulus, get_equal_timing_copies
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -91,8 +92,8 @@ class extracellular_context(NRV_class):
         super().__init__()
         self.type = "extracellular_context"
         # empty list to store electrodes and corresponding stimuli
-        self.electrodes = []
-        self.stimuli = []
+        self.electrodes:list[electrode] = []
+        self.stimuli:list[stimulus] = []
         # list for synchronised stimuli
         self.synchronised = False
         self.synchronised_stimuli = []
@@ -135,6 +136,22 @@ class extracellular_context(NRV_class):
         """
         for elec in self.electrodes:
             elec.translate(x=x, y=y, z=z)
+
+    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+        """
+        Rotate extracellular context electrodes by group rotation around x-axis
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle
+        center : bool, optional
+            Center of the rotation, by default (0,0)
+        degree : bool, optional
+            if True `angle` is in degree, if False in radian, by default False
+        """
+        for elec in self.electrodes:
+            elec.rotate(angle=angle, center=center, degree=degree)
 
     def add_electrode(self, electrode, stimulus):
         """

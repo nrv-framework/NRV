@@ -1,6 +1,8 @@
 import numpy as np
+from copy import deepcopy
 
 from ._cshape import CShape
+from .._units import to_nrv_unit
 
 
 class Ellipse(CShape):
@@ -9,7 +11,7 @@ class Ellipse(CShape):
     Represents an ellipse with a center, semi-major axis, and semi-minor axis.
     """
 
-    def __init__(self, center: tuple[float, float], r1: float, r2: float, rot: float = 0, Ntheta: int = 100):
+    def __init__(self, center: tuple[float, float], radius:tuple[float, float], rot:float=None, degree:bool=False):
         """
         Initialize the Ellipse with a center and axes.
 
@@ -17,34 +19,41 @@ class Ellipse(CShape):
         :param semi_major_axis: The length of the semi-major axis.
         :param r2: The length of the semi-minor axis.
         """
-        super().__init__(Ntheta)
-        if r1 <= 0 or r2 <= 0:
-            raise ValueError("Semi-major and semi-minor axes must be positive numbers.")
+        super().__init__(center, radius)
+        assert np.iterable(radius), "Ellipse radius must be iterable (of lenght at least equal to 2)"
+        self.rot = 0
+        self.r1 = self.radius[0]
+        self.r2 = self.radius[1]
 
-        self.center = center[:2]
-        self.r1 = r1
-        self.r2 = r2
-        self.rot = rot
+        if rot is not None:
+            self.rotate(rot, degree)
+
 
     @property
-    def c(self):
+    def c(self)->np.ndarray:
         return np.array(self.center, dtype=float)
 
+    def r(self)->np.ndarray:
+        return np.array(self.radius, dtype=float)
 
     @property
-    def x(self):
+    def x(self)->float:
         return 0
     
     @property
-    def y(self):
+    def y(self)->float:
         return self.center[0]
 
     @property
-    def z(self):
+    def z(self)->float:
         return self.center[1]
+    
+    @property
+    def area(self)->float:
+        return np.pi * self.r1 * self.r2
 
     @property
-    def Rmatrix(self)->np.ndarray:
+    def rot_mat(self)->np.ndarray:
         """
         rotation matrix
 
@@ -58,7 +67,7 @@ class Ellipse(CShape):
             )
 
     @property
-    def Rmatrix_inverse(self)->np.ndarray:
+    def rot_mat_inverse(self)->np.ndarray:
         """
         Inverse rotation matrix
 
@@ -76,12 +85,15 @@ class Ellipse(CShape):
         return bool(self.rot)
 
     def is_inside(self, point: tuple[np.ndarray, np.ndarray], delta:float=0) -> bool:
-        X = np.array(point).astype(float).T
+        if isinstance(point, np.ndarray):
+            X = deepcopy(point)
+        else:
+            X = np.array(point).astype(float).T
         # Translate back to the ellipse's coordinate system
         X -= self.c
         # Rotate back to the ellipse's coordinate system
         if self.is_rot:
-            X @= self.Rmatrix_inverse
+            X @= self.rot_mat_inverse
 
         # Normalize the coordinate
         X /= np.array((self.r1+delta, self.r2+delta))
@@ -89,15 +101,23 @@ class Ellipse(CShape):
 
         # Check if the normalized point is inside the unit circle
         return (X_norm <= 1).all()
+    
+    def rotate(self, angle:float, degree:bool=False):
+        if degree:
+            angle = to_nrv_unit(angle, "deg")
+        self.rot += angle
 
-    def get_trace(self) -> tuple[list[float], list[float]]:
+
+    def get_trace(self, n_theta=100) -> tuple[list[float], list[float]]:
         """
         Get the trace of the ellipse.
 
         :return: A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
         """
-        y_trace = self.r1 * np.cos(self.theta)
-        z_trace = self.r2 * np.sin(self.theta)
+        _theta = np.linspace(0, 2 * np.pi, n_theta, endpoint=True)
+
+        y_trace = self.r1 * np.cos(_theta)
+        z_trace = self.r2 * np.sin(_theta)
 
         X = np.vstack((
             y_trace,
@@ -105,7 +125,7 @@ class Ellipse(CShape):
         )).T
         # Apply rotation if needed
         if self.is_rot:
-            X = X @ self.Rmatrix
+            X = X @ self.rot_mat
         # Apply translation
         X += self.c
         return X[:,0], X[:,1]
@@ -126,7 +146,7 @@ class Ellipse(CShape):
 
         # Rotate and translate
         if self.is_rot:
-            X = X @ self.Rmatrix
+            X = X @ self.rot_mat
         X += self.c
         return X
 

@@ -9,6 +9,8 @@ All notable changes to NRV are summed up in this file.
 - Added `utils.geom`-subpackage to gather geometry related functions and classes.
 - Added `nmod.utils`-subpackage to gather population creation and placement methods and classes.
 - Added `axon_population`-class to handle creation of population and interface with fascicle.
+- Added angle untis: rad (default) and degree
+- Added file: `backend._extlib_interface` to gather interfacing function with external libraries
 
 
 ### Fixed
@@ -16,6 +18,7 @@ All notable changes to NRV are summed up in this file.
 
 ### Removed
 
+- Removed `fascicle.save_fascicle_configuration` and `fascicle.load_fascicle_configuration` Deprecated since `fascicle.save` and `fascicle.load` arrived.
 
 
 ## [1.2.1] - 2025-06-06

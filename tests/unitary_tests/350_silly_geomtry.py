@@ -15,19 +15,19 @@ def nrv_geom():
     r1 = 2
     r2 = 8
     center = (2, 1)
-    el = geom.Ellipse(center, r1, r2)
+    el = geom.Ellipse(center, (r1, r2))
     X_trace1= el.get_trace()
     inside_pts1 = el.get_point_inside(5000, delta=.3)
     del el
 
     center = (5, 1)
-    el = geom.Ellipse(center, r1, r2+.5, rot=-np.pi/8)
+    el = geom.Ellipse(center, (r1, r2+.5), rot=-np.pi/8)
     X_trace2 = el.get_trace()
     inside_pts2 = el.get_point_inside(5000, delta=.3)
     del el
 
     center = (8, 1)
-    el = geom.Ellipse(center, r1, r2)
+    el = geom.Ellipse(center, (r1, r2))
     X_trace3 = el.get_trace()
     inside_pts31 = el.get_point_inside(5000, delta=.3)
     inside_pts32 = el.get_point_inside(300, delta=.3)
@@ -46,7 +46,7 @@ def nrv_geom():
     del ci
 
     center = (12.5, -1.7)
-    el = geom.Ellipse(center, r1, 5, rot=-np.pi/8)
+    el = geom.Ellipse(center, (r1, 5), rot=-np.pi/8)
     X_trace5 = el.get_trace()
     inside_pts5 = el.get_point_inside(5000, delta=.3)
     del el
@@ -55,13 +55,13 @@ def nrv_geom():
 
     # V
     center = (18, 1)
-    el = geom.Ellipse(center, r1, r2+.5, rot=-np.pi/10)
+    el = geom.Ellipse(center, (r1, r2+.5), rot=-np.pi/10)
     X_trace6 = el.get_trace()
     inside_pts6 = el.get_point_inside(5000, delta=.3)
     del el
 
     center = (23, 1)
-    el = geom.Ellipse(center, r1, r2+.5, rot=np.pi/10)
+    el = geom.Ellipse(center, (r1, r2+.5), rot=np.pi/10)
     X_trace7 = el.get_trace()
     inside_pts7 = el.get_point_inside(5000, delta=.3)
     del el

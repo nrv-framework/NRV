@@ -10,12 +10,11 @@ figdir = "unitary_tests/figures/" + test_num + "_"
 
 def test_ellipse():
     center = (1, 1)
-    r1 = 3
-    r2 = 2
-    ellipse = geom.Ellipse(center, r1, r2)
+    r = 3, 2
+    ellipse = geom.Ellipse(center, r)
     assert ellipse.center == center, "Center should be set correctly."
-    assert ellipse.r1 == r1, "Semi-major axis should be set correctly."
-    assert ellipse.r2 == r2, "Semi-minor axis should be set correctly."
+    assert ellipse.r1 == r[0], "Semi-major axis should be set correctly."
+    assert ellipse.r2 == r[1], "Semi-minor axis should be set correctly."
     assert ellipse.is_inside((1, 1)), "Point (1, 1) should be inside the ellipse."
     assert not ellipse.is_inside((5, 5)), "Point (5, 5) should be outside the ellipse."
     assert ellipse.is_inside((3, 1)), "Point (3, 1) should be inside the ellipse." 
