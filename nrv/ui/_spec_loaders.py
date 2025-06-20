@@ -2,7 +2,7 @@ from ..backend._NRV_Class import load_any
 from ..backend._log_interface import rise_warning
 
 from ..nmod import fascicle, nerve, axon, myelinated, unmyelinated
-
+from ..backend._file_handler import rmv_ext
 
 def load_nerve(data, **kwargs) -> nerve:
     """
@@ -81,3 +81,35 @@ def load_axon(data, **kwargs) -> myelinated | unmyelinated:
         rise_warning(data, " not a loadable axon")
         return None
     return obj
+
+
+# ---------- #
+#  Updaters  #
+# ---------- #
+
+
+def update_fascicle_file(fname_in:str, fname_out:str|None=None, overwrite:bool=False):
+    """
+    Update a file containing a deprecated version of saved fascicle
+
+    Parameters
+    ----------
+    fname_in : str
+        File to load
+    fname_out : str | None, optional
+        File use to save the updated fascicle, if None two cases:
+
+            - `overwrite == True`: `fname_out` is set to `fname_in`
+            - `overwrite == True` (default): `fname_out` is set to `fname_in + "_updated"`
+    overwrite : bool, optional
+        If True original file can be overwritten, by default False
+    """
+
+    if fname_out is None: 
+        if overwrite:
+            fname_out = fname_in
+        else:
+            fname_out = rmv_ext(fname_in) + "_updated"
+
+    fasc = load_fascicle(data=fname_in, extracel_context=True, intracel_context=True, rec_context=True)
+    fasc.save(data=fname_out, extracel_context=True, intracel_context=True, rec_context=True)

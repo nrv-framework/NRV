@@ -7,7 +7,7 @@ class Circle(Ellipse):
     Represents a circle with a center and radius.
     """
 
-    def __init__(self, center: tuple[float, float], radius: float):
+    def __init__(self, center: tuple[float, float]=(0,0), radius: float=10):
         """
         Initialize the Circle with a center and radius.
 
@@ -16,6 +16,10 @@ class Circle(Ellipse):
         """
         super().__init__(center=center, radius=(radius, radius), rot=0)
         self.radius = radius
+
+    @property
+    def bbox_size(self)->tuple[float, float]:
+        return 2 * self.radius, 2 * self.radius
 
     def rotate(self, angle:float, degree:bool=False):
         pass

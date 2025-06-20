@@ -8,7 +8,7 @@ class CShape(NRV_class):
     Abstract base class for closed-shaped geometries.
     """
     @abstractmethod
-    def __init__(self, center:tuple[float, float], radius:float|tuple[float,float]):
+    def __init__(self, center:tuple[float, float], radius:float|tuple[float,float], rot:float=None, degree:bool=False):
         """
         Initializes the CShape with a specified number of points for angular resolution.
 
@@ -17,8 +17,28 @@ class CShape(NRV_class):
         super().__init__()
         self.center = center[:2]
         self.radius = radius
+        self.rot = 0
 
+        if rot is not None:
+            self.rotate(rot, degree)
+
+    # ---------- #
+    # Properties #
+    # ---------- #
+
+    @property
+    def x(self)->float:
+        return 0
     
+    @property
+    def y(self)->float:
+        return self.center[0]
+
+    @property
+    def z(self)->float:
+        return self.center[1]
+    
+
     @property
     def area(self)->float:
         """
@@ -29,6 +49,18 @@ class CShape(NRV_class):
         float
         """
         pass
+
+    @property
+    def bbox_size(self)->tuple[float, float]:
+        """
+        Size of the bounding bounding box of the shape (usefull for meshing)
+
+        Returns
+        -------
+        tuple[float, float]
+        """
+        pass
+
 
     def rotate(self, angle:float, degree:bool=False):
         """

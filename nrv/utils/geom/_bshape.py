@@ -137,7 +137,7 @@ class BShape(NRV_class):
         return  self._pop["is_placed"].to_numpy(dtype=bool)
 
 
-    def __getitem__(self,key):
+    def __getitem__(self,key)->DataFrame:
         if self.has_pop:
             return self._pop[key]
         

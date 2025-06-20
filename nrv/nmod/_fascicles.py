@@ -21,12 +21,11 @@ from ..backend._NRV_Class import load_any
 from ..fmod._extracellular import *
 from ..fmod._recording import *
 from ..ui._axon_postprocessing import *
-from ..utils._misc import get_MRG_parameters
-from ..utils.geom import Circle
+from ..utils.geom import create_cshape, overlap_checker
+from ._axon_population import axon_population
 from ..backend._inouts import check_function_kwargs
 from ._axons import *
 from .utils._axon_pop_generator import *
-from ._axon_population import axon_population
 from ._myelinated import myelinated
 from ._unmyelinated import unmyelinated
 from .results._fascicles_results import fascicle_results
@@ -54,7 +53,7 @@ deprecated_builtin_postproc_functions = {
     "save_gmem": "sample_g_mem",
 }
 
-NRV_fasc_default_geom = lambda d=50: Circle(center=(0,0),radius=d/2)
+
 
 #####################
 ## Fasscicle class ##
@@ -206,7 +205,7 @@ class fascicle(NRV_simulable):
 
         self.L:float|None = None
         # add an empty axon population
-        self.axons:axon_population = axon_population(geometry=NRV_fasc_default_geom(diameter))
+        self.axons:axon_population = axon_population(geometry=create_cshape(diameter=diameter))
 
         # self.D = diameter
         # # geometric properties
@@ -384,9 +383,25 @@ class fascicle(NRV_simulable):
             bl += ["record", "recorder"]
 
         super().load(data=key_dic, blacklist=bl)
+        self.__check_deprecation(key_dic=key_dic)
+
+
+    def __check_deprecation(self, key_dic:dict):
+        d_status = False
         if "unmyelinated_param" not in key_dic:
-            rise_warning("Deprecated fascicle file")
+            rise_warning("Deprecated fascicle file, does not contains unmyelinated_param requiered since v0.8.0")
             self.set_axons_parameters(key_dic)
+            d_status = True
+
+        if "axons" not in key_dic:
+            rise_warning("Deprecated fascicle file, does not contains axon_populaiton requiered since v1.2.2")
+            self.axons.generate_from_deprected_fascicle(key_dic)
+            d_status = True
+
+        if d_status:
+            rise_warning("Deprecated fascicle file: consider updating using nrv.ui.update_fascicle_file")
+
+
 
     ## Fascicle property method
     @property
@@ -908,7 +923,7 @@ class fascicle(NRV_simulable):
             axon = unmyelinated(
                 self.axons["y"][k],
                 self.axons["z"][k],
-                self.axons["diameter"][k],
+                self.axons["diameters"][k],
                 self.L,
                 ID=k,
                 **self.unmyelinated_param,
@@ -918,7 +933,7 @@ class fascicle(NRV_simulable):
             axon = myelinated(
                 self.axons["y"][k],
                 self.axons["z"][k],
-                self.axons["diameter"][k],
+                self.axons["diameters"][k],
                 self.L,
                 ID=k,
                 **self.myelinated_param,
@@ -946,17 +961,18 @@ class fascicle(NRV_simulable):
         self.sim_mask.append(_lab)
 
     def remove_sim_masks(self, mask_labels:None|Iterable[str]|str=None, remove_from_pop=True):
-        if remove_from_pop:
-            self.axons.clear_masks(mask_labels=mask_labels)
         if mask_labels is None:
             mask_labels = self.sim_mask # to keep is_placed
         elif isinstance(mask_labels, str):
                 mask_labels = [mask_labels]
         _rmved = []
         for _lab in mask_labels:
-            if _lab in self.sim_mask:
+            if _lab in self.sim_mask and not "_elec" in _lab:
                 _rmved.append(self.sim_mask.pop(_lab))
-        pass_info(f"The following masks were removed from fascicle: {_rmved}")
+        if remove_from_pop:
+            self.axons.clear_masks(mask_labels=_rmved)
+        else:
+            pass_info(f"The following masks were removed from fascicle: {_rmved}")
 
     def remove_unmyelinated_axons(self):
         """
@@ -981,11 +997,11 @@ class fascicle(NRV_simulable):
         Remove fibers with diameters below/above a threshold
         """
         if min:
-            mask = self.axons["diameter"] >= d
+            mask = self.axons["diameters"] >= d
             _lab = f"d_over_{d}"
             
         else:
-            mask = self.axons["diameter"] <= d
+            mask = self.axons["diameters"] <= d
             _lab = f"d_under_{d}"
         self.axons.add_mask(mask=mask ,label=_lab)
         self.sim_mask.append(_lab)
@@ -1017,7 +1033,7 @@ class fascicle(NRV_simulable):
         num             : bool
             if True, the index of each axon is displayed on top of the circle
         """
-        self.axons.plot(axes, contour_color=contour_color, myel_color=myel_color, unmyel_color=unmyel_color, num=num)
+        self.axons.plot(axes, mask_labels=self.sim_mask,contour_color=contour_color, myel_color=myel_color, unmyel_color=unmyel_color, num=num)
         if self.extra_stim is not None:
             self.extra_stim.plot(axes=axes, color=elec_color, 
             nerve_d=self.radius)
@@ -1038,7 +1054,7 @@ class fascicle(NRV_simulable):
             model use for myelinated axon (use to calulated node position)
         """
         if self.L is None:
-            self.axons.plot_x(axes=axes, length=self.L, myel_color=myel_color, unmyel_color=unmyel_color, Myelinated_model=Myelinated_model)
+            self.axons.plot_x(axes=axes,length=self.L, myel_color=myel_color, unmyel_color=unmyel_color, Myelinated_model=Myelinated_model)
             ## plot electrode(s) if existings
             if self.extra_stim is not None:
                 for electrode in self.extra_stim.electrodes:
@@ -1076,7 +1092,7 @@ class fascicle(NRV_simulable):
             self.recorder = None
         self.is_simulated = False
 
-    def attach_extracellular_stimulation(self, stimulation):
+    def attach_extracellular_stimulation(self, stimulation:extracellular_context):
         """
         attach a extracellular context of simulation for an axon.
 
@@ -1090,7 +1106,7 @@ class fascicle(NRV_simulable):
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
 
-    def remove_axons_electrode_overlap(self, electrode):
+    def remove_axons_electrode_overlap(self, electrode:electrode):
         """
         Remove the axons that could overlap an electrode
 
@@ -1099,30 +1115,17 @@ class fascicle(NRV_simulable):
         electrode : object
             electrode instance, see electrodes for more details
         """
-        y, z, D = 0, 0, 0
+        _y_z_D_elec = np.zeros(3)
         # CUFF electrodes do not affect intrafascicular state
         if not is_CUFF_electrode(electrode):
             y = electrode.y
             z = electrode.z
             if is_LIFE_electrode(electrode):
                 D = electrode.D
-            # compute the distance of all axons to electrode
-            D_vectors = np.sqrt((self.axons_y - y) ** 2 + (self.axons_z - z) ** 2) - (
-                self.axons_diameter / 2 + D / 2
-            )
-            colapse = np.argwhere(D_vectors < 0)
-            mask = np.ones(len(self.axons_diameter), dtype=bool)
-            mask[colapse] = False
-            # remove axons colliding the electrode
-            if len(colapse) > 0:
-                pass_info(
-                    f"From Fascicle {self.ID}: Electrode/Axons overlap, {len(colapse)} axons will be removed from the fascicle"
-                )
-                pass_info(self.n_ax, " axons remaining")
-            self.axons_diameter = self.axons_diameter[mask]
-            self.axons_type = self.axons_type[mask]
-            self.axons_y = self.axons_y[mask]
-            self.axons_z = self.axons_z[mask]
+            e_mask = ~overlap_checker(c=_y_z_D_elec[:2], r=_y_z_D_elec[2], c_comp=self.axons[["y", "z"]].to_numpy(), r_comp=self.axons["diameters"].to_numpy())
+            e_mlabel = f"_elec{electrode.ID}"
+            self.add_sim_mask(e_mask, label=e_mlabel)
+
 
     def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
@@ -1261,7 +1264,7 @@ class fascicle(NRV_simulable):
         if not self.axons.has_node_shift:
             self.axons.generate_random_NoR_position()
         self.__update_sim_list()
-        for k in self.sim_list.index:
+        for k in self.sim_list:
             axon = self.__generate_axon(k)
             axon.attach_extracellular_stimulation(self.extra_stim)
             footprints[k] = axon.get_electrodes_footprints_on_axon(

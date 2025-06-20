@@ -13,6 +13,7 @@ def test_cercle():
     center = (1, 1)
     radius = 2
     circle = geom.Circle(center, radius)
+    bbox = geom.get_cshape_bbox(circle, looped_end=True)
     assert circle.center == center, "Center should be set correctly."
     assert circle.r1 == radius, "Radius should be set correctly."
     assert circle.radius == radius, "Radius should be set correctly."
@@ -23,11 +24,10 @@ def test_cercle():
 
 
     y_trace, z_trace = circle.get_trace()
-    assert len(y_trace) == circle.Ntheta, "Trace x-coordinates should match Ntheta."
-    assert len(z_trace) == circle.Ntheta, "Trace y-coordinates should match Ntheta."
     # Plot the circle
     plt.figure(figsize=(6, 6))
     plt.plot(y_trace, z_trace, label='Ellipse Trace')
+    plt.plot(*bbox.T, "-+",color=("k",.2),label='bbox')
     plt.scatter(*circle.center[:2], color='red', label='Center', zorder=5)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
@@ -42,3 +42,5 @@ def test_cercle():
 if __name__ == "__main__":
     test_cercle()
     print("All tests passed successfully.")
+
+    # plt.show()

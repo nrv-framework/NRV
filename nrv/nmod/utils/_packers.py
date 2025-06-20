@@ -5,7 +5,7 @@ from rich.progress import track
 import matplotlib.pyplot as plt
 
 from ._axon_pop_generator import plot_population
-from ...utils.geom._circle import Circle
+from ...utils.geom import Circle, overlap_checker
 from ...utils.geom._cshape import CShape
 from ...backend._log_interface import rise_warning, pass_info
 
@@ -64,30 +64,6 @@ def get_ppop_info(y, z, r, verbose=False, with_all_dist=False):
 # ----------- #
 # Axon Placer #
 # ----------- #
-def overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.ndarray, delta:float)->np.ndarray[bool]:
-    """
-    Check if a cicle of center ``c`` and radius ``r`` overlap with a list of circles of center ``c_comp`` and radius ``r_comp``
-
-    Parameters
-    ----------
-    c : np.ndarray
-        2D position of the center of the circle.
-    r : float
-        radius of the circle.
-    c_comp : np.ndarray
-        Array, or shape listing the 2D position of the center of the circles to compare.
-    r_comp : np.ndarrayn
-        Array listing the radius of the circles to compare.
-    delta : float
-        Additional extra space between circles perimeter
-
-    Returns
-    -------
-    np.ndarray[bool]
-    """
-    d = np.sqrt(np.sum((c_comp - c)**2, axis=-1))
-    return d < r_comp + r + delta
-
 class Placer:
     """A class for drawing circles-inside-a-circle."""
     def __init__(self, geom:CShape|None=None, delta:float=.01, delta_trace:float|None=None, delta_in:float|None=None, n_iter:int=500, radius:float=250, rho_min:float=0.005, rho_max:float=0.05):
@@ -125,7 +101,7 @@ class Placer:
             if not any(overlap_checker(c=X, r=r, c_comp=self.pos[self.placed,:],r_comp=self.r[self.placed], delta=self.delta_in)):
                 return X, True
         # for this circle.
-        pass_info('guard reached.')
+        # pass_info('guard reached.')
         return np.zeros(2) , False
 
     def place_all(self, r:int|Iterable):
@@ -148,7 +124,7 @@ class Placer:
         self.placed = np.zeros((self.n), dtype=bool)
         # Do our best to place the circles, larger ones first.
         self.pos[0,:], self.placed[0] = self._place_circle(self.r[0], first=True)
-        for i in range(1, self.n):
+        for i in track(range(1, self.n)):
             self.pos[i,:], self.placed[i] = self._place_circle(self.r[i])
         # return 2*r, y, z
         if not self.placed.all():

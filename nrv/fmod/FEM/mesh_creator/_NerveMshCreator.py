@@ -11,8 +11,10 @@ from ....backend._log_interface import rise_error, rise_warning
 
 # from ....nmod.myelinated import myelinated
 from ....utils._units import mm, sci_round
+from ....utils.geom._misc import CShape, create_cshape
 from ....backend._file_handler import rmv_ext
 from ._MshCreator import MshCreator, pi
+
 
 ENT_DOM_offset = {
     "Volume": 0,
@@ -146,6 +148,9 @@ class NerveMshCreator(MshCreator):
         self.N_axon = 0
         self.axons = {}
 
+        self.geometries:dict[str, CShape] = {}
+
+
         self._continuous_myelin = True
 
         self.N_electrode = 0
@@ -185,6 +190,7 @@ class NerveMshCreator(MshCreator):
         param["axons"] = self.axons
         param["N_electrode"] = self.N_electrode
         param["electrodes"] = self.electrodes
+        param["geometries"] = self.geometries
         return param
 
     def save(
@@ -292,10 +298,13 @@ class NerveMshCreator(MshCreator):
                     self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
             self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
 
-            for fascicle in self.fascicles.values():
-                self.add_cylinder(
-                    0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["d"] / 2
+            for _id, fascicle in self.fascicles.items():
+                self.add_from_cshape(
+                    self.geometries[f"fa{_id}"],
+                    x=0,
+                    dx=self.L,
                 )
+
             for i in self.axons:
                 self.add_axon(i)
 
@@ -373,7 +382,7 @@ class NerveMshCreator(MshCreator):
         if self.default_res["Nerve"] > self.Nerve_D / 5:
             self.default_res["Nerve"] = self.Nerve_D / 5
 
-    def reshape_fascicle(self, d, y_c=0, z_c=0, ID=None, res="default"):
+    def reshape_fascicle(self, d=0, y_c=0, z_c=0, ID=None,res="default", geometry:CShape|None=None):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -395,15 +404,25 @@ class NerveMshCreator(MshCreator):
                     ID += 1
             self.N_fascicle += 1
 
+        # Mostly for retrocompatibility
+        if geometry is None and d != 0:
+            geometry = create_cshape(center=(y_c,z_c), diameter=d)
+        if np.iterable(geometry.radius):
+            min_length = min(geometry.radius)
+        else:
+            min_length = geometry.radius
+
+
+
         if res == "default":
             res = self.default_res["Fascicle"]
-        if d / 5 < res:
-            res = d / 5
+        if res > min_length/2:
+            res = min_length/2
+
+        self.geometries[f"fa{ID}"] = geometry
 
         self.fascicles[ID] = {
-            "y_c": y_c,
-            "z_c": z_c,
-            "d": d,
+            "gid":f"fa{ID}",
             "res": res,
             "face": None,
             "volume": None,
@@ -421,7 +440,9 @@ class NerveMshCreator(MshCreator):
         if ID is None:
             self.fascicles = {}
             self.N_fascicle = 0
+            self.geometries = {k: v for k, v in self.geometries.items() if "fa" not in k}
         elif ID in self.fascicles:
+            del self.geometries[self.fascicles[ID]["gid"]]
             del self.fascicles[ID]
             self.N_fascicle -= 1
 
@@ -586,17 +607,15 @@ class NerveMshCreator(MshCreator):
         dim_key     :"face" or "volume"
             element type
         """
-        fascicle = self.fascicles[ID]
         # Already computed
-        status_test = fascicle[dim_key] is None
+        status_test = self.fascicles[ID][dim_key] is None
+        geom = self.geometries[f"fa{ID}"]
         # test good diameter
-        size_test = np.allclose([dx, dy, dz], [self.L, fascicle["d"], fascicle["d"]])
+        size_test = np.allclose((dx, dy, dz), (self.L,)+ geom.bbox_size, atol=1)
         # test center of mass in fascicle
-        com_test = np.allclose(
-            com,
-            (self.L / 2, fascicle["y_c"], fascicle["z_c"]),
-            rtol=1,
-            atol=fascicle["d"] / 2,
+        com_test = (
+            np.isclose(com[0], self.L / 2)
+            and geom.is_inside(com[1:])
         )
         return status_test and size_test and com_test
 
@@ -859,7 +878,6 @@ class NerveMshCreator(MshCreator):
         # nerve domain
         self.add_domains(obj_IDs=self.Nerve_entities["volume"], phys_ID=2, dim=3)
         self.add_domains(obj_IDs=self.Nerve_entities["face"], phys_ID=3, dim=2)
-
         for j in self.fascicles:
             id_ph = ENT_DOM_offset["Fascicle"] + (2 * j)
             if id_ph < ENT_DOM_offset["Electrode"]:

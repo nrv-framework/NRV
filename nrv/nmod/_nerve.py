@@ -152,21 +152,19 @@ class nerve(NRV_simulable):
         self.type = "nerve"
         self.L = length
         self.D = None
-        self.y_grav_center = 0
-        self.z_grav_center = 0
         self.Outer_D = Outer_D
         self.ID = ID
 
         # geometric properties
-        self.y_grav_center = 0
-        self.z_grav_center = 0
+        self.y_grav_center:float = 0
+        self.z_grav_center:float = 0
 
         # Update parameters with kwargs
         self.set_parameters(**kwargs)
 
         # Fascicular content
-        self.fascicles_IDs = []
-        self.fascicles = {}
+        self.fascicles_IDs:list[str] = []
+        self.fascicles:dict[str,fascicle] = {}
 
         # Axons objects default parameters
         self.unmyelinated_param = {
@@ -619,7 +617,7 @@ class nerve(NRV_simulable):
     def __merge_fascicular_context(self, fasc: fascicle):
         if self.is_extra_stim:
             self.extra_stim.reshape_fascicle(
-                fasc.D, fasc.y_grav_center, fasc.z_grav_center, fasc.ID
+                fasc.geom, fasc.ID
             )
         if fasc.extra_stim is not None:
             self.attach_extracellular_stimulation(fasc.extra_stim)
@@ -834,9 +832,7 @@ class nerve(NRV_simulable):
             self.extra_stim.remove_fascicles()
             for fasc in self.fascicles.values():
                 self.extra_stim.reshape_fascicle(
-                    Fascicle_D=fasc.D,
-                    y_c=fasc.y_grav_center,
-                    z_c=fasc.z_grav_center,
+                    geometry=fasc.geom,
                     ID=fasc.ID,
                 )
             self.is_extra_stim = True

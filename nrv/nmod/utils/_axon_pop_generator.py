@@ -89,7 +89,7 @@ def get_stat_expected(fname:str)->float:
     float
     """
     diameters, presence = load_stat(fname)
-    return np.mean(diameters*presence)
+    return np.sum(diameters*presence)
 
 
 def one_Gamma(x, a1, beta1, c1):

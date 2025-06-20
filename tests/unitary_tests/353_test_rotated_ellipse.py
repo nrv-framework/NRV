@@ -13,8 +13,11 @@ figdir = "unitary_tests/figures/" + test_num + "_"
 def test_rotated_ellipse():
     center = 1, 1
     r = 3, 2
-    angle = np.pi/4 # Rotation angle in degrees
+    angle = -np.pi/3 # Rotation angle in degrees
     ellipse = geom.Ellipse(center, r, angle)
+    bbox = geom.get_cshape_bbox(ellipse, looped_end=True)
+
+    print(ellipse.__module__)
 
     y_trace, z_trace = ellipse.get_trace()
     X_trace = np.array((y_trace, z_trace)).T
@@ -30,6 +33,7 @@ def test_rotated_ellipse():
     # Plot the rotated ellipse
     plt.figure(figsize=(6, 6))
     plt.plot(y_trace, z_trace, label='Rotated Ellipse Trace')
+    plt.plot(*bbox.T, "-+",color=("k",.2),label='bbox')
     plt.scatter(*ellipse.center, color='red', label='Center', zorder=5)
 
     plt.plot(*trace_rtra.T, color=("orange",.3),label='Inverse Translated Ellipse Trace')
@@ -49,3 +53,5 @@ def test_rotated_ellipse():
 if __name__ == "__main__":
     test_rotated_ellipse()
     print("All tests passed successfully.")
+
+    # plt.show()

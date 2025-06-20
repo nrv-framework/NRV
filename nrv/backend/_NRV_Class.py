@@ -202,6 +202,7 @@ class NRV_class(metaclass=ABCMeta):
         """
         self.__NRVObject__ = True
         self.nrv_type = self.__class__.__name__
+        self.nrv_module = self.__module__
         pass_debug_info(self.nrv_type, " initialized")
 
     def __del__(self):
@@ -364,7 +365,10 @@ def load_any(data, **kwargs) -> NRV_class:
     # test if NRV dict
     elif is_NRV_dict(key_dic):
         nrv_type = key_dic["nrv_type"]
-        nrv_obj = eval('sys.modules["nrv"].' + nrv_type)()
+        nrv_module = "nrv"
+        if "nrv_module" in key_dic:
+            nrv_module = key_dic["nrv_module"]
+        nrv_obj = eval(f"sys.modules['{nrv_module}'].{nrv_type}")()
         nrv_obj.load(key_dic, **kwargs)
     elif is_NRV_dict_dict(key_dic):
         nrv_obj = {}

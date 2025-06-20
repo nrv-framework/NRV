@@ -11,14 +11,18 @@ All notable changes to NRV are summed up in this file.
 - Added `axon_population`-class to handle creation of population and interface with fascicle.
 - Added angle untis: rad (default) and degree
 - Added file: `backend._extlib_interface` to gather interfacing function with external libraries
+- Added `MshCreator.add_from_cshape` to generate cylinder with custom base. 
+- Fascicle are now added from their full geometry instead of only their diameter and center
 
 
 ### Fixed
 
 
 ### Removed
-
 - Removed `fascicle.save_fascicle_configuration` and `fascicle.load_fascicle_configuration` Deprecated since `fascicle.save` and `fascicle.load` arrived.
+
+### Depreciated
+- arguments `Fascicle_D`, `y_c` and `z_c` from `FEM_stimulation.reshape_fascicle`, now `geometry` is used instead
 
 
 ## [1.2.1] - 2025-06-06

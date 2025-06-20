@@ -5,6 +5,11 @@ utils.geom provides some classes and functions allowing to desig and handle vari
 
 from ._circle import Circle
 from ._ellipse import Ellipse
+from ._misc import (
+    create_cshape,
+    get_cshape_bbox,
+    overlap_checker,
+)
 
 
 
@@ -15,7 +20,11 @@ classes = [
     "Ellipse",
 ]
 
-functions = []
+functions = [
+    "create_cshape",
+    "get_cshape_bbox",
+    "overlap_checker",
+]
 
 __all__ = []
 

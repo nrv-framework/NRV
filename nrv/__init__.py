@@ -117,6 +117,7 @@ from .utils._saving_handler import *
 from .utils._nrv_function import *
 from .utils._units import *
 from .utils._stimulus import *
+from .utils.geom._misc import *
 
 from .ui._axon_postprocessing import *
 from .ui._axon_simulations import *

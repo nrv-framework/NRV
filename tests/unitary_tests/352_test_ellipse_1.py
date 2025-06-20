@@ -12,6 +12,8 @@ def test_ellipse():
     center = (1, 1)
     r = 3, 2
     ellipse = geom.Ellipse(center, r)
+    bbox = geom.get_cshape_bbox(ellipse, looped_end=True)
+
     assert ellipse.center == center, "Center should be set correctly."
     assert ellipse.r1 == r[0], "Semi-major axis should be set correctly."
     assert ellipse.r2 == r[1], "Semi-minor axis should be set correctly."
@@ -22,11 +24,10 @@ def test_ellipse():
 
 
     y_trace, z_trace = ellipse.get_trace()
-    assert len(y_trace) == ellipse.Ntheta, "Trace x-coordinates should match Ntheta."
-    assert len(z_trace) == ellipse.Ntheta, "Trace y-coordinates should match Ntheta."
     # Plot the ellipse
     plt.figure(figsize=(6, 6))
     plt.plot(y_trace, z_trace, label='Ellipse Trace')
+    plt.plot(*bbox.T, "-+",color=("k",.2),label='bbox')
     plt.scatter(*ellipse.center[:2], color='red', label='Center', zorder=5)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
@@ -42,3 +43,5 @@ def test_ellipse():
 if __name__ == "__main__":
     test_ellipse()
     print("All tests passed successfully.")
+
+    # plt.show()

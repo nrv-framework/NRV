@@ -26,9 +26,12 @@ from .utils._packers import (
 
 from ..backend._NRV_Class import kwags_picker
 from ..backend._log_interface import pass_info, rise_warning, rise_error
-from ..utils.geom._ellipse import Ellipse
-from ..utils.geom._circle import Circle
-from ..utils.geom._cshape import CShape
+from ..utils.geom import (
+    create_cshape,
+    Ellipse, # typing
+    Circle, # typing
+)
+from ..utils.geom._cshape import CShape # typing
 from ..utils.geom._bshape import BShape
 from ..utils._misc import get_MRG_parameters
 
@@ -103,7 +106,7 @@ class axon_population(BShape):
             data to used to create the population. Supported data:
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
-                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax).
+                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional).
         n_ax               : int, optional
             Number of axon to generate for the population (Unmyelinated and myelinated), default 100
         FVF             : float
@@ -202,7 +205,7 @@ class axon_population(BShape):
             data to used to create the population. Supported data:
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
-                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax).
+                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional).
         n_ax               : int, optional
             Number of axon to generate for the population (Unmyelinated and myelinated), default 100
         FVF             : float
@@ -260,19 +263,33 @@ class axon_population(BShape):
                 overwrite=overwrite
             )
 
-            self.place_population(
-                pos=pos,
-                method=method,
-                delta=delta,
-                delta_trace=delta_trace,
-                delta_in=delta_in,
-                n_iter=n_iter,
-                fit_to_size=fit_to_size,
-                with_node_shift=with_node_shift,
-                overwrite=overwrite,
-            )
+            # Need for the case of data.shape is (4,n) 
+            # to avoid calling place twice
+            if not self.has_placed_pop or overwrite:
+                self.place_population(
+                    pos=pos,
+                    method=method,
+                    delta=delta,
+                    delta_trace=delta_trace,
+                    delta_in=delta_in,
+                    n_iter=n_iter,
+                    fit_to_size=fit_to_size,
+                    with_node_shift=with_node_shift,
+                    overwrite=overwrite,
+                )
             if fname is not None:
                 save_axon_population(fname, *self._pop.to_numpy())
+
+    def generate_from_deprected_fascicle(self, key_dic:dict):
+        if len({"y_grav_center", "z_grav_center", "D"} - key_dic.keys()) == 0:
+            self.set_geometry(center=(key_dic["y_grav_center"], key_dic["z_grav_center"]), radius=key_dic["D"]/2)
+        if len({"axons_type", "axons_diameter", "axons_y", "axons_z", "NoR_relative_position"} - key_dic.keys()) == 0:
+            if len(key_dic["axons_diameter"]) > 0:
+                self.create_population(data=(key_dic["axons_type"],key_dic["axons_diameter"]))
+            if len(key_dic["axons_y"]) > 0:
+                self.place_population(pos=(key_dic["axons_y"],key_dic["axons_z"]))
+            if len(key_dic["NoR_relative_position"]) > 0:
+                self.generate_NoR_position_from_data(key_dic["NoR_relative_position"])
 
     # ---------------- #
     # Geometry methods #
@@ -310,7 +327,7 @@ class axon_population(BShape):
                 if isinstance(self.geom, Ellipse):
                     rot = rot or self.geom.rot
             if center is not None and radius is not None:
-                self.create_geometry(center=center, radius=radius, rot=rot)
+                create_cshape(center=center, radius=radius, rot=rot)
             else:
                 raise ValueError(
                 "Either the geometry or its property must be use in argument"
@@ -322,18 +339,6 @@ class axon_population(BShape):
                 self.clear_population_placement()
             else:
                 self.check_placement
-
-
-    def create_geometry(
-        self,
-        center: tuple[float, float],
-        radius: float | tuple[float, float],
-        rot: float = None,
-    ):
-        if isinstance(radius, tuple):
-            self.geom = Ellipse(center=center, radius=radius, rot=rot)
-        else:
-            self.geom = Circle(center=center, radius=radius)
 
     def reshape_geometry(
         self,
@@ -350,8 +355,7 @@ class axon_population(BShape):
                 center = self.geom.center
             if radius:
                 radius = self.geom.radius
-            if rot is None and isinstance(self.geom, Ellipse):
-                rot = self.geom.rot
+            rot = self.geom.rot
         self.set_geometry(
             geometry=geometry,
             center=center,
@@ -378,9 +382,10 @@ class axon_population(BShape):
         ----------
         data : tuple[np.ndarray] | np.ndarray | str
             data to used to create the population. Supported data:
+
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
-                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax).
+                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional).
         n_ax               : int, optional
             Number of axon to generate for the population (Unmyelinated and myelinated), default 100
         FVF             : float
@@ -444,19 +449,21 @@ class axon_population(BShape):
 
         .. math::
 
-            FVF = \frac{n_{axons}*E_{d}}{A_{tot}}
+            FVF = \frac{n_{axons}(0.5E_{d})^2\pi}{A_{tot}}
 
-        where E_{d} is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where \\(E_{d}\\) is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
 
         Tip
         ---
         It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         if FVF is not None:
-            e_d = percent_unmyel * get_stat_expected(U_stat) - (
+            e_d = percent_unmyel * get_stat_expected(U_stat) + (
                 1 - percent_unmyel
             ) * get_stat_expected(M_stat)
-            n_ax = FVF * self.geom.area / e_d
+            e_A = np.pi * (.5*e_d)**2 
+            n_ax = round(FVF * self.geom.area / (2*e_A)) 
+            #!BUG in stats `2*` not supposed to be their
             pass_info(f"A {n_ax} axons population will be generated")
 
         axons_diameters, axons_type, _, _ = create_axon_population(
@@ -487,7 +494,7 @@ class axon_population(BShape):
             data to used to create the population. Supported data:
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
-                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax).
+                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional).
         """
         if isinstance(data, str):
             axons_diameters, axons_type, _, _, y_axons, z_axons = load_axon_population(
@@ -499,14 +506,15 @@ class axon_population(BShape):
 
         if np.iterable(data):
             n_col = len(data)
-            pass_info("Generating Axon population from data")
             self._pop = DataFrame(data=zip(*data[:2]), columns=["types", "diameters"])
             if n_col == 4:
-                pass_info("Generating Axon placed population from data")
                 self._pop = DataFrame(
                     data=zip(*data), columns=["types", "diameters", "y", "z"]
                 )
                 self.check_placement
+                pass_info("Axon placed population generated from data")
+            else:
+                pass_info("Axon population generated from data")
 
     # ----------------------- #
     # Place population method #
@@ -699,6 +707,18 @@ class axon_population(BShape):
         node_lengths = get_MRG_parameters(self._pop["diameters"].to_numpy)[5]
         self._pop["node_shift"] = (x - 0.5) % node_lengths / node_lengths
 
+        self._pop["node_shift"] *= self._pop["types"]
+
+    def generate_NoR_position_from_data(self, node_shift:np.ndarray):
+        """
+        Generates Node of Ranvier shifts to aligned a node of each axon to x postition.
+
+        Parameters
+        ----------
+        x    : float
+            x axsis value (um) on which node are lined, by default 0
+        """
+        self._pop["node_shift"] = node_shift
         self._pop["node_shift"] *= self._pop["types"]
 
 
