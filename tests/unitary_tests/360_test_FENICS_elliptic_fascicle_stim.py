@@ -1,6 +1,8 @@
 import nrv
 import time
 import matplotlib.pyplot as plt
+#nrv.parameters.set_nrv_verbosity(4)
+
 
 test_dir = "./unitary_tests/"
 __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
@@ -11,22 +13,8 @@ meshfname = test_dir+ "results/mesh/" + test_num+ "_mesh.msh"
 
 if __name__ == '__main__':
     t0 = time.time()
-    source_file = './unitary_tests/sources/56_fasc.json'
-    # Ntest = 124
 
-    #### Nerve and fascicle geometry
-    L = 10_000
-    Nerve_D = 250
-
-    ##########################
-    ## Fascicle declaration ##
-    ##########################
-    fascicle_1 = nrv.fascicle()
-    fascicle_1.load(source_file)
-
-    fascicle_1.define_length(L)
-    fascicle_1.set_ID(test_num)
-
+    geom = nrv.create_cshape((0,0), radius=(15, 11), rot=60, degree=True)
     ###########################
     ## extracellular context ##
     ###########################
@@ -34,8 +22,12 @@ if __name__ == '__main__':
     # ### Simulation box size
     Outer_D = 5
     test_stim.reshape_outerBox(Outer_D)
+    #### Nerve and fascicle geometry
+    L = 10_000
+    Nerve_D = 250
     test_stim.reshape_nerve(Nerve_D, L)
-    test_stim.reshape_fascicle(fascicle_1.geom)
+
+    test_stim.reshape_fascicle(geometry=geom)
     ##### electrode and stimulus definition
     D_1 = 25
     length_1 = 1000
@@ -53,21 +45,30 @@ if __name__ == '__main__':
     stim1.biphasic_pulse(start, I_cathod, T_cathod, I_anod, T_inter)
     test_stim.add_electrode(elec_1, stim1)
 
+    ##########################
+    ## Fascicle declaration ##
+    ##########################
+    fascicle_1 = nrv.fascicle()
+    fascicle_1.set_geometry(geometry=geom)
+    fascicle_1.fill(n_ax=35)
 
+    fascicle_1.define_length(L)
+    fascicle_1.set_ID(124)
     # extra cellular stimulation
     fascicle_1.attach_extracellular_stimulation(test_stim)
     # simulation
     fascicle_1.compute_electrodes_footprints()
     # Save the mesh
     fascicle_1.extra_stim.model.mesh.save(fname=meshfname)
+    #fascicle_1.extra_stim.run_model()
 
-    res = fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/')
+    res = fascicle_1.simulate(t_sim=10,postproc_script='is_recruited')
     t1 = time.time()
-    
+    print('simulation done in ' + str(t1-t0))
+
     fig, ax = plt.subplots()
     res.plot_recruited_fibers(ax)
     fig.savefig(fname=figdir+"A.png")
-    print('simulation done in ' + str(t1-t0))
 
     del test_stim
     plt.show()

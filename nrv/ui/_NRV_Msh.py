@@ -115,20 +115,20 @@ def mesh_from_fascicle(
         else:
             node_shift = np.zeros(fascicle.n_ax)
         if x_shift is not None:
-            i_myel = fascicle.axons_type.astype(bool)
-            __deltaxs = get_MRG_parameters(fascicle.axons_diameter[i_myel])[5]
+            i_myel = fascicle.axons["types"].astype(bool)
+            __deltaxs = get_MRG_parameters(fascicle.axons["diameters"][i_myel])[5]
             __l1_ = fascicle.NoR_relative_position[i_myel] * __deltaxs
             __x_l = (__l1_ - x_shift) % __deltaxs
             node_shift[i_myel] = __x_l / __deltaxs
 
         for i_ax in range(fascicle.n_ax):
-            ax_d = round(fascicle.axons_diameter[i_ax], 3)
-            ax_y = round(fascicle.axons_y[i_ax], 3)
-            ax_z = round(fascicle.axons_z[i_ax], 3)
-            mye = bool(fascicle.axons_type[i_ax])
+            ax_d = round(fascicle.axons["diameters"][i_ax], 3)
+            ax_y = round(fascicle.axons["y"][i_ax], 3)
+            ax_z = round(fascicle.axons["z"][i_ax], 3)
+            mye = bool(fascicle.axons["types"][i_ax])
             res_ax_ = res_ax
             if isinstance(res_ax, str) and res_ax != "default":
-                res_ax_ = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
+                res_ax_ = eval(str(fascicle.axons["diameters"][i_ax]) + res_ax)
             elif np.iterable(res_ax) and not isinstance(res_ax, str):
                 res_ax_ = res_ax[i_ax]
             mesh.reshape_axon(

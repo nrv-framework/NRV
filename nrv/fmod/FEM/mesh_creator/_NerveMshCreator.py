@@ -299,12 +299,12 @@ class NerveMshCreator(MshCreator):
             self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
 
             for _id, fascicle in self.fascicles.items():
-                self.add_from_cshape(
+                _s_id = self.add_from_cshape(
                     self.geometries[f"fa{_id}"],
                     x=0,
                     dx=self.L,
                 )
-
+                self.__collect_geom_ppt(fascicle, _s_id)
             for i in self.axons:
                 self.add_axon(i)
 
@@ -533,6 +533,16 @@ class NerveMshCreator(MshCreator):
 
         self.electrodes[ID] = {"type": elec_type, "res": res, "kwargs": kwargs}
 
+    def __collect_geom_ppt(self, d_store:dict, shape_ids:tuple[tuple[int]]):
+        for c in shape_ids:
+            bbox =  np.round(self.model.occ.getBoundingBox(*c),4)
+            if np.isclose(abs(bbox[0] - bbox[3]), self.L):
+                if c[0]==2:
+                    key = "face_bbox"
+                else:
+                    key = "volume_bbox"
+                d_store[key] =bbox
+
     ####################################################################################################
     #####################################   domains definition  ########################################
     ####################################################################################################
@@ -588,7 +598,7 @@ class NerveMshCreator(MshCreator):
             dx, 0
         )
 
-    def __is_fascicle(self, ID, dx, dy, dz, com, dim_key):
+    def __is_fascicle(self, ID, bbox, com, dim_key):
         """
         Internal use only: check if volume is fascicle ID or face is external face of fascicle ID
 
@@ -608,11 +618,12 @@ class NerveMshCreator(MshCreator):
             element type
         """
         # Already computed
+        # fasc = self.fascicles[ID][dim_key]
         status_test = self.fascicles[ID][dim_key] is None
-        geom = self.geometries[f"fa{ID}"]
         # test good diameter
-        size_test = np.allclose((dx, dy, dz), (self.L,)+ geom.bbox_size, atol=1)
+        size_test = np.allclose(bbox, self.fascicles[ID][dim_key+"_bbox"], atol=1)
         # test center of mass in fascicle
+        geom = self.geometries[f"fa{ID}"]
         com_test = (
             np.isclose(com[0], self.L / 2)
             and geom.is_inside(com[1:])
@@ -820,7 +831,8 @@ class NerveMshCreator(MshCreator):
                 self.Nerve_entities[key] += [entities[i][1]]
 
             for j in self.fascicles:
-                if self.__is_fascicle(j, bd_x, bd_y, bd_z, ent_com[i], key):
+                if self.__is_fascicle(j, ent_bd[i], ent_com[i], key):
+                # if self.__is_fascicle(j, ent_bd, ent_com[i], key):
                     self.fascicles[j][key] = entities[i][1]
 
             for j in self.axons:

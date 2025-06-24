@@ -21,7 +21,7 @@ from ..backend._NRV_Class import load_any
 from ..fmod._extracellular import *
 from ..fmod._recording import *
 from ..ui._axon_postprocessing import *
-from ..utils.geom import create_cshape, overlap_checker
+from ..utils.geom import create_cshape, circle_overlap_checker
 from ._axon_population import axon_population
 from ..backend._inouts import check_function_kwargs
 from ._axons import *
@@ -467,7 +467,7 @@ class fascicle(NRV_simulable):
         -------
         float
         """
-        self.center[0]
+        return self.center[0]
 
 
     @property
@@ -479,24 +479,7 @@ class fascicle(NRV_simulable):
         -------
         float
         """
-        self.center[1]
-
-    @property
-    def N(self):
-        """
-        :meta private:
-        """
-        rise_warning(DeprecationWarning, "fascicle.N property is obsolete use fascicle.n_ax instead")
-        return self.n_ax
-
-    @property
-    def A(self):
-        """
-        Area of the fascicle
-        """
-        if not self.axons.has_geom:
-            return None
-        return self.axons.geom.area
+        return self.center[1]
 
     def set_ID(self, ID):
         """
@@ -531,65 +514,6 @@ class fascicle(NRV_simulable):
         alias for `self.axons.set_geometry<:meth:axon_population.set_geometry>`
         """
         self.axons.set_geometry(**kwgs)
-
-    def define_circular_contour(self, D, y_c=None, z_c=None):
-        """
-        Define a circular countour to the fascicle
-
-        Parameters
-        ----------
-        D           : float
-            diameter of the circular fascicle contour, in um
-        y_c         : float
-            y coordinate of the circular contour center, in um
-        z_c         : float
-            z coordinate of the circular contour center, in um
-        """
-        rise_warning(
-            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
-        )
-        if y_c is not None and z_c is not None:
-            center = y_c, z_c
-        else:
-            center = None
-        self.axons.reshape_geometry(radius=D/2, center=center)
-
-    def get_circular_contour(self):
-        """
-        Returns the properties of the fascicle contour considered as a circle (y and z center and diameter)
-
-        Returns
-        -------
-        D : float
-            diameter of the contour, in um. Set to 0 if not applicable
-        y : float
-            y position of the contour center, in um
-        z : float
-            z position of the contour center, in um
-        """
-        rise_warning(
-            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
-        )
-        return self.axons.geom.radius, self.axons.geom.center
-
-    def fit_circular_contour(self, y_c=None, z_c=None, delta=0.1, round_dgt=None):
-        """
-        Define a circular countour to the fascicle
-
-        Parameters
-        ----------
-        y_c         : float
-            y coordinate of the circular contour center, in um
-        z_c         : float
-            z coordinate of the circular contour center, in um
-        delta       : float
-            distance between farest axon and contour, in um
-        """
-        # TODO implement a fit contour method
-        rise_warning(
-            DeprecationWarning, "fit_circular_contour method usage is not recommended anymore and will be removed in future release. Nothing was done"
-        )
-        pass_info("Define fascicle size/shape at object creation instead.")
 
     ## generate Fascicle from histology
     def import_contour(self, smthing_else):
@@ -689,63 +613,6 @@ class fascicle(NRV_simulable):
             fname=fname,
         )
 
-
-    def fill_with_population(
-        self,
-        axons_diameter: np.array = None,
-        axons_type: np.array = None,
-        y_axons: np.array = None,
-        z_axons: np.array = None,
-        fit_to_size: bool = False,
-        delta: float = 1,
-        delta_in: float | None = None,
-        delta_trace: float = 1,
-        method: Literal["default", "packing"] = "default",
-        overwrite = False,
-        n_iter: int = 500,
-    ) -> None:
-        """
-        Fill the fascicle with an axon population
-
-        Parameters
-        ----------
-        axons_diameters     : np.array
-            Array  containing all the diameters of the axon population
-        axons_type          : np.array
-            Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
-        y_axons             : np.array
-            y coordinate of the axon population, in um
-        z_axons             : np.array
-            z coordinate of the axons population, in um
-        delta               : float
-            axon-to-axon and axon to border minimal distance, by default .01
-        delta_trace : float | None, optional
-            _description_, by default None
-        delta_in : float | None, optional
-            _description_, by default None
-        fit_to_size         : bool
-            if true, the axon population is extended to fit within fascicle size, if not the population is kept as is
-        n_iter              : int
-            number of interation for the packing algorithm if the y-x axon coordinates are not specified
-        """
-        rise_warning(DeprecationWarning, "fascicle.fill_with_population deprecated, use fascicle.axons.place_population instead")
-        if axons_diameter is not None and axons_type is not None:
-            self.axons.create_population(data=(axons_diameter, axons_type), overwrite=overwrite)
-        pos = None
-        if y_axons is not None and z_axons is not None:
-            pos = (y_axons, z_axons)
-        self.axons.place_population(
-            pos=pos,
-            fit_to_size=fit_to_size,
-            delta=delta,
-            delta_in=delta_in,
-            delta_trace=delta_trace,
-            method=method,
-            n_iter=n_iter,
-            overwrite=overwrite,
-        )
-
-
     ## Move methods
     def translate(self, y, z, with_geom:bool=True, with_pop:bool=True, with_context:bool=True):
         """
@@ -794,67 +661,6 @@ class fascicle(NRV_simulable):
             if self.recorder is not None:
                 self.recorder.rotate(angle, self.center)
 
-
-    def translate_axons(self, y, z):
-        """
-        Move axons only in a fascicle by group translation
-
-        Parameters
-        ----------
-        y   : float
-            y axis value for the translation in um
-        z   : float
-            z axis value for the translation in um
-        """
-        rise_warning(DeprecationWarning, "fascicle.translate_axons is deprecated and migth be removed in future version, use fascicle.translate instead")
-        self.translate((y, z), with_geom=False, with_context=False)
-
-    def translate_fascicle(self, y, z):
-        """
-        Translate a complete fascicle
-
-        Parameters
-        ----------
-        y   : float
-            y axis value for the translation in um
-        z   : float
-            z axis value for the translation in um
-        """
-        rise_warning(DeprecationWarning, "fascicle.translate_fascicle is deprecated and migth be removed in future version, use fascicle.translate instead")
-        self.translate((y, z), with_axon=False)
-
-
-    def rotate_axons(self, theta, y_c=0, z_c=0):
-        """
-        Move axons only in a fascicle by group rotation
-
-        Parameters
-        ----------
-        theta   : float
-            angular value of the translation, in rad
-        y_c     : float
-            y axis value of the rotation center in um, by default set to 0
-        z_c     : float
-            z axis value for the rotation center in um, by default set to 0
-        """
-        rise_warning(DeprecationWarning, "fascicle.rotate_axons is deprecated and migth be removed in future version, use fascicle.rotate instead")
-        self.translate(theta, with_geom=False, with_context=False)
-
-    def rotate_fascicle(self, theta, y_c=0, z_c=0):
-        """
-        Rotate a complete fascicle
-
-        Parameters
-        ----------
-        theta   : float
-            angular value of the translation, in rad
-        y_c     : float
-            y axis value of the rotation center in um, by default set to 0
-        z_c     : float
-            z axis value for the rotation center in um, by default set to 0
-        """
-        rise_warning(DeprecationWarning, "fascicle.rotate_fascicle is deprecated and migth be removed in future version, use fascicle.rotate instead")
-        self.translate(theta)
 
     ## Axons related method
     def set_axons_parameters(
@@ -1115,14 +921,14 @@ class fascicle(NRV_simulable):
         electrode : object
             electrode instance, see electrodes for more details
         """
-        _y_z_D_elec = np.zeros(3)
+        _y_z_r_elec = np.zeros(3)
         # CUFF electrodes do not affect intrafascicular state
         if not is_CUFF_electrode(electrode):
-            y = electrode.y
-            z = electrode.z
+            _y_z_r_elec[0] = electrode.y
+            _y_z_r_elec[1] = electrode.z
             if is_LIFE_electrode(electrode):
-                D = electrode.D
-            e_mask = ~overlap_checker(c=_y_z_D_elec[:2], r=_y_z_D_elec[2], c_comp=self.axons[["y", "z"]].to_numpy(), r_comp=self.axons["diameters"].to_numpy())
+                _y_z_r_elec[2] = electrode.D/2
+            e_mask = ~circle_overlap_checker(c=_y_z_r_elec[:2], r=_y_z_r_elec[2], c_comp=self.axons[["y", "z"]].to_numpy(), r_comp=self.axons["diameters"].to_numpy()/2)
             e_mlabel = f"_elec{electrode.ID}"
             self.add_sim_mask(e_mask, label=e_mlabel)
 
@@ -1203,27 +1009,6 @@ class fascicle(NRV_simulable):
     def __update_sim_list(self):
         self.sim_list = self.axons.get_sub_population(mask_labels=self.sim_mask).index
 
-    def generate_random_NoR_position(self):
-        """
-        Generates radom Node of Ranvier shifts to prevent from axons with the same diamters to be aligned.
-        """
-        pass_info(DeprecationWarning, "fascicle.generate_random_NoR_position is depercated, use fascicle.axons.generate_random_NoR_position")
-        # also generated for unmyelinated but the meaningless value won't be used
-        self.axons.generate_random_NoR_position()
-
-    def generate_ligned_NoR_position(self, x=0):
-        """
-        Generates Node of Ranvier shifts to aligned a node of each axon to x postition.
-
-        Parameters
-        ----------
-        x    : float
-            x axsis value (um) on which node are lined, by default 0
-        """
-        pass_info(DeprecationWarning, "fascicle.generate_ligned_NoR_position is depercated, use fascicle.axons.generate_ligned_NoR_position")
-        # also generated for unmyelinated but the meaningless value won't be used
-        self.axons.generate_ligned_NoR_position(x=x)
-
     @property
     def __footprint_to_compute(self):
         """
@@ -1277,21 +1062,6 @@ class fascicle(NRV_simulable):
             self.footprints = footprints
         self.is_footprinted = True
         return footprints
-
-    def get_electrodes_footprints_on_axons(
-        self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
-    ):
-        """
-        :meta private:
-        """
-        rise_warning(
-            DeprecationWarning,
-            "Deprecation method get_electrodes_footprints_on_axons",
-            "\nuse compute_electrodes_footprints instead",
-        )
-        self.compute_electrodes_footprints(
-            save_ftp_only=save_ftp_only, filename=filename, **kwargs
-        )
 
     def __init_axon_postprocessing(self):
         """
@@ -1597,11 +1367,14 @@ class fascicle(NRV_simulable):
         if not self.return_parameters_only:
             for k in axons_ID:
                 fasc_sim.update({"axon" + str(k): results[k]})
+
+        # dirty hack to force NRV_class instead of dict
         if not self.return_parameters_only:
+            fasc_sim["axons"] = load_any(fasc_sim["axons"])
             if "extra_stim" in fasc_sim:
                 fasc_sim["extra_stim"] = load_any(
                     fasc_sim["extra_stim"]
-                )  # dirty hack to force NRV_class instead of dict
+                )  
             if self.record:
                 fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
 
@@ -1610,3 +1383,240 @@ class fascicle(NRV_simulable):
             fasc_sim["is_simulated"] = True
         self.is_simulated = True
         return fasc_sim
+
+
+
+    # ---------------------------------------------- #
+    #               DEPRECATED Methods               #
+    # ---------------------------------------------- #
+    @property
+    def N(self):
+        """
+        :meta private:
+        """
+        rise_warning(DeprecationWarning, "fascicle.N property is obsolete use fascicle.n_ax instead")
+        return self.n_ax
+
+    @property
+    def A(self):
+        """
+        Area of the fascicle
+        """
+        rise_warning(DeprecationWarning, "fascicle.A property is obsolete use fascicle.geom.area instead")
+        return self.geom.area
+    
+
+
+    def define_circular_contour(self, D, y_c=None, z_c=None):
+        """
+        Define a circular countour to the fascicle
+
+        Parameters
+        ----------
+        D           : float
+            diameter of the circular fascicle contour, in um
+        y_c         : float
+            y coordinate of the circular contour center, in um
+        z_c         : float
+            z coordinate of the circular contour center, in um
+        """
+        rise_warning(
+            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
+        )
+        if y_c is not None and z_c is not None:
+            center = y_c, z_c
+        else:
+            center = None
+        self.axons.reshape_geometry(radius=D/2, center=center)
+
+    def get_circular_contour(self):
+        """
+        Returns the properties of the fascicle contour considered as a circle (y and z center and diameter)
+
+        Returns
+        -------
+        D : float
+            diameter of the contour, in um. Set to 0 if not applicable
+        y : float
+            y position of the contour center, in um
+        z : float
+            z position of the contour center, in um
+        """
+        rise_warning(
+            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
+        )
+        return self.axons.geom.radius, self.axons.geom.center
+
+    def fit_circular_contour(self, y_c=None, z_c=None, delta=0.1, round_dgt=None):
+        """
+        Define a circular countour to the fascicle
+
+        Parameters
+        ----------
+        y_c         : float
+            y coordinate of the circular contour center, in um
+        z_c         : float
+            z coordinate of the circular contour center, in um
+        delta       : float
+            distance between farest axon and contour, in um
+        """
+        # TODO implement a fit contour method
+        rise_warning(
+            DeprecationWarning, "fit_circular_contour method usage is not recommended anymore and will be removed in future release. Nothing was done"
+        )
+        pass_info("Define fascicle size/shape at object creation instead.")
+
+
+
+    def fill_with_population(
+        self,
+        axons_diameter: np.array = None,
+        axons_type: np.array = None,
+        y_axons: np.array = None,
+        z_axons: np.array = None,
+        fit_to_size: bool = False,
+        delta: float = 1,
+        delta_in: float | None = None,
+        delta_trace: float = 1,
+        method: Literal["default", "packing"] = "default",
+        overwrite = False,
+        n_iter: int = 500,
+    ) -> None:
+        """
+        Fill the fascicle with an axon population
+
+        Parameters
+        ----------
+        axons_diameters     : np.array
+            Array  containing all the diameters of the axon population
+        axons_type          : np.array
+            Array containing a '1' value for indexes where the axon is myelinated (A-delta or not), else '0'
+        y_axons             : np.array
+            y coordinate of the axon population, in um
+        z_axons             : np.array
+            z coordinate of the axons population, in um
+        delta               : float
+            axon-to-axon and axon to border minimal distance, by default .01
+        delta_trace : float | None, optional
+            _description_, by default None
+        delta_in : float | None, optional
+            _description_, by default None
+        fit_to_size         : bool
+            if true, the axon population is extended to fit within fascicle size, if not the population is kept as is
+        n_iter              : int
+            number of interation for the packing algorithm if the y-x axon coordinates are not specified
+        """
+        rise_warning(DeprecationWarning, "fascicle.fill_with_population deprecated, use fascicle.axons.place_population or fascicle.fill instead")
+        if axons_diameter is not None and axons_type is not None:
+            self.axons.create_population(data=(axons_type, axons_diameter), overwrite=overwrite)
+        pos = None
+        if y_axons is not None and z_axons is not None:
+            pos = (y_axons, z_axons)
+        self.axons.place_population(
+            pos=pos,
+            fit_to_size=fit_to_size,
+            delta=delta,
+            delta_in=delta_in,
+            delta_trace=delta_trace,
+            method=method,
+            n_iter=n_iter,
+            overwrite=overwrite,
+        )
+
+
+    def translate_axons(self, y, z):
+        """
+        Move axons only in a fascicle by group translation
+
+        Parameters
+        ----------
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        rise_warning(DeprecationWarning, "fascicle.translate_axons is deprecated and migth be removed in future version, use fascicle.translate instead")
+        self.translate((y, z), with_geom=False, with_context=False)
+
+    def translate_fascicle(self, y, z):
+        """
+        Translate a complete fascicle
+
+        Parameters
+        ----------
+        y   : float
+            y axis value for the translation in um
+        z   : float
+            z axis value for the translation in um
+        """
+        rise_warning(DeprecationWarning, "fascicle.translate_fascicle is deprecated and migth be removed in future version, use fascicle.translate instead")
+        self.translate((y, z), with_axon=False)
+
+
+    def rotate_axons(self, theta, y_c=0, z_c=0):
+        """
+        Move axons only in a fascicle by group rotation
+
+        Parameters
+        ----------
+        theta   : float
+            angular value of the translation, in rad
+        y_c     : float
+            y axis value of the rotation center in um, by default set to 0
+        z_c     : float
+            z axis value for the rotation center in um, by default set to 0
+        """
+        rise_warning(DeprecationWarning, "fascicle.rotate_axons is deprecated and migth be removed in future version, use fascicle.rotate instead")
+        self.translate(theta, with_geom=False, with_context=False)
+
+    def rotate_fascicle(self, theta, y_c=0, z_c=0):
+        """
+        Rotate a complete fascicle
+
+        Parameters
+        ----------
+        theta   : float
+            angular value of the translation, in rad
+        y_c     : float
+            y axis value of the rotation center in um, by default set to 0
+        z_c     : float
+            z axis value for the rotation center in um, by default set to 0
+        """
+        rise_warning(DeprecationWarning, "fascicle.rotate_fascicle is deprecated and migth be removed in future version, use fascicle.rotate instead")
+        self.translate(theta)
+
+    def generate_random_NoR_position(self):
+        """
+        Generates radom Node of Ranvier shifts to prevent from axons with the same diamters to be aligned.
+        """
+        pass_info(DeprecationWarning, "fascicle.generate_random_NoR_position is depercated, use fascicle.axons.generate_random_NoR_position")
+        # also generated for unmyelinated but the meaningless value won't be used
+        self.axons.generate_random_NoR_position()
+
+    def generate_ligned_NoR_position(self, x=0):
+        """
+        Generates Node of Ranvier shifts to aligned a node of each axon to x postition.
+
+        Parameters
+        ----------
+        x    : float
+            x axsis value (um) on which node are lined, by default 0
+        """
+        pass_info(DeprecationWarning, "fascicle.generate_ligned_NoR_position is depercated, use fascicle.axons.generate_ligned_NoR_position")
+        # also generated for unmyelinated but the meaningless value won't be used
+        self.axons.generate_ligned_NoR_position(x=x)
+
+    def get_electrodes_footprints_on_axons(
+        self, save_ftp_only=False, filename="electrodes_footprint.ftpt", **kwargs
+    ):
+        """
+        :meta private:
+        """
+        rise_warning(
+            DeprecationWarning,
+            "Deprecation method get_electrodes_footprints_on_axons",
+            "\nuse compute_electrodes_footprints instead",
+        )
+        self.compute_electrodes_footprints(
+            save_ftp_only=save_ftp_only, filename=filename, **kwargs
+        )

@@ -24,8 +24,7 @@ class BShape(NRV_class):
         """
         super().__init__()
         self.geom:None|Type[CShape] = None
-        self._pop:None|DataFrame = None
-
+        self._pop:DataFrame = DataFrame(columns=["types", "diameters"])
         self.mask_labels:list[str] = []
 
     @property
@@ -49,7 +48,7 @@ class BShape(NRV_class):
         bool
         """
         
-        return self._pop is not None
+        return not self._pop.empty
     
     @property
     def has_placed_pop(self)->bool:
@@ -92,8 +91,8 @@ class BShape(NRV_class):
         """
         Delete the current population
         """
-        self._pop = None
-        self.mask_labels = set()
+        self._pop = DataFrame(columns=["types", "diameters"])
+        self.mask_labels = []
 
     def place_population(self, **kwgs):
         """
@@ -203,7 +202,7 @@ class BShape(NRV_class):
         """
         return len(self.mask_labels)
 
-    def add_mask(self, data:np.ndarray|str, label:None|str=None, overwrite:bool=True)->tuple[int, np.ndarray]:
+    def add_mask(self, data:np.ndarray|str, label:None|str=None, overwrite:bool=True, mask_on:list[str]=[])->tuple[int, np.ndarray]:
         """
         Add a mask on the population
 
@@ -233,7 +232,11 @@ class BShape(NRV_class):
                 mask = self._pop.eval(data)
             else:
                 mask = np.array(data, dtype=bool)
-
+                if len(mask_on) > 0:
+                    full_mask = np.zeros(len(self),dtype=bool)
+                    i_mask = self.get_sub_population(mask_labels=mask_on).index.to_numpy(dtype=int)
+                    full_mask[i_mask] = mask
+                    mask = full_mask
             self._pop[label] = mask
             self.mask_labels.append(label)
         return label, mask

@@ -214,8 +214,13 @@ class FENICS_model(FEM_model):
             z_c=param["z_c"],
         )
         for id in param["fascicles"]:
+            if not len(param["geometries"]):
+                rise_warning("Deprecated file")
+                geom = create_cshape(center=(param["fascicles"][id]["y_c"], param["fascicles"][id]["z_c"]), diameter=param["fascicles"][id]["d"])
+            else:
+                geom = param["geometries"][f"fa{id}"]
             self.reshape_fascicle(
-                geometry=param["geometries"][f"fa{id}"],
+                geometry=geom,
                 ID=int(id),
                 Perineurium_thickness=param["Perineurium_thickness"][id],
                 res=param["fascicles"][id]["res"],
@@ -397,7 +402,7 @@ class FENICS_model(FEM_model):
                 else:  ## To check when not all ID are fixed
                     ID = max(self.Perineurium_thickness) + 1
 
-            p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
+            p_th = Perineurium_thickness or get_perineurial_thickness(2*np.mean(geometry.radius))
             self.Perineurium_thickness[ID] = p_th
 
     def remove_fascicles(self, ID=None):

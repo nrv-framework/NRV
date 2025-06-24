@@ -112,7 +112,7 @@ nF = 1e-6 * uF
 ####################
 ## angle prefixes ##
 ####################
-deg = 180 * np.pi * rad
+deg = rad * np.pi / 180
 
 #############################
 ####  Usefull functions ####

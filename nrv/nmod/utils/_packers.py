@@ -5,7 +5,7 @@ from rich.progress import track
 import matplotlib.pyplot as plt
 
 from ._axon_pop_generator import plot_population
-from ...utils.geom import Circle, overlap_checker
+from ...utils.geom import Circle, circle_overlap_checker
 from ...utils.geom._cshape import CShape
 from ...backend._log_interface import rise_warning, pass_info
 
@@ -98,7 +98,7 @@ class Placer:
             X = self.geom.get_point_inside(1, delta=r+self.delta_trace)
             if first:
                 return X, True
-            if not any(overlap_checker(c=X, r=r, c_comp=self.pos[self.placed,:],r_comp=self.r[self.placed], delta=self.delta_in)):
+            if not any(circle_overlap_checker(c=X, r=r, c_comp=self.pos[self.placed,:],r_comp=self.r[self.placed], delta=self.delta_in)):
                 return X, True
         # for this circle.
         # pass_info('guard reached.')

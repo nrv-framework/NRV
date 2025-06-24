@@ -20,11 +20,10 @@ from .utils._packers import (
     get_circular_contour,
     expand_pop,
     remove_collision,
-    remove_outlier_axons,
     get_ppop_info,
 )
 
-from ..backend._NRV_Class import kwags_picker
+from ..backend._inouts import check_function_kwargs
 from ..backend._log_interface import pass_info, rise_warning, rise_error
 from ..utils.geom import (
     create_cshape,
@@ -45,7 +44,7 @@ class axon_population(BShape):
     def __init__(self, **kwgs):
         super().__init__()
 
-        gen_kwg = kwags_picker(self.generate, kwgs)
+        gen_kwg = check_function_kwargs(self.generate, kwgs)
 
         if len(gen_kwg):
             self.generate(**gen_kwg)
@@ -70,6 +69,7 @@ class axon_population(BShape):
         center: tuple[float, float] = None,
         radius: None | float | tuple[float, float] = None,
         rot: float = 0,
+        diameter: None | float | tuple[float, float] = None,
         discard_placement: bool = False,
         data: tuple[np.ndarray] | np.ndarray | str = None,
         n_ax: int = None,
@@ -281,8 +281,20 @@ class axon_population(BShape):
                 save_axon_population(fname, *self._pop.to_numpy())
 
     def generate_from_deprected_fascicle(self, key_dic:dict):
+        """
+        Generate the population from the data saved in a deprecated fascicle file. 
+        
+        Warning
+        -------
+            This function is mostly for internal use for retrocompatibility. If deprecated save file are found, it is adviced to uptated them using :func:`update_fascicle_file`.
+
+        Parameters
+        ----------
+        key_dic : dict
+            Dictionary containing the loaded fascicle
+        """
         if len({"y_grav_center", "z_grav_center", "D"} - key_dic.keys()) == 0:
-            self.set_geometry(center=(key_dic["y_grav_center"], key_dic["z_grav_center"]), radius=key_dic["D"]/2)
+            self.set_geometry(center=(key_dic["y_grav_center"], key_dic["z_grav_center"]), diameter=key_dic["D"])
         if len({"axons_type", "axons_diameter", "axons_y", "axons_z", "NoR_relative_position"} - key_dic.keys()) == 0:
             if len(key_dic["axons_diameter"]) > 0:
                 self.create_population(data=(key_dic["axons_type"],key_dic["axons_diameter"]))
@@ -300,6 +312,8 @@ class axon_population(BShape):
         center: tuple[float, float] = None,
         radius: None | float | tuple[float, float] = None,
         rot: float = 0,
+        degree: bool = False,
+        diameter: None | float | tuple[float, float] = None,
         discard_placement: bool = False,
     ):
         """
@@ -307,16 +321,16 @@ class axon_population(BShape):
 
         Parameters
         ----------
-        geometry : None | Type[CShape]
-            if not None, geometry used for the population
         center : tuple[float, float], optional
-            _description_, by default None
-        r1 : float, optional
-            _description_, by default 0
-        r2 : float, optional
-            _description_, by default 0
-        rot : float, optional
-            _description_, by default 0
+            Center of the shape, by default (0, 0)
+        radius : float | tuple[float, float], optional
+            Radius of the shape, by default 10
+        rot : None | float, optional
+            Rotation of the shape, by default None
+        diameter : None | float | tuple[float, float], optional
+            Diameter of the shape. If None, radius value is used to define the shape, by default None
+        discard_placement : bool
+            If true and a unplace an potential population already placed. Else, only discard the axon not fiting in the geometry, by default False
         """
         if geometry is not None:
             self.geom = geometry
@@ -327,7 +341,7 @@ class axon_population(BShape):
                 if isinstance(self.geom, Ellipse):
                     rot = rot or self.geom.rot
             if center is not None and radius is not None:
-                create_cshape(center=center, radius=radius, rot=rot)
+                self.geom = create_cshape(center=center, radius=radius, rot=rot, degree=degree, diameter=diameter)
             else:
                 raise ValueError(
                 "Either the geometry or its property must be use in argument"
@@ -733,9 +747,10 @@ class axon_population(BShape):
             sub_pop = self.get_sub_population(expr=expr, mask_labels=mask_labels)
             for i_ax in sub_pop.index:
                 c = ptc.Circle(
-                    (sub_pop["y"][i_ax], self.axon_pop["z"][i_ax]),
-                    sub_pop["diameters"][i_ax] / 2,
+                    (self._pop["y"][i_ax], self.axon_pop["z"][i_ax]),
+                    self._pop["diameters"][i_ax] / 2,
                 )
+
                 if sub_pop["types"][i_ax]:
                     c.set_color(myel_color)
                 else:

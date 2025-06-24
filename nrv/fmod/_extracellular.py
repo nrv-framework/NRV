@@ -545,7 +545,7 @@ class FEM_stimulation(extracellular_context):
 
     def reshape_fascicle(
         self,
-        geometry:CShape,
+        geometry:CShape=None,
         Fascicle_D:float=10,
         y_c:float=0,
         z_c:float=0,

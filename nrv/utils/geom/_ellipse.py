@@ -19,7 +19,7 @@ class Ellipse(CShape):
         :param semi_major_axis: The length of the semi-major axis.
         :param r2: The length of the semi-minor axis.
         """
-        super().__init__(center, radius, rot=rot)
+        super().__init__(center, radius, rot=rot, degree=degree)
         assert np.iterable(radius), "Ellipse radius must be iterable (of lenght at least equal to 2)"
         self.r1 = self.radius[0]
         self.r2 = self.radius[1]
@@ -78,7 +78,7 @@ class Ellipse(CShape):
     def is_rot(self)->bool:
         return bool(self.rot)
 
-    def is_inside(self, point: tuple[np.ndarray, np.ndarray], delta:float=0) -> bool:
+    def is_inside(self, point: tuple[np.ndarray, np.ndarray], delta:float=0, for_all:bool=True) -> bool:
         if isinstance(point, np.ndarray):
             X = deepcopy(point)
         else:
@@ -94,8 +94,11 @@ class Ellipse(CShape):
         X_norm = np.sum(X**2, axis=-1)
 
         # Check if the normalized point is inside the unit circle
-        return (X_norm <= 1).all()
-    
+        if for_all:
+            return (X_norm <= 1).all()
+        return X_norm <= 1
+
+
     def rotate(self, angle:float, degree:bool=False):
         if degree:
             angle = to_nrv_unit(angle, "deg")

@@ -91,6 +91,7 @@ class nerve_results(sim_results):
         """
         Porperties of axons population of each fascicles
 
+
         Returns
         -------
         np.ndarray (self.n_ax, 6)
@@ -105,10 +106,7 @@ class nerve_results(sim_results):
                 (
                     self[key].ID * np.ones(fasc_n_ax),
                     np.arange(fasc_n_ax),
-                    self[key].axons_type,
-                    self[key].axons_diameter,
-                    self[key].axons_y,
-                    self[key].axons_z,
+                    self[key].axons[["types", "diameters", "y", "z"]].to_numpy(),
                 )
             ).T
             _mye[_offset : _offset + fasc_n_ax, :] = fasc_axons

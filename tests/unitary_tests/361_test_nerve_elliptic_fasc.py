@@ -18,17 +18,19 @@ if __name__ == "__main__":
     nerve = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d)
 
     ## Nerve creation
-    fasc1_d = 200       # in um
+    fasc1_d = (200, 120)       # in um
     fasc1_y = -100      # in um
     fasc1_z = 0         # in um
 
-    fasc2_d = 100       # in um
+
+    fasc2_d = (100, 60)       # in um
     fasc2_y = 100       # in um
     fasc2_z = 0         # in um
 
     #create the fascicle objects
     fascicle_1 = nrv.fascicle(diameter=fasc1_d,ID=1)
-    fascicle_2 = nrv.fascicle(diameter=fasc2_d, ID=2)
+    fascicle_2 = nrv.fascicle(ID=2)
+    fascicle_2.set_geometry(diameter=fasc2_d, rot=90, degree=True)
     #Add the fascicles to the nerve
     nerve.add_fascicle(fascicle=fascicle_1, y=fasc1_y, z=fasc1_z)
     nerve.add_fascicle(fascicle=fascicle_2, y=fasc2_y, z=fasc2_z)
@@ -36,10 +38,10 @@ if __name__ == "__main__":
     n_ax = 100      #size of the axon population
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
     
-    fascicle_1.fill_with_population(axons_diameters, axons_type, delta=2)
+    fascicle_1.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=2, delta_trace=10)
 
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
-    fascicle_2.fill_with_population(axons_diameters, axons_type, delta=2, delta_trace=2)
+    fascicle_2.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=2)
     # fascicle_1.fit_population_to_size(delta=2)
 
 
@@ -73,7 +75,6 @@ if __name__ == "__main__":
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
     fig.savefig(figdir+"A.png")
-
     nerve_ppt = nerve.save(save=False,extracel_context=True)
     del nerve
 
@@ -86,22 +87,8 @@ if __name__ == "__main__":
     n_res1 = ner1(t_sim=3,postproc_script = "is_recruited")
     del ner1
 
-    # Overwrite default nproc (with nrv.parameters)
-    # nrv.parameters.set_nmod_ncore(4)
-    ner2 = nrv.load_nerve(nerve_ppt, extracel_context=True)
-    n_res2 = ner2(t_sim=3,postproc_script = "is_recruited")
-    del ner2
-
-    # !! Not implemented yet (should be implemented for Friday's merge)
-    # # Set nproc directly for the instance
-    # ner3 = nrv.load_nerve(nerve_ppt, extracel_context=True)
-    # ner3.set_ncores(2)
-    # n_res3 = ner3(t_sim=3,postproc_script = "is_recruited")
-    # del ner3
-
     fig, axs = plt.subplots(1, 2, figsize=(10,5))
     n_res1.plot_recruited_fibers(axs[0])
-    n_res2.plot_recruited_fibers(axs[1])
     ax.set_xlabel("z-axis (µm)")
     ax.set_ylabel("y-axis (µm)")
     fig.savefig(figdir+"B.png")

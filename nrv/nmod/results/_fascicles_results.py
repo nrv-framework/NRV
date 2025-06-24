@@ -29,7 +29,7 @@ class fascicle_results(sim_results):
         """
         Number of axons in the fascicle
         """
-        return len(self.axons_diameter)
+        return len(self.axons["diameters"])
 
     def get_n_ax(self, ax_type: str = "all") -> int:
         """
@@ -175,6 +175,7 @@ class fascicle_results(sim_results):
             axon_z.append(self[axon].z)
             axon_diam.append(self[axon].diameter)
             axon_type.append(self[axon].myelinated)
+        self.axons.add_mask(data=axon_recruited, label="is_recruited", mask_on=self.sim_mask)
         return (axon_diam, axon_type, axon_y, axon_z, axon_recruited)
 
     def get_block_summary_axons(
@@ -189,13 +190,15 @@ class fascicle_results(sim_results):
         n_onset = []
         for axon in axons_keys:
             self[axon].block_summary(AP_start, freq, t_refractory)
-
             is_blocked.append(self[axon].is_blocked)
             n_onset.append(self[axon].n_onset)
             axon_y.append(self[axon].y)
             axon_z.append(self[axon].z)
             axon_diam.append(self[axon].diameter)
             axon_type.append(self[axon].myelinated)
+        self.axons["is_blocked"] = is_blocked
+        self.axons["n_onset"] = n_onset
+
         return (axon_diam, axon_type, axon_y, axon_z, is_blocked, n_onset)
 
     # impeddance related methods
@@ -291,7 +294,7 @@ class fascicle_results(sim_results):
             membrane thickness in um, by default 7*nm
         """
         u_c, m_c = self.get_membrane_capacitance(mem_th=mem_th)
-        eps = (self.axons_type * (m_c - u_c)) + u_c
+        eps = (self.axons["types"] * (m_c - u_c)) + u_c
         g = self.get_membrane_conductivity(x=x, t=t, mem_th=mem_th)
         f_mem = g / (2 * np.pi * eps)
 
@@ -341,62 +344,56 @@ class fascicle_results(sim_results):
         self,
         axes: plt.axes,
         contour_color: str = "k",
-        myel_color: str = "r",
-        unmyel_color: str = "b",
+        myel_color: str = "b",
+        unmyel_color: str = "r",
         num: bool = False,
     ) -> None:
-        ## plot contour
-        axes.add_patch(
-            plt.Circle(
-                (self.y_grav_center, self.z_grav_center),
-                self.D / 2,
-                color=contour_color,
-                fill=False,
-                linewidth=2,
-            )
-        )
         ## plot axons
-        axon_diam, axon_type, axon_y, axon_z, axon_recruited = self.get_axons()
-        for k, _ in enumerate(axon_diam):
-            color = unmyel_color
-            if axon_type[k]:
-                color = myel_color
-            alpha = 0.1
-            if axon_recruited[k]:
-                alpha = 1
-            axes.add_patch(
-                plt.Circle(
-                    (axon_y[k], axon_z[k]),
-                    axon_diam[k] / 2,
-                    color=color,
-                    fill=True,
-                    alpha=alpha,
-                )
+        self.get_axons()
+
+        self.axons.plot(
+            axes=axes,
+            mask_labels=[],
+            contour_color=(contour_color,.1),
+            myel_color=(myel_color,.1),
+            unmyel_color=(unmyel_color,.1),
+            num=num,
             )
+    
+        self.axons.plot(
+            axes=axes,
+            mask_labels=["is_recruited"],
+            contour_color=(contour_color,1),
+            myel_color=(myel_color,1),
+            unmyel_color=(unmyel_color,1),
+            num=num,
+            )
+
+
         if "extra_stim" in self:
             if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+                self.extra_stim.plot(axes=axes, color="gold", nerve_d=2*self.axons.geom.radius)
         if num:
             for k in range(self.n_ax):
                 axes.text(
-                    self.axons_y[k],
-                    self.axons_z[k],
+                    self.axons["y"][k],
+                    self.axons["z"][k],
                     str(k),
                     horizontalalignment="center",
                     verticalalignment="center",
                 )
-        axes.set_xlim(
-            (
-                -1.1 * self.D / 2 + self.y_grav_center,
-                1.1 * self.D / 2 + self.y_grav_center,
-            )
-        )
-        axes.set_ylim(
-            (
-                -1.1 * self.D / 2 + self.z_grav_center,
-                1.1 * self.D / 2 + self.z_grav_center,
-            )
-        )
+        # axes.set_xlim(
+        #     (
+        #         -1.1 * self.D / 2 + self.y_grav_center,
+        #         1.1 * self.D / 2 + self.y_grav_center,
+        #     )
+        # )
+        # axes.set_ylim(
+        #     (
+        #         -1.1 * self.D / 2 + self.z_grav_center,
+        #         1.1 * self.D / 2 + self.z_grav_center,
+        #     )
+        # )
 
     def plot_block_summary(
         self,
@@ -434,11 +431,12 @@ class fascicle_results(sim_results):
             if True, the index of each axon is displayed on top of the circle
         """
 
+
         ## plot contour
         axes.add_patch(
             plt.Circle(
-                (self.y_grav_center, self.z_grav_center),
-                self.D / 2,
+                (self.geom.y, self.geom.z),
+                self.geom.radius / 2,
                 color=contour_color,
                 fill=False,
                 linewidth=2,
@@ -490,7 +488,7 @@ class fascicle_results(sim_results):
         if num:
             for k in range(self.n_ax):
                 axes.text(
-                    self.axons_y[k], self.axons_z[k], str(k)
+                    self.axons["y"][k], self.axons["z"][k], str(k)
                 )  # horizontalalignment='center',verticalalignment='center')
         axes.set_xlim(
             (

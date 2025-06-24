@@ -10,6 +10,7 @@ def create_cshape(
     center: tuple[float, float] = (0, 0),
     radius: float | tuple[float, float] = 10,
     rot: None | float = None,
+    degree:bool = False,
     diameter: None | float | tuple[float, float] = None,
 )->CShape:
     """
@@ -18,13 +19,13 @@ def create_cshape(
     Parameters
     ----------
     center : tuple[float, float], optional
-        _description_, by default (0, 0)
+        Center of the shape, by default (0, 0)
     radius : float | tuple[float, float], optional
-        _description_, by default 10
+        Radius of the shape, by default 10
     rot : None | float, optional
-        _description_, by default None
+        Rotation of the shape, by default None
     diameter : None | float | tuple[float, float], optional
-        _description_, by default None
+        Diameter of the shape. If None, radius value is used to define the shape, by default None
 
     Returns
     -------
@@ -36,7 +37,7 @@ def create_cshape(
         radius = diameter / 2
 
     if isinstance(radius, tuple):
-        geom = Ellipse(center=center, radius=radius, rot=rot)
+        geom = Ellipse(center=center, radius=radius, rot=rot, degree=degree)
     else:
         geom = Circle(center=center, radius=radius)
     return geom
@@ -66,7 +67,7 @@ def get_cshape_bbox(shape:CShape, looped_end:bool=False):
     return bbox
 
 
-def overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.ndarray, delta:float=0)->np.ndarray[bool]:
+def circle_overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.ndarray, delta:float=0)->np.ndarray[bool]:
     """
     Check if a cicle of center ``c`` and radius ``r`` overlap with a list of circles of center ``c_comp`` and radius ``r_comp``
 
@@ -89,3 +90,39 @@ def overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.ndarray,
     """
     d = np.sqrt(np.sum((c_comp - c)**2, axis=-1))
     return d < r_comp + r + delta
+
+def cshape_overlap_checker(s:CShape, s_comp:CShape|list[CShape], n_trace:int=1000, on_trace:bool=False)->bool|list[bool]:
+    """
+    Check if a `CShape` overlape with another or a list of them.
+
+    Warning
+    -------
+    This version is not ideal and will be improved in the future
+
+    Parameters
+    ----------
+    s : CShape
+        _description_
+    s_comp : CShape | list[CShape]
+        _description_
+    n_trace : int, optional
+        _description_, by default 1000
+    on_trace : bool, optional
+        _description_, by default False
+
+    Returns
+    -------
+    bool|list[bool]
+        _description_
+    """
+    if isinstance(s_comp, CShape):
+        if not on_trace:
+            return s.is_inside(s_comp.get_trace(n_trace))
+        _isin = s.is_inside(s_comp.get_trace(n_trace), for_all=False)
+        return True in _isin and False in _isin
+    else:
+        comp = []
+        for s_c in s_comp:
+            comp += cshape_overlap_checker(s, s_c, n_trace=n_trace, on_trace=on_trace)
+
+        return comp

@@ -8,7 +8,8 @@ from ._ellipse import Ellipse
 from ._misc import (
     create_cshape,
     get_cshape_bbox,
-    overlap_checker,
+    circle_overlap_checker,
+    cshape_overlap_checker,
 )
 
 
@@ -23,7 +24,8 @@ classes = [
 functions = [
     "create_cshape",
     "get_cshape_bbox",
-    "overlap_checker",
+    "circle_overlap_checker",
+    "cshape_overlap_checker",
 ]
 
 __all__ = []

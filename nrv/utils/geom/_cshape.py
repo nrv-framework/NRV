@@ -90,7 +90,7 @@ class CShape(NRV_class):
 
 
     @abstractmethod
-    def is_inside(self, point: tuple[np.ndarray|float, np.ndarray|float], delta:float=0) -> bool:
+    def is_inside(self, point: tuple[np.ndarray|float, np.ndarray|float], delta:float=0, for_all:bool=True) -> bool|np.ndarray[bool]:
         """
         Checks if a given point is inside the C-shape.
 
@@ -100,10 +100,11 @@ class CShape(NRV_class):
             A tuple representing the coordinates of the point (x, y).
         delat : float
             addtional space bewteen the point and the trace
-
+        for_all : bool
+            If False return a array of bool for each point else return only one bool using ``all``, by default True
         Returns
         -------
-        bool
+        bool | np.ndarray[bool]
             True if the point is inside the C-shape, False otherwise.
         """
         pass
@@ -141,3 +142,7 @@ class CShape(NRV_class):
             A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
         """
         pass
+
+    def get_bbox(self, n_theta:int=100) -> np.ndarray[float]:
+        _tr = np.array(self.get_trace(n_theta))
+        return np.concatenate([np.min(_tr, axis=1),np.max(_tr, axis=1)])

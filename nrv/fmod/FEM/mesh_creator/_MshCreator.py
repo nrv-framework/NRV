@@ -419,10 +419,6 @@ class MshCreator(NRV_class):
         surf = gmsh.model.occ.addPlaneSurface([loop])
         gmsh.model.occ.synchronize()
 
-
-        gmsh.model.occ.rotate([(2, surf)], x, shape.center[0], shape.center[1], 1, 0, 0, shape.rot)
-        gmsh.model.occ.synchronize()
-
         if self.D == 3:
             cyl = gmsh.model.occ.extrude([(2, surf)], dx, 0, 0)
             gmsh.model.occ.synchronize()

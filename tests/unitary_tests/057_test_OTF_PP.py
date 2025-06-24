@@ -49,7 +49,7 @@ def test_custom_OFT_PP():
 
 def test_custom_OFT_PP_with_kwargs():
     # set in simulation
-    fasc = create_fascicle(_id=2)
+    fasc = create_fascicle(_id=3)
     res = fasc.simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":1, "unvalid_arg":404})
 
 

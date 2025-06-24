@@ -5,39 +5,14 @@ This is mainly used to create generic methods such as save and load.
 
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-from inspect import getcallargs
-from typing import Callable
 import sys      # used in an eval
 import numpy as np
+from pandas import DataFrame
 from numpy import iterable
 
 from ._file_handler import json_dump, json_load
 from ._log_interface import pass_debug_info
 from ._extlib_interface import is_empty_iterable
-
-
-
-def kwags_picker(func:Callable, kwgs:dict)->dict:
-    """
-    Get only the key arguments corresponding to function from a `dict` of key arguments.
-
-    Parameters
-    ----------
-    func : Callable
-        funtion or method to check.
-    kwgs : dict
-        Dictionnary containing all the key arguments to check
-
-    Returns
-    -------
-    dict
-        Dictionnary containing only the key arguments required for `func`
-    """
-    rmv_key = kwgs.keys()-getcallargs(func).keys()
-    func_kwgs = deepcopy(kwgs)
-    for k in rmv_key:
-        func_kwgs.pop(k)
-    return func_kwgs
 
 # ------------------------------------ #
 #           check object               #
@@ -292,6 +267,8 @@ class NRV_class(metaclass=ABCMeta):
                     self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
+                elif isinstance(self.__dict__[key], DataFrame):
+                    self.__dict__[key] = DataFrame(key_dic[key])
                 elif isinstance(self.__dict__[key], set):
                     self.__dict__[key] = set(key_dic[key])
                 elif is_empty_iterable(key_dic[key]):

@@ -5,6 +5,7 @@ NRV-I/O File Handler.
 import json
 import os
 import numpy as np
+from pandas import DataFrame
 
 from ._log_interface import rise_error, rise_warning, pass_info
 
@@ -184,6 +185,8 @@ class NRV_Encoder(json.JSONEncoder):
             result = float(obj)
         elif isinstance(obj, np.ndarray):
             result = obj.tolist()
+        elif isinstance(obj, DataFrame):
+            result = obj.to_dict()
         elif isinstance(obj, set):
             result = list(obj)
         else:
