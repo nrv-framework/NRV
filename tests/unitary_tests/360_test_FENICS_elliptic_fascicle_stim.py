@@ -71,4 +71,4 @@ if __name__ == '__main__':
     fig.savefig(fname=figdir+"A.png")
 
     del test_stim
-    plt.show()
+    # plt.show()

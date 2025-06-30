@@ -215,7 +215,7 @@ class FENICS_model(FEM_model):
         )
         for id in param["fascicles"]:
             if not len(param["geometries"]):
-                rise_warning("Deprecated file")
+                rise_warning("Deprecated file: FENICS_model does not contain attribute geometries")
                 geom = create_cshape(center=(param["fascicles"][id]["y_c"], param["fascicles"][id]["z_c"]), diameter=param["fascicles"][id]["d"])
             else:
                 geom = param["geometries"][f"fa{id}"]

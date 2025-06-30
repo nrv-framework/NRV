@@ -3,44 +3,57 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
 
-test_num = 310
-mesh_file_u = f"./unitary_tests/results/mesh/{test_num}_umesh"
-mesh_file_m = f"./unitary_tests/results/mesh/{test_num}_mmesh"
+figdir = "unitary_tests/figures/" + test_num + "_"
 
-
-fascicle = nrv.fascicle(ID=test_num)
-fascicle.axons_diameter = np.asarray([10 ,3, 4])
-fascicle.axons_type = np.asarray([1, 1, 1])
-fascicle.axons_y = np.asarray([0, 0, 10])
-fascicle.axons_z = np.asarray([0, 10, 0])
-fascicle.define_circular_contour(D=50)
-
-fig, ax = plt.subplots(figsize=(5,5))
-fascicle.plot(ax)
-#plt.show()
-
-mesh = nrv.mesh_from_fascicle(fascicle, Length=300,Outer_D=None, Nerve_D=400)
-print(mesh.n_core)
-mesh.compute_mesh()
-mesh.save(mesh_file_m)
-
-fascicle = nrv.fascicle(ID=test_num)
-fascicle.axons_diameter = np.asarray([1, 1, 2])
-fascicle.axons_type = np.asarray([0, 0, 0])
-fascicle.axons_y = np.asarray([0, 0, 5])
-fascicle.axons_z = np.asarray([0, 2, 0])
-fascicle.define_circular_contour(D=50)
+mesh_file_u = f"./unitary_tests/results/mesh/{test_num}_umesh.msh"
+mesh_file_m = f"./unitary_tests/results/mesh/{test_num}_mmesh.msh"
 
 
-fig, ax = plt.subplots(figsize=(5,5))
-fascicle.plot(ax)
-#plt.show()
+if __name__ == "__main__":
+    fascicle = nrv.fascicle(ID=test_num, diameter=50)
+    fascicle.fill(data={
+        "diameters": [10 ,3, 4],
+        "types": [1, 1, 1],
+        "y": [0, 0, 10],
+        "z": [0, 10, 0],
+        "node_shift":[.2,.3,.1]
+    })
+    print(fascicle.axons)
+    fig, ax = plt.subplots(figsize=(5,5))
+    fig.savefig(figdir+"B.png")
 
-mesh = nrv.mesh_from_fascicle(fascicle, Length=100,Outer_D=None, Nerve_D=400)
-print(mesh.n_core)
-mesh.compute_mesh()
-mesh.save(mesh_file_u)
+    mesh = nrv.mesh_from_fascicle(fascicle, Length=300,Outer_D=None, Nerve_D=400)
+    print(mesh.n_core)
+    mesh.compute_mesh()
+    mesh.save(mesh_file_m)
+    mesh.get_info(verbose=True)
+    del mesh
+
+    fascicle = nrv.fascicle(ID=test_num, diameter=50)
+    fascicle.fill(data={
+        "diameters": [1, 1, 2],
+        "types": [0, 0, 0],
+        "y": [0, 0, 5],
+        "z": [0, 2, 0],
+    })
+
+
+    fig, ax = plt.subplots(figsize=(5,5))
+    fascicle.plot(ax)
+    fig.savefig(figdir+"B.png")
+    # plt.show()
+
+    mesh = nrv.mesh_from_fascicle(fascicle, Length=100,Outer_D=None, Nerve_D=400)
+    print(mesh.n_core)
+    mesh.compute_mesh()
+    mesh.save(mesh_file_u)
+    mesh.get_info(verbose=True)
+    del mesh
+
 # plt.show()
 
 

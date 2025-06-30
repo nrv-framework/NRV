@@ -36,4 +36,4 @@ if __name__ == "__main__":
     fig2, ax2 = plt.subplots(figsize=(8,8))
     fascicle_1.plot(ax2)
     plt.savefig('./unitary_tests/figures/68_B.png')
-    #plt.show()
+    # plt.show()

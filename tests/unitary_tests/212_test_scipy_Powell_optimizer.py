@@ -41,4 +41,4 @@ if __name__ == "__main__":
     res2.plot_cost_history(ax,label="rosenbock")
     ax.legend()
     fig.savefig(figdir+"A.png")
-    #plt.show()
+    # plt.show()

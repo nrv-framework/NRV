@@ -3,18 +3,22 @@ import matplotlib.pyplot as plt
 import time
 import numpy as np
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
+source_file = './unitary_tests/sources/300_fascicle_1.json'
+
 
 if __name__ == "__main__":
     t0 = time.time()
-    test_num = 308
-    source_file = './unitary_tests/sources/56_fasc.json'
-    nerve = nrv.nerve(length= 10000, d= 250)
+    nerve = nrv.nerve(length= 10000, diameter= 500)
     nerve.set_ID(test_num)
 
     t_sim = 10
-
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=0, y=-20, z=-60)#, extracel_context=True)
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=1, z=65, extracel_context=True)
+    nerve.add_fascicle(source_file, ID=0, y=-20, z=-60)#, extracel_context=True)
+    nerve.add_fascicle(source_file, ID=1, z=65, extracel_context=True)
     nerve.fit_circular_contour()
 
 
@@ -37,7 +41,10 @@ if __name__ == "__main__":
     stim1.t = np.round(stim1.t, 4)
     LIFE_stim.add_electrode(elec_1, stim1)
     nerve.attach_extracellular_stimulation(LIFE_stim)
+    # !BUG Shoud be done in the script
+    nerve.extra_stim.synchronise_stimuli(snap_time=True)
 
+    ### Iclame
     position = 0.05
     t_start = 5
     duration = 0.1

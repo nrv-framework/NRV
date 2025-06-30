@@ -3,6 +3,8 @@ Module containing functions to ease and addapt the interface with external libra
 """
 
 import numpy as np
+from pandas import DataFrame
+from typing import Literal
 
 # ---------------------------------- #
 #       Numpy compatibility          #
@@ -85,3 +87,11 @@ def get_query(*args, **kwgs):
     
     queries = " and ".join(queries)
     return queries
+
+
+def df_to(df:DataFrame, otype:None|Literal["numpy", "list"], *args, **kwgs):
+    if otype is None:
+        return df
+    else:
+        to_any = eval(f"df.to_{otype}")
+        return to_any(*args, **kwgs)

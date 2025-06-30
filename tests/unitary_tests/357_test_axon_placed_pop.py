@@ -102,4 +102,4 @@ if __name__ == "__main__":
     test_axon_pop_placer_packer()
     print("All tests passed successfully.")
 
-    plt.show()
+    # plt.show()

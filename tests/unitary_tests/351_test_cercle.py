@@ -13,7 +13,8 @@ def test_cercle():
     center = (1, 1)
     radius = 2
     circle = geom.Circle(center, radius)
-    bbox = geom.get_cshape_bbox(circle, looped_end=True)
+    bbox_pts = circle.bbox
+    bbox = bbox_pts[np.array([0,0,2,2,0])],bbox_pts[np.array([1,3,3,1,1])]
     assert circle.center == center, "Center should be set correctly."
     assert circle.r1 == radius, "Radius should be set correctly."
     assert circle.radius == radius, "Radius should be set correctly."
@@ -25,14 +26,15 @@ def test_cercle():
 
     y_trace, z_trace = circle.get_trace()
     # Plot the circle
-    plt.figure(figsize=(6, 6))
-    plt.plot(y_trace, z_trace, label='Ellipse Trace')
-    plt.plot(*bbox.T, "-+",color=("k",.2),label='bbox')
-    plt.scatter(*circle.center[:2], color='red', label='Center', zorder=5)
+    y_trace, z_trace = circle.get_trace()
+    fig, ax = plt.subplots(figsize=(6, 6))
+    circle.plot(ax, label="Polygon Trace")
+    circle.plot_bbox(ax, "-+",color=("k",.2),label='bbox')
+    plt.scatter(*circle.center, color='red', label='Center', zorder=5)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.title('Ellipse Test')
+    plt.title('circle Test')
     plt.xlabel('X-axis')
     plt.ylabel('Y-axis')
     plt.legend()

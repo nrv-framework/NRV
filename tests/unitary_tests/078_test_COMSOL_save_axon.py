@@ -72,4 +72,4 @@ if __name__ == "__main__":
         plt.savefig('./unitary_tests/figures/78_A.png')
     else:
         nrv.pass_info('not connected to COMSOL, parts of the test were skiped')
-    #plt.show()
+    # plt.show()

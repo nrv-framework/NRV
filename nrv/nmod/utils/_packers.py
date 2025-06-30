@@ -124,7 +124,7 @@ class Placer:
         self.placed = np.zeros((self.n), dtype=bool)
         # Do our best to place the circles, larger ones first.
         self.pos[0,:], self.placed[0] = self._place_circle(self.r[0], first=True)
-        for i in track(range(1, self.n)):
+        for i in track(range(1, self.n), description="Placing..."):
             self.pos[i,:], self.placed[i] = self._place_circle(self.r[i])
         # return 2*r, y, z
         if not self.placed.all():
@@ -404,7 +404,7 @@ def axon_packer(
         fig, ax = plt.subplots(figsize=(8, 8))
         ax.set_axis_off()
         fig.add_axes(ax)
-    for i in track(range(n_iter)):
+    for i in track(range(n_iter), description="Packing..."):
         pos = update_axon_packing(
             pos, id_pairs, diam_pair, gc, v_att, v_rep, delta, Naxon
         )

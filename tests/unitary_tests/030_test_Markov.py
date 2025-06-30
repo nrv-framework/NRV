@@ -43,4 +43,4 @@ if __name__ == "__main__":
     axs[2].plot(results['t'],results['I1_nav16'][2]+results['I2_nav16'][2],label='Nav 1.6 I')
     axs[2].legend()
     plt.savefig('./unitary_tests/figures/30_B.png')
-    #plt.show()
+    # plt.show()

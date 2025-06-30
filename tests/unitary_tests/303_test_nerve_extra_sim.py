@@ -4,30 +4,24 @@ import time
 import numpy as np
 import os
 
-#nrv.parameters.set_nrv_verbosity(4)
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
 
 if __name__ == "__main__":
     t0 = time.time()
-    test_num = 303
-    source_file = './unitary_tests/sources/56_fasc.json'
-    nerve = nrv.nerve()
-    nerve.set_ID(test_num)
+    source_file = './unitary_tests/sources/300_fascicle_1.json'
+    nerve = nrv.nerve(diameter=1_000)
+    nerve.set_ID(int(test_num))
 
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=0, y=-20, z=-60)#, extracel_context=True)
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=1, z=65, extracel_context=True)
+    nerve.add_fascicle(source_file, ID=0, y=-20, z=-60)#, extracel_context=True)
+    nerve.add_fascicle(source_file, ID=1, z=65, extracel_context=True)
     nerve.fit_circular_contour()
 
 
-
     LIFE_stim = nrv.FEM_stimulation()
-    #### Simulation box size
-    Outer_D = 5
-    LIFE_stim.reshape_outerBox(Outer_D)
-    #### Nerve and fascicle geometry
-    Nerve_D = 250
-    Fascicle_D = 220
-    LIFE_stim.reshape_nerve(Nerve_D, 10000)
-    LIFE_stim.reshape_fascicle(Fascicle_D)
     ##### electrode and stimulus definition
     D_1 = 25
     length_1 = 1000
@@ -64,12 +58,13 @@ if __name__ == "__main__":
 
 
 
-    nerve.simulate(t_sim=5, save_path='./unitary_tests/figures/', postproc_script="vmem_plot")
+    res = nerve.simulate(t_sim=5, postproc_script="is_recruited")
     t2 = time.time()
     print("Nerve simulation time "+str(t2-t1))
     
-    fig, ax = plt.subplots(figsize=(8,8))
-    nerve.plot(ax)
-    plt.savefig('./unitary_tests/figures/'+str(test_num)+'_A.png')
+    fig, axs = plt.subplots(1,2,figsize=(8,4))
+    nerve.plot(axs[0])
+    res.plot_recruited_fibers(axes=axs[1])
+    plt.savefig(figdir+'_A.png')
 
-    #plt.show()
+    # plt.show()

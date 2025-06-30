@@ -31,11 +31,11 @@ from ..utils.geom import (
     Circle, # typing
 )
 from ..utils.geom._cshape import CShape # typing
-from ..utils.geom._bshape import BShape
+from ..utils.geom._popshape import PopShape
 from ..utils._misc import get_MRG_parameters
 
 
-class axon_population(BShape):
+class axon_population(PopShape):
     """
     Instance of an axon population.
 
@@ -154,6 +154,7 @@ class axon_population(BShape):
             center=center,
             radius=radius,
             rot=rot,
+            diameter=diameter,
             discard_placement=discard_placement
         )
 
@@ -300,8 +301,11 @@ class axon_population(BShape):
                 self.create_population(data=(key_dic["axons_type"],key_dic["axons_diameter"]))
             if len(key_dic["axons_y"]) > 0:
                 self.place_population(pos=(key_dic["axons_y"],key_dic["axons_z"]))
-            if len(key_dic["NoR_relative_position"]) > 0:
+            if len(key_dic["NoR_relative_position"]) == len(self):
                 self.generate_NoR_position_from_data(key_dic["NoR_relative_position"])
+            elif self.has_pop:
+                rise_warning("Number of NoR positions in the file does not match with the population, regenerating")
+                self.generate_random_NoR_position()
 
     # ---------------- #
     # Geometry methods #
@@ -340,7 +344,7 @@ class axon_population(BShape):
                 radius = radius or self.geom.radius
                 if isinstance(self.geom, Ellipse):
                     rot = rot or self.geom.rot
-            if center is not None and radius is not None:
+            if center is not None and radius is not None or diameter is not None:
                 self.geom = create_cshape(center=center, radius=radius, rot=rot, degree=degree, diameter=diameter)
             else:
                 raise ValueError(
@@ -517,13 +521,30 @@ class axon_population(BShape):
             data = axons_diameters, axons_type
             if np.isnan(y_axons).all() or np.isnan(z_axons).all():
                 data += (y_axons, z_axons)
+        if isinstance(data, dict) or isinstance(data, DataFrame):
+            _keys = ["types", "diameters", "y", "z", "node_shift"]
+            if len(set(_keys) - data.keys()) > 0:
+                _keys = _keys[:4]
+            if len(_keys - data.keys()) > 0:
+                _keys = _keys[:2]
 
+            if len(_keys - data.keys()) > 0:
+                rise_warning(f"Wrong data format to create_population.",
+                             f"If data is dict or DataFrames it must at least contains the keys: {_keys}")
+            else:
+                data = [data[k] for k in _keys]
         if np.iterable(data):
             n_col = len(data)
             self._pop = DataFrame(data=zip(*data[:2]), columns=["types", "diameters"])
             if n_col == 4:
                 self._pop = DataFrame(
                     data=zip(*data), columns=["types", "diameters", "y", "z"]
+                )
+                self.check_placement
+                pass_info("Axon placed population generated from data")
+            elif n_col == 5:
+                self._pop = DataFrame(
+                    data=zip(*data), columns=["types", "diameters", "y", "z", "node_shift"]
                 )
                 self.check_placement
                 pass_info("Axon placed population generated from data")
@@ -761,50 +782,3 @@ class axon_population(BShape):
         axes.set_aspect('equal', adjustable='box')
 
 
-
-    def plot_x(self, axes:plt.Axes, length:float, myel_color:str="b", unmyel_color:str="r", Myelinated_model:str="MRG"):
-        """
-        plot the fascicle's axons along Xline (longitudinal)
-
-        Parameters
-        ----------
-        axes    : matplotlib.axes
-            axes of the figure to display the fascicle
-        myel_color      : str
-            matplotlib color string applied to the myelinated axons. Red by default
-        unmyel_color    : str
-            matplotlib color string applied to the myelinated axons. Blue by default
-        Myelinated_model : str
-            model use for myelinated axon (use to calulated node position)
-        """
-        if len(self.has_node_shift) and self._pop["node_shift"].sum()>0:
-            drange = [
-                min(self._pop["diameters"].to_numpy),
-                max(self._pop["diameters"].to_numpy),
-            ]
-            polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
-            for k in range(self.n_ax):
-                relative_pos = self.NoR_relative_position[k]
-                d = self._pop["diameters"][k]
-                if self._pop["types"][k] == 0.0:
-                    color = unmyel_color
-                    size = polysize(d)
-                    axes.plot([0, length], np.ones(2) + k - 1, color=color, lw=size)
-                else:
-                    color = myel_color
-                    size = polysize(d)
-                    axon = self.__generate_axon(k)
-                    x_nodes = axon.x_nodes
-                    node_number = len(x_nodes)
-                    del axon
-                    axes.plot([0, length], np.ones(2) + k - 1, color=color, lw=size)
-                    axes.scatter(
-                        x_nodes,
-                        np.ones(node_number) + k - 1,
-                        marker="x",
-                        color=color,
-                    )
-            axes.set_xlabel("x (um)")
-            axes.set_ylabel("axon ID")
-            axes.set_yticks(np.arange(self.n_ax))
-            axes.set_xlim(0, length)

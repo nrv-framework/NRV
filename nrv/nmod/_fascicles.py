@@ -202,6 +202,7 @@ class fascicle(NRV_simulable):
 
         self.config_filename:str = ""
         self.ID:int = ID
+        self.n_proc:None|int = None
 
         self.L:float|None = None
         # add an empty axon population
@@ -333,9 +334,9 @@ class fascicle(NRV_simulable):
     def load(
         self,
         data,
-        extracel_context=False,
-        intracel_context=False,
-        rec_context=False,
+        extracel_context:bool=False,
+        intracel_context:bool=False,
+        rec_context:bool=False,
         blacklist=[],
     ):
         """
@@ -502,9 +503,13 @@ class fascicle(NRV_simulable):
             length of the fascicle in um
         """
         if self.extra_stim is not None or self.N_intra > 0:
-            rise_warning(
-                "Modifying length of a fascicle with extra or intra cellular context can lead to error"
-            )
+            if self.loaded_footprints:
+                rise_warning(
+                    "Modifying length of a fascicle delete the su"
+                )
+                self.loaded_footprints = False
+                self.footprints = {}
+                self.is_footprinted = False
         self.L = L
         self.unmyelinated_param["Nseg_per_sec"] == self.L // 25
 
@@ -614,7 +619,7 @@ class fascicle(NRV_simulable):
         )
 
     ## Move methods
-    def translate(self, y, z, with_geom:bool=True, with_pop:bool=True, with_context:bool=True):
+    def translate(self, y=0, z=0, with_geom:bool=True, with_pop:bool=True, with_context:bool=True):
         """
         Translate the population and/or its geometry and/or stim and rec context
 
@@ -766,19 +771,36 @@ class fascicle(NRV_simulable):
         _lab, mask = self.axons.add_mask(data=data, label=label, overwrite=overwrite)
         self.sim_mask.append(_lab)
 
-    def remove_sim_masks(self, mask_labels:None|Iterable[str]|str=None, remove_from_pop=True):
+    def remove_sim_masks(self, mask_labels:None|Iterable[str]|str=None, remove_from_pop:bool=True, keep_elec:bool=True):
         if mask_labels is None:
             mask_labels = self.sim_mask # to keep is_placed
         elif isinstance(mask_labels, str):
                 mask_labels = [mask_labels]
         _rmved = []
         for _lab in mask_labels:
-            if _lab in self.sim_mask and not "_elec" in _lab:
-                _rmved.append(self.sim_mask.pop(_lab))
+            if _lab in self.sim_mask and (not "_elec" in _lab or not keep_elec):
+                _rmved.append(self.sim_mask.pop(self.sim_mask.index(_lab)))
         if remove_from_pop:
             self.axons.clear_masks(mask_labels=_rmved)
         else:
             pass_info(f"The following masks were removed from fascicle: {_rmved}")
+
+    def __set_elec_mask(self):
+        """
+        Set the mask corresponding to 
+        """
+        mask_to_keep = []
+        if self.has_FEM_extracel:
+            for elec in self.extra_stim.electrodes:
+                mask_to_keep += [f"_elec{elec.ID}"]
+
+        mask_to_rmv = [ml for ml in self.sim_mask if ml not in mask_to_keep and "_elec" in ml]
+        if len(mask_to_rmv):
+            self.remove_sim_masks(
+                mask_labels=mask_to_rmv,
+                keep_elec=False,
+            )
+        exit
 
     def remove_unmyelinated_axons(self):
         """
@@ -859,8 +881,39 @@ class fascicle(NRV_simulable):
         Myelinated_model : str
             model use for myelinated axon (use to calulated node position)
         """
-        if self.L is None:
-            self.axons.plot_x(axes=axes,length=self.L, myel_color=myel_color, unmyel_color=unmyel_color, Myelinated_model=Myelinated_model)
+        if self.L is not None:
+            if self.axons.has_node_shift:
+                self.__update_sim_list()
+                drange = [
+                    self.axons["diameters"].min(),
+                    self.axons["diameters"].max(),
+                ]
+                polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
+                for s_k in range(self.n_ax):
+                    k = self.sim_list[s_k]
+                    d = self.axons["diameters"][k]
+                    if self.axons["types"][k] == 0.0:
+                        color = unmyel_color
+                        size = polysize(d)
+                        axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
+                    else:
+                        color = myel_color
+                        size = polysize(d)
+                        axon = self.__generate_axon(k)
+                        x_nodes = axon.x_nodes
+                        node_number = len(x_nodes)
+                        del axon
+                        axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
+                        axes.scatter(
+                            x_nodes,
+                            np.ones(node_number) + k - 1,
+                            marker="x",
+                            color=color,
+                        )
+                axes.set_xlabel("x (um)")
+                axes.set_ylabel("axon ID")
+                axes.set_yticks(np.arange(self.n_ax))
+                axes.set_xlim(0, self.L)
             ## plot electrode(s) if existings
             if self.extra_stim is not None:
                 for electrode in self.extra_stim.electrodes:
@@ -949,7 +1002,7 @@ class fascicle(NRV_simulable):
         else:
             rise_warning("Cannot be changed: no extrastim in the fascicle")
 
-    def insert_I_Clamp(self, position:float, t_start:float, duration:float, amplitude:float, ax_list=None):
+    def insert_I_Clamp(self, position:float, t_start:float, duration:float, amplitude:float, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], ax_list=None):
         """
         Insert a IC clamp stimulation
 
@@ -971,7 +1024,11 @@ class fascicle(NRV_simulable):
         self.intra_stim_t_start.append(t_start)
         self.intra_stim_duration.append(duration)
         self.intra_stim_amplitude.append(amplitude)
-        self.intra_stim_ON.append(ax_list)
+
+        if ax_list is not None:
+            self.intra_stim_ON.append(ax_list)
+        else:
+            self.intra_stim_ON.append(self.axons.get_mask(expr=expr, mask_labels=mask_labels, otype="list"))
         self.N_intra += 1
 
     def clear_I_clamp(self):
@@ -1007,7 +1064,8 @@ class fascicle(NRV_simulable):
 
     ## SIMULATION HANDLING
     def __update_sim_list(self):
-        self.sim_list = self.axons.get_sub_population(mask_labels=self.sim_mask).index
+        self.__set_elec_mask()
+        self.sim_list = self.axons.get_sub_population(mask_labels=self.sim_mask).index.astype(int).to_list()
 
     @property
     def __footprint_to_compute(self):
@@ -1114,13 +1172,13 @@ class fascicle(NRV_simulable):
             self.postproc_function, self.postproc_kwargs
         )
 
-    def __set_pbar_label(self, **kwargs):
+    def __set_pbar_label(self, n_proc:int, **kwargs):
         if "pbar_label" in kwargs:
             __label = kwargs["pbar_label"]
         else:
             __label = f"Fascicle {self.ID}"
-        __label += f" -- {parameters.get_nmod_ncore()} CPU"
-        if parameters.get_nmod_ncore() > 1:
+        __label += f" -- {n_proc} CPU"
+        if n_proc > 1:
             __label += "s"
         return __label
 
@@ -1148,34 +1206,9 @@ class fascicle(NRV_simulable):
         # add intracellular stim
         if self.N_intra > 0:
             for j in range(self.N_intra):
-                if is_iterable(self.intra_stim_ON[j]):
-                    # in this case, the stimulation is possibly not for all axons
-                    if self.intra_stim_ON[j][k]:
-                        # then stimulation should apply, look for the parameters
-                        # get position
-                        if is_iterable(self.intra_stim_position[j]):
-                            position = self.intra_stim_position[j][k]
-                        else:
-                            position = self.intra_stim_position[j]
-                        # get t_start
-                        if is_iterable(self.intra_stim_t_start[j]):
-                            t_start = self.intra_stim_t_start[j][k]
-                        else:
-                            t_start = self.intra_stim_t_start[j]
-                        # get duration
-                        if is_iterable(self.intra_stim_duration[j]):
-                            duration = self.intra_stim_duration[j][k]
-                        else:
-                            duration = self.intra_stim_duration[j]
-                        # get amplitude
-                        if is_iterable(self.intra_stim_amplitude[j]):
-                            amplitude = self.intra_stim_amplitude[j][k]
-                        else:
-                            amplitude = self.intra_stim_amplitude[j]
-                        # APPLY INTRA CELLULAR STIMULATION
-                        axon.insert_I_Clamp(position, t_start, duration, amplitude)
-                else:
-                    # in this case , stimulate all axons
+                if self.intra_stim_ON[j][k]:
+                    # then stimulation should apply, look for the parameters
+                    # get position
                     if is_iterable(self.intra_stim_position[j]):
                         position = self.intra_stim_position[j][k]
                     else:
@@ -1219,6 +1252,8 @@ class fascicle(NRV_simulable):
             loaded_footprints=axon_ftpt,
         )
         # print(axon.recorder.save())
+        if axon_sim["Simulation_state"] != "Successful":
+            rise_error("SimulationError: ", f"something went wrong during the simulation of axon {k}:\n", self.axons.iloc(k))
         del axon
 
         axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
@@ -1334,6 +1369,8 @@ class fascicle(NRV_simulable):
 
         ## perform simulations in //
         results = []
+        _n_proc = self.n_proc or parameters.get_nmod_ncore()
+        _n_proc = min(_n_proc, self.n_ax)
         # Todo add upperlevel progress handler in nerve.simulate()
         with progress.Progress(
             "[progress.description]{task.description}",
@@ -1343,10 +1380,10 @@ class fascicle(NRV_simulable):
             progress.TimeRemainingColumn(),
             progress.TimeElapsedColumn(),
         ) as pg:
-            __label = self.__set_pbar_label(**kwargs)
+            __label = self.__set_pbar_label(_n_proc, **kwargs)
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
             # with mp.get_context('spawn').Pool(parameters.get_nmod_ncore()) as pool:  #forces spawn mode
-            with get_pool(parameters.get_nmod_ncore(), backend="spawn") as pool:
+            with get_pool(_n_proc, backend="spawn") as pool:
                 for result in pool.imap(self.sim_axon, axons_ID):
                     results.append(result)
                     pg.advance(task_id)
@@ -1374,13 +1411,13 @@ class fascicle(NRV_simulable):
             if "extra_stim" in fasc_sim:
                 fasc_sim["extra_stim"] = load_any(
                     fasc_sim["extra_stim"]
-                )  
+                )
             if self.record:
                 fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
 
-        if self.verbose:
+        if self.verbose and not "in_nerve" in kwargs:
             pass_info("... Simulation done")
-            fasc_sim["is_simulated"] = True
+        fasc_sim["is_simulated"] = True
         self.is_simulated = True
         return fasc_sim
 

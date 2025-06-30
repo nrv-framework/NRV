@@ -302,4 +302,4 @@ if __name__ == "__main__":
     plt.savefig('./unitary_tests/figures/527_G.png')
 
 
-    #plt.show()
+    # plt.show()

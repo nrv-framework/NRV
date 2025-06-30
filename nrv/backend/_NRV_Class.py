@@ -340,21 +340,23 @@ def load_any(data, **kwargs) -> NRV_class:
     if is_NRV_class(key_dic) or is_NRV_class_list(key_dic):
         nrv_obj = key_dic
     # test if NRV dict
-    elif is_NRV_dict(key_dic):
-        nrv_type = key_dic["nrv_type"]
-        nrv_module = "nrv"
-        if "nrv_module" in key_dic:
-            nrv_module = key_dic["nrv_module"]
-        nrv_obj = eval(f"sys.modules['{nrv_module}'].{nrv_type}")()
-        nrv_obj.load(key_dic, **kwargs)
-    elif is_NRV_dict_dict(key_dic):
-        nrv_obj = {}
-        for key in key_dic:
-            nrv_obj[key] = load_any(key_dic[key], **kwargs)
-    elif is_NRV_dict_list(key_dic):
-        nrv_obj = []
-        for i in key_dic:
-            nrv_obj += [load_any(i, **kwargs)]
+    elif is_NRV_object_dict(key_dic):
+        key_dic = deepcopy(key_dic)
+        if is_NRV_dict(key_dic):
+            nrv_type = key_dic["nrv_type"]
+            nrv_module = "nrv"
+            if "nrv_module" in key_dic:
+                nrv_module = key_dic["nrv_module"]
+            nrv_obj = eval(f"sys.modules['{nrv_module}'].{nrv_type}")()
+            nrv_obj.load(key_dic, **kwargs)
+        elif is_NRV_dict_dict(key_dic):
+            nrv_obj = {}
+            for key in key_dic:
+                nrv_obj[key] = load_any(key_dic[key], **kwargs)
+        elif is_NRV_dict_list(key_dic):
+            nrv_obj = []
+            for i in key_dic:
+                nrv_obj += [load_any(i, **kwargs)]
     else:
         nrv_obj = key_dic
     return nrv_obj

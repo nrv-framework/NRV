@@ -74,4 +74,4 @@ if __name__ == "__main__":
         #print(X)
     # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
     plt.savefig('./unitary_tests/figures/509_D.png')
-    #plt.show()
+    # plt.show()

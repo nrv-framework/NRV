@@ -96,9 +96,11 @@ def rise_error(*args, out=1, **kwargs):
     message = ""
     error = None
     for arg in args:
-        print(type(arg), isinstance(arg, Exception))
         if isinstance(arg, type) and isinstance(arg(), Exception):
             error = arg
+        elif isinstance(arg, Exception):
+            error = arg
+            message += f"{arg.__class__.__name__}: {arg}"
         else:
             message += str(arg)
     if parameters.LOG_Status:
@@ -121,8 +123,11 @@ def rise_error(*args, out=1, **kwargs):
             sys.stdout.flush()
     if out == 0:
         out = 1
-    if not error is None:
+    if isinstance(error, type):
         raise error(message)
+    elif isinstance(error, Exception):
+        raise error
+        
     sys.exit(out)
 
 

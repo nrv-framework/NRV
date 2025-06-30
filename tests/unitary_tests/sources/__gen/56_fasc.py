@@ -4,7 +4,7 @@ import numpy as np
 
 np.random.seed(1234)
 
-test_dir = "source_generators/"
+test_dir = "__gen/"
 __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
 
 ofname = f"../{nrv.rmv_ext(__fname__)}.json"

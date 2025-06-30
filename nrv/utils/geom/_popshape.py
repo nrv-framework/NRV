@@ -2,14 +2,15 @@ from typing import Iterable, Type
 import numpy as np
 import matplotlib.pyplot as plt
 from pandas import DataFrame
+from typing import Literal
 
 from ._cshape import CShape
 from ...backend._NRV_Class import NRV_class, abstractmethod
-from .._units import to_nrv_unit
+from ...backend._extlib_interface import df_to
 from ...backend._log_interface import pass_info, rise_warning
 from .._misc import rotate_2D
 
-class BShape(NRV_class):
+class PopShape(NRV_class):
     """
     Abstract base class for bumble-shaped geometries gathering sub-shapes.
     """
@@ -123,9 +124,9 @@ class BShape(NRV_class):
         if not ("y" in self._pop and "z" in self._pop):
             return np.zeros(len(self), dtype=bool)
         
-        ok_trace = self.geom.is_inside((self._pop["y"], self._pop["z"]))
+        ok_trace = self.geom.is_inside((self._pop["y"], self._pop["z"]), for_all=False)
         if "is_placed" in self._pop:
-            ok_trace |= self.axon_pop["is_placed"]
+            ok_trace &= self.axon_pop["is_placed"]
             n_discarded = np.sum(self.axon_pop["is_placed"]) - np.sum(ok_trace)
             if n_discarded > 0:
                 _str = f"{n_discarded} axon"
@@ -148,7 +149,7 @@ class BShape(NRV_class):
     # -------------------- #
     # Handeling population #
     # -------------------- #
-    def rotate(self, angle:float, with_geom:bool=True, with_pop:bool=True, degree:bool=False):
+    def rotate(self, angle:float, with_geom:bool=True, with_pop:bool=True, degree:bool=False, mask_on:list[str]=[]):
         """
         Rotate the population and/or its geometry
 
@@ -166,10 +167,12 @@ class BShape(NRV_class):
         if self.has_geom and with_geom:
             self.geom.rotate(angle, degree=degree)
         if self.has_placed_pop and with_pop:
-            self._pop["y"], self._pop["z"] = rotate_2D(point=(self._pop["y"], self._pop["z"]), angle=angle, degree=degree)
+            _y, _z = rotate_2D(center=self.geom.center, point=(self._pop["y"].to_numpy(), self._pop["z"].to_numpy()), angle=angle, degree=degree)
+            _m = self.get_mask(mask_labels=mask_on)
+            self._pop["y"], self._pop["z"] = _y * _m, _z * _m
         self.check_placement
 
-    def translate(self, y:float, z:float, with_geom:bool=True, with_pop:bool=True):
+    def translate(self, y:float, z:float, with_geom:bool=True, with_pop:bool=True, mask_on:list[str]=[]):
         """
         Translate the population and/or its geometry
 
@@ -187,8 +190,9 @@ class BShape(NRV_class):
         if self.has_geom and with_geom:
             self.geom.translate(y=y, z=z)
         if self.has_placed_pop and with_pop:
-                self._pop["y"] += y
-                self._pop["z"] += z
+            _m = self.get_mask(mask_labels=mask_on, otype="numpy")
+            self._pop["y"] += y * _m
+            self._pop["z"] += z * _m
         self.check_placement
 
 
@@ -232,7 +236,7 @@ class BShape(NRV_class):
                 mask = self._pop.eval(data)
             else:
                 mask = np.array(data, dtype=bool)
-                if len(mask_on) > 0:
+                if len(mask) != len(self):
                     full_mask = np.zeros(len(self),dtype=bool)
                     i_mask = self.get_sub_population(mask_labels=mask_on).index.to_numpy(dtype=int)
                     full_mask[i_mask] = mask
@@ -270,19 +274,23 @@ class BShape(NRV_class):
         pass_info(f"the following mask were removed: {_mask_to_rmv}")
 
 
-    def get_sub_population(self, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], placed_only:bool=True)-> DataFrame:
+    def get_mask(self, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], placed_only:bool=True, otype:None|Literal[""]=None)-> DataFrame:
+        _mask = DataFrame(np.ones(len(self)), columns=[""])
         if expr is None:
             _labels = self.valid_mask_labels(mask_labels)
             if placed_only:
                 _labels.append("is_placed")
             if len(_labels):
                 _mask = self._pop[list(_labels)].all(axis="columns")
-                return self._pop[_mask]
         else:
             if placed_only:
                 expr += f" & is_placed"
-            return self._pop.query(expr=expr)
-        return self._pop
+            _mask = self._pop.eval(expr=expr)
+        return df_to(_mask, otype)
+
+    def get_sub_population(self, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], placed_only:bool=True)-> DataFrame:
+        _mask = self.get_mask(expr=expr, mask_labels=mask_labels, placed_only=placed_only)
+        return self._pop[_mask]
 
 
     # ----- ------------ #

@@ -23,12 +23,10 @@ def test_ellipse():
     assert not ellipse.is_inside((3, 4)), "Point (3, 4) should be outside the ellipse."
 
 
-    y_trace, z_trace = ellipse.get_trace()
-    # Plot the ellipse
-    plt.figure(figsize=(6, 6))
-    plt.plot(y_trace, z_trace, label='Ellipse Trace')
-    plt.plot(*bbox.T, "-+",color=("k",.2),label='bbox')
-    plt.scatter(*ellipse.center[:2], color='red', label='Center', zorder=5)
+    fig, ax = plt.subplots(figsize=(6, 6))
+    ellipse.plot(ax, label="Polygon Trace")
+    ellipse.plot_bbox(ax, "-+",color=("k",.2),label='bbox')
+    plt.scatter(*ellipse.center, color='red', label='Center', zorder=5)
     plt.xlim(-5, 5)
     plt.ylim(-5, 5)
     plt.gca().set_aspect('equal', adjustable='box')
@@ -37,7 +35,7 @@ def test_ellipse():
     plt.ylabel('Y-axis')
     plt.legend()
     plt.grid()
-    plt.savefig(figdir+"A.png")
+    fig.savefig(figdir+"A.png")
 
 
 if __name__ == "__main__":

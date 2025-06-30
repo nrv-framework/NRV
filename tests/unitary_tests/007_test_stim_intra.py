@@ -55,5 +55,5 @@ if __name__ == "__main__":
     cbar.set_label('membrane voltage (mV)')
     plt.savefig('./unitary_tests/figures/07_C.png')
 
-    #plt.show()
+    # plt.show()
 

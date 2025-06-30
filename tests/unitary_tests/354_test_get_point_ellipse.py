@@ -39,8 +39,7 @@ def test_get_point_inside_ellipse():
 def test_get_point_inside_circle():
     center = (-1, 2)
     r = 4
-    angle = np.pi/4 # Rotation angle in degrees
-    circle = geom.Circle(center, r, angle)
+    circle = geom.Circle(center, r)
 
     y_trace, z_trace = circle.get_trace()
     inside_pts = circle.get_point_inside(1000, delta=.5)

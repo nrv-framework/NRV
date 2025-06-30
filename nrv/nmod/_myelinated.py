@@ -441,7 +441,7 @@ class myelinated(axon):
 
         if is_empty_iterable(self.node):
             rise_warning(
-                "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n"
+                "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted\n"
             )
             # logging.warning("Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n")
 

@@ -107,4 +107,4 @@ if __name__ == "__main__":
     test_subpop_from_data()
     print("All tests passed successfully.")
 
-    plt.show()
+    # plt.show()

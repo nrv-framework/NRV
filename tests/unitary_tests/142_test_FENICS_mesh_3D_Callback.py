@@ -71,6 +71,6 @@ if __name__ == "__main__":
     t2 = time.time()
     print('mesh 1 generated in '+str(t2 - t1)+' s')
 
-    #plt.show()
+    # plt.show()
     #mesh.visualize()
     del mesh

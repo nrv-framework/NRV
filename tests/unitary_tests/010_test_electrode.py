@@ -41,4 +41,4 @@ if __name__ == "__main__":
     plt.plot(x,v_ext_cath2)
     plt.savefig('./unitary_tests/figures/10_B.png')
 
-    #plt.show()
+    # plt.show()

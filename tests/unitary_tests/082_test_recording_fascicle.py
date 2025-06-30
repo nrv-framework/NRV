@@ -79,7 +79,7 @@ if __name__ == '__main__':
     plt.tight_layout()
     plt.savefig('./unitary_tests/figures/082_B.png')
 
-    #plt.show()
+    # plt.show()
     del fascicle_1, testrec2
 
 

@@ -13,14 +13,11 @@ L = 10000             # length, in um
 
 
 def test_load_fascicle():
-    fname = './unitary_tests/sources/56_fasc.json'
-
     start_time = time.time()
     fascicle_1 = nrv.fascicle()
     fascicle_1.load('./unitary_tests/sources/56_fasc.json')
     fascicle_1.define_length(L)
-    #fascicle_1.generate_random_NoR_position()
-    fascicle_1.simulate(save_path='./unitary_tests/figures/')
+    fascicle_1.simulate(t_sim=2)
 
     sim_time = time.time() - start_time
     print('simulation performed in '+str(sim_time)+' s')
@@ -34,8 +31,7 @@ def test_load_deprecated_file():
     fascicle_1 = nrv.fascicle()
     fascicle_1.load('./unitary_tests/sources/56_fasc_depr.json')
     fascicle_1.define_length(L)
-    #fascicle_1.generate_random_NoR_position()
-    fascicle_1.simulate(save_path='./unitary_tests/figures/')
+    fascicle_1.simulate(t_sim=2)
 
     sim_time = time.time() - start_time
     print('simulation performed in '+str(sim_time)+' s')
@@ -46,4 +42,4 @@ def test_load_deprecated_file():
 if __name__ == "__main__":
     test_load_fascicle()
     test_load_deprecated_file()
-    #plt.show()
+    # plt.show()

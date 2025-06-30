@@ -150,6 +150,8 @@ class nerve(NRV_simulable):
         self.postproc_script = None
         self.postproc_kwargs = {}
 
+        self.n_proc = None
+
         self.type = "nerve"
         self.L = length
         self.D = None
@@ -519,9 +521,13 @@ class nerve(NRV_simulable):
         if N_fasc == 0:
             pass_info("No fascicles to fit - Nerve diameter set to " + str(D) + "um")
         else:
-            rise_warning("Not implemented: nerve.fit_circular_contour")
-            pass
-
+            _r = 0
+            for fasc in self.fascicles.values():
+                y_tr, z_tr = fasc.geom.get_trace(n_theta=1000)
+                _r_fasc = np.hypot((y_tr-self.y_grav_center), (z_tr-self.z_grav_center)).max()
+                _r = np.max((_r, _r_fasc))
+            self.D = 2*(_r+delta)
+            print(self.D)
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
         Define ellipsoidal contour
@@ -869,7 +875,7 @@ class nerve(NRV_simulable):
         int
             ID of the fascicle overlapping, -1 if no overlap
         """
-        y, z, D = 0, 0, 0.01
+        y, z, d = 0, 0, 0.001
         # CUFF electrodes do not affect intrafascicular state
         if not is_CUFF_electrode(electrode):
             y = electrode.y

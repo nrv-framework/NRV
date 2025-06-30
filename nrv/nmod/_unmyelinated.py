@@ -484,7 +484,7 @@ class unmyelinated(axon):
         amplitude   : float
             amplitude of the pulse (nA)
         """
-        # adapt position to the number of sections
+    # adapt position to the number of sections
         portion_length = 1.0 / self.Nsec
         stim_sec = int(math.floor(position / portion_length))
         stim_pos = (position / portion_length) - math.floor(position / portion_length)

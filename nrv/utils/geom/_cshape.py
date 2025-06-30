@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ...backend._NRV_Class import NRV_class, abstractmethod
 
@@ -8,14 +9,14 @@ class CShape(NRV_class):
     Abstract base class for closed-shaped geometries.
     """
     @abstractmethod
-    def __init__(self, center:tuple[float, float], radius:float|tuple[float,float], rot:float=None, degree:bool=False):
+    def __init__(self, center:tuple[float, float]=(0,0), radius:float|tuple[float,float]=0, rot:float=None, degree:bool=False):
         """
         Initializes the CShape with a specified number of points for angular resolution.
 
         :param Ntheta: Number of points to use for angular resolution.
         """
         super().__init__()
-        self.center = center[:2]
+        self.center = center
         self.radius = radius
         self.rot = 0
 
@@ -52,6 +53,16 @@ class CShape(NRV_class):
 
     @property
     def bbox_size(self)->tuple[float, float]:
+        """
+        Size of the bounding bounding box of the shape (usefull for meshing)
+
+        Returns
+        -------
+        tuple[float, float]
+        """
+        pass
+
+    def bbox(self)->tuple[float, float]:
         """
         Size of the bounding bounding box of the shape (usefull for meshing)
 
@@ -143,6 +154,32 @@ class CShape(NRV_class):
         """
         pass
 
-    def get_bbox(self, n_theta:int=100) -> np.ndarray[float]:
-        _tr = np.array(self.get_trace(n_theta))
-        return np.concatenate([np.min(_tr, axis=1),np.max(_tr, axis=1)])
+    
+    # ------------ #
+    # Plot methods #
+    # ------------ #
+    
+    def plot(self, axes:plt.Axes, n_tetha:int=100, add_center:bool=False, *args, **kwgs):
+        """
+        plot the border of the shape
+
+        Parameters
+        ----------
+        axes : plt.Axes
+            Matplolib axes where to plot
+        n_tetha : int, optional
+            number of resultion points used for the plot, by default 100
+        """
+        axes.plot(*self.get_trace(n_theta=n_tetha), *args, **kwgs)
+
+
+    def plot_bbox(self, axes:plt.Axes, *args, **kwgs):
+        """
+                plot the border of the shape
+
+        Parameters
+        ----------
+        axes : plt.Axes
+            Matplolib axes where to plot
+        """
+        axes.plot(self.bbox[np.array([0,0,2,2,0])],self.bbox[np.array([1,3,3,1,1])], *args, **kwgs)

@@ -87,7 +87,7 @@ if __name__ == "__main__":
     del ner1
 
     # Overwrite default nproc (with nrv.parameters)
-    # nrv.parameters.set_nmod_ncore(4)
+    nrv.parameters.set_nmod_ncore(4)
     ner2 = nrv.load_nerve(nerve_ppt, extracel_context=True)
     n_res2 = ner2(t_sim=3,postproc_script = "is_recruited")
     del ner2

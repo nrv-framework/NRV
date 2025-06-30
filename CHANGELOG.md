@@ -13,16 +13,20 @@ All notable changes to NRV are summed up in this file.
 - Added file: `backend._extlib_interface` to gather interfacing function with external libraries
 - Added `MshCreator.add_from_cshape` to generate cylinder with custom base. 
 - Fascicle are now added from their full geometry instead of only their diameter and center
+- New dependency: [shapely](https://shapely.readthedocs.io/en/stable/).
 
 
 ### Fixed
-
+- Impose deepcopy in load_any to prevent issue when loading multiple times a same `dict`.
+- Prevent to use more processes than axon number in `fascicle.simulate`.
+- Various Bug with tests
 
 ### Removed
 - Removed `fascicle.save_fascicle_configuration` and `fascicle.load_fascicle_configuration` Deprecated since `fascicle.save` and `fascicle.load` arrived.
 
 ### Depreciated
 - arguments `Fascicle_D`, `y_c` and `z_c` from `FEM_stimulation.reshape_fascicle`, now `geometry` is used instead
+- tests `513` to `517`: axon pop related test are now with geometry tests between `350` and `400`.
 
 
 ## [1.2.1] - 2025-06-06

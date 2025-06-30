@@ -45,4 +45,4 @@ if __name__ == "__main__":
     results.raster_plot(ax)
     fig.savefig('./unitary_tests/figures/533_peaks_B.png')
 
-    #plt.show()
+    # plt.show()

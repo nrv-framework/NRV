@@ -97,8 +97,8 @@ class extracellular_context(NRV_class):
         self.electrodes:list[electrode] = []
         self.stimuli:list[stimulus] = []
         # list for synchronised stimuli
-        self.synchronised = False
-        self.synchronised_stimuli = []
+        self.synchronised:bool = False
+        self.synchronised_stimuli:list[stimulus] = []
         self.global_time_serie = []
         self.type = None
 
@@ -583,7 +583,8 @@ class FEM_stimulation(extracellular_context):
         """
         if not isinstance(geometry, CShape):
             rise_warning("Deprecated arguments: You migth be using an old script. FEM_stimulation.reshape_fascicle use geometry instead of Fascicle_D, y_c, z_c")
-            Fascicle_D = geometry
+            if geometry is not None:
+                Fascicle_D = geometry
             geometry = create_cshape(center=(y_c,z_c), diameter=Fascicle_D)
 
 

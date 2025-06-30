@@ -1,7 +1,7 @@
-from ..utils.geom._bshape import BShape
+from ..utils.geom._popshape import PopShape
 
 
-class fascicle_group(BShape):
+class fascicle_group(PopShape):
     """
     Instance of an axon population.
 

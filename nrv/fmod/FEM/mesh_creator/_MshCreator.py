@@ -757,6 +757,24 @@ class MshCreator(NRV_class):
             self.model.mesh.generate(self.D)
             self.is_generated = True
 
+    def save_geom(self, fname):
+        """
+        save only the mesh geometry in a `.brep` file
+
+        Note
+        ----
+        `.brep` files can be open similarly to `.msh` in `gmsh` application.
+
+        Parameters
+        ----------
+        fname : _type_
+            _description_
+        """
+        fname = rmv_ext(fname)
+        gmsh.write(fname + ".brep")
+        self.file = fname
+
+
     def save(self, fname, generate=True):
         """
         Save mesh in fname in ".msh"

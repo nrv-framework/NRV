@@ -125,13 +125,14 @@ def in_tol(test: float, ref: float, tol: float = 0.1) -> bool:
     down_bound = ref * (1 - tol)
     return np.abs(test) < up_bound and np.abs(test) > down_bound
 
-def rotate_2D(point:tuple[np.ndarray, np.ndarray],angle:float, degree:bool=False, center:tuple[float,float]=(0,0)):
+def rotate_2D(point:tuple[np.ndarray, np.ndarray],angle:float, degree:bool=False, center:tuple[float,float]=(0,0), as_array:bool=False):
     if degree:
         angle = to_nrv_unit(angle, "deg")
     if isinstance(point, np.ndarray):
         X = deepcopy(point)
     else:
         X = np.array(point).astype(float).T
+
     rot_mat = np.array(
         [[np.cos(angle), -np.sin(angle)],
         [np.sin(angle), np.cos(angle)]]
@@ -147,7 +148,11 @@ def rotate_2D(point:tuple[np.ndarray, np.ndarray],angle:float, degree:bool=False
     X += c
 
     # Check if the normalized point is inside the unit circle
-    return X[0], X[1]
+    if as_array:
+        return X.T
+    if len(X.shape)==1:
+        return X[0], X[1]
+    return X[:,0], X[:,1]
 
 
 

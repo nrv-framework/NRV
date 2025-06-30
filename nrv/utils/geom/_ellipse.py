@@ -47,6 +47,16 @@ class Ellipse(CShape):
         )
 
     @property
+    def bbox(self):
+        b_s = self.bbox_size
+        return np.array([
+            self.center[0] - b_s[0]/2,
+            self.center[1] - b_s[1]/2,
+            self.center[0] + b_s[0]/2,
+            self.center[1] + b_s[1]/2,
+        ])
+
+    @property
     def rot_mat(self)->np.ndarray:
         """
         rotation matrix

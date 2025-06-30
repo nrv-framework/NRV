@@ -553,7 +553,18 @@ class NerveMshCreator(MshCreator):
         elif not self.is_dom:
             self.__link_entity_domains(dim=2)
             self.__link_entity_domains(dim=3)
-            self.compute_entity_domain()
+            try:
+                self.compute_entity_domain()
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
+            except TypeError:
+                self.save_geom("./__mesh_geom_dbg")
+                rise_error(TypeError, 
+                           "One or several domain not found, ",
+                           "please check your geometry saved in `./__mesh_geom_dbg.brep`")
+            except Exception as e:
+                rise_error("Error in during the mehsing:\n",e)
+
             self.is_dom = True
 
     def __is_outerbox(self, dx, dy, dz, com, dim_key):
@@ -625,8 +636,7 @@ class NerveMshCreator(MshCreator):
         # test center of mass in fascicle
         geom = self.geometries[f"fa{ID}"]
         com_test = (
-            np.isclose(com[0], self.L / 2)
-            and geom.is_inside(com[1:])
+            geom.is_inside(com[1:])
         )
         return status_test and size_test and com_test
 

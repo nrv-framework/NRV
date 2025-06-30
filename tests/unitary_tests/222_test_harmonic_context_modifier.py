@@ -42,7 +42,7 @@ if __name__ == "__main__":
         test_stim = ax.extra_stim.stimuli[0]
         '''
         plt.plot(test_stim.t,test_stim.s)
-        #plt.show()
+        # plt.show()
         exit()
         '''
         results = ax(t_sim=t_sim)
@@ -65,4 +65,4 @@ if __name__ == "__main__":
     plt.figure(2)
     plt.savefig('./unitary_tests/figures/222_B.png')
 
-    #plt.show()
+    # plt.show()

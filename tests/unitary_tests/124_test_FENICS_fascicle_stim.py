@@ -70,4 +70,4 @@ if __name__ == '__main__':
     print('simulation done in ' + str(t1-t0))
 
     del test_stim
-    plt.show()
+    # plt.show()

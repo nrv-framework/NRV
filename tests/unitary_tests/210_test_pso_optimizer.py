@@ -50,4 +50,4 @@ if __name__ == "__main__":
     ax.legend()
     fig.savefig(figdir+"A.png")
 
-    #plt.show()
+    # plt.show()

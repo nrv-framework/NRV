@@ -55,7 +55,7 @@ if __name__ == "__main__":
     cbar = plt.colorbar(map)
     cbar.set_label('membrane voltage (mV)')
     plt.savefig('./unitary_tests/figures/502_B.png')
-    #plt.show()
+    # plt.show()
 
     axon2 = nrv.load_any('./unitary_tests/figures/502_ax.json', extracel_context=True)
     results = axon2.simulate(t_sim=5)

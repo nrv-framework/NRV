@@ -5,6 +5,7 @@ utils.geom provides some classes and functions allowing to desig and handle vari
 
 from ._circle import Circle
 from ._ellipse import Ellipse
+from ._polygon import Polygon
 from ._misc import (
     create_cshape,
     get_cshape_bbox,
