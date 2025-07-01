@@ -381,7 +381,7 @@ class MshCreator(NRV_class):
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
 
-    def add_from_cshape(self, shape:CShape, n_pts_trace:int=1000, x:float=0, dx:float=10):
+    def add_from_cshape(self, shape:CShape, n_pts_trace:int=100, x:float=0, dx:float=10, res:None|float=None):
         """
         genertate a volume by extruding a :class:`....utils.geom._cshape.CShape` along
 
@@ -405,9 +405,14 @@ class MshCreator(NRV_class):
         cyl    : int
             id of the added object
         """
-        # Create OCC points
+        if res is not None:
+            #NOTE TC - alpha is arbitrarily set to 5 see if it needs to be access
+            alpha = 5
+            n_pts_trace = alpha * round(shape.perimeter/res)
         pt_tags = []
         y_trace, z_trace = shape.get_trace(n_theta=n_pts_trace)
+
+        # Create OCC points
         for y, z in zip(y_trace, z_trace):
             pt_tags.append(gmsh.model.occ.addPoint(x, y, z))
 

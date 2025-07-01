@@ -17,6 +17,14 @@ class Circle(Ellipse):
         super().__init__(center=center, radius=(radius, radius), rot=0)
         self.radius = radius
 
+
+    @property
+    def perimeter(self)->float:
+        """
+        Perimeter of the shape in \\(\\mu m^2\\)
+        """
+        return 2 * np.pi * self.r**0.5
+
     @property
     def bbox_size(self)->tuple[float, float]:
         return 2 * self.radius, 2 * self.radius

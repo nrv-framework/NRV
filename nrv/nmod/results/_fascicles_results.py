@@ -64,8 +64,8 @@ class fascicle_results(sim_results):
             axon_recruited = []
             for axon in axons_keys:
                 axon_recruited.append(self[axon].is_recruited(vm_key, t_start))
-            self.axons.add_mask(data=axon_recruited, label=df_key)
-        self.axons.add_mask(data=self.axons[df_key], label="is_recruited")
+            self.axons.add_mask(data=axon_recruited, label=df_key, mask_on=self.sim_mask)
+        self.axons.add_mask(data=self.axons[df_key], label="is_recruited", mask_on=self.sim_mask)
         if otype is None:
             return self.axons["is_recruited"]
         else:
@@ -204,9 +204,8 @@ class fascicle_results(sim_results):
             axon_z.append(self[axon].z)
             axon_diam.append(self[axon].diameter)
             axon_type.append(self[axon].myelinated)
-        self.axons["is_blocked"] = is_blocked
-        self.axons["n_onset"] = n_onset
-
+        self.axons.add_mask(data=is_blocked, label="is_blocked", mask_on=self.sim_mask)
+        self.axons.add_mask(data=n_onset, label="n_onset", mask_on=self.sim_mask)
         return (axon_diam, axon_type, axon_y, axon_z, is_blocked, n_onset)
 
     # impeddance related methods
@@ -441,15 +440,7 @@ class fascicle_results(sim_results):
 
 
         ## plot contour
-        axes.add_patch(
-            plt.Circle(
-                (self.geom.y, self.geom.z),
-                self.geom.radius / 2,
-                color=contour_color,
-                fill=False,
-                linewidth=2,
-            )
-        )
+        self.axons.plot(axes, myel_color=("b", .1), unmyel_color=("r", .1))
         ## plot axons
         axon_diam, _, axon_y, axon_z, is_blocked, n_onset = (
             self.get_block_summary_axons(

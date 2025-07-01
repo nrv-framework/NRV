@@ -52,6 +52,18 @@ class CShape(NRV_class):
         pass
 
     @property
+    def perimeter(self)->float:
+        """
+        Perimeter of the shape in \\(\\mu m^2\\)
+
+        Returns
+        -------
+        float
+        """
+        pass
+
+
+    @property
     def bbox_size(self)->tuple[float, float]:
         """
         Size of the bounding bounding box of the shape (usefull for meshing)

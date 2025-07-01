@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
 
     t_sim=5
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     X = [
         [amplitude,0.2,0],
         [amplitude,0.2,0,0.4,0],

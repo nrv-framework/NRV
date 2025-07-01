@@ -30,12 +30,24 @@ class Ellipse(CShape):
     def c(self)->np.ndarray:
         return np.array(self.center, dtype=float)
 
+    @property
     def r(self)->np.ndarray:
         return np.array(self.radius, dtype=float)
 
     @property
     def area(self)->float:
         return np.pi * self.r1 * self.r2
+    
+    @property
+    def perimeter(self)->float:
+        """
+        Perimeter of the shape in \\(\\mu m^2\\)
+
+        Warning
+        -------
+        For ellipse perimeter is only the `Simple arithmetic-geometric mean approximation <https://en.wikipedia.org/wiki/Perimeter_of_an_ellipse>`_. To use with cation as it can be limited for eccentric ellipses.
+        """
+        return 2 * np.pi * (np.sum(self.r**2)/2)**0.5
     
     @property
     def bbox_size(self)->tuple[float, float]:

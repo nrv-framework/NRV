@@ -303,6 +303,7 @@ class NerveMshCreator(MshCreator):
                     self.geometries[f"fa{_id}"],
                     x=0,
                     dx=self.L,
+                    res=fascicle["res"]
                 )
                 self.__collect_geom_ppt(fascicle, _s_id)
             for i in self.axons:

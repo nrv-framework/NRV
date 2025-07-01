@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == "__main__":
-    context = "./unitary_tests/sources/202_axon.json"
+    context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     t_sim=20
     # generate cost_evaluation method
     cost_evaluation = nrv.raster_count_CE()

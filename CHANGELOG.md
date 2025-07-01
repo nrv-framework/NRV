@@ -27,6 +27,7 @@ All notable changes to NRV are summed up in this file.
 ### Depreciated
 - arguments `Fascicle_D`, `y_c` and `z_c` from `FEM_stimulation.reshape_fascicle`, now `geometry` is used instead
 - tests `513` to `517`: axon pop related test are now with geometry tests between `350` and `400`.
+- test `77`
 
 
 ## [1.2.1] - 2025-06-06

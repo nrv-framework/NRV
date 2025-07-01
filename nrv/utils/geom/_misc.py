@@ -4,6 +4,7 @@ import numpy as np
 from ._cshape import CShape
 from ._ellipse import Ellipse
 from ._circle import Circle
+from ._polygon import Polygon
 
 
 def create_cshape(
@@ -12,6 +13,7 @@ def create_cshape(
     rot: None | float = None,
     degree:bool = False,
     diameter: None | float | tuple[float, float] = None,
+    vertices: None|np.ndarray = None
 )->CShape:
     """
     generate a CShape from parameters
@@ -26,21 +28,24 @@ def create_cshape(
         Rotation of the shape, by default None
     diameter : None | float | tuple[float, float], optional
         Diameter of the shape. If None, radius value is used to define the shape, by default None
+    vertices: None|np.ndarray, optional
+        If not none create a polygon with these vertices coordinate, by default None
 
     Returns
     -------
     CShape
     """
+    if vertices is not None:
+        return Polygon(vertices=vertices)
     if isinstance(diameter, tuple):
         radius = tuple([_d/2 for _d in diameter])
     elif diameter is not None:
         radius = diameter / 2
 
     if isinstance(radius, tuple):
-        geom = Ellipse(center=center, radius=radius, rot=rot, degree=degree)
+        return Ellipse(center=center, radius=radius, rot=rot, degree=degree)
     else:
-        geom = Circle(center=center, radius=radius)
-    return geom
+        return Circle(center=center, radius=radius)
 
 
 def get_cshape_bbox(shape:CShape, looped_end:bool=False):

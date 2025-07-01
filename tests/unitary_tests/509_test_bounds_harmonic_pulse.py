@@ -20,7 +20,7 @@ if __name__ == "__main__":
     t_pulse = 100e-3
     test_stim_CM = nrv.harmonic_stimulus_CM(start = start,t_pulse=t_pulse)
     t_sim=5
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
 
 
     plt.figure()

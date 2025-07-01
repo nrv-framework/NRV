@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
 
     t_sim=5
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     X = np.array([
         [1, 1],
         [1, 20],

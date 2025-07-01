@@ -10,8 +10,6 @@ figdir = test_dir+ "figures/" + test_num + "_"
 
 
 if __name__ == "__main__":
-    fig_DIR = "./unitary_tests/results/"
-
     test_stim_CM = nrv.biphasic_stimulus_CM(s_cathod="0", t_cathod="1")
     t_sim=5
     static_context = "./unitary_tests/sources/200_fascicle_1.json"
@@ -57,5 +55,5 @@ if __name__ == "__main__":
         axs[i].set_title(f"X = {x}\ncost = {c}")
         assert excepted_cost[i]==c, f"Wrong cost computed: {c} should be {excepted_cost[i]}"
 
-    fig.savefig(fig_DIR+"A.png")
+    fig.savefig(figdir+"A.png")
     # plt.show()

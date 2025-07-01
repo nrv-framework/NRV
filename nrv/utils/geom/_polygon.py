@@ -14,13 +14,13 @@ class Polygon(CShape):
     Represents an polygon eiher from its vertices positions.
     """
 
-    def __init__(self, vertices: tuple[float, float]=(0,0)):
+    def __init__(self, vertices: tuple[float, float]=[[0,0], [0,1], [1,0]]):
         """
-        Initialize the Ellipse with a center and axes.
 
-        :param center: A tuple (x, y) representing the center of the ellipse.
-        :param semi_major_axis: The length of the semi-major axis.
-        :param r2: The length of the semi-minor axis.
+        Parameters
+        ----------
+        vertices : tuple[float, float], optional
+            Vertices of the polygone, by default [[0,0], [0,1], [1,0]]
         """
         self.vertices:np.ndarray[float] = np.array(vertices)
         if self.vertices.shape[0]==2:
@@ -28,6 +28,8 @@ class Polygon(CShape):
             self.vertices = self.vertices.swapaxes(0,1)
             
         super().__init__(center=np.mean(self.vertices, axis=0))
+        # Mostely to have an idea of default mesh res
+        self.radius = np.mean(np.hypot(self.c, self.vertices))
 
     @property
     def n_gon(self)->int:
@@ -36,10 +38,6 @@ class Polygon(CShape):
     @property
     def shp_poly(self)->shp.Polygon:
         return shp.Polygon(self.vertices)
-
-    @property
-    def center_c(self)->complex:
-        return complex(self.center)
 
     @property
     def c(self)->np.ndarray:
@@ -56,7 +54,7 @@ class Polygon(CShape):
     
     @property
     def perimeter(self) -> float:
-        return np.sum(np.hypot(self.vertices))
+        return np.sum(np.hypot(*self.vertices.T))
 
     @property
     def bbox_size(self)->tuple[float, float]:
@@ -92,6 +90,7 @@ class Polygon(CShape):
 
         :return: A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
         """
+        # return self.vertices[:, 0], self.vertices[:, 1]
         p = np.linspace(0,self.n_gon, n_theta, endpoint=True)
         i_p = p.astype(int) % self.n_gon
         t_p = (p % 1).reshape(n_theta, 1)
