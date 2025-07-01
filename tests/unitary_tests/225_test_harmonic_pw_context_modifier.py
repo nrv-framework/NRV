@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
 
     t_sim=5
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     X = [
         [amplitude,t_pulse,0.2,0],
         [amplitude,2*t_pulse,0.2,0,0.4,0],
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         test_stim = ax.extra_stim.stimuli[0]
         '''
         plt.plot(test_stim.t,test_stim.s)
-        #plt.show()
+        # plt.show()
         exit()
         '''
         results = ax(t_sim=t_sim)
@@ -66,4 +66,4 @@ if __name__ == "__main__":
     plt.figure(2)
     plt.savefig('./unitary_tests/figures/222_B.png')
 
-    #plt.show()
+    # plt.show()

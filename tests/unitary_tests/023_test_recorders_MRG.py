@@ -70,4 +70,4 @@ if __name__ == "__main__":
     cbar.set_label('membrane current (mA/cm^2)')
     plt.savefig('./unitary_tests/figures/23_C.png')
 
-    #plt.show()
+    # plt.show()

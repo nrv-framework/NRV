@@ -31,6 +31,9 @@ The folowing table details the default units used in NRV and the lists of units 
         *   - Capacitance
             - uF
             - F, mF, pF, nF
+        *   - Angle
+            - rad
+            - deg
 
 """
 
@@ -48,6 +51,7 @@ uA = 1  # default unit for current is uA, UNLESS NEURON who is by default in nA
 S = 1  # default unit for conductance is S
 kHz = 1  # default unit for frequency is kHz
 uF = 1  # default unit for capacitance is uF
+rad = 1  # default unit for capacitance is uF
 
 ######################
 ## voltage prefixes ##
@@ -104,6 +108,11 @@ F = 1e6 * uF
 mF = 1e3 * uF
 pF = 1e-3 * uF
 nF = 1e-6 * uF
+
+####################
+## angle prefixes ##
+####################
+deg = rad * np.pi / 180
 
 #############################
 ####  Usefull functions ####

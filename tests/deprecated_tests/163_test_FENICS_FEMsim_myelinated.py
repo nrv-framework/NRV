@@ -102,4 +102,4 @@ if __name__ == "__main__":
     plt.plot(X[0, :], resdiff[0].eval(X.T), label="node 1 active")
     plt.plot(X[0, :], resdiff[1].eval(X.T), label="node 2 active")
 
-    #plt.show()
+    # plt.show()

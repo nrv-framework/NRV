@@ -26,4 +26,4 @@ if __name__ == "__main__":
     ax.add_patch(plt.Circle((0, 0), pop_diam/4, color='k',fill=False))
     fig.savefig('./unitary_tests/figures/516_outliers_removed.png')
 
-    #plt.show()
+    # plt.show()

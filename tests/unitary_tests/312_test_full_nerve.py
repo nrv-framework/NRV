@@ -1,8 +1,11 @@
 import nrv
 import matplotlib.pyplot as plt
 
-test_num = 312
-figdir = "./unitary_tests/figures/" + test_num + "_"
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
 
 
 def create_nerve():
@@ -33,12 +36,9 @@ def create_nerve():
 
     # create axon population
     n_ax = 100      #size of the axon population
-    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
-    fascicle_1.fill_with_population(axons_diameters, axons_type, delta=5)
+    fascicle_1.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=5)
 
-    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
-    fascicle_2.fill_with_population(axons_diameters, axons_type, delta=5)
-    fascicle_1.fit_population_to_size(delta=2)
+    fascicle_2.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=5)
 
     ## add electrode and stimulation
     # electrode

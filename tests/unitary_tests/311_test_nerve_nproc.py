@@ -2,11 +2,15 @@ import nrv
 import numpy as np
 import matplotlib.pyplot as plt
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
+
 
 if __name__ == "__main__":
-
-    test_num = 311
-    figdir = "./unitary_tests/figures/" + test_num + "_"
+    np.random.seed(444)
 
     outer_d = 5         # in mm
     nerve_d = 500       # in um
@@ -32,11 +36,11 @@ if __name__ == "__main__":
     n_ax = 100      #size of the axon population
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
     
-    fascicle_1.fill_with_population(axons_diameters, axons_type, delta=5)
+    fascicle_1.fill_with_population(axons_diameters, axons_type, delta=2)
 
     axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
-    fascicle_2.fill_with_population(axons_diameters, axons_type, delta=5)
-    fascicle_1.fit_population_to_size(delta=2)
+    fascicle_2.fill_with_population(axons_diameters, axons_type, delta=2, delta_trace=2)
+    # fascicle_1.fit_population_to_size(delta=2)
 
 
 
@@ -62,6 +66,7 @@ if __name__ == "__main__":
     extra_stim.add_electrode(elec_2, pulse_stim)
     nerve.attach_extracellular_stimulation(extra_stim)
 
+
     #Plot the nerve again.
     fig, ax = plt.subplots(1, 1, figsize=(6,6))
     nerve.plot(ax)
@@ -69,10 +74,8 @@ if __name__ == "__main__":
     ax.set_ylabel("y-axis (µm)")
     fig.savefig(figdir+"A.png")
 
-
     nerve_ppt = nerve.save(save=False,extracel_context=True)
     del nerve
-
 
 
     ##################
@@ -84,7 +87,7 @@ if __name__ == "__main__":
     del ner1
 
     # Overwrite default nproc (with nrv.parameters)
-    # nrv.parameters.set_nmod_ncore(4)
+    nrv.parameters.set_nmod_ncore(4)
     ner2 = nrv.load_nerve(nerve_ppt, extracel_context=True)
     n_res2 = ner2(t_sim=3,postproc_script = "is_recruited")
     del ner2

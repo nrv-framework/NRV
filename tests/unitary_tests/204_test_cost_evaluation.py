@@ -5,7 +5,7 @@ import numpy as np
 import time 
 if __name__ == "__main__":
     t0 = time.time()
-    context = "./unitary_tests/sources/202_axon.json"
+    context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     t_sim=2
     # generate cost_evaluation method
     test_CE1 = nrv.raster_count_CE()
@@ -58,4 +58,4 @@ if __name__ == "__main__":
     cbar.set_label('membrane voltage (mV)')
 
     plt.savefig('./unitary_tests/figures/202_B.png')
-    #plt.show()
+    # plt.show()

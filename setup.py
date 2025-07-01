@@ -131,6 +131,7 @@ setup(
         "pyswarms",
         "rich",
         "scipy",
+        "shapely",
     ],  # external packages as dependencies
     python_requires=">=3.12",
     scripts=["./tests/NRV_test"]        #script

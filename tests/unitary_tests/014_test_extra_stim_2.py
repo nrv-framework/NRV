@@ -52,4 +52,4 @@ if __name__ == "__main__":
     cbar = plt.colorbar(map)
     cbar.set_label('membrane voltage (mV)')
     plt.savefig('./unitary_tests/figures/14_B.png')
-    #plt.show()
+    # plt.show()

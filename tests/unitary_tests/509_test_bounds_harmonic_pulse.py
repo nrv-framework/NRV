@@ -20,7 +20,7 @@ if __name__ == "__main__":
     t_pulse = 100e-3
     test_stim_CM = nrv.harmonic_stimulus_CM(start = start,t_pulse=t_pulse)
     t_sim=5
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
 
 
     plt.figure()
@@ -74,4 +74,4 @@ if __name__ == "__main__":
         #print(X)
     # waveform2 = nrv.interpolate_Npts(X, plot=True, generatefigure=False, **kwrgs_interp)
     plt.savefig('./unitary_tests/figures/509_D.png')
-    #plt.show()
+    # plt.show()

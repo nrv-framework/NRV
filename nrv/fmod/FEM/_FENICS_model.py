@@ -12,13 +12,15 @@ from mpi4py.MPI import COMM_WORLD, COMM_SELF
 from ...backend._file_handler import rmv_ext
 from ...utils._units import V, mm
 from ...utils._misc import get_perineurial_thickness
+from ...utils.geom._misc import CShape, create_cshape
 from ...backend._log_interface import rise_warning
 from ...backend._parameters import parameters
 from .fenics_utils._FEMSimulation import FEMSimulation
 
 from ._FEM import FEM_model
 from .fenics_utils._FEMResults import save_sim_res_list
-from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset, pi
+from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset
+
 
 # built in FENICS models
 dir_path = parameters.nrv_path + "/_misc"
@@ -107,6 +109,7 @@ class FENICS_model(FEM_model):
         self.i_stim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
+        self.geometries:dict[str,CShape] = {}
 
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
@@ -114,7 +117,6 @@ class FENICS_model(FEM_model):
         self.Perineurium_mat = "perineurium"
         self.Electrodes_mat = 1  # "platinum"
 
-        self.default_fascicle = {"d": 250, "y_c": 0, "z_c": 0, "res": 250 / 3}
         self.default_electrode = {
             "elec_type": "LIFE",
             "x_c": self.L / 2,
@@ -212,15 +214,16 @@ class FENICS_model(FEM_model):
             z_c=param["z_c"],
         )
         for id in param["fascicles"]:
-            fasc = param["fascicles"][id]
-            per_th = param["Perineurium_thickness"][id]
+            if not len(param["geometries"]):
+                rise_warning("Deprecated file: FENICS_model does not contain attribute geometries")
+                geom = create_cshape(center=(param["fascicles"][id]["y_c"], param["fascicles"][id]["z_c"]), diameter=param["fascicles"][id]["d"])
+            else:
+                geom = param["geometries"][f"fa{id}"]
             self.reshape_fascicle(
-                fasc["d"],
-                y_c=fasc["y_c"],
-                z_c=fasc["z_c"],
+                geometry=geom,
                 ID=int(id),
-                Perineurium_thickness=per_th,
-                res=fasc["res"],
+                Perineurium_thickness=param["Perineurium_thickness"][id],
+                res=param["fascicles"][id]["res"],
             )
         for id in param["electrodes"]:
             elec = param["electrodes"][id]
@@ -278,6 +281,7 @@ class FENICS_model(FEM_model):
         param["Outer_D"] = self.Outer_D / mm
         param["Nerve_D"] = self.Nerve_D
         param["fascicles"] = self.fascicles
+        param["geometries"] = self.geometries
         param["Perineurium_thickness"] = self.Perineurium_thickness
         param["N_electrode"] = self.N_electrode
         param["electrodes"] = self.electrodes
@@ -374,9 +378,7 @@ class FENICS_model(FEM_model):
 
     def reshape_fascicle(
         self,
-        Fascicle_D,
-        y_c=0,
-        z_c=0,
+        geometry:CShape,
         ID=None,
         Perineurium_thickness=None,
         res="default",
@@ -386,17 +388,13 @@ class FENICS_model(FEM_model):
 
         Parameters
         ----------
-        Fascicle_D  : float
-            Fascicle diameter, in um
-        y_c         : float
-            Fascicle center y-coodinate in um, 0 by default
-        z_c         : float
-            Fascicle center y-coodinate in um, 0 by default
+        geometry    : CShape
+            Fascicle geometry on Oyz plan
         ID          : int
             If the simulation contains more than one fascicles, ID number of the fascicle to reshape as in FENICS
         """
         if not self.mesh_file_status:
-            self.mesh.reshape_fascicle(Fascicle_D, y_c, z_c, ID, res)
+            self.mesh.reshape_fascicle(geometry=geometry, ID=ID, res=res)
             self.__update_parameters()
             if ID is None:
                 if self.Perineurium_thickness == {}:
@@ -404,7 +402,7 @@ class FENICS_model(FEM_model):
                 else:  ## To check when not all ID are fixed
                     ID = max(self.Perineurium_thickness) + 1
 
-            p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
+            p_th = Perineurium_thickness or get_perineurial_thickness(2*np.mean(geometry.radius))
             self.Perineurium_thickness[ID] = p_th
 
     def remove_fascicles(self, ID=None):
@@ -419,7 +417,9 @@ class FENICS_model(FEM_model):
         if ID is None:
             self.fascicles = {}
             self.Perineurium_thickness = {}
+            self.geometries = {k: v for k, v in self.geometries.items() if "fa" not in k}
         elif ID in self.fascicles:
+            del self.geometries[f"fa{ID}"]
             del self.fascicles[ID]
             del self.Perineurium_thickness[ID]
         self.mesh.remove_fascicles(ID=ID)
@@ -436,7 +436,18 @@ class FENICS_model(FEM_model):
     ######################
     def setup_simulations(self, comm=None, rank=None):
         """
-        TO BE WRITTEN
+        Setup the FEM simulation
+
+        Parameters
+        ----------
+        comm : MPI.Comm, optional
+            MPI communicator of for FEM simulation, by default None
+        rank : int, optional
+            MPI communicator rank for FEM simulation, by default None
+
+        Warning
+        -------
+        Since v1.2.0, parallel computation in NRV is handeled with `multiprocessing`, so it is advised to ignore the `comm`, `rank` to avoid incompatibilities.
         """
         if comm is not None:
             self.comm = comm
@@ -558,9 +569,8 @@ class FENICS_model(FEM_model):
         if elec["type"] == "LIFE":
             y_e, z_e = elec["kwargs"]["y_c"], elec["kwargs"]["z_c"]
             for i in self.fascicles:
-                fascicle = self.fascicles[i]
-                d_f, y_f, z_f = fascicle["d"], fascicle["y_c"], fascicle["z_c"]
-                if (y_e - y_f) ** 2 + (z_e - z_f) ** 2 < (d_f / 2) ** 2:
+                geom = self.geometries[f"fa{i}"]
+                if geom.is_inside((y_e, z_e)):
                     return 10 + 2 * i
         return 0
 
@@ -606,10 +616,7 @@ class FENICS_model(FEM_model):
             self.__update_parameters()
             if self.N_fascicle == 0:
                 self.reshape_fascicle(
-                    Fascicle_D=self.default_fascicle["d"],
-                    y_c=self.default_fascicle["y_c"],
-                    z_c=self.default_fascicle["z_c"],
-                    res=self.default_fascicle["res"],
+                    geometry=create_cshape(diameter=250),
                 )
             if self.N_electrode == 0:
                 self.add_electrode(

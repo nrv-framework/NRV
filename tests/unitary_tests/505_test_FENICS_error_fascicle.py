@@ -46,12 +46,13 @@ if __name__ == "__main__":
     fascicle_1.set_ID(Ntest)
     # extra cellular stimulation
     fascicle_1.attach_extracellular_stimulation(test_stim)
-    fascicle_1.axons_type[12] = -1
+    fascicle_1.axons["types"][12] = -1
     # simulation
     #print(fascicle_1.compute_electrodes_footprints())
     try:
-        fascicle_1.simulate(t_sim=10, save_path='./unitary_tests/figures/',postproc_script='is_recruited')
-    except:
-        print('Error as expected')
-    else:
-        assert (0 == 1) #should throw an error
+        fascicle_1.simulate(t_sim=5)
+        assert 1==0, "should complete the simulation"
+    except AssertionError:
+        print("...Expected error")
+    except Exception as e:
+        nrv.rise_error(e)

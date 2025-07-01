@@ -49,5 +49,5 @@ if __name__ == "__main__":
     m_results_intra1.colormap_plot(axs[0,1])
     m_results_no_stim.colormap_plot(axs[1,1])
     m_results_intra2.colormap_plot(axs[2,1])
-    #plt.show()
+    # plt.show()
     fig.savefig('./unitary_tests/figures/534_clear_clamps_axons.png')

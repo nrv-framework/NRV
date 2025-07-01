@@ -23,4 +23,4 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     pulse_stim3.plot(ax)
     fig.savefig('./unitary_tests/figures/519_plot_stim2.png')
-    #plt.show()
+    # plt.show()

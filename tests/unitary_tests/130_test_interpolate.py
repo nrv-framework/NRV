@@ -101,4 +101,4 @@ if __name__ == "__main__":
     plt.plot(Y, F_mul(X), label="f.f/4")
     plt.plot(Y, F_div(X), label="10 + f / f")
     plt.legend()
-    #plt.show()
+    # plt.show()

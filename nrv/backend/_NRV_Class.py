@@ -5,20 +5,18 @@ This is mainly used to create generic methods such as save and load.
 
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-
-# sys used in an eval
-import sys
+import sys      # used in an eval
 import numpy as np
+from pandas import DataFrame
 from numpy import iterable
 
 from ._file_handler import json_dump, json_load
 from ._log_interface import pass_debug_info
+from ._extlib_interface import is_empty_iterable
 
-########################################
+# ------------------------------------ #
 #           check object               #
-########################################
-
-
+# ------------------------------------ #
 def is_NRV_class(x):
     """
     Check if the object x is a ``NRV_class``.
@@ -77,9 +75,10 @@ def is_NRV_class_dict(x):
     return False
 
 
-##########################################
-#           check dictionaries           #
-##########################################
+# ------------------------------------ #
+#         check dictionaries           #
+# ------------------------------------ #
+
 def is_NRV_dict(x):
     """
     Check if the object x is a dictionary of saved ``NRV_class``.
@@ -158,32 +157,10 @@ def is_NRV_object_dict(x):
     return is_NRV_dict(x) or is_NRV_dict_list(x) or is_NRV_dict_dict(x)
 
 
-######################################
-#       numpy compatibility          #
-######################################
-def is_empty_iterable(x):
-    """
-    check if the object x is an empty iterable
+# --------------------------------- #
+#            NRV Class              #
+# --------------------------------- #
 
-    Parameters
-    ----------
-    x : any
-        object to check.
-
-    Returns
-    -------
-    bool
-    """
-    if not np.iterable(x):
-        return False
-    if len(x) == 0:
-        return True
-    return False
-
-
-######################################
-#            NRV Class               #
-######################################
 
 
 class NRV_class(metaclass=ABCMeta):
@@ -200,6 +177,7 @@ class NRV_class(metaclass=ABCMeta):
         """
         self.__NRVObject__ = True
         self.nrv_type = self.__class__.__name__
+        self.nrv_module = self.__module__
         pass_debug_info(self.nrv_type, " initialized")
 
     def __del__(self):
@@ -289,6 +267,8 @@ class NRV_class(metaclass=ABCMeta):
                     self.__dict__[key] = load_any(key_dic[key], **kwargs)
                 elif isinstance(self.__dict__[key], np.ndarray):
                     self.__dict__[key] = np.array(key_dic[key])
+                elif isinstance(self.__dict__[key], DataFrame):
+                    self.__dict__[key] = DataFrame(key_dic[key])
                 elif isinstance(self.__dict__[key], set):
                     self.__dict__[key] = set(key_dic[key])
                 elif is_empty_iterable(key_dic[key]):
@@ -360,18 +340,23 @@ def load_any(data, **kwargs) -> NRV_class:
     if is_NRV_class(key_dic) or is_NRV_class_list(key_dic):
         nrv_obj = key_dic
     # test if NRV dict
-    elif is_NRV_dict(key_dic):
-        nrv_type = key_dic["nrv_type"]
-        nrv_obj = eval('sys.modules["nrv"].' + nrv_type)()
-        nrv_obj.load(key_dic, **kwargs)
-    elif is_NRV_dict_dict(key_dic):
-        nrv_obj = {}
-        for key in key_dic:
-            nrv_obj[key] = load_any(key_dic[key], **kwargs)
-    elif is_NRV_dict_list(key_dic):
-        nrv_obj = []
-        for i in key_dic:
-            nrv_obj += [load_any(i, **kwargs)]
+    elif is_NRV_object_dict(key_dic):
+        key_dic = deepcopy(key_dic)
+        if is_NRV_dict(key_dic):
+            nrv_type = key_dic["nrv_type"]
+            nrv_module = "nrv"
+            if "nrv_module" in key_dic:
+                nrv_module = key_dic["nrv_module"]
+            nrv_obj = eval(f"sys.modules['{nrv_module}'].{nrv_type}")()
+            nrv_obj.load(key_dic, **kwargs)
+        elif is_NRV_dict_dict(key_dic):
+            nrv_obj = {}
+            for key in key_dic:
+                nrv_obj[key] = load_any(key_dic[key], **kwargs)
+        elif is_NRV_dict_list(key_dic):
+            nrv_obj = []
+            for i in key_dic:
+                nrv_obj += [load_any(i, **kwargs)]
     else:
         nrv_obj = key_dic
     return nrv_obj

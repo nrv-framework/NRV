@@ -79,4 +79,4 @@ if __name__ == "__main__":
     plt.plot(r2['t'], r2['V_mem'][len(r2['V_mem'])//2], ':g', label="with snap")
     plt.legend()
     plt.savefig("./unitary_tests/figures/507_A.png")
-    #plt.show()
+    # plt.show()

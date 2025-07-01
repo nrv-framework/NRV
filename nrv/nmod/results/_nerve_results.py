@@ -12,7 +12,7 @@ from ...utils._misc import membrane_capacitance_from_model
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+from pandas import DataFrame, concat
 
 def number_in_str(s: str) -> bool:
     return any(i.isdigit() for i in s)
@@ -23,6 +23,7 @@ class nerve_results(sim_results):
 
     def __init__(self, context=None):
         super().__init__(context)
+        self._axons:DataFrame = DataFrame()
 
     @property
     def fascicle_keys(self) -> list:
@@ -91,6 +92,7 @@ class nerve_results(sim_results):
         """
         Porperties of axons population of each fascicles
 
+
         Returns
         -------
         np.ndarray (self.n_ax, 6)
@@ -105,15 +107,32 @@ class nerve_results(sim_results):
                 (
                     self[key].ID * np.ones(fasc_n_ax),
                     np.arange(fasc_n_ax),
-                    self[key].axons_type,
-                    self[key].axons_diameter,
-                    self[key].axons_y,
-                    self[key].axons_z,
+                    self[key].axons[["types", "diameters", "y", "z"]].to_numpy(),
                 )
             ).T
             _mye[_offset : _offset + fasc_n_ax, :] = fasc_axons
             _offset += fasc_n_ax
         return _mye
+
+    @property
+    def axons(self) -> np.ndarray:
+        """
+        Porperties of axons population of each fascicles
+
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 6)
+            ndarray gathering, for all axons in the nerve, corresponding fascicle and axon IDs, myelinating type, diameter and y and z positions.
+        """
+        if self._axons.empty:
+            fasc_keys = self.fascicle_keys
+            for key in fasc_keys:
+                _ax_pop = self[key].axons.axon_pop
+                _ax_pop["fkey"] = [key for _ in range(len(_ax_pop))]
+                self._axons = concat((self._axons, _ax_pop))
+                print(self[key].axons.axon_pop.keys())
+        return self._axons
 
     def get_fascicle_results(self, ID: int) -> fascicle_results:
         if ID not in self.fascicles_IDs:

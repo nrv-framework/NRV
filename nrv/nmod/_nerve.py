@@ -7,6 +7,7 @@ import numpy as np
 from ..backend._log_interface import pass_info, rise_warning
 from ..backend._NRV_Class import load_any
 from ..backend._NRV_Simulable import NRV_simulable
+from ..utils.geom._misc import cshape_overlap_checker, create_cshape
 from ..utils._stimulus import stimulus
 from ._fascicles import *
 from .results._nerve_results import nerve_results
@@ -149,24 +150,24 @@ class nerve(NRV_simulable):
         self.postproc_script = None
         self.postproc_kwargs = {}
 
+        self.n_proc = None
+
         self.type = "nerve"
         self.L = length
         self.D = None
-        self.y_grav_center = 0
-        self.z_grav_center = 0
         self.Outer_D = Outer_D
         self.ID = ID
 
         # geometric properties
-        self.y_grav_center = 0
-        self.z_grav_center = 0
+        self.y_grav_center:float = 0
+        self.z_grav_center:float = 0
 
         # Update parameters with kwargs
         self.set_parameters(**kwargs)
 
         # Fascicular content
-        self.fascicles_IDs = []
-        self.fascicles = {}
+        self.fascicles_IDs:list[str] = []
+        self.fascicles:dict[str,fascicle] = {}
 
         # Axons objects default parameters
         self.unmyelinated_param = {
@@ -520,18 +521,13 @@ class nerve(NRV_simulable):
         if N_fasc == 0:
             pass_info("No fascicles to fit - Nerve diameter set to " + str(D) + "um")
         else:
+            _r = 0
             for fasc in self.fascicles.values():
-                dist_max = (
-                    fasc.D / 2
-                    + (
-                        (self.y_grav_center - fasc.y_grav_center) ** 2
-                        + (self.z_grav_center - fasc.z_grav_center) ** 2
-                    )
-                    ** 0.5
-                )
-                D = max(D, 2 * (dist_max + delta))
-        self.define_circular_contour(D, y_c=None, z_c=None)
-
+                y_tr, z_tr = fasc.geom.get_trace(n_theta=1000)
+                _r_fasc = np.hypot((y_tr-self.y_grav_center), (z_tr-self.z_grav_center)).max()
+                _r = np.max((_r, _r_fasc))
+            self.D = 2*(_r+delta)
+            print(self.D)
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
         Define ellipsoidal contour
@@ -583,10 +579,10 @@ class nerve(NRV_simulable):
             if ID is not None:
                 fasc.set_ID(ID)
             if y is None:
-                y = fasc.y_grav_center
+                y = fasc.y
             if z is None:
-                z = fasc.z_grav_center
-            fasc.translate_fascicle(y - fasc.y_grav_center, z - fasc.z_grav_center)
+                z = fasc.z
+            fasc.translate(y - fasc.y, z - fasc.z)
             if self.__check_fascicle_overlap(fasc):
                 rise_warning(
                     "fascicles overlap:  fasicle " + str(fasc.ID) + " cannot be added"
@@ -607,19 +603,18 @@ class nerve(NRV_simulable):
                 self.fascicles[fasc.ID].define_length(self.L)
 
     def __check_fascicle_overlap(self, fasc: fascicle):
-        for fasc_i in self.fascicles.values():
-            dist_yz = (fasc.y_grav_center - fasc_i.y_grav_center) ** 2 + (
-                fasc.z_grav_center - fasc_i.z_grav_center
-            ) ** 2
-            len_min_yz = ((fasc.D + fasc_i.D) / 2) ** 2
-            if dist_yz < len_min_yz:
-                return True
-        return False
+        """
+        To handle in fascicle group
+        """
+        if len(self.fascicles) == 0:
+            return False
+        fasc_geom = [fasc_i.geom for fasc_i in self.fascicles.values()]
+        return any(cshape_overlap_checker(s=fasc.geom, s_comp=fasc_geom))
 
     def __merge_fascicular_context(self, fasc: fascicle):
         if self.is_extra_stim:
             self.extra_stim.reshape_fascicle(
-                fasc.D, fasc.y_grav_center, fasc.z_grav_center, fasc.ID
+                fasc.geom, fasc.ID
             )
         if fasc.extra_stim is not None:
             self.attach_extracellular_stimulation(fasc.extra_stim)
@@ -834,9 +829,7 @@ class nerve(NRV_simulable):
             self.extra_stim.remove_fascicles()
             for fasc in self.fascicles.values():
                 self.extra_stim.reshape_fascicle(
-                    Fascicle_D=fasc.D,
-                    y_c=fasc.y_grav_center,
-                    z_c=fasc.z_grav_center,
+                    geometry=fasc.geom,
                     ID=fasc.ID,
                 )
             self.is_extra_stim = True
@@ -882,18 +875,20 @@ class nerve(NRV_simulable):
         int
             ID of the fascicle overlapping, -1 if no overlap
         """
-        y, z, D = 0, 0, 0
+        y, z, d = 0, 0, 0.001
         # CUFF electrodes do not affect intrafascicular state
         if not is_CUFF_electrode(electrode):
             y = electrode.y
             z = electrode.z
             if is_LIFE_electrode(electrode):
-                D = electrode.D
+                d = electrode.D
+            e_geom = create_cshape(center=(y,z), diameter=d)
             for fasc in self.fascicles.values():
-                dist = np.sqrt(
-                    (fasc.y_grav_center - y) ** 2 + (fasc.z_grav_center - z) ** 2
-                ) - (fasc.D / 2)
-                if abs(dist) < D:
+                if cshape_overlap_checker(
+                    s=fasc.geom,
+                    s_comp=e_geom,
+                    on_trace=True,
+                ):
                     return fasc.ID
         return -1
 

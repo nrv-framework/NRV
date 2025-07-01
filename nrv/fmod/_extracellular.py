@@ -6,12 +6,14 @@ import faulthandler
 
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import Literal
 
 from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._NRV_Class import NRV_class, is_empty_iterable
 from ..utils._misc import get_perineurial_thickness
 from ._electrodes import (
+    electrode,
     is_analytical_electrode,
     is_FEM_electrode,
     check_electrodes_overlap,
@@ -19,7 +21,8 @@ from ._electrodes import (
 from .FEM._COMSOL_model import COMSOL_model, COMSOL_Status
 from .FEM._FENICS_model import FENICS_model
 from ._materials import load_material, is_mat
-from ..utils._stimulus import get_equal_timing_copies
+from ..utils._stimulus import stimulus, get_equal_timing_copies
+from ..utils.geom._misc import CShape, create_cshape
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -91,11 +94,11 @@ class extracellular_context(NRV_class):
         super().__init__()
         self.type = "extracellular_context"
         # empty list to store electrodes and corresponding stimuli
-        self.electrodes = []
-        self.stimuli = []
+        self.electrodes:list[electrode] = []
+        self.stimuli:list[stimulus] = []
         # list for synchronised stimuli
-        self.synchronised = False
-        self.synchronised_stimuli = []
+        self.synchronised:bool = False
+        self.synchronised_stimuli:list[stimulus] = []
         self.global_time_serie = []
         self.type = None
 
@@ -135,6 +138,22 @@ class extracellular_context(NRV_class):
         """
         for elec in self.electrodes:
             elec.translate(x=x, y=y, z=z)
+
+    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+        """
+        Rotate extracellular context electrodes by group rotation around x-axis
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle
+        center : bool, optional
+            Center of the rotation, by default (0,0)
+        degree : bool, optional
+            if True `angle` is in degree, if False in radian, by default False
+        """
+        for elec in self.electrodes:
+            elec.rotate(angle=angle, center=center, degree=degree)
 
     def add_electrode(self, electrode, stimulus):
         """
@@ -526,23 +545,34 @@ class FEM_stimulation(extracellular_context):
 
     def reshape_fascicle(
         self,
-        Fascicle_D,
-        y_c=0,
-        z_c=0,
-        ID=None,
-        Perineurium_thickness=None,
-        res="default",
+        geometry:CShape=None,
+        Fascicle_D:float=10,
+        y_c:float=0,
+        z_c:float=0,
+        ID:int=None,
+        Perineurium_thickness:None|float=None,
+        res:float|Literal["default"]="default",
     ):
         """
         Reshape a fascicle of the FEM simulation
 
+        Warning
+        -------
+        ``Fascicle_D``, ``y_c`` and ``z_c`` parameters are deprecated since v1.2.2 and might be removed in future versions. Use directly ``geometry``.
+
+        Tip
+        ---
+        ``geometry`` can be either define with :module:`.._utils.geom` tools or access from an existing fascicle in `fascicle.geom`.
+
         Parameters
         ----------
-        Fascicle_D  : float
-            Fascicle diameter, in µm
-        y_c         : float
+        geometry    : CShape
+            Fascicle geometry.
+        Fascicle_D  : float, DEPRECATED
+            Fascicle diameter, in µm, 10 by default
+        y_c         : float, DEPRECATED
             Fascicle center y-coodinate in µm, 0 by default
-        z_c         : float
+        z_c         : float, DEPRECATED
             Fascicle center y-coodinate in µm, 0 by default
         Perineurium_thickness   :float
             Thickness of the Perineurium sheet surounding the fascicles in µm. If None, thickness is determined according to the fascicle diameter
@@ -551,28 +581,26 @@ class FEM_stimulation(extracellular_context):
         res         : float or "default"
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
-        p_th = Perineurium_thickness or get_perineurial_thickness(Fascicle_D)
+        if not isinstance(geometry, CShape):
+            rise_warning("Deprecated arguments: You migth be using an old script. FEM_stimulation.reshape_fascicle use geometry instead of Fascicle_D, y_c, z_c")
+            if geometry is not None:
+                Fascicle_D = geometry
+            geometry = create_cshape(center=(y_c,z_c), diameter=Fascicle_D)
+
+
+        fasc_d_avg = np.mean(geometry.radius)*2
+        p_th = Perineurium_thickness or get_perineurial_thickness(fasc_d_avg)
         if self.comsol:
-            if ID is None:
-                self.model.set_parameter("Fascicle_D", str(Fascicle_D) + "[um]")
-                self.model.set_parameter("Fascicle_y_c", str(y_c) + "[um]")
-                self.model.set_parameter("Fascicle_z_c", str(z_c) + "[um]")
-            else:
-                self.model.set_parameter(
-                    "Fascicle_" + str(ID) + "_D", str(Fascicle_D) + "[um]"
-                )
-                self.model.set_parameter(
-                    "Fascicle_" + str(ID) + "_y_c", str(y_c) + "[um]"
-                )
-                self.model.set_parameter(
-                    "Fascicle_" + str(ID) + "_z_c", str(z_c) + "[um]"
-                )
+            fasc_label = "Fascicle_"
+            if ID is not None:
+                fasc_label += f"{ID}_"
+            self.model.set_parameter(fasc_label+"D", str(fasc_d_avg) + "[um]")
+            self.model.set_parameter(fasc_label+"y_c", str(geometry.y) + "[um]")
+            self.model.set_parameter(fasc_label+"z_c", str(geometry.z) + "[um]")
             self.model.set_parameter("Perineurium_thickness", str(p_th) + "[um]")
         else:
             self.model.reshape_fascicle(
-                Fascicle_D=Fascicle_D,
-                y_c=y_c,
-                z_c=z_c,
+                geometry=geometry,
                 ID=ID,
                 Perineurium_thickness=p_th,
                 res=res,

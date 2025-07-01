@@ -123,4 +123,4 @@ if __name__ == "__main__":
     print(not np.allclose(res1.vector, res2.vector))
     resdiff.save(sim_file)
 
-    #plt.show()
+    # plt.show()

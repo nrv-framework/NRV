@@ -51,4 +51,4 @@ if __name__ == "__main__":
     plt.plot(delta_t-axon1.dt)
     plt.savefig('./unitary_tests/figures/39_A.png')
 
-    #plt.show()
+    # plt.show()

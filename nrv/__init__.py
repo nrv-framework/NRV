@@ -80,7 +80,6 @@ from .backend._NRV_Class import load_any
 
 from .fmod._materials import *
 from .fmod._electrodes import *
-from .utils._stimulus import *
 from .fmod._extracellular import *
 from .fmod._recording import *
 from .fmod.FEM._FEM import *
@@ -104,8 +103,8 @@ from .nmod._axons import *
 from .nmod._unmyelinated import *
 from .nmod._myelinated import *
 from .nmod._fascicles import *
-from .nmod._axon_pop_generator import *
 from .nmod._nerve import *
+from .nmod.utils._axon_pop_generator import *
 
 from .nmod.results._axons_results import *
 from .nmod.results._unmyelinated_results import *
@@ -117,6 +116,9 @@ from .nmod.results._nerve_results import *
 from .utils._saving_handler import *
 from .utils._nrv_function import *
 from .utils._units import *
+from .utils._stimulus import *
+from .utils.geom._misc import *
+
 from .ui._axon_postprocessing import *
 from .ui._axon_simulations import *
 from .ui._fascicle_postprocessing import *

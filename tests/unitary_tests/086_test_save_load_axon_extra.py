@@ -2,14 +2,21 @@ import nrv
 import matplotlib.pyplot as plt
 import numpy as np
 
+
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = test_dir+ "figures/" + test_num + "_"
+extastim_file = test_dir+ "results/json/" + test_num+ "_extastim.json"
+unm_axon_file = test_dir+ "results/json/" + test_num+ "_uaxon.json"
+m_axon_file = test_dir+ "results/json/" + test_num+ "_maxon.json"
+
 if __name__ == "__main__":
     ###########################
     ## extracellular contexts ##
     ###########################
 
-    extastim_file = "./unitary_tests/figures/505_extastim.json"
-    unm_axon_file = "./unitary_tests/figures/505_unm_axon.json"
-    m_axon_file = "./unitary_tests/figures/505_m_axon.json"
     L_mye = 10000
 
 
@@ -57,7 +64,7 @@ if __name__ == "__main__":
     Nerve_D = 250
     Fascicle_D = 220
     #nrv.parameters.set_nrv_verbosity(2)
-    test_stim = nrv.FEM_stimulation(comsol=False)
+    test_stim = nrv.FEM_stimulation()
     ### Simulation box size
     test_stim.reshape_outerBox(Outer_D)
     #### Nerve and fascicle geometry

@@ -66,6 +66,7 @@ deps = (
     "scipy.sparse.csgraph",
     "scipy.spatial",
     "scipy.stats",
+    "shapely",
     "ufl",
     "ufl.finiteelement",
     "pathos",

@@ -186,4 +186,4 @@ if __name__ == "__main__":
     print(u_res.get_membrane_capacitance("F/m"), "F/m")
     print(m_res.get_membrane_capacitance("F/m"), "F/m")
     print(res_nrv.get_membrane_capacitance("F/m"), "F/m")
-    #plt.show()
+    # plt.show()

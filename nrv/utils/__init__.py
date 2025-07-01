@@ -53,8 +53,10 @@ from ._stimulus import (
     stimulus,
 )
 
+from . import geom
 
-submodules = []
+
+submodules = ["geom"]
 
 classes = [
     "nrv_function",
