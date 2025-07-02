@@ -3,6 +3,7 @@
 utils.geom provides some classes and functions allowing to desig and handle various geomatrical shapes.
 """
 
+from ._cshape import CShape
 from ._circle import Circle
 from ._ellipse import Ellipse
 from ._polygon import Polygon

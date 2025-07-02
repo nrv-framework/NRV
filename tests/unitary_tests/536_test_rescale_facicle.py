@@ -41,5 +41,5 @@ if __name__ == "__main__":
     print(np.all(fasc1.axons["node_shift"]>0), np.all(fasc1.axons["node_shift"]<1))
     fasc1.plot_x(axs[1])
     fig.savefig(figdir+"B.png")
-    plt.show()
+    # plt.show()
 

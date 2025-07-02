@@ -38,4 +38,4 @@ if __name__ == "__main__":
     test_cercle()
     print("All tests passed successfully.")
 
-    plt.show()
+    # plt.show()

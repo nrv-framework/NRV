@@ -41,12 +41,7 @@ if __name__ == "__main__":
     #mesh.add_electrode(elec_type="CUFF MP", N=6, x_c=L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
     #mesh.add_electrode(elec_type="CUFF MP", N=4, x_c=3*L/4, y_c=0, z_c=0, size = (1000, 500),inactive=True)
 
-    mesh.compute_geo()
-    mesh.save_geom(f"{test_num}_mesh_geom")
-    # plt.show()
-    # exit()
     mesh.compute_mesh()
-
     mesh.save(mesh_file)
 
     t2 = time.time()

@@ -7,6 +7,7 @@ from ...backend._log_interface import pass_info, rise_warning, rise_error
 from ...fmod._electrodes import is_FEM_electrode
 from ...utils._units import nm, convert, from_nrv_unit, to_nrv_unit
 from ...utils._misc import membrane_capacitance_from_model, compute_complex_admitance
+from ...utils.geom import CShape
 import matplotlib.pyplot as plt
 import numpy as np
 from typing import Literal
@@ -26,11 +27,18 @@ class fascicle_results(sim_results):
         super().__init__(context)
 
     @property
-    def n_ax(self):
+    def n_ax(self)->int:
         """
         Number of axons in the fascicle
         """
         return len(self.axons["diameters"])
+
+    @property
+    def geom(self)->CShape:
+        """
+        Simulated fascicle geometry
+        """
+        return self.axons.geom
 
     def get_n_ax(self, ax_type: str="all") -> int:
         """
@@ -179,10 +187,11 @@ class fascicle_results(sim_results):
         return n_recr
 
     def get_axons(self, vm_key: str="V_mem", t_start: float=None) -> list:
-        axon_diam = self.axons["diameters"]
-        axon_type = self.axons["types"]
-        axon_y = self.axons["y"]
-        axon_z = self.axons["z"]
+        _m = self.axons.get_mask(mask_labels=self.sim_mask)
+        axon_diam = self.axons["diameters"][_m]
+        axon_type = self.axons["types"][_m]
+        axon_y = self.axons["y"][_m]
+        axon_z = self.axons["z"][_m]
         axon_recruited = self.__compute_recruited_axons(vm_key=vm_key, t_start=t_start, otype="list")
         return (axon_diam, axon_type, axon_y, axon_z, axon_recruited)
 
@@ -190,20 +199,17 @@ class fascicle_results(sim_results):
         self, AP_start: float, freq: float=None, t_refractory: float=1
     ) -> list:
         axons_keys = self.get_axons_key()
-        axon_diam = []
-        axon_type = []
-        axon_y = []
-        axon_z = []
+        _m = self.axons.get_mask(mask_labels=self.sim_mask)
+        axon_diam = self.axons["diameters"][_m]
+        axon_type = self.axons["types"][_m]
+        axon_y = self.axons["y"][_m]
+        axon_z = self.axons["z"][_m]
         is_blocked = []
         n_onset = []
         for axon in axons_keys:
             self[axon].block_summary(AP_start, freq, t_refractory)
             is_blocked.append(self[axon].is_blocked)
             n_onset.append(self[axon].n_onset)
-            axon_y.append(self[axon].y)
-            axon_z.append(self[axon].z)
-            axon_diam.append(self[axon].diameter)
-            axon_type.append(self[axon].myelinated)
         self.axons.add_mask(data=is_blocked, label="is_blocked", mask_on=self.sim_mask)
         self.axons.add_mask(data=n_onset, label="n_onset", mask_on=self.sim_mask)
         return (axon_diam, axon_type, axon_y, axon_z, is_blocked, n_onset)
@@ -389,18 +395,7 @@ class fascicle_results(sim_results):
                     horizontalalignment="center",
                     verticalalignment="center",
                 )
-        # axes.set_xlim(
-        #     (
-        #         -1.1 * self.D / 2 + self.y_grav_center,
-        #         1.1 * self.D / 2 + self.y_grav_center,
-        #     )
-        # )
-        # axes.set_ylim(
-        #     (
-        #         -1.1 * self.D / 2 + self.z_grav_center,
-        #         1.1 * self.D / 2 + self.z_grav_center,
-        #     )
-        # )
+
 
     def plot_block_summary(
         self,
@@ -483,21 +478,9 @@ class fascicle_results(sim_results):
             )
 
         if self.extra_stim is not None:
-            self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.D)
+            self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.geom.radius*2)
         if num:
             for k in range(self.n_ax):
                 axes.text(
                     self.axons["y"][k], self.axons["z"][k], str(k)
                 )  # horizontalalignment='center',verticalalignment='center')
-        axes.set_xlim(
-            (
-                -1.1 * self.D / 2 + self.y_grav_center,
-                1.1 * self.D / 2 + self.y_grav_center,
-            )
-        )
-        axes.set_ylim(
-            (
-                -1.1 * self.D / 2 + self.z_grav_center,
-                1.1 * self.D / 2 + self.z_grav_center,
-            )
-        )

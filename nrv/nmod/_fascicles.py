@@ -414,9 +414,9 @@ class fascicle(NRV_simulable):
 
 
     @property
-    def geom(self):
+    def geom(self)->CShape:
         """
-        Number of axons in the fascicle
+        Fascicle geometry
         """
         return self.axons.geom
 
@@ -790,17 +790,16 @@ class fascicle(NRV_simulable):
         Set the mask corresponding to 
         """
         mask_to_keep = []
-        if self.has_FEM_extracel:
+        if self.extra_stim is not None:
             for elec in self.extra_stim.electrodes:
                 mask_to_keep += [f"_elec{elec.ID}"]
-
         mask_to_rmv = [ml for ml in self.sim_mask if ml not in mask_to_keep and "_elec" in ml]
         if len(mask_to_rmv):
             self.remove_sim_masks(
+                remove_from_pop=False,
                 mask_labels=mask_to_rmv,
                 keep_elec=False,
             )
-        exit
 
     def remove_unmyelinated_axons(self):
         """
@@ -1264,6 +1263,7 @@ class fascicle(NRV_simulable):
 
     def simulate(
         self,
+        pbar_off=False,
         **kwargs,
     ) -> fascicle_results:
         """
@@ -1313,6 +1313,7 @@ class fascicle(NRV_simulable):
         save_results                  : bool
             if False disable the result storage
             can only be False if return_parameters_only is False
+        
 
         Return
         ------
@@ -1320,6 +1321,7 @@ class fascicle(NRV_simulable):
                 results of the simulation
         """
         fasc_sim = super().simulate(**kwargs)
+        in_nerve = "in_nerve" in kwargs
         if not self.save_results:
             if self.return_parameters_only:
                 rise_warning(
@@ -1379,6 +1381,7 @@ class fascicle(NRV_simulable):
             "[progress.percentage]{task.percentage:>3.0f}%",
             progress.TimeRemainingColumn(),
             progress.TimeElapsedColumn(),
+            disable=pbar_off
         ) as pg:
             __label = self.__set_pbar_label(_n_proc, **kwargs)
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
@@ -1415,7 +1418,7 @@ class fascicle(NRV_simulable):
             if self.record:
                 fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
 
-        if self.verbose and not "in_nerve" in kwargs:
+        if self.verbose and not in_nerve:
             pass_info("... Simulation done")
         fasc_sim["is_simulated"] = True
         self.is_simulated = True

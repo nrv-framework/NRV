@@ -2,6 +2,7 @@ from nrv.utils import geom
 from nrv.nmod._axon_population import axon_population
 import matplotlib.pyplot as plt
 import numpy as np
+from pandas import DataFrame
 
 test_dir = "./unitary_tests/"
 __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
@@ -17,18 +18,18 @@ def test_axon_pop_set_from_stat():
     angle = -np.pi/12
     ellipse = geom.Ellipse(center, r, angle)
 
-    pop_1 = axon_population()
+    pop_tup = axon_population()
 
     n_ax = 20
-    assert not pop_1.has_pop, "Axon population should not contain population at the creation."
-    assert pop_1.n_ax == 0, "Wrong number of axons."
+    assert not pop_tup.has_pop, "Axon population should not contain population at the creation."
+    assert pop_tup.n_ax == 0, "Wrong number of axons."
 
-    pop_1.set_geometry(ellipse)
-    pop_1.create_population_from_stat(n_ax=n_ax)
-    assert pop_1.has_pop, "Axon population should contain population after setting."
-    assert pop_1.n_ax == n_ax, "Wrong number of axons."
-    assert all(pop_1.axon_pop["diameters"] == pop_1["diameters"]), "Issue with getitems"
-    assert all(pop_1.axon_pop.loc[[0]] == pop_1.axon_pop.loc[[0]]), "Issue with loc"
+    pop_tup.set_geometry(ellipse)
+    pop_tup.create_population_from_stat(n_ax=n_ax)
+    assert pop_tup.has_pop, "Axon population should contain population after setting."
+    assert pop_tup.n_ax == n_ax, "Wrong number of axons."
+    assert all(pop_tup.axon_pop["diameters"] == pop_tup["diameters"]), "Issue with getitems"
+    assert all(pop_tup.axon_pop.loc[[0]] == pop_tup.axon_pop.loc[[0]]), "Issue with loc"
 
 
 
@@ -45,24 +46,46 @@ def test_axon_pop_set_from_data():
     ax_diameters = np.random.random(n_ax)*20
 
     # as tupple
-    pop_1 = axon_population()
-    pop_1.set_geometry(ellipse)
-    pop_1.create_population_from_data((ax_type, ax_diameters))
+    pop_tup = axon_population()
+    pop_tup.set_geometry(ellipse)
+    pop_tup.create_population_from_data((ax_type, ax_diameters))
+
+    assert pop_tup.has_pop, "Axon population should contain population after setting."
+    assert np.allclose(pop_tup.axon_pop["types"], ax_type), "Wrong axon types."
+    assert np.allclose(pop_tup.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
 
     # as np.ndarray
     data = np.vstack((ax_type, ax_diameters))
-    pop_2 = axon_population()
-    pop_2.set_geometry(ellipse)
-    pop_2.create_population_from_data(data)
+    pop_np = axon_population()
+    pop_np.set_geometry(ellipse)
+    pop_np.create_population_from_data(data)
 
-    assert pop_1.has_pop, "Axon population should contain population after setting."
-    assert np.allclose(pop_1.axon_pop["types"], ax_type), "Wrong axon types."
-    assert np.allclose(pop_1.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
+    assert pop_np.has_pop, "Axon population should contain population after setting."
+    assert np.allclose(pop_np.axon_pop["types"], ax_type), "Wrong axon types."
+    assert np.allclose(pop_np.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
 
-    assert pop_2.has_pop, "Axon population should contain population after setting."
-    assert np.allclose(pop_2.axon_pop["types"], ax_type), "Wrong axon types."
-    assert np.allclose(pop_2.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
 
+    # as dict
+    data = {"types":ax_type, "diameters":ax_diameters, "other_key":0}
+    pop_dict = axon_population()
+    pop_dict.set_geometry(ellipse)
+    pop_dict.create_population_from_data(data)
+
+    print(pop_dict.axon_pop["types"], ax_type)
+    assert pop_dict.has_pop, "Axon population should contain population after setting."
+    assert np.allclose(pop_dict.axon_pop["types"], ax_type), "Wrong axon types."
+    assert np.allclose(pop_dict.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
+
+
+    # as dataframe
+    data = DataFrame({"types":ax_type, "diameters":ax_diameters, "other_key":np.random.rand(len(ax_type))})
+    pop_df = axon_population()
+    pop_df.set_geometry(ellipse)
+    pop_df.create_population_from_data(data)
+
+    assert pop_df.has_pop, "Axon population should contain population after setting."
+    assert np.allclose(pop_df.axon_pop["types"], ax_type), "Wrong axon types."
+    assert np.allclose(pop_df.axon_pop["diameters"], ax_diameters), "Wrong axon diamters."
 
 
 def test_axon_pop_set_from_file():
@@ -74,13 +97,13 @@ def test_axon_pop_set_from_file():
     
     fname = test_dir + "sources/52_test.pop"
     # as tupple
-    pop_1 = axon_population()
-    pop_1.set_geometry(ellipse)
-    pop_1.create_population_from_data(data=fname)
+    pop_tup = axon_population()
+    pop_tup.set_geometry(ellipse)
+    pop_tup.create_population_from_data(data=fname)
 
 
-    assert pop_1.has_pop, "Axon population should contain population after setting."
-    assert pop_1.n_ax == 250, "Wrong number of axons."
+    assert pop_tup.has_pop, "Axon population should contain population after setting."
+    assert pop_tup.n_ax == 250, "Wrong number of axons."
 
 
 

@@ -500,10 +500,10 @@ class axon_population(PopShape):
         Note
         ----
         If column are not precised, the order for the data must be:
-            |-------|----------|------------|------------|
-            | Axons |  Axons   | y-position | z-position |
-            | Type  | Diameter | `optional` | `optional` |
-            |-------|----------|------------|------------|
+            |-------|----------|------------|------------|------------|
+            | Axons |  Axons   | y-position | z-position | node shift |
+            | Type  | Diameter | `optional` | `optional` | `optional` |
+            |-------|----------|------------|------------|------------|
 
 
         Parameters
@@ -512,7 +512,7 @@ class axon_population(PopShape):
             data to used to create the population. Supported data:
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
-                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional).
+                - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax), arange in the following order: `types`, `diameters`, `y` (optional), `z` (optional), `node_shift` (optional).
         """
         if isinstance(data, str):
             axons_diameters, axons_type, _, _, y_axons, z_axons = load_axon_population(
@@ -523,14 +523,19 @@ class axon_population(PopShape):
                 data += (y_axons, z_axons)
         if isinstance(data, dict) or isinstance(data, DataFrame):
             _keys = ["types", "diameters", "y", "z", "node_shift"]
-            if len(set(_keys) - data.keys()) > 0:
+            if isinstance(data, dict):
+                _dkeys = data.keys()
+            else:
+                _dkeys = set(data.columns)
+            if len(set(_keys) - _dkeys) > 0:
                 _keys = _keys[:4]
-            if len(_keys - data.keys()) > 0:
+            if len(set(_keys) - _dkeys) > 0:
                 _keys = _keys[:2]
-
-            if len(_keys - data.keys()) > 0:
-                rise_warning(f"Wrong data format to create_population.",
-                             f"If data is dict or DataFrames it must at least contains the keys: {_keys}")
+            if len(set(_keys) - _dkeys) > 0:
+                rise_warning(
+                    f"Wrong data format to create_population.",
+                    f"If data is dict or DataFrames it must at least contains the keys: {_keys}"
+                )
             else:
                 data = [data[k] for k in _keys]
         if np.iterable(data):

@@ -53,4 +53,4 @@ if __name__ == "__main__":
     test_rotated_ellipse()
     print("All tests passed successfully.")
 
-    plt.show()
+    # plt.show()

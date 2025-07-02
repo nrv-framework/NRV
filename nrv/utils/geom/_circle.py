@@ -23,7 +23,7 @@ class Circle(Ellipse):
         """
         Perimeter of the shape in \\(\\mu m^2\\)
         """
-        return 2 * np.pi * self.r**0.5
+        return 2 * np.pi * self.r
 
     @property
     def bbox_size(self)->tuple[float, float]:
