@@ -117,7 +117,7 @@ class FEMSimulation(FEMParameters):
 
         \mathbf{j}(\mathbf{r}) = \mathbf{\sigma} (\mathbf{r}) \nabla V (\mathbf{r}), \forall \mathbf{r} \in \Omega
 
-    Where \\(\\Omega\\) is the simulation space, \\(\\bf{j}\\) the the current density and \\(V\\) the electrical potential
+    Where $\\Omega$ is the simulation space, $\\bf{j}$ the the current density and $V$ the electrical potential
 
     The problem parameters (domains and boundaries condition) can be define using FEMParameters methods
     Contains methods to setup the matrix sytstem, to solve it and to access the results.

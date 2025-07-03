@@ -13,11 +13,18 @@ class Ellipse(CShape):
 
     def __init__(self, center: tuple[float, float]=(0,0), radius:tuple[float, float]=(10,10), rot:float=None, degree:bool=False):
         """
-        Initialize the Ellipse with a center and axes.
+        Initializes the Ellipse
 
-        :param center: A tuple (x, y) representing the center of the ellipse.
-        :param semi_major_axis: The length of the semi-major axis.
-        :param r2: The length of the semi-minor axis.
+        Parameters
+        ----------
+        center : tuple[float, float], optional
+            Center of the shape, by default (0,0)
+        radius : tuple[float,float], optional
+            Radius of the shape, for none circular shape set as an average distance between trace points and center, by default (10,10)
+        rot : float, optional
+            rotation of the shape, by default None
+        degree : bool, optional
+            if True `rot` is in degree, if False in radian, by default False
         """
         super().__init__(center, radius, rot=rot, degree=degree)
         assert np.iterable(radius), "Ellipse radius must be iterable (of lenght at least equal to 2)"
@@ -41,7 +48,7 @@ class Ellipse(CShape):
     @property
     def perimeter(self)->float:
         """
-        Perimeter of the shape in \\(\\mu m^2\\)
+        Perimeter of the shape in $\\mu m^2$
 
         Warning
         -------
@@ -128,11 +135,6 @@ class Ellipse(CShape):
 
 
     def get_trace(self, n_theta=100) -> tuple[list[float], list[float]]:
-        """
-        Get the trace of the ellipse.
-
-        :return: A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
-        """
         _theta = np.linspace(0, 2 * np.pi, n_theta, endpoint=True)
 
         y_trace = self.r1 * np.cos(_theta)
@@ -150,7 +152,6 @@ class Ellipse(CShape):
         return X[:,0], X[:,1]
     
     def get_point_inside(self, n_pts:int=1, delta:float=0)->np.ndarray:
-
         _theta = np.random.random(n_pts) * 2 * np.pi
         _rf = np.sqrt(np.random.random(n_pts))
 

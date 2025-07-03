@@ -70,8 +70,8 @@ def save_sim_res_list(sim_res_list, fname, dt=1.0):
     Warning
     -------
     For this function to work dolfinx and ParaView must be up to date:
-        -   dolfinx \\(\\geq\\) 0.8.0
-        -   ParaView \\(\\geq\\) 5.12.0
+        -   dolfinx $\\geq$ 0.8.0
+        -   ParaView $\\geq$ 5.12.0
     """
     N_list = len(sim_res_list)
     fname = rmv_ext(fname) + ".bp"

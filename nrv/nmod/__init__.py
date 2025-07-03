@@ -33,7 +33,14 @@ from . import results, utils
 
 submodules = ["results", "utils"]
 
-classes = ["axon", "unmyelinated", "myelinated", "fascicle", "nerve"]
+classes = [
+    "axon",
+    "unmyelinated",
+    "myelinated",
+    "axon_population",
+    "fascicle",
+    "nerve",
+]
 
 functions = [
     "create_axon_population",

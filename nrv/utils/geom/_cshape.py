@@ -11,9 +11,18 @@ class CShape(NRV_class):
     @abstractmethod
     def __init__(self, center:tuple[float, float]=(0,0), radius:float|tuple[float,float]=0, rot:float=None, degree:bool=False):
         """
-        Initializes the CShape with a specified number of points for angular resolution.
+        Initializes the CShape
 
-        :param Ntheta: Number of points to use for angular resolution.
+        Parameters
+        ----------
+        center : tuple[float, float], optional
+            Center of the shape, by default (0,0)
+        radius : float | tuple[float,float], optional
+            Radius of the shape, for none elliptic shape set as an average distance between trace points and center, by default 0
+        rot : float, optional
+            rotation of the shape, by default None
+        degree : bool, optional
+            if True `rot` is in degree, if False in radian, by default False
         """
         super().__init__()
         self.center = center
@@ -43,7 +52,7 @@ class CShape(NRV_class):
     @property
     def area(self)->float:
         """
-        Area of the shape in \\(\\mu m^2\\)
+        Area of the shape in $\\mu m^2$
 
         Returns
         -------
@@ -54,7 +63,7 @@ class CShape(NRV_class):
     @property
     def perimeter(self)->float:
         """
-        Perimeter of the shape in \\(\\mu m^2\\)
+        Perimeter of the shape in $\\mu m^2$
 
         Returns
         -------
@@ -66,7 +75,7 @@ class CShape(NRV_class):
     @property
     def bbox_size(self)->tuple[float, float]:
         """
-        Size of the bounding bounding box of the shape (usefull for meshing)
+        Size of the bounding bounding box of the shape. (usefull for meshing)
 
         Returns
         -------
@@ -74,9 +83,10 @@ class CShape(NRV_class):
         """
         pass
 
+    @property
     def bbox(self)->tuple[float, float]:
         """
-        Size of the bounding bounding box of the shape (usefull for meshing)
+        Coordinate of the bounding box as a :class:`numpy.ndarray`in the following format $y_{min}, z_{min}, y_{max}, z_{max}$.
 
         Returns
         -------
@@ -87,7 +97,7 @@ class CShape(NRV_class):
 
     def rotate(self, angle:float, degree:bool=False):
         """
-        Rotate the shape
+        Rotate the shape.
 
         Parameters
         ----------
@@ -100,7 +110,7 @@ class CShape(NRV_class):
 
     def translate(self, y:float=0, z:float=0):
         """
-        Translate the shape
+        Translate the shape.
 
         Parameters
         ----------
@@ -135,7 +145,7 @@ class CShape(NRV_class):
 
     def get_point_inside(self, n_pts:int=1, delta:float=0)->np.ndarray:
         """
-        return n points coordinate randomly picked inside the shape
+        Returns n points coordinate randomly picked inside the shape
 
         Parameters
         ----------
@@ -152,7 +162,7 @@ class CShape(NRV_class):
 
     def get_trace(self, n_theta:int=100) -> tuple[list[float], list[float]]:
         """
-        Get the trace of the shape.
+        Returns the trace of the geometry as a list of points.
 
         Parameters
         ----------

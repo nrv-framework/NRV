@@ -561,14 +561,24 @@ class nerve(NRV_simulable):
         else:
             return self.fascicles
 
-    def add_fascicle(self, fascicle, ID=None, y=None, z=None, **kwargs):
+    def add_fascicle(self, fascicle, ID:None|int=None, y:None|float=None, z:None|float=None, rot:None|float=None, degree:bool=False, **kwargs):
         """
         Add a fascicle to the list of fascicles
 
         Parameters
         ----------
         fascicle : object
-            fascicle to add to the nerve struture
+            object that can be load to a fascicle to add to the nerve struture
+        ID : None | int, optional
+            ID of the fascicle, if None keep the value of from `fascicle`, by default None
+        y :  None | float, optional
+            y-position of the fascicle, if None keep the value of from `fascicle`, by default None
+        z :  None | float, optional
+            y-position of the fascicle, if None keep the value of from `fascicle`, by default None
+        rot : None | float, optional
+            Rotation angle of the fascicle, if None keep the value of from `fascicle`, by default None
+        degree : bool, optional
+            if true angle is considered in degree, by default False
         """
         fasc = load_any(fascicle, **kwargs)
         if not is_fascicle(fasc):
@@ -583,6 +593,8 @@ class nerve(NRV_simulable):
             if z is None:
                 z = fasc.z
             fasc.translate(y - fasc.y, z - fasc.z)
+            if rot is not None:
+                fasc.rotate(fasc.geom.rot)
             if self.__check_fascicle_overlap(fasc):
                 rise_warning(
                     "fascicles overlap:  fasicle " + str(fasc.ID) + " cannot be added"

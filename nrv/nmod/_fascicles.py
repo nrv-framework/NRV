@@ -516,7 +516,12 @@ class fascicle(NRV_simulable):
     ## generate stereotypic Fascicle
     def set_geometry(self, **kwgs):
         """
-        alias for `self.axons.set_geometry<:meth:axon_population.set_geometry>`
+        Set the fascicle geometry
+    
+        Note
+        ----
+        alias for :meth:`self.axons.set_geometry<axon_population.set_geometry>`
+        
         """
         self.axons.set_geometry(**kwgs)
 
@@ -548,12 +553,17 @@ class fascicle(NRV_simulable):
         fname:str=None,
     ):
         """
-        Fill a geometricaly defined contour with axons
+        Fill a geometricaly defined contour with axons.
+
+        Note
+        ----
+        alias for :meth:`self.axons.fill_geometry<axon_population.fill_geometry>`
 
         Parameters
         ----------
         data : tuple[np.ndarray] | np.ndarray | str
             data to used to create the population. Supported data:
+
                 - `str`: of the file path and name where to load the population properties.
                 - `tuple[np.ndarray]` containing the population properties.
                 - `np.ndarray`: of dimention (2, n_ax) or (4, n_ax).
@@ -585,19 +595,20 @@ class fascicle(NRV_simulable):
             if True also compute the Node of Ranviers shifts
         fname      : str
             optional, if specified, name file to store the population generated
+
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-
+        
         .. math::
 
-            FVF = \frac{n_{axons}*E_{d}}{A_{tot}}
+            FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
 
-        where E_{d} is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where $E_{d}$ is the espected diameters from the myelinated and unmyelinated fibers stats and $A_{tot}$ is geometry total area.
 
         Tip
         ---
-        It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
+        It goes for the previous definition that `FVF` will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         self.axons.fill_geometry(
             data=data,
@@ -621,7 +632,7 @@ class fascicle(NRV_simulable):
     ## Move methods
     def translate(self, y=0, z=0, with_geom:bool=True, with_pop:bool=True, with_context:bool=True):
         """
-        Translate the population and/or its geometry and/or stim and rec context
+        Translate the population and/or its geometry and/or stim and rec context.
 
         Parameters
         ----------
@@ -644,14 +655,14 @@ class fascicle(NRV_simulable):
                 self.recorder.translate(y=y, z=z)
 
 
-    def rotate(self, angle, with_geom:bool=True, with_pop:bool=True, with_context:bool=True, degree:bool=False):
+    def rotate(self, angle:float, with_geom:bool=True, with_pop:bool=True, with_context:bool=True, degree:bool=False):
         """
-        Rotate the population and/or its geometry and/or stim and rec context
+        Rotate the population and/or its geometry and/or stim and rec context.
 
         Parameters
         ----------
-        angle : _type_
-            _description_
+        angle : float
+            Angle of the rotation
         with_geom : bool, optional
             if True rotate the geometry, by default True
         with_pop : bool, optional

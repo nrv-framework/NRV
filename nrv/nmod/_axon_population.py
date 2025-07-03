@@ -92,7 +92,7 @@ class axon_population(PopShape):
 
         Parameters
         ----------
-       geometry : None | Type[CShape]
+        geometry : None | Type[CShape]
             if not None, geometry used for the population
         center : tuple[float, float], optional
             _description_, by default None
@@ -135,19 +135,20 @@ class axon_population(PopShape):
             if True also compute the Node of Ranviers shifts
         fname      : str
             optional, if specified, name file to store the population generated
+
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-
+        
         .. math::
 
-            FVF = \frac{n_{axons}*E_{d}}{A_{tot}}
+            FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
 
-        where E_{d} is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where $E_{d}$ is the espected diameters from the myelinated and unmyelinated fibers stats and $A_{tot}$ is geometry total area.
 
         Tip
         ---
-        It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
+        It goes for the previous definition that `FVF` will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         self.set_geometry(
             geometry=geometry,
@@ -235,19 +236,20 @@ class axon_population(PopShape):
             if True also compute the Node of Ranviers shifts
         fname      : str
             optional, if specified, name file to store the population generated
+
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-
+        
         .. math::
 
-            FVF = \frac{n_{axons}*E_{d}}{A_{tot}}
+            FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
 
-        where E_{d} is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where $E_{d}$ is the espected diameters from the myelinated and unmyelinated fibers stats and $A_{tot}$ is geometry total area.
 
         Tip
         ---
-        It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
+        It goes for the previous definition that `FVF` will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         if not self.has_geom:
             rise_warning(
@@ -396,6 +398,8 @@ class axon_population(PopShape):
         overwrite = False,
     ):
         """
+        Creat an placed axon population
+
         Parameters
         ----------
         data : tuple[np.ndarray] | np.ndarray | str
@@ -418,16 +422,16 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-
+        
         .. math::
 
-            FVF = \frac{n_{axons}*E_{d}}{A_{tot}}
+            FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
 
-        where E_{d} is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where $E_{d}$ is the espected diameters from the myelinated and unmyelinated fibers stats and $A_{tot}$ is geometry total area.
 
         Tip
         ---
-        It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
+        It goes for the previous definition that `FVF` will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         if not self.has_pop or overwrite:
             if data is not None:
@@ -464,16 +468,16 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-
+        
         .. math::
 
-            FVF = \frac{n_{axons}(0.5E_{d})^2\pi}{A_{tot}}
+            FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
 
-        where \\(E_{d}\\) is the espected diameters from the myelinated and unmyelinated fibers stats and\\(A_{tot}\\) is geometry total area.
+        where $E_{d}$ is the espected diameters from the myelinated and unmyelinated fibers stats and $A_{tot}$ is geometry total area.
 
         Tip
         ---
-        It goes for the previous definition that FVF will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
+        It goes for the previous definition that `FVF` will only be accurate for large axon population. This might be improved in future version but for now it is adviced to define small population using `n_ax` instead of `FVF`
         """
         if FVF is not None:
             e_d = percent_unmyel * get_stat_expected(U_stat) + (
@@ -572,9 +576,15 @@ class axon_population(PopShape):
         with_node_shift:bool = True,
     ):
         """
+        Place the population.
 
         Parameters
         ----------
+        pos : None | tuple[np.ndarray] | np.ndarray
+            if not None data to used to create the population. Supported data:
+                - `str`: of the file path and name where to load the population properties.
+                - `tuple[np.ndarray]` containing the population properties.
+                - `np.ndarray`: of dimention (2, n_ax)
         method : Literal[&quot;default&quot;, &quot;packing&quot;], optional
             method to use for the , by default "default"
         overwrite : bool, optional

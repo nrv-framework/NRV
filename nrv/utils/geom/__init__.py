@@ -19,8 +19,10 @@ from ._misc import (
 submodules = []
 
 classes = [
+    "CShape",
     "Circle",
     "Ellipse",
+    "Polygon",
 ]
 
 functions = [

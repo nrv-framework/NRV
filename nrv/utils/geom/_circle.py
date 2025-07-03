@@ -9,10 +9,14 @@ class Circle(Ellipse):
 
     def __init__(self, center: tuple[float, float]=(0,0), radius: float=10):
         """
-        Initialize the Circle with a center and radius.
+        Initializes the `Circle`
 
-        :param center: A tuple (x, y) representing the center of the circle.
-        :param radius: The radius of the circle.
+        Parameters
+        ----------
+        center : tuple[float, float], optional
+            Center of the shape, by default (0,0)
+        radius : float , optional
+            Radius of the shape, by default 10
         """
         super().__init__(center=center, radius=(radius, radius), rot=0)
         self.radius = radius
@@ -21,7 +25,7 @@ class Circle(Ellipse):
     @property
     def perimeter(self)->float:
         """
-        Perimeter of the shape in \\(\\mu m^2\\)
+        Perimeter of the shape in $\\mu m^2$
         """
         return 2 * np.pi * self.r
 

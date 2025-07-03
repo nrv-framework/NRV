@@ -43,6 +43,7 @@ Chapters of the User's Guide
 
    usersguide/simulables
    usersguide/populations
+   usersguide/geometry
    usersguide/stimuli
    usersguide/electrodes
    usersguide/materials
