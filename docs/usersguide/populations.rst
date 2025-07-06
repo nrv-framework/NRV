@@ -150,10 +150,25 @@ The length of the bins is automatically determined by two successive values. Not
 Users can find the predefined statistics at the path ``nrv/_misc/stats/``. Adding files to this folder make the statistics accessible by the filname without the extension. It is also possible to specify the statistics with a string beeing the path to the specific file.
 
 
-Axon Packing
-============
+Axon Placing and Packing
+========================
 
-Once generated, the population can be packed, i.e. fibers are automatically placed on the y-z plane with a given proximity and with no overlap. Starting on a grid, axons are automatically migrated in the direction of a so-called gravity center during a number of iterations. At each step, a velocity for each axon is computed, considering the attraction to the gravity center and the collisions that can occur between cells with a minimal distance to respect between fibers. The animation below is an example of population packing.
+Once generated, the population have to be spacialy distributed, i.e. fibers are automatically placed on the y-z plane with a given proximity and with no overlap. This can be done using two methods:
+
+- **Axon placing**: This method places the fibers on random positions, ensuring that they do not overlap and that they respect a minimal distance between them.
+- **Axon packing**: This method places the fibers on a grid and then iteratively moves them towards a gravity center, ensuring that they do not overlap and that they respect a minimal distance between them.
+
+If the packing method is the one that has been historically used in the framework, the placing method is a new addition that allows for faster operations and is more suitable for large populations. The placing method is also more flexible, as it allows for the placement of fibers in a specific area of the grid, while the packing method is more suitable for creating a compact population.
+
+Axon Placing
+------------
+
+Axon placing is performed with a single function called :meth:`~nrv.nmod.placer`, which is designed to interface with the :meth:`~nrv.nmod.create_axon_population` function detailed previously. The placer function takes care of distributing the fibers on the y-z plane, ensuring that they do not overlap and that they respect a minimal distance between them.
+
+Axon Packing
+------------
+
+Starting on a grid, axons are automatically migrated in the direction of a so-called gravity center during a number of iterations. At each step, a velocity for each axon is computed, considering the attraction to the gravity center and the collisions that can occur between cells with a minimal distance to respect between fibers. The animation below is an example of population packing.
 
 .. image:: ../images/packing_anim.gif
 
@@ -173,7 +188,47 @@ An example demonstrating the proper use of the packer and plotting/saving tools 
 
 .. seealso::
 
-   **TODO EXAMPLE**
+.. code-block:: python
+
+    import nrv
+
+    # Define nerve geometry: one elliptic fascicle
+    L = 10000         # length in µm
+    y_c, z_c = 0, 0   # center coordinates
+    a, b = 100, 50    # ellipse axes in µm
+
+    # Create a population of axons
+    N_axons = 200
+    percent_unmyel = 0.5
+    diameters, types, myel_diam, unmyel_diam = nrv.nmod.create_axon_population(
+         N=N_axons,
+         percent_unmyel=percent_unmyel,
+         M_stat="Schellens_1",
+         U_stat="Ochoa_U"
+    )
+
+    # Pack axons inside the elliptic fascicle
+    y, z = nrv.nmod.axon_packer(
+         diameters,
+         y_center=y_c,
+         z_center=z_c,
+         a=a,
+         b=b,
+         min_dist=2.0
+    )
+
+    # Create the nerve object
+    nerve = nrv.Nerve(L)
+    nerve.add_fascicle(
+         y_c, z_c, a, b,
+         axon_y=y,
+         axon_z=z,
+         axon_diam=diameters,
+         axon_type=types
+    )
+
+    # Plot the nerve cross-section
+    nrv.nmod.plot_population(diameters, types, y, z, fascicles=[(y_c, z_c, a, b)])
 
 .. warning::
 
