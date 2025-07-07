@@ -20,7 +20,6 @@ Subpackages
    :toctree: _nrv
    :recursive:
 
-   backend
    nmod
    fmod
    optim
