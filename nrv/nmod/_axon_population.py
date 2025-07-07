@@ -796,4 +796,29 @@ class axon_population(PopShape):
                     axes.text(self._pop["y"][i_ax], self._pop["z"][i_ax], str(i_ax))
         axes.set_aspect('equal', adjustable='box')
 
+    def hist(self, axes:plt.Axes, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], myel_color:str="b", unmyel_color:str="r", **kwgs):
+        """
+        Plot an histogram of axon diamters in the population
+
+        Parameters
+        ----------
+        axes : plt.Axes
+            _description_
+        expr : str | None, optional
+            Subpopulation to plot, by default None
+        mask_labels : None | Iterable[str] | str, optional
+            Subpopulation to plot, by default []
+        myel_color : str, optional
+            Color of myelinated axons bins, by default "b"
+        unmyel_color : str, optional
+            Color of unmyelinated axons bins, by default "r"
+        """
+        if self.has_pop:
+            sub_pop = self.get_sub_population(expr=expr, mask_labels=mask_labels)
+            u_diam = sub_pop.query("types==0")["diameters"]
+            kwgs["color"] = unmyel_color
+            axes.hist(u_diam, **kwgs)
+            m_diam = sub_pop.query("types==1")["diameters"]
+            kwgs["color"] = myel_color
+            axes.hist(m_diam, **kwgs)
 

@@ -58,7 +58,7 @@ If you add a new functionality, you should add one or several tests, showing tha
 
 .. code:: bash
 
-    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton nbsphinx sphinx_gallery
+    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton sphinx_gallery
 
 Once installed, you should be able to build the documentation with the following command:
 

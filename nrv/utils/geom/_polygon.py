@@ -81,7 +81,13 @@ class Polygon(CShape):
         return self.shp_poly.contains(shp.points(np.array(point).T))
 
     def rotate(self, angle:float, degree:bool=False):
-        self.vertices = rotate_2D(point=self.vertices, angle=angle, degree=degree, as_array=True)
+        self.vertices = rotate_2D(point=self.vertices, center=self.center, angle=angle, degree=degree, as_array=True).T
+
+
+    def translate(self, y:float=0, z:float=0):
+        self.vertices +=  np.array([y,z]) 
+        self.center = np.mean(self.vertices, axis=0)
+
 
 
     def get_trace(self, n_theta=100) -> tuple[list[float], list[float]]:
@@ -98,7 +104,7 @@ class Polygon(CShape):
         return tr[:, 0], tr[:, 1]
     
     def get_point_inside(self, n_pts:int=1, delta:float=0, max_iter=1e5)->np.ndarray:
-        points = np.zeros((2,n_pts))
+        points = np.zeros((n_pts, 2))
         _poly = self.shp_poly
         minx, miny, maxx, maxy = _poly.bounds
         i, _iter = 0, 0
@@ -106,14 +112,15 @@ class Polygon(CShape):
             gen_point = lambda X: shp.Point(*X)
         else:
             gen_point = lambda X: shp.Point(*X).buffer(delta)
-        while i < n_pts:
+        while i < n_pts and _iter < max_iter:
             # pnt = np.random.uniform(minx, maxx, 2)
             pnt = (np.random.uniform(minx, maxx), np.random.uniform(miny, maxy))
             _iter +=1
             if _poly.contains(gen_point(pnt)):
-                points[:,i] = pnt
+                points[i, :] = pnt
                 i += 1
             if _iter > max_iter:
                 rise_warning(f"Max Iteration reach: only {i} points placed")
+                break
         return points
         

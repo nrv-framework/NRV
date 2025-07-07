@@ -1,0 +1,1303 @@
+{
+ "DataFrame": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.frame",
+   "module_short": "pandas.core.frame",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.generic",
+   "module_short": "pandas.core.generic",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "NDFrame"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.arraylike",
+   "module_short": "pandas.core.arraylike",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "OpsMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.base",
+   "module_short": "pandas.core.base",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "PandasObject"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.indexing",
+   "module_short": "pandas.core.indexing",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "IndexingMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core.accessor",
+   "module_short": "pandas.core.accessor",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DirNamesMixin"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
+ "_i": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "ax_diameters": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "ax_type": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "axon_population": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "axs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core.frame",
+   "module_short": "pandas.core.frame",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "n_ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "np.random.rand": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "module.rand"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "rand"
+  }
+ ],
+ "np.random.randint": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "module.randint"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "randint"
+  }
+ ],
+ "np.random.random": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "module.random"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "random"
+  }
+ ],
+ "np.vstack": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "_ArrayFunctionDispatcher"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "vstack"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "pop_df": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "pop_df.axon_pop": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.axon_pop"
+  }
+ ],
+ "pop_df.create_population_from_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.create_population_from_data"
+  }
+ ],
+ "pop_dict": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "pop_dict.axon_pop": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.axon_pop"
+  }
+ ],
+ "pop_dict.create_population_from_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.create_population_from_data"
+  }
+ ],
+ "pop_np": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "pop_np.axon_pop": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.axon_pop"
+  }
+ ],
+ "pop_np.create_population_from_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.create_population_from_data"
+  }
+ ],
+ "pop_stat": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "pop_stat.axon_pop": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.axon_pop"
+  }
+ ],
+ "pop_stat.create_population_from_stat": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.create_population_from_stat"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.create_population_from_stat"
+  }
+ ],
+ "pop_stat.hist": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.hist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.hist"
+  }
+ ],
+ "pop_tup": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population"
+  }
+ ],
+ "pop_tup.axon_pop": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.axon_pop"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.axon_pop"
+  }
+ ],
+ "pop_tup.create_population_from_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.create_population_from_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.create_population_from_data"
+  }
+ ]
+}

@@ -275,18 +275,19 @@ class PopShape(NRV_class):
 
 
     def get_mask(self, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], placed_only:bool=True, otype:None|Literal[""]=None)-> DataFrame:
-        _mask = DataFrame(np.ones(len(self)), columns=[""])
-        if expr is None:
-            _labels = self.valid_mask_labels(mask_labels)
-            if placed_only:
-                _labels.append("is_placed")
-            if len(_labels):
-                _mask = self._pop[list(_labels)].all(axis="columns")
-        else:
-            if placed_only:
-                expr += f" & is_placed"
-            _mask = self._pop.eval(expr=expr)
-        return df_to(_mask, otype)
+        if self.has_pop:
+            _mask = self._pop["diameters"]>0
+            if expr is None:
+                _labels = self.valid_mask_labels(mask_labels)
+                if placed_only and self.has_placed_pop:
+                    _labels.append("is_placed")
+                if len(_labels):
+                    _mask = self._pop[list(_labels)].all(axis="columns")
+            else:
+                if placed_only and self.has_placed_pop:
+                    expr += f" & is_placed"
+                _mask = self._pop.eval(expr=expr)
+            return df_to(_mask, otype)
 
     def get_sub_population(self, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], placed_only:bool=True)-> DataFrame:
         _mask = self.get_mask(expr=expr, mask_labels=mask_labels, placed_only=placed_only)

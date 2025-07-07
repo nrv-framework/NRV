@@ -143,8 +143,6 @@ autodoc_member_order = 'bysource'
 autosummary_generate = True
 autosummary_ignore_module_all = False
 
-# nbsphinx config
-nbsphinx_execute = 'never'
 
 # -- Sphinx Gallery configuration ---------------------------------------------
 sphinx_gallery_conf = {
