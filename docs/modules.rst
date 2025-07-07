@@ -21,10 +21,10 @@ Subpackages
    :recursive:
 
    backend
-..    nmod
-..    fmod
-..    optim
-..    eit
-..    utils
-..    ui
-..    backend
+   nmod
+   fmod
+   optim
+   eit
+   utils
+   ui
+   backend
