@@ -20,10 +20,11 @@ Subpackages
    :toctree: _nrv
    :recursive:
 
-   nmod
-   fmod
-   optim
-   eit
-   utils
-   ui
    backend
+..    nmod
+..    fmod
+..    optim
+..    eit
+..    utils
+..    ui
+..    backend

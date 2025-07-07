@@ -80,11 +80,28 @@ class nerve_results(sim_results):
             _fasc[i_fasc, :] = np.array(
                 [
                     fasc_.ID,
-                    fasc_.D,
-                    fasc_.y_grav_center,
-                    fasc_.z_grav_center,
+                    fasc_.geom.radius * 2,
+                    fasc_.geom.y,
+                    fasc_.geom.z,
                 ]
             )
+        return _fasc
+    
+    @property
+    def fasc_geometries(self) -> dict:
+        """
+        Porperties of axons population of each fascicles
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 6)
+            ndarray gathering, for all fascicles in the nerve, fascicle IDs, diameter and y and z positions.
+        """
+        fasc_keys = self.fascicle_keys
+        _fasc_geom = {}
+        for i_fasc, key in enumerate(fasc_keys):
+            _fasc = self[key]
+            _fasc_geom[str(_fasc.ID)] = _fasc.geom
         return _fasc
 
     @property

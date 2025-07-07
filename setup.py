@@ -85,6 +85,7 @@ setup(
         "nrv.optim.optim_utils",
         "nrv.ui",
         "nrv.utils",
+        "nrv.utils.geom",
     ],
 
     # non python data to keep

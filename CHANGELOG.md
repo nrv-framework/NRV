@@ -13,6 +13,8 @@ All notable changes to NRV are summed up in this file.
 - Added file: `backend._extlib_interface` to gather interfacing function with external libraries
 - Added `MshCreator.add_from_cshape` to generate cylinder with custom base. 
 - Fascicle are now added from their full geometry instead of only their diameter and center
+- New method used to generated example and tutorial docs using [sphinxs_gallery](https://sphinx-gallery.github.io/stable/index.html).
+- New directory for [NRV/examples](examples) and [NRV/tutorials](tutorials).
 - New dependency: [shapely](https://shapely.readthedocs.io/en/stable/).
 
 

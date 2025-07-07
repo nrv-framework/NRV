@@ -48,9 +48,9 @@ BibTeX
    introduction
    installation
    scientific
-   tutorials
+   tutorials/index
    usersguide
-   examples
+   examples/index
    modules
    changelog
    devcorner

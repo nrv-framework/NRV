@@ -88,6 +88,9 @@ In brief, commit messages should follow these conventions:
 
 8. Submit a pull request through the GitHub website.
 
+NRV documentation
+=================
+
 NRV testing
 ===========
 
@@ -179,10 +182,13 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
         - 275
         - Wrappers and decorators
     *   - 300
-        - 306
+        - 349
         - Nerve functions
+    *   - 350
+        - 399
+        - Geometries and axon population
     *   - 500
-        - 509
+        - 550
         - Various functions
     *   - 900
         - 950

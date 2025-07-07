@@ -187,6 +187,21 @@ class fascicle_results(sim_results):
         return n_recr
 
     def get_axons(self, vm_key: str="V_mem", t_start: float=None) -> list:
+        """
+        Get simulated axons properties
+
+        Parameters
+        ----------
+        vm_key : str, optional
+            _description_, by default "V_mem"
+        t_start : float, optional
+            _description_, by default None
+
+        Returns
+        -------
+        list
+            _description_
+        """
         _m = self.axons.get_mask(mask_labels=self.sim_mask)
         axon_diam = self.axons["diameters"][_m]
         axon_type = self.axons["types"][_m]

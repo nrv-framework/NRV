@@ -969,6 +969,8 @@ class nerve(NRV_simulable):
         compute electrodes footprints
         """
         if not self.is_footprinted:
+            if self.verbose:
+                pass_info("...computing electrodes footprint")
             self.__set_fascicles_context()
             self.set_axons_parameters(**kwargs)
             if self.is_extra_stim:
@@ -1012,9 +1014,6 @@ class nerve(NRV_simulable):
             self.save(config_filename, fascicles_context=False)
 
         # run FEM model
-        if self.verbose:
-            pass_info("...computing electrodes footprint")
-
         if self.__footprint_to_compute and self.has_FEM_extracel:
             self.compute_electrodes_footprints()
             self.loaded_footprints = True
