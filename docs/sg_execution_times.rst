@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:04.385** total execution time for 32 files **from all galleries**:
+**00:31.091** total execution time for 34 files **from all galleries**:
 
 .. container::
 
@@ -32,8 +32,11 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_generic_22_access_subpopulation.py` (``../examples/generic/22_access_subpopulation.py``)
-     - 00:04.385
+   * - :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py` (``../examples/generic/23_subpop_iclamp.py``)
+     - 00:30.787
+     - 0.0
+   * - :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py` (``../examples/optim/o03_biphasic_stimulus_CM.py``)
+     - 00:00.304
      - 0.0
    * - :ref:`sphx_glr_examples_00_dummy_example.py` (``../examples/00_dummy_example.py``)
      - 00:00.000
@@ -96,6 +99,9 @@ Computation times
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_21_place_population.py` (``../examples/generic/21_place_population.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_22_access_subpopulation.py` (``../examples/generic/22_access_subpopulation.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_optim_o01_nerve_optimization.py` (``../examples/optim/o01_nerve_optimization.py``)

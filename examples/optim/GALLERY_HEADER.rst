@@ -1,5 +1,5 @@
 Optimization Examples
-=====================
+---------------------
 
 This gallery consists of introductory examples for the use of `nrv.optim` module
 

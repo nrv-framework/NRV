@@ -445,6 +445,15 @@
    "name": "myelinated"
   }
  ],
+ "nrv.optim.optim_utils.harmonic_stimulus_CM": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  }
+ ],
  "nrv.point_source_electrode": [
   {
    "is_class": true,

@@ -2,8 +2,10 @@ r"""
 Understanding context modifiers: **harmonic_stimulus_CM**
 =========================================================
 
-This example shows a way to use the built-in `context modifiers<../../usersguide/optimization#context-modifier>`
-:`harmonic_stimulus_CM`.
+This small example shows a way to use the built-in :class:`~nrv.optim.optim_utils.harmonic_stimulus_CM`.
+
+.. seealso::
+    :doc:`users' guide <../../usersguide/optimization>` 
 """
 import numpy as np
 import matplotlib.pyplot as plt

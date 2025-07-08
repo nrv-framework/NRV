@@ -844,16 +844,16 @@ class axon_population(PopShape):
 
         Parameters
         ----------
-        axes : plt.Axes
-            _description_
+        axes    : matplotlib.Axes
+            axes of the figure to display the histogram.
         expr : str | None, optional
-            Subpopulation to plot, by default None
+            Subpopulation to plot, by default None.
         mask_labels : None | Iterable[str] | str, optional
-            Subpopulation to plot, by default []
+            Subpopulation to plot, by default [].
         myel_color : str, optional
-            Color of myelinated axons bins, by default "b"
+            Color of myelinated axons bins, by default "b".
         unmyel_color : str, optional
-            Color of unmyelinated axons bins, by default "r"
+            Color of unmyelinated axons bins, by default "r".
         """
         if self.has_pop:
             sub_pop = self.get_sub_population(expr=expr, mask_labels=mask_labels)

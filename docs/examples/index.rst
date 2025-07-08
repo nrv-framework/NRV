@@ -43,7 +43,7 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
    /examples/00_dummy_example
 
 Generic Examples
-================
+----------------
 
 This gallery consists of introductory examples of basic usage of NRV framework.
 
@@ -413,6 +413,23 @@ This gallery consists of introductory examples of basic usage of NRV framework.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows:     - Creating a nerve with fascicles of various geometries.     - Filling fascicles with axon populations.     - Selecting subpopulations using expressions or masks.     - Applying IClamp to specific subpopulations.     - Running a simulation and plotting recruited fibers.">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_23_subpop_iclamp_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Intracellular stimulation of axon subpopulations</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -420,7 +437,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
     </div>
 
 Optimization Examples
-=====================
+---------------------
 
 This gallery consists of introductory examples for the use of `nrv.optim` module
 
@@ -456,7 +473,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in context modifiers &lt;../../usersguide/optimization#context-modifier&gt; :`stimulus_CM`.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
 
 .. only:: html
 
@@ -473,7 +490,24 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a way to use the built-in context modifiers&lt;../../usersguide/optimization#context-modifier&gt; :`harmonic_stimulus_CM`.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
+
+.. only:: html
+
+  .. image:: /examples/optim/images/thumb/sphx_glr_o03_biphasic_stimulus_CM_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Understanding context modifiers: biphasic_stimulus_CM</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in harmonic_stimulus_CM.">
 
 .. only:: html
 

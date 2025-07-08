@@ -3,7 +3,7 @@
 .. _sphx_glr_examples_optim:
 
 Optimization Examples
-=====================
+---------------------
 
 This gallery consists of introductory examples for the use of `nrv.optim` module
 
@@ -39,7 +39,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in context modifiers &lt;../../usersguide/optimization#context-modifier&gt; :`stimulus_CM`.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
 
 .. only:: html
 
@@ -56,7 +56,24 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows a way to use the built-in context modifiers&lt;../../usersguide/optimization#context-modifier&gt; :`harmonic_stimulus_CM`.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
+
+.. only:: html
+
+  .. image:: /examples/optim/images/thumb/sphx_glr_o03_biphasic_stimulus_CM_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Understanding context modifiers: biphasic_stimulus_CM</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in harmonic_stimulus_CM.">
 
 .. only:: html
 
@@ -117,6 +134,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
    /examples/optim/o01_nerve_optimization
    /examples/optim/o02_stimulus_CM
+   /examples/optim/o03_biphasic_stimulus_CM
    /examples/optim/o04_harmonic_stimulus_CM
    /examples/optim/o05_plot_CM
    /examples/optim/o06_mproc_optimization

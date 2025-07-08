@@ -3,7 +3,7 @@
 .. _sphx_glr_examples_generic:
 
 Generic Examples
-================
+----------------
 
 This gallery consists of introductory examples of basic usage of NRV framework.
 
@@ -373,6 +373,23 @@ This gallery consists of introductory examples of basic usage of NRV framework.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows:     - Creating a nerve with fascicles of various geometries.     - Filling fascicles with axon populations.     - Selecting subpopulations using expressions or masks.     - Applying IClamp to specific subpopulations.     - Running a simulation and plotting recruited fibers.">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_23_subpop_iclamp_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Intracellular stimulation of axon subpopulations</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -404,4 +421,5 @@ This gallery consists of introductory examples of basic usage of NRV framework.
    /examples/generic/20_create_population
    /examples/generic/21_place_population
    /examples/generic/22_access_subpopulation
+   /examples/generic/23_subpop_iclamp
 

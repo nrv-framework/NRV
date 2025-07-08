@@ -77,7 +77,7 @@ pop_1.add_mask(~pop_1.axon_pop["d_over_6"], label=lab31)
 pop_1.add_mask(pop_1.axon_pop["diameters"]>.1, label=lab32)
 
 
-pop_1.add_mask((pop_1.axon_pop["y"]-100)**2+(pop_1.axon_pop["z"]-200)**2 < 50**2)
+pop_1.add_mask((pop_1.axon_pop["y"]-center[0])**2+(pop_1.axon_pop["z"]-center[1])**2 < 50**2)
 
 
 # %%
@@ -101,7 +101,7 @@ axs[0,1].set_title([lab31, lab32])
 
 pop_1.plot(axs[1,1], myel_color=("b", .2), unmyel_color=("r",.2))
 pop_1.plot(axs[1,1], mask_labels="mask_0", myel_color="b", unmyel_color="r")
-axs[1,1].set_title("mask_0 (default)")
+axs[1,1].set_title("mask_0 (default label)")
 
 fig.text(.5,.9, "sub-population ($mask_labels$):", ha="center", va="center", size=15)
 
