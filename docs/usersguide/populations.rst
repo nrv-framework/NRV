@@ -1,12 +1,14 @@
-==========================
-Generate axons populations
-==========================
+=================
+Axons populations
+=================
 
-Simulable objects are either single axons, fascicles and nerve. The last two contain one more many axons. To create new populations of axons, NRV comes with two functionalities described below:
+Simulable objects are either single axons, fascicles and nerve. The last two contain one more many axons. Since version 1.2.2, NRV has a dedicated object to store and handle populations, aiming at simplfying the operations associated with large number of axons. 
+
+An empty population can be created with an instance of the class :class:`~nrv._nmod._axon_population.axon_population`. This object basically couples a list of simulable axons with a geometry (automatically used in FEM simulations). To create new populations of axons, NRV comes with different methods for the two steps described below:
 
 - Tools for automated generation of populations with controlled diameters, based on experimental observations.
 
-- A packing algorithm that shuffles the generated population on the spacial grid, and that shuffles nodes of Ranvier for myelinated fibers.
+- Placing and Packing algorithms that shuffles the generated population spacialy, and that shuffles nodes of Ranvier for myelinated fibers.
 
 .. tip::
     It is also possible to use already created and placed populations of fibers as shown bellow.
@@ -14,60 +16,61 @@ Simulable objects are either single axons, fascicles and nerve. The last two con
 Population generation
 =====================
 
-Axon population
----------------
+There are several ways of using/creating populations:
 
-Populations of axons are stored in the framework under the path ``nrv/_misc/pops`` as ``.pop`` files. These files follow a CSV-like structure with the following columns:
+- NRV contains some populations and placed populations already defined. Since version 1.2.2, its is easy and fast to generate new populations, these populations should be use for educational scripts only.
+- a population can be generated using a distribution probability,
+- a population can be generated from data (stored in various formats)
 
-.. list-table:: 
-   :header-rows: 1
+A simple example of compact code is given in the examples (see :doc:`example o01 <../examples/generic/20_create_population>`)
 
-   * - Fiber diameter
-     - Fiber type
-     - Not a Number
-     - Not a Number
-   * - (in µm)
-     - (1.0 for myelinated / 0.0 for unmyelinated)
-     - (`NaN`)
-     - (`NaN`)
+Generate a population from data
+-------------------------------
 
-.. note::
-    The last two columns are placeholders used to maintain compatibility with placed populations (see below) and to ensure consistent data formatting in the code.
+It is possible to generate a desired population give two iterables, describing both the axon myelination (`1` or `True` for myelinated axons, `0` or `False`for unmyelinated axons) and the axons diamters. These iterables can be:
 
-Six predefined unplaced populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+- tuples, in this case, the following syntax should be used, with `ax_type` and `ax_diameters` two one dimentional array-like or iterables
 
-Axon placed population
-----------------------
+    .. code-block:: python
 
-Placed populations of axons are stored under the path ``nrv/_misc/pops`` in ``.pop`` files. These files are similar to CSV files and contain the following columns:
+        pop = axon_population()
+        pop.create_population_from_data((ax_type, ax_diameters))
 
-.. list-table:: 
-   :header-rows: 1
+- with a unique numpy array combining both myelination and diametersn following the next syntax:
 
-   * - Fiber diameter
-     - Fiber type
-     - y-axis coordinate
-     - z-axis coordinate
-   * - (in µm)
-     - (1.0 for myelinated / 0.0 for unmyelinated)
-     - (in µm)
-     - (in µm)
+    .. code-block:: python
 
-Six predefined placed populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+        import numpy as np
+        data = np.vstack((ax_type, ax_diameters))
+        pop = axon_population()
+        pop.create_population_from_data(data)
+
+- with a dictionnary containing `ax_type` and `ax_diameters` two one dimentional array-like or iterables at the keys `types` and `diameter` respectively, like in the syntax:
+
+    .. code-block:: python
+
+        data = {"types":ax_type, "diameters":ax_diameters, "other_key":0}
+        pop = axon_population()
+        pop.create_population_from_data(data)
+
+- with a `pandas` dataframe also containing`ax_type` and `ax_diameters` two one dimentional array-like or iterables at the keys `types` and `diameter` respectively, like in the syntax:
+
+    .. code-block:: python
+
+        from pandas import DataFrame
+        data =  DataFrame({"types":ax_type, "diameters":ax_diameters, "other_key":np.random.rand(len(ax_type))})
+        pop = axon_population()
+        pop.create_population_from_data(data)
+
+Create *ex-novo* populations (recommended method)
+-------------------------------------------------
 
 
-Diameter distributions
-======================
+To create a new population of fibers from scratch, you can use the function :meth:`~nrv.nmod.create_population_from_stat`. This method will directly feed:
 
-Create ex-novo population
--------------------------
+- the population's axon diameters (in :math:`\mu m`).
+- the population axon types, where ``1.0`` corresponds to myelinated fibers and ``0.0`` to unmyelinated fibers.
 
-To create a new population of fibers from scratch, you can use the function :meth:`~nrv.nmod.create_axon_population`. This function returns four lists:
-
-- A list of axon diameters (in :math:`\mu m`).
-- A list indicating axon types, where ``1.0`` corresponds to myelinated fibers and ``0.0`` to unmyelinated fibers.
-- A list of diameters for the subgroup of myelinated fibers.
-- A list of diameters for the subgroup of unmyelinated fibers.
 
 The arguments for the function are:
 
@@ -135,19 +138,62 @@ The scientific references used are:
 - [stat3] Schellens, R. L., van Veen, B. K., Gabreëls‐Festen, A. A., Notermans, S. L., van't Hof, M. A., & Stegeman, D. F. (1993). A statistical approach to fiber diameter distribution in human sural nerve. Muscle & Nerve: Official Journal of the American Association of Electrodiagnostic Medicine, 16(12), 1342-1350.
 
 
+.. tip::
 
-Describe a new statistical law
-------------------------------
+    To define a new statistical law, you should store it in a `csv` files with two columns:
 
-Predefined statistics are simple csv files with two columns:
+    1. Starting value of the bin for diameter histogram.
+    2. Value of the probability for the corresponding bin
 
-1. Starting value of the bin for diameter histogram.
+    The length of the bins is automatically determined by two successive values. Note last bin is the same size as previous one. Sum of probabilities is automatically normalized to 1.
+    Users can find the predefined statistics at the path ``nrv/_misc/stats/``. Adding files to this folder make the statistics accessible by the filname without the extension. It is also possible to specify the statistics with a string beeing the path to the specific file.
 
-2. Value of the probability for the corresponding bin
+Axon population already existing in NRV
+---------------------------------------
 
-The length of the bins is automatically determined by two successive values. Note last bin is the same size as previous one. Sum of probabilities is automatically normalized to 1.
+Populations of axons are stored in the framework under the path ``nrv/_misc/pops`` as ``.pop`` files. These files follow a CSV-like structure with the following columns:
 
-Users can find the predefined statistics at the path ``nrv/_misc/stats/``. Adding files to this folder make the statistics accessible by the filname without the extension. It is also possible to specify the statistics with a string beeing the path to the specific file.
+.. list-table:: 
+   :header-rows: 1
+
+   * - Fiber diameter
+     - Fiber type
+     - Not a Number
+     - Not a Number
+   * - (in µm)
+     - (1.0 for myelinated / 0.0 for unmyelinated)
+     - (`NaN`)
+     - (`NaN`)
+
+.. note::
+    The last two columns are placeholders used to maintain compatibility with placed populations (see below) and to ensure consistent data formatting in the code.
+
+Six predefined unplaced populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+
+Axon placed population already existing in NRV
+----------------------------------------------
+
+Placed populations of axons are stored under the path ``nrv/_misc/pops`` in ``.pop`` files. These files are similar to CSV files and contain the following columns:
+
+.. list-table:: 
+   :header-rows: 1
+
+   * - Fiber diameter
+     - Fiber type
+     - y-axis coordinate
+     - z-axis coordinate
+   * - (in µm)
+     - (1.0 for myelinated / 0.0 for unmyelinated)
+     - (in µm)
+     - (in µm)
+
+Six predefined placed populations are available, corresponding to different total numbers of axons: 100, 200, 500, 1000, 2000, and 5000.
+
+
+
+Create ex-novo population
+-------------------------
+
 
 
 Axon Placing and Packing
@@ -178,59 +224,16 @@ The packing is performed with a single function called :meth:`~nrv.nmod.axon_pac
 Interacting with populations
 ============================
 
-It is also possible to plot the population on a ``matplotlib`` figure using the function :meth:`~nrv.nmod.plot_population`.
+Methods have been implemented to interact with population in an easy way. If you need to remove some information, two methods for clearing data are implemented:
 
-Saving a placed population to a ``.ppop`` file can be done with the function :meth:`~nrv.nmod.save_axon_population`, which accepts the following parameters:
+- `clear_population` that basically get back to an empty population,
+- `clear_population_placement` that removes all geometrical properties of the population (generated by the placer/packer).
 
-Loading a ``.ppop`` file can be done using the function :meth:`~nrv.nmod.load_axon_population`.
+to handle the placement of axons, two geometrical operations have been implemented:
 
-An example demonstrating the proper use of the packer and plotting/saving tools is provided in **example XXX**
+- a `rotate` method,
+- a `translate` method.
 
-.. seealso::
+A population can be plot using the `plot` method that takes as parameter the axes of a `matplotlib` figure.
 
-.. code-block:: python
-
-    import nrv
-
-    # Define nerve geometry: one elliptic fascicle
-    L = 10000         # length in µm
-    y_c, z_c = 0, 0   # center coordinates
-    a, b = 100, 50    # ellipse axes in µm
-
-    # Create a population of axons
-    N_axons = 200
-    percent_unmyel = 0.5
-    diameters, types, myel_diam, unmyel_diam = nrv.nmod.create_axon_population(
-         N=N_axons,
-         percent_unmyel=percent_unmyel,
-         M_stat="Schellens_1",
-         U_stat="Ochoa_U"
-    )
-
-    # Pack axons inside the elliptic fascicle
-    y, z = nrv.nmod.axon_packer(
-         diameters,
-         y_center=y_c,
-         z_center=z_c,
-         a=a,
-         b=b,
-         min_dist=2.0
-    )
-
-    # Create the nerve object
-    nerve = nrv.Nerve(L)
-    nerve.add_fascicle(
-         y_c, z_c, a, b,
-         axon_y=y,
-         axon_z=z,
-         axon_diam=diameters,
-         axon_type=types
-    )
-
-    # Plot the nerve cross-section
-    nrv.nmod.plot_population(diameters, types, y, z, fascicles=[(y_c, z_c, a, b)])
-
-.. warning::
-
-   In a future release of the code, we plan to create an ``axon_population`` class that will encapsulate all these methods. This class will provide a more convenient way to manipulate populations and sub-populations of axons through logical and arithmetic operations, filtering, and more.
-
+More importantly, the structure of an `NRV` population is based on `pandas` Data
