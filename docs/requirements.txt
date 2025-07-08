@@ -7,3 +7,5 @@ nbsphinx
 sphinx_gallery
 ipython
 sphinx_codeautolink
+numpy
+matplotlib
