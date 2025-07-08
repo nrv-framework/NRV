@@ -7,6 +7,7 @@ from ..fmod._extracellular import is_FEM_extra_stim, FEM_stimulation
 from ..fmod.FEM.mesh_creator._NerveMshCreator import *
 from ._spec_loaders import load_axon, load_fascicle, load_nerve
 
+
 def mesh_from_electrode(
     elec: FEM_electrode,
     mesh: NerveMshCreator = None,
@@ -102,9 +103,7 @@ def mesh_from_fascicle(
         if res_nerve != "default":
             mesh.reshape_nerve(res=res_nerve)
 
-    mesh.reshape_fascicle(
-        geometry=fasc.geom
-    )
+    mesh.reshape_fascicle(geometry=fasc.geom)
     if add_axons:
         if fasc.axons.has_node_shift:
             node_shift = fasc.axons["node_shift"]

@@ -159,15 +159,15 @@ class nerve(NRV_simulable):
         self.ID = ID
 
         # geometric properties
-        self.y_grav_center:float = 0
-        self.z_grav_center:float = 0
+        self.y_grav_center: float = 0
+        self.z_grav_center: float = 0
 
         # Update parameters with kwargs
         self.set_parameters(**kwargs)
 
         # Fascicular content
-        self.fascicles_IDs:list[str] = []
-        self.fascicles:dict[str,fascicle] = {}
+        self.fascicles_IDs: list[str] = []
+        self.fascicles: dict[str, fascicle] = {}
 
         # Axons objects default parameters
         self.unmyelinated_param = {
@@ -524,10 +524,13 @@ class nerve(NRV_simulable):
             _r = 0
             for fasc in self.fascicles.values():
                 y_tr, z_tr = fasc.geom.get_trace(n_theta=1000)
-                _r_fasc = np.hypot((y_tr-self.y_grav_center), (z_tr-self.z_grav_center)).max()
+                _r_fasc = np.hypot(
+                    (y_tr - self.y_grav_center), (z_tr - self.z_grav_center)
+                ).max()
                 _r = np.max((_r, _r_fasc))
-            self.D = 2*(_r+delta)
+            self.D = 2 * (_r + delta)
             print(self.D)
+
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """
         Define ellipsoidal contour
@@ -561,7 +564,16 @@ class nerve(NRV_simulable):
         else:
             return self.fascicles
 
-    def add_fascicle(self, fascicle, ID:None|int=None, y:None|float=None, z:None|float=None, rot:None|float=None, degree:bool=False, **kwargs):
+    def add_fascicle(
+        self,
+        fascicle,
+        ID: None | int = None,
+        y: None | float = None,
+        z: None | float = None,
+        rot: None | float = None,
+        degree: bool = False,
+        **kwargs,
+    ):
         """
         Add a fascicle to the list of fascicles
 
@@ -625,9 +637,7 @@ class nerve(NRV_simulable):
 
     def __merge_fascicular_context(self, fasc: fascicle):
         if self.is_extra_stim:
-            self.extra_stim.reshape_fascicle(
-                fasc.geom, fasc.ID
-            )
+            self.extra_stim.reshape_fascicle(fasc.geom, fasc.ID)
         if fasc.extra_stim is not None:
             self.attach_extracellular_stimulation(fasc.extra_stim)
 
@@ -894,7 +904,7 @@ class nerve(NRV_simulable):
             z = electrode.z
             if is_LIFE_electrode(electrode):
                 d = electrode.D
-            e_geom = create_cshape(center=(y,z), diameter=d)
+            e_geom = create_cshape(center=(y, z), diameter=d)
             for fasc in self.fascicles.values():
                 if cshape_overlap_checker(
                     s=fasc.geom,

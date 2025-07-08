@@ -94,11 +94,11 @@ class extracellular_context(NRV_class):
         super().__init__()
         self.type = "extracellular_context"
         # empty list to store electrodes and corresponding stimuli
-        self.electrodes:list[electrode] = []
-        self.stimuli:list[stimulus] = []
+        self.electrodes: list[electrode] = []
+        self.stimuli: list[stimulus] = []
         # list for synchronised stimuli
-        self.synchronised:bool = False
-        self.synchronised_stimuli:list[stimulus] = []
+        self.synchronised: bool = False
+        self.synchronised_stimuli: list[stimulus] = []
         self.global_time_serie = []
         self.type = None
 
@@ -139,7 +139,9 @@ class extracellular_context(NRV_class):
         for elec in self.electrodes:
             elec.translate(x=x, y=y, z=z)
 
-    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+    def rotate(
+        self, angle: float, center: tuple[float, float] = (0, 0), degree: bool = False
+    ):
         """
         Rotate extracellular context electrodes by group rotation around x-axis
 
@@ -545,13 +547,13 @@ class FEM_stimulation(extracellular_context):
 
     def reshape_fascicle(
         self,
-        geometry:CShape=None,
-        Fascicle_D:float=10,
-        y_c:float=0,
-        z_c:float=0,
-        ID:int=None,
-        Perineurium_thickness:None|float=None,
-        res:float|Literal["default"]="default",
+        geometry: CShape = None,
+        Fascicle_D: float = 10,
+        y_c: float = 0,
+        z_c: float = 0,
+        ID: int = None,
+        Perineurium_thickness: None | float = None,
+        res: float | Literal["default"] = "default",
     ):
         """
         Reshape a fascicle of the FEM simulation
@@ -582,21 +584,22 @@ class FEM_stimulation(extracellular_context):
             mesh resolution for fenics_model cf NerveMshCreator, use with caution, by default "default"
         """
         if not isinstance(geometry, CShape):
-            rise_warning("Deprecated arguments: You migth be using an old script. FEM_stimulation.reshape_fascicle use geometry instead of Fascicle_D, y_c, z_c")
+            rise_warning(
+                "Deprecated arguments: You migth be using an old script. FEM_stimulation.reshape_fascicle use geometry instead of Fascicle_D, y_c, z_c"
+            )
             if geometry is not None:
                 Fascicle_D = geometry
-            geometry = create_cshape(center=(y_c,z_c), diameter=Fascicle_D)
+            geometry = create_cshape(center=(y_c, z_c), diameter=Fascicle_D)
 
-
-        fasc_d_avg = np.mean(geometry.radius)*2
+        fasc_d_avg = np.mean(geometry.radius) * 2
         p_th = Perineurium_thickness or get_perineurial_thickness(fasc_d_avg)
         if self.comsol:
             fasc_label = "Fascicle_"
             if ID is not None:
                 fasc_label += f"{ID}_"
-            self.model.set_parameter(fasc_label+"D", str(fasc_d_avg) + "[um]")
-            self.model.set_parameter(fasc_label+"y_c", str(geometry.y) + "[um]")
-            self.model.set_parameter(fasc_label+"z_c", str(geometry.z) + "[um]")
+            self.model.set_parameter(fasc_label + "D", str(fasc_d_avg) + "[um]")
+            self.model.set_parameter(fasc_label + "y_c", str(geometry.y) + "[um]")
+            self.model.set_parameter(fasc_label + "z_c", str(geometry.z) + "[um]")
             self.model.set_parameter("Perineurium_thickness", str(p_th) + "[um]")
         else:
             self.model.reshape_fascicle(

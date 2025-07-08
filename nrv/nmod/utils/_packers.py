@@ -9,12 +9,13 @@ from ...utils.geom import Circle, circle_overlap_checker
 from ...utils.geom._cshape import CShape
 from ...backend._log_interface import rise_warning, pass_info
 
+
 # ---- #
 # misc #
 # ---- #
-def dist_matrix(X:tuple[np.ndarray, np.ndarray, np.ndarray])->np.ndarray:
+def dist_matrix(X: tuple[np.ndarray, np.ndarray, np.ndarray]) -> np.ndarray:
     """
-    Get a matrix containing the distance of three array containg the position and radius of various circles. 
+    Get a matrix containing the distance of three array containg the position and radius of various circles.
 
     Note
     ----
@@ -28,7 +29,7 @@ def dist_matrix(X:tuple[np.ndarray, np.ndarray, np.ndarray])->np.ndarray:
     Parameters
     ----------
     X : tuple[np.ndarray, np.ndarray, np.ndarray]
-        Tuple of 1D-``ndarray`` of same lengh containing the respectively: 
+        Tuple of 1D-``ndarray`` of same lengh containing the respectively:
             - the y position of each circle
             - the z position of each circle
             - the radius of each circle
@@ -37,7 +38,10 @@ def dist_matrix(X:tuple[np.ndarray, np.ndarray, np.ndarray])->np.ndarray:
     -------
     np.ndarray
     """
-    return ((X[0][:, np.newaxis] - X[0])**2 + (X[1][:, np.newaxis] - X[1])**2)**0.5 - (X[2][:, np.newaxis] + X[2])
+    return (
+        (X[0][:, np.newaxis] - X[0]) ** 2 + (X[1][:, np.newaxis] - X[1]) ** 2
+    ) ** 0.5 - (X[2][:, np.newaxis] + X[2])
+
 
 def get_ppop_info(y, z, r, verbose=False, with_all_dist=False):
     _info = {}
@@ -66,7 +70,18 @@ def get_ppop_info(y, z, r, verbose=False, with_all_dist=False):
 # ----------- #
 class Placer:
     """A class for drawing circles-inside-a-circle."""
-    def __init__(self, geom:CShape|None=None, delta:float=.01, delta_trace:float|None=None, delta_in:float|None=None, n_iter:int=500, radius:float=250, rho_min:float=0.005, rho_max:float=0.05):
+
+    def __init__(
+        self,
+        geom: CShape | None = None,
+        delta: float = 0.01,
+        delta_trace: float | None = None,
+        delta_in: float | None = None,
+        n_iter: int = 500,
+        radius: float = 250,
+        rho_min: float = 0.005,
+        rho_max: float = 0.05,
+    ):
         """Initialize the Circles object.
 
         R is the radius of the large circle within which the small circles are
@@ -78,7 +93,7 @@ class Placer:
         if geom is not None:
             self.geom = geom
         else:
-            self.geom = Circle(center=(0,0), radius=radius)
+            self.geom = Circle(center=(0, 0), radius=radius)
         # The centre of the canvas
         self.rmin, self.rmax = radius * rho_min, radius * rho_max
         self.delta_in = delta
@@ -95,18 +110,26 @@ class Placer:
         # of trials, we give up.
         for _ in range(self.n_iter):
             # Pick a random position, uniformly on the larger circle's interior
-            X = self.geom.get_point_inside(1, delta=r+self.delta_trace)
+            X = self.geom.get_point_inside(1, delta=r + self.delta_trace)
             if first:
                 return X, True
-            if not any(circle_overlap_checker(c=X, r=r, c_comp=self.pos[self.placed,:],r_comp=self.r[self.placed], delta=self.delta_in)):
+            if not any(
+                circle_overlap_checker(
+                    c=X,
+                    r=r,
+                    c_comp=self.pos[self.placed, :],
+                    r_comp=self.r[self.placed],
+                    delta=self.delta_in,
+                )
+            ):
                 return X, True
         # for this circle.
         # pass_info('guard reached.')
-        return np.zeros(2) , False
+        return np.zeros(2), False
 
-    def place_all(self, r:int|Iterable):
+    def place_all(self, r: int | Iterable):
         """Place the little circles inside the big one."""
-        
+
         # First choose a set of n random radii and sort them. We use
         if isinstance(r, int):
             self.n = r
@@ -120,17 +143,16 @@ class Placer:
         r[::-1].sort()
         self.r = r
 
-        self.pos = np.zeros((self.n,2))
+        self.pos = np.zeros((self.n, 2))
         self.placed = np.zeros((self.n), dtype=bool)
         # Do our best to place the circles, larger ones first.
-        self.pos[0,:], self.placed[0] = self._place_circle(self.r[0], first=True)
+        self.pos[0, :], self.placed[0] = self._place_circle(self.r[0], first=True)
         for i in track(range(1, self.n), description="Placing..."):
-            self.pos[i,:], self.placed[i] = self._place_circle(self.r[i])
+            self.pos[i, :], self.placed[i] = self._place_circle(self.r[i])
         # return 2*r, y, z
         if not self.placed.all():
             pass_info(np.sum(~self.placed), "axons not placed")
-        return self.r[ir_rs], self.pos[ir_rs,0], self.pos[ir_rs,1], self.placed[ir_rs]
-
+        return self.r[ir_rs], self.pos[ir_rs, 0], self.pos[ir_rs, 1], self.placed[ir_rs]
 
 
 # ----------- #
@@ -265,7 +287,9 @@ def compute_attraction_v(
     return v_att * get_gravity_dr(pos, gc, Naxons) / get_gravity_dist(pos, gc, Naxons)
 
 
-def compute_repulsion_v(pos1: np.ndarray, pos2: np.ndarray, v_rep: np.float32) -> np.array:
+def compute_repulsion_v(
+    pos1: np.ndarray, pos2: np.ndarray, v_rep: np.float32
+) -> np.array:
     """
     Evaluate the repulsion velocity for the colliding axons only - Internal use only
     """
@@ -456,9 +480,9 @@ def remove_collision(
     axons_diameters: np.ndarray,
     y_axons: np.ndarray,
     z_axons: np.ndarray,
-    axon_type: np.ndarray|None=None,
+    axon_type: np.ndarray | None = None,
     delta: float = 0,
-    return_mask:bool = False,
+    return_mask: bool = False,
 ) -> np.array:
     """
     Remove collinding axons in a population
@@ -504,7 +528,10 @@ def remove_collision(
 
 
 def get_circular_contour(
-    axons_diameters: np.ndarray, y_axons: np.ndarray, z_axons: np.ndarray, delta: float = 10
+    axons_diameters: np.ndarray,
+    y_axons: np.ndarray,
+    z_axons: np.ndarray,
+    delta: float = 10,
 ) -> float:
     """
     Get a circular contour diameter of the axon population
@@ -530,7 +557,7 @@ def remove_outlier_axons(
     axons_diameters: np.ndarray,
     y_axons: np.ndarray,
     z_axons: np.ndarray,
-    axon_type: np.ndarray|None=None,
+    axon_type: np.ndarray | None = None,
     diameter: float = 10,
 ) -> np.array:
     """
@@ -562,7 +589,6 @@ def remove_outlier_axons(
         z_axons[inside_border],
         axon_type[inside_border],
     )
-
 
 
 def get_barycenter(axons_diameters, y_axons, z_axons):

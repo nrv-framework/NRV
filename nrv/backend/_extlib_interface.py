@@ -1,5 +1,5 @@
 """
-Module containing functions to ease and addapt the interface with external libraries 
+Module containing functions to ease and addapt the interface with external libraries
 """
 
 import numpy as np
@@ -9,6 +9,7 @@ from typing import Literal
 # ---------------------------------- #
 #       Numpy compatibility          #
 # ---------------------------------- #
+
 
 def is_empty_iterable(x):
     """
@@ -30,8 +31,7 @@ def is_empty_iterable(x):
     return False
 
 
-
-def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
+def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
     """
     convert an object _i into an 1D array of index
 
@@ -53,12 +53,12 @@ def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
         _i = np.arange(_n)
     elif not np.iterable(_i):
         _i = np.array([_i])
-    elif isinstance(_i,tuple) and len(_i) == 2:
+    elif isinstance(_i, tuple) and len(_i) == 2:
         _i = np.arange(*_i)
     elif isinstance(_i, list):
         _i = np.array(_i)
     if isinstance(_i, np.ndarray) and _n is not None:
-        _i = _i[_i<_n]
+        _i = _i[_i < _n]
     return _i
 
 
@@ -82,14 +82,14 @@ def get_query(*args, **kwgs):
                 queries += [get_query(**i_val)]
             else:
                 queries += [f"{i_lab}.isin({set_idxs(i_val, None).tolist()})"]
-    if len(queries)==0:
+    if len(queries) == 0:
         return None
-    
+
     queries = " and ".join(queries)
     return queries
 
 
-def df_to(df:DataFrame, otype:None|Literal["numpy", "list"], *args, **kwgs):
+def df_to(df: DataFrame, otype: None | Literal["numpy", "list"], *args, **kwgs):
     if otype is None:
         return df
     else:

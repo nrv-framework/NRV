@@ -5,13 +5,14 @@ from ..backend._NRV_Class import NRV_class
 from ..nmod import fascicle, nerve, axon, myelinated, unmyelinated
 from ..backend._file_handler import rmv_ext
 
+
 def load_nerve(
-        data: str| dict| NRV_class,
-        extracel_context:bool=False,
-        intracel_context:bool=False,
-        rec_context:bool=False,
-        **kwargs
-    ) -> nerve:
+    data: str | dict | NRV_class,
+    extracel_context: bool = False,
+    intracel_context: bool = False,
+    rec_context: bool = False,
+    **kwargs,
+) -> nerve:
     """
     loads a nerve from a json file or a dictionary generated with NRV_class.save
 
@@ -36,7 +37,7 @@ def load_nerve(
         extracel_context=extracel_context,
         intracel_context=intracel_context,
         rec_context=rec_context,
-        **kwargs
+        **kwargs,
     )
     if not isinstance(obj, nerve):
         rise_warning(data, " not a loadable nerve")
@@ -45,12 +46,12 @@ def load_nerve(
 
 
 def load_fascicle(
-        data: str| dict| NRV_class,
-        extracel_context:bool=False,
-        intracel_context:bool=False,
-        rec_context:bool=False,
-        **kwargs
-    ) -> fascicle:
+    data: str | dict | NRV_class,
+    extracel_context: bool = False,
+    intracel_context: bool = False,
+    rec_context: bool = False,
+    **kwargs,
+) -> fascicle:
     """
     loads a fascicle from a json file or a dictionary generated with NRV_class.save
 
@@ -74,7 +75,7 @@ def load_fascicle(
         extracel_context=extracel_context,
         intracel_context=intracel_context,
         rec_context=rec_context,
-        **kwargs
+        **kwargs,
     )
     if not isinstance(obj, fascicle):
         rise_warning(data, " not a loadable fascicle")
@@ -83,12 +84,12 @@ def load_fascicle(
 
 
 def load_axon(
-        data: str| dict| NRV_class,
-        extracel_context:bool=False,
-        intracel_context:bool=False,
-        rec_context:bool=False,
-        **kwargs
-    ) -> myelinated | unmyelinated:
+    data: str | dict | NRV_class,
+    extracel_context: bool = False,
+    intracel_context: bool = False,
+    rec_context: bool = False,
+    **kwargs,
+) -> myelinated | unmyelinated:
     """
     loads a fascicle from a json file or a dictionary generated with NRV_class.save
 
@@ -112,7 +113,7 @@ def load_axon(
         extracel_context=extracel_context,
         intracel_context=intracel_context,
         rec_context=rec_context,
-        **kwargs
+        **kwargs,
     )
     if not isinstance(obj, axon):
         rise_warning(data, " not a loadable axon")
@@ -125,7 +126,9 @@ def load_axon(
 # ---------- #
 
 
-def update_fascicle_file(fname_in:str, fname_out:str|None=None, overwrite:bool=False):
+def update_fascicle_file(
+    fname_in: str, fname_out: str | None = None, overwrite: bool = False
+):
     """
     Update a file containing a deprecated version of saved fascicle
 
@@ -142,13 +145,17 @@ def update_fascicle_file(fname_in:str, fname_out:str|None=None, overwrite:bool=F
         If True original file can be overwritten, by default False
     """
 
-    if fname_out is None: 
+    if fname_out is None:
         if overwrite:
             fname_out = fname_in
         else:
             fname_out = rmv_ext(fname_in) + "_updated"
 
-    fasc = load_fascicle(data=fname_in, extracel_context=True, intracel_context=True, rec_context=True)
+    fasc = load_fascicle(
+        data=fname_in, extracel_context=True, intracel_context=True, rec_context=True
+    )
     pass_info(f"{fname_in} loaded")
-    fasc.save(data=fname_out, extracel_context=True, intracel_context=True, rec_context=True)
+    fasc.save(
+        data=fname_out, extracel_context=True, intracel_context=True, rec_context=True
+    )
     pass_info(f"updated and saved in {fname_in}")

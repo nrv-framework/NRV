@@ -5,7 +5,7 @@ This is mainly used to create generic methods such as save and load.
 
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-import sys      # used in an eval
+import sys  # used in an eval
 import numpy as np
 from pandas import DataFrame
 from numpy import iterable
@@ -13,6 +13,7 @@ from numpy import iterable
 from ._file_handler import json_dump, json_load
 from ._log_interface import pass_debug_info
 from ._extlib_interface import is_empty_iterable
+
 
 # ------------------------------------ #
 #           check object               #
@@ -78,6 +79,7 @@ def is_NRV_class_dict(x):
 # ------------------------------------ #
 #         check dictionaries           #
 # ------------------------------------ #
+
 
 def is_NRV_dict(x):
     """
@@ -160,7 +162,6 @@ def is_NRV_object_dict(x):
 # --------------------------------- #
 #            NRV Class              #
 # --------------------------------- #
-
 
 
 class NRV_class(metaclass=ABCMeta):

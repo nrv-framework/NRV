@@ -44,7 +44,6 @@ def check_function_kwargs(func: Callable, kwargs: dict) -> dict:
     return kwargs
 
 
-
 def function_to_str(func: Callable) -> str:
     lines = inspect.getsource(func)
     return lines

@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pandas import DataFrame, concat
 
+
 def number_in_str(s: str) -> bool:
     return any(i.isdigit() for i in s)
 
@@ -23,7 +24,7 @@ class nerve_results(sim_results):
 
     def __init__(self, context=None):
         super().__init__(context)
-        self._axons:DataFrame = DataFrame()
+        self._axons: DataFrame = DataFrame()
 
     @property
     def fascicle_keys(self) -> list:
@@ -86,7 +87,7 @@ class nerve_results(sim_results):
                 ]
             )
         return _fasc
-    
+
     @property
     def fasc_geometries(self) -> dict:
         """

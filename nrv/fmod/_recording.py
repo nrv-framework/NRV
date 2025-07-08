@@ -124,7 +124,9 @@ class recording_point(NRV_class):
         if z is not None:
             self.z += z
 
-    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+    def rotate(
+        self, angle: float, center: tuple[float, float] = (0, 0), degree: bool = False
+    ):
         """
         rotate recording point around x-axis
 
@@ -137,7 +139,9 @@ class recording_point(NRV_class):
         degree : bool, optional
             if True `angle` is in degree, if False in radian, by default False
         """
-        self.y, self.z = rotate_2D(point=(self.y, self.z), angle=angle, degree=degree, center=center)
+        self.y, self.z = rotate_2D(
+            point=(self.y, self.z), angle=angle, degree=degree, center=center
+        )
 
     def get_ID(self):
         """
@@ -420,7 +424,7 @@ class recorder(NRV_class):
                 self.sigma_yy = temporary_material.sigma_yy
                 self.sigma_zz = temporary_material.sigma_zz
         # for internal use
-        self.recording_points:list[recording_point] = []
+        self.recording_points: list[recording_point] = []
 
     def save_recorder(self, save=False, fname="recorder.json"):
         rise_warning("save_recorder is a deprecated method use save")
@@ -455,7 +459,9 @@ class recorder(NRV_class):
         for rec_p in self.recording_points:
             rec_p.translate(x=x, y=y, z=z)
 
-    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+    def rotate(
+        self, angle: float, center: tuple[float, float] = (0, 0), degree: bool = False
+    ):
         """
         Rotate rec points by group rotation around x-axis
 
@@ -470,7 +476,6 @@ class recorder(NRV_class):
         """
         for rec_p in self.recording_points:
             rec_p.rotate(angle=angle, center=center, degree=degree)
-
 
     def set_time(self, t_vector):
         """

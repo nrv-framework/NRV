@@ -148,8 +148,7 @@ class NerveMshCreator(MshCreator):
         self.N_axon = 0
         self.axons = {}
 
-        self.geometries:dict[str, CShape] = {}
-
+        self.geometries: dict[str, CShape] = {}
 
         self._continuous_myelin = True
 
@@ -300,10 +299,7 @@ class NerveMshCreator(MshCreator):
 
             for _id, fascicle in self.fascicles.items():
                 _s_id = self.add_from_cshape(
-                    self.geometries[f"fa{_id}"],
-                    x=0,
-                    dx=self.L,
-                    res=fascicle["res"]
+                    self.geometries[f"fa{_id}"], x=0, dx=self.L, res=fascicle["res"]
                 )
                 self.__collect_geom_ppt(fascicle, _s_id)
             for i in self.axons:
@@ -383,7 +379,9 @@ class NerveMshCreator(MshCreator):
         if self.default_res["Nerve"] > self.Nerve_D / 5:
             self.default_res["Nerve"] = self.Nerve_D / 5
 
-    def reshape_fascicle(self, d=0, y_c=0, z_c=0, ID=None,res="default", geometry:CShape|None=None):
+    def reshape_fascicle(
+        self, d=0, y_c=0, z_c=0, ID=None, res="default", geometry: CShape | None = None
+    ):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -407,23 +405,21 @@ class NerveMshCreator(MshCreator):
 
         # Mostly for retrocompatibility
         if geometry is None and d != 0:
-            geometry = create_cshape(center=(y_c,z_c), diameter=d)
+            geometry = create_cshape(center=(y_c, z_c), diameter=d)
         if np.iterable(geometry.radius):
             min_length = min(geometry.radius)
         else:
             min_length = geometry.radius
 
-
-
         if res == "default":
             res = self.default_res["Fascicle"]
-        if res > min_length/2:
-            res = min_length/2
+        if res > min_length / 2:
+            res = min_length / 2
 
         self.geometries[f"fa{ID}"] = geometry
 
         self.fascicles[ID] = {
-            "gid":f"fa{ID}",
+            "gid": f"fa{ID}",
             "res": res,
             "face": None,
             "volume": None,
@@ -441,7 +437,9 @@ class NerveMshCreator(MshCreator):
         if ID is None:
             self.fascicles = {}
             self.N_fascicle = 0
-            self.geometries = {k: v for k, v in self.geometries.items() if "fa" not in k}
+            self.geometries = {
+                k: v for k, v in self.geometries.items() if "fa" not in k
+            }
         elif ID in self.fascicles:
             del self.geometries[self.fascicles[ID]["gid"]]
             del self.fascicles[ID]
@@ -534,15 +532,15 @@ class NerveMshCreator(MshCreator):
 
         self.electrodes[ID] = {"type": elec_type, "res": res, "kwargs": kwargs}
 
-    def __collect_geom_ppt(self, d_store:dict, shape_ids:tuple[tuple[int]]):
+    def __collect_geom_ppt(self, d_store: dict, shape_ids: tuple[tuple[int]]):
         for c in shape_ids:
-            bbox =  np.round(self.model.occ.getBoundingBox(*c),4)
+            bbox = np.round(self.model.occ.getBoundingBox(*c), 4)
             if np.isclose(abs(bbox[0] - bbox[3]), self.L):
-                if c[0]==2:
+                if c[0] == 2:
                     key = "face_bbox"
                 else:
                     key = "volume_bbox"
-                d_store[key] =bbox
+                d_store[key] = bbox
 
     ####################################################################################################
     #####################################   domains definition  ########################################
@@ -560,11 +558,13 @@ class NerveMshCreator(MshCreator):
                 raise KeyboardInterrupt
             except TypeError:
                 self.save_geom("./__mesh_geom_dbg")
-                rise_error(TypeError, 
-                           "One or several domain not found, ",
-                           "please check your geometry saved in `./__mesh_geom_dbg.brep`")
+                rise_error(
+                    TypeError,
+                    "One or several domain not found, ",
+                    "please check your geometry saved in `./__mesh_geom_dbg.brep`",
+                )
             except Exception as e:
-                rise_error("Error in during the mehsing:\n",e)
+                rise_error("Error in during the mehsing:\n", e)
 
             self.is_dom = True
 
@@ -633,12 +633,10 @@ class NerveMshCreator(MshCreator):
         # fasc = self.fascicles[ID][dim_key]
         status_test = self.fascicles[ID][dim_key] is None
         # test good diameter
-        size_test = np.allclose(bbox, self.fascicles[ID][dim_key+"_bbox"], atol=1)
+        size_test = np.allclose(bbox, self.fascicles[ID][dim_key + "_bbox"], atol=1)
         # test center of mass in fascicle
         geom = self.geometries[f"fa{ID}"]
-        com_test = (
-            geom.is_inside(com[1:])
-        )
+        com_test = geom.is_inside(com[1:])
         return status_test and size_test and com_test
 
     def __is_axon_node(self, ID, dx, dy, dz, com, dim_key):
@@ -843,7 +841,7 @@ class NerveMshCreator(MshCreator):
 
             for j in self.fascicles:
                 if self.__is_fascicle(j, ent_bd[i], ent_com[i], key):
-                # if self.__is_fascicle(j, ent_bd, ent_com[i], key):
+                    # if self.__is_fascicle(j, ent_bd, ent_com[i], key):
                     self.fascicles[j][key] = entities[i][1]
 
             for j in self.axons:

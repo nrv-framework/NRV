@@ -75,7 +75,7 @@ def load_stat(stat_name):
     return diameters, presence
 
 
-def get_stat_expected(fname:str)->float:
+def get_stat_expected(fname: str) -> float:
     """
     Get expected value from a stat stored in a file
 
@@ -89,7 +89,7 @@ def get_stat_expected(fname:str)->float:
     float
     """
     diameters, presence = load_stat(fname)
-    return np.sum(diameters*presence)
+    return np.sum(diameters * presence)
 
 
 def one_Gamma(x, a1, beta1, c1):
@@ -481,7 +481,6 @@ def shuffle_population(axons_diameters, axons_type):
     axons_diameters = axons_diameters[shuffle_mask]
     axons_type = axons_type[shuffle_mask]
     return axons_diameters, axons_type
-
 
 
 def plot_population(

@@ -27,26 +27,26 @@ class fascicle_results(sim_results):
         super().__init__(context)
 
     @property
-    def n_ax(self)->int:
+    def n_ax(self) -> int:
         """
         Number of axons in the fascicle
         """
         return len(self.axons["diameters"])
 
     @property
-    def geom(self)->CShape:
+    def geom(self) -> CShape:
         """
         Simulated fascicle geometry
         """
         return self.axons.geom
 
-    def get_n_ax(self, ax_type: str="all") -> int:
+    def get_n_ax(self, ax_type: str = "all") -> int:
         """
         Number of myelinated axons in the fascicle
         """
         return len(self.get_axons_key(ax_type))
 
-    def get_axons_key(self, ax_type: str="all") -> list:
+    def get_axons_key(self, ax_type: str = "all") -> list:
         """ """
         if ax_type not in recognized_axon_types:
             rise_error(
@@ -60,11 +60,15 @@ class fascicle_results(sim_results):
             else:
                 axon_keys = [i for i in axon_keys if self[i].myelinated == True]
         return axon_keys
-    
 
-    def __compute_recruited_axons(self, vm_key: str="V_mem", t_start: float=None, otype:None|Literal["list", "numpy"]=None)->np.ndarray[bool]:
+    def __compute_recruited_axons(
+        self,
+        vm_key: str = "V_mem",
+        t_start: float = None,
+        otype: None | Literal["list", "numpy"] = None,
+    ) -> np.ndarray[bool]:
         """
-        Check which of the axons are recruited, add "is_recruited" from 
+        Check which of the axons are recruited, add "is_recruited" from
         """
         df_key = f"is_recruited_{vm_key}"
         if df_key not in self.axons.axon_pop:
@@ -72,8 +76,12 @@ class fascicle_results(sim_results):
             axon_recruited = []
             for axon in axons_keys:
                 axon_recruited.append(self[axon].is_recruited(vm_key, t_start))
-            self.axons.add_mask(data=axon_recruited, label=df_key, mask_on=self.sim_mask)
-        self.axons.add_mask(data=self.axons[df_key], label="is_recruited", mask_on=self.sim_mask)
+            self.axons.add_mask(
+                data=axon_recruited, label=df_key, mask_on=self.sim_mask
+            )
+        self.axons.add_mask(
+            data=self.axons[df_key], label="is_recruited", mask_on=self.sim_mask
+        )
         if otype is None:
             return self.axons["is_recruited"]
         else:
@@ -81,10 +89,10 @@ class fascicle_results(sim_results):
 
     def get_recruited_axons(
         self,
-        ax_type: str="all",
-        normalize: bool=False,
-        vm_key: str="V_mem",
-        t_start: float=None,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> int | float:
         """
         Return the number or the ratio of recruited axons in the fascicle
@@ -113,10 +121,10 @@ class fascicle_results(sim_results):
     def get_recruited_axons_greater_than(
         self,
         diam: float,
-        ax_type: str="all",
-        normalize: bool=False,
-        vm_key: str="V_mem",
-        t_start: float=None,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> float:
         """
         Return the number or the ratio of recruited axons with a diameter greater than `diam` in the fascicle
@@ -151,10 +159,10 @@ class fascicle_results(sim_results):
     def get_recruited_axons_lesser_than(
         self,
         diam: float,
-        ax_type: str="all",
-        normalize: bool=False,
-        vm_key: str="V_mem",
-        t_start: float=None,
+        ax_type: str = "all",
+        normalize: bool = False,
+        vm_key: str = "V_mem",
+        t_start: float = None,
     ) -> float:
         """
         Return the number or the ratio of recruited axons with a diameter smaller than `diam` in the fascicle
@@ -186,7 +194,7 @@ class fascicle_results(sim_results):
             n_recr /= n_tot
         return n_recr
 
-    def get_axons(self, vm_key: str="V_mem", t_start: float=None) -> list:
+    def get_axons(self, vm_key: str = "V_mem", t_start: float = None) -> list:
         """
         Get simulated axons properties
 
@@ -207,11 +215,13 @@ class fascicle_results(sim_results):
         axon_type = self.axons["types"][_m]
         axon_y = self.axons["y"][_m]
         axon_z = self.axons["z"][_m]
-        axon_recruited = self.__compute_recruited_axons(vm_key=vm_key, t_start=t_start, otype="list")
+        axon_recruited = self.__compute_recruited_axons(
+            vm_key=vm_key, t_start=t_start, otype="list"
+        )
         return (axon_diam, axon_type, axon_y, axon_z, axon_recruited)
 
     def get_block_summary_axons(
-        self, AP_start: float, freq: float=None, t_refractory: float=1
+        self, AP_start: float, freq: float = None, t_refractory: float = 1
     ) -> list:
         axons_keys = self.get_axons_key()
         _m = self.axons.get_mask(mask_labels=self.sim_mask)
@@ -231,7 +241,7 @@ class fascicle_results(sim_results):
 
     # impeddance related methods
     def get_membrane_conductivity(
-        self, x: float=0, t: float=0, unit: str="S/cm**2", mem_th: float=7 * nm
+        self, x: float = 0, t: float = 0, unit: str = "S/cm**2", mem_th: float = 7 * nm
     ) -> np.array:
         """
         get the membran conductivity of each axon at a position x and a time t
@@ -266,7 +276,7 @@ class fascicle_results(sim_results):
         return g
 
     def get_membrane_capacitance(
-        self, unit: str="uF/cm**2", mem_th: float=7 * nm
+        self, unit: str = "uF/cm**2", mem_th: float = 7 * nm
     ) -> tuple[float]:
         """
         get the membrane capacitance or permitivity of unmyelinated and myelinated axons filling the ner
@@ -299,11 +309,11 @@ class fascicle_results(sim_results):
 
     def get_membrane_complexe_admitance(
         self,
-        f: float=1.0,
-        x: float=0,
-        t: float=0,
-        unit: str="S/m",
-        mem_th: float=7 * nm,
+        f: float = 1.0,
+        x: float = 0,
+        t: float = 0,
+        unit: str = "S/m",
+        mem_th: float = 7 * nm,
     ) -> np.array:
         """
         get the membran complexe admitance of each axon at a position x and a time t for a given frequency
@@ -342,9 +352,9 @@ class fascicle_results(sim_results):
     def get_block_summary(
         self,
         AP_start: float,
-        freq: float=None,
-        t_refractory_m: float=1,
-        t_refractory_um: float=1,
+        freq: float = None,
+        t_refractory_m: float = 1,
+        t_refractory_um: float = 1,
     ) -> None:
         """
         Get block characteristics (blocked, onset response, number of APs) for each axon of the fascicle
@@ -371,10 +381,10 @@ class fascicle_results(sim_results):
     def plot_recruited_fibers(
         self,
         axes: plt.axes,
-        contour_color: str="k",
-        myel_color: str="b",
-        unmyel_color: str="r",
-        num: bool=False,
+        contour_color: str = "k",
+        myel_color: str = "b",
+        unmyel_color: str = "r",
+        num: bool = False,
     ) -> None:
         ## plot axons
         self.get_axons()
@@ -382,25 +392,26 @@ class fascicle_results(sim_results):
         self.axons.plot(
             axes=axes,
             mask_labels=[],
-            contour_color=(contour_color,.1),
-            myel_color=(myel_color,.1),
-            unmyel_color=(unmyel_color,.1),
+            contour_color=(contour_color, 0.1),
+            myel_color=(myel_color, 0.1),
+            unmyel_color=(unmyel_color, 0.1),
             num=num,
-            )
-    
+        )
+
         self.axons.plot(
             axes=axes,
             mask_labels=["is_recruited"],
-            contour_color=(contour_color,1),
-            myel_color=(myel_color,1),
-            unmyel_color=(unmyel_color,1),
+            contour_color=(contour_color, 1),
+            myel_color=(myel_color, 1),
+            unmyel_color=(unmyel_color, 1),
             num=num,
-            )
-
+        )
 
         if "extra_stim" in self:
             if self.extra_stim is not None:
-                self.extra_stim.plot(axes=axes, color="gold", nerve_d=2*self.axons.geom.radius)
+                self.extra_stim.plot(
+                    axes=axes, color="gold", nerve_d=2 * self.axons.geom.radius
+                )
         if num:
             for k in range(self.n_ax):
                 axes.text(
@@ -411,15 +422,14 @@ class fascicle_results(sim_results):
                     verticalalignment="center",
                 )
 
-
     def plot_block_summary(
         self,
         axes: plt.axes,
         AP_start: float,
-        freq: float=None,
-        t_refractory: float=1,
-        contour_color: str="k",
-        num: bool=False,
+        freq: float = None,
+        t_refractory: float = 1,
+        contour_color: str = "k",
+        num: bool = False,
     ) -> None:
         """
         plot the block_summary of the fascicle in the Y-Z plane (transverse section)
@@ -448,9 +458,8 @@ class fascicle_results(sim_results):
             if True, the index of each axon is displayed on top of the circle
         """
 
-
         ## plot contour
-        self.axons.plot(axes, myel_color=("b", .1), unmyel_color=("r", .1))
+        self.axons.plot(axes, myel_color=("b", 0.1), unmyel_color=("r", 0.1))
         ## plot axons
         axon_diam, _, axon_y, axon_z, is_blocked, n_onset = (
             self.get_block_summary_axons(
@@ -493,7 +502,7 @@ class fascicle_results(sim_results):
             )
 
         if self.extra_stim is not None:
-            self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.geom.radius*2)
+            self.extra_stim.plot(axes=axes, color="gold", nerve_d=self.geom.radius * 2)
         if num:
             for k in range(self.n_ax):
                 axes.text(

@@ -109,7 +109,7 @@ class FENICS_model(FEM_model):
         self.i_stim = 1e-3  # A
         self.jstims = []
         self.j_electrode = {}
-        self.geometries:dict[str,CShape] = {}
+        self.geometries: dict[str, CShape] = {}
 
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
@@ -215,8 +215,16 @@ class FENICS_model(FEM_model):
         )
         for id in param["fascicles"]:
             if not len(param["geometries"]):
-                rise_warning("Deprecated file: FENICS_model does not contain attribute geometries")
-                geom = create_cshape(center=(param["fascicles"][id]["y_c"], param["fascicles"][id]["z_c"]), diameter=param["fascicles"][id]["d"])
+                rise_warning(
+                    "Deprecated file: FENICS_model does not contain attribute geometries"
+                )
+                geom = create_cshape(
+                    center=(
+                        param["fascicles"][id]["y_c"],
+                        param["fascicles"][id]["z_c"],
+                    ),
+                    diameter=param["fascicles"][id]["d"],
+                )
             else:
                 geom = param["geometries"][f"fa{id}"]
             self.reshape_fascicle(
@@ -378,7 +386,7 @@ class FENICS_model(FEM_model):
 
     def reshape_fascicle(
         self,
-        geometry:CShape,
+        geometry: CShape,
         ID=None,
         Perineurium_thickness=None,
         res="default",
@@ -402,7 +410,9 @@ class FENICS_model(FEM_model):
                 else:  ## To check when not all ID are fixed
                     ID = max(self.Perineurium_thickness) + 1
 
-            p_th = Perineurium_thickness or get_perineurial_thickness(2*np.mean(geometry.radius))
+            p_th = Perineurium_thickness or get_perineurial_thickness(
+                2 * np.mean(geometry.radius)
+            )
             self.Perineurium_thickness[ID] = p_th
 
     def remove_fascicles(self, ID=None):
@@ -417,7 +427,9 @@ class FENICS_model(FEM_model):
         if ID is None:
             self.fascicles = {}
             self.Perineurium_thickness = {}
-            self.geometries = {k: v for k, v in self.geometries.items() if "fa" not in k}
+            self.geometries = {
+                k: v for k, v in self.geometries.items() if "fa" not in k
+            }
         elif ID in self.fascicles:
             del self.geometries[f"fa{ID}"]
             del self.fascicles[ID]

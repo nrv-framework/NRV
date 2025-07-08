@@ -22,7 +22,6 @@ internally.
    :doc:`Scientific details</scientific>`, :doc:`Simulables users guide</usersguide/simulables>`
 """
 
-
 from ._axons import axon
 from ._axon_population import axon_population
 from ._unmyelinated import unmyelinated

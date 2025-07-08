@@ -237,7 +237,9 @@ class electrode(NRV_class):
             self.z += z
         self.clear_footprint()
 
-    def rotate(self, angle:float, center:tuple[float, float]=(0,0),degree:bool=False):
+    def rotate(
+        self, angle: float, center: tuple[float, float] = (0, 0), degree: bool = False
+    ):
         """
         rotate electrode around x-axis
 
@@ -250,7 +252,9 @@ class electrode(NRV_class):
         degree : bool, optional
             if True `angle` is in degree, if False in radian, by default False
         """
-        self.y, self.z = rotate_2D(point=(self.y, self.z), angle=angle, degree=degree, center=center)
+        self.y, self.z = rotate_2D(
+            point=(self.y, self.z), angle=angle, degree=degree, center=center
+        )
 
     @abstractmethod
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:

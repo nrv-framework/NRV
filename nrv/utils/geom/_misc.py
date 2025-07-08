@@ -1,4 +1,3 @@
-
 import numpy as np
 
 from ._cshape import CShape
@@ -11,10 +10,10 @@ def create_cshape(
     center: tuple[float, float] = (0, 0),
     radius: float | tuple[float, float] = 10,
     rot: None | float = None,
-    degree:bool = False,
+    degree: bool = False,
     diameter: None | float | tuple[float, float] = None,
-    vertices: None|np.ndarray = None
-)->CShape:
+    vertices: None | np.ndarray = None,
+) -> CShape:
     """
     generate a CShape from parameters
 
@@ -38,7 +37,7 @@ def create_cshape(
     if vertices is not None:
         return Polygon(vertices=vertices)
     if isinstance(diameter, tuple):
-        radius = tuple([_d/2 for _d in diameter])
+        radius = tuple([_d / 2 for _d in diameter])
     elif diameter is not None:
         radius = diameter / 2
 
@@ -48,31 +47,37 @@ def create_cshape(
         return Circle(center=center, radius=radius)
 
 
-def get_cshape_bbox(shape:CShape, looped_end:bool=False):
+def get_cshape_bbox(shape: CShape, looped_end: bool = False):
     y_bbox = (
-        shape.center[0]-shape.bbox_size[0]/2,
-        shape.center[0]+shape.bbox_size[0]/2,
+        shape.center[0] - shape.bbox_size[0] / 2,
+        shape.center[0] + shape.bbox_size[0] / 2,
     )
     z_bbox = (
-        shape.center[1]-shape.bbox_size[1]/2,
-        shape.center[1]+shape.bbox_size[1]/2,
+        shape.center[1] - shape.bbox_size[1] / 2,
+        shape.center[1] + shape.bbox_size[1] / 2,
     )
 
-    bbox = np.array([
-        (y_bbox[0], z_bbox[0]),
-        (y_bbox[1], z_bbox[0]),
-        (y_bbox[1], z_bbox[1]),
-        (y_bbox[0], z_bbox[1]),
-    ])
-    if looped_end:
-        bbox = np.vstack((
-            bbox,
+    bbox = np.array(
+        [
             (y_bbox[0], z_bbox[0]),
-        ))
+            (y_bbox[1], z_bbox[0]),
+            (y_bbox[1], z_bbox[1]),
+            (y_bbox[0], z_bbox[1]),
+        ]
+    )
+    if looped_end:
+        bbox = np.vstack(
+            (
+                bbox,
+                (y_bbox[0], z_bbox[0]),
+            )
+        )
     return bbox
 
 
-def circle_overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.ndarray, delta:float=0)->np.ndarray[bool]:
+def circle_overlap_checker(
+    c: np.ndarray, r: float, c_comp: np.ndarray, r_comp: np.ndarray, delta: float = 0
+) -> np.ndarray[bool]:
     """
     Check if a cicle of center ``c`` and radius ``r`` overlap with a list of circles of center ``c_comp`` and radius ``r_comp``
 
@@ -93,10 +98,16 @@ def circle_overlap_checker(c:np.ndarray, r:float, c_comp:np.ndarray, r_comp:np.n
     -------
     np.ndarray[bool]
     """
-    d = np.sqrt(np.sum((c_comp - c)**2, axis=-1))
+    d = np.sqrt(np.sum((c_comp - c) ** 2, axis=-1))
     return d < r_comp + r + delta
 
-def cshape_overlap_checker(s:CShape, s_comp:CShape|list[CShape], n_trace:int=1000, on_trace:bool=False)->bool|list[bool]:
+
+def cshape_overlap_checker(
+    s: CShape,
+    s_comp: CShape | list[CShape],
+    n_trace: int = 1000,
+    on_trace: bool = False,
+) -> bool | list[bool]:
     """
     Check if a `CShape` overlape with another or a list of them.
 

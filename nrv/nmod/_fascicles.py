@@ -9,6 +9,7 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 from typing import Literal, Callable
 import numpy as np
+
 # import multiprocessing as mp
 from ..backend._NRV_Mproc import get_pool
 from rich import progress
@@ -52,7 +53,6 @@ deprecated_builtin_postproc_functions = {
     "is_excited": "is_recruited",
     "save_gmem": "sample_g_mem",
 }
-
 
 
 #####################
@@ -189,24 +189,26 @@ class fascicle(NRV_simulable):
         #:str: path where the simulation results should be saved
         self.save_path: str = ""
         #:str: value: False: verbosity mainly for pbars. Tests more comment
-        self.verbose:bool = False
-        self.return_parameters_only:bool = False
-        self.loaded_footprints:bool = False
-        self.save_results:bool = False
+        self.verbose: bool = False
+        self.return_parameters_only: bool = False
+        self.loaded_footprints: bool = False
+        self.save_results: bool = False
         self.result_folder_name: str = ""
 
-        self.postproc_label:str = "default"
-        self.postproc_function:Callable = None
-        self.postproc_script:Callable|str = None
-        self.postproc_kwargs:dict = {}
+        self.postproc_label: str = "default"
+        self.postproc_function: Callable = None
+        self.postproc_script: Callable | str = None
+        self.postproc_kwargs: dict = {}
 
-        self.config_filename:str = ""
-        self.ID:int = ID
-        self.n_proc:None|int = None
+        self.config_filename: str = ""
+        self.ID: int = ID
+        self.n_proc: None | int = None
 
-        self.L:float|None = None
+        self.L: float | None = None
         # add an empty axon population
-        self.axons:axon_population = axon_population(geometry=create_cshape(diameter=diameter))
+        self.axons: axon_population = axon_population(
+            geometry=create_cshape(diameter=diameter)
+        )
 
         # self.D = diameter
         # # geometric properties
@@ -215,7 +217,6 @@ class fascicle(NRV_simulable):
 
         # Update parameters with kwargs
         self.set_parameters(**kwargs)
-
 
         # Axons objects default parameters
         self.unmyelinated_param = {
@@ -250,11 +251,11 @@ class fascicle(NRV_simulable):
 
         self.set_axons_parameters(**kwargs)
 
-        self.sim_list:list[int] = []
+        self.sim_list: list[int] = []
         self.sim_mask = []
 
         # extra-cellular stimulation
-        self.extra_stim:extracellular_context = None
+        self.extra_stim: extracellular_context = None
         self.footprints = {}
         self.is_footprinted = False
         # intra-cellular stimulation
@@ -266,7 +267,7 @@ class fascicle(NRV_simulable):
         self.intra_stim_ON = []
         ## recording mechanism
         self.record = False
-        self.recorder:None|recorder = None
+        self.recorder: None | recorder = None
         # Simulation status
         self.is_simulated = False
 
@@ -334,9 +335,9 @@ class fascicle(NRV_simulable):
     def load(
         self,
         data,
-        extracel_context:bool=False,
-        intracel_context:bool=False,
-        rec_context:bool=False,
+        extracel_context: bool = False,
+        intracel_context: bool = False,
+        rec_context: bool = False,
         blacklist=[],
     ):
         """
@@ -386,42 +387,44 @@ class fascicle(NRV_simulable):
         super().load(data=key_dic, blacklist=bl)
         self.__check_deprecation(key_dic=key_dic)
 
-
-    def __check_deprecation(self, key_dic:dict):
+    def __check_deprecation(self, key_dic: dict):
         d_status = False
         if "unmyelinated_param" not in key_dic:
-            rise_warning("Deprecated fascicle file, does not contains unmyelinated_param requiered since v0.8.0")
+            rise_warning(
+                "Deprecated fascicle file, does not contains unmyelinated_param requiered since v0.8.0"
+            )
             self.set_axons_parameters(key_dic)
             d_status = True
 
         if "axons" not in key_dic:
-            rise_warning("Deprecated fascicle file, does not contains axon_populaiton requiered since v1.2.2")
+            rise_warning(
+                "Deprecated fascicle file, does not contains axon_populaiton requiered since v1.2.2"
+            )
             self.axons.generate_from_deprected_fascicle(key_dic)
             d_status = True
 
         if d_status:
-            rise_warning("Deprecated fascicle file: consider updating using nrv.ui.update_fascicle_file")
-
-
+            rise_warning(
+                "Deprecated fascicle file: consider updating using nrv.ui.update_fascicle_file"
+            )
 
     ## Fascicle property method
     @property
-    def n_ax(self)->int:
+    def n_ax(self) -> int:
         """
         Number of axons in the fascicle
         """
         return len(self.axons.get_sub_population(mask_labels=self.sim_mask))
 
-
     @property
-    def geom(self)->CShape:
+    def geom(self) -> CShape:
         """
         Fascicle geometry
         """
         return self.axons.geom
 
     @property
-    def center(self)->tuple[float,float]:
+    def center(self) -> tuple[float, float]:
         """
         (y,z) position of the fascicle center
 
@@ -432,35 +435,35 @@ class fascicle(NRV_simulable):
         return self.geom.center
 
     @property
-    def radius(self)->float|tuple[float,float]:
+    def radius(self) -> float | tuple[float, float]:
         """
         radius of the fascicle
 
         Returns
         -------
         float | tuple[float,float]
-            `float` for circular fascicles 
+            `float` for circular fascicles
             `tuple[float,float]` for elliptic fascicles
         """
         return self.geom.radius
 
     @property
-    def d(self)->float:
+    def d(self) -> float:
         """
         diameter of the fascicle
 
         Returns
         -------
         float | tuple[float,float]
-            `float` for circular fascicles 
+            `float` for circular fascicles
             `tuple[float,float]` for elliptic fascicles
         """
         if isinstance(self.radius, tuple):
-            return tuple([2*r for r in self.radius])
-        return 2*self.radius
+            return tuple([2 * r for r in self.radius])
+        return 2 * self.radius
 
     @property
-    def y(self)->float:
+    def y(self) -> float:
         """
         y position of the center of the fascicle
 
@@ -470,9 +473,8 @@ class fascicle(NRV_simulable):
         """
         return self.center[0]
 
-
     @property
-    def z(self)->float:
+    def z(self) -> float:
         """
         z position of the center of the fascicle
 
@@ -504,9 +506,7 @@ class fascicle(NRV_simulable):
         """
         if self.extra_stim is not None or self.N_intra > 0:
             if self.loaded_footprints:
-                rise_warning(
-                    "Modifying length of a fascicle delete the su"
-                )
+                rise_warning("Modifying length of a fascicle delete the su")
                 self.loaded_footprints = False
                 self.footprints = {}
                 self.is_footprinted = False
@@ -517,11 +517,11 @@ class fascicle(NRV_simulable):
     def set_geometry(self, **kwgs):
         """
         Set the fascicle geometry
-    
+
         Note
         ----
         alias for :meth:`self.axons.set_geometry<axon_population.set_geometry>`
-        
+
         """
         self.axons.set_geometry(**kwgs)
 
@@ -537,7 +537,7 @@ class fascicle(NRV_simulable):
         self,
         data: tuple[np.ndarray] | np.ndarray | str = None,
         n_ax: int = 100,
-        FVF: None|float = None,
+        FVF: None | float = None,
         percent_unmyel: float = 0.7,
         M_stat: str = "Schellens_1",
         U_stat: str = "Ochoa_U",
@@ -548,9 +548,9 @@ class fascicle(NRV_simulable):
         delta_in: float | None = None,
         n_iter: int = None,
         fit_to_size: bool = False,
-        with_node_shift:bool = True,
-        overwrite:bool=False,
-        fname:str=None,
+        with_node_shift: bool = True,
+        overwrite: bool = False,
+        fname: str = None,
     ):
         """
         Fill a geometricaly defined contour with axons.
@@ -599,7 +599,7 @@ class fascicle(NRV_simulable):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-        
+
         .. math::
 
             FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
@@ -630,7 +630,14 @@ class fascicle(NRV_simulable):
         )
 
     ## Move methods
-    def translate(self, y=0, z=0, with_geom:bool=True, with_pop:bool=True, with_context:bool=True):
+    def translate(
+        self,
+        y=0,
+        z=0,
+        with_geom: bool = True,
+        with_pop: bool = True,
+        with_context: bool = True,
+    ):
         """
         Translate the population and/or its geometry and/or stim and rec context.
 
@@ -654,8 +661,14 @@ class fascicle(NRV_simulable):
             if self.recorder is not None:
                 self.recorder.translate(y=y, z=z)
 
-
-    def rotate(self, angle:float, with_geom:bool=True, with_pop:bool=True, with_context:bool=True, degree:bool=False):
+    def rotate(
+        self,
+        angle: float,
+        with_geom: bool = True,
+        with_pop: bool = True,
+        with_context: bool = True,
+        degree: bool = False,
+    ):
         """
         Rotate the population and/or its geometry and/or stim and rec context.
 
@@ -676,7 +689,6 @@ class fascicle(NRV_simulable):
                 self.extra_stim.rotate(angle, self.center)
             if self.recorder is not None:
                 self.recorder.rotate(angle, self.center)
-
 
     ## Axons related method
     def set_axons_parameters(
@@ -762,9 +774,10 @@ class fascicle(NRV_simulable):
             )
             self.myelinated_param.pop("node_shift")
         return axon
-    
 
-    def add_sim_mask(self, data:np.ndarray|str, label:None|str=None, overwrite:bool=True):
+    def add_sim_mask(
+        self, data: np.ndarray | str, label: None | str = None, overwrite: bool = True
+    ):
         """
         Add a mask on the axon population
 
@@ -782,11 +795,16 @@ class fascicle(NRV_simulable):
         _lab, mask = self.axons.add_mask(data=data, label=label, overwrite=overwrite)
         self.sim_mask.append(_lab)
 
-    def remove_sim_masks(self, mask_labels:None|Iterable[str]|str=None, remove_from_pop:bool=True, keep_elec:bool=True):
+    def remove_sim_masks(
+        self,
+        mask_labels: None | Iterable[str] | str = None,
+        remove_from_pop: bool = True,
+        keep_elec: bool = True,
+    ):
         if mask_labels is None:
-            mask_labels = self.sim_mask # to keep is_placed
+            mask_labels = self.sim_mask  # to keep is_placed
         elif isinstance(mask_labels, str):
-                mask_labels = [mask_labels]
+            mask_labels = [mask_labels]
         _rmved = []
         for _lab in mask_labels:
             if _lab in self.sim_mask and (not "_elec" in _lab or not keep_elec):
@@ -798,13 +816,15 @@ class fascicle(NRV_simulable):
 
     def __set_elec_mask(self):
         """
-        Set the mask corresponding to 
+        Set the mask corresponding to
         """
         mask_to_keep = []
         if self.extra_stim is not None:
             for elec in self.extra_stim.electrodes:
                 mask_to_keep += [f"_elec{elec.ID}"]
-        mask_to_rmv = [ml for ml in self.sim_mask if ml not in mask_to_keep and "_elec" in ml]
+        mask_to_rmv = [
+            ml for ml in self.sim_mask if ml not in mask_to_keep and "_elec" in ml
+        ]
         if len(mask_to_rmv):
             self.remove_sim_masks(
                 remove_from_pop=False,
@@ -818,7 +838,7 @@ class fascicle(NRV_simulable):
         """
         _mask = self.axons["types"] == 1
         _lab = "mye_only"
-        self.axons.add_mask(mask=_mask ,label=_lab)
+        self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
 
     def remove_myelinated_axons(self):
@@ -827,7 +847,7 @@ class fascicle(NRV_simulable):
         """
         _mask = self.axons["types"] == 0
         _lab = "unm_only"
-        self.axons.add_mask(mask=_mask ,label=_lab)
+        self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
 
     def remove_axons_size_threshold(self, d, min=True):
@@ -837,13 +857,12 @@ class fascicle(NRV_simulable):
         if min:
             mask = self.axons["diameters"] >= d
             _lab = f"d_over_{d}"
-            
+
         else:
             mask = self.axons["diameters"] <= d
             _lab = f"d_under_{d}"
-        self.axons.add_mask(mask=mask ,label=_lab)
+        self.axons.add_mask(mask=mask, label=_lab)
         self.sim_mask.append(_lab)
-
 
     ## Representation methods
     def plot(
@@ -871,10 +890,16 @@ class fascicle(NRV_simulable):
         num             : bool
             if True, the index of each axon is displayed on top of the circle
         """
-        self.axons.plot(axes, mask_labels=self.sim_mask,contour_color=contour_color, myel_color=myel_color, unmyel_color=unmyel_color, num=num)
+        self.axons.plot(
+            axes,
+            mask_labels=self.sim_mask,
+            contour_color=contour_color,
+            myel_color=myel_color,
+            unmyel_color=unmyel_color,
+            num=num,
+        )
         if self.extra_stim is not None:
-            self.extra_stim.plot(axes=axes, color=elec_color, 
-            nerve_d=self.radius)
+            self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.radius)
 
     def plot_x(self, axes, myel_color="b", unmyel_color="r", Myelinated_model="MRG"):
         """
@@ -961,7 +986,7 @@ class fascicle(NRV_simulable):
             self.recorder = None
         self.is_simulated = False
 
-    def attach_extracellular_stimulation(self, stimulation:extracellular_context):
+    def attach_extracellular_stimulation(self, stimulation: extracellular_context):
         """
         attach a extracellular context of simulation for an axon.
 
@@ -975,7 +1000,7 @@ class fascicle(NRV_simulable):
         for electrode in stimulation.electrodes:
             self.remove_axons_electrode_overlap(electrode)
 
-    def remove_axons_electrode_overlap(self, electrode:electrode):
+    def remove_axons_electrode_overlap(self, electrode: electrode):
         """
         Remove the axons that could overlap an electrode
 
@@ -990,11 +1015,15 @@ class fascicle(NRV_simulable):
             _y_z_r_elec[0] = electrode.y
             _y_z_r_elec[1] = electrode.z
             if is_LIFE_electrode(electrode):
-                _y_z_r_elec[2] = electrode.D/2
-            e_mask = ~circle_overlap_checker(c=_y_z_r_elec[:2], r=_y_z_r_elec[2], c_comp=self.axons[["y", "z"]].to_numpy(), r_comp=self.axons["diameters"].to_numpy()/2)
+                _y_z_r_elec[2] = electrode.D / 2
+            e_mask = ~circle_overlap_checker(
+                c=_y_z_r_elec[:2],
+                r=_y_z_r_elec[2],
+                c_comp=self.axons[["y", "z"]].to_numpy(),
+                r_comp=self.axons["diameters"].to_numpy() / 2,
+            )
             e_mlabel = f"_elec{electrode.ID}"
             self.add_sim_mask(e_mask, label=e_mlabel)
-
 
     def change_stimulus_from_electrode(self, ID_elec, stimulus):
         """
@@ -1012,7 +1041,16 @@ class fascicle(NRV_simulable):
         else:
             rise_warning("Cannot be changed: no extrastim in the fascicle")
 
-    def insert_I_Clamp(self, position:float, t_start:float, duration:float, amplitude:float, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], ax_list=None):
+    def insert_I_Clamp(
+        self,
+        position: float,
+        t_start: float,
+        duration: float,
+        amplitude: float,
+        expr: str | None = None,
+        mask_labels: None | Iterable[str] | str = [],
+        ax_list=None,
+    ):
         """
         Insert a IC clamp stimulation
 
@@ -1038,7 +1076,9 @@ class fascicle(NRV_simulable):
         if ax_list is not None:
             self.intra_stim_ON.append(ax_list)
         else:
-            self.intra_stim_ON.append(self.axons.get_mask(expr=expr, mask_labels=mask_labels, otype="list"))
+            self.intra_stim_ON.append(
+                self.axons.get_mask(expr=expr, mask_labels=mask_labels, otype="list")
+            )
         self.N_intra += 1
 
     def clear_I_clamp(self):
@@ -1075,7 +1115,11 @@ class fascicle(NRV_simulable):
     ## SIMULATION HANDLING
     def __update_sim_list(self):
         self.__set_elec_mask()
-        self.sim_list = self.axons.get_sub_population(mask_labels=self.sim_mask).index.astype(int).to_list()
+        self.sim_list = (
+            self.axons.get_sub_population(mask_labels=self.sim_mask)
+            .index.astype(int)
+            .to_list()
+        )
 
     @property
     def __footprint_to_compute(self):
@@ -1182,7 +1226,7 @@ class fascicle(NRV_simulable):
             self.postproc_function, self.postproc_kwargs
         )
 
-    def __set_pbar_label(self, n_proc:int, **kwargs):
+    def __set_pbar_label(self, n_proc: int, **kwargs):
         if "pbar_label" in kwargs:
             __label = kwargs["pbar_label"]
         else:
@@ -1263,7 +1307,11 @@ class fascicle(NRV_simulable):
         )
         # print(axon.recorder.save())
         if axon_sim["Simulation_state"] != "Successful":
-            rise_error("SimulationError: ", f"something went wrong during the simulation of axon {k}:\n", self.axons.iloc(k))
+            rise_error(
+                "SimulationError: ",
+                f"something went wrong during the simulation of axon {k}:\n",
+                self.axons.iloc(k),
+            )
         del axon
 
         axon_sim = self.postproc_function(axon_sim, **self.postproc_kwargs)
@@ -1324,7 +1372,7 @@ class fascicle(NRV_simulable):
         save_results                  : bool
             if False disable the result storage
             can only be False if return_parameters_only is False
-        
+
 
         Return
         ------
@@ -1392,7 +1440,7 @@ class fascicle(NRV_simulable):
             "[progress.percentage]{task.percentage:>3.0f}%",
             progress.TimeRemainingColumn(),
             progress.TimeElapsedColumn(),
-            disable=pbar_off
+            disable=pbar_off,
         ) as pg:
             __label = self.__set_pbar_label(_n_proc, **kwargs)
             task_id = pg.add_task(f"[cyan]{__label}:", total=self.n_ax)
@@ -1423,9 +1471,7 @@ class fascicle(NRV_simulable):
         if not self.return_parameters_only:
             fasc_sim["axons"] = load_any(fasc_sim["axons"])
             if "extra_stim" in fasc_sim:
-                fasc_sim["extra_stim"] = load_any(
-                    fasc_sim["extra_stim"]
-                )
+                fasc_sim["extra_stim"] = load_any(fasc_sim["extra_stim"])
             if self.record:
                 fasc_sim["recorder"] = load_any(fasc_sim["recorder"])
 
@@ -1435,8 +1481,6 @@ class fascicle(NRV_simulable):
         self.is_simulated = True
         return fasc_sim
 
-
-
     # ---------------------------------------------- #
     #               DEPRECATED Methods               #
     # ---------------------------------------------- #
@@ -1445,7 +1489,10 @@ class fascicle(NRV_simulable):
         """
         :meta private:
         """
-        rise_warning(DeprecationWarning, "fascicle.N property is obsolete use fascicle.n_ax instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.N property is obsolete use fascicle.n_ax instead",
+        )
         return self.n_ax
 
     @property
@@ -1453,10 +1500,11 @@ class fascicle(NRV_simulable):
         """
         Area of the fascicle
         """
-        rise_warning(DeprecationWarning, "fascicle.A property is obsolete use fascicle.geom.area instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.A property is obsolete use fascicle.geom.area instead",
+        )
         return self.geom.area
-    
-
 
     def define_circular_contour(self, D, y_c=None, z_c=None):
         """
@@ -1472,13 +1520,14 @@ class fascicle(NRV_simulable):
             z coordinate of the circular contour center, in um
         """
         rise_warning(
-            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
+            DeprecationWarning,
+            "define_circular_contour is deprecated, use define_geometry instead.",
         )
         if y_c is not None and z_c is not None:
             center = y_c, z_c
         else:
             center = None
-        self.axons.reshape_geometry(radius=D/2, center=center)
+        self.axons.reshape_geometry(radius=D / 2, center=center)
 
     def get_circular_contour(self):
         """
@@ -1494,7 +1543,8 @@ class fascicle(NRV_simulable):
             z position of the contour center, in um
         """
         rise_warning(
-            DeprecationWarning, "define_circular_contour is deprecated, use define_geometry instead."
+            DeprecationWarning,
+            "define_circular_contour is deprecated, use define_geometry instead.",
         )
         return self.axons.geom.radius, self.axons.geom.center
 
@@ -1513,11 +1563,10 @@ class fascicle(NRV_simulable):
         """
         # TODO implement a fit contour method
         rise_warning(
-            DeprecationWarning, "fit_circular_contour method usage is not recommended anymore and will be removed in future release. Nothing was done"
+            DeprecationWarning,
+            "fit_circular_contour method usage is not recommended anymore and will be removed in future release. Nothing was done",
         )
         pass_info("Define fascicle size/shape at object creation instead.")
-
-
 
     def fill_with_population(
         self,
@@ -1530,7 +1579,7 @@ class fascicle(NRV_simulable):
         delta_in: float | None = None,
         delta_trace: float = 1,
         method: Literal["default", "packing"] = "default",
-        overwrite = False,
+        overwrite=False,
         n_iter: int = 500,
     ) -> None:
         """
@@ -1557,9 +1606,14 @@ class fascicle(NRV_simulable):
         n_iter              : int
             number of interation for the packing algorithm if the y-x axon coordinates are not specified
         """
-        rise_warning(DeprecationWarning, "fascicle.fill_with_population deprecated, use fascicle.axons.place_population or fascicle.fill instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.fill_with_population deprecated, use fascicle.axons.place_population or fascicle.fill instead",
+        )
         if axons_diameter is not None and axons_type is not None:
-            self.axons.create_population(data=(axons_type, axons_diameter), overwrite=overwrite)
+            self.axons.create_population(
+                data=(axons_type, axons_diameter), overwrite=overwrite
+            )
         pos = None
         if y_axons is not None and z_axons is not None:
             pos = (y_axons, z_axons)
@@ -1574,7 +1628,6 @@ class fascicle(NRV_simulable):
             overwrite=overwrite,
         )
 
-
     def translate_axons(self, y, z):
         """
         Move axons only in a fascicle by group translation
@@ -1586,7 +1639,10 @@ class fascicle(NRV_simulable):
         z   : float
             z axis value for the translation in um
         """
-        rise_warning(DeprecationWarning, "fascicle.translate_axons is deprecated and migth be removed in future version, use fascicle.translate instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.translate_axons is deprecated and migth be removed in future version, use fascicle.translate instead",
+        )
         self.translate((y, z), with_geom=False, with_context=False)
 
     def translate_fascicle(self, y, z):
@@ -1600,9 +1656,11 @@ class fascicle(NRV_simulable):
         z   : float
             z axis value for the translation in um
         """
-        rise_warning(DeprecationWarning, "fascicle.translate_fascicle is deprecated and migth be removed in future version, use fascicle.translate instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.translate_fascicle is deprecated and migth be removed in future version, use fascicle.translate instead",
+        )
         self.translate((y, z), with_axon=False)
-
 
     def rotate_axons(self, theta, y_c=0, z_c=0):
         """
@@ -1617,7 +1675,10 @@ class fascicle(NRV_simulable):
         z_c     : float
             z axis value for the rotation center in um, by default set to 0
         """
-        rise_warning(DeprecationWarning, "fascicle.rotate_axons is deprecated and migth be removed in future version, use fascicle.rotate instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.rotate_axons is deprecated and migth be removed in future version, use fascicle.rotate instead",
+        )
         self.translate(theta, with_geom=False, with_context=False)
 
     def rotate_fascicle(self, theta, y_c=0, z_c=0):
@@ -1633,14 +1694,20 @@ class fascicle(NRV_simulable):
         z_c     : float
             z axis value for the rotation center in um, by default set to 0
         """
-        rise_warning(DeprecationWarning, "fascicle.rotate_fascicle is deprecated and migth be removed in future version, use fascicle.rotate instead")
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.rotate_fascicle is deprecated and migth be removed in future version, use fascicle.rotate instead",
+        )
         self.translate(theta)
 
     def generate_random_NoR_position(self):
         """
         Generates radom Node of Ranvier shifts to prevent from axons with the same diamters to be aligned.
         """
-        pass_info(DeprecationWarning, "fascicle.generate_random_NoR_position is depercated, use fascicle.axons.generate_random_NoR_position")
+        pass_info(
+            DeprecationWarning,
+            "fascicle.generate_random_NoR_position is depercated, use fascicle.axons.generate_random_NoR_position",
+        )
         # also generated for unmyelinated but the meaningless value won't be used
         self.axons.generate_random_NoR_position()
 
@@ -1653,7 +1720,10 @@ class fascicle(NRV_simulable):
         x    : float
             x axsis value (um) on which node are lined, by default 0
         """
-        pass_info(DeprecationWarning, "fascicle.generate_ligned_NoR_position is depercated, use fascicle.axons.generate_ligned_NoR_position")
+        pass_info(
+            DeprecationWarning,
+            "fascicle.generate_ligned_NoR_position is depercated, use fascicle.axons.generate_ligned_NoR_position",
+        )
         # also generated for unmyelinated but the meaningless value won't be used
         self.axons.generate_ligned_NoR_position(x=x)
 

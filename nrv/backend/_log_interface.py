@@ -127,7 +127,7 @@ def rise_error(*args, out=1, **kwargs):
         raise error(message)
     elif isinstance(error, Exception):
         raise error
-        
+
     sys.exit(out)
 
 

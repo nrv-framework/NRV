@@ -381,7 +381,14 @@ class MshCreator(NRV_class):
             rise_warning("Not added : add_cylinder requiere 3D mesh")
             return None
 
-    def add_from_cshape(self, shape:CShape, n_pts_trace:int=100, x:float=0, dx:float=10, res:None|float=None):
+    def add_from_cshape(
+        self,
+        shape: CShape,
+        n_pts_trace: int = 100,
+        x: float = 0,
+        dx: float = 10,
+        res: None | float = None,
+    ):
         """
         genertate a volume by extruding a :class:`....utils.geom._cshape.CShape` along
 
@@ -406,9 +413,9 @@ class MshCreator(NRV_class):
             id of the added object
         """
         if res is not None:
-            #NOTE TC - alpha is arbitrarily set to 5 see if it needs to be access
+            # NOTE TC - alpha is arbitrarily set to 5 see if it needs to be access
             alpha = 5
-            n_pts_trace = alpha * round(shape.perimeter/res)
+            n_pts_trace = alpha * round(shape.perimeter / res)
         pt_tags = []
         y_trace, z_trace = shape.get_trace(n_theta=n_pts_trace)
 
@@ -778,7 +785,6 @@ class MshCreator(NRV_class):
         fname = rmv_ext(fname)
         gmsh.write(fname + ".brep")
         self.file = fname
-
 
     def save(self, fname, generate=True):
         """

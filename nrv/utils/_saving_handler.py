@@ -19,10 +19,12 @@ from ..backend._log_interface import rise_warning
 # --------- #
 
 
-
 def load_any_fascicle(
-    data:str|dict, extracel_context:bool=False, intracel_context:bool=False, rec_context:bool=False
-)->fascicle:
+    data: str | dict,
+    extracel_context: bool = False,
+    intracel_context: bool = False,
+    rec_context: bool = False,
+) -> fascicle:
     """
     generate any kind of fascicle from a dictionary or a json file
 
@@ -55,7 +57,7 @@ def load_any_fascicle(
 
 def load_any_axon(
     data, extracel_context=False, intracel_context=False, rec_context=False
-)->axon:
+) -> axon:
     """
     generate any kind of axon from a dictionary or a json file
 
@@ -89,4 +91,3 @@ def load_any_axon(
         return ax, ax.recorder
     else:
         return ax
-

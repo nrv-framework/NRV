@@ -27,10 +27,10 @@ from ..backend._inouts import check_function_kwargs
 from ..backend._log_interface import pass_info, rise_warning, rise_error
 from ..utils.geom import (
     create_cshape,
-    Ellipse, # typing
-    Circle, # typing
+    Ellipse,  # typing
+    Circle,  # typing
 )
-from ..utils.geom._cshape import CShape # typing
+from ..utils.geom._cshape import CShape  # typing
 from ..utils.geom._popshape import PopShape
 from ..utils._misc import get_MRG_parameters
 
@@ -48,7 +48,6 @@ class axon_population(PopShape):
 
         if len(gen_kwg):
             self.generate(**gen_kwg)
-        
 
     @property
     def axon_pop(self):
@@ -73,7 +72,7 @@ class axon_population(PopShape):
         discard_placement: bool = False,
         data: tuple[np.ndarray] | np.ndarray | str = None,
         n_ax: int = None,
-        FVF: None|float = None,
+        FVF: None | float = None,
         percent_unmyel: float = 0.7,
         M_stat: str = "Schellens_1",
         U_stat: str = "Ochoa_U",
@@ -84,7 +83,7 @@ class axon_population(PopShape):
         delta_in: float | None = None,
         n_iter: int = None,
         fit_to_size: bool = False,
-        with_node_shift:bool = True,
+        with_node_shift: bool = True,
         overwrite=False,
     ):
         """
@@ -139,7 +138,7 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-        
+
         .. math::
 
             FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
@@ -156,7 +155,7 @@ class axon_population(PopShape):
             radius=radius,
             rot=rot,
             diameter=diameter,
-            discard_placement=discard_placement
+            discard_placement=discard_placement,
         )
 
         if n_ax is not None or FVF is not None:
@@ -178,12 +177,11 @@ class axon_population(PopShape):
                 overwrite=overwrite,
             )
 
-
     def fill_geometry(
         self,
         data: tuple[np.ndarray] | np.ndarray | str = None,
         n_ax: int = 100,
-        FVF: None|float = None,
+        FVF: None | float = None,
         percent_unmyel: float = 0.7,
         M_stat: str = "Schellens_1",
         U_stat: str = "Ochoa_U",
@@ -194,9 +192,9 @@ class axon_population(PopShape):
         delta_in: float | None = None,
         n_iter: int = None,
         fit_to_size: bool = False,
-        with_node_shift:bool = True,
-        overwrite:bool=False,
-        fname:str=None,
+        with_node_shift: bool = True,
+        overwrite: bool = False,
+        fname: str = None,
     ):
         """
         Fill a geometricaly defined contour with axons
@@ -240,7 +238,7 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-        
+
         .. math::
 
             FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
@@ -263,10 +261,10 @@ class axon_population(PopShape):
                 FVF=FVF,
                 M_stat=M_stat,
                 U_stat=U_stat,
-                overwrite=overwrite
+                overwrite=overwrite,
             )
 
-            # Need for the case of data.shape is (4,n) 
+            # Need for the case of data.shape is (4,n)
             # to avoid calling place twice
             if not self.has_placed_pop or overwrite:
                 self.place_population(
@@ -283,10 +281,10 @@ class axon_population(PopShape):
             if fname is not None:
                 save_axon_population(fname, *self._pop.to_numpy())
 
-    def generate_from_deprected_fascicle(self, key_dic:dict):
+    def generate_from_deprected_fascicle(self, key_dic: dict):
         """
-        Generate the population from the data saved in a deprecated fascicle file. 
-        
+        Generate the population from the data saved in a deprecated fascicle file.
+
         Warning
         -------
             This function is mostly for internal use for retrocompatibility. If deprecated save file are found, it is adviced to uptated them using :func:`update_fascicle_file`.
@@ -297,16 +295,35 @@ class axon_population(PopShape):
             Dictionary containing the loaded fascicle
         """
         if len({"y_grav_center", "z_grav_center", "D"} - key_dic.keys()) == 0:
-            self.set_geometry(center=(key_dic["y_grav_center"], key_dic["z_grav_center"]), diameter=key_dic["D"])
-        if len({"axons_type", "axons_diameter", "axons_y", "axons_z", "NoR_relative_position"} - key_dic.keys()) == 0:
+            self.set_geometry(
+                center=(key_dic["y_grav_center"], key_dic["z_grav_center"]),
+                diameter=key_dic["D"],
+            )
+        if (
+            len(
+                {
+                    "axons_type",
+                    "axons_diameter",
+                    "axons_y",
+                    "axons_z",
+                    "NoR_relative_position",
+                }
+                - key_dic.keys()
+            )
+            == 0
+        ):
             if len(key_dic["axons_diameter"]) > 0:
-                self.create_population(data=(key_dic["axons_type"],key_dic["axons_diameter"]))
+                self.create_population(
+                    data=(key_dic["axons_type"], key_dic["axons_diameter"])
+                )
             if len(key_dic["axons_y"]) > 0:
-                self.place_population(pos=(key_dic["axons_y"],key_dic["axons_z"]))
+                self.place_population(pos=(key_dic["axons_y"], key_dic["axons_z"]))
             if len(key_dic["NoR_relative_position"]) == len(self):
                 self.generate_NoR_position_from_data(key_dic["NoR_relative_position"])
             elif self.has_pop:
-                rise_warning("Number of NoR positions in the file does not match with the population, regenerating")
+                rise_warning(
+                    "Number of NoR positions in the file does not match with the population, regenerating"
+                )
                 self.generate_random_NoR_position()
 
     # ---------------- #
@@ -347,10 +364,16 @@ class axon_population(PopShape):
                 if isinstance(self.geom, Ellipse):
                     rot = rot or self.geom.rot
             if center is not None and radius is not None or diameter is not None:
-                self.geom = create_cshape(center=center, radius=radius, rot=rot, degree=degree, diameter=diameter)
+                self.geom = create_cshape(
+                    center=center,
+                    radius=radius,
+                    rot=rot,
+                    degree=degree,
+                    diameter=diameter,
+                )
             else:
                 raise ValueError(
-                "Either the geometry or its property must be use in argument"
+                    "Either the geometry or its property must be use in argument"
                 )
 
         # Find points outside the new geometry
@@ -391,11 +414,11 @@ class axon_population(PopShape):
         self,
         data: tuple[np.ndarray] | np.ndarray | str = None,
         n_ax: int = 100,
-        FVF: None|float = None,
+        FVF: None | float = None,
         percent_unmyel: float = 0.7,
         M_stat: str = "Schellens_1",
         U_stat: str = "Ochoa_U",
-        overwrite = False,
+        overwrite=False,
     ):
         """
         Creat an placed axon population
@@ -422,7 +445,7 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-        
+
         .. math::
 
             FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
@@ -438,13 +461,17 @@ class axon_population(PopShape):
                 self.create_population_from_data(data=data)
             else:
                 self.create_population_from_stat(
-                    n_ax=n_ax, FVF=FVF, percent_unmyel=percent_unmyel, M_stat=M_stat, U_stat=U_stat,
+                    n_ax=n_ax,
+                    FVF=FVF,
+                    percent_unmyel=percent_unmyel,
+                    M_stat=M_stat,
+                    U_stat=U_stat,
                 )
 
     def create_population_from_stat(
         self,
         n_ax: int,
-        FVF: None|float = None,
+        FVF: None | float = None,
         percent_unmyel: float = 0.7,
         M_stat: str = "Schellens_1",
         U_stat: str = "Ochoa_U",
@@ -468,7 +495,7 @@ class axon_population(PopShape):
         Note
         ----
         When `FVF` is set, an approximated value of `n_ax` is calculated from:
-        
+
         .. math::
 
             FVF = \\frac{n_{axons}*E_{d}}{A_{tot}}
@@ -483,8 +510,8 @@ class axon_population(PopShape):
             e_d = percent_unmyel * get_stat_expected(U_stat) + (
                 1 - percent_unmyel
             ) * get_stat_expected(M_stat)
-            e_A = np.pi * (.5*e_d)**2 
-            n_ax = round(FVF * self.geom.area / (2*e_A)) 
+            e_A = np.pi * (0.5 * e_d) ** 2
+            n_ax = round(FVF * self.geom.area / (2 * e_A))
             #!BUG in stats `2*` not supposed to be their
             pass_info(f"A {n_ax} axons population will be generated")
 
@@ -538,7 +565,7 @@ class axon_population(PopShape):
             if len(set(_keys) - _dkeys) > 0:
                 rise_warning(
                     f"Wrong data format to create_population.",
-                    f"If data is dict or DataFrames it must at least contains the keys: {_keys}"
+                    f"If data is dict or DataFrames it must at least contains the keys: {_keys}",
                 )
             else:
                 data = [data[k] for k in _keys]
@@ -553,7 +580,8 @@ class axon_population(PopShape):
                 pass_info("Axon placed population generated from data")
             elif n_col == 5:
                 self._pop = DataFrame(
-                    data=zip(*data), columns=["types", "diameters", "y", "z", "node_shift"]
+                    data=zip(*data),
+                    columns=["types", "diameters", "y", "z", "node_shift"],
                 )
                 self.check_placement
                 pass_info("Axon placed population generated from data")
@@ -573,7 +601,7 @@ class axon_population(PopShape):
         delta_in: float | None = None,
         n_iter: int = None,
         fit_to_size: bool = False,
-        with_node_shift:bool = True,
+        with_node_shift: bool = True,
     ):
         """
         Place the population.
@@ -716,7 +744,6 @@ class axon_population(PopShape):
         _ok_trace = self.geom.is_inside((self._pop["y"], self._pop["z"]))
         self._pop["is_placed"] = _ok_in & _ok_trace
 
-
     def get_ppop_info(self, verbose=False):
         y, z, r = (
             self.axon_pop["y"].to_numpy(),
@@ -739,9 +766,7 @@ class axon_population(PopShape):
         Generates radom Node of Ranvier shifts to prevent from axons with the same diamters to be aligned.
         """
         # also generated for unmyelinated but the meaningless value won't be used
-        self._pop["node_shift"] = np.random.uniform(
-            low=0.0, high=1.0, size=self.n_ax
-        )
+        self._pop["node_shift"] = np.random.uniform(low=0.0, high=1.0, size=self.n_ax)
         self._pop["node_shift"] *= self._pop["types"]
 
     def generate_ligned_NoR_position(self, x=0):
@@ -759,7 +784,7 @@ class axon_population(PopShape):
 
         self._pop["node_shift"] *= self._pop["types"]
 
-    def generate_NoR_position_from_data(self, node_shift:np.ndarray):
+    def generate_NoR_position_from_data(self, node_shift: np.ndarray):
         """
         Generates Node of Ranvier shifts to aligned a node of each axon to x postition.
 
@@ -771,11 +796,20 @@ class axon_population(PopShape):
         self._pop["node_shift"] = node_shift
         self._pop["node_shift"] *= self._pop["types"]
 
-
     # ------- #
     # Plotter #
     # ------- #
-    def plot(self, axes:plt.Axes, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], contour_color:str="k", myel_color:str="b", unmyel_color:str="r", num:bool=False,**kwgs):
+    def plot(
+        self,
+        axes: plt.Axes,
+        expr: str | None = None,
+        mask_labels: None | Iterable[str] | str = [],
+        contour_color: str = "k",
+        myel_color: str = "b",
+        unmyel_color: str = "r",
+        num: bool = False,
+        **kwgs,
+    ):
         if self.has_geom:
             kwgs["color"] = contour_color
             axes.plot(*self.geom.get_trace(), **kwgs)
@@ -794,9 +828,17 @@ class axon_population(PopShape):
                 axes.add_artist(c)
                 if num:
                     axes.text(self._pop["y"][i_ax], self._pop["z"][i_ax], str(i_ax))
-        axes.set_aspect('equal', adjustable='box')
+        axes.set_aspect("equal", adjustable="box")
 
-    def hist(self, axes:plt.Axes, expr:str|None=None, mask_labels:None|Iterable[str]|str=[], myel_color:str="b", unmyel_color:str="r", **kwgs):
+    def hist(
+        self,
+        axes: plt.Axes,
+        expr: str | None = None,
+        mask_labels: None | Iterable[str] | str = [],
+        myel_color: str = "b",
+        unmyel_color: str = "r",
+        **kwgs,
+    ):
         """
         Plot an histogram of axon diamters in the population
 
@@ -821,4 +863,3 @@ class axon_population(PopShape):
             m_diam = sub_pop.query("types==1")["diameters"]
             kwgs["color"] = myel_color
             axes.hist(m_diam, **kwgs)
-
