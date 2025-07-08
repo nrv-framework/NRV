@@ -1000,13 +1000,13 @@
    "name": "pi"
   }
  ],
- "nrv.utils.geom.CShape": [
+ "nrv.utils.geom.CShape.get_point_inside": [
   {
    "is_class": false,
    "is_explicit": true,
-   "module": "nrv.utils.geom",
-   "module_short": "nrv.utils.geom",
-   "name": "CShape"
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "get_point_inside"
   }
  ],
  "nrv.utils.geom.CShape.rotate": [

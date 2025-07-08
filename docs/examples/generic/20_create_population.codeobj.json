@@ -558,6 +558,24 @@
    "name": "vstack"
   }
  ],
+ "numpy.ndarray": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "pandas.DataFrame": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
  "plt.show": [
   {
    "is_class": false,

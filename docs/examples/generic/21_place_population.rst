@@ -18,47 +18,28 @@
 .. _sphx_glr_examples_generic_21_place_population.py:
 
 
-Create an unplaced population
-=============================
+Axon Population Placement
+=========================
 
-Simple example showing how to create builtin 2D shapes with nrv
+Simple example to help using :class:`~nrv.nmod.axon_population` placement methods.
+
+This example shows how to:
+    - Create axon populations for different shapes (circle, ellipse, polygon)
+    - Place axons using both direct data and the placer
+    - Use and highlight various placer arguments (delta, delta_trace, delta_in, method, fit_to_size, n_iter)
 
 .. seealso::
     :doc:`Users' guide <../../usersguide/populations>`
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-19
+.. GENERATED FROM PYTHON SOURCE LINES 15-23
 
 .. code-block:: Python
 
-
-    from nrv.utils import geom
-    from nrv.nmod._axon_population import axon_population
 
     import matplotlib.pyplot as plt
     import numpy as np
-    from pandas import DataFrame
-
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 20-22
-
-Generate population from data
------------------------------
-
-.. GENERATED FROM PYTHON SOURCE LINES 22-29
-
-.. code-block:: Python
-
-    n_ax = 10
-    # Randomly generate axon types and diameters
-    ax_type = np.random.randint(0,2,n_ax)
-    ax_diameters = np.random.random(n_ax)*20
+    from nrv.utils import geom
+    from nrv.nmod._axon_population import axon_population
 
 
 
@@ -69,19 +50,28 @@ Generate population from data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-32
+.. GENERATED FROM PYTHON SOURCE LINES 24-29
 
-When `data` are store in a tupple
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Quick placement
+---------------
+.. note::
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-37
+  :meth:`~nrv.axon_population.fill_geometry` both create and place the geometry
+
+.. GENERATED FROM PYTHON SOURCE LINES 29-40
 
 .. code-block:: Python
 
-    pop_tup = axon_population()
-    pop_tup.create_population_from_data((ax_type, ax_diameters))
-    pop_tup.axon_pop
 
+    center = (0, 0)
+    radius = 20
+    n_ax=10
+
+    pop_circle = axon_population()
+    pop_circle.set_geometry(center=center, radius=radius)
+
+    pop_circle.fill_geometry(n_ax=n_ax)
+    pop_circle.axon_pop
 
 
 
@@ -91,7 +81,8 @@ When `data` are store in a tupple
 
  .. code-block:: none
 
-    NRV INFO: Axon population generated from data
+    NRV INFO: On 10 axons to generate, there are 3 Myelinated and 7 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
 
 .. raw:: html
@@ -117,58 +108,102 @@ When `data` are store in a tupple
           <th></th>
           <th>types</th>
           <th>diameters</th>
+          <th>y</th>
+          <th>z</th>
+          <th>is_placed</th>
+          <th>node_shift</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <th>0</th>
-          <td>1</td>
-          <td>17.646208</td>
+          <td>0.0</td>
+          <td>0.960120</td>
+          <td>-11.719259</td>
+          <td>1.746613</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0</td>
-          <td>18.883833</td>
+          <td>0.0</td>
+          <td>2.209619</td>
+          <td>9.894702</td>
+          <td>-1.794247</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>13.159518</td>
+          <td>1.0</td>
+          <td>2.789579</td>
+          <td>-0.897268</td>
+          <td>-15.832871</td>
+          <td>True</td>
+          <td>0.514995</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>0</td>
-          <td>7.686306</td>
+          <td>1.0</td>
+          <td>3.398798</td>
+          <td>4.188172</td>
+          <td>5.486005</td>
+          <td>True</td>
+          <td>0.238044</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1</td>
-          <td>10.281282</td>
+          <td>0.0</td>
+          <td>1.518036</td>
+          <td>-17.805801</td>
+          <td>6.774598</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0</td>
-          <td>0.536566</td>
+          <td>0.0</td>
+          <td>1.349499</td>
+          <td>0.882568</td>
+          <td>-18.991319</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1</td>
-          <td>3.201525</td>
+          <td>0.0</td>
+          <td>2.180561</td>
+          <td>-10.012510</td>
+          <td>8.730826</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>0.921819</td>
+          <td>0.0</td>
+          <td>1.355311</td>
+          <td>11.191248</td>
+          <td>-5.710436</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>8</th>
-          <td>0</td>
-          <td>18.601539</td>
+          <td>0.0</td>
+          <td>1.250701</td>
+          <td>13.809219</td>
+          <td>-4.182802</td>
+          <td>True</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1</td>
-          <td>0.320942</td>
+          <td>1.0</td>
+          <td>3.436874</td>
+          <td>15.834680</td>
+          <td>-0.986666</td>
+          <td>True</td>
+          <td>0.216937</td>
         </tr>
       </tbody>
     </table>
@@ -177,21 +212,27 @@ When `data` are store in a tupple
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 41-46
 
-When `data` are store in a np.ndarray
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tunable parameters
+------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-47
+Placement in a Circle using the placer
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. GENERATED FROM PYTHON SOURCE LINES 46-56
 
 .. code-block:: Python
 
-    data = np.vstack((ax_type, ax_diameters))
-    pop_np = axon_population()
-    pop_np.create_population_from_data(data)
-    pop_np.axon_pop
+    center = (0, 0)
+    radius = 100
+    n_ax = 625
 
-
+    pop_circle = axon_population()
+    pop_circle.set_geometry(center=center, radius=radius)
+    pop_circle.create_population_from_stat(n_ax=n_ax)
+    pop_circle.place_population(delta=2)  # default placer
+    pop_circle.get_ppop_info(verbose=True)
 
 
 
@@ -201,107 +242,34 @@ When `data` are store in a np.ndarray
 
  .. code-block:: none
 
-    NRV INFO: Axon population generated from data
+    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+    NRV INFO: minimal distance: 2.003136831572715
+    NRV INFO: average minimal distance: 2.7883824020325236
+    NRV INFO: Maximal minimal distance: 6.429877949603505
+    NRV INFO: Outer box: ((np.float64(-94.47138985184193), np.float64(-96.62279564341591)), (np.float64(95.80218357173072), np.float64(94.96437026863205)))
 
 
-.. raw:: html
 
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
 
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
 
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>types</th>
-          <th>diameters</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>1.0</td>
-          <td>17.646208</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>0.0</td>
-          <td>18.883833</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>0.0</td>
-          <td>13.159518</td>
-        </tr>
-        <tr>
-          <th>3</th>
-          <td>0.0</td>
-          <td>7.686306</td>
-        </tr>
-        <tr>
-          <th>4</th>
-          <td>1.0</td>
-          <td>10.281282</td>
-        </tr>
-        <tr>
-          <th>5</th>
-          <td>0.0</td>
-          <td>0.536566</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>1.0</td>
-          <td>3.201525</td>
-        </tr>
-        <tr>
-          <th>7</th>
-          <td>1.0</td>
-          <td>0.921819</td>
-        </tr>
-        <tr>
-          <th>8</th>
-          <td>0.0</td>
-          <td>18.601539</td>
-        </tr>
-        <tr>
-          <th>9</th>
-          <td>1.0</td>
-          <td>0.320942</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <br />
-    <br />
+Placement in an Ellipse using the placer with custom `delta`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
-
-When `data` are store in a dict
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. GENERATED FROM PYTHON SOURCE LINES 50-57
+.. GENERATED FROM PYTHON SOURCE LINES 59-69
 
 .. code-block:: Python
 
-    data = {"types":ax_type, "diameters":ax_diameters, "other_key":0}
-    pop_dict = axon_population()
-    pop_dict.create_population_from_data(data)
-    pop_dict.axon_pop
+    center_ellipse = (200, 0)
+    r_ellipse = (120, 60)
+    angle = np.pi/6
 
-
+    pop_ellipse = axon_population()
+    pop_ellipse.set_geometry(center=center_ellipse, radius=r_ellipse, rot=angle)
+    pop_ellipse.create_population_from_stat(n_ax=n_ax)
+    pop_ellipse.place_population(delta=2)
+    pop_ellipse.get_ppop_info(verbose=True)
 
 
 
@@ -311,105 +279,112 @@ When `data` are store in a dict
 
  .. code-block:: none
 
-    NRV INFO: Axon population generated from data
+    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
+    NRV INFO: minimal distance: 2.002192141951094
+    NRV INFO: average minimal distance: 2.3500811050722774
+    NRV INFO: Maximal minimal distance: 3.9983854728272865
+    NRV INFO: Outer box: ((np.float64(96.03886857086125), np.float64(-77.03117491115061)), (np.float64(304.9067622163896), np.float64(76.38692291031137)))
 
 
-.. raw:: html
 
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
 
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
+.. GENERATED FROM PYTHON SOURCE LINES 70-72
 
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>types</th>
-          <th>diameters</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>1</td>
-          <td>17.646208</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>0</td>
-          <td>18.883833</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>0</td>
-          <td>13.159518</td>
-        </tr>
-        <tr>
-          <th>3</th>
-          <td>0</td>
-          <td>7.686306</td>
-        </tr>
-        <tr>
-          <th>4</th>
-          <td>1</td>
-          <td>10.281282</td>
-        </tr>
-        <tr>
-          <th>5</th>
-          <td>0</td>
-          <td>0.536566</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>1</td>
-          <td>3.201525</td>
-        </tr>
-        <tr>
-          <th>7</th>
-          <td>1</td>
-          <td>0.921819</td>
-        </tr>
-        <tr>
-          <th>8</th>
-          <td>0</td>
-          <td>18.601539</td>
-        </tr>
-        <tr>
-          <th>9</th>
-          <td>1</td>
-          <td>0.320942</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <br />
-    <br />
+Placement in a Polygon using the placer and differen `deltas_in`/`delta_trace`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-60
+.. GENERATED FROM PYTHON SOURCE LINES 72-81
 
-When `data` are store in a dataframe
+.. code-block:: Python
+
+
+    vertices = [(-100, 100), (0, 200), (100, 100), (60, 0), (0, -100), (-60, 0)]
+    pop_polygon = axon_population()
+    poly = geom.Polygon(vertices=vertices)
+    pop_polygon.set_geometry(geometry=poly)
+    pop_polygon.create_population_from_stat(n_ax=n_ax)
+    pop_polygon.place_population(delta_in=2, delta_trace=20)
+    pop_polygon.get_ppop_info(verbose=True)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:07
+    NRV INFO: 32axons not placed
+    NRV INFO: minimal distance: -1.224549098196393
+    NRV INFO: average minimal distance: 1.9934938570403458
+    NRV INFO: Maximal minimal distance: 3.014820342718302
+    NRV INFO: Outer box: ((np.float64(-72.73791298277241), np.float64(-55.39297352202542)), (np.float64(75.2276771153939), np.float64(169.33214882004333)))
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 82-86
+
+Placement from data (direct y/z)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Generate mesh grid position inside the circle bounding box
+
+.. GENERATED FROM PYTHON SOURCE LINES 86-102
+
+.. code-block:: Python
+
+
+    x = np.linspace(-radius, radius, int(n_ax**0.5))
+    xv, yv = np.meshgrid(x, x)
+    xv = xv.reshape((n_ax,))
+    yv = yv.reshape((n_ax,))
+    types = np.random.randint(0, 2, n_ax)
+    n_mye = types.sum()
+    diameters = np.zeros(n_ax)
+    diameters[types.astype(bool)] = np.random.uniform(2, 11, n_mye)
+    diameters[~types.astype(bool)] = np.random.uniform(.1,4, n_ax-n_mye)
+
+    pop_data = axon_population()
+    pop_data.set_geometry(center=center, radius=radius)
+    pop_data.create_population_from_data((types, diameters, xv, yv))
+    pop_data.get_ppop_info(verbose=True)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    NRV INFO: Axon placed population generated from data
+    NRV INFO: minimal distance: -2.2103775962246672
+    NRV INFO: average minimal distance: 2.4674672592833393
+    NRV INFO: Maximal minimal distance: 6.689547950762082
+    NRV INFO: Outer box: ((np.float64(-100.0), np.float64(-100.0)), (np.float64(100.0), np.float64(100.0)))
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 103-105
+
+Placement using the "packing" method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-66
+.. GENERATED FROM PYTHON SOURCE LINES 105-113
 
 .. code-block:: Python
 
-    data = DataFrame({"types":ax_type, "diameters":ax_diameters, "other_key":np.random.rand(len(ax_type))})
-    pop_df = axon_population()
-    pop_df.create_population_from_data(data)
-    pop_df.axon_pop
+
+    pop_packing = axon_population()
+    pop_packing.set_geometry(center=center, radius=radius)
+    pop_packing.create_population_from_stat(n_ax=n_ax)
+    pop_packing.place_population(method="packing", delta=2, fit_to_size=True, n_iter=16000)
+    pop_packing.get_ppop_info(verbose=True)
 
 
 
@@ -420,108 +395,31 @@ When `data` are store in a dataframe
 
  .. code-block:: none
 
-    NRV INFO: Axon population generated from data
+    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
+    NRV INFO: Axon packing initiated. This might take a while...
+    Packing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:32
+    NRV INFO: Packing done!
+    NRV INFO: minimal distance: 1.769244989826337
+    NRV INFO: average minimal distance: 2.3580701834595144
+    NRV INFO: Maximal minimal distance: 6.259760445136788
+    NRV INFO: Outer box: ((np.float64(-72.53150077586874), np.float64(-72.44691013316684)), (np.float64(73.03586475794576), np.float64(73.2961927567928)))
 
 
-.. raw:: html
 
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
 
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
+.. GENERATED FROM PYTHON SOURCE LINES 114-116
 
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>types</th>
-          <th>diameters</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>1</td>
-          <td>17.646208</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>0</td>
-          <td>18.883833</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>0</td>
-          <td>13.159518</td>
-        </tr>
-        <tr>
-          <th>3</th>
-          <td>0</td>
-          <td>7.686306</td>
-        </tr>
-        <tr>
-          <th>4</th>
-          <td>1</td>
-          <td>10.281282</td>
-        </tr>
-        <tr>
-          <th>5</th>
-          <td>0</td>
-          <td>0.536566</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>1</td>
-          <td>3.201525</td>
-        </tr>
-        <tr>
-          <th>7</th>
-          <td>1</td>
-          <td>0.921819</td>
-        </tr>
-        <tr>
-          <th>8</th>
-          <td>0</td>
-          <td>18.601539</td>
-        </tr>
-        <tr>
-          <th>9</th>
-          <td>1</td>
-          <td>0.320942</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <br />
-    <br />
+All in one using :meth:`~nrv.nmod.axon_population.generate`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-71
-
-Generate population from data
------------------------------
-Small 20-axons population
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. GENERATED FROM PYTHON SOURCE LINES 71-77
+.. GENERATED FROM PYTHON SOURCE LINES 116-121
 
 .. code-block:: Python
 
-    n_ax = 20
 
-    pop_stat = axon_population()
-    pop_stat.create_population_from_stat(n_ax=n_ax)
-    pop_stat.axon_pop
+    pop_fvf = axon_population()
+    pop_fvf.generate(center=center, radius=radius, n_ax=n_ax, delta_in=5)
+    pop_fvf.get_ppop_info(verbose=True)
 
 
 
@@ -531,176 +429,54 @@ Small 20-axons population
 
  .. code-block:: none
 
-    NRV INFO: On 20 axons to generate, there are 6 Myelinated and 14 Unmyelinated
+    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:03
+    NRV INFO: 278axons not placed
+    NRV INFO: minimal distance: -2.1369739478957914
+    NRV INFO: average minimal distance: 2.1540827330504912
+    NRV INFO: Maximal minimal distance: 6.802106434395377
+    NRV INFO: Outer box: ((np.float64(-97.2402741948308), np.float64(-97.99588940737056)), (np.float64(98.71680942675214), np.float64(97.3080465505196)))
 
 
-.. raw:: html
 
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
 
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
+.. GENERATED FROM PYTHON SOURCE LINES 122-124
 
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>types</th>
-          <th>diameters</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>0</th>
-          <td>0.0</td>
-          <td>1.378557</td>
-        </tr>
-        <tr>
-          <th>1</th>
-          <td>1.0</td>
-          <td>3.322645</td>
-        </tr>
-        <tr>
-          <th>2</th>
-          <td>0.0</td>
-          <td>1.831864</td>
-        </tr>
-        <tr>
-          <th>3</th>
-          <td>1.0</td>
-          <td>3.056112</td>
-        </tr>
-        <tr>
-          <th>4</th>
-          <td>0.0</td>
-          <td>1.070541</td>
-        </tr>
-        <tr>
-          <th>5</th>
-          <td>1.0</td>
-          <td>2.408818</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>0.0</td>
-          <td>1.244890</td>
-        </tr>
-        <tr>
-          <th>7</th>
-          <td>0.0</td>
-          <td>1.442485</td>
-        </tr>
-        <tr>
-          <th>8</th>
-          <td>0.0</td>
-          <td>2.866333</td>
-        </tr>
-        <tr>
-          <th>9</th>
-          <td>0.0</td>
-          <td>1.634269</td>
-        </tr>
-        <tr>
-          <th>10</th>
-          <td>0.0</td>
-          <td>2.337475</td>
-        </tr>
-        <tr>
-          <th>11</th>
-          <td>1.0</td>
-          <td>3.855711</td>
-        </tr>
-        <tr>
-          <th>12</th>
-          <td>0.0</td>
-          <td>0.692786</td>
-        </tr>
-        <tr>
-          <th>13</th>
-          <td>0.0</td>
-          <td>1.297194</td>
-        </tr>
-        <tr>
-          <th>14</th>
-          <td>0.0</td>
-          <td>0.803206</td>
-        </tr>
-        <tr>
-          <th>15</th>
-          <td>1.0</td>
-          <td>3.817635</td>
-        </tr>
-        <tr>
-          <th>16</th>
-          <td>0.0</td>
-          <td>0.710220</td>
-        </tr>
-        <tr>
-          <th>17</th>
-          <td>0.0</td>
-          <td>1.128657</td>
-        </tr>
-        <tr>
-          <th>18</th>
-          <td>1.0</td>
-          <td>8.615230</td>
-        </tr>
-        <tr>
-          <th>19</th>
-          <td>0.0</td>
-          <td>1.244890</td>
-        </tr>
-      </tbody>
-    </table>
-    </div>
-    </div>
-    <br />
-    <br />
+Plotting
+^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-80
-
-Histograms
-^^^^^^^^^^
-
-.. GENERATED FROM PYTHON SOURCE LINES 80-88
+.. GENERATED FROM PYTHON SOURCE LINES 124-144
 
 .. code-block:: Python
 
 
-    fig, axs = plt.subplots(2, 2,  layout="constrained")
-    for _i, n_ax in enumerate([20, 200, 2000, 20000]):
-        pop_stat = axon_population()
-        pop_stat.create_population_from_stat(n_ax=n_ax)
-        pop_stat.hist(axes=axs[_i%2, _i//2], unmyel_color=("r",.2), myel_color=("b",.2), bins=50)
-        axs[_i%2, _i//2].set_title(f"{n_ax} axons")
+    def plot_pop(axes:plt.Axes, pop:axon_population, title:str):
+        """
+        Plot an axon population in `axes`
+        """
+        pop.plot(axes)
+        axes.set_title(title)
+        axes.set_aspect('equal', adjustable='box')
+        axes.set_xlabel('Y-axis')
+        axes.set_ylabel('Z-axis')
+
+    fig, axs = plt.subplots(2, 3, figsize=(15, 10))
+    plot_pop(axs[0, 0], pop_circle, "Circle - placer (delta=2)")
+    plot_pop(axs[0, 1], pop_ellipse, "Ellipse - placer (delta=2, n_iter=2000)")
+    plot_pop(axs[0, 2], pop_polygon, "Polygon - placer (delta_in=2, delta_trace=10)")
+    plot_pop(axs[1, 0], pop_data, "Circle - from data (direct y/z)")
+    plot_pop(axs[1, 1], pop_packing, "Circle - packing (fit_to_size=True, n_iter=17000)")
+    plot_pop(axs[1, 2], pop_fvf, "Circle - generate")
+
     plt.show()
 
 
 
 .. image-sg:: /examples/generic/images/sphx_glr_21_place_population_001.png
-   :alt: 20 axons, 2000 axons, 200 axons, 20000 axons
+   :alt: Circle - placer (delta=2), Ellipse - placer (delta=2, n_iter=2000), Polygon - placer (delta_in=2, delta_trace=10), Circle - from data (direct y/z), Circle - packing (fit_to_size=True, n_iter=17000), Circle - generate
    :srcset: /examples/generic/images/sphx_glr_21_place_population_001.png
    :class: sphx-glr-single-img
 
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: On 20 axons to generate, there are 6 Myelinated and 14 Unmyelinated
-    NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
-    NRV INFO: On 2000 axons to generate, there are 600 Myelinated and 1400 Unmyelinated
-    NRV INFO: On 20000 axons to generate, there are 6000 Myelinated and 14000 Unmyelinated
 
 
 
@@ -708,7 +484,7 @@ Histograms
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.391 seconds)
+   **Total running time of the script:** (0 minutes 44.763 seconds)
 
 
 .. _sphx_glr_download_examples_generic_21_place_population.py:

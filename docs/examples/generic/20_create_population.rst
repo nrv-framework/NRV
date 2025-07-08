@@ -21,12 +21,13 @@
 Create an unplaced population
 =============================
 
-Simple example showing how to create builtin 2D shapes with nrv
+Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:
+    - From data (`tupple`, :class:`numpy.ndarray`, `dict` or :class:`pandas.DataFrame`)
 
 .. seealso::
     :doc:`Users' guide <../../usersguide/populations>`
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-19
+.. GENERATED FROM PYTHON SOURCE LINES 11-20
 
 .. code-block:: Python
 
@@ -46,12 +47,12 @@ Simple example showing how to create builtin 2D shapes with nrv
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-22
+.. GENERATED FROM PYTHON SOURCE LINES 21-23
 
 Generate population from data
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-29
+.. GENERATED FROM PYTHON SOURCE LINES 23-30
 
 .. code-block:: Python
 
@@ -69,12 +70,12 @@ Generate population from data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-32
+.. GENERATED FROM PYTHON SOURCE LINES 31-33
 
-When `data` are store in a tupple
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When `data` are in a tupple
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-37
+.. GENERATED FROM PYTHON SOURCE LINES 33-38
 
 .. code-block:: Python
 
@@ -122,53 +123,53 @@ When `data` are store in a tupple
       <tbody>
         <tr>
           <th>0</th>
-          <td>1</td>
-          <td>9.436264</td>
+          <td>0</td>
+          <td>9.977344</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0</td>
-          <td>9.609528</td>
+          <td>13.373399</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0</td>
-          <td>18.205805</td>
+          <td>19.618248</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1</td>
-          <td>16.948614</td>
+          <td>0</td>
+          <td>9.119061</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>0</td>
-          <td>6.459945</td>
+          <td>1</td>
+          <td>10.171386</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>0.952670</td>
+          <td>17.593294</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>0</td>
-          <td>12.597486</td>
+          <td>1</td>
+          <td>6.573522</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>10.603188</td>
+          <td>0</td>
+          <td>5.204733</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>17.558583</td>
+          <td>14.817707</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1</td>
-          <td>19.508831</td>
+          <td>0</td>
+          <td>7.540484</td>
         </tr>
       </tbody>
     </table>
@@ -177,12 +178,12 @@ When `data` are store in a tupple
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 39-41
 
-When `data` are store in a np.ndarray
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When `data` are in a np.ndarray
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-47
+.. GENERATED FROM PYTHON SOURCE LINES 41-48
 
 .. code-block:: Python
 
@@ -232,53 +233,53 @@ When `data` are store in a np.ndarray
       <tbody>
         <tr>
           <th>0</th>
-          <td>1.0</td>
-          <td>9.436264</td>
+          <td>0.0</td>
+          <td>9.977344</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>9.609528</td>
+          <td>13.373399</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0.0</td>
-          <td>18.205805</td>
+          <td>19.618248</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1.0</td>
-          <td>16.948614</td>
+          <td>0.0</td>
+          <td>9.119061</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>0.0</td>
-          <td>6.459945</td>
+          <td>1.0</td>
+          <td>10.171386</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0.0</td>
-          <td>0.952670</td>
+          <td>17.593294</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>0.0</td>
-          <td>12.597486</td>
+          <td>1.0</td>
+          <td>6.573522</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1.0</td>
-          <td>10.603188</td>
+          <td>0.0</td>
+          <td>5.204733</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>17.558583</td>
+          <td>14.817707</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1.0</td>
-          <td>19.508831</td>
+          <td>0.0</td>
+          <td>7.540484</td>
         </tr>
       </tbody>
     </table>
@@ -287,12 +288,12 @@ When `data` are store in a np.ndarray
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
-When `data` are store in a dict
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When `data` are in a dict
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-57
+.. GENERATED FROM PYTHON SOURCE LINES 51-58
 
 .. code-block:: Python
 
@@ -342,53 +343,53 @@ When `data` are store in a dict
       <tbody>
         <tr>
           <th>0</th>
-          <td>1</td>
-          <td>9.436264</td>
+          <td>0</td>
+          <td>9.977344</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0</td>
-          <td>9.609528</td>
+          <td>13.373399</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0</td>
-          <td>18.205805</td>
+          <td>19.618248</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1</td>
-          <td>16.948614</td>
+          <td>0</td>
+          <td>9.119061</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>0</td>
-          <td>6.459945</td>
+          <td>1</td>
+          <td>10.171386</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>0.952670</td>
+          <td>17.593294</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>0</td>
-          <td>12.597486</td>
+          <td>1</td>
+          <td>6.573522</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>10.603188</td>
+          <td>0</td>
+          <td>5.204733</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>17.558583</td>
+          <td>14.817707</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1</td>
-          <td>19.508831</td>
+          <td>0</td>
+          <td>7.540484</td>
         </tr>
       </tbody>
     </table>
@@ -397,12 +398,12 @@ When `data` are store in a dict
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-60
+.. GENERATED FROM PYTHON SOURCE LINES 59-61
 
-When `data` are store in a dataframe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When `data` are in a dataframe
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-66
+.. GENERATED FROM PYTHON SOURCE LINES 61-67
 
 .. code-block:: Python
 
@@ -451,53 +452,53 @@ When `data` are store in a dataframe
       <tbody>
         <tr>
           <th>0</th>
-          <td>1</td>
-          <td>9.436264</td>
+          <td>0</td>
+          <td>9.977344</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0</td>
-          <td>9.609528</td>
+          <td>13.373399</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0</td>
-          <td>18.205805</td>
+          <td>19.618248</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1</td>
-          <td>16.948614</td>
+          <td>0</td>
+          <td>9.119061</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>0</td>
-          <td>6.459945</td>
+          <td>1</td>
+          <td>10.171386</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>0.952670</td>
+          <td>17.593294</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>0</td>
-          <td>12.597486</td>
+          <td>1</td>
+          <td>6.573522</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>10.603188</td>
+          <td>0</td>
+          <td>5.204733</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>17.558583</td>
+          <td>14.817707</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1</td>
-          <td>19.508831</td>
+          <td>0</td>
+          <td>7.540484</td>
         </tr>
       </tbody>
     </table>
@@ -506,14 +507,14 @@ When `data` are store in a dataframe
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-71
+.. GENERATED FROM PYTHON SOURCE LINES 68-72
 
 Generate population from data
 -----------------------------
 Small 20-axons population
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-77
+.. GENERATED FROM PYTHON SOURCE LINES 72-78
 
 .. code-block:: Python
 
@@ -562,103 +563,103 @@ Small 20-axons population
       <tbody>
         <tr>
           <th>0</th>
-          <td>0.0</td>
-          <td>0.745090</td>
+          <td>1.0</td>
+          <td>6.939880</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>0.692786</td>
+          <td>1.796994</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1.0</td>
-          <td>12.346693</td>
+          <td>0.0</td>
+          <td>1.959719</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>2.250301</td>
+          <td>1.018236</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>0.617234</td>
+          <td>1.645892</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1.0</td>
-          <td>8.424850</td>
+          <td>0.0</td>
+          <td>1.117034</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1.0</td>
-          <td>3.398798</td>
+          <td>0.0</td>
+          <td>1.709820</td>
         </tr>
         <tr>
           <th>7</th>
           <td>1.0</td>
-          <td>2.713427</td>
+          <td>5.835671</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>1.930661</td>
+          <td>2.401403</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0.0</td>
-          <td>1.523848</td>
+          <td>1.698196</td>
         </tr>
         <tr>
           <th>10</th>
           <td>0.0</td>
-          <td>1.733066</td>
+          <td>1.227455</td>
         </tr>
         <tr>
           <th>11</th>
           <td>0.0</td>
-          <td>2.099198</td>
+          <td>1.913226</td>
         </tr>
         <tr>
           <th>12</th>
           <td>1.0</td>
-          <td>4.579158</td>
+          <td>7.472946</td>
         </tr>
         <tr>
           <th>13</th>
           <td>0.0</td>
-          <td>1.564529</td>
+          <td>1.262325</td>
         </tr>
         <tr>
           <th>14</th>
-          <td>0.0</td>
-          <td>1.146092</td>
+          <td>1.0</td>
+          <td>9.567134</td>
         </tr>
         <tr>
           <th>15</th>
-          <td>1.0</td>
-          <td>2.979960</td>
+          <td>0.0</td>
+          <td>1.320441</td>
         </tr>
         <tr>
           <th>16</th>
-          <td>0.0</td>
-          <td>0.965932</td>
+          <td>1.0</td>
+          <td>2.903808</td>
         </tr>
         <tr>
           <th>17</th>
           <td>0.0</td>
-          <td>1.279760</td>
+          <td>1.401804</td>
         </tr>
         <tr>
           <th>18</th>
-          <td>0.0</td>
-          <td>1.500601</td>
+          <td>1.0</td>
+          <td>3.513026</td>
         </tr>
         <tr>
           <th>19</th>
           <td>0.0</td>
-          <td>2.430461</td>
+          <td>1.140281</td>
         </tr>
       </tbody>
     </table>
@@ -667,12 +668,12 @@ Small 20-axons population
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-80
+.. GENERATED FROM PYTHON SOURCE LINES 79-81
 
 Histograms
 ^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-92
+.. GENERATED FROM PYTHON SOURCE LINES 81-93
 
 .. code-block:: Python
 
@@ -712,7 +713,7 @@ Histograms
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.417 seconds)
+   **Total running time of the script:** (0 minutes 0.419 seconds)
 
 
 .. _sphx_glr_download_examples_generic_20_create_population.py:

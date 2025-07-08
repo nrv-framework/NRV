@@ -347,7 +347,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to handle builtin 2D shapes. More precisely this example shows how to:     - create shape by instantiating the corresponding class     - create shape using the generic create_cshape-function     - Use basic method implemented in CShape subclasses (~nrv.utils.geom.CShape.translate, rotate, CShape.get_point_inside`)">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to handle builtin 2D shapes. More precisely this example shows how to:     - create shape by instantiating the corresponding class     - create shape using the generic create_cshape-function     - Use basic method implemented in CShape subclasses (~nrv.utils.geom.CShape.translate, rotate, get_point_inside)">
 
 .. only:: html
 
@@ -364,7 +364,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to create builtin 2D shapes with nrv">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:     - From data (`tupple`, numpy.ndarray, dict or pandas.DataFrame)">
 
 .. only:: html
 
@@ -381,7 +381,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to create builtin 2D shapes with nrv">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example to help using axon_population placement methods.">
 
 .. only:: html
 
@@ -392,7 +392,24 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Create an unplaced population</div>
+      <div class="sphx-glr-thumbnail-title">Axon Population Placement</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Example showing two method to access sub population from axon_population.">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_22_access_subpopulation_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_generic_22_access_subpopulation.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Access axon sub-poplation</div>
     </div>
 
 

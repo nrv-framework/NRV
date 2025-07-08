@@ -24,7 +24,7 @@ Create a CShape geometry
 Simple example showing how to handle builtin 2D shapes. More precisely this example shows how to:
     - create shape by instantiating the corresponding class
     - create shape using the generic :func:`~nrv.utils.geom.create_cshape`-function
-    - Use basic method implemented in CShape subclasses (:meth:`~nrv.utils.geom.CShape.translate`, :meth:`~nrv.utils.geom.CShape.rotate`, :meth:`~nrv.utils.geom.CShape`.get_point_inside`)
+    - Use basic method implemented in CShape subclasses (:meth:`~nrv.utils.geom.CShape.translate`, :meth:`~nrv.utils.geom.CShape.rotate`, :meth:`~nrv.utils.geom.CShape.get_point_inside`)
 
 
 .. seealso::
@@ -166,7 +166,7 @@ Implemented methods
 -------------------
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-145
+.. GENERATED FROM PYTHON SOURCE LINES 101-144
 
 .. code-block:: Python
 
@@ -174,11 +174,10 @@ Implemented methods
 
         fig, axs = plt.subplots(2, 2, layout="constrained")
 
-
         plot_cshape(axes=axs[0,0], csh=circle, label="Circle")
         circle.translate(y=3)
         plot_cshape(axes=axs[0,0], csh=circle, label="Circle")
-        inside_pts = circle.get_point_inside(100)
+        inside_pts = circle.get_point_inside(100, delta=.5)
         axs[0,0].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
 
 
@@ -187,16 +186,16 @@ Implemented methods
         plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
         ellipse.rotate(60, degree=True)
         plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
-        inside_pts = ellipse.get_point_inside(100)
+        inside_pts = ellipse.get_point_inside(100, delta=.5)
         axs[1,0].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
 
 
         plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
-        poly1.translate(y=-3, z=-3)
+        poly1.translate(y=3)
         plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
         poly1.rotate(60, degree=True)
         plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
-        inside_pts = poly1.get_point_inside(100)
+        inside_pts = poly1.get_point_inside(100, delta=.2)
         axs[0,1].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
 
 
@@ -205,7 +204,7 @@ Implemented methods
         plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
         poly2.rotate(60, degree=True)
         plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
-        inside_pts = poly2.get_point_inside(100)
+        inside_pts = poly2.get_point_inside(100, delta=.1)
 
         p = axs[1,1].lines[::2]
         p += [axs[1,1].lines[1]]
@@ -229,7 +228,7 @@ Implemented methods
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.451 seconds)
+   **Total running time of the script:** (0 minutes 0.483 seconds)
 
 
 .. _sphx_glr_download_examples_generic_19_build_geometry.py:

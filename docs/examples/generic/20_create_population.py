@@ -2,7 +2,8 @@ r"""
 Create an unplaced population
 =============================
 
-Simple example showing how to create builtin 2D shapes with nrv
+Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:
+    - From data (`tupple`, :class:`numpy.ndarray`, `dict` or :class:`pandas.DataFrame`)
 
 .. seealso::
     :doc:`Users' guide <../../usersguide/populations>`
@@ -27,16 +28,16 @@ ax_diameters = np.random.random(n_ax)*20
 
 
 # %%
-# When `data` are store in a tupple
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# When `data` are in a tupple
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pop_tup = axon_population()
 pop_tup.create_population_from_data((ax_type, ax_diameters))
 pop_tup.axon_pop
 
 
 # %%
-# When `data` are store in a np.ndarray
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# When `data` are in a np.ndarray
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 data = np.vstack((ax_type, ax_diameters))
 pop_np = axon_population()
 pop_np.create_population_from_data(data)
@@ -45,8 +46,8 @@ pop_np.axon_pop
 
 
 # %%
-# When `data` are store in a dict
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# When `data` are in a dict
+# ^^^^^^^^^^^^^^^^^^^^^^^^^
 data = {"types":ax_type, "diameters":ax_diameters, "other_key":0}
 pop_dict = axon_population()
 pop_dict.create_population_from_data(data)
@@ -55,8 +56,8 @@ pop_dict.axon_pop
 
 
 # %%
-# When `data` are store in a dataframe
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# When `data` are in a dataframe
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 data = DataFrame({"types":ax_type, "diameters":ax_diameters, "other_key":np.random.rand(len(ax_type))})
 pop_df = axon_population()
 pop_df.create_population_from_data(data)

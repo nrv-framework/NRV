@@ -1,10 +1,8 @@
 r"""
-Axon Population Placement
-=========================
+Axon Population Placement in Various Shapes
+===========================================
 
-Simple example to help using :class:`~nrv.nmod.axon_population` placement methods.
-
-This example shows how to:
+This example demonstrates how to:
     - Create axon populations for different shapes (circle, ellipse, polygon)
     - Place axons using both direct data and the placer
     - Use and highlight various placer arguments (delta, delta_trace, delta_in, method, fit_to_size, n_iter)
@@ -18,31 +16,9 @@ import numpy as np
 from nrv.utils import geom
 from nrv.nmod._axon_population import axon_population
 
-
-
 # %%
-# Quick placement
-# ---------------
-# .. note::
-# 
-#   :meth:`~nrv.axon_population.fill_geometry` both create and place the geometry
-
-center = (0, 0)
-radius = 20
-n_ax=10
-
-pop_circle = axon_population()
-pop_circle.set_geometry(center=center, radius=radius)
-
-pop_circle.fill_geometry(n_ax=n_ax)
-pop_circle.axon_pop
-
-# %%
-# Tunable parameters
-# ------------------
-#
 # Placement in a Circle using the placer
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# --------------------------------------
 center = (0, 0)
 radius = 100
 n_ax = 625
@@ -54,8 +30,8 @@ pop_circle.place_population(delta=2)  # default placer
 pop_circle.get_ppop_info(verbose=True)
 
 # %%
-# Placement in an Ellipse using the placer with custom `delta`
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Placement in an Ellipse using the placer with custom delta
+# ----------------------------------------------------------
 center_ellipse = (200, 0)
 r_ellipse = (120, 60)
 angle = np.pi/6
@@ -67,8 +43,8 @@ pop_ellipse.place_population(delta=2)
 pop_ellipse.get_ppop_info(verbose=True)
 
 # %%
-# Placement in a Polygon using the placer and differen `deltas_in`/`delta_trace`
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Placement in a Polygon using the placer and `delta`
+# ---------------------------------------------------
 
 vertices = [(-100, 100), (0, 200), (100, 100), (60, 0), (0, -100), (-60, 0)]
 pop_polygon = axon_population()
@@ -80,7 +56,7 @@ pop_polygon.get_ppop_info(verbose=True)
 
 # %%
 # Placement from data (direct y/z)
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# --------------------------------
 #
 # Generate mesh grid position inside the circle bounding box
 
@@ -101,7 +77,7 @@ pop_data.get_ppop_info(verbose=True)
 
 # %%
 # Placement using the "packing" method
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ------------------------------------
 
 pop_packing = axon_population()
 pop_packing.set_geometry(center=center, radius=radius)
@@ -112,15 +88,14 @@ pop_packing.get_ppop_info(verbose=True)
 
 # %%
 # All in one using :meth:`~nrv.nmod.axon_population.generate`
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# -----------------------------------------------------------
 
 pop_fvf = axon_population()
-pop_fvf.generate(center=center, radius=radius, n_ax=n_ax, delta_in=5)
+pop_fvf.generate(center=center, radius=radius, n_ax=n_ax, delta_in=3)
 pop_fvf.get_ppop_info(verbose=True)
 
 # %%
 # Plotting
-# ^^^^^^^^
 
 def plot_pop(axes:plt.Axes, pop:axon_population, title:str):
     """
