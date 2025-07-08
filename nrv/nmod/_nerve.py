@@ -606,7 +606,7 @@ class nerve(NRV_simulable):
                 z = fasc.z
             fasc.translate(y - fasc.y, z - fasc.z)
             if rot is not None:
-                fasc.rotate(fasc.geom.rot)
+                fasc.rotate(rot, degree=degree)
             if self.__check_fascicle_overlap(fasc):
                 rise_warning(
                     "fascicles overlap:  fasicle " + str(fasc.ID) + " cannot be added"
@@ -788,7 +788,17 @@ class nerve(NRV_simulable):
         self.is_simulated = False
 
     # Intra cellular
-    def insert_I_Clamp(self, position, t_start, duration, amplitude, ax_list=None):
+    def insert_I_Clamp(
+        self,
+        position: float,
+        t_start: float,
+        duration: float,
+        amplitude: float,
+        expr: str | None = None,
+        mask_labels: None | Iterable[str] | str = [],
+        ax_list: None | list = None,
+        fasc_list: None | list = None,
+    ):
         """
         Insert a IC clamp stimulation
 
@@ -806,14 +816,19 @@ class nerve(NRV_simulable):
         ax_list     : list, array, np.array
             list of axons to insert the clamp on, if None, all axons are stimulated
         """
-        for fasc in self.fascicles.values():
-            fasc.insert_I_Clamp(
-                position=position,
-                t_start=t_start,
-                duration=duration,
-                amplitude=amplitude,
-                ax_list=ax_list,
-            )
+        if fasc_list is None:
+            fasc_list = list(self.fascicles.keys())
+        for _fid, fasc in self.fascicles.items():
+            if _fid in fasc_list:
+                fasc.insert_I_Clamp(
+                    position=position,
+                    t_start=t_start,
+                    duration=duration,
+                    amplitude=amplitude,
+                    mask_labels=mask_labels,
+                    expr=expr,
+                    ax_list=ax_list,
+                )
         self.N_intra += 1
 
     def clear_I_clamp(self):

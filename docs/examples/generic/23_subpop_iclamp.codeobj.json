@@ -1,0 +1,1647 @@
+{
+ "__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "ax.set_title": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_title"
+  }
+ ],
+ "ax.set_xlabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_xlabel"
+  }
+ ],
+ "ax.set_ylabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_ylabel"
+  }
+ ],
+ "expr_large": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "expr_local": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "expr_ularge": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "expr_unmyel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "fasc": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fasc.fill": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.fill"
+  }
+ ],
+ "fasc1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fasc1.insert_I_Clamp": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.insert_I_Clamp"
+  }
+ ],
+ "fasc1_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc1_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fasc2.axons.add_mask": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.add_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.add_mask"
+  }
+ ],
+ "fasc2.axons.get_mask": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._axon_population",
+   "module_short": "nrv",
+   "name": "axon_population.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon_population.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon_population.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._popshape",
+   "module_short": "nrv.utils.geom._popshape",
+   "name": "PopShape.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "PopShape.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "PopShape.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PopShape.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_mask"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_mask"
+  }
+ ],
+ "fasc2.insert_I_Clamp": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.insert_I_Clamp"
+  }
+ ],
+ "fasc2.set_geometry": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.set_geometry"
+  }
+ ],
+ "fasc2_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc2_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc3": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fasc3.insert_I_Clamp": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.insert_I_Clamp"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.insert_I_Clamp"
+  }
+ ],
+ "fasc3.set_geometry": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.set_geometry"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.set_geometry"
+  }
+ ],
+ "fasc3_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc3_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "geom.Polygon": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  }
+ ],
+ "i_amp": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "i_dur": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "i_pos": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "i_start": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "mask_local": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "mask_u": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "n_ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "ner": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "ner.add_fascicle": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.add_fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.add_fascicle"
+  }
+ ],
+ "ner.fascicles.values": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "ner.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot"
+  }
+ ],
+ "ner.simulate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.simulate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.simulate"
+  }
+ ],
+ "np.pi": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "pi"
+  }
+ ],
+ "nrv.fascicle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "nrv.nerve": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "results": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results"
+  }
+ ],
+ "results.plot_recruited_fibers": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_recruited_fibers"
+  }
+ ],
+ "vertices": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ]
+}

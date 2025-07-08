@@ -313,8 +313,35 @@ class PopShape(NRV_class):
         expr: str | None = None,
         mask_labels: None | Iterable[str] | str = [],
         placed_only: bool = True,
-        otype: None | Literal[""] = None,
-    ) -> DataFrame:
+        otype: None | Literal["numpy", "list"] = None,
+    ) -> DataFrame | np.ndarray | list:
+        """
+        Get a population mask from an expression or a list of labels.
+
+        Note
+        ----
+        For supopulation from expression look at :meth:`pandas.DataFrame.eval` or :meth:`pandas.DataFrame.query` documentation.
+
+        Tip
+        ---
+        To simplify, :meth:`self.get_mask` correspond to :meth:`pandas.DataFrame.eval` and :meth:`self.get_sub_population` correspond to :meth:`pandas.DataFrame.query`
+
+        Parameters
+        ----------
+        expr : str | None, optional
+            If not None mask is generated using :meth:`pandas.DataFrame.eval` of this expression, by default None
+        mask_labels : None | Iterable[str] | str, optional
+            Label or list of labels already added to the population, by default []
+        placed_only : bool, optional
+            if True add `"is_place"` column to the mask, by default True
+        otype : None | Literal[&quot;numpy&quot;, &quot;list&quot;], optional
+            type of the output see :func:`~nrv.backend._extlib_interface.df_to`, by default None
+
+        Returns
+        -------
+        DataFrame | np.ndarray | list
+            array like of booleen of the same size than the population corresponding to the mask
+        """
         if self.has_pop:
             _mask = self._pop["diameters"] > 0
             if expr is None:
@@ -335,6 +362,33 @@ class PopShape(NRV_class):
         mask_labels: None | Iterable[str] | str = [],
         placed_only: bool = True,
     ) -> DataFrame:
+        """
+        Get a sub population from an expression or a list of labels.
+
+        Note
+        ----
+        For supopulation from expression look at :meth:`pandas.DataFrame.eval` or :meth:`pandas.DataFrame.query` documentation.
+
+        Tip
+        ---
+        To simplify, :meth:`self.get_mask` correspond to :meth:`pandas.DataFrame.eval` and :meth:`self.get_sub_population` correspond to :meth:`pandas.DataFrame.query`
+
+        Parameters
+        ----------
+        expr : str | None, optional
+            If not None mask is generated using :meth:`pandas.DataFrame.eval` of this expression, by default None
+        mask_labels : None | Iterable[str] | str, optional
+            Label or list of labels already added to the population, by default []
+        placed_only : bool, optional
+            if True add `"is_place"` column to the mask, by default True
+        otype : None | Literal[&quot;numpy&quot;, &quot;list&quot;], optional
+            type of the output see :func:`~nrv.backend._extlib_interface.df_to`, by default None
+
+        Returns
+        -------
+        DataFrame
+            Containing the subpopulation parameters.
+        """
         _mask = self.get_mask(
             expr=expr, mask_labels=mask_labels, placed_only=placed_only
         )

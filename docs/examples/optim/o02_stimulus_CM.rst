@@ -21,10 +21,12 @@
 Understanding context modifiers: **stimulus_CM**
 ================================================
 
-This small example shows a way to use the built-in :doc:`context modifiers <../../usersguide/optimization#context-modifier>`
-:`stimulus_CM`.
+This small example shows a way to use the built-in `~nrv.optim.optim_utils.stimulus_CM`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-103
+.. seealso::
+    :doc:`users' guide <../../usersguide/optimization>` 
+
+.. GENERATED FROM PYTHON SOURCE LINES 10-105
 
 
 
@@ -150,7 +152,7 @@ This small example shows a way to use the built-in :doc:`context modifiers <../.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.240 seconds)
+   **Total running time of the script:** (0 minutes 0.225 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o02_stimulus_CM.py:

@@ -89,7 +89,28 @@ def get_query(*args, **kwgs):
     return queries
 
 
-def df_to(df: DataFrame, otype: None | Literal["numpy", "list"], *args, **kwgs):
+def df_to(
+    df: DataFrame, otype: None | Literal["numpy", "list"], *args, **kwgs
+) -> object:
+    """
+    convert a :class:`pandas.DataFrame` to another type.
+
+    Note
+    ----
+    This function if a generalisation of all  `pandas.DataFrame` methods `to_...`. In other words, if otype is not None, this function returns: `f"df.to_{otype}(*args, **kwgs)"`
+
+    Parameters
+    ----------
+    df : DataFrame
+        :class:`pandas.DataFrame` to convert.
+    otype : None | Literal[&quot;numpy&quot;, &quot;list&quot;]
+        If None, return as a panda, convert into the corresponding class.
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     if otype is None:
         return df
     else:

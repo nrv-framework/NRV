@@ -21,10 +21,12 @@
 Understanding context modifiers: **harmonic_stimulus_CM**
 =========================================================
 
-This example shows a way to use the built-in `context modifiers<../../usersguide/optimization#context-modifier>`
-:`harmonic_stimulus_CM`.
+This small example shows a way to use the built-in :class:`~nrv.optim.optim_utils.harmonic_stimulus_CM`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-122
+.. seealso::
+    :doc:`users' guide <../../usersguide/optimization>` 
+
+.. GENERATED FROM PYTHON SOURCE LINES 10-124
 
 
 
@@ -157,7 +159,7 @@ This example shows a way to use the built-in `context modifiers<../../usersguide
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.244 seconds)
+   **Total running time of the script:** (0 minutes 0.258 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o04_harmonic_stimulus_CM.py:

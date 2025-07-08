@@ -132,13 +132,14 @@ def cshape_overlap_checker(
         _description_
     """
     if isinstance(s_comp, CShape):
-        if not on_trace:
-            return s.is_inside(s_comp.get_trace(n_trace))
         _isin = s.is_inside(s_comp.get_trace(n_trace), for_all=False)
+        if not on_trace:
+            return True in _isin
+
         return True in _isin and False in _isin
     else:
         comp = []
         for s_c in s_comp:
-            comp += cshape_overlap_checker(s, s_c, n_trace=n_trace, on_trace=on_trace)
+            comp += [cshape_overlap_checker(s, s_c, n_trace=n_trace, on_trace=on_trace)]
 
         return comp

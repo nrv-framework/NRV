@@ -21,33 +21,12 @@
 Understanding context modifiers: **biphasic_stimulus_CM**
 =========================================================
 
-This small example shows a way to use the built-in `context modifiers<../../usersguide/optimization.rst#context-modifier>`
-:`biphasic_stimulus_CM`.
+This small example shows a way to use the built-in `~nrv.optim.optim_utils.biphasic_stimulus_CM`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-150
+.. seealso::
+    :doc:`users' guide <../../usersguide/optimization>` 
 
-
-
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image-sg:: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_001.png
-         :alt: X = [$t_{cathod}$], X := [$t_{start}$], X := [$s_{cathod}$], X := [$s_{ratio}$]
-         :srcset: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_001.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_002.png
-         :alt: X = [$s_{cathod}$, $s_{ratio}$, $t_{cathod}$, $t_{cathod}$, $t_{inter}$]
-         :srcset: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_002.png
-         :class: sphx-glr-multi-img
-
-
-
-
+.. GENERATED FROM PYTHON SOURCE LINES 10-127
 
 .. code-block:: Python
 
@@ -168,7 +147,22 @@ This small example shows a way to use the built-in `context modifiers<../../user
     axs1[1, 1].set_ylabel('amplitude (µA)')
     fig1.tight_layout()
 
-    # 
+
+
+
+.. image-sg:: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_001.png
+   :alt: X = [$t_{cathod}$], X := [$t_{start}$], X := [$s_{cathod}$], X := [$s_{ratio}$]
+   :srcset: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_001.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 128-136
+
+.. code-block:: Python
+
     test_stim_CM.set_parameters(start="3", t_cathod="2", s_cathod="0", s_ratio="1", t_inter="4")
 
     X = np.array([
@@ -176,6 +170,17 @@ This small example shows a way to use the built-in `context modifiers<../../user
         [200, .2, 1, 1, 0.2],
         [500, .5, 2, 2, 0.4],
     ])
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 137-153
+
+.. code-block:: Python
 
     fig2, ax2 = plt.subplots()
     ax2.set_title("X = [$s_{cathod}$, $s_{ratio}$, $t_{cathod}$, $t_{cathod}$, $t_{inter}$]")
@@ -185,7 +190,7 @@ This small example shows a way to use the built-in `context modifiers<../../user
         stim = ax.extra_stim.stimuli[0]
         del ax
 
-        stim.plot(ax2, linestyle=linestyles[i], label=f"x={list(x)}")
+        stim.plot(ax2, linestyle=linestyles[i], label=f"x={x.tolist()}")
         # ax1.plot(t_shift+x[::2], x[1::2], 'ok')
 
     ax2.grid()
@@ -195,9 +200,20 @@ This small example shows a way to use the built-in `context modifiers<../../user
 
     plt.show()
 
+
+.. image-sg:: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_002.png
+   :alt: X = [$s_{cathod}$, $s_{ratio}$, $t_{cathod}$, $t_{cathod}$, $t_{inter}$]
+   :srcset: /examples/optim/images/sphx_glr_o03_biphasic_stimulus_CM_002.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.261 seconds)
+   **Total running time of the script:** (0 minutes 0.304 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o03_biphasic_stimulus_CM.py:

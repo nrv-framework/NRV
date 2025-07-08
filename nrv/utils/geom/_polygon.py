@@ -22,7 +22,7 @@ class Polygon(CShape):
         vertices : tuple[float, float], optional
             Vertices of the polygone, by default [[0,0], [0,1], [1,0]]
         """
-        self.vertices: np.ndarray[float] = np.array(vertices)
+        self.vertices: np.ndarray[float] = np.array(vertices, dtype=float)
         if self.vertices.shape[0] == 2:
             pass_info("vertices of Polygon must be of dim (n_gon, 2) not (2, n_gon)")
             self.vertices = self.vertices.swapaxes(0, 1)

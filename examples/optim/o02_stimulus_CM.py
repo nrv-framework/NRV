@@ -2,8 +2,10 @@ r"""
 Understanding context modifiers: **stimulus_CM**
 ================================================
 
-This small example shows a way to use the built-in :doc:`context modifiers <../../usersguide/optimization#context-modifier>`
-:`stimulus_CM`.
+This small example shows a way to use the built-in `~nrv.optim.optim_utils.stimulus_CM`.
+
+.. seealso::
+    :doc:`users' guide <../../usersguide/optimization>` 
 """
 
 import numpy as np

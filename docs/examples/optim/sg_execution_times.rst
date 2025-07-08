@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.240** total execution time for 5 files **from examples/optim**:
+**00:00.304** total execution time for 6 files **from examples/optim**:
 
 .. container::
 
@@ -32,10 +32,13 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_optim_o02_stimulus_CM.py` (``o02_stimulus_CM.py``)
-     - 00:00.240
+   * - :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py` (``o03_biphasic_stimulus_CM.py``)
+     - 00:00.304
      - 0.0
    * - :ref:`sphx_glr_examples_optim_o01_nerve_optimization.py` (``o01_nerve_optimization.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_optim_o02_stimulus_CM.py` (``o02_stimulus_CM.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_optim_o04_harmonic_stimulus_CM.py` (``o04_harmonic_stimulus_CM.py``)
