@@ -3,7 +3,7 @@ Create an unplaced population
 =============================
 
 Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:
-    - From data (`tupple`, :class:`numpy.ndarray`, `dict` or :class:`pandas.DataFrame`)
+    - From data (:class:`tupple`, :class:`numpy.ndarray`, :class:`dict` or :class:`pandas.DataFrame`)
 
 .. seealso::
     :doc:`Users' guide <../../usersguide/populations>`

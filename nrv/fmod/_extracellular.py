@@ -564,7 +564,7 @@ class FEM_stimulation(extracellular_context):
 
         Tip
         ---
-        ``geometry`` can be either define with :module:`.._utils.geom` tools or access from an existing fascicle in `fascicle.geom`.
+        ``geometry`` can be either define with :mod:`.._utils.geom` tools or access from an existing fascicle in `fascicle.geom`.
 
         Parameters
         ----------

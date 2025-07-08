@@ -531,10 +531,13 @@ class axon_population(PopShape):
         Note
         ----
         If column are not precised, the order for the data must be:
-            |-------|----------|------------|------------|------------|
-            | Axons |  Axons   | y-position | z-position | node shift |
-            | Type  | Diameter | `optional` | `optional` | `optional` |
-            |-------|----------|------------|------------|------------|
+            +-------+-----------+------------+------------+------------+
+            | Types | Diameters | y-position | z-position | node shift |
+            +       +           +            +            +            +
+            |       |           | `optional` | `optional` | `optional` |
+            +-------+-----------+------------+------------+------------+
+
+        For `str` indexed objects (:class:`dict` or :class:`pandas.DataFrame`) the respective indexes of the column above must be: `"types"`, `"diameters"`, `"y"` (optional), `"z"` (optional), `"node_shift"` (optional).
 
 
         Parameters

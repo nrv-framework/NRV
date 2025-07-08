@@ -21,6 +21,8 @@
 Intracellular stimulation of axon subpopulations
 ================================================
 
+Example of use of subpopulation for axon species targeted current clamp.
+
 This example shows:
     - Creating a nerve with fascicles of various geometries.
     - Filling fascicles with axon populations.
@@ -29,9 +31,11 @@ This example shows:
     - Running a simulation and plotting recruited fibers.
 
 .. seealso::
-    :doc:`Users' guide <../../usersguide/populations>`
+    - :doc:`Simulable <../../usersguide/populations>`, :doc:`Axon population <../../usersguide/populations>` and :doc:`Geometry <../../usersguide/geometry>` Users' guides.
+    
+     - :doc:`Tutorial 4 <../../tutorials/4_nerve_simulation>`
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-98
+.. GENERATED FROM PYTHON SOURCE LINES 19-101
 
 .. code-block:: Python
 
@@ -57,9 +61,8 @@ This example shows:
 
         # Fascicle 3: Polygon
         vertices = [(-80, 130), (0, 180), (80, 130), (50, 30), (0, -30), (-50, 30)]
-        from nrv.utils import geom
         fasc3 = nrv.fascicle(ID=3)
-        fasc3.set_geometry(geometry=geom.Polygon(vertices=vertices))
+        fasc3.set_geometry(geometry=nrv.create_cshape(vertices=vertices))
         fasc3_y, fasc3_z = 0, 100
         ner.add_fascicle(fasc3, y=fasc3_y, z=fasc3_z, rot=-np.pi/6)
 
@@ -135,24 +138,24 @@ This example shows:
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
     NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: 23axons not placed
+    NRV INFO: 56axons not placed
     NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
     NRV INFO: Starting nerve simulation
-    fascicle 1/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:09
-    fascicle 2/3 -- 3 CPUs: 177 / 177 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:09
+    fascicle 1/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:10
+    fascicle 2/3 -- 3 CPUs: 144 / 144 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
     fascicle 3/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:09
     NRV INFO: ...Done!
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-101
+.. GENERATED FROM PYTHON SOURCE LINES 102-104
 
 Plot recruited fibers
 ^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-109
+.. GENERATED FROM PYTHON SOURCE LINES 104-112
 
 .. code-block:: Python
 
@@ -179,7 +182,7 @@ Plot recruited fibers
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 30.787 seconds)
+   **Total running time of the script:** (0 minutes 30.964 seconds)
 
 
 .. _sphx_glr_download_examples_generic_23_subpop_iclamp.py:

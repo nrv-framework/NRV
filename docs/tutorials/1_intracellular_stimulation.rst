@@ -180,9 +180,9 @@ Now we can use matplotlib to easily visualize some simulation results contained 
 
 .. GENERATED FROM PYTHON SOURCE LINES 76-79
 
-The plot above shows a momentary voltage increase (a spike) across $V_{mem}$.
+The plot above shows a momentary voltage increase (a spike) across :math:`V_{mem}`.
 
-The simulated fiber's membrane voltage $V_{mem}$ is a 3-D variable: voltage is solved across the fiber's x-axis (```x_rec``` in ```results```) and across time. The 3-D result can be visualized with a color map. This can simply be obtained with the ``colormap_plot`` method of the ``results`` object: 
+The simulated fiber's membrane voltage :math:`V_{mem}` is a 3-D variable: voltage is solved across the fiber's x-axis (```x_rec``` in ```results```) and across time. The 3-D result can be visualized with a color map. This can simply be obtained with the ``colormap_plot`` method of the ``results`` object: 
 
 .. GENERATED FROM PYTHON SOURCE LINES 79-87
 
@@ -210,7 +210,7 @@ The simulated fiber's membrane voltage $V_{mem}$ is a 3-D variable: voltage is s
 
 .. GENERATED FROM PYTHON SOURCE LINES 88-89
 
-We can also use the ``plot_x_t`` method of ``results`` to plot $V_{mem}$ across time and space. The function plot the evolution of $V_{mem}$ across time for a subset of x position (20 by default):
+We can also use the ``plot_x_t`` method of ``results`` to plot :math:`V_{mem}` across time and space. The function plot the evolution of :math:`V_{mem}` across time for a subset of x position (20 by default):
 
 .. GENERATED FROM PYTHON SOURCE LINES 89-97
 
@@ -244,8 +244,8 @@ We can also use the ``plot_x_t`` method of ``results`` to plot $V_{mem}$ across 
 
 .. GENERATED FROM PYTHON SOURCE LINES 98-102
 
-The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber ($x = 0\mu m$, where the current clamp is attached to the fiber) to the other end of the fiber ($x = 5000\mu m$). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
-The AP took approximately $12 ms$ to travel across the fiber $5000\mu m$ fiber. The propagation velocity of the AP is thus about $0.4m/s$. This property is referred to as the conduction velocity of a fiber.
+The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber (`x = 0\mu m`, where the current clamp is attached to the fiber) to the other end of the fiber (`x = 5000\mu m`). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
+The AP took approximately :math:`12 ms` to travel across the fiber :math:`5000\mu m` fiber. The propagation velocity of the AP is thus about :math:`0.4m/s`. This property is referred to as the conduction velocity of a fiber.
 
 In many situations, we want to detect if whether an AP is going through the fiber. For that, the ```rasterize``` method of the ``results`` object. The method detected the presence of AP in the fiber across time and space using a threshold function. The results can be plotted with the ``raster_plot`` method of ``results``.
 
@@ -279,8 +279,8 @@ In many situations, we want to detect if whether an AP is going through the fibe
 
 .. GENERATED FROM PYTHON SOURCE LINES 115-117
 
-The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber ($x = 0\mu m$, where the current clamp is attached to the fiber) to the other end of the fiber ($x = 5000\mu m$). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
-The AP took approximately $12 ms$ to travel across the fiber $5000\mu m$ fiber. The propagation velocity of the AP is thus about $0.4m/s$. This property is referred to as the conduction velocity of a fiber.
+The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber (`x = 0\mu m`, where the current clamp is attached to the fiber) to the other end of the fiber (`x = 5000\mu m`). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
+The AP took approximately :math:`12 ms` to travel across the fiber :math:`5000\mu m` fiber. The propagation velocity of the AP is thus about :math:`0.4m/s`. This property is referred to as the conduction velocity of a fiber.
 
 .. GENERATED FROM PYTHON SOURCE LINES 117-130
 
@@ -308,7 +308,7 @@ The AP took approximately $12 ms$ to travel across the fiber $5000\mu m$ fiber. 
 
 .. GENERATED FROM PYTHON SOURCE LINES 131-132
 
-Attaching an intracelullar clamp is similar, but the position of the clamp on the fiber is defined by a NoR number instead of an absolute $x-position$. Here the clamp is attached to the first NoR of fiber, i.e. the closest NoR to $x = 0\mu m$.
+Attaching an intracelullar clamp is similar, but the position of the clamp on the fiber is defined by a NoR number instead of an absolute :math:`x-position`. Here the clamp is attached to the first NoR of fiber, i.e. the closest NoR to :math:`x = 0\mu m`.
 
 .. GENERATED FROM PYTHON SOURCE LINES 132-144
 
@@ -406,7 +406,7 @@ Using the ```rasterize``` function of NRV (figure below) we see that the AP is o
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.054 seconds)
+   **Total running time of the script:** (0 minutes 3.915 seconds)
 
 
 .. _sphx_glr_download_tutorials_1_intracellular_stimulation.py:

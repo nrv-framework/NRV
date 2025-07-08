@@ -54,26 +54,9 @@ You should be able to make changes locally
 
 If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
-6. Please do not forget to update the documentation if your changes imply knowledge from the end user. To be able to compile the documentation, few dependancies have to be considered:
+1. Please do not forget to update the documentation if your changes imply knowledge from the end user. The requirements for doc compilation are listed in the `following section <devcorner.html#nrv-documentation>`_.
 
-.. code:: bash
-
-    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton sphinx_gallery
-
-Once installed, you should be able to build the documentation with the following command:
-
-.. code:: bash
-
-    python3 -m sphinx.cmd.build -b html docs/ docs/_build/
-
-.. tip::
-    To document new features, example should be added as `.rst <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_ file in the folder ``NRV.docs.examples``. It can be more convenient to write the example in a *jupiter notebook* to check the code and then convert it in using `nbconvert <https://nbconvert.readthedocs.io/en/latest/>`_ and this command line:
-
-        .. code:: bash
-
-            jupyter nbconvert --to rst your_fname.ipynb
-
-7. Commit your changes and push you branch to GitHub:
+2. Commit your changes and push you branch to GitHub:
 
 .. code:: bash
 
@@ -90,6 +73,58 @@ In brief, commit messages should follow these conventions:
 
 NRV documentation
 =================
+
+.. important::
+
+    To ensure the usability of NRV, it is important to make sure that all changes made to the source code are documented before any merge.
+
+
+NRV documentation is built using `Sphinx <https://www.sphinx-doc.org/fr/master/>`_. For consistent documentation, three main parts must be updated:
+    1. **Generic explanations**: `.rst` files gathered in ``NRV/docs``.
+    2. **Tutorials and Examples**: `.py` files stored in ``NRV/tutorials`` and ``NRV/examples``. *Generated with* `sphinx_gallery <https://sphinx-gallery.github.io/stable/index.html>`_
+    3. **API documentation**: Docstrings in all source files, classes, and functions. *Generated with* `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
+
+
+To compile the full documentation (1, 2, and 3), use a conda/mamba environment where you can `import nrv`:
+
+.. seealso::
+    - :doc:`Standard installation <./installation>`.
+    - `Developer installation <devcorner.html#contribution-forking-and-pull-requests>`_.
+
+Additionally, a few dependencies must be installed:
+
+.. code:: bash
+
+    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton sphinx_gallery
+
+
+Once installed, you can build the documentation with the following command from the base repository ``NRV/``:
+
+.. code:: bash
+
+    python3 -m sphinx.cmd.build -b html docs/ docs/_build/
+
+.. warning::
+
+    Building the full documentation can take a long time, mainly due to `2. Tutorials and Examples` and `3. API documentation`.
+
+If you want to rebuild the full documentation, you should first manually remove the generated files. This can be done by deleting the folders ``NRV/docs/_build/``, ``NRV/docs/_nrv/``, ``NRV/docs/_exemple/``, and ``NRV/docs/_tutorial/``.
+
+.. tip::
+
+    You can considerably speed up documentation generation by only rebuilding the required parts.
+        - To skip rebuilding `2. Tutorials and Examples`, keep the folders ``NRV/docs/_exemple/`` and ``NRV/docs/_tutorial/``.
+        - To skip rebuilding `3. API documentation`, keep the folder ``NRV/docs/_nrv/``.
+
+.. note::
+    ``NRV/docs/_exemple/`` and ``NRV/docs/_tutorial/`` are included by default in the git repository. If you want to rebuild `2. Tutorials and Examples`, you need to manually remove these folders before compiling.
+
+    If your change does not involve tutorials or examples, you do not need to be in an environment able to `import nrv`. You only need the pip-installable dependencies listed in `NRV/docs/requirements.txt <https://github.com/nrv-framework/NRV/blob/master/docs/requirements.txt>`_:
+
+    .. code:: bash
+
+        pip install sphinx sphinx_rtd_theme furo Pygments sphinx_mdinclude sphinx_copybutton sphinx_gallery ipython sphinx_codeautolink numpy matplotlib
+
 
 NRV testing
 ===========

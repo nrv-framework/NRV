@@ -469,6 +469,15 @@
    "name": "DataFrame"
   }
  ],
+ "dict": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
  "fig": [
   {
    "is_class": false,
@@ -1513,6 +1522,15 @@
    "module": "nrv",
    "module_short": "nrv",
    "name": "NRV_class.create_population_from_data"
+  }
+ ],
+ "tupple": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tupple"
   }
  ]
 }

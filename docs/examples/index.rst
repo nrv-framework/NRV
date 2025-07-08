@@ -364,7 +364,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:     - From data (`tupple`, numpy.ndarray, dict or pandas.DataFrame)">
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:     - From data (tupple, numpy.ndarray, dict or pandas.DataFrame)">
 
 .. only:: html
 
@@ -415,7 +415,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows:     - Creating a nerve with fascicles of various geometries.     - Filling fascicles with axon populations.     - Selecting subpopulations using expressions or masks.     - Applying IClamp to specific subpopulations.     - Running a simulation and plotting recruited fibers.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Example of use of subpopulation for axon species targeted current clamp.">
 
 .. only:: html
 

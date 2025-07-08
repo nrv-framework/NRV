@@ -6,9 +6,9 @@ Generate a fascicle with all contexts
 This example shows how to easily generate and save a fascicle with the
 following contexts:
 
--  **Intracellular context**: A current attached to all axons at $x=0$.
--  **Recording context** : An analytical recorder is added with three recording points located at $x\in\{\frac{L}{4}, \frac{L}{2}, \frac{3L}{4}\}$, $y=0$, $z=100$.
--  **Extracellular context**: A LIFE electrode is added to the centre of the fascicle $x=\frac{L}{2}$, $y=0$, $z=0$.
+-  **Intracellular context**: A current attached to all axons at :math:`x=0`.
+-  **Recording context** : An analytical recorder is added with three recording points located at :math:`x\in\{\frac{L}{4}, \frac{L}{2}, \frac{3L}{4}\}`, :math:`y=0`, :math:`z=100`.
+-  **Extracellular context**: A LIFE electrode is added to the centre of the fascicle :math:`x=\frac{L}{2}`, :math:`y=0`, :math:`z=0`.
 
 This example can be used as a model to generate all sorts of fascicles
 with a customised context. For instance, it is used to generate the

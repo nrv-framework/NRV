@@ -73,9 +73,9 @@ fig.tight_layout()
 plt.show()
 
 # %%
-# The plot above shows a momentary voltage increase (a spike) across $V_{mem}$.
+# The plot above shows a momentary voltage increase (a spike) across :math:`V_{mem}`.
 #
-# The simulated fiber's membrane voltage $V_{mem}$ is a 3-D variable: voltage is solved across the fiber's x-axis (```x_rec``` in ```results```) and across time. The 3-D result can be visualized with a color map. This can simply be obtained with the ``colormap_plot`` method of the ``results`` object: 
+# The simulated fiber's membrane voltage :math:`V_{mem}` is a 3-D variable: voltage is solved across the fiber's x-axis (```x_rec``` in ```results```) and across time. The 3-D result can be visualized with a color map. This can simply be obtained with the ``colormap_plot`` method of the ``results`` object: 
 
 fig, ax = plt.subplots(1)
 cbar = results.colormap_plot(ax, "V_mem")
@@ -85,7 +85,7 @@ cbar.set_label(r'Membrane Voltage $V_{mem}$ (mV)')
 fig.tight_layout()
 
 # %%
-# We can also use the ``plot_x_t`` method of ``results`` to plot $V_{mem}$ across time and space. The function plot the evolution of $V_{mem}$ across time for a subset of x position (20 by default):
+# We can also use the ``plot_x_t`` method of ``results`` to plot :math:`V_{mem}` across time and space. The function plot the evolution of :math:`V_{mem}` across time for a subset of x position (20 by default):
 
 fig, ax = plt.subplots(1)
 results.plot_x_t(ax,'V_mem')
@@ -95,8 +95,8 @@ ax.set_xlim(0,results.tstop)
 ax.set_ylim(0,np.max(results.x_rec))
 
 # %%
-# The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber ($x = 0\mu m$, where the current clamp is attached to the fiber) to the other end of the fiber ($x = 5000\mu m$). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
-# The AP took approximately $12 ms$ to travel across the fiber $5000\mu m$ fiber. The propagation velocity of the AP is thus about $0.4m/s$. This property is referred to as the conduction velocity of a fiber.
+# The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber (`x = 0\mu m`, where the current clamp is attached to the fiber) to the other end of the fiber (`x = 5000\mu m`). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
+# The AP took approximately :math:`12 ms` to travel across the fiber :math:`5000\mu m` fiber. The propagation velocity of the AP is thus about :math:`0.4m/s`. This property is referred to as the conduction velocity of a fiber.
 #
 # In many situations, we want to detect if whether an AP is going through the fiber. For that, the ```rasterize``` method of the ``results`` object. The method detected the presence of AP in the fiber across time and space using a threshold function. The results can be plotted with the ``raster_plot`` method of ``results``.
 
@@ -112,8 +112,8 @@ fig.tight_layout()
 
 
 # %%
-# The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber ($x = 0\mu m$, where the current clamp is attached to the fiber) to the other end of the fiber ($x = 5000\mu m$). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
-# The AP took approximately $12 ms$ to travel across the fiber $5000\mu m$ fiber. The propagation velocity of the AP is thus about $0.4m/s$. This property is referred to as the conduction velocity of a fiber.
+# The color plot shows that the voltage spike across the fiber's voltage propagates from one end of the fiber (`x = 0\mu m`, where the current clamp is attached to the fiber) to the other end of the fiber (`x = 5000\mu m`). The generates voltage spikes propagates across the fiber: it is an action potential (AP)!
+# The AP took approximately :math:`12 ms` to travel across the fiber :math:`5000\mu m` fiber. The propagation velocity of the AP is thus about :math:`0.4m/s`. This property is referred to as the conduction velocity of a fiber.
 
 # In many situations, we want to detect if whether an AP is going through the fiber. For that, the ```rasterize``` method of the ``results`` object. The method detected the presence of AP in the fiber across time and space using a threshold function. The results can be plotted with the ``raster_plot`` method of ``results``.
 
@@ -128,7 +128,7 @@ model = "MRG" #myelinated fiber model, MRG by default
 axon_m = nrv.myelinated(y, z, d, L, model=model,rec='all')
 
 # %%
-# Attaching an intracelullar clamp is similar, but the position of the clamp on the fiber is defined by a NoR number instead of an absolute $x-position$. Here the clamp is attached to the first NoR of fiber, i.e. the closest NoR to $x = 0\mu m$.
+# Attaching an intracelullar clamp is similar, but the position of the clamp on the fiber is defined by a NoR number instead of an absolute :math:`x-position`. Here the clamp is attached to the first NoR of fiber, i.e. the closest NoR to :math:`x = 0\mu m`.
 
 ## test pulse
 t_start = 1

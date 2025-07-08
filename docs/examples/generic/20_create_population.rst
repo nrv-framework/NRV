@@ -22,7 +22,7 @@ Create an unplaced population
 =============================
 
 Simple example showing how to create an unplaced axon population with NRV and plot an histogram of the diameters values. In this example population are either created:
-    - From data (`tupple`, :class:`numpy.ndarray`, `dict` or :class:`pandas.DataFrame`)
+    - From data (:class:`tupple`, :class:`numpy.ndarray`, :class:`dict` or :class:`pandas.DataFrame`)
 
 .. seealso::
     :doc:`Users' guide <../../usersguide/populations>`
@@ -124,52 +124,52 @@ When `data` are in a tupple
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>9.977344</td>
+          <td>11.489104</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0</td>
-          <td>13.373399</td>
+          <td>1</td>
+          <td>7.021503</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>19.618248</td>
+          <td>1</td>
+          <td>1.794894</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>9.119061</td>
+          <td>4.470522</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1</td>
-          <td>10.171386</td>
+          <td>0</td>
+          <td>5.191064</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0</td>
-          <td>17.593294</td>
+          <td>1</td>
+          <td>7.420182</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1</td>
-          <td>6.573522</td>
+          <td>0</td>
+          <td>2.347313</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>0</td>
-          <td>5.204733</td>
+          <td>1</td>
+          <td>2.798213</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>14.817707</td>
+          <td>16.485956</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0</td>
-          <td>7.540484</td>
+          <td>10.210258</td>
         </tr>
       </tbody>
     </table>
@@ -234,52 +234,52 @@ When `data` are in a np.ndarray
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>9.977344</td>
+          <td>11.489104</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0.0</td>
-          <td>13.373399</td>
+          <td>1.0</td>
+          <td>7.021503</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0.0</td>
-          <td>19.618248</td>
+          <td>1.0</td>
+          <td>1.794894</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>9.119061</td>
+          <td>4.470522</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1.0</td>
-          <td>10.171386</td>
+          <td>0.0</td>
+          <td>5.191064</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0.0</td>
-          <td>17.593294</td>
+          <td>1.0</td>
+          <td>7.420182</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1.0</td>
-          <td>6.573522</td>
+          <td>0.0</td>
+          <td>2.347313</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>0.0</td>
-          <td>5.204733</td>
+          <td>1.0</td>
+          <td>2.798213</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>14.817707</td>
+          <td>16.485956</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0.0</td>
-          <td>7.540484</td>
+          <td>10.210258</td>
         </tr>
       </tbody>
     </table>
@@ -344,52 +344,52 @@ When `data` are in a dict
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>9.977344</td>
+          <td>11.489104</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0</td>
-          <td>13.373399</td>
+          <td>1</td>
+          <td>7.021503</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>19.618248</td>
+          <td>1</td>
+          <td>1.794894</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>9.119061</td>
+          <td>4.470522</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1</td>
-          <td>10.171386</td>
+          <td>0</td>
+          <td>5.191064</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0</td>
-          <td>17.593294</td>
+          <td>1</td>
+          <td>7.420182</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1</td>
-          <td>6.573522</td>
+          <td>0</td>
+          <td>2.347313</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>0</td>
-          <td>5.204733</td>
+          <td>1</td>
+          <td>2.798213</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>14.817707</td>
+          <td>16.485956</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0</td>
-          <td>7.540484</td>
+          <td>10.210258</td>
         </tr>
       </tbody>
     </table>
@@ -453,52 +453,52 @@ When `data` are in a dataframe
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>9.977344</td>
+          <td>11.489104</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0</td>
-          <td>13.373399</td>
+          <td>1</td>
+          <td>7.021503</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>19.618248</td>
+          <td>1</td>
+          <td>1.794894</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>9.119061</td>
+          <td>4.470522</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1</td>
-          <td>10.171386</td>
+          <td>0</td>
+          <td>5.191064</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0</td>
-          <td>17.593294</td>
+          <td>1</td>
+          <td>7.420182</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>1</td>
-          <td>6.573522</td>
+          <td>0</td>
+          <td>2.347313</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>0</td>
-          <td>5.204733</td>
+          <td>1</td>
+          <td>2.798213</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>14.817707</td>
+          <td>16.485956</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0</td>
-          <td>7.540484</td>
+          <td>10.210258</td>
         </tr>
       </tbody>
     </table>
@@ -563,103 +563,103 @@ Small 20-axons population
       <tbody>
         <tr>
           <th>0</th>
-          <td>1.0</td>
-          <td>6.939880</td>
+          <td>0.0</td>
+          <td>0.919439</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>1.796994</td>
+          <td>1.488978</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0.0</td>
-          <td>1.959719</td>
+          <td>1.186774</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>1.018236</td>
+          <td>1.616834</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>1.645892</td>
+          <td>1.378557</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0.0</td>
-          <td>1.117034</td>
+          <td>0.948497</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0.0</td>
-          <td>1.709820</td>
+          <td>1.547094</td>
         </tr>
         <tr>
           <th>7</th>
           <td>1.0</td>
-          <td>5.835671</td>
+          <td>8.196393</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>2.401403</td>
+          <td>0.803206</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0.0</td>
-          <td>1.698196</td>
+          <td>1.523848</td>
         </tr>
         <tr>
           <th>10</th>
-          <td>0.0</td>
-          <td>1.227455</td>
+          <td>1.0</td>
+          <td>7.282565</td>
         </tr>
         <tr>
           <th>11</th>
           <td>0.0</td>
-          <td>1.913226</td>
+          <td>1.070541</td>
         </tr>
         <tr>
           <th>12</th>
-          <td>1.0</td>
-          <td>7.472946</td>
+          <td>0.0</td>
+          <td>2.378156</td>
         </tr>
         <tr>
           <th>13</th>
           <td>0.0</td>
-          <td>1.262325</td>
+          <td>0.768337</td>
         </tr>
         <tr>
           <th>14</th>
           <td>1.0</td>
-          <td>9.567134</td>
+          <td>8.653307</td>
         </tr>
         <tr>
           <th>15</th>
           <td>0.0</td>
-          <td>1.320441</td>
+          <td>1.233267</td>
         </tr>
         <tr>
           <th>16</th>
           <td>1.0</td>
-          <td>2.903808</td>
+          <td>8.462926</td>
         </tr>
         <tr>
           <th>17</th>
-          <td>0.0</td>
-          <td>1.401804</td>
+          <td>1.0</td>
+          <td>2.751503</td>
         </tr>
         <tr>
           <th>18</th>
-          <td>1.0</td>
-          <td>3.513026</td>
+          <td>0.0</td>
+          <td>0.681162</td>
         </tr>
         <tr>
           <th>19</th>
-          <td>0.0</td>
-          <td>1.140281</td>
+          <td>1.0</td>
+          <td>2.675351</td>
         </tr>
       </tbody>
     </table>
@@ -713,7 +713,7 @@ Histograms
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.419 seconds)
+   **Total running time of the script:** (0 minutes 0.435 seconds)
 
 
 .. _sphx_glr_download_examples_generic_20_create_population.py:

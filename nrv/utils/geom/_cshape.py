@@ -92,7 +92,7 @@ class CShape(NRV_class):
     @property
     def bbox(self) -> tuple[float, float]:
         """
-        Coordinate of the bounding box as a :class:`numpy.ndarray`in the following format $y_{min}, z_{min}, y_{max}, z_{max}$.
+        Coordinate of the bounding box as a :class:`numpy.ndarray`in the following format :math:`y_{min}, z_{min}, y_{max}, z_{max}`.
 
         Returns
         -------

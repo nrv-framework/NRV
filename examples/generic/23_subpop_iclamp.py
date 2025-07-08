@@ -2,6 +2,8 @@ r"""
 Intracellular stimulation of axon subpopulations
 ================================================
 
+Example of use of subpopulation for axon species targeted current clamp.
+
 This example shows:
     - Creating a nerve with fascicles of various geometries.
     - Filling fascicles with axon populations.
@@ -10,7 +12,9 @@ This example shows:
     - Running a simulation and plotting recruited fibers.
 
 .. seealso::
-    :doc:`Users' guide <../../usersguide/populations>`
+    - :doc:`Simulable <../../usersguide/populations>`, :doc:`Axon population <../../usersguide/populations>` and :doc:`Geometry <../../usersguide/geometry>` Users' guides.
+    
+     - :doc:`Tutorial 4 <../../tutorials/4_nerve_simulation>`
 """
 
 import nrv
@@ -34,9 +38,8 @@ if __name__ == '__main__':
 
     # Fascicle 3: Polygon
     vertices = [(-80, 130), (0, 180), (80, 130), (50, 30), (0, -30), (-50, 30)]
-    from nrv.utils import geom
     fasc3 = nrv.fascicle(ID=3)
-    fasc3.set_geometry(geometry=geom.Polygon(vertices=vertices))
+    fasc3.set_geometry(geometry=nrv.create_cshape(vertices=vertices))
     fasc3_y, fasc3_z = 0, 100
     ner.add_fascicle(fasc3, y=fasc3_y, z=fasc3_z, rot=-np.pi/6)
 

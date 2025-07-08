@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:30.787** total execution time for 22 files **from examples/generic**:
+**00:31.399** total execution time for 22 files **from examples/generic**:
 
 .. container::
 
@@ -33,7 +33,10 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py` (``23_subpop_iclamp.py``)
-     - 00:30.787
+     - 00:30.964
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_20_create_population.py` (``20_create_population.py``)
+     - 00:00.435
      - 0.0
    * - :ref:`sphx_glr_examples_generic_01_propagation_Vmem.py` (``01_propagation_Vmem.py``)
      - 00:00.000
@@ -87,9 +90,6 @@ Computation times
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_19_build_geometry.py` (``19_build_geometry.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_examples_generic_20_create_population.py` (``20_create_population.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_21_place_population.py` (``21_place_population.py``)

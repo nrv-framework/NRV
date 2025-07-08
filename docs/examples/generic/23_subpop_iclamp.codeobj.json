@@ -937,92 +937,6 @@
    "name": "Figure"
   }
  ],
- "geom.Polygon": [
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils.geom._polygon",
-   "module_short": "nrv.utils.geom",
-   "name": "Polygon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils.geom",
-   "module_short": "nrv.utils.geom",
-   "name": "Polygon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils",
-   "module_short": "nrv.utils",
-   "name": "Polygon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "Polygon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils.geom._cshape",
-   "module_short": "nrv.utils.geom",
-   "name": "CShape"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils.geom",
-   "module_short": "nrv.utils.geom",
-   "name": "CShape"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.utils",
-   "module_short": "nrv.utils",
-   "name": "CShape"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "CShape"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv",
-   "name": "NRV_class"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv",
-   "name": "NRV_class"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.utils.geom",
-   "module_short": "nrv.utils.geom",
-   "name": "Polygon"
-  }
- ],
  "i_amp": [
   {
    "is_class": false,
@@ -1327,6 +1241,22 @@
    "module": "numpy",
    "module_short": "numpy",
    "name": "pi"
+  }
+ ],
+ "nrv.create_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "create_cshape"
   }
  ],
  "nrv.fascicle": [
