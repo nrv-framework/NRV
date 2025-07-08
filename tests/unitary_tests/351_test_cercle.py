@@ -24,9 +24,7 @@ def test_cercle():
     assert not circle.is_inside((3, 4)), "Point (3, 4) should be outside the circle."
 
 
-    y_trace, z_trace = circle.get_trace()
     # Plot the circle
-    y_trace, z_trace = circle.get_trace()
     fig, ax = plt.subplots(figsize=(6, 6))
     circle.plot(ax, label="Polygon Trace")
     circle.plot_bbox(ax, "-+",color=("k",.2),label='bbox')

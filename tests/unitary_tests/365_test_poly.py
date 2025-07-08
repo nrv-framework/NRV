@@ -23,7 +23,7 @@ def test_cercle():
     poly.plot(ax, label="Polygon Trace")
     poly.plot_bbox(ax, "-+",color=("k",.2),label='bbox')
     ax.scatter(*poly.center[:2], color='red', label='Center', zorder=5)
-    ax.scatter(*inside_pts, color=(.2,.6,.3,.2), label='generated points', zorder=5)
+    ax.scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
     # plt.xlim(-5, 5)
     # plt.ylim(-5, 5)
     ax.set_aspect('equal', adjustable='box')

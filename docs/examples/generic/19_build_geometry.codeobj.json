@@ -1,22 +1,4 @@
 {
- "L": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "int"
-  }
- ],
- "_": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "list"
-  }
- ],
  "__name__": [
   {
    "is_class": false,
@@ -26,231 +8,13 @@
    "name": "str"
   }
  ],
- "amplitude": [
+ "angle": [
   {
    "is_class": false,
    "is_explicit": false,
    "module": "builtins",
    "module_short": "builtins",
-   "name": "int"
-  }
- ],
- "ax": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "matplotlib.axes._axes",
-   "module_short": "matplotlib.axes",
-   "name": "Axes"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "matplotlib.axes",
-   "module_short": "matplotlib.axes",
-   "name": "Axes"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "matplotlib",
-   "module_short": "matplotlib",
-   "name": "Axes"
-  }
- ],
- "axon2": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod._myelinated",
-   "module_short": "nrv",
-   "name": "myelinated"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "myelinated"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated"
-  }
- ],
- "axon2.insert_I_Clamp": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod._myelinated",
-   "module_short": "nrv",
-   "name": "myelinated.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "myelinated.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod._axons",
-   "module_short": "nrv",
-   "name": "axon.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "axon.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Simulable",
-   "module_short": "nrv.backend._NRV_Simulable",
-   "name": "NRV_simulable.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_simulable.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_simulable.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.insert_I_Clamp"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.insert_I_Clamp"
-  }
- ],
- "axon2.simulate": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod._myelinated",
-   "module_short": "nrv",
-   "name": "myelinated.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "myelinated.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod._axons",
-   "module_short": "nrv",
-   "name": "axon.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "axon.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Simulable",
-   "module_short": "nrv",
-   "name": "NRV_simulable.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv",
-   "name": "NRV_simulable.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_simulable.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.simulate"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.simulate"
+   "name": "float"
   }
  ],
  "axs": [
@@ -262,22 +26,524 @@
    "name": "ndarray"
   }
  ],
- "d": [
+ "center": [
   {
    "is_class": false,
    "is_explicit": false,
    "module": "builtins",
    "module_short": "builtins",
-   "name": "int"
+   "name": "tuple"
   }
  ],
- "duration": [
+ "circle": [
   {
    "is_class": false,
    "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "float"
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle"
+  }
+ ],
+ "circle.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "circle.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "ellipse": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  }
+ ],
+ "ellipse.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "ellipse.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "ellipse.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
   }
  ],
  "fig": [
@@ -296,113 +562,78 @@
    "name": "Figure"
   }
  ],
- "fig.tight_layout": [
+ "fig.legend": [
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib.figure",
    "module_short": "matplotlib.figure",
-   "name": "Figure.tight_layout"
+   "name": "Figure.legend"
   },
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib",
    "module_short": "matplotlib",
-   "name": "Figure.tight_layout"
+   "name": "Figure.legend"
   },
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib.figure",
    "module_short": "matplotlib.figure",
-   "name": "FigureBase.tight_layout"
+   "name": "FigureBase.legend"
   },
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib",
    "module_short": "matplotlib",
-   "name": "FigureBase.tight_layout"
+   "name": "FigureBase.legend"
   },
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib.artist",
    "module_short": "matplotlib.artist",
-   "name": "Artist.tight_layout"
+   "name": "Artist.legend"
   },
   {
    "is_class": false,
    "is_explicit": false,
    "module": "matplotlib",
    "module_short": "matplotlib",
-   "name": "Artist.tight_layout"
+   "name": "Artist.legend"
   }
  ],
- "nrv.myelinated": [
+ "geom.CShape": [
   {
    "is_class": true,
    "is_explicit": false,
-   "module": "nrv.nmod._myelinated",
-   "module_short": "nrv",
-   "name": "myelinated"
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
   },
   {
    "is_class": true,
    "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "myelinated"
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
   },
   {
    "is_class": true,
    "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.nmod._axons",
-   "module_short": "nrv",
-   "name": "axon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv",
-   "name": "axon"
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
   },
   {
    "is_class": true,
    "is_explicit": false,
    "module": "nrv",
    "module_short": "nrv",
-   "name": "axon"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Simulable",
-   "module_short": "nrv",
-   "name": "NRV_simulable"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv",
-   "name": "NRV_simulable"
-  },
-  {
-   "is_class": true,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_simulable"
+   "name": "CShape"
   },
   {
    "is_class": true,
@@ -428,12 +659,298 @@
   {
    "is_class": false,
    "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated"
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
   }
  ],
- "plt.show": [
+ "geom.Circle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  }
+ ],
+ "geom.Ellipse": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  }
+ ],
+ "geom.Polygon": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  }
+ ],
+ "geom.create_cshape": [
   {
    "is_class": false,
    "is_explicit": false,
@@ -444,9 +961,169 @@
   {
    "is_class": false,
    "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  }
+ ],
+ "inside_pts": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "inside_pts.T": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "np.pi": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "pi"
+  }
+ ],
+ "nrv.utils.geom.CShape.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "get_point_inside"
+  }
+ ],
+ "nrv.utils.geom.CShape.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "rotate"
+  }
+ ],
+ "nrv.utils.geom.CShape.translate": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "translate"
+  }
+ ],
+ "nrv.utils.geom.create_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  }
+ ],
+ "p": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "plot_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "plt.Axes": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
    "module": "matplotlib.pyplot",
    "module_short": "matplotlib.pyplot",
-   "name": "show"
+   "name": "Axes"
   }
  ],
  "plt.subplots": [
@@ -465,1838 +1142,7 @@
    "name": "subplots"
   }
  ],
- "results": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results"
-  }
- ],
- "results.APs_in_timeframe": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.APs_in_timeframe"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.APs_in_timeframe"
-  }
- ],
- "results.APs_reached_end": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.APs_reached_end"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.APs_reached_end"
-  }
- ],
- "results.colormap_plot": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.colormap_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.colormap_plot"
-  }
- ],
- "results.count_APs": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.count_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.count_APs"
-  }
- ],
- "results.detect_AP_collisions": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.detect_AP_collisions"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.detect_AP_collisions"
-  }
- ],
- "results.getAPspeed": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.getAPspeed"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.getAPspeed"
-  }
- ],
- "results.get_collision_pts": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.get_collision_pts"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.get_collision_pts"
-  }
- ],
- "results.get_start_AP": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.get_start_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.get_start_AP"
-  }
- ],
- "results.get_xmax_AP": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.get_xmax_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.get_xmax_AP"
-  }
- ],
- "results.get_xmin_AP": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.get_xmin_AP"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.get_xmin_AP"
-  }
- ],
- "results.plot_x_t": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.plot_x_t"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.plot_x_t"
-  }
- ],
- "results.raster_plot": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.raster_plot"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.raster_plot"
-  }
- ],
- "results.rasterize": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.rasterize"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.rasterize"
-  }
- ],
- "results.split_APs": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._myelinated_results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "myelinated_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "myelinated_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "myelinated_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results._axons_results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod.results",
-   "module_short": "nrv.nmod.results",
-   "name": "axon_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.nmod",
-   "module_short": "nrv.nmod",
-   "name": "axon_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "axon_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "sim_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "sim_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "sim_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Results",
-   "module_short": "nrv.backend._NRV_Results",
-   "name": "NRV_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_results.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend._NRV_Class",
-   "module_short": "nrv.backend._NRV_Class",
-   "name": "NRV_class.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv.backend",
-   "module_short": "nrv.backend",
-   "name": "NRV_class.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "nrv",
-   "module_short": "nrv",
-   "name": "NRV_class.split_APs"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "dict.split_APs"
-  }
- ],
- "t_AP": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "ndarray"
-  }
- ],
- "t_APs": [
+ "points": [
   {
    "is_class": false,
    "is_explicit": false,
@@ -2305,106 +1151,580 @@
    "name": "list"
   }
  ],
- "t_coll": [
+ "poly": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly1.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "poly1.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "poly1.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "poly2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly2.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "poly2.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "poly2.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "r": [
   {
    "is_class": false,
    "is_explicit": false,
    "module": "builtins",
    "module_short": "builtins",
-   "name": "list"
+   "name": "tuple"
   }
  ],
- "t_start": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "t_xmax": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "t_xmin": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "x_AP": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "ndarray"
-  }
- ],
- "x_APs": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "list"
-  }
- ],
- "x_coll": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "list"
-  }
- ],
- "x_max": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "x_min": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "x_start": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "numpy",
-   "module_short": "numpy",
-   "name": "float64"
-  }
- ],
- "y": [
-  {
-   "is_class": false,
-   "is_explicit": false,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": "int"
-  }
- ],
- "z": [
+ "radius": [
   {
    "is_class": false,
    "is_explicit": false,

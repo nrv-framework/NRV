@@ -18,18 +18,18 @@ def test_axon_pop_set_from_stat():
     angle = -np.pi/12
     ellipse = geom.Ellipse(center, r, angle)
 
-    pop_tup = axon_population()
+    pop_stat = axon_population()
 
     n_ax = 20
-    assert not pop_tup.has_pop, "Axon population should not contain population at the creation."
-    assert pop_tup.n_ax == 0, "Wrong number of axons."
+    assert not pop_stat.has_pop, "Axon population should not contain population at the creation."
+    assert pop_stat.n_ax == 0, "Wrong number of axons."
 
-    pop_tup.set_geometry(ellipse)
-    pop_tup.create_population_from_stat(n_ax=n_ax)
-    assert pop_tup.has_pop, "Axon population should contain population after setting."
-    assert pop_tup.n_ax == n_ax, "Wrong number of axons."
-    assert all(pop_tup.axon_pop["diameters"] == pop_tup["diameters"]), "Issue with getitems"
-    assert all(pop_tup.axon_pop.loc[[0]] == pop_tup.axon_pop.loc[[0]]), "Issue with loc"
+    pop_stat.set_geometry(ellipse)
+    pop_stat.create_population_from_stat(n_ax=n_ax)
+    assert pop_stat.has_pop, "Axon population should contain population after setting."
+    assert pop_stat.n_ax == n_ax, "Wrong number of axons."
+    assert all(pop_stat.axon_pop["diameters"] == pop_stat["diameters"]), "Issue with getitems"
+    assert all(pop_stat.axon_pop.loc[[0]] == pop_stat.axon_pop.loc[[0]]), "Issue with loc"
 
 
 

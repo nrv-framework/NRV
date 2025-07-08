@@ -133,6 +133,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "matplotlib": ("https://matplotlib.org/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
 }
 
 # Napoleon config
@@ -143,8 +144,6 @@ autodoc_member_order = 'bysource'
 autosummary_generate = True
 autosummary_ignore_module_all = False
 
-# nbsphinx config
-nbsphinx_execute = 'never'
 
 # -- Sphinx Gallery configuration ---------------------------------------------
 sphinx_gallery_conf = {

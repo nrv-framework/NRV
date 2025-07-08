@@ -18,117 +18,217 @@
 .. _sphx_glr_examples_generic_19_build_geometry.py:
 
 
-Analyzing Action Potentials in Axons
-====================================
+Create a CShape geometry
+========================
 
-This script shows how to use the methods of ``axon_results``-class to detect and analyze action potentials.
-
-.. GENERATED FROM PYTHON SOURCE LINES 7-67
-
-
-
-.. rst-class:: sphx-glr-horizontal
+Simple example showing how to handle builtin 2D shapes. More precisely this example shows how to:
+    - create shape by instantiating the corresponding class
+    - create shape using the generic :func:`~nrv.utils.geom.create_cshape`-function
+    - Use basic method implemented in CShape subclasses (:meth:`~nrv.utils.geom.CShape.translate`, :meth:`~nrv.utils.geom.CShape.rotate`, :meth:`~nrv.utils.geom.CShape.get_point_inside`)
 
 
-    *
+.. seealso::
+    :doc:`Users' guide <../../usersguide/geometry>`
 
-      .. image-sg:: /examples/generic/images/sphx_glr_19_build_geometry_001.png
-         :alt: 19 build geometry
-         :srcset: /examples/generic/images/sphx_glr_19_build_geometry_001.png
-         :class: sphx-glr-multi-img
-
-    *
-
-      .. image-sg:: /examples/generic/images/sphx_glr_19_build_geometry_002.png
-         :alt: 19 build geometry
-         :srcset: /examples/generic/images/sphx_glr_19_build_geometry_002.png
-         :class: sphx-glr-multi-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Number of APs detected: 5
-    APs reached end: False
-    APs reached end within the timeframe: True
-    InterAP collision detected: True
-    AP propagation velocity: 57.5m/s
-
-
-
-
-
-
-|
+.. GENERATED FROM PYTHON SOURCE LINES 14-34
 
 .. code-block:: Python
 
-    import nrv
+    import nrv.utils.geom as geom
     import matplotlib.pyplot as plt
+    import numpy as np
+
+    def plot_cshape(axes:plt.Axes, csh:geom.CShape, label:str):
+        """
+        Plot a CShape with its bounding box
+        """
+        # Plot the shape
+        csh.plot(axes, label="Trace")
+
+        # Plot its bounding box
+        csh.plot_bbox(axes, "-+",color=("k",.2),label="bbox")
+
+        # plt.axes parameters
+        axes.set_aspect('equal', adjustable='box')
+        axes.set_xlabel('Y-axis')
+        axes.set_ylabel('Z-axis')
+        axes.set_title(label)
+        axes.grid(visible=True)
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 35-37
+
+First method: from the classes
+------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 37-66
+
+.. code-block:: Python
+
 
     if __name__ == '__main__':
-        y = 0
-        z = 0
-        d = 10
-        L = 20000
-        #with AP collision
-        axon2 = nrv.myelinated(y,z,d,L,dt=0.005,rec='all')
-        t_start = 2
-        duration = 0.1
-        amplitude = 2
 
-        axon2.insert_I_Clamp(0.5, 2.01, duration, amplitude)
-        axon2.insert_I_Clamp(0.75, 6.01, duration, amplitude)
-        axon2.insert_I_Clamp(0.25, 6.0, duration, amplitude)
-        axon2.insert_I_Clamp(0.75, 8.01, duration, amplitude)
-        axon2.insert_I_Clamp(0.25, 8.0, duration, amplitude)
-        results = axon2.simulate(t_sim=10)
+        fig, axs = plt.subplots(2, 2, layout="constrained")
 
-        results.rasterize()
-        x_APs,_,t_APs,_ = results.split_APs()
+        center = (1, 1)
+        radius = 2
+        circle = geom.Circle(center, radius)
+        plot_cshape(axes=axs[0,0], csh=circle, label="Circle 1")
 
-        print(f"Number of APs detected: {results.count_APs()}")
-        print(f"APs reached end: {results.APs_reached_end()}")
-        print(f"APs reached end within the timeframe: {results.APs_in_timeframe()}")
-        print(f"InterAP collision detected: {results.detect_AP_collisions()}")
-        if (results.count_APs()):
-            print(f"AP propagation velocity: {results.getAPspeed()[0]}m/s")
 
-        fig,ax = plt.subplots(1)
-        results.colormap_plot(ax)
+        center = 1, 1
+        r = 3, 2
+        angle = -np.pi/3 # Rotation angle in degrees
+        ellipse = geom.Ellipse(center, r, angle)
+        plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse 1")
 
-        fig,axs = plt.subplots(2)
 
-        results.plot_x_t(axs[0],"V_mem")
-        axs[0].set_xlabel('time (ms)')
-        axs[0].set_ylabel("x-axis (µm)")
-        axs[0].set_xlim(0,results['tstop'])
+        points = [[-6,1.5],[3,-2], [-2,1.5],[3,5]]
+        poly = geom.Polygon(vertices=points)
+        plot_cshape(axes=axs[0,1], csh=poly, label="Polygon 1")
 
-        results.raster_plot(axs[1],"V_mem")
-        for x_AP,t_AP in zip(x_APs,t_APs):
-            axs[1].scatter(t_AP,x_AP)
-            x_start,t_start = results.get_start_AP(x_AP,t_AP)
-            x_max,t_xmax = results.get_xmax_AP(x_AP,t_AP)
-            x_min,t_xmin = results.get_xmin_AP(x_AP,t_AP)
-            axs[1].scatter(t_start,x_start,s=10,c = 'k')
-            axs[1].scatter(t_xmax,x_max,s=10,c = 'g')
-            axs[1].scatter(t_xmin,x_min,s=10,c = 'b')
 
-        if results.detect_AP_collisions():
-            x_coll,t_coll,_ = results.get_collision_pts()
-            axs[1].scatter(t_coll,x_coll,s=50,c = 'r')
+        points = [[0, 2],[-.6,1.8], [-.8, 1.4], [-.8, 1], [-.6, .6], [0, .4], [.4, .6], [.4, .8], [.2, 1], [0, 1.2], [0, 1.4], [.2, 1.6], [.6, 1.8], [.6, 2], [.6, 2.2]]
+        poly = geom.Polygon(vertices=points)
+        plot_cshape(axes=axs[1,1], csh=poly, label="Polygon 2")
+        axs[1,1].legend()
 
-        axs[1].set_xlabel('time (ms)')
-        axs[1].set_ylabel("x-axis (µm)")
-        axs[1].set_xlim(0,results['tstop'])
 
-        fig.tight_layout()
-        plt.show()
+
+
+
+.. image-sg:: /examples/generic/images/sphx_glr_19_build_geometry_001.png
+   :alt: Circle 1, Polygon 1, Ellipse 1, Polygon 2
+   :srcset: /examples/generic/images/sphx_glr_19_build_geometry_001.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 67-69
+
+Second method: from :func:`~nrv.utils.geom.create_cshape`
+---------------------------------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 69-97
+
+.. code-block:: Python
+
+    if __name__ == '__main__':
+
+        fig, axs = plt.subplots(2, 2, layout="constrained")
+
+        center = (1, 1)
+        radius = 2
+        circle = geom.create_cshape(center=center, radius=radius)
+        plot_cshape(axes=axs[0,0], csh=circle, label="Circle")
+
+
+        center = 1, 1
+        r = 3, 2
+        angle = -np.pi/3 # Rotation angle in degrees
+        ellipse = geom.create_cshape(center=center, radius=r,rot=angle)
+        plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
+
+
+        points = [[-6,1.5],[3,-2], [-2,1.5],[3,5]]
+        poly1 = geom.create_cshape(vertices=points)
+        plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
+
+
+        points = [[0, 2],[-.6,1.8], [-.8, 1.4], [-.8, 1], [-.6, .6], [0, .4], [.4, .6], [.4, .8], [.2, 1], [0, 1.2], [0, 1.4], [.2, 1.6], [.6, 1.8], [.6, 2], [.6, 2.2]]
+        poly2 = geom.create_cshape(vertices=points)
+        plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
+        axs[1,1].legend()
+
+
+
+
+
+.. image-sg:: /examples/generic/images/sphx_glr_19_build_geometry_002.png
+   :alt: Circle, Polygon 1, Ellipse, Polygon 2
+   :srcset: /examples/generic/images/sphx_glr_19_build_geometry_002.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 98-101
+
+Implemented methods
+-------------------
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 101-144
+
+.. code-block:: Python
+
+    if __name__ == '__main__':
+
+        fig, axs = plt.subplots(2, 2, layout="constrained")
+
+        plot_cshape(axes=axs[0,0], csh=circle, label="Circle")
+        circle.translate(y=3)
+        plot_cshape(axes=axs[0,0], csh=circle, label="Circle")
+        inside_pts = circle.get_point_inside(100, delta=.5)
+        axs[0,0].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
+
+
+        plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
+        ellipse.translate(z=-4)
+        plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
+        ellipse.rotate(60, degree=True)
+        plot_cshape(axes=axs[1,0], csh=ellipse, label="Ellipse")
+        inside_pts = ellipse.get_point_inside(100, delta=.5)
+        axs[1,0].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
+
+
+        plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
+        poly1.translate(y=3)
+        plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
+        poly1.rotate(60, degree=True)
+        plot_cshape(axes=axs[0,1], csh=poly1, label="Polygon 1")
+        inside_pts = poly1.get_point_inside(100, delta=.2)
+        axs[0,1].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)
+
+
+        plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
+        poly2.translate(y=-1, z=-2)
+        plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
+        poly2.rotate(60, degree=True)
+        plot_cshape(axes=axs[1,1], csh=poly2, label="Polygon 2")
+        inside_pts = poly2.get_point_inside(100, delta=.1)
+
+        p = axs[1,1].lines[::2]
+        p += [axs[1,1].lines[1]]
+        p += [axs[1,1].scatter(*inside_pts.T, color=(.2,.6,.3,.2), label='generated points', zorder=5)]
+
+        fig.legend(handles=p, labels=["trace", "translate", "rotate", "bbox", "get_point_inside"], loc=(.4,.32))
+
+
+
+
+
+.. image-sg:: /examples/generic/images/sphx_glr_19_build_geometry_003.png
+   :alt: Circle, Polygon 1, Ellipse, Polygon 2
+   :srcset: /examples/generic/images/sphx_glr_19_build_geometry_003.png
+   :class: sphx-glr-single-img
+
+
+
+
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.544 seconds)
+   **Total running time of the script:** (0 minutes 0.483 seconds)
 
 
 .. _sphx_glr_download_examples_generic_19_build_geometry.py:

@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:49.835** total execution time for 19 files **from examples/generic**:
+**00:04.385** total execution time for 21 files **from examples/generic**:
 
 .. container::
 
@@ -32,11 +32,8 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_generic_15_activation_thresholds.py` (``15_activation_thresholds.py``)
-     - 01:49.835
-     - 0.0
-   * - :ref:`sphx_glr_examples_generic_00_dummy_example.py` (``00_dummy_example.py``)
-     - 00:00.000
+   * - :ref:`sphx_glr_examples_generic_22_access_subpopulation.py` (``22_access_subpopulation.py``)
+     - 00:04.385
      - 0.0
    * - :ref:`sphx_glr_examples_generic_01_propagation_Vmem.py` (``01_propagation_Vmem.py``)
      - 00:00.000
@@ -80,6 +77,9 @@ Computation times
    * - :ref:`sphx_glr_examples_generic_14_activation_function_cuff.py` (``14_activation_function_cuff.py``)
      - 00:00.000
      - 0.0
+   * - :ref:`sphx_glr_examples_generic_15_activation_thresholds.py` (``15_activation_thresholds.py``)
+     - 00:00.000
+     - 0.0
    * - :ref:`sphx_glr_examples_generic_16_activation_thresholds_arbitrary.py` (``16_activation_thresholds_arbitrary.py``)
      - 00:00.000
      - 0.0
@@ -87,5 +87,11 @@ Computation times
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_19_build_geometry.py` (``19_build_geometry.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_20_create_population.py` (``20_create_population.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_21_place_population.py` (``21_place_population.py``)
      - 00:00.000
      - 0.0
