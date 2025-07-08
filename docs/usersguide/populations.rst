@@ -22,12 +22,12 @@ There are several ways of using/creating populations:
 - a population can be generated using a distribution probability,
 - a population can be generated from data (stored in various formats)
 
-A simple example of compact code is given in the examples (see :doc:`example o01 <../examples/generic/20_create_population>`)
+A simple example of compact code is given in the examples (see :doc:`example 20 <../examples/generic/20_create_population>`)
 
 Generate a population from data
 -------------------------------
 
-It is possible to generate a desired population give two iterables, describing both the axon myelination (`1` or `True` for myelinated axons, `0` or `False`for unmyelinated axons) and the axons diamters. These iterables can be:
+It is possible to generate a desired population give two iterables, describing both the axon myelination (`1` or `True` for myelinated axons, `0` or `False` for unmyelinated axons) and the axons diameters. These iterables can be:
 
 - tuples, in this case, the following syntax should be used, with `ax_type` and `ax_diameters` two one dimentional array-like or iterables
 
@@ -36,7 +36,7 @@ It is possible to generate a desired population give two iterables, describing b
         pop = axon_population()
         pop.create_population_from_data((ax_type, ax_diameters))
 
-- with a unique numpy array combining both myelination and diametersn following the next syntax:
+- with a unique numpy array combining both myelination and diameters following the next syntax:
 
     .. code-block:: python
 
@@ -220,9 +220,14 @@ Starting on a grid, axons are automatically migrated in the direction of a so-ca
 
 The packing is performed with a single function called :meth:`~nrv.nmod.axon_packer`, and the function is designed to interface with the :meth:`~nrv.nmod.create_axon_population` function detailed previously. 
 
+.. important::
+    The packer only works with circular geometry, not with ellipses neither with generic polygons, and is not recommended. It is maintained mostly for backward compatibility. If the algorithms seems elegant, we noticed that sometimes unmyelinated axons aggregates around myelinated ones, in a strange fashion. It turns out that the placer does not have this behaviour and is computationally much more efficient, especially for large populations. USE PACKING AT YOUR OWN RISK.
 
 Interacting with populations
 ============================
+
+Basic methods
+-------------
 
 Methods have been implemented to interact with population in an easy way. If you need to remove some information, two methods for clearing data are implemented:
 
@@ -236,4 +241,12 @@ to handle the placement of axons, two geometrical operations have been implement
 
 A population can be plot using the `plot` method that takes as parameter the axes of a `matplotlib` figure.
 
-More importantly, the structure of an `NRV` population is based on `pandas` Data
+Populations as DataFrames and playing with masks
+------------------------------------------------
+
+More importantly, the structure of an `NRV` population is based on `pandas` DataFrames. Theerefore, it is possible for postprocessing of results to:
+
+- evaluate conditional expression with the `plot` method,
+- add a mask (with the method `add_mask`) to automatically select a subgroup of the population. When a mask is added, it is associated with a label that can be reused for other operations.
+
+An illustrative example of these two operations is given in :doc:`example 22 <../examples/generic/22_access_subpopulation>`, and an example of application where only subpopulations are stimulated via IClamp is provided in :doc:`example 23 <../examples/generic/23_subpop_iclamp>`
