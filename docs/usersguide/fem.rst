@@ -38,9 +38,9 @@ You can modify the nerve and fascicle geometries using:
 
     .. code-block:: python3
 
-        my_FEM.reshape_fascicle(d1, y1, z1, ID=0)  # Create fascicle ID 0
-        my_FEM.reshape_fascicle(d2, y2, z2, ID=1)  # Create fascicle ID 1
-        my_FEM.reshape_fascicle(d3, y1, z1, ID=0)  # Modify fascicle ID 0
+        my_FEM.reshape_fascicle(cshape_1, ID=0)  # Create fascicle ID 0
+        my_FEM.reshape_fascicle(cshape_2, ID=1)  # Create fascicle ID 1
+        my_FEM.reshape_fascicle(cshape_3, ID=0)  # Modify fascicle ID 0
 
 Electrodes
 ----------
@@ -70,18 +70,18 @@ Examples
 .. code-block:: python3
 
     import nrv
-    my_axon = nrv.myelinated(...)                                           # Create an axon
-    my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
-    my_FEM.reshape_nerve(nerve_d, nerve_l)                                  # Set nerve geometry
-    my_FEM.reshape_outerBox(outer_d)                                        # Set simulation box size
-    my_FEM.reshape_fascicle(fascicle_d1, y1, z1, ID=0)                      # Add fascicle 0
-    my_FEM.reshape_fascicle(fascicle_d2, y2, z2, ID=1)                      # Add fascicle 1
-    my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
-    my_axon.attach_extracellular_stimulation(my_FEM)                        # Attach FEM model to axon
-    my_result = my_axon(t_sim)                                              # Run simulation
+    my_axon = nrv.myelinated(...)                    # Create an axon
+    my_FEM = nrv.FEM_stimulation()                   # Create FEM model
+    my_FEM.reshape_nerve(nerve_d, nerve_l)           # Set nerve geometry
+    my_FEM.reshape_outerBox(outer_d)                 # Set simulation box size
+    my_FEM.reshape_fascicle(cshape_1, ID=0)          # Add fascicle 0
+    my_FEM.reshape_fascicle(cshape_2, ID=1)          # Add fascicle 1
+    my_FEM.add_electrode(my_electrode, my_stimulus)  # Add electrode and stimulus
+    my_axon.attach_extracellular_stimulation(my_FEM) # Attach FEM model to axon
+    my_result = my_axon(t_sim)                       # Run simulation
 
 .. seealso::
-    :doc:`Tutorial 3 </tutorials/3_single_fiber_simulation>` — Stimulating single fibers with NRV
+    :doc:`Tutorial 3 </tutorials/3_single_fiber_simulation>` --- Stimulating single fibers with NRV.
 
 
 
@@ -93,14 +93,14 @@ Example with a Nerve
 .. code-block:: python3
 
     import nrv
-    my_nerve = nrv.nerve(...)                                                # Create a Nerve
-    my_FEM = nrv.FEM_stimulation()                                          # Create FEM model
-    my_FEM.add_electrode(my_electrode, my_stimulus)                         # Add electrode and stimulus
-    my_nerve.attach_extracellular_stimulation(my_FEM)                       # Attach FEM model to nerve
-    my_result = my_nerve(t_sim)                                             # Run simulation
+    my_nerve = nrv.nerve(...)                         # Create a Nerve
+    my_FEM = nrv.FEM_stimulation()                    # Create FEM model
+    my_FEM.add_electrode(my_electrode, my_stimulus)   # Add electrode and stimulus
+    my_nerve.attach_extracellular_stimulation(my_FEM) # Attach FEM model to nerve
+    my_result = my_nerve(t_sim)                       # Run simulation
 
 .. seealso::
-    :doc:`Tutorial 4 </tutorials/4_nerve_simulation>` — Stimulating nerves with NRV
+    :doc:`Tutorial 4 </tutorials/4_nerve_simulation>` --- Stimulating nerves with NRV.
 
 .. note::  
     When attaching a FEM model to a :class:`~nrv.nmod.nerve`, the nerve's geometry (e.g., diameter, number of fascicles) is automatically overwritten

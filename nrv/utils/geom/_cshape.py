@@ -165,10 +165,11 @@ class CShape(NRV_class):
         Returns
         -------
         np.ndarray
+            array, of dimension (n_pts, 2), containing the coordinate of y, z-coorinates of the generated point
         """
         pass
 
-    def get_trace(self, n_theta: int = 100) -> tuple[list[float], list[float]]:
+    def get_trace(self, n_theta: int = 100) -> tuple[np.ndarray[float], np.ndarray[float]]:
         """
         Returns the trace of the geometry as a list of points.
 
@@ -179,8 +180,8 @@ class CShape(NRV_class):
 
         Returns
         -------
-        tuple[list[float], list[float]]
-            A tuple containing two lists: x-coordinates and y-coordinates of the ellipse.
+        tuple[np.ndarray[float], np.ndarray[float]]
+            A tuple containing two lists: y-coordinates and z-coordinates of points in the shape boundaries.
         """
         pass
 

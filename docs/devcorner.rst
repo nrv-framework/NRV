@@ -109,16 +109,16 @@ Once installed, you can build the documentation with the following command from 
 
     Building the full documentation can take a long time, mainly due to `2. Tutorials and Examples` and `3. API documentation`.
 
-If you want to rebuild the full documentation, you should first manually remove the generated files. This can be done by deleting the folders ``NRV/docs/_build/``, ``NRV/docs/_nrv/``, ``NRV/docs/_exemple/``, and ``NRV/docs/_tutorial/``.
+If you want to rebuild the full documentation, you should first manually remove the generated files. This can be done by deleting the folders ``NRV/docs/_build/``, ``NRV/docs/_nrv/``, ``NRV/docs/exemple/``, and ``NRV/docs/tutorial/``.
 
 .. tip::
 
     You can considerably speed up documentation generation by only rebuilding the required parts.
-        - To skip rebuilding `2. Tutorials and Examples`, keep the folders ``NRV/docs/_exemple/`` and ``NRV/docs/_tutorial/``.
+        - To skip rebuilding `2. Tutorials and Examples`, keep the folders ``NRV/docs/exemple/`` and ``NRV/docs/tutorial/``.
         - To skip rebuilding `3. API documentation`, keep the folder ``NRV/docs/_nrv/``.
 
 .. note::
-    ``NRV/docs/_exemple/`` and ``NRV/docs/_tutorial/`` are included by default in the git repository. If you want to rebuild `2. Tutorials and Examples`, you need to manually remove these folders before compiling.
+    ``NRV/docs/exemple/`` and ``NRV/docs/tutorial/`` are included by default in the git repository. If you want to rebuild `2. Tutorials and Examples`, you need to manually remove these folders before compiling.
 
     If your change does not involve tutorials or examples, you do not need to be in an environment able to `import nrv`. You only need the pip-installable dependencies listed in `NRV/docs/requirements.txt <https://github.com/nrv-framework/NRV/blob/master/docs/requirements.txt>`_:
 

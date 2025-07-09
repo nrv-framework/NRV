@@ -36,7 +36,7 @@ BibTeX
       publisher={Public Library of Science San Francisco, CA USA}
     }
 
-.. SeeAlso::
+.. seealso::
    - **General information**: `nrv-framework.org <https://nrv-framework.org>`_
    - **Discussions and queries**: `Forum NRV <https://nrv-framework.org/forum>`_
    - **Full code**: `Github repository <https://github.com/nrv-framework/NRV>`_

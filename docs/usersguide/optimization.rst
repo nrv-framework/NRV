@@ -6,7 +6,7 @@ NRV includes an integrated optimization layer, enabling direct tuning of input p
 
 .. seealso::
 
-    :doc:`Tutorial 5 </tutorials/5_first_optimization>` — First optimization problem using NRV
+    :doc:`Tutorial 5 </tutorials/5_first_optimization>` --- First optimization problem using NRV
 
 Optimization Problem
 ---------------------

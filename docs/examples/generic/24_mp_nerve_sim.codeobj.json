@@ -1,0 +1,613 @@
+{
+ "__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "create_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "nrv.FEM_stimulation": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  }
+ ],
+ "nrv.LIFE_electrode": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  }
+ ],
+ "nrv.fascicle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "nrv.nerve": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "nrv.parameters.set_nmod_ncore": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._parameters",
+   "module_short": "nrv.backend",
+   "name": "nrv_parameters.set_nmod_ncore"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "nrv_parameters.set_nmod_ncore"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nrv_parameters.set_nmod_ncore"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.parameters",
+   "module_short": "nrv.parameters",
+   "name": "set_nmod_ncore"
+  }
+ ],
+ "nrv.stimulus": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "plt.close": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "close"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "prostprocessing": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "results": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results"
+  }
+ ],
+ "results.plot_recruited_fibers": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_recruited_fibers"
+  }
+ ],
+ "sim_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "simulate_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ]
+}

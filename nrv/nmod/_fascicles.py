@@ -1065,8 +1065,12 @@ class fascicle(NRV_simulable):
             duration of the pulse, in ms
         amplitude   : float
             amplitude of the pulse (nA)
-        ax_list     : list, array, np.array
-            list of axons to insert the clamp on, if None, all axons are stimulated
+        expr : str | None, optional
+            To select a subpopulation of axon for the clamp, If not None mask is generated using :meth:`pandas.DataFrame.eval` of this expression, by default None
+        mask_labels : None | Iterable[str] | str, optional
+            To select a subpopulation of axon for the clamp, Label or list of labels already added to the axon populations population, by default []
+        ax_list     : None | list
+            To select a subpopulation of axon for the clamp, list of axons to insert the clamp on, if None, all axons are stimulated, by default None
         """
         self.intra_stim_position.append(position)
         self.intra_stim_t_start.append(t_start)

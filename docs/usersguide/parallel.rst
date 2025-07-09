@@ -59,91 +59,10 @@ These keys control how NRV interacts with third-party libraries, independent of 
 Number of CPU cores for each step can be dynamically adjusted with the following built-in functions: :meth:`~nrv.backend.nrv_parameters.set_nmod_ncore`, :meth:`~nrv.backend.nrv_parameters.set_gmsh_ncore`,
 :meth:`~nrv.backend.nrv_parameters.set_optim_ncore`.
 
-Example: Parallel Nerve Simulation
-----------------------------------
-
-Below is a practical example illustrating how a nerve simulation can be distributed across multiple cores.
-
-Step 1: Define Nerve Geometry
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    import nrv
-    import matplotlib.pyplot as plt
-
-    def create_nerve():
-        outer_d = 5      # mm
-        nerve_d = 500    # µm
-        nerve_l = 5000   # µm
-        fasc1_d, fasc1_y, fasc1_z = 200, -100, 0
-        fasc2_d, fasc2_y, fasc2_z = 100, 100, 0
-        t_start, t_pulse, amp_pulse = 0.1, 0.1, 60
-
-        nerve = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d)
-        fascicle_1 = nrv.fascicle(diameter=fasc1_d, ID=1)
-        fascicle_2 = nrv.fascicle(diameter=fasc2_d, ID=2)
-        nerve.add_fascicle(fascicle_1, y=fasc1_y, z=fasc1_z)
-        nerve.add_fascicle(fascicle_2, y=fasc2_y, z=fasc2_z)
-
-        for fasc in [fascicle_1, fascicle_2]:
-            diam, types, _, _ = nrv.create_axon_population(
-                n_ax=100, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U"
-            )
-            fasc.fill_with_population(diam, types, delta=5)
-            fasc.fit_population_to_size(delta=2)
-
-        stim = nrv.FEM_stimulation("endoneurium_ranck", "perineurium", "epineurium", "saline")
-        life = nrv.LIFE_electrode("LIFE_2", 25, 1000, (nerve_l - 1000)/2, fasc2_y, fasc2_z)
-        pulse = nrv.stimulus()
-        pulse.pulse(t_start, -amp_pulse, t_pulse)
-        stim.add_electrode(life, pulse)
-        nerve.attach_extracellular_stimulation(stim)
-
-        fig, ax = plt.subplots(figsize=(6, 6))
-        nerve.plot(ax)
-        ax.set_xlabel("z-axis (µm)")
-        ax.set_ylabel("y-axis (µm)")
-        fig.savefig("nerve_example.png", dpi=300)
-        plt.close(fig)
-
-        return nerve
-
-.. image:: ../images/parallel_nerve_example.png
-
-Step 2: Simulate the Nerve
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    def simulate_nerve(nerve, nproc=12):
-        nrv.parameters.set_nmod_ncore(nproc)
-        return nerve(t_sim=3, postproc_script="is_recruited")
-
-Step 3: Post-process Results
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    def postprocessing(results):
-        fig, ax = plt.subplots(figsize=(5, 5))
-        results.plot_recruited_fibers(ax)
-        ax.set_xlabel("z-axis (µm)")
-        ax.set_ylabel("y-axis (µm)")
-        fig.savefig("nerve_postproc.png", dpi=300)
-        plt.close(fig)
-
-Main Execution Script
-^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: python
-
-    if __name__ == "__main__":
-        sim_nerve = create_nerve()
-        results = simulate_nerve(sim_nerve, nproc=12)
-        postprocessing(results)
-
-.. image:: ../images/parallel_nerve_postproc.png
+.. seealso:: 
+    :doc:`Example 24 <../examples/generic/24_mp_nerve_sim>` --- Parallel Nerve Simulation.
+    
+    :doc:`Example oO6 <../examples/optim/o06_mproc_optimization>` --- Optimization change number of processes.
 
 .. note::
     Only the simulation phase is parallelized. Pre- and post-processing remain single-threaded for simplicity and stability.

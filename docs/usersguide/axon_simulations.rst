@@ -36,7 +36,7 @@ Example usage:
     )
 
 .. seealso::
-    :doc:`Example 16 <../examples/generic/16_activation_thresholds_arbitrary>` - Practical applications of :func:`~nrv.ui.axon_AP_threshold`.
+    :doc:`Example 16 <../examples/generic/16_activation_thresholds_arbitrary>` --- Practical applications of :func:`~nrv.ui.axon_AP_threshold`.
 
 Search Threshold Dispatching Functions
 ----------------------------------------
@@ -70,7 +70,7 @@ Example usage:
         )
 
 .. seealso::
-    :doc:`Example 17 <../examples/generic/17_threshold_search_dispatcher>` - Demonstration of :func:`~nrv.utils.cell._axon_simulations.search_threshold_dispatcher`.
+    :doc:`Example 17 <../examples/generic/17_threshold_search_dispatcher>` --- Demonstration of :func:`~nrv.utils.cell._axon_simulations.search_threshold_dispatcher`.
 
 .. warning::
     Always enclose the call to :func:`~nrv.ui.search_threshold_dispatcher` within the ``if __name__ == '__main__':`` block. Otherwise, each core may redundantly execute the full parameter list.

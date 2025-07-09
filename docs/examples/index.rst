@@ -430,6 +430,23 @@ This gallery consists of introductory examples of basic usage of NRV framework.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Practical example illustrating how a nerve simulation can be distributed across multiple cores.">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_24_mp_nerve_sim_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Parallel Nerve Simulation</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
