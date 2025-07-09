@@ -20,7 +20,7 @@ Contribution - forking and Pull-Requests
 
 Here is how to setup NRV for local development:
 
-1. Fork the NRV repo on GitHub. Official developers are limited to members of the `Bioelectronics group at the laboratory IMS <https://www.ims-bordeaux.fr/research-groups/bioelectronics/>`_
+1. Fork the NRV repo on GitHub. If you want to be part of the NRV team contact us on `the forum NRV <https://nrv-framework.org/forum>`_ or `Github <https://github.com/nrv-framework/NRV>`_
 
 2. Clone your fork locally:
 
