@@ -1489,6 +1489,28 @@ class fascicle(NRV_simulable):
     #               DEPRECATED Methods               #
     # ---------------------------------------------- #
     @property
+    def y_grav_center(self):
+        """
+        :meta private:
+        """
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.y_grav_center property is obsolete use fascicle.y instead",
+        )
+        return self.y
+
+    @property
+    def z_grav_center(self):
+        """
+        Area of the fascicle
+        """
+        rise_warning(
+            DeprecationWarning,
+            "fascicle.z_grav_center property is obsolete use fascicle.geom.z instead",
+        )
+        return self.z
+
+    @property
     def N(self):
         """
         :meta private:

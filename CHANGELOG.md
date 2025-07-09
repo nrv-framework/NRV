@@ -5,8 +5,8 @@ All notable changes to NRV are summed up in this file.
 ## [1.2.2] - 2025-XX-XX
 
 ### Added
-- Added elliptic geometry for fascicles.
 - Added `utils.geom`-subpackage to gather geometry related functions and classes.
+- Added elliptic and polygonal geometry for fascicles.
 - Added `nmod.utils`-subpackage to gather population creation and placement methods and classes.
 - Added `axon_population`-class to handle creation of population and interface with fascicle.
 - Added angle untis: rad (default) and degree
@@ -26,10 +26,11 @@ All notable changes to NRV are summed up in this file.
 ### Removed
 - Removed `fascicle.save_fascicle_configuration` and `fascicle.load_fascicle_configuration` Deprecated since `fascicle.save` and `fascicle.load` arrived.
 
+
 ### Depreciated
 - arguments `Fascicle_D`, `y_c` and `z_c` from `FEM_stimulation.reshape_fascicle`, now `geometry` is used instead
+- Attributes `fascicle.A`, `fascicle.y_grav_center` and `fascicle.z_grav_center`, now `fascicle.geom.area`, `fascicle.y` and `fascicle.z`
 - tests `513` to `517`: axon pop related test are now with geometry tests between `350` and `400`.
-- test `77`
 
 
 ## [1.2.1] - 2025-06-06
