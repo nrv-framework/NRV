@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     nrv.parameters.set_nrv_verbosity(2)
     DIR = './unitary_tests/'
-    source_file = DIR + 'sources/77_fascicle_1.json'
+    source_file = DIR + 'sources/77_fascicle_0.json'
     #source_file =  DIR + 'figures/76_fascicle_PS.json'
     figfile = DIR + 'figures/77_A.png'
 

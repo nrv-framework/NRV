@@ -1,0 +1,20 @@
+name: Linter
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  super-lint:
+    name: Blakc Lint code base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Super-Linter
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          src: "./nrv"

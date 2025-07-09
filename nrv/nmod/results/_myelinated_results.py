@@ -62,7 +62,7 @@ class myelinated_results(axon_results):
         """
         return self["x_rec"][self.find_central_index(node=node)]
 
-    def find_central_index(self, node:bool=True)->int:
+    def find_central_index(self, node: bool = True) -> int:
         """
         Returns the central indec
 
@@ -121,33 +121,70 @@ class myelinated_results(axon_results):
         return self["g_mye"], self["c_mye"], self["f_mye"]
 
     def plot_x_t(
-        self, axes: plt.axes, key: str = "V_mem", color: str = "k", switch_axes=False, norm=None, **kwgs
+        self,
+        axes: plt.axes,
+        key: str = "V_mem",
+        color: str = "k",
+        switch_axes=False,
+        norm=None,
+        **kwgs
     ) -> None:
         x_pos = self.x[self.node_index]
         x_index = self.node_index
         if not "ALL" in self.rec.upper():
             x_index = np.arange(len(x_pos))
-        super().plot_x_t(axes=axes, x_pos=x_pos,x_index=x_index, key=key, color=color, switch_axes=switch_axes, norm=norm, **kwgs)
+        super().plot_x_t(
+            axes=axes,
+            x_pos=x_pos,
+            x_index=x_index,
+            key=key,
+            color=color,
+            switch_axes=switch_axes,
+            norm=norm,
+            **kwgs
+        )
 
     def plot_x_t_all_seq(
-        self, axes: plt.axes, key: str = "V_mem", color: str = "k", myelin_color:str="gray", switch_axes=False, norm=None, **kwgs
+        self,
+        axes: plt.axes,
+        key: str = "V_mem",
+        color: str = "k",
+        myelin_color: str = "gray",
+        switch_axes=False,
+        norm=None,
+        **kwgs
     ) -> None:
-        if self.rec=="all":
+        if self.rec == "all":
             node_index = self.node_index
-            other_index = np.concatenate([i_x+(self.Nseg_per_sec+1)*np.arange(len(self.this_ax_sequence)) for i_x in node_index])
-            other_index = other_index[other_index<len(self.x_rec)]
-            super().plot_x_t(axes=axes, x_pos=self.x_rec[other_index],x_index=other_index, key=key, color=myelin_color, switch_axes=switch_axes, norm=norm, **kwgs)
+            other_index = np.concatenate(
+                [
+                    i_x
+                    + (self.Nseg_per_sec + 1) * np.arange(len(self.this_ax_sequence))
+                    for i_x in node_index
+                ]
+            )
+            other_index = other_index[other_index < len(self.x_rec)]
+            super().plot_x_t(
+                axes=axes,
+                x_pos=self.x_rec[other_index],
+                x_index=other_index,
+                key=key,
+                color=myelin_color,
+                switch_axes=switch_axes,
+                norm=norm,
+                **kwgs
+            )
 
-        self.plot_x_t(axes=axes, key=key, color=color, switch_axes=switch_axes, norm=norm)
-
+        self.plot_x_t(
+            axes=axes, key=key, color=color, switch_axes=switch_axes, norm=norm
+        )
 
     def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
         if self.rec == "all":
             return super().colormap_plot(axes, key, **kwgs)
-        else: 
+        else:
             rise_warning("colormap_plot be myelined.rec is not 'all'")
             return None
-    
 
     def plot_Nav_states(ax: plt.axes) -> None:
         """

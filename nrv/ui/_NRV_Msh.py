@@ -5,6 +5,7 @@ from ..utils._misc import get_MRG_parameters
 from ..fmod._electrodes import *
 from ..fmod._extracellular import is_FEM_extra_stim, FEM_stimulation
 from ..fmod.FEM.mesh_creator._NerveMshCreator import *
+from ._spec_loaders import load_axon, load_fascicle, load_nerve
 
 
 def mesh_from_electrode(
@@ -76,7 +77,7 @@ def mesh_from_extracellular_context(
 
 
 def mesh_from_fascicle(
-    fascicle: fascicle,
+    fasc: fascicle,
     mesh: NerveMshCreator | None = None,
     Length: float = 10000,
     Outer_D: float = 5,
@@ -84,7 +85,7 @@ def mesh_from_fascicle(
     y_c: float = 0,
     z_c: float = 0,
     add_axons: bool = True,
-    x_shift: float|None = None,
+    x_shift: float | None = None,
     add_context: bool = False,
     res_nerve: float | str = "default",
     res_fasc: float | str = "default",
@@ -94,7 +95,7 @@ def mesh_from_fascicle(
     """
     returns the corresponding mesh from a nrv.facsicle
     """
-    fascicle = load_any(fascicle, extracel_context=True)
+    fasc = load_fascicle(fasc, extracel_context=True)
     if mesh is None:
         mesh = NerveMshCreator(
             Length=Length, Outer_D=Outer_D, Nerve_D=Nerve_D, y_c=y_c, z_c=z_c
@@ -102,50 +103,49 @@ def mesh_from_fascicle(
         if res_nerve != "default":
             mesh.reshape_nerve(res=res_nerve)
 
-    mesh.reshape_fascicle(
-        d=fascicle.D,
-        y_c=fascicle.y_grav_center,
-        z_c=fascicle.z_grav_center,
-        res=res_fasc,
-    )
+    mesh.reshape_fascicle(geometry=fasc.geom)
     if add_axons:
-        is_NoR_relative_position = len(fascicle.NoR_relative_position) != 0
-        if is_NoR_relative_position:
-            node_shift = fascicle.NoR_relative_position
+        if fasc.axons.has_node_shift:
+            node_shift = fasc.axons["node_shift"]
         else:
-            node_shift = np.zeros(fascicle.n_ax)
+            node_shift = np.zeros(fasc.n_ax)
         if x_shift is not None:
-            i_myel = fascicle.axons_type.astype(bool)
-            __deltaxs = get_MRG_parameters(fascicle.axons_diameter[i_myel])[5]
-            __l1_ = fascicle.NoR_relative_position[i_myel]*__deltaxs
-            __x_l = (__l1_ - x_shift)%__deltaxs
+            i_myel = fasc.axons["types"].astype(bool)
+            __deltaxs = get_MRG_parameters(fasc.axons["diameters"][i_myel])[5]
+            __l1_ = fasc.NoR_relative_position[i_myel] * __deltaxs
+            __x_l = (__l1_ - x_shift) % __deltaxs
             node_shift[i_myel] = __x_l / __deltaxs
 
-        for i_ax in range(fascicle.n_ax):
-            ax_d = round(fascicle.axons_diameter[i_ax], 3)
-            ax_y = round(fascicle.axons_y[i_ax], 3)
-            ax_z = round(fascicle.axons_z[i_ax], 3)
-            mye = bool(fascicle.axons_type[i_ax])
+        for i_ax in range(fasc.n_ax):
+            ax_d = round(fasc.axons["diameters"][i_ax], 3)
+            ax_y = round(fasc.axons["y"][i_ax], 3)
+            ax_z = round(fasc.axons["z"][i_ax], 3)
+            mye = bool(fasc.axons["types"][i_ax])
             res_ax_ = res_ax
             if isinstance(res_ax, str) and res_ax != "default":
-                res_ax_ = eval(str(fascicle.axons_diameter[i_ax]) + res_ax)
+                res_ax_ = eval(str(fasc.axons["diameters"][i_ax]) + res_ax)
             elif np.iterable(res_ax) and not isinstance(res_ax, str):
                 res_ax_ = res_ax[i_ax]
             mesh.reshape_axon(
-                d=ax_d, y=ax_y, z=ax_z, myelinated=mye, node_shift=node_shift[i_ax], res=res_ax_
+                d=ax_d,
+                y=ax_y,
+                z=ax_z,
+                myelinated=mye,
+                node_shift=node_shift[i_ax],
+                res=res_ax_,
             )
-    if add_context and fascicle.extra_stim is not None:
+    if add_context and fasc.extra_stim is not None:
         mesh = mesh_from_extracellular_context(
-            fascicle.extra_stim, mesh=mesh, res_elec=res_elec
+            fasc.extra_stim, mesh=mesh, res_elec=res_elec
         )
     return mesh
 
 
 def mesh_from_nerve(
     nerve: nerve,
-    length: float|None = None,
+    length: float | None = None,
     add_axons: bool = True,
-    x_shift: float|None = None,
+    x_shift: float | None = None,
     res_nerve: float | str = "default",
     res_fasc: list[float] | float | str = "default",
     res_ax: list[float] | float | str = "default",
@@ -179,7 +179,7 @@ def mesh_from_nerve(
     """
     nerve = load_any(nerve, extracel_context=True)
     if length is not None:
-        length = length 
+        length = length
     else:
         length = nerve.L
     mesh = NerveMshCreator(

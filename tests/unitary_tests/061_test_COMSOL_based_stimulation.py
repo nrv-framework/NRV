@@ -62,4 +62,4 @@ if __name__ == "__main__":
     plt.plot(x, elec_1.footprint,color='r')
     plt.plot(x, elec_2.footprint,color='b')
     plt.savefig('./unitary_tests/figures/61_A.png')
-    #plt.show()
+    # plt.show()

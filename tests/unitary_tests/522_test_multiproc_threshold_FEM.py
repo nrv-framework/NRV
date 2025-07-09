@@ -27,7 +27,7 @@ def process_threshold(diam):
 
     #### Nerve and fascicle geometry
     Nerve_D = 1000      # in [um]
-    Fascicle_D = 800    # in [um]
+    fasc_geom = nrv.create_cshape(diameter=800)    # in [um]
     perineurium_thickeness = 25 # in [um]
 
     #binary search parameters
@@ -43,7 +43,7 @@ def process_threshold(diam):
     extra_stim = nrv.FEM_stimulation()
     extra_stim.reshape_outerBox(Outer_D)
     extra_stim.reshape_nerve(Nerve_D, L)
-    extra_stim.reshape_fascicle(Fascicle_D)
+    extra_stim.reshape_fascicle(fasc_geom)
     #axon creation
     axon1 = nrv.myelinated(y_axon,z_axon,diam,L,rec='nodes',model=model)
     n_node = len(axon1.x_nodes)

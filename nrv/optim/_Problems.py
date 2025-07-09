@@ -5,7 +5,13 @@ NRV-:class:`.Problem` handling.
 import numpy as np
 import faulthandler
 import traceback
-from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeRemainingColumn
+from rich.progress import (
+    Progress,
+    SpinnerColumn,
+    BarColumn,
+    TextColumn,
+    TimeRemainingColumn,
+)
 
 from ..backend._parameters import parameters
 from ..backend._NRV_Class import NRV_class
@@ -20,6 +26,7 @@ import sys
 
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
+
 
 class Problem(NRV_class):
     """
@@ -39,9 +46,9 @@ class Problem(NRV_class):
         self,
         cost_function: cost_function = None,
         optimizer: Optimizer = None,
-        save_problem_results:bool=False,
-        problem_fname:str="optim.json",
-        n_proc:int=None,
+        save_problem_results: bool = False,
+        problem_fname: str = "optim.json",
+        n_proc: int = None,
     ):
         super().__init__()
         self._CostFunction = cost_function
@@ -56,7 +63,7 @@ class Problem(NRV_class):
 
     # Handling the cost_function attribute
     @property
-    def costfunction(self)->cost_function:
+    def costfunction(self) -> cost_function:
         """
         Cost function of a Problem,
         the cost function should be a CosFunction object, it should return a scalar.
@@ -69,7 +76,6 @@ class Problem(NRV_class):
         # need to add a verification that the cost function is a scallar and so on
         self._CostFunction = cf
 
-    
     @costfunction.deleter
     def costfunction(self):
         self._CostFunction = None
@@ -77,16 +83,16 @@ class Problem(NRV_class):
     def _SwarmCostFunction(self, swarm):
         s_l = len(swarm)
         costs = np.zeros((s_l))
-        if self.mp_type=="costfunction":
+        if self.mp_type == "costfunction":
             for i in range(s_l):
                 particle = swarm[i][:]
                 costs[i] = self._CostFunction(particle)
         else:
-            
-            #LR: This still generate PETSC errors (not crashing the script tho). Adding pool.close()/pool.join() crashes everything however
+
+            # LR: This still generate PETSC errors (not crashing the script tho). Adding pool.close()/pool.join() crashes everything however
             with get_pool(n_jobs=self.n_proc) as pool:
-               for i_c, cost in enumerate(pool.imap(self._CostFunction, swarm)):
-                   costs[i_c] = cost
+                for i_c, cost in enumerate(pool.imap(self._CostFunction, swarm)):
+                    costs[i_c] = cost
 
         return costs
 
@@ -149,12 +155,10 @@ class Problem(NRV_class):
             results["status"] = "Error"
             rise_error(traceback.format_exc())
 
-
         set_log_level("INFO")
         if self.save_problem_results:
             results.save(save=True, fname=self.problem_fname)
         return results
-
 
     # Mcore handling
     def __check_m_proc_CostFunction(self):
@@ -179,19 +183,18 @@ class Problem(NRV_class):
         # parallelizable optimizer
         if "n_processes" in self._Optimizer.__dict__:
             if self.__check_m_proc_CostFunction() and costfunction_mp:
-                #* To add number of n_core_fascicle = n_core
+                # * To add number of n_core_fascicle = n_core
                 self._Optimizer.n_processes = None
                 self.mp_type = "costfunction"
             else:
-                #* To add number of n_core_fascicle = 1
+                # * To add number of n_core_fascicle = 1
                 #!! Bug cannot compute local method generated from cost_function_swarm_from_particle
                 self._Optimizer.n_processes = self.n_proc
                 #!!self._Optimizer.n_processes = None
                 self.mp_type = "optimizer"
         else:
-            #* To add number of n_core_fascicle = n_core
+            # * To add number of n_core_fascicle = n_core
             self.mp_type = "costfunction"
-
 
     # additional methods
     def __update_saving_parameters(self, **kwargs):

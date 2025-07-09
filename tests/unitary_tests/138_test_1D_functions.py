@@ -84,4 +84,4 @@ if __name__ == "__main__":
     axs[1].set_xlim((X[0], X[-1]))
     axs[1].plot(X, P_G(X))
     plt.savefig(fig_file4)
-    #plt.show()
+    # plt.show()

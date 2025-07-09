@@ -2,6 +2,13 @@ import nrv
 import numpy as np
 import matplotlib.pyplot as plt
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
+
+
 def test_oft_pp(results:nrv.axon_results, num=0):
     results["comment"] = "Custom PP accessed"
     results["num"] = num
@@ -11,50 +18,55 @@ def test_oft_pp(results:nrv.axon_results, num=0):
 key_to_check_default = {"L", "ID", "myelinated", "intra_stim_positions", "V_mem_raster_position"}
 key_to_check_custom = {"ID", "comment", "num"}
 
-if __name__ == "__main__":
-    # parameters for the test fascicle
-    L = 10000             # length, in um
-    fascicles = []
-    for i in range(4):
-        fascicles += [nrv.fascicle(return_parameters_only=False, ID=57*10+i)]
-        fascicles[i].define_length(L)
-        # SHAM 1 axon fascicle
-        fascicles[i].axons_diameter = np.asarray([5.7])
-        fascicles[i].axons_type = np.asarray([1])
-        fascicles[i].axons_y = np.asarray([0])
-        fascicles[i].axons_z = np.asarray([0])
+def create_fascicle(_id):
+    fasc = nrv.fascicle(return_parameters_only=False, ID=int(test_num)*10+_id)
+    fasc.define_length(10000)
+    fasc.fill(data=np.array([1, 5.7, 0, 0]).reshape((4,1)))
+    return fasc
 
 
-    # launch sim with
-    res = fascicles[0].simulate(save_path='./unitary_tests/figures/')
-    print('default OFT_PP:')
-    print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
-    del fascicles[0], res
 
-    res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script='rmv_keys')
-    print('rmv_keys OFT_PP:')
-    print(len(key_to_check_default - set(res["axon0"].keys())) == 0)
-    del fascicles[0], res
+def test_default_OFT_PP():
+    fasc = create_fascicle(_id=0)
+    res = fasc.simulate(save_path='./unitary_tests/figures/')
 
-    res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp)
-    print('Custom OFT_PP:')
-    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
-    del fascicles[0], res
-
-    res = fascicles[0].simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":1, "unvalid_arg":404})
-    print('Custom OFT_PP with kwargs:')
-    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
-    del fascicles, res
+    assert len(key_to_check_default - set(res["axon0"].keys())) == 0,  "Wrong keys removed from default OFT PP"
 
 
-    fasc = nrv.fascicle(return_parameters_only=False, ID=57*10+i+1,save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":2, "unvalid_arg":404})
-    fasc.define_length(L)
-    # SHAM 1 axon fascicle
-    fasc.axons_diameter = np.asarray([5.7])
-    fasc.axons_type = np.asarray([1])
-    fasc.axons_y = np.asarray([0])
-    fasc.axons_z = np.asarray([0])
+def test_rmv_keys_OFT_PP():
+    fasc = create_fascicle(_id=1)
+    res = fasc.simulate(save_path='./unitary_tests/figures/', postproc_script='rmv_keys')
 
+    assert len(key_to_check_default - set(res["axon0"].keys())) == 0, "Wrong keys removed from rmv_key OFT PP"
+
+def test_custom_OFT_PP():
+    fasc = create_fascicle(_id=2)
+    res = fasc.simulate(save_path='./unitary_tests/figures/', postproc_script=test_oft_pp)
+    print(key_to_check_custom, set(res["axon0"].keys()))
+
+    assert len(key_to_check_custom - set(res["axon0"].keys())) == 0,  "Wrong keys removed from custom OFT PP"
+
+
+def test_custom_OFT_PP_with_kwargs():
+    # set in simulation
+    fasc = create_fascicle(_id=3)
+    res = fasc.simulate(save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":1, "unvalid_arg":404})
+
+
+    assert len(key_to_check_custom - set(res["axon0"].keys())) == 0,  "Wrong keys removed from custom OFT PP set with kwargs"
+
+
+    # set in istantiation
+    fasc = nrv.fascicle(return_parameters_only=False, ID=57*10+4,save_path='./unitary_tests/figures/',postproc_script=test_oft_pp, postproc_kwargs={"num":2, "unvalid_arg":404})
+    fasc.define_length(10000)
+    fasc.fill(data=np.array([1, 5.7, 0, 0]).reshape((4,1)))
     res = fasc()
-    print('Custom OFT_PP with kwargs (set when instantiated):')
-    print(len(key_to_check_custom - set(res["axon0"].keys())) == 0)
+
+    assert len(key_to_check_custom - set(res["axon0"].keys())) == 0,  "Wrong keys removed from custom OFT PP set with kwargs set in the istantiation"
+
+if __name__ == "__main__":
+    test_default_OFT_PP()
+
+    test_rmv_keys_OFT_PP()
+    test_custom_OFT_PP()
+    test_custom_OFT_PP_with_kwargs()

@@ -46,7 +46,7 @@ if __name__ == '__main__':
     plt.figure()
     plt.loglog(freqs, sig2)
     plt.savefig(fig_file+"B.png")
-    #plt.show()
+    # plt.show()
 
 
 

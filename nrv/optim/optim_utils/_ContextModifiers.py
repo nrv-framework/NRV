@@ -224,7 +224,7 @@ class biphasic_stimulus_CM(stimulus_CM):
     rec_context             : bool
         specifies whether to load rec_context with the static context
 
-    WARNING
+    Warning
     -------
     ``s_cathod`` must always positive, the user give here the absolute value
 

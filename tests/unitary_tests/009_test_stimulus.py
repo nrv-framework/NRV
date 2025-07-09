@@ -59,4 +59,4 @@ if __name__ == "__main__":
     plt.step(stim_HF.t, stim_HF.s,where='post',label='1')
     plt.step(stim_combined.t, stim_combined.s,where='post',label='combined')
     plt.savefig('./unitary_tests/figures/09_C.png')
-    #plt.show()
+    # plt.show()

@@ -52,4 +52,4 @@ if __name__ == "__main__":
     cbar.set_label('I na (mV)')
 
     plt.savefig('./unitary_tests/figures/94_B.png')
-    #plt.show()
+    # plt.show()

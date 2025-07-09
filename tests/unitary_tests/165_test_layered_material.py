@@ -25,4 +25,4 @@ if __name__ == "__main__":
     plt.loglog(freqs, sig)
     plt.savefig(fig_file+"A.png")
 
-    #plt.show()
+    # plt.show()

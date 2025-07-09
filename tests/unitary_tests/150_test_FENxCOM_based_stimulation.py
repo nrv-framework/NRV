@@ -66,4 +66,4 @@ if __name__ == "__main__":
     plt.plot(x, fen_elec_1.footprint,color='g',label='FEniCS')
     plt.legend()
     plt.savefig('./unitary_tests/figures/150_A.png')
-    #plt.show()
+    # plt.show()

@@ -1,20 +1,25 @@
 import time
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_num = __fname__[:__fname__.find("_")]
+
+figdir = "unitary_tests/figures/" + test_num + "_"
+source_file = './unitary_tests/sources/300_fascicle_1.json'
+
+
 if __name__ == "__main__":
     t_1 = time.time()
     import nrv
-
-
     t0 = time.time()
-    test_num = 308
-    nerve = nrv.nerve(length= 10000, d= 250)
+
+    nerve = nrv.nerve(length= 10000, diameter= 500)
     nerve.set_ID(test_num)
     t1 = time.time()
 
-    t_sim = 2
-
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=0, y=-20, z=-60)#, extracel_context=True)
-    nerve.add_fascicle('./unitary_tests/sources/300_fascicle_1.json', ID=1, z=65, extracel_context=True)
+    t_sim = 10
+    nerve.add_fascicle(source_file, ID=0, y=-20, z=-60)#, extracel_context=True)
+    nerve.add_fascicle(source_file, ID=1, z=65, extracel_context=True)
     nerve.fit_circular_contour()
     t2= time.time()
 
@@ -35,6 +40,6 @@ if __name__ == "__main__":
     print(f"I clamp inserted in {t3 - t2}s")
     print(f"Simulation done in {t4 - t3}s")
 
-    print(res.fascicle0.keys())
-    print(f"Axons properties:\n  fasc_ID\taxon_ID\t myelinated\tdiameter\tz\tz\n {res.axons_pop_properties}")
-    print(res.axons_type)
+    print(res.fascicle1.keys())
+    print(f"Axons properties:\n  fasc_ID\taxon_ID\t myelinated\tdiameter\tz\tz\n {res.axons}")
+    print(res.axons["types"])

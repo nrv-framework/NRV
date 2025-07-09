@@ -57,4 +57,4 @@ if __name__ == "__main__":
     axs[3].plot(results['t'],results['h'][75],label='k')
     axs[3].set_xlabel('time (ms)')
     plt.savefig('./unitary_tests/figures/17_C.png')
-    #plt.show()
+    # plt.show()

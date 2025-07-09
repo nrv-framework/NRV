@@ -119,4 +119,4 @@ if __name__ == "__main__":
     plt.title(str(x)+": "+res_motor.get_index_myelinated_sequence(x))
     plt.savefig('./unitary_tests/figures/98_D.png')
     plt.legend(['MRG', 'motor', 'sensory'])
-    #plt.show()
+    # plt.show()

@@ -441,7 +441,7 @@ class myelinated(axon):
 
         if is_empty_iterable(self.node):
             rise_warning(
-                "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n"
+                "Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted\n"
             )
             # logging.warning("Warning, myelinated axon without node... this can cause latter errors and is maybe unwanted ?\n")
 
@@ -476,7 +476,7 @@ class myelinated(axon):
         self.__get_rec_positions()
 
     @property
-    def n_nodes(self)->int:
+    def n_nodes(self) -> int:
         """
         number of nodes of Ranvier
 
@@ -1588,7 +1588,6 @@ class myelinated(axon):
             I2_nav16_ax,
         )
 
-
-    # Simulate method, for output type 
+    # Simulate method, for output type
     def simulate(self, **kwargs) -> myelinated_results:
         return super().simulate(**kwargs)

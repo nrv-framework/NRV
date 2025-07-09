@@ -22,7 +22,7 @@ def stimulus_generator(X, **kwargs):
     return stim
 
 if __name__ == "__main__":
-    context = "./unitary_tests/sources/202_axon.json"
+    context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     t_sim=20
     test_stim_CM = nrv.stimulus_CM(stim_gen=stimulus_generator)
     # generate cost_evaluation method

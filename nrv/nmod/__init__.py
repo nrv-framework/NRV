@@ -1,4 +1,4 @@
-""" NEURON Models - nmod: handles neural fiber models using the NEURON software.
+"""NEURON Models - nmod: handles neural fiber models using the NEURON software.
 
 nmod contains all the code to describe the axonal fibers using .mod mechanisms
 with NEURON. This subpackage contains all primitives to describe:
@@ -22,34 +22,24 @@ internally.
    :doc:`Scientific details</scientific>`, :doc:`Simulables users guide</usersguide/simulables>`
 """
 
-from ._axon_pop_generator import (
-    load_stat,
-    create_axon_population,
-    fill_area_with_axons,
-    axon_packer,
-    expand_pop,
-    remove_collision,
-    remove_outlier_axons,
-    get_circular_contour,
-    plot_population,
-    save_axon_population,
-    load_axon_population,
-)
 from ._axons import axon
+from ._axon_population import axon_population
 from ._unmyelinated import unmyelinated
 from ._myelinated import myelinated
 from ._fascicles import fascicle
 from ._nerve import nerve
-from . import results
+from . import results, utils
 
-submodules = ["results"]
+submodules = ["results", "utils"]
 
 classes = [
     "axon",
     "unmyelinated",
     "myelinated",
+    "axon_population",
     "fascicle",
-    "nerve"]
+    "nerve",
+]
 
 functions = [
     "create_axon_population",

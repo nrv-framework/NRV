@@ -1,0 +1,842 @@
+{
+ "E1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  }
+ ],
+ "X": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "amplitude": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "axs1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "dummy_stim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "extra_stim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "stimulation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "stimulation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulation"
+  }
+ ],
+ "extra_stim.add_electrode": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.add_electrode"
+  }
+ ],
+ "fig1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig1.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.tight_layout"
+  }
+ ],
+ "i": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "l_ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "nrv.harmonic_stimulus_CM": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "harmonic_stimulus_CM"
+  }
+ ],
+ "nrv.myelinated": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._myelinated",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._axons",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "myelinated"
+  }
+ ],
+ "nrv.optim.optim_utils.harmonic_stimulus_CM": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  }
+ ],
+ "nrv.point_source_electrode": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "point_source_electrode"
+  }
+ ],
+ "nrv.stimulation": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulation"
+  }
+ ],
+ "nrv.stimulus": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "plt.figure": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "figure"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "start": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "static_context": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "stim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "stim.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot"
+  }
+ ],
+ "t_pulse": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "t_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "test_stim_CM": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "harmonic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "harmonic_stimulus_CM"
+  }
+ ],
+ "x": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ]
+}

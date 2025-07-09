@@ -11,8 +11,10 @@ from ....backend._log_interface import rise_error, rise_warning
 
 # from ....nmod.myelinated import myelinated
 from ....utils._units import mm, sci_round
+from ....utils.geom._misc import CShape, create_cshape
 from ....backend._file_handler import rmv_ext
 from ._MshCreator import MshCreator, pi
+
 
 ENT_DOM_offset = {
     "Volume": 0,
@@ -23,7 +25,9 @@ ENT_DOM_offset = {
     "Electrode": 100,
     "Axon": 1000,
 }
-def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
+
+
+def get_mesh_domid(objtype: str, objid: int = 0, is_surf: bool = False) -> int:
     """
     function returning the corresponding physical domain in the mesh of an object in the context.
 
@@ -40,7 +44,7 @@ def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
     -------
     int
     """
-    domid = 2*objid
+    domid = 2 * objid
     if objtype.lower() in ["o", "outer", "outerbox"]:
         domid = ENT_DOM_offset["Outerbox"]
     elif objtype.lower() in ["n", "nerve"]:
@@ -54,6 +58,7 @@ def get_mesh_domid(objtype:str, objid:int=0, is_surf:bool=False)->int:
     if is_surf:
         domid += 1
     return domid
+
 
 ELEC_TYPES = ["CUFF MP", "CUFF", "LIFE"]
 
@@ -74,12 +79,14 @@ def is_NerveMshCreator(object):
     """
     return isinstance(object, NerveMshCreator)
 
-def get_node_physical_id(id_ax:int, i_node:int, volume:bool=False)->int:
-    id_ax_volume = id_ax-id_ax%2
-    i_node_str = str(2*i_node)
-    while len(i_node_str)<3:
+
+def get_node_physical_id(id_ax: int, i_node: int, volume: bool = False) -> int:
+    id_ax_volume = id_ax - id_ax % 2
+    i_node_str = str(2 * i_node)
+    while len(i_node_str) < 3:
         i_node_str = "0" + i_node_str
-    return int(str(id_ax_volume)+i_node_str)
+    return int(str(id_ax_volume) + i_node_str)
+
 
 class NerveMshCreator(MshCreator):
     """
@@ -141,6 +148,8 @@ class NerveMshCreator(MshCreator):
         self.N_axon = 0
         self.axons = {}
 
+        self.geometries: dict[str, CShape] = {}
+
         self._continuous_myelin = True
 
         self.N_electrode = 0
@@ -180,6 +189,7 @@ class NerveMshCreator(MshCreator):
         param["axons"] = self.axons
         param["N_electrode"] = self.N_electrode
         param["electrodes"] = self.electrodes
+        param["geometries"] = self.geometries
         return param
 
     def save(
@@ -287,10 +297,11 @@ class NerveMshCreator(MshCreator):
                     self.Ox = self.add_line((0, 0, 0), (self.L, 0, 0))
             self.add_cylinder(0, self.y_c, self.z_c, self.L, self.Nerve_D / 2)
 
-            for fascicle in self.fascicles.values():
-                self.add_cylinder(
-                    0, fascicle["y_c"], fascicle["z_c"], self.L, fascicle["d"] / 2
+            for _id, fascicle in self.fascicles.items():
+                _s_id = self.add_from_cshape(
+                    self.geometries[f"fa{_id}"], x=0, dx=self.L, res=fascicle["res"]
                 )
+                self.__collect_geom_ppt(fascicle, _s_id)
             for i in self.axons:
                 self.add_axon(i)
 
@@ -368,7 +379,9 @@ class NerveMshCreator(MshCreator):
         if self.default_res["Nerve"] > self.Nerve_D / 5:
             self.default_res["Nerve"] = self.Nerve_D / 5
 
-    def reshape_fascicle(self, d, y_c=0, z_c=0, ID=None, res="default"):
+    def reshape_fascicle(
+        self, d=0, y_c=0, z_c=0, ID=None, res="default", geometry: CShape | None = None
+    ):
         """
         Reshape a fascicle of the FEM simulation
 
@@ -390,15 +403,23 @@ class NerveMshCreator(MshCreator):
                     ID += 1
             self.N_fascicle += 1
 
+        # Mostly for retrocompatibility
+        if geometry is None and d != 0:
+            geometry = create_cshape(center=(y_c, z_c), diameter=d)
+        if np.iterable(geometry.radius):
+            min_length = min(geometry.radius)
+        else:
+            min_length = geometry.radius
+
         if res == "default":
             res = self.default_res["Fascicle"]
-        if d / 5 < res:
-            res = d / 5
+        if res > min_length / 2:
+            res = min_length / 2
+
+        self.geometries[f"fa{ID}"] = geometry
 
         self.fascicles[ID] = {
-            "y_c": y_c,
-            "z_c": z_c,
-            "d": d,
+            "gid": f"fa{ID}",
             "res": res,
             "face": None,
             "volume": None,
@@ -416,7 +437,11 @@ class NerveMshCreator(MshCreator):
         if ID is None:
             self.fascicles = {}
             self.N_fascicle = 0
+            self.geometries = {
+                k: v for k, v in self.geometries.items() if "fa" not in k
+            }
         elif ID in self.fascicles:
+            del self.geometries[self.fascicles[ID]["gid"]]
             del self.fascicles[ID]
             self.N_fascicle -= 1
 
@@ -507,6 +532,16 @@ class NerveMshCreator(MshCreator):
 
         self.electrodes[ID] = {"type": elec_type, "res": res, "kwargs": kwargs}
 
+    def __collect_geom_ppt(self, d_store: dict, shape_ids: tuple[tuple[int]]):
+        for c in shape_ids:
+            bbox = np.round(self.model.occ.getBoundingBox(*c), 4)
+            if np.isclose(abs(bbox[0] - bbox[3]), self.L):
+                if c[0] == 2:
+                    key = "face_bbox"
+                else:
+                    key = "volume_bbox"
+                d_store[key] = bbox
+
     ####################################################################################################
     #####################################   domains definition  ########################################
     ####################################################################################################
@@ -517,7 +552,20 @@ class NerveMshCreator(MshCreator):
         elif not self.is_dom:
             self.__link_entity_domains(dim=2)
             self.__link_entity_domains(dim=3)
-            self.compute_entity_domain()
+            try:
+                self.compute_entity_domain()
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
+            except TypeError:
+                self.save_geom("./__mesh_geom_dbg")
+                rise_error(
+                    TypeError,
+                    "One or several domain not found, ",
+                    "please check your geometry saved in `./__mesh_geom_dbg.brep`",
+                )
+            except Exception as e:
+                rise_error("Error in during the mehsing:\n", e)
+
             self.is_dom = True
 
     def __is_outerbox(self, dx, dy, dz, com, dim_key):
@@ -562,7 +610,7 @@ class NerveMshCreator(MshCreator):
             dx, 0
         )
 
-    def __is_fascicle(self, ID, dx, dy, dz, com, dim_key):
+    def __is_fascicle(self, ID, bbox, com, dim_key):
         """
         Internal use only: check if volume is fascicle ID or face is external face of fascicle ID
 
@@ -581,18 +629,14 @@ class NerveMshCreator(MshCreator):
         dim_key     :"face" or "volume"
             element type
         """
-        fascicle = self.fascicles[ID]
         # Already computed
-        status_test = fascicle[dim_key] is None
+        # fasc = self.fascicles[ID][dim_key]
+        status_test = self.fascicles[ID][dim_key] is None
         # test good diameter
-        size_test = np.allclose([dx, dy, dz], [self.L, fascicle["d"], fascicle["d"]])
+        size_test = np.allclose(bbox, self.fascicles[ID][dim_key + "_bbox"], atol=1)
         # test center of mass in fascicle
-        com_test = np.allclose(
-            com,
-            (self.L / 2, fascicle["y_c"], fascicle["z_c"]),
-            rtol=1,
-            atol=fascicle["d"] / 2,
-        )
+        geom = self.geometries[f"fa{ID}"]
+        com_test = geom.is_inside(com[1:])
         return status_test and size_test and com_test
 
     def __is_axon_node(self, ID, dx, dy, dz, com, dim_key):
@@ -796,7 +840,8 @@ class NerveMshCreator(MshCreator):
                 self.Nerve_entities[key] += [entities[i][1]]
 
             for j in self.fascicles:
-                if self.__is_fascicle(j, bd_x, bd_y, bd_z, ent_com[i], key):
+                if self.__is_fascicle(j, ent_bd[i], ent_com[i], key):
+                    # if self.__is_fascicle(j, ent_bd, ent_com[i], key):
                     self.fascicles[j][key] = entities[i][1]
 
             for j in self.axons:
@@ -854,7 +899,6 @@ class NerveMshCreator(MshCreator):
         # nerve domain
         self.add_domains(obj_IDs=self.Nerve_entities["volume"], phys_ID=2, dim=3)
         self.add_domains(obj_IDs=self.Nerve_entities["face"], phys_ID=3, dim=2)
-
         for j in self.fascicles:
             id_ph = ENT_DOM_offset["Fascicle"] + (2 * j)
             if id_ph < ENT_DOM_offset["Electrode"]:
@@ -1037,7 +1081,7 @@ class NerveMshCreator(MshCreator):
     ################################################################
     ############## complex volumes adding methods ##################
     ################################################################
-    def __add_mye_section(self, i_sec:int, sec:str, x, ax_pties:dict, l_sec:float):
+    def __add_mye_section(self, i_sec: int, sec: str, x, ax_pties: dict, l_sec: float):
         """_summary_
 
         Parameters
@@ -1055,14 +1099,14 @@ class NerveMshCreator(MshCreator):
         r_sec : float
             radius of the section
         """
-        if sec =="MYSA":
+        if sec == "MYSA":
             neighbour_sec = {"node", "FLUT"}
             if i_sec == 0:
                 next_sec = ax_pties["path_type"][1]
                 neighbour_sec -= {next_sec}
                 prev_sec = neighbour_sec.pop()
             else:
-                prev_sec = ax_pties["path_type"][i_sec-1]
+                prev_sec = ax_pties["path_type"][i_sec - 1]
                 neighbour_sec -= {prev_sec}
                 next_sec = neighbour_sec.pop()
             r_1 = ax_pties[prev_sec]["r"]
@@ -1070,7 +1114,9 @@ class NerveMshCreator(MshCreator):
 
             self.add_cone(x, ax_pties["y"], ax_pties["z"], l_sec, r_1, r_2)
         else:
-            self.add_cylinder(x, ax_pties["y"], ax_pties["z"], l_sec, ax_pties[sec]["r"])
+            self.add_cylinder(
+                x, ax_pties["y"], ax_pties["z"], l_sec, ax_pties[sec]["r"]
+            )
 
     def add_axon(self, ID):
         """
@@ -1108,11 +1154,11 @@ class NerveMshCreator(MshCreator):
                 "deltax": ax.deltax,
                 "l_first_sec": ax.first_section_size,
                 "l_last_sec": ax.last_section_size,
-                "node":{"r":ax.nodeD / 2, "l":ax.nodelength},
-                "MYSA":{"r":axon["d"] / 2, "l":ax.paralength1},
-                "FLUT":{"r":axon["d"] / 2, "l":ax.paralength2},
-                "STIN":{"r":axon["d"] / 2, "l":ax.interlength},
-                }
+                "node": {"r": ax.nodeD / 2, "l": ax.nodelength},
+                "MYSA": {"r": axon["d"] / 2, "l": ax.paralength1},
+                "FLUT": {"r": axon["d"] / 2, "l": ax.paralength2},
+                "STIN": {"r": axon["d"] / 2, "l": ax.interlength},
+            }
             x = ax.first_section_size
             del ax
 
@@ -1126,7 +1172,7 @@ class NerveMshCreator(MshCreator):
                 if ax_pties["path_type"].pop(0) == "node":
                     ax_pties["n_nodes"] -= 1
                 ax_pties["path_type"].pop(0)
-                sec = ax_pties["path_type"][0] 
+                sec = ax_pties["path_type"][0]
                 x += ax_pties[sec]["l"]
             else:
                 sec = ax_pties["path_type"][0]
@@ -1135,7 +1181,9 @@ class NerveMshCreator(MshCreator):
             if sec == "node":
                 self.axons[ID]["first_node_l"] = l_sec
             self.add_cylinder(0, ax_pties["y"], ax_pties["z"], l_sec, r_sec)
-            self.__add_mye_section(i_sec=0, sec=sec, x=0, ax_pties=ax_pties, l_sec=l_sec)
+            self.__add_mye_section(
+                i_sec=0, sec=sec, x=0, ax_pties=ax_pties, l_sec=l_sec
+            )
 
             ## adding mid sections
             for i_sec, sec in enumerate(ax_pties["path_type"][1:]):
@@ -1149,10 +1197,12 @@ class NerveMshCreator(MshCreator):
                         self.axons[ID]["last_node_l"] = l_sec
                 elif l_sec > self.L - x:
                     l_sec = self.L - x
-                self.__add_mye_section(i_sec=i_sec+1, sec=sec, x=x, ax_pties=ax_pties, l_sec=l_sec)
+                self.__add_mye_section(
+                    i_sec=i_sec + 1, sec=sec, x=x, ax_pties=ax_pties, l_sec=l_sec
+                )
                 x += l_sec
 
-            self.axons[ID]["node_d"] = 2*ax_pties["node"]["r"]
+            self.axons[ID]["node_d"] = 2 * ax_pties["node"]["r"]
             self.axons[ID]["node_l"] = ax_pties["node"]["l"]
             self.axons[ID]["deltax"] = ax_pties["deltax"]
             self.axons[ID]["n_nodes"] = ax_pties["n_nodes"]

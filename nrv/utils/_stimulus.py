@@ -393,7 +393,7 @@ class stimulus(NRV_class):
             and begins with the cathodic value and is balances with anodic value,
             by default set to False (cathodic first as most stimulation protocols)
 
-        WARNING
+        Warning
         -------
         `s_cathod` must always positive, the user give here the absolute value
         """

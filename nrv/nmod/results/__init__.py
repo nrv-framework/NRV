@@ -1,4 +1,4 @@
-""" nmod Results: standardized result gathering for nmod simulations.
+"""nmod Results: standardized result gathering for nmod simulations.
 
 nmod.results defines classes to gather results from nmod object simulations.
 Result classes are defined for axons (myelinated and unlyelinated), fascicles

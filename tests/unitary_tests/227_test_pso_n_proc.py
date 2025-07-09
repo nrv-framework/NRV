@@ -76,8 +76,10 @@ if __name__ == "__main__":
     #  PSO Optimizer definition  #
     # -------------------------- #
     pso_kwargs = {
-        "maxiter" : 50,
-        "n_particles" : 20,
+        "maxiter" : 10,
+        # "maxiter" : 50,
+        "n_particles" : 10,
+        # "n_particles" : 20,
         "opt_type" : "local",
         "options": {'c1': 0.6, 'c2': 0.6, 'w': 0.8, 'k': 3, 'p': 1},
         "bh_strategy": "reflective",
@@ -143,3 +145,4 @@ if __name__ == "__main__":
     plt.xlabel("Number of process")
     plt.ylabel("PSO duration (s)")
     plt.savefig(figdir+"B.png")
+    plt.show()

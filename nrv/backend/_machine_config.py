@@ -1,6 +1,7 @@
 import os
 import sys
 import psutil
+import numpy as np
 
 from ._GPU import getGPUs
 from ._NRV_Singleton import NRV_singleton
@@ -24,10 +25,7 @@ NRV_PYTHON_VERSION = {
     "patch": 0,
 }
 
-MIN_REQUIREMENTS = {
-    "CPU_ncores": 1,
-    "Memory_size": 8000
-}
+MIN_REQUIREMENTS = {"CPU_ncores": 1, "Memory_size": 8000}
 
 
 class MachineConfig(metaclass=NRV_singleton):
@@ -36,12 +34,13 @@ class MachineConfig(metaclass=NRV_singleton):
     Parameters
     ----------
     memory_unit: int
-        Dividor to express all memomry sizes in a given unit, 
+        Dividor to express all memomry sizes in a given unit,
         Constant already defined, can be:
         * Mem_KBytes (= 1024)
         * Mem_MBytes (= Mem_KBytes**2)
         * Mem_GBytes (= Mem_KBytes**3
     """
+
     def __init__(self, memory_unit=Mem_MBytes):
         self._explore_OS()
         self._explore_Python()
@@ -136,7 +135,7 @@ Float representation style: {self.float_repr_style}"""
 
     def _explore_CPU(self):
         # get number of cores
-        self.CPU_ncores = os.cpu_count()
+        self.CPU_ncores = psutil.cpu_count(logical=True)
         # get number of bits
         if sys.maxsize == 2**63 - 1:
             self.CPU_nbits = 64
@@ -240,6 +239,13 @@ Float representation style: {self.float_repr_style}"""
     def get_report(self):
         print(self)
 
+    def get_Available_CPU_number(self, threshold: float = 20.0):
+        assert (
+            threshold >= 0 and threshold <= 100
+        ), "Threshold must be between 0 and 100"
+        available_CPUs = np.asarray(psutil.cpu_percent(percpu=True)) < threshold
+        return np.sum(available_CPUs)
+
     ### Sanity checks ###
     def sanity_check(self):
         # python checks
@@ -261,3 +267,5 @@ Float representation style: {self.float_repr_style}"""
                 + str(NRV_PYTHON_VERSION["patch"])
             )
             print(display_str)
+        else:
+            print("Current configuration is compatible with NRV requirements")

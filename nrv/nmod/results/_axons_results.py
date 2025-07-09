@@ -146,22 +146,22 @@ def rasterize(
     t_idx_AP = np.array([], np.int32)
     x_idx_AP = np.array([], np.int32)
 
-    dt = t_data[1]-t_data[0]
-    dis = int(t_refractory/dt)
-    width = int(t_min_AP/dt)
-    #width = None
-    height = [-20,70]     #min/max heigh of AP
+    dt = t_data[1] - t_data[0]
+    dis = int(t_refractory / dt)
+    width = int(t_min_AP / dt)
+    # width = None
+    height = [-20, 70]  # min/max heigh of AP
 
     for x_val, v in enumerate(y_data):
         data = v[t_start_idx:t_stop_idx]
-        peak_idxs, _ = find_peaks(data, height=height,distance=dis, width=width)
+        peak_idxs, _ = find_peaks(data, height=height, distance=dis, width=width)
         t_idx_AP = np.concatenate([t_idx_AP, peak_idxs])
         x_idx_AP = np.concatenate([x_idx_AP, np.ones(np.size(peak_idxs)) * x_val])
-        
+
     t_idx_AP = np.int32(t_idx_AP)
     x_idx_AP = np.int32(x_idx_AP)
 
-    if len(t_data) :
+    if len(t_data):
         return (x_idx_AP, x_data[x_idx_AP], t_idx_AP, t_data[t_idx_AP])
     else:
         return (np.array([]), np.array([]), np.array([]), np.array([]))
@@ -224,9 +224,8 @@ def get_first_AP(
     x_ordered_unique.sort()
     if len(x_ordered_unique) < 2:
         return (np.array([]), np.array([]), np.array([]), np.array([]), np.array([]))
-    
-    x_min = np.min(np.abs(np.diff(x_ordered_unique))) * 5
 
+    x_min = np.min(np.abs(np.diff(x_ordered_unique))) * 5
 
     msk_unique = np.arange(len(t_ordered) - 1)
     msk_unique = [i for i in msk_unique if i not in idx_unique]
@@ -325,16 +324,16 @@ class axon_results(sim_results):
         """
         if not "recruited" in self:
             n_aps = self.count_APs(vm_key) != 0
-            if n_aps :
-                if t_start is None: 
+            if n_aps:
+                if t_start is None:
                     self["recruited"] = n_aps
                 else:
-                    _,t_starts = self.get_start_APs(vm_key= vm_key)
-                    #print(t_start)
-                    #print(t_starts)
-                    #print(t_starts[t_starts>=t_start])
-                    #print(len(t_starts[t_starts>=t_start])>0)
-                    self["recruited"] = len(t_starts[t_starts>=t_start])>0
+                    _, t_starts = self.get_start_APs(vm_key=vm_key)
+                    # print(t_start)
+                    # print(t_starts)
+                    # print(t_starts[t_starts>=t_start])
+                    # print(len(t_starts[t_starts>=t_start])>0)
+                    self["recruited"] = len(t_starts[t_starts >= t_start]) > 0
             else:
                 self["recruited"] = n_aps
         return self["recruited"]
@@ -369,7 +368,9 @@ class axon_results(sim_results):
             if freq is not None:
                 self.filter_freq("V_mem", freq, Q=2)
                 vm_key += "_filtered"
-            self.rasterize(vm_key=vm_key,clear_artifacts = False)   #artifacts clearing produces strange results :(
+            self.rasterize(
+                vm_key=vm_key, clear_artifacts=False
+            )  # artifacts clearing produces strange results :(
             _, t_starts = self.get_start_APs(vm_key)
             n_APs = len(t_starts[t_starts >= AP_start])
 
@@ -384,10 +385,10 @@ class axon_results(sim_results):
                 _, t_AP_start = self.get_start_AP(x_AP_test, t_AP_test)
 
             delta = 1
-            
+
             if n_APs == 0 or (
-                t_AP_start is not None and t_AP_start>= AP_start + delta
-            ):  
+                t_AP_start is not None and t_AP_start >= AP_start + delta
+            ):
                 rise_warning(
                     f"is_blocked in Axon {self.ID}: No AP detected after the test pulse. Make sure the stimulus is strong enough, attached to the axon or not colliding with onset response. \n ... Fiber considered as blocked."
                 )
@@ -477,7 +478,7 @@ class axon_results(sim_results):
         t_idx_raster = self[vm_key + "_raster_time_index"].copy()
 
         min_size = self._get_min_AP_length()
-        #plt.figure()
+        # plt.figure()
         if len(x_raster) > min_size:
             while len(x_raster) > min_size:
                 x_AP, x_idx_AP, t_AP, t_idx_AP, AP_idx = get_first_AP(
@@ -492,8 +493,8 @@ class axon_results(sim_results):
                             self.get_AP_downward_len(x_AP, t_AP),
                         ]
                     )
-                #print(f"upward: {self.get_AP_upward_len(x_AP, t_AP)} - downward: {self.get_AP_downward_len(x_AP, t_AP)}")
-                #plt.scatter(t_AP,x_AP)
+                # print(f"upward: {self.get_AP_upward_len(x_AP, t_AP)} - downward: {self.get_AP_downward_len(x_AP, t_AP)}")
+                # plt.scatter(t_AP,x_AP)
                 if AP_len >= min_size:
                     x_APs.append(x_AP)
                     t_APs.append(t_AP)
@@ -510,8 +511,8 @@ class axon_results(sim_results):
                     x_idx_raster = np.array([])
                     t_idx_raster = np.array([])
 
-        #plt.show()
-        #exit()
+        # plt.show()
+        # exit()
         return (x_APs, x_idx_APs, t_APs, t_idx_APs)
 
     def count_APs(self, vm_key: str = "V_mem") -> int:  # **kwargs
@@ -1174,7 +1175,7 @@ class axon_results(sim_results):
             - t_stop: (float) stop time for rasterize, in ms. Default is simulation time.
         """
 
-        #clear_artifacts = False
+        # clear_artifacts = False
         if not vm_key + "_raster_position" in self:
 
             if "threshold" in kwargs:
@@ -1480,7 +1481,7 @@ class axon_results(sim_results):
             t_start = t_start[0]
         return t_start
 
-    def extra_stim_properties(self)->dict:
+    def extra_stim_properties(self) -> dict:
         """
         Return elect caracteristics (blocked, Onset response, ...)
 
@@ -1525,7 +1526,7 @@ class axon_results(sim_results):
 
         if {"is_blocked", "has_onset", "n_onset"} not in self:
             vm_key = "V_mem"
-            # if freq is not None: 
+            # if freq is not None:
             #     vm_key += "_filtered"
             # required_keys = {f"{vm_key}_raster_position",
             #                 f"{vm_key}_raster_x_position",
@@ -1534,8 +1535,8 @@ class axon_results(sim_results):
             required_keys = {vm_key}
 
             if required_keys in self:
-                #vm_key = "V_mem"
-                #if freq is not None:
+                # vm_key = "V_mem"
+                # if freq is not None:
                 #    self.filter_freq("V_mem", freq, Q=2)
                 #    vm_key += "_filtered"
 
@@ -1566,8 +1567,8 @@ class axon_results(sim_results):
                 "n_onset": self.n_onset,
             }
         return axon_state
-    
-    def find_central_index(self)->int:
+
+    def find_central_index(self) -> int:
         """
         Returns the index of the closer node from the center
 
@@ -1629,7 +1630,7 @@ class axon_results(sim_results):
     ) -> float:
         """
         get the membrane conductivity at a position x and a time t
-         
+
         Parameters
         ----------
         x : float, optional
@@ -1664,12 +1665,12 @@ class axon_results(sim_results):
                 i_x = np.arange(n_x)
         else:
             i_x = np.argmin(abs(self["x_rec"] - x))
-        
+
         if np.iterable(i_x) and np.iterable(i_t):
             g = self["g_mem"][np.ix_(i_x, i_t)]
         else:
             g = self["g_mem"][i_x, i_t]
-    
+
         # Surface conductivity in [S]/([m]*[m])
         if "2" in unit:
             return convert(g, "S/cm**2", unit)
@@ -1789,7 +1790,9 @@ class axon_results(sim_results):
                 " Please check the simulation parameters",
             )
 
-    def colormap_plot(self, axes: plt.axes, key: str = "V_mem", switch_axes:bool=False, **kwgs) -> plt.colorbar:
+    def colormap_plot(
+        self, axes: plt.axes, key: str = "V_mem", switch_axes: bool = False, **kwgs
+    ) -> plt.colorbar:
         required_keys = {key, "tstop", "L", "t"}
         if required_keys in self:
             x_ = self["t"]
@@ -1797,7 +1800,7 @@ class axon_results(sim_results):
             c_ = self[key]
 
             if switch_axes:
-                x_, y_, c_ = y_, x_,c_.T
+                x_, y_, c_ = y_, x_, c_.T
                 axes.set_ylabel("Time (ms)")
                 axes.set_xlabel("Position (µm)")
                 axes.set_ylim(0, self["tstop"])
@@ -1807,9 +1810,7 @@ class axon_results(sim_results):
                 axes.set_ylabel("Position (µm)")
                 axes.set_xlim(0, self["tstop"])
                 axes.set_ylim(0, self["L"])
-            map = axes.pcolormesh(
-                x_, y_, c_, shading="auto", **kwgs
-            )
+            map = axes.pcolormesh(x_, y_, c_, shading="auto", **kwgs)
 
             cbar = plt.colorbar(map)
             cbar.set_label(key)
@@ -1832,7 +1833,7 @@ class axon_results(sim_results):
         color: str = "k",
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
         """
         Plot `key` in time at various position.
@@ -1867,8 +1868,4 @@ class axon_results(sim_results):
             y_ = self[key][x_idx] * norm_fac + x + offset
             if switch_axes:
                 x_, y_ = y_, x_[::-1]
-            axes.plot(
-                x_,
-                y_,
-                color=color, **kwgs
-            )
+            axes.plot(x_, y_, color=color, **kwgs)

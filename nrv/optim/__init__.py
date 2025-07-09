@@ -1,4 +1,4 @@
-""" OPTIMIZATION methods - optim: automated optimization of any simulation parameter
+"""OPTIMIZATION methods - optim: automated optimization of any simulation parameter
 
 optim has been designed to enable optimization or automated space search of
 parameters. Any simulation can be considered as a context for optimization.
@@ -46,13 +46,7 @@ from ._Problems import Problem
 
 submodules = ["optim_utils"]
 
-classes = [
-    "Problem",
-    "Optimizer",
-    "scipy_optimizer",
-    "PSO_optimizer",
-    "cost_function"
-]
+classes = ["Problem", "Optimizer", "scipy_optimizer", "PSO_optimizer", "cost_function"]
 
 functions = []
 

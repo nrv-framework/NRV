@@ -1,0 +1,2437 @@
+{
+ "I_max_abs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "LIFE_stim0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  }
+ ],
+ "LIFE_stim0.add_electrode": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.add_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.add_electrode"
+  }
+ ],
+ "LIFE_stim0.reshape_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv.fmod._extracellular",
+   "name": "extracellular_context.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv.fmod",
+   "name": "extracellular_context.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.reshape_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.reshape_nerve"
+  }
+ ],
+ "__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "ax_best": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "ax_best.set_title": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_title"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_title"
+  }
+ ],
+ "axs_costs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "bounds0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "cm_0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "biphasic_stimulus_CM"
+  }
+ ],
+ "costC": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._CostEvaluation",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stim_energy_CE"
+  }
+ ],
+ "costR": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._CostEvaluation",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "recrutement_count_CE"
+  }
+ ],
+ "cost_evaluation": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._nrv_function",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  }
+ ],
+ "dt": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "dummy_stim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "dummy_stim.pulse": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus.pulse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus.pulse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus.pulse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.pulse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.pulse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.pulse"
+  }
+ ],
+ "elec_0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  }
+ ],
+ "fasc1_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc1_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc1_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fascicle_1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fascicle_1.fill": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.fill"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig_best": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig_costs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig_costs.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.tight_layout"
+  }
+ ],
+ "kwarg_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "life_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "life_length": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "life_x_0_offset": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "life_y_c_0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "life_z_c_0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "my_cost0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._CostFunctions",
+   "module_short": "nrv",
+   "name": "cost_function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "cost_function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function"
+  }
+ ],
+ "my_cost0.set_context_modifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._CostFunctions",
+   "module_short": "nrv",
+   "name": "cost_function.set_context_modifier"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "cost_function.set_context_modifier"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function.set_context_modifier"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.set_context_modifier"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.set_context_modifier"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.set_context_modifier"
+  }
+ ],
+ "my_cost0.set_cost_evaluation": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._CostFunctions",
+   "module_short": "nrv",
+   "name": "cost_function.set_cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "cost_function.set_cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function.set_cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.set_cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.set_cost_evaluation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.set_cost_evaluation"
+  }
+ ],
+ "my_cost0.set_static_context": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._CostFunctions",
+   "module_short": "nrv",
+   "name": "cost_function.set_static_context"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "cost_function.set_static_context"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function.set_static_context"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.set_static_context"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.set_static_context"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.set_static_context"
+  }
+ ],
+ "my_prob": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._Problems",
+   "module_short": "nrv",
+   "name": "Problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "Problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Problem"
+  }
+ ],
+ "my_prob.costfunction": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._Problems",
+   "module_short": "nrv",
+   "name": "Problem.costfunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "Problem.costfunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Problem.costfunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.costfunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.costfunction"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.costfunction"
+  }
+ ],
+ "my_prob.optimizer": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._Problems",
+   "module_short": "nrv",
+   "name": "Problem.optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "Problem.optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Problem.optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.optimizer"
+  }
+ ],
+ "n_ax1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "nerve_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "nerve_l": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "_cython_3_0_12",
+   "module_short": "_cython_3_0_12",
+   "name": "cython_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "nrv.FEM_stimulation": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._extracellular",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "extracellular_context"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_stimulation"
+  }
+ ],
+ "nrv.LIFE_electrode": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "FEM_electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod._electrodes",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.fmod",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "electrode"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "LIFE_electrode"
+  }
+ ],
+ "nrv.PSO_optimizer": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim._Optimizers",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim._Optimizers",
+   "module_short": "nrv",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Optimizer"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  }
+ ],
+ "nrv.Problem": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim._Problems",
+   "module_short": "nrv",
+   "name": "Problem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "Problem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Problem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Problem"
+  }
+ ],
+ "nrv.biphasic_stimulus_CM": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "biphasic_stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus_CM"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._ContextModifiers",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "context_modifier"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "biphasic_stimulus_CM"
+  }
+ ],
+ "nrv.cost_function": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim._CostFunctions",
+   "module_short": "nrv",
+   "name": "cost_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "cost_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_function"
+  }
+ ],
+ "nrv.fascicle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "nrv.nerve": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "nrv.recrutement_count_CE": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._CostEvaluation",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "recrutement_count_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._nrv_function",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._nrv_function",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "recrutement_count_CE"
+  }
+ ],
+ "nrv.stim_energy_CE": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._CostEvaluation",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stim_energy_CE"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._nrv_function",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "cost_evaluation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._nrv_function",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nrv_function"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stim_energy_CE"
+  }
+ ],
+ "nrv.stimulus": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "outer_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "pso_kwargs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "pso_kwargs_pb_0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "pso_opt": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim._Optimizers",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "PSO_optimizer"
+  }
+ ],
+ "res0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._OptimResults",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "optim_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "optim_results"
+  }
+ ],
+ "res0.compute_best_pos": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._OptimResults",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "optim_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "optim_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.compute_best_pos"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.compute_best_pos"
+  }
+ ],
+ "res0.plot_cost_history": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils._OptimResults",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim.optim_utils",
+   "module_short": "nrv.optim.optim_utils",
+   "name": "optim_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.optim",
+   "module_short": "nrv.optim",
+   "name": "optim_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "optim_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_cost_history"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_cost_history"
+  }
+ ],
+ "res0.x": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "res_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results"
+  }
+ ],
+ "res_sim.plot_recruited_fibers": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_recruited_fibers"
+  }
+ ],
+ "static_context": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "stim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus"
+  }
+ ],
+ "stim.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils._stimulus",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "stimulus.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot"
+  }
+ ],
+ "t_end": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "t_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "t_start": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ]
+}

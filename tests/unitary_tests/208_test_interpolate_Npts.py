@@ -78,8 +78,8 @@ if __name__ == "__main__":
     bounds = [t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, t_bound, I_bound, (0.01,0.5)]
 
 
-    for i in track(range(100000)):
+    for i in track(range(100000), description="Checking random points to interpolate..."):
         X = np.array([np.random.uniform(low=bounds[k][0], high=bounds[k][1]) for k in range(len(bounds))])
         waveform2 = nrv.interpolate_Npts(X, plot=False, generatefigure=False, **kwrgs_interp)
 
-    #plt.show()
+    # plt.show()

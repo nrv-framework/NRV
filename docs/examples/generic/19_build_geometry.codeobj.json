@@ -1,0 +1,1736 @@
+{
+ "__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "angle": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "axs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "center": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "circle": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle"
+  }
+ ],
+ "circle.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "circle.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "ellipse": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  }
+ ],
+ "ellipse.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "ellipse.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "ellipse.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig.legend": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "FigureBase.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FigureBase.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.legend"
+  }
+ ],
+ "geom.CShape": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  }
+ ],
+ "geom.Circle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._circle",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Circle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Circle"
+  }
+ ],
+ "geom.Ellipse": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._ellipse",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Ellipse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Ellipse"
+  }
+ ],
+ "geom.Polygon": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  }
+ ],
+ "geom.create_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  }
+ ],
+ "inside_pts": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "inside_pts.T": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "np.pi": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "pi"
+  }
+ ],
+ "nrv.utils.geom.CShape.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "get_point_inside"
+  }
+ ],
+ "nrv.utils.geom.CShape.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "rotate"
+  }
+ ],
+ "nrv.utils.geom.CShape.translate": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom.CShape",
+   "module_short": "nrv.utils.geom.CShape",
+   "name": "translate"
+  }
+ ],
+ "nrv.utils.geom.create_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "create_cshape"
+  }
+ ],
+ "p": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "plot_cshape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "plt.Axes": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "Axes"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "points": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "poly": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly1.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "poly1.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "poly1.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "poly2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon"
+  }
+ ],
+ "poly2.get_point_inside": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.get_point_inside"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.get_point_inside"
+  }
+ ],
+ "poly2.rotate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.rotate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.rotate"
+  }
+ ],
+ "poly2.translate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._polygon",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "Polygon.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom._cshape",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils.geom",
+   "module_short": "nrv.utils.geom",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.utils",
+   "module_short": "nrv.utils",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "CShape.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.translate"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.translate"
+  }
+ ],
+ "r": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "radius": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ]
+}

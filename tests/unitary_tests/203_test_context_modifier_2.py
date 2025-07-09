@@ -19,7 +19,7 @@ if __name__ == "__main__":
     test_stim_CM = nrv.stimulus_CM(interpolator=nrv.interpolate_Npts, intrep_kwargs=kwrgs_interp, t_sim=t_sim)
 
 
-    static_context = "./unitary_tests/sources/202_axon.json"
+    static_context = "./unitary_tests/sources/200_unmyelinated_axon.json"
     X = np.array([
         [1, -.1, 4, .1],
         [1, -20, 4, .1],
@@ -57,4 +57,4 @@ if __name__ == "__main__":
     plt.savefig('./unitary_tests/figures/203_A.png')
     plt.figure(2)
     plt.savefig('./unitary_tests/figures/203_B.png')
-    #plt.show()
+    # plt.show()

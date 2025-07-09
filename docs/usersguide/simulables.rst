@@ -224,42 +224,42 @@ For the end-user, two specific methods for intracellular stimulation of unmyelin
 
 * :meth:`~nrv.nmod.unmyelinated.insert_I_Clamp` to perform current clamp stimulation. For the moment only single pulse waveform are available.
 
-    .. list-table:: Arguments of current clamp method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of current clamp method
+     :widths: 15 25 50
+     :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - position
-         - float
-         - relative position over the axon
-       * - t_start
-         - float
-         - starting time, in ms
-       * - duration
-         - float
-         - duration of the pulse, in ms
-       * - amplitude
-         - float
-         - amplitude of the pulse, in nA
+     * - Parameter
+       - Type
+       - Comment
+     * - position
+       - float
+       - relative position over the axon
+     * - t_start
+       - float
+       - starting time, in ms
+     * - duration
+       - float
+       - duration of the pulse, in ms
+     * - amplitude
+       - float
+       - amplitude of the pulse, in nA
 
 
 * :meth:`~nrv.nmod.unmyelinated.insert_V_Clamp` to perform voltage clamp stimulation.
 
-    .. list-table:: Arguments of voltage clamp method
-       :widths: 15 25 50
-       :header-rows: 1
+  .. list-table:: Arguments of voltage clamp method
+      :widths: 15 25 50
+      :header-rows: 1
 
-       * - Parameter
-         - Type
-         - Comment
-       * - position
-         - float
-         - relative position over the axon
-       * - stimulus
-         - :class:`~nrv.utils._stimulus.stimulus`
-         - stimulus for the clamp, see corresponding page for more information
+      * - Parameter
+        - Type
+        - Comment
+      * - position
+        - float
+        - relative position over the axon
+      * - stimulus
+        - :class:`~nrv.utils._stimulus.stimulus`
+        - stimulus for the clamp, see corresponding page for more information
 
 
 Myelinated axons
@@ -592,10 +592,24 @@ To stimulate the fascicle, one option is to use the :meth:`~nrv.nmod.fascicle.in
     - 
     - Pulse amplitude, in nA
 
+  * - expr 
+    - None | Iterable[str] | str
+    - None
+    - To select a subpopulation of axon for the clamp, If not None mask is generated using :meth:`pandas.DataFrame.eval` of this expression
+
+  * - mask_labels 
+    - np.array[int]
+    - None | Iterable[str] | str
+    - To select a subpopulation of axon for the clamp, Label or list of labels already added to the axon populations population
+
   * - ax_list 
     - np.array[int]
-    - None
-    - Array to filter axon for I clamp. If None, I clamp is applied to all axons.
+    - None | list
+    - To select a subpopulation of axon for the clamp, list of axons to insert the clamp on, if None, all axons are stimulated
+
+
+.. seealso::
+    :doc:`Example 23 <../examples/generic/23_subpop_iclamp>` --- Attach a current clamp to specific subpopulation of axons.
 
 
 Extracellular context is attached to a fascicle with the :meth:`~nrv.nmod.fascicle.attach_extracellular_stimulation` method, as for the axon (see above). Stimulus can also be changed with the :meth:`~nrv.nmod.fascicle.change_stimulus_from_electrode` method. NRV also provides several other methods to manipulate fascicle objects, such as :meth:`~nrv.nmod.fascicle.remove_myelinated_axons`, :meth:`~nrv.nmod.fascicle.remove_axons_size_threshold`, :meth:`~nrv.nmod.fascicle.rotate_fascicle`, :meth:`~nrv.nmod.fascicle.translate_fascicle`, :meth:`~nrv.nmod.fascicle.plot`, etc. 
@@ -688,4 +702,4 @@ The :class:`~nrv.nmod.nerve` object is initialized with the following list of pa
   of the fascicle after adding them to the :class:`~nrv.nmod.nerve` will also affect the copy added in the latter.
 
 The :class:`~nrv.nmod.nerve` class includes most of the method available in the :class:`~nrv.nmod.fascicle` class: :meth:`~nrv.nmod.nerve.set_axons_parameters`, :meth:`~nrv.nmod.nerve.plot`, :meth:`~nrv.nmod.nerve.insert_I_Clamp`, :meth:`~nrv.nmod.nerve.attach_extracellular_stimulation`, etc.
-The :meth:`~nrv.nmod.nerve.simulate` method runs the simulation and returns a :meth:`~nrv.nmod.results.nerve_results` object (see the :doc:`post-processing section <postproc>`). 
+The :meth:`~nrv.nmod.nerve.simulate` method runs the simulation and returns a :meth:`~nrv.nmod.results.nerve_results` object (see the :doc:`post-processing section <postproc>`).

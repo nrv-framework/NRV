@@ -9,7 +9,7 @@ if __name__ == "__main__":
     L = 10000             # length, in um
     fascicle_1 = nrv.fascicle()
     fascicle_1.define_length(L)
-    fascicle_1.load_fascicle_configuration('./unitary_tests/sources/56_fasc.json')
+    fascicle_1.load('./unitary_tests/sources/56_fasc.json')
 
     # electrode def
     x_elec = L/2                # electrode x position, in [um]
@@ -36,4 +36,4 @@ if __name__ == "__main__":
     fig2, ax2 = plt.subplots(figsize=(8,8))
     fascicle_1.plot(ax2)
     plt.savefig('./unitary_tests/figures/68_B.png')
-    #plt.show()
+    # plt.show()

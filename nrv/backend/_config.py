@@ -4,14 +4,15 @@ Everything about the configuration, gathers :in a singleton:
 * NRV parameters,
 * ...
 """
+
 from ._NRV_Singleton import NRV_singleton
 from ._machine_config import MachineConfig
 from ._parameters import nrv_parameters
 
+
 class nrv_config(metaclass=NRV_singleton):
-    """ A unique class to handle all the configuration
-    
-    """
+    """A unique class to handle all the configuration"""
+
     def __init__(self):
         self.machine_config = MachineConfig()
         self.framework_parameters = nrv_parameters()

@@ -42,6 +42,7 @@ Chapters of the User's Guide
 .. toctree::
 
    usersguide/simulables
+   usersguide/geometry
    usersguide/populations
    usersguide/stimuli
    usersguide/electrodes

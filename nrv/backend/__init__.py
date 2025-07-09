@@ -1,4 +1,4 @@
-""" backend: code for IO, machine and classes handling
+"""backend: code for IO, machine and classes handling
 
 the backend sub-package is dedicated to handling the magic behind all NRV
 computations. The code developed here is not meant to be used directly by the
@@ -52,7 +52,7 @@ from ._NRV_Class import (
 from ._NRV_Results import generate_results, NRV_results, sim_results
 from ._NRV_Simulable import is_NRV_simulable, simulable, NRV_simulable
 from ._NRV_Singleton import NRV_singleton
-from ._parameters import nrv_parameters
+from ._parameters import nrv_parameters, ncore_autoset
 
 submodules = []
 
@@ -103,6 +103,7 @@ functions = [
     "generate_results",
     "is_NRV_simulable",
     "simulable",
+    "ncore_autoset",
 ]
 
 __all__ = []

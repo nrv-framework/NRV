@@ -11,6 +11,7 @@ from matplotlib.patches import Wedge
 from ..backend._file_handler import json_load
 from ..backend._log_interface import rise_error, rise_warning
 from ..backend._NRV_Class import NRV_class, abstractmethod
+from ..utils._misc import rotate_2D
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -235,6 +236,25 @@ class electrode(NRV_class):
         if z is not None:
             self.z += z
         self.clear_footprint()
+
+    def rotate(
+        self, angle: float, center: tuple[float, float] = (0, 0), degree: bool = False
+    ):
+        """
+        rotate electrode around x-axis
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle
+        center : bool, optional
+            Center of the rotation, by default (0,0)
+        degree : bool, optional
+            if True `angle` is in degree, if False in radian, by default False
+        """
+        self.y, self.z = rotate_2D(
+            point=(self.y, self.z), angle=angle, degree=degree, center=center
+        )
 
     @abstractmethod
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
@@ -540,9 +560,7 @@ class CUFF_electrode(FEM_electrode):
             del kwgs["nerve_d"]
             if "linewidth" not in kwgs:
                 kwgs["linewidth"] = 2
-            axes.add_patch(
-                plt.Circle((0, 0), rad, color=color, fill=False, **kwgs)
-            )
+            axes.add_patch(plt.Circle((0, 0), rad, color=color, fill=False, **kwgs))
         else:
             rise_warning("Diameter has to be specifie to plot CUFF electrodes")
 
@@ -636,7 +654,9 @@ class CUFF_MP_electrode(CUFF_electrode):
                 res=res,
             )
 
-    def plot(self, axes: plt.axes, color: str = "gold", list_e=None, e_label=True, **kwgs) -> None:
+    def plot(
+        self, axes: plt.axes, color: str = "gold", list_e=None, e_label=True, **kwgs
+    ) -> None:
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]
@@ -645,23 +665,23 @@ class CUFF_MP_electrode(CUFF_electrode):
             elif not np.iterable(list_e):
                 list_e = [list_e]
             # elec_theta = 0.9 * 2 * np.pi / self.N_contact
-            elec_theta = 180*(self.contact_width/(rad))/np.pi
+            elec_theta = 180 * (self.contact_width / (rad)) / np.pi
             for i in list_e:
-                theta_ = np.pi/2 -(2 * i * np.pi / self.N_contact)
-                theta_deg = 180*theta_/np.pi
+                theta_ = np.pi / 2 - (2 * i * np.pi / self.N_contact)
+                theta_deg = 180 * theta_ / np.pi
                 axes.add_patch(
                     Wedge(
                         (0, 0),
-                        1.025*rad,
-                        theta1=theta_deg - elec_theta/2,
-                        theta2=theta_deg + elec_theta/2,
+                        1.025 * rad,
+                        theta1=theta_deg - elec_theta / 2,
+                        theta2=theta_deg + elec_theta / 2,
                         color=color,
-                        width=.05*rad,
-                        **kwgs
+                        width=0.05 * rad,
+                        **kwgs,
                     )
                 )
                 if e_label:
-                    z_ = 1.2*rad*np.exp(1j*theta_)
+                    z_ = 1.2 * rad * np.exp(1j * theta_)
                     axes.text(z_.real, z_.imag, f"E{i}", va="center", ha="center")
 
         else:

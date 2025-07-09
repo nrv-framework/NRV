@@ -16,9 +16,6 @@ help:
 	@echo "  make open     → Open the HTML documentation in your browser"
 
 html:
-	@echo "Copying notebooks from ../tutorial/"
-	@python3 copy_tutorials.py
-	@python3 clean_outputs.py tutorials/
 	$(SPHINXBUILD) -b html $(SOURCEDIR) $(BUILDDIR)/html
 	@echo "HTML documentation generated in $(BUILDDIR)/html"
 

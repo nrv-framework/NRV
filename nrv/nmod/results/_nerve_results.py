@@ -12,6 +12,7 @@ from ...utils._misc import membrane_capacitance_from_model
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pandas import DataFrame, concat
 
 
 def number_in_str(s: str) -> bool:
@@ -23,6 +24,7 @@ class nerve_results(sim_results):
 
     def __init__(self, context=None):
         super().__init__(context)
+        self._axons: DataFrame = DataFrame()
 
     @property
     def fascicle_keys(self) -> list:
@@ -60,7 +62,7 @@ class nerve_results(sim_results):
         np.ndarray (self.n_ax, 2)
             _description_
         """
-        return self.axons_pop_properties[:,[0,2]]
+        return self.axons_pop_properties[:, [0, 2]]
 
     @property
     def fasc_properties(self) -> np.ndarray:
@@ -76,18 +78,38 @@ class nerve_results(sim_results):
         _fasc = np.zeros((self.n_fasc, 4))
         for i_fasc, key in enumerate(fasc_keys):
             fasc_ = self[key]
-            _fasc[i_fasc, :] = np.array([
-                fasc_.ID,
-                fasc_.D,
-                fasc_.y_grav_center,
-                fasc_.z_grav_center,
-            ])
+            _fasc[i_fasc, :] = np.array(
+                [
+                    fasc_.ID,
+                    fasc_.geom.radius * 2,
+                    fasc_.geom.y,
+                    fasc_.geom.z,
+                ]
+            )
+        return _fasc
+
+    @property
+    def fasc_geometries(self) -> dict:
+        """
+        Porperties of axons population of each fascicles
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 6)
+            ndarray gathering, for all fascicles in the nerve, fascicle IDs, diameter and y and z positions.
+        """
+        fasc_keys = self.fascicle_keys
+        _fasc_geom = {}
+        for i_fasc, key in enumerate(fasc_keys):
+            _fasc = self[key]
+            _fasc_geom[str(_fasc.ID)] = _fasc.geom
         return _fasc
 
     @property
     def axons_pop_properties(self) -> np.ndarray:
         """
         Porperties of axons population of each fascicles
+
 
         Returns
         -------
@@ -103,15 +125,32 @@ class nerve_results(sim_results):
                 (
                     self[key].ID * np.ones(fasc_n_ax),
                     np.arange(fasc_n_ax),
-                    self[key].axons_type,
-                    self[key].axons_diameter,
-                    self[key].axons_y,
-                    self[key].axons_z,
+                    self[key].axons[["types", "diameters", "y", "z"]].to_numpy(),
                 )
             ).T
             _mye[_offset : _offset + fasc_n_ax, :] = fasc_axons
             _offset += fasc_n_ax
         return _mye
+
+    @property
+    def axons(self) -> np.ndarray:
+        """
+        Porperties of axons population of each fascicles
+
+
+        Returns
+        -------
+        np.ndarray (self.n_ax, 6)
+            ndarray gathering, for all axons in the nerve, corresponding fascicle and axon IDs, myelinating type, diameter and y and z positions.
+        """
+        if self._axons.empty:
+            fasc_keys = self.fascicle_keys
+            for key in fasc_keys:
+                _ax_pop = self[key].axons.axon_pop
+                _ax_pop["fkey"] = [key for _ in range(len(_ax_pop))]
+                self._axons = concat((self._axons, _ax_pop))
+                print(self[key].axons.axon_pop.keys())
+        return self._axons
 
     def get_fascicle_results(self, ID: int) -> fascicle_results:
         if ID not in self.fascicles_IDs:
@@ -276,8 +315,8 @@ class nerve_results(sim_results):
         self,
         axes: plt.axes,
         contour_color: str = "k",
-        myel_color: str = "r",
-        unmyel_color: str = "b",
+        myel_color: str = "b",
+        unmyel_color: str = "r",
         elec_color: str = "gold",
         num: bool = False,
         **kwgs,
@@ -303,7 +342,7 @@ class nerve_results(sim_results):
                 unmyel_color=unmyel_color,
                 num=num,
             )
-        
+
         if "extra_stim" in self:
             if self.extra_stim is not None:
                 self.extra_stim.plot(axes=axes, color=elec_color, nerve_d=self.D)

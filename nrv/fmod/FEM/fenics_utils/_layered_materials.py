@@ -44,9 +44,7 @@ def is_lay_mat(mat: object) -> bool:
 
 
 def get_sig_ap(sig_in, sig_lay, alpha_lay):
-    """
-    
-    """
+    """ """
 
     _alpha_lay = 1 / alpha_lay
     _alpha_in = 1 / (1 - 1 / _alpha_lay)
