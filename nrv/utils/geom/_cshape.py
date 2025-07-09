@@ -169,7 +169,9 @@ class CShape(NRV_class):
         """
         pass
 
-    def get_trace(self, n_theta: int = 100) -> tuple[np.ndarray[float], np.ndarray[float]]:
+    def get_trace(
+        self, n_theta: int = 100
+    ) -> tuple[np.ndarray[float], np.ndarray[float]]:
         """
         Returns the trace of the geometry as a list of points.
 
