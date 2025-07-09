@@ -137,7 +137,7 @@ This example shows how to plot structural parameters used in NRV's myelinated fi
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.158 seconds)
+   **Total running time of the script:** (0 minutes 0.156 seconds)
 
 
 .. _sphx_glr_download_examples_generic_12_MRG_structural_parameters.py:

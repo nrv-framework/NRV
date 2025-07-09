@@ -88,12 +88,6 @@ When `data` are in a tupple
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Axon population generated from data
-
 
 .. raw:: html
 
@@ -124,52 +118,52 @@ When `data` are in a tupple
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>11.489104</td>
+          <td>0.866013</td>
         </tr>
         <tr>
           <th>1</th>
           <td>1</td>
-          <td>7.021503</td>
+          <td>4.933820</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1</td>
-          <td>1.794894</td>
+          <td>0</td>
+          <td>7.836162</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>4.470522</td>
+          <td>1.061859</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.191064</td>
+          <td>5.423561</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1</td>
-          <td>7.420182</td>
+          <td>0</td>
+          <td>15.522308</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>2.347313</td>
+          <td>4.659298</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>2.798213</td>
+          <td>0</td>
+          <td>8.047352</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>16.485956</td>
+          <td>13.045553</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>0</td>
-          <td>10.210258</td>
+          <td>1</td>
+          <td>16.389905</td>
         </tr>
       </tbody>
     </table>
@@ -198,12 +192,6 @@ When `data` are in a np.ndarray
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Axon population generated from data
-
 
 .. raw:: html
 
@@ -234,52 +222,52 @@ When `data` are in a np.ndarray
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>11.489104</td>
+          <td>0.866013</td>
         </tr>
         <tr>
           <th>1</th>
           <td>1.0</td>
-          <td>7.021503</td>
+          <td>4.933820</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1.0</td>
-          <td>1.794894</td>
+          <td>0.0</td>
+          <td>7.836162</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>4.470522</td>
+          <td>1.061859</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>5.191064</td>
+          <td>5.423561</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1.0</td>
-          <td>7.420182</td>
+          <td>0.0</td>
+          <td>15.522308</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0.0</td>
-          <td>2.347313</td>
+          <td>4.659298</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1.0</td>
-          <td>2.798213</td>
+          <td>0.0</td>
+          <td>8.047352</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>16.485956</td>
+          <td>13.045553</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>0.0</td>
-          <td>10.210258</td>
+          <td>1.0</td>
+          <td>16.389905</td>
         </tr>
       </tbody>
     </table>
@@ -308,12 +296,6 @@ When `data` are in a dict
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Axon population generated from data
-
 
 .. raw:: html
 
@@ -344,52 +326,52 @@ When `data` are in a dict
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>11.489104</td>
+          <td>0.866013</td>
         </tr>
         <tr>
           <th>1</th>
           <td>1</td>
-          <td>7.021503</td>
+          <td>4.933820</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1</td>
-          <td>1.794894</td>
+          <td>0</td>
+          <td>7.836162</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>4.470522</td>
+          <td>1.061859</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.191064</td>
+          <td>5.423561</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1</td>
-          <td>7.420182</td>
+          <td>0</td>
+          <td>15.522308</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>2.347313</td>
+          <td>4.659298</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>2.798213</td>
+          <td>0</td>
+          <td>8.047352</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>16.485956</td>
+          <td>13.045553</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>0</td>
-          <td>10.210258</td>
+          <td>1</td>
+          <td>16.389905</td>
         </tr>
       </tbody>
     </table>
@@ -417,12 +399,6 @@ When `data` are in a dataframe
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Axon population generated from data
-
 
 .. raw:: html
 
@@ -453,52 +429,52 @@ When `data` are in a dataframe
         <tr>
           <th>0</th>
           <td>0</td>
-          <td>11.489104</td>
+          <td>0.866013</td>
         </tr>
         <tr>
           <th>1</th>
           <td>1</td>
-          <td>7.021503</td>
+          <td>4.933820</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1</td>
-          <td>1.794894</td>
+          <td>0</td>
+          <td>7.836162</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>4.470522</td>
+          <td>1.061859</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.191064</td>
+          <td>5.423561</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1</td>
-          <td>7.420182</td>
+          <td>0</td>
+          <td>15.522308</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>2.347313</td>
+          <td>4.659298</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1</td>
-          <td>2.798213</td>
+          <td>0</td>
+          <td>8.047352</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>16.485956</td>
+          <td>13.045553</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>0</td>
-          <td>10.210258</td>
+          <td>1</td>
+          <td>16.389905</td>
         </tr>
       </tbody>
     </table>
@@ -528,12 +504,6 @@ Small 20-axons population
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: On 20 axons to generate, there are 6 Myelinated and 14 Unmyelinated
-
 
 .. raw:: html
 
@@ -564,102 +534,102 @@ Small 20-axons population
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>0.919439</td>
+          <td>1.384369</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>1.488978</td>
+          <td>0.902004</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0.0</td>
-          <td>1.186774</td>
+          <td>2.930261</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>0.0</td>
-          <td>1.616834</td>
+          <td>1.0</td>
+          <td>3.513026</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>1.378557</td>
+          <td>1.570341</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0.0</td>
-          <td>0.948497</td>
+          <td>1.895792</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0.0</td>
-          <td>1.547094</td>
+          <td>0.820641</td>
         </tr>
         <tr>
           <th>7</th>
           <td>1.0</td>
-          <td>8.196393</td>
+          <td>2.637275</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>0.803206</td>
+          <td>1.587776</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0.0</td>
-          <td>1.523848</td>
+          <td>1.878357</td>
         </tr>
         <tr>
           <th>10</th>
           <td>1.0</td>
-          <td>7.282565</td>
+          <td>3.741483</td>
         </tr>
         <tr>
           <th>11</th>
           <td>0.0</td>
-          <td>1.070541</td>
+          <td>1.547094</td>
         </tr>
         <tr>
           <th>12</th>
-          <td>0.0</td>
-          <td>2.378156</td>
+          <td>1.0</td>
+          <td>3.741483</td>
         </tr>
         <tr>
           <th>13</th>
           <td>0.0</td>
-          <td>0.768337</td>
+          <td>1.227455</td>
         </tr>
         <tr>
           <th>14</th>
-          <td>1.0</td>
-          <td>8.653307</td>
+          <td>0.0</td>
+          <td>1.320441</td>
         </tr>
         <tr>
           <th>15</th>
           <td>0.0</td>
-          <td>1.233267</td>
+          <td>0.640481</td>
         </tr>
         <tr>
           <th>16</th>
           <td>1.0</td>
-          <td>8.462926</td>
+          <td>3.056112</td>
         </tr>
         <tr>
           <th>17</th>
-          <td>1.0</td>
-          <td>2.751503</td>
+          <td>0.0</td>
+          <td>1.337876</td>
         </tr>
         <tr>
           <th>18</th>
           <td>0.0</td>
-          <td>0.681162</td>
+          <td>0.739279</td>
         </tr>
         <tr>
           <th>19</th>
           <td>1.0</td>
-          <td>2.675351</td>
+          <td>8.348697</td>
         </tr>
       </tbody>
     </table>
@@ -698,22 +668,13 @@ Histograms
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: On 20 axons to generate, there are 6 Myelinated and 14 Unmyelinated
-    NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
-    NRV INFO: On 2000 axons to generate, there are 600 Myelinated and 1400 Unmyelinated
-    NRV INFO: On 20000 axons to generate, there are 6000 Myelinated and 14000 Unmyelinated
-
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.435 seconds)
+   **Total running time of the script:** (0 minutes 0.443 seconds)
 
 
 .. _sphx_glr_download_examples_generic_20_create_population.py:

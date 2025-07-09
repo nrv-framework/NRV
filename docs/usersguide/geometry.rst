@@ -4,6 +4,22 @@ Create (Fascicle) Geometry
 
 In NRV, geometries are handled through dedicated classes that allow you to define the shape and structure of fascicles. Custom geometries are currently only used to define fascicles, but this may be extended in the future to nerves and electrodes.
 
+All geometries share a common setup described with the figure bellow:
+
+.. image:: ../images/geometry_1_light.png
+    :class: only-light
+
+.. image:: ../images/geometry_1_dark.png
+    :class: only-dark
+
+
+On the (x, y, z)-frame:
+
+- all extrusions are automatically done in the direction of the axons, so on the x-axis direction,
+
+- as a consequence, all 2-D shapes (circles, ellipses or polygons) are constructed in a z-y plane. By default, x is often assumed to be null.
+
+
 .. warning::
 
     For now, custom geometries are only used to define fascicles. This might be extended in the future to both nerves and electrodes.
@@ -31,10 +47,10 @@ To define a new geometry, you need to implement the following methods:
 
 And the following properties:
 
-- :meth:`~nrv.utils.geom.CShape.area` Area of the shape in \\(\\mu m^2\\). *Required for Meshing*
-- :meth:`~nrv.utils.geom.CShape.perimeter` Perimeter of the shape in \\(\\mu m^2\\). *Required for Meshing*
+- :meth:`~nrv.utils.geom.CShape.area` Area of the shape in :math:`\mu m^2`. *Required for Meshing*
+- :meth:`~nrv.utils.geom.CShape.perimeter` Perimeter of the shape in :math:`\mu m^2`. *Required for Meshing*
 - :meth:`~nrv.utils.geom.CShape.bbox_size` Size of the bounding bounding box of the shape. *Required for Meshing*
-- :meth:`~nrv.utils.geom.CShape.bbox` Coordinate of the bounding box as a :class:`numpy.ndarray`in the following format \\(y_{min}, z_{min}, y_{max}, z_{max}\\)  *Required for Meshing*
+- :meth:`~nrv.utils.geom.CShape.bbox` Coordinate of the bounding box as a :class:`numpy.ndarray` in the following format :math:`y_{min}, z_{min}, y_{max}, z_{max}` *Required for Meshing*
 
 
 **Example:**
@@ -67,6 +83,8 @@ NRV provides several built-in geometries for fascicles. The following table summ
 | Polygon        | :class:`~nrv.utils.geom.Polygon`         | Polygonal fascicle            |
 +----------------+------------------------------------------+-------------------------------+
 
+These shapes are nicely illustrated with an example implementing an instance of each shape: :doc:`example 19 <../examples/generic/19_build_geometry>`
+
 Example Usage
 =============
 
@@ -91,3 +109,10 @@ To define your own custom geometry, subclass ``CShape`` and implement the requir
 .. note::
 
     For more details on each geometry class, refer to the API documentation.
+
+.. tip::
+
+    for other examples of geometry, howaver linked with axons population (see next section in the user's guide), please have a look at :
+
+    - :doc:`example 21 <../examples/generic/21_place_population>`
+    - :doc:`example 23 <../examples/generic/23_subpop_iclamp>`

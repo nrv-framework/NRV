@@ -100,7 +100,7 @@ This example shows how to plot available axon diameter distributions in NRV
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.564 seconds)
+   **Total running time of the script:** (0 minutes 0.596 seconds)
 
 
 .. _sphx_glr_download_examples_generic_13_axon_distributions.py:

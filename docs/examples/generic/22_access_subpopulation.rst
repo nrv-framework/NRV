@@ -129,12 +129,10 @@ From :meth:`pandas.DataFrame.eval` expression
 
  .. code-block:: none
 
-    NRV INFO: On 2000 axons to generate, there are 600 Myelinated and 1400 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 2000 axons to generate, there are 600 Myelinated and 1400 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
-    ('mask_0', array([ True, False, False, ..., False, False, False], shape=(2000,)))
+    ('mask_0', array([False, False, False, ..., False, False, False], shape=(2000,)))
 
 
 
@@ -185,7 +183,7 @@ The
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.190 seconds)
+   **Total running time of the script:** (0 minutes 4.152 seconds)
 
 
 .. _sphx_glr_download_examples_generic_22_access_subpopulation.py:

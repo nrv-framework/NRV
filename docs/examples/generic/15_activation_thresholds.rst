@@ -38,13 +38,13 @@ This script evaluates the activation threshold of myelinated fibers when stimula
  .. code-block:: none
 
     CUFF - PW = 50us - D_axon 2.0um
-    Threshold: 402.0µA
+    Threshold: 404.3µA
     CUFF - PW = 50us - D_axon 4.0um
     Threshold: 160.0µA
     CUFF - PW = 50us - D_axon 6.0um
     Threshold: 91.1µA
     CUFF - PW = 50us - D_axon 8.0um
-    Threshold: 65.9µA
+    Threshold: 66.5µA
     CUFF - PW = 50us - D_axon 10.0um
     NRV WARNING: [18400.00390625   100.             0.        ] not found in mesh, value of [18400.   100.     0.] reused
     Threshold: 54.1µA
@@ -54,26 +54,26 @@ This script evaluates the activation threshold of myelinated fibers when stimula
     Threshold: 46.1µA
     CUFF - PW = 50us - D_axon 16.0um
     NRV WARNING: [21000.00390625   100.             0.        ] not found in mesh, value of [21000.   100.     0.] reused
-    Threshold: 43.5µA
+    Threshold: 43.8µA
     CUFF - PW = 50us - D_axon 18.0um
     Threshold: 41.5µA
     CUFF - PW = 50us - D_axon 20.0um
-    Threshold: 40.3µA
+    Threshold: 40.0µA
     LIFE - PW = 50us - D_axon 2.0um
     Threshold: 75.9µA
     LIFE - PW = 50us - D_axon 4.0um
-    Threshold: 36.8µA
+    Threshold: 37.1µA
     LIFE - PW = 50us - D_axon 6.0um
     Threshold: 23.4µA
     LIFE - PW = 50us - D_axon 8.0um
-    Threshold: 17.9µA
+    Threshold: 17.8µA
     LIFE - PW = 50us - D_axon 10.0um
     NRV WARNING: [12650.00488281   100.             0.        ] not found in mesh, value of [12650.   100.     0.] reused
     Threshold: 15.6µA
     LIFE - PW = 50us - D_axon 12.0um
-    Threshold: 14.6µA
+    Threshold: 14.7µA
     LIFE - PW = 50us - D_axon 14.0um
-    Threshold: 14.1µA
+    Threshold: 14.3µA
     LIFE - PW = 50us - D_axon 16.0um
     Threshold: 13.7µA
     LIFE - PW = 50us - D_axon 18.0um
@@ -246,7 +246,7 @@ This script evaluates the activation threshold of myelinated fibers when stimula
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 49.835 seconds)
+   **Total running time of the script:** (1 minutes 47.914 seconds)
 
 
 .. _sphx_glr_download_examples_generic_15_activation_thresholds.py:

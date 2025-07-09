@@ -362,7 +362,7 @@ The objective of the first optimization problem is to **minimize a rectangle pul
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (7 minutes 30.233 seconds)
+   **Total running time of the script:** (7 minutes 29.614 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o01_nerve_optimization.py:

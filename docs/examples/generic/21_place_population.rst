@@ -81,7 +81,6 @@ Quick placement
 
  .. code-block:: none
 
-    NRV INFO: On 10 axons to generate, there are 3 Myelinated and 7 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
 
@@ -118,92 +117,92 @@ Quick placement
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>0.960120</td>
-          <td>-11.719259</td>
-          <td>1.746613</td>
+          <td>0.442886</td>
+          <td>15.153097</td>
+          <td>-6.547833</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>2.209619</td>
-          <td>9.894702</td>
-          <td>-1.794247</td>
+          <td>1.355311</td>
+          <td>-9.694166</td>
+          <td>1.491902</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1.0</td>
-          <td>2.789579</td>
-          <td>-0.897268</td>
-          <td>-15.832871</td>
+          <td>0.0</td>
+          <td>1.971343</td>
+          <td>4.244391</td>
+          <td>-7.729372</td>
           <td>True</td>
-          <td>0.514995</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1.0</td>
-          <td>3.398798</td>
-          <td>4.188172</td>
-          <td>5.486005</td>
+          <td>0.0</td>
+          <td>1.878357</td>
+          <td>-4.905767</td>
+          <td>9.246669</td>
           <td>True</td>
-          <td>0.238044</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>1.518036</td>
-          <td>-17.805801</td>
-          <td>6.774598</td>
+          <td>2.058517</td>
+          <td>-8.854880</td>
+          <td>-5.449079</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0.0</td>
-          <td>1.349499</td>
-          <td>0.882568</td>
-          <td>-18.991319</td>
+          <td>1.0</td>
+          <td>8.424850</td>
+          <td>-2.882341</td>
+          <td>14.040094</td>
           <td>True</td>
-          <td>0.000000</td>
+          <td>0.840496</td>
         </tr>
         <tr>
           <th>6</th>
-          <td>0.0</td>
-          <td>2.180561</td>
-          <td>-10.012510</td>
-          <td>8.730826</td>
+          <td>1.0</td>
+          <td>8.120240</td>
+          <td>7.367780</td>
+          <td>5.825482</td>
           <td>True</td>
-          <td>0.000000</td>
+          <td>0.622564</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0.0</td>
-          <td>1.355311</td>
-          <td>11.191248</td>
-          <td>-5.710436</td>
+          <td>0.942685</td>
+          <td>1.283380</td>
+          <td>1.437351</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>1.250701</td>
-          <td>13.809219</td>
-          <td>-4.182802</td>
+          <td>1.221643</td>
+          <td>3.619578</td>
+          <td>-12.311362</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>9</th>
           <td>1.0</td>
-          <td>3.436874</td>
-          <td>15.834680</td>
-          <td>-0.986666</td>
+          <td>3.969940</td>
+          <td>-3.504748</td>
+          <td>-16.057810</td>
           <td>True</td>
-          <td>0.216937</td>
+          <td>0.520913</td>
         </tr>
       </tbody>
     </table>
@@ -242,12 +241,7 @@ Placement in a Circle using the placer
 
  .. code-block:: none
 
-    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: minimal distance: 2.003136831572715
-    NRV INFO: average minimal distance: 2.7883824020325236
-    NRV INFO: Maximal minimal distance: 6.429877949603505
-    NRV INFO: Outer box: ((np.float64(-94.47138985184193), np.float64(-96.62279564341591)), (np.float64(95.80218357173072), np.float64(94.96437026863205)))
 
 
 
@@ -279,12 +273,7 @@ Placement in an Ellipse using the placer with custom `delta`
 
  .. code-block:: none
 
-    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: minimal distance: 2.002192141951094
-    NRV INFO: average minimal distance: 2.3500811050722774
-    NRV INFO: Maximal minimal distance: 3.9983854728272865
-    NRV INFO: Outer box: ((np.float64(96.03886857086125), np.float64(-77.03117491115061)), (np.float64(304.9067622163896), np.float64(76.38692291031137)))
 
 
 
@@ -315,13 +304,7 @@ Placement in a Polygon using the placer and differen `deltas_in`/`delta_trace`
 
  .. code-block:: none
 
-    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
-    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:07
-    NRV INFO: 32axons not placed
-    NRV INFO: minimal distance: -1.224549098196393
-    NRV INFO: average minimal distance: 1.9934938570403458
-    NRV INFO: Maximal minimal distance: 3.014820342718302
-    NRV INFO: Outer box: ((np.float64(-72.73791298277241), np.float64(-55.39297352202542)), (np.float64(75.2276771153939), np.float64(169.33214882004333)))
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
 
 
 
@@ -357,16 +340,6 @@ Generate mesh grid position inside the circle bounding box
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Axon placed population generated from data
-    NRV INFO: minimal distance: -2.2103775962246672
-    NRV INFO: average minimal distance: 2.4674672592833393
-    NRV INFO: Maximal minimal distance: 6.689547950762082
-    NRV INFO: Outer box: ((np.float64(-100.0), np.float64(-100.0)), (np.float64(100.0), np.float64(100.0)))
-
 
 
 
@@ -395,14 +368,7 @@ Placement using the "packing" method
 
  .. code-block:: none
 
-    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
-    NRV INFO: Axon packing initiated. This might take a while...
-    Packing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:32
-    NRV INFO: Packing done!
-    NRV INFO: minimal distance: 1.769244989826337
-    NRV INFO: average minimal distance: 2.3580701834595144
-    NRV INFO: Maximal minimal distance: 6.259760445136788
-    NRV INFO: Outer box: ((np.float64(-72.53150077586874), np.float64(-72.44691013316684)), (np.float64(73.03586475794576), np.float64(73.2961927567928)))
+    Packing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:41
 
 
 
@@ -429,13 +395,7 @@ All in one using :meth:`~nrv.nmod.axon_population.generate`
 
  .. code-block:: none
 
-    NRV INFO: On 625 axons to generate, there are 188 Myelinated and 437 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:03
-    NRV INFO: 278axons not placed
-    NRV INFO: minimal distance: -2.1369739478957914
-    NRV INFO: average minimal distance: 2.1540827330504912
-    NRV INFO: Maximal minimal distance: 6.802106434395377
-    NRV INFO: Outer box: ((np.float64(-97.2402741948308), np.float64(-97.99588940737056)), (np.float64(98.71680942675214), np.float64(97.3080465505196)))
 
 
 
@@ -484,7 +444,7 @@ Plotting
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 44.763 seconds)
+   **Total running time of the script:** (0 minutes 47.895 seconds)
 
 
 .. _sphx_glr_download_examples_generic_21_place_population.py:

@@ -345,3 +345,5 @@ ax.set_xlabel("Axon diameter (µm)")
 ax.set_ylabel("Axon threshold (µA)")
 fig.tight_layout()
 plt.show()
+
+# sphinx_gallery_thumbnail_number = -1

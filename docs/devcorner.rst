@@ -85,17 +85,18 @@ NRV documentation is built using `Sphinx <https://www.sphinx-doc.org/fr/master/>
     3. **API documentation**: Docstrings in all source files, classes, and functions. *Generated with* `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
 
 
-To compile the full documentation (1, 2, and 3), use a conda/mamba environment where you can `import nrv`:
+To compile the full documentation (1, 2, and 3), use a conda/mamba environment where you can `import nrv`.
 
 .. seealso::
-    - :doc:`Standard installation <./installation>`.
-    - `Developer installation <devcorner.html#contribution-forking-and-pull-requests>`_.
+    Two method can be used to install such environment: 
+       - :doc:`Standard installation <./installation>`.
+       - `Developer installation <devcorner.html#contribution-forking-and-pull-requests>`_.
 
 Additionally, a few dependencies must be installed:
 
 .. code:: bash
 
-    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton sphinx_gallery
+    pip install sphinx sphinx-rtd-theme furo Pygments sphinx-mdinclude sphinx_copybutton sphinx_gallery sphinx_codeautolink
 
 
 Once installed, you can build the documentation with the following command from the base repository ``NRV/``:

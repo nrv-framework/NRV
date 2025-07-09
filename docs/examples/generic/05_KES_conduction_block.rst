@@ -133,7 +133,7 @@ In this example, we use NRV to replicate some results from the in-silico study f
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.419 seconds)
+   **Total running time of the script:** (0 minutes 9.325 seconds)
 
 
 .. _sphx_glr_download_examples_generic_05_KES_conduction_block.py:

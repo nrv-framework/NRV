@@ -113,7 +113,7 @@ This script shows how to use the ``axon_AP_threshold()`` function to evaluate ax
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 27.642 seconds)
+   **Total running time of the script:** (0 minutes 27.400 seconds)
 
 
 .. _sphx_glr_download_examples_generic_16_activation_thresholds_arbitrary.py:

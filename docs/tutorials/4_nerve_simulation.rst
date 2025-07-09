@@ -94,7 +94,7 @@ The simplest method is to define a circular fascicle by its diameter and its (y,
     In our case, the (0, 0) coordinate is aligned with the center of the nerve. Its final position in the nerve is reached with a translation when added to the nerve.
 
 .. tip::
-    An elliptic fascicle can also be generated with the quick method by setting diameter as a tuple (corresponding to the smallest and largest diameters of the ellipse). In such a case, an eventual rotation can be added using the ``rot`` argument of :meth:`nerve.add_fascicle<../_nrv/nmod/nerve/~nrv.nmod.nerve.add_fascicle>``
+    An elliptic fascicle can also be generated with the quick method by setting diameter as a tuple (corresponding to the smallest and largest diameters of the ellipse). In such a case, an eventual rotation can be added using the ``rot`` argument of :meth:`nerve.add_fascicle <../_nrv/nmod/nerve/~nrv.nmod.nerve.add_fascicle>`
 
 .. GENERATED FROM PYTHON SOURCE LINES 54-70
 
@@ -134,7 +134,7 @@ The simplest method is to define a circular fascicle by its diameter and its (y,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-82
+.. GENERATED FROM PYTHON SOURCE LINES 71-83
 
 **Fascicle's shape from CShape**
 
@@ -146,9 +146,10 @@ In this example, we generate a second elliptic fascicle centered at $(y,z) = (10
     This time, as the fascicle is already positioned from its geometry, it is added to our nerve without any additional translation.
 
 .. seealso::
-    `Builtin geometry<../usersguide/geometry#builtin-shapes)>`.
+    `Builtin geometry <../usersguide/geometry>`.
+    `Example 18 <../examples/19_build_geometry>`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-99
+.. GENERATED FROM PYTHON SOURCE LINES 83-100
 
 .. code-block:: Python
 
@@ -187,7 +188,7 @@ In this example, we generate a second elliptic fascicle centered at $(y,z) = (10
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-133
+.. GENERATED FROM PYTHON SOURCE LINES 101-134
 
 Populate fascicles with axons
 -----------------------------
@@ -198,7 +199,7 @@ Now that our nerve geometry is created, it is time to populate them with axons. 
 - The population placement
 
 .. seealso:
-    :doc:`Axon population users' guide<../usersguide/populations>` for more detail.
+    :doc:`Axon population users' guide <../usersguide/populations>` for more detail.
 
 **Population creation**
 
@@ -216,14 +217,14 @@ To generate the population custumisable data. Or, in our case:
 * the unmyelinated axon distribution ```U_stat```
 
 To generate population from statistical distributions
-Available myelinated and unmyelinated axon distributions are described in :doc:`Axon population users' guide<../usersguide/populations.rst#diameter-distributions>`.
+Available myelinated and unmyelinated axon distributions are described in :doc:`Axon population users' guide <../usersguide/populations.rst#diameter-distributions>`.
 
 This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.axon_pop`` (or ``fascicle.axons.axon_pop`` in the fascicle) and containing two columns: 
 
 - The axons diameters in $\mu m$: ``"diameters"``
 - The axons myelination status (0 for umyelinated, 1 for myelinated): ``"types"``
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-138
+.. GENERATED FROM PYTHON SOURCE LINES 134-139
 
 .. code-block:: Python
 
@@ -236,20 +237,14 @@ This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 139-140
+.. GENERATED FROM PYTHON SOURCE LINES 140-141
 
 **Population placement**
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-164
+.. GENERATED FROM PYTHON SOURCE LINES 141-165
 
 .. code-block:: Python
 
@@ -263,7 +258,7 @@ This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.
     # An additional boolean column ``"is_placed"`` is generated assessing if each axon could have been placed in the population. Thus, if the population is too large to fit within the fascicle given the specified ``delta`` (i.e. some lines of ``"is_placed"`` are ``False``), cooresponding axons will still exist in the population but will not be considered in the fascicle. 
     #
     # .. seealso:
-    #     More detail on mask and subpopulation in :doc:`Axon population users' guide<../usersguide/populations>`)
+    #     More detail on mask and subpopulation in :doc:`Axon population users' guide <../usersguide/populations>`.
     #
     # .. tip::
     #     As Jupyter notebook offer a great viewer for ``pandas.DataFrame``, axon population can be well printed by adding the following line at the python cell: ```fascicle_1.axons.axon_pop```.
@@ -320,48 +315,48 @@ This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.
       <tbody>
         <tr>
           <th>0</th>
-          <td>0.0</td>
-          <td>1.076353</td>
-          <td>-154.470454</td>
-          <td>16.881662</td>
+          <td>1.0</td>
+          <td>4.236473</td>
+          <td>-27.730837</td>
+          <td>-40.150700</td>
           <td>True</td>
-          <td>0.000000</td>
+          <td>0.079150</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>0.0</td>
-          <td>1.547094</td>
-          <td>-139.295985</td>
-          <td>-50.232920</td>
+          <td>1.0</td>
+          <td>3.931864</td>
+          <td>-158.300821</td>
+          <td>42.598035</td>
           <td>True</td>
-          <td>0.000000</td>
+          <td>0.949257</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>1.0</td>
-          <td>14.517034</td>
-          <td>-148.719943</td>
-          <td>-72.197948</td>
+          <td>0.0</td>
+          <td>2.395591</td>
+          <td>-128.659043</td>
+          <td>64.465348</td>
           <td>True</td>
-          <td>0.596932</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>1.663327</td>
-          <td>-189.981148</td>
-          <td>-11.635754</td>
+          <td>1.843487</td>
+          <td>-111.144001</td>
+          <td>-75.795410</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>4</th>
-          <td>1.0</td>
-          <td>10.633267</td>
-          <td>-127.024812</td>
-          <td>-83.331274</td>
+          <td>0.0</td>
+          <td>1.117034</td>
+          <td>-75.284228</td>
+          <td>74.937824</td>
           <td>True</td>
-          <td>0.383808</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>...</th>
@@ -375,45 +370,45 @@ This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.
         <tr>
           <th>95</th>
           <td>0.0</td>
-          <td>0.989178</td>
-          <td>-74.890903</td>
-          <td>3.694724</td>
+          <td>1.680762</td>
+          <td>-121.350966</td>
+          <td>-13.532918</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>96</th>
-          <td>1.0</td>
-          <td>4.198397</td>
-          <td>-97.028321</td>
-          <td>-63.867319</td>
+          <td>0.0</td>
+          <td>2.267735</td>
+          <td>-20.935530</td>
+          <td>8.460054</td>
           <td>True</td>
-          <td>0.396241</td>
+          <td>0.000000</td>
         </tr>
         <tr>
           <th>97</th>
           <td>0.0</td>
-          <td>0.925251</td>
-          <td>-57.056858</td>
-          <td>28.232653</td>
+          <td>1.372745</td>
+          <td>-137.375680</td>
+          <td>34.810431</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>98</th>
           <td>0.0</td>
-          <td>0.820641</td>
-          <td>-75.174585</td>
-          <td>24.417603</td>
+          <td>1.047295</td>
+          <td>-115.091101</td>
+          <td>-57.709277</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>99</th>
           <td>0.0</td>
-          <td>0.669539</td>
-          <td>-37.030667</td>
-          <td>62.708987</td>
+          <td>1.244890</td>
+          <td>-46.482984</td>
+          <td>-54.824622</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
@@ -425,14 +420,14 @@ This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-169
+.. GENERATED FROM PYTHON SOURCE LINES 166-170
 
-Let's repeat this operation for the 2nd fascicle and plot the nerve again. This time, both creation and placement can be done in one line using the :meth:`fascicle.fill<~nrv.nmod.fascicle.fill> method.
+Let's repeat this operation for the 2nd fascicle and plot the nerve again. This time, both creation and placement can be done in one line using the :meth:`fascicle.fill <~nrv.nmod.fascicle.fill>`-method.
 
 .. tip::
-    This :meth:`fascicle.fill<~nrv.nmod.fascicle.fill>`-method is an alias for :meth:`axon_population.fill_geometry<~nrv.nmod.axon_population.fill_geometry>`, which calls :meth:`~nrv.nmod.axon_population.create_population` and then :meth:`~nrv.nmod.axon_population.place_population`. Its arguments are therefore the same as those of the two other methods.
+    This :meth:`fascicle.fill <~nrv.nmod.fascicle.fill>`-method is an alias for :meth:`axon_population.fill_geometry <~nrv.nmod.axon_population.fill_geometry>`, which calls :meth:`~nrv.nmod.axon_population.create_population` and then :meth:`~nrv.nmod.axon_population.place_population`. Its arguments are therefore the same as those of the two other methods.
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-173
+.. GENERATED FROM PYTHON SOURCE LINES 170-174
 
 .. code-block:: Python
 
@@ -448,17 +443,16 @@ Let's repeat this operation for the 2nd fascicle and plot the nerve again. This 
 
  .. code-block:: none
 
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-175
+.. GENERATED FROM PYTHON SOURCE LINES 175-176
 
 We see that now our nerve is populated with fibers. Since the ```fascicle_1```and ```fascicle_2```-objects are attached to the ```nerve```-object, any modification to one of them will be propagated to the nerve.
 
-.. GENERATED FROM PYTHON SOURCE LINES 175-182
+.. GENERATED FROM PYTHON SOURCE LINES 176-183
 
 .. code-block:: Python
 
@@ -487,11 +481,11 @@ We see that now our nerve is populated with fibers. Since the ```fascicle_1```an
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 183-184
+.. GENERATED FROM PYTHON SOURCE LINES 184-185
 
 While we are here, we can also define stimulation parameters of the axons. For example, we can specify the computational model of the myelinated and unmyelinated fibers. You can refer to the previous tutorials for a thorough overview of the fiber's simulation parameters available.
 
-.. GENERATED FROM PYTHON SOURCE LINES 184-198
+.. GENERATED FROM PYTHON SOURCE LINES 185-199
 
 .. code-block:: Python
 
@@ -516,14 +510,14 @@ While we are here, we can also define stimulation parameters of the axons. For e
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 199-203
+.. GENERATED FROM PYTHON SOURCE LINES 200-204
 
 Extracellular stimulation context
 ---------------------------------
 
 Now we will define everything related to the extracellular stimulation. First, we need to create a ```FEM_stimulation```-object. In this object, we can specify the conductivity of each material of the FEM stimulation. Available material conductivities are specified in :doc:`../../usersguide/materials`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-209
+.. GENERATED FROM PYTHON SOURCE LINES 204-210
 
 .. code-block:: Python
 
@@ -540,7 +534,7 @@ Now we will define everything related to the extracellular stimulation. First, w
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 210-219
+.. GENERATED FROM PYTHON SOURCE LINES 211-220
 
 Adding intracellular electrodes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -552,7 +546,7 @@ First, we will run some simulation with 3 intrafascicular LIFE-like electrodes, 
 
 The electrodes are attached to the ```extra_stim``` ```FEM_stimulation```-object with the ```add_electrode```-method. The method also requires to link the electrode to a NRV ```stimulus```-object. For that, we created a dummy stimulus ```dummy_stim```that we will change later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-244
+.. GENERATED FROM PYTHON SOURCE LINES 220-245
 
 .. code-block:: Python
 
@@ -588,11 +582,11 @@ The electrodes are attached to the ```extra_stim``` ```FEM_stimulation```-object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-246
+.. GENERATED FROM PYTHON SOURCE LINES 246-247
 
 Last, we attach ```extra_stim```-object to the nerve with the ```attach_extracellular_stimulation```-method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-249
+.. GENERATED FROM PYTHON SOURCE LINES 247-250
 
 .. code-block:: Python
 
@@ -606,11 +600,11 @@ Last, we attach ```extra_stim```-object to the nerve with the ```attach_extracel
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-251
+.. GENERATED FROM PYTHON SOURCE LINES 251-252
 
 Let's see how our nerve with electrodes now looks like:
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-257
+.. GENERATED FROM PYTHON SOURCE LINES 252-258
 
 .. code-block:: Python
 
@@ -638,7 +632,7 @@ Let's see how our nerve with electrodes now looks like:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-277
+.. GENERATED FROM PYTHON SOURCE LINES 259-278
 
 The three LIFEs now are showing up, and we can make sure that their positions within the nerve are corrects. We also note that axon overlapping with the electrodes are removed. 
 
@@ -660,7 +654,7 @@ Simulation duration is set with the ```t_sim``` parameter (in ms). We can also s
 .. note::
     This cell takes several minutes to run.
 
-.. GENERATED FROM PYTHON SOURCE LINES 277-284
+.. GENERATED FROM PYTHON SOURCE LINES 278-285
 
 .. code-block:: Python
 
@@ -679,37 +673,17 @@ Simulation duration is set with the ```t_sim``` parameter (in ms). We can also s
 
  .. code-block:: none
 
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 228
-    NRV INFO: Number of nodes : 17680
-    NRV INFO: Number of elements : 123927
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 11.111393928527832 s
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 20.019429206848145 s
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 28.76738429069519 s
-    fascicle 1/2 -- 3 CPUs: 99 / 99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
-    fascicle 2/2 -- 3 CPUs: 94 / 94 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
-    NRV INFO: ...Done!
+    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-286
+.. GENERATED FROM PYTHON SOURCE LINES 286-287
 
 We can plot the nerve again and highlight axons that are recruited:
 
-.. GENERATED FROM PYTHON SOURCE LINES 286-292
+.. GENERATED FROM PYTHON SOURCE LINES 287-293
 
 .. code-block:: Python
 
@@ -737,11 +711,11 @@ We can plot the nerve again and highlight axons that are recruited:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-294
+.. GENERATED FROM PYTHON SOURCE LINES 294-295
 
 No fiber activated are activated, of course the electrodes are stimulating with the ```dummy_stim```stimulus! Let's change the stimulus of ```LIFE_2``` (in ```fascicle_2```) with a 100µs-long 60µA monophasic cathodic pulse:
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-309
+.. GENERATED FROM PYTHON SOURCE LINES 295-310
 
 .. code-block:: Python
 
@@ -778,11 +752,11 @@ No fiber activated are activated, of course the electrodes are stimulating with 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 310-311
+.. GENERATED FROM PYTHON SOURCE LINES 311-312
 
 We can change the stimulus of ```LIFE_2``` by calling ```change_stimulus_from_electrode``` of the ```nerve```-object with the ```LIFE_2``` ID and the new stimulus. We then re-run the simulation and plot the activated fibers.
 
-.. GENERATED FROM PYTHON SOURCE LINES 311-320
+.. GENERATED FROM PYTHON SOURCE LINES 312-321
 
 .. code-block:: Python
 
@@ -808,24 +782,21 @@ We can change the stimulus of ```LIFE_2``` by calling ```change_stimulus_from_el
 
  .. code-block:: none
 
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    fascicle 1/2 -- 3 CPUs: 99 / 99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
-    fascicle 2/2 -- 3 CPUs: 94 / 94 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
-    NRV INFO: ...Done!
+    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
 
     Text(22.972222222222214, 0.5, 'y-axis (µm)')
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-325
+.. GENERATED FROM PYTHON SOURCE LINES 322-326
 
 Now we see some activation some fibers being recruited! All myelinated fibers in the ```fascicle_2``` are recruited, as few as a few unmyelinated ones. Some myelinated fibers are also recruited in ```fascicle_1``` but no unmyelinated ones. We can get the ratio of activated fiber in each fascicle using NRV's built-in methods.
 
 .. note::
     Note that FEM is not recomputed between this simulation run and the previous. Indeed, as long as we don't change any geometrical properties of the model, we only need to run the FEM solver once. This is automatically handled by the framework.
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-342
+.. GENERATED FROM PYTHON SOURCE LINES 326-343
 
 .. code-block:: Python
 
@@ -854,19 +825,19 @@ Now we see some activation some fibers being recruited! All myelinated fibers in
 
  .. code-block:: none
 
-    Proportion of unmyelinated recruited in fascicle_1: 10.0%
-    Proportion of myelinated recruited in fascicle_1: 24.137931034482758%
-    Proportion of unmyelinated recruited in fascicle_2: 34.84848484848485%
-    Proportion of myelinated recruited in fascicle_2: 82.14285714285714%
+    Proportion of unmyelinated recruited in fascicle_1: 7.246376811594203%
+    Proportion of myelinated recruited in fascicle_1: 17.24137931034483%
+    Proportion of unmyelinated recruited in fascicle_2: 33.33333333333333%
+    Proportion of myelinated recruited in fascicle_2: 79.3103448275862%
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 343-344
+.. GENERATED FROM PYTHON SOURCE LINES 344-345
 
 Let's remove the stimulation in ```LIFE_2``` and apply it via ```LIFE_0``` instead:
 
-.. GENERATED FROM PYTHON SOURCE LINES 344-349
+.. GENERATED FROM PYTHON SOURCE LINES 345-350
 
 .. code-block:: Python
 
@@ -883,20 +854,17 @@ Let's remove the stimulation in ```LIFE_2``` and apply it via ```LIFE_0``` inste
 
  .. code-block:: none
 
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    fascicle 1/2 -- 3 CPUs: 99 / 99 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
-    fascicle 2/2 -- 3 CPUs: 94 / 94 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
-    NRV INFO: ...Done!
+    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 350-351
+.. GENERATED FROM PYTHON SOURCE LINES 351-352
 
 Let's see how many fibers are activated now:
 
-.. GENERATED FROM PYTHON SOURCE LINES 351-371
+.. GENERATED FROM PYTHON SOURCE LINES 352-372
 
 .. code-block:: Python
 
@@ -933,16 +901,16 @@ Let's see how many fibers are activated now:
 
  .. code-block:: none
 
-    Proportion of unmyelinated recruited in fascicle_1: 24.285714285714285%
-    Proportion of myelinated recruited in fascicle_1: 58.620689655172406%
-    Proportion of unmyelinated recruited in fascicle_2: 31.818181818181817%
-    Proportion of myelinated recruited in fascicle_2: 75.0%
+    Proportion of unmyelinated recruited in fascicle_1: 20.28985507246377%
+    Proportion of myelinated recruited in fascicle_1: 48.275862068965516%
+    Proportion of unmyelinated recruited in fascicle_2: 26.08695652173913%
+    Proportion of myelinated recruited in fascicle_2: 62.06896551724138%
 
     Text(48.472222222222214, 0.5, 'y-axis (µm)')
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 372-378
+.. GENERATED FROM PYTHON SOURCE LINES 373-379
 
 We see that the recruitment profile in the fascicles is very different whether we stimulate with one or another electrode. We can analyze it by plotting recruitment curves.
 
@@ -951,7 +919,7 @@ Recruitment curves with LIFEs
 
 To build the recruitment curve of our three electrodes, we are going to create a quick python function ```get_recruitment_electrode```that take as argument and electrode ID and a numpy array containing the pulse amplitude for the curve. The function return the ratio of myelinated and unmyelinated fibers recruited in each fascicle in python list. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 378-411
+.. GENERATED FROM PYTHON SOURCE LINES 379-412
 
 .. code-block:: Python
 
@@ -995,11 +963,11 @@ To build the recruitment curve of our three electrodes, we are going to create a
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 412-413
+.. GENERATED FROM PYTHON SOURCE LINES 413-414
 
 We use this function to get the recruitment curve of each electrode with the cathodic pulse amplitude varying from 0µA to 150µA, in 20pts. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 413-425
+.. GENERATED FROM PYTHON SOURCE LINES 414-426
 
 .. code-block:: Python
 
@@ -1210,11 +1178,11 @@ We use this function to get the recruitment curve of each electrode with the cat
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 426-427
+.. GENERATED FROM PYTHON SOURCE LINES 427-428
 
 Now let's look at the results for myelinated fibers:
 
-.. GENERATED FROM PYTHON SOURCE LINES 427-451
+.. GENERATED FROM PYTHON SOURCE LINES 428-452
 
 .. code-block:: Python
 
@@ -1254,7 +1222,7 @@ Now let's look at the results for myelinated fibers:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 452-458
+.. GENERATED FROM PYTHON SOURCE LINES 453-459
 
 Myelinated fibers are progressively recruited when increasing the pulse amplitude. ```LIFE_1``` recruits the entire ```fascicle_1``` without recruiting any axon in ```fascicle_2```. Oppositely, ```LIFE_2``` recruits the entire ```fascicle_2``` without recruiting any axon in ```fascicle_1```. In other words, intrafascicular selective activation is possible with ```LIFE_1```and ```LIFE_2```. ```LIFE_0``` however, located is neither of the two fascicles, can't selectively activate one or the other fascicle.
 
@@ -1263,7 +1231,7 @@ Myelinated fibers are progressively recruited when increasing the pulse amplitud
 
 Let's plot the unmyelinated fibers' recruitment curves:
 
-.. GENERATED FROM PYTHON SOURCE LINES 458-477
+.. GENERATED FROM PYTHON SOURCE LINES 459-478
 
 .. code-block:: Python
 
@@ -1298,7 +1266,7 @@ Let's plot the unmyelinated fibers' recruitment curves:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 478-484
+.. GENERATED FROM PYTHON SOURCE LINES 479-485
 
 Activation of unmyelinated fibers requires much higher pulse amplitude. Electrodes located in the fascicle recruits at most about 10% of the unmyelinated fibers in ```fascicle_1``` and about 70% in ```fascicle_2```. Electrode outside the fascicle or located in the other one fail at recruiting myelinated fibers. 
 
@@ -1307,7 +1275,7 @@ Recruitment curves with a monopolar cuff-like electrode
 
 Let's create a second nerve with a cuff electrode now:
 
-.. GENERATED FROM PYTHON SOURCE LINES 484-512
+.. GENERATED FROM PYTHON SOURCE LINES 485-513
 
 .. code-block:: Python
 
@@ -1347,19 +1315,17 @@ Let's create a second nerve with a cuff electrode now:
 
  .. code-block:: none
 
-    NRV INFO: Axon population generated from data
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: Axon population generated from data
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 513-514
+.. GENERATED FROM PYTHON SOURCE LINES 514-515
 
 We now create a FEM stimulation context, create a cuff electrode using the ```CUFF_electrode```-class, combine everything and add it to the ```nerve_cuff```-object:
 
-.. GENERATED FROM PYTHON SOURCE LINES 514-537
+.. GENERATED FROM PYTHON SOURCE LINES 515-538
 
 .. code-block:: Python
 
@@ -1398,11 +1364,11 @@ We now create a FEM stimulation context, create a cuff electrode using the ```CU
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 538-539
+.. GENERATED FROM PYTHON SOURCE LINES 539-540
 
 We can now simulate a recruitment curve with a cuff just like we did with the LIFE electrodes:
 
-.. GENERATED FROM PYTHON SOURCE LINES 539-563
+.. GENERATED FROM PYTHON SOURCE LINES 540-564
 
 .. code-block:: Python
 
@@ -1440,145 +1406,74 @@ We can now simulate a recruitment curve with a cuff just like we did with the LI
 
     Stimulating nerve with CUFF
     Pulse amplitude set to -0.0µA (1/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 235
-    NRV INFO: Number of nodes : 10535
-    NRV INFO: Number of elements : 74295
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 8.926728248596191 s
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -5.3µA (2/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -10.5µA (3/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -15.8µA (4/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -21.1µA (5/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -26.3µA (6/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -31.6µA (7/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -36.8µA (8/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -42.1µA (9/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -47.4µA (10/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -52.6µA (11/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -57.9µA (12/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -63.2µA (13/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -68.4µA (14/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -73.7µA (15/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -78.9µA (16/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -84.2µA (17/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -89.5µA (18/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -94.7µA (19/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
 
 
-    NRV INFO: ...Done!
     Pulse amplitude set to -100.0µA (20/20)
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-
-
-    NRV INFO: ...Done!
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 564-565
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 565-566
 
 And plot the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 565-584
+.. GENERATED FROM PYTHON SOURCE LINES 566-585
 
 .. code-block:: Python
 
@@ -1616,7 +1511,7 @@ And plot the results:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (21 minutes 21.491 seconds)
+   **Total running time of the script:** (20 minutes 8.088 seconds)
 
 
 .. _sphx_glr_download_tutorials_4_nerve_simulation.py:

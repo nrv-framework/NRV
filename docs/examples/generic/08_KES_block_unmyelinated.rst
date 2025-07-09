@@ -139,7 +139,7 @@ This file shows an example of action potential propagation block with an unmyeli
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.098 seconds)
+   **Total running time of the script:** (0 minutes 7.758 seconds)
 
 
 .. _sphx_glr_download_examples_generic_08_KES_block_unmyelinated.py:

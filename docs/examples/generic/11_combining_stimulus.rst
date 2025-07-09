@@ -21,7 +21,7 @@
 Combining Stimuli in NRV
 ========================
 
-This example shows how logical and arithmetical operations on :doc:`NRV's stimulus<../../usersguide/stimuli>` object can facilitate the creation of complex stimulus.
+This example shows how logical and arithmetical operations on :doc:`NRV's stimulus<../../usersguide/stimuli.rst>` object can facilitate the creation of complex stimulus.
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-80
 
@@ -139,7 +139,7 @@ This example shows how logical and arithmetical operations on :doc:`NRV's stimul
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.180 seconds)
+   **Total running time of the script:** (0 minutes 7.117 seconds)
 
 
 .. _sphx_glr_download_examples_generic_11_combining_stimulus.py:

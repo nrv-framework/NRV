@@ -174,4 +174,4 @@ axs[1].set_ylim(0,np.max(results_m.x_rec))
 
 fig.tight_layout()
 plt.show()
-
+# sphinx_gallery_thumbnail_number = -1

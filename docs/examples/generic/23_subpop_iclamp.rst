@@ -134,18 +134,12 @@ This example shows:
 
  .. code-block:: none
 
-    NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
+    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:01
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: 56axons not placed
-    NRV INFO: On 200 axons to generate, there are 60 Myelinated and 140 Unmyelinated
-    Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: Starting nerve simulation
-    fascicle 1/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:10
-    fascicle 2/3 -- 3 CPUs: 144 / 144 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 1/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:11
+    fascicle 2/3 -- 3 CPUs: 143 / 143 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
     fascicle 3/3 -- 3 CPUs: 200 / 200 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:09
-    NRV INFO: ...Done!
 
 
 
@@ -182,7 +176,7 @@ Plot recruited fibers
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 30.964 seconds)
+   **Total running time of the script:** (0 minutes 31.664 seconds)
 
 
 .. _sphx_glr_download_examples_generic_23_subpop_iclamp.py:

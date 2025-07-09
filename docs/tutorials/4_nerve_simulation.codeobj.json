@@ -1,20 +1,4 @@
 {
- ":meth:": [
-  {
-   "is_class": false,
-   "is_explicit": true,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": ":meth:"
-  },
-  {
-   "is_class": false,
-   "is_explicit": true,
-   "module": "builtins",
-   "module_short": "builtins",
-   "name": ":meth:"
-  }
- ],
  "amp": [
   {
    "is_class": false,
@@ -3373,6 +3357,40 @@
    "module": "nrv.nmod.axon_population",
    "module_short": "nrv.nmod.axon_population",
    "name": "place_population"
+  }
+ ],
+ "nrv.nmod.fascicle.fill": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.fascicle",
+   "module_short": "nrv.nmod.fascicle",
+   "name": "fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.fascicle",
+   "module_short": "nrv.nmod.fascicle",
+   "name": "fill"
+  }
+ ],
+ "nrv.nmod.fascicle.set_geometry": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.fascicle",
+   "module_short": "nrv.nmod.fascicle",
+   "name": "set_geometry"
+  }
+ ],
+ "nrv.nmod.nerve.add_fascicle": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.nerve",
+   "module_short": "nrv.nmod.nerve",
+   "name": "add_fascicle"
   }
  ],
  "nrv.parameters.set_nmod_ncore": [

@@ -103,7 +103,7 @@ Subthreshold pre-pulses change the initial state of an axon membrane and thus ca
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.724 seconds)
+   **Total running time of the script:** (0 minutes 0.730 seconds)
 
 
 .. _sphx_glr_download_examples_generic_09_Prepulse_waveform.py:

@@ -152,7 +152,7 @@ This small example shows a way to use the built-in `~nrv.optim.optim_utils.stimu
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.225 seconds)
+   **Total running time of the script:** (0 minutes 0.157 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o02_stimulus_CM.py:

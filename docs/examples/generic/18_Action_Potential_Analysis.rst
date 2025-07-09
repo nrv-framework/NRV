@@ -128,7 +128,7 @@ This script shows how to use the methods of ``axon_results``-class to detect and
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.525 seconds)
+   **Total running time of the script:** (0 minutes 0.524 seconds)
 
 
 .. _sphx_glr_download_examples_generic_18_Action_Potential_Analysis.py:

@@ -47,9 +47,7 @@ simulation context for many other examples in this documentation.
 
  .. code-block:: none
 
-    NRV INFO: On 60 axons to generate, there are 18 Myelinated and 42 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: 49axons not placed
 
 
 
@@ -166,7 +164,7 @@ simulation context for many other examples in this documentation.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.523 seconds)
+   **Total running time of the script:** (0 minutes 0.491 seconds)
 
 
 .. _sphx_glr_download_examples_generic_06_fascicle_with_contexts.py:

@@ -213,7 +213,7 @@ This small example shows a way to use the built-in `~nrv.optim.optim_utils.bipha
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.304 seconds)
+   **Total running time of the script:** (0 minutes 0.282 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o03_biphasic_stimulus_CM.py:

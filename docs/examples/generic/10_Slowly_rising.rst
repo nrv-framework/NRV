@@ -111,7 +111,7 @@ A slowly rising pulse can help in triggering small diameter axon first. This scr
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.861 seconds)
+   **Total running time of the script:** (0 minutes 1.847 seconds)
 
 
 .. _sphx_glr_download_examples_generic_10_Slowly_rising.py:

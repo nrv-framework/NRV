@@ -50,7 +50,7 @@ nerve = nrv.nerve(length=nerve_l, diameter=nerve_d, Outer_D=outer_d)
 #     In our case, the (0, 0) coordinate is aligned with the center of the nerve. Its final position in the nerve is reached with a translation when added to the nerve.
 #
 # .. tip::
-#     An elliptic fascicle can also be generated with the quick method by setting diameter as a tuple (corresponding to the smallest and largest diameters of the ellipse). In such a case, an eventual rotation can be added using the ``rot`` argument of :meth:`nerve.add_fascicle<../_nrv/nmod/nerve/~nrv.nmod.nerve.add_fascicle>``
+#     An elliptic fascicle can also be generated with the quick method by setting diameter as a tuple (corresponding to the smallest and largest diameters of the ellipse). In such a case, an eventual rotation can be added using the ``rot`` argument of :meth:`nerve.add_fascicle <../_nrv/nmod/nerve/~nrv.nmod.nerve.add_fascicle>`
 
 fasc1_d = 200       # in um
 fasc1_y = -100      # in um
@@ -78,7 +78,8 @@ ax.set_ylabel("y-axis (µm)")
 #     This time, as the fascicle is already positioned from its geometry, it is added to our nerve without any additional translation.
 #
 # .. seealso::
-#     `Builtin geometry<../usersguide/geometry#builtin-shapes)>`.
+#     `Builtin geometry <../usersguide/geometry>`.
+#     `Example 18 <../examples/19_build_geometry>`.
 
 fasc2_d = (220,110)       # in um
 fasc2_center = (100, 0)       # in um
@@ -106,7 +107,7 @@ ax.set_ylabel("y-axis (µm)")
 # - The population placement
 #
 # .. seealso:
-#     :doc:`Axon population users' guide<../usersguide/populations>` for more detail.
+#     :doc:`Axon population users' guide <../usersguide/populations>` for more detail.
 #
 # **Population creation**
 #
@@ -124,7 +125,7 @@ ax.set_ylabel("y-axis (µm)")
 # * the unmyelinated axon distribution ```U_stat```
 #
 # To generate population from statistical distributions
-# Available myelinated and unmyelinated axon distributions are described in :doc:`Axon population users' guide<../usersguide/populations.rst#diameter-distributions>`.
+# Available myelinated and unmyelinated axon distributions are described in :doc:`Axon population users' guide <../usersguide/populations.rst#diameter-distributions>`.
 #
 # This method build an ``pandas.DataFrame`` attribute stored in ``axon_population.axon_pop`` (or ``fascicle.axons.axon_pop`` in the fascicle) and containing two columns: 
 #
@@ -147,7 +148,7 @@ fascicle_1.axons.create_population(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_
 # An additional boolean column ``"is_placed"`` is generated assessing if each axon could have been placed in the population. Thus, if the population is too large to fit within the fascicle given the specified ``delta`` (i.e. some lines of ``"is_placed"`` are ``False``), cooresponding axons will still exist in the population but will not be considered in the fascicle. 
 #
 # .. seealso:
-#     More detail on mask and subpopulation in :doc:`Axon population users' guide<../usersguide/populations>`)
+#     More detail on mask and subpopulation in :doc:`Axon population users' guide <../usersguide/populations>`.
 #
 # .. tip::
 #     As Jupyter notebook offer a great viewer for ``pandas.DataFrame``, axon population can be well printed by adding the following line at the python cell: ```fascicle_1.axons.axon_pop```.
@@ -162,10 +163,10 @@ fascicle_1.axons.get_sub_population()
 
 
 # %%
-# Let's repeat this operation for the 2nd fascicle and plot the nerve again. This time, both creation and placement can be done in one line using the :meth:`fascicle.fill<~nrv.nmod.fascicle.fill> method.
+# Let's repeat this operation for the 2nd fascicle and plot the nerve again. This time, both creation and placement can be done in one line using the :meth:`fascicle.fill <~nrv.nmod.fascicle.fill>`-method.
 #
 # .. tip::
-#     This :meth:`fascicle.fill<~nrv.nmod.fascicle.fill>`-method is an alias for :meth:`axon_population.fill_geometry<~nrv.nmod.axon_population.fill_geometry>`, which calls :meth:`~nrv.nmod.axon_population.create_population` and then :meth:`~nrv.nmod.axon_population.place_population`. Its arguments are therefore the same as those of the two other methods.
+#     This :meth:`fascicle.fill <~nrv.nmod.fascicle.fill>`-method is an alias for :meth:`axon_population.fill_geometry <~nrv.nmod.axon_population.fill_geometry>`, which calls :meth:`~nrv.nmod.axon_population.create_population` and then :meth:`~nrv.nmod.axon_population.place_population`. Its arguments are therefore the same as those of the two other methods.
 
 fascicle_2.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=5)
 

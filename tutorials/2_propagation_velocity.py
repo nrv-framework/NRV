@@ -298,6 +298,7 @@ ax.legend()
 ax.grid()
 ax.set_xlabel(r"diameter ($\mu m$)")
 ax.set_ylabel(r"speed ($m.s^{-1}$)")
+# sphinx_gallery_thumbnail_number = -1
 
 # %%
 # On the other hand, we can see that the differences in propagation speed

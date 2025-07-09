@@ -147,7 +147,7 @@ This code highlith how to retrieve particle dynamics in results.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.358 seconds)
+   **Total running time of the script:** (0 minutes 1.388 seconds)
 
 
 .. _sphx_glr_download_examples_generic_04_AP_particles.py:

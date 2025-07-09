@@ -117,17 +117,17 @@ class NRV_results(NRV_class, dict):
         else:
             if isinstance(keys_to_remove, str):
                 del self[keys_to_remove]
-                pass_info(
-                    "removed the following key from results: ",
-                    keys_to_remove,
-                    verbose=verbose,
-                )
+                # pass_info(
+                #     "removed the following key from results: ",
+                #     keys_to_remove,
+                #     verbose=verbose,
+                # )
             else:
                 for key in keys_to_remove:
                     del self[key]
-                    pass_info(
-                        "removed the following key from results: ", key, verbose=verbose
-                    )
+                    # pass_info(
+                    #     "removed the following key from results: ", key, verbose=verbose
+                    # )
 
     def update(self, __m, **kwargs) -> None:
         """

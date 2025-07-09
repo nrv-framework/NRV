@@ -104,7 +104,7 @@ This example provides an example of action potential propagation block using a D
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.343 seconds)
+   **Total running time of the script:** (0 minutes 5.247 seconds)
 
 
 .. _sphx_glr_download_examples_generic_07_DC_block.py:

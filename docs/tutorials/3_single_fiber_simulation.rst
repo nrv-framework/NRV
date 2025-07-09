@@ -344,25 +344,6 @@ And simulate it and save the results:
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 135
-    NRV INFO: Number of nodes : 7527
-    NRV INFO: Number of elements : 52869
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 2.024618148803711 s
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 3.344733953475952 s
-
 
 
 
@@ -587,21 +568,6 @@ In this tutorial, we use an update function to estimate threshold from stimulati
 
  .. code-block:: none
 
-    NRV INFO: Iteration 1, Amp is 300µA ...
-    NRV INFO: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 0.406s)
-    NRV INFO: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 0.405s)
-    NRV INFO: Iteration 3, Amp is 150.0µA (100.0%)... AP Detected! (in 0.42s)
-    NRV INFO: Iteration 4, Amp is 75.0µA (50.0%)... AP Detected! (in 0.408s)
-    NRV INFO: Iteration 5, Amp is 37.5µA (50.0%)... AP Detected! (in 0.4s)
-    NRV INFO: Iteration 6, Amp is 18.75µA (50.0%)... AP Detected! (in 0.407s)
-    NRV INFO: Iteration 7, Amp is 9.38µA (50.0%)... AP Not Detected! (in 0.408s)
-    NRV INFO: Iteration 8, Amp is 14.06µA (33.33%)... AP Not Detected! (in 0.416s)
-    NRV INFO: Iteration 9, Amp is 16.41µA (14.29%)... AP Detected! (in 0.416s)
-    NRV INFO: Iteration 10, Amp is 15.23µA (7.14%)... AP Not Detected! (in 0.416s)
-    NRV INFO: Iteration 11, Amp is 15.82µA (3.7%)... AP Not Detected! (in 0.417s)
-    NRV INFO: Iteration 12, Amp is 16.11µA (1.82%)... AP Not Detected! (in 0.417s)
-    NRV INFO: Iteration 13, Amp is 16.26µA (0.9%)... AP Detected! (in 0.413s)
-    NRV INFO: Activation threshold is 16.19µA (0.9%), found in 13 iterations (5.55s).
     LIFE threshold: 16.2µA
 
 
@@ -632,18 +598,6 @@ Let's do the same thing but with the cuff electrode:
 
  .. code-block:: none
 
-    NRV INFO: Iteration 1, Amp is 300µA ...
-    NRV INFO: Iteration 1, Amp is 300µA (100.0%)... AP Detected! (in 0.418s)
-    NRV INFO: Iteration 2, Amp is 0µA (100.0%)... AP Not Detected! (in 0.417s)
-    NRV INFO: Iteration 3, Amp is 150.0µA (100.0%)... AP Not Detected! (in 0.418s)
-    NRV INFO: Iteration 4, Amp is 225.0µA (33.33%)... AP Detected! (in 0.412s)
-    NRV INFO: Iteration 5, Amp is 187.5µA (16.67%)... AP Detected! (in 0.412s)
-    NRV INFO: Iteration 6, Amp is 168.75µA (10.0%)... AP Detected! (in 0.412s)
-    NRV INFO: Iteration 7, Amp is 159.38µA (5.56%)... AP Detected! (in 0.411s)
-    NRV INFO: Iteration 8, Amp is 154.69µA (2.94%)... AP Not Detected! (in 0.41s)
-    NRV INFO: Iteration 9, Amp is 157.03µA (1.49%)... AP Detected! (in 0.417s)
-    NRV INFO: Iteration 10, Amp is 155.86µA (0.75%)... AP Detected! (in 0.417s)
-    NRV INFO: Activation threshold is 155.27µA (0.75%), found in 10 iterations (4.29s).
     cuff threshold: 155.3µA
 
 
@@ -710,13 +664,13 @@ Let's use the ``axon_AP_threshold`` function to plot threshold vs axon diameter 
 
     NRV WARNING: [6000.00537109    0.            0.        ] not found in mesh, value of [6000.    0.    0.] reused
     LIFE threshold: 70.0µA (axon_d = 2µm)
-    LIFE threshold: 35.3µA (axon_d = 4µm)
+    LIFE threshold: 35.0µA (axon_d = 4µm)
     LIFE threshold: 23.8µA (axon_d = 6µm)
-    LIFE threshold: 18.7µA (axon_d = 8µm)
+    LIFE threshold: 18.8µA (axon_d = 8µm)
     LIFE threshold: 16.5µA (axon_d = 10µm)
     LIFE threshold: 15.6µA (axon_d = 12µm)
     LIFE threshold: 14.9µA (axon_d = 14µm)
-    LIFE threshold: 14.2µA (axon_d = 16µm)
+    LIFE threshold: 14.4µA (axon_d = 16µm)
     LIFE threshold: 14.0µA (axon_d = 18µm)
     LIFE threshold: 13.7µA (axon_d = 20µm)
 
@@ -825,7 +779,7 @@ Lets to the same curve but with a cuff electrode this time. To speed up the comp
 
 Now we can plot the results to compare the recruitment properties of the two tested electrodes:
 
-.. GENERATED FROM PYTHON SOURCE LINES 339-347
+.. GENERATED FROM PYTHON SOURCE LINES 339-349
 
 .. code-block:: Python
 
@@ -840,6 +794,8 @@ Now we can plot the results to compare the recruitment properties of the two tes
     plt.show()
 
 
+
+
 .. image-sg:: /tutorials/images/sphx_glr_3_single_fiber_simulation_004.png
    :alt: 3 single fiber simulation
    :srcset: /tutorials/images/sphx_glr_3_single_fiber_simulation_004.png
@@ -852,7 +808,7 @@ Now we can plot the results to compare the recruitment properties of the two tes
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (3 minutes 56.250 seconds)
+   **Total running time of the script:** (3 minutes 50.093 seconds)
 
 
 .. _sphx_glr_download_tutorials_3_single_fiber_simulation.py:

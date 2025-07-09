@@ -137,7 +137,7 @@ waveform figures
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x169230a10>]
+    [<matplotlib.lines.Line2D object at 0x305fa3bf0>]
 
 
 
@@ -276,7 +276,7 @@ waveform 0
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.033 seconds)
+   **Total running time of the script:** (0 minutes 0.015 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o05_plot_CM.py:

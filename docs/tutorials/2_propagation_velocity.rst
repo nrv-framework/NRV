@@ -551,7 +551,7 @@ unmyelinated models:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 303-308
+.. GENERATED FROM PYTHON SOURCE LINES 304-309
 
 On the other hand, we can see that the differences in propagation speed
 between the different models of unmyelinated fibers are much more
@@ -563,7 +563,7 @@ al. (Pelot et al. 2021).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 38.376 seconds)
+   **Total running time of the script:** (1 minutes 38.786 seconds)
 
 
 .. _sphx_glr_download_tutorials_2_propagation_velocity.py:
