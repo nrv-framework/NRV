@@ -9,7 +9,6 @@ This gallery consists of introductory examples of basic usage of NRV framework.
 
 
 
-
 .. raw:: html
 
     <div class="sphx-glr-thumbnails">
@@ -407,6 +406,23 @@ This gallery consists of introductory examples of basic usage of NRV framework.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Practical example illustrating how to build a realistic nerve geometry from an image and simulate it with NRV.">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_25_test_fit_fasc_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_generic_25_test_fit_fasc.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Simulation of Realistic Geometry</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -440,4 +456,5 @@ This gallery consists of introductory examples of basic usage of NRV framework.
    /examples/generic/22_access_subpopulation
    /examples/generic/23_subpop_iclamp
    /examples/generic/24_mp_nerve_sim
+   /examples/generic/25_test_fit_fasc
 

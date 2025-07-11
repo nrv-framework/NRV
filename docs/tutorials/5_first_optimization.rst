@@ -89,7 +89,7 @@ In this first example the context is only composed of:
 .. note::
     To speed up the simulations done later, in the optimization, the footprints of the electrode on the axon are computed with `get_electrodes_footprints_on_axon` method and save with the context.
 
-Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV `save` methods (:doc:`save methods <../usersguide#note-on-object-saving>`). This file will be loaded by the `cost_function` every times it will be called for the optimization.
+Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV `save` methods (`save methods <../usersguide.html#note-on-object-saving>`_). This file will be loaded by the `cost_function` every times it will be called for the optimization.
 
 .. GENERATED FROM PYTHON SOURCE LINES 49-83
 
@@ -137,6 +137,22 @@ Once generated, the axon and its extracellular context can be saved in a `.json`
    :srcset: /tutorials/images/sphx_glr_5_first_optimization_001.png
    :class: sphx-glr-single-img
 
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    NRV INFO: Mesh properties:
+    NRV INFO: Number of processes : 3
+    NRV INFO: Number of entities : 101
+    NRV INFO: Number of nodes : 8761
+    NRV INFO: Number of elements : 62119
+    NRV INFO: Static/Quasi-Static electrical current problem
+    NRV INFO: FEN4NRV: setup the bilinear form
+    NRV INFO: FEN4NRV: setup the linear form
+    NRV INFO: Static/Quasi-Static electrical current problem
+    NRV INFO: FEN4NRV: solving electrical potential
+    NRV INFO: FEN4NRV: solved in 2.6167314052581787 s
 
 
 
@@ -189,7 +205,7 @@ The next step is to define how to interpret the tuning parameters to modify the 
 
 In NRV, the modification of the static context can either be done with a callable class or a function. Some `context_modifier` classes have already been implemented in NRV.
 
-The :doc:`biphasic_stimulus_CM <../usersguide/optimization#context-modifier>` is appropriate for our problem. Such :doc:`simulable <../usersguide/simulables>` add a biphasic pulse to a given electrode of a `nrv_simulable` object. 
+The `biphasic_stimulus_CM <../usersguide/optimization.html#context-modifier>`_ is appropriate for our problem. Such :doc:`simulable <../usersguide/simulables>` add a biphasic pulse to a given electrode of a `nrv_simulable` object. 
 To fit with our problem, we set the following arguments:
  - `start=1`: the cathodic pulse to start at :math:`1ms`.
  - `s_cathod="0"` the cathodic pulse amplitude is defined by the first value of the input vector :math:`\mathcal{X}_{sq}`.
@@ -260,9 +276,9 @@ Cost Evaluation
 """""""""""""""
 
 In our problem, we want at the same time to minimize the energy of the stimulus and maximize the number of fibre recruited. Therefore, we can evaluate the *cost* of a stimulus on the context using the following equation:
-.. math::
 
-    Cost = \alpha_e\sum_{t_k}{i_{stim}^2(t_k)}+\alpha_r(N_{axon}-N_{recruited})
+.. math::
+    Cost = \alpha_e\sum_{t_k}(i_{stim}^2(t_k))+\alpha_r(N_{axon}-N_{recruited})
 
 
 With:
@@ -412,6 +428,12 @@ An :class:`~nrv.optim.optim_utils.optim_results` instance will be returned from 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    PSO optimizer - 3 procs:   0%|          |0/50    PSO optimizer - 3 procs:   0%|          |0/50, best_cost=0.139    PSO optimizer - 3 procs:   2%|▏         |1/50, best_cost=0.139    PSO optimizer - 3 procs:   2%|▏         |1/50, best_cost=0.139    PSO optimizer - 3 procs:   4%|▍         |2/50, best_cost=0.139    PSO optimizer - 3 procs:   4%|▍         |2/50, best_cost=0.11     PSO optimizer - 3 procs:   6%|▌         |3/50, best_cost=0.11    PSO optimizer - 3 procs:   6%|▌         |3/50, best_cost=0.0986    PSO optimizer - 3 procs:   8%|▊         |4/50, best_cost=0.0986    PSO optimizer - 3 procs:   8%|▊         |4/50, best_cost=0.0986    PSO optimizer - 3 procs:  10%|█         |5/50, best_cost=0.0986    PSO optimizer - 3 procs:  10%|█         |5/50, best_cost=0.0658    PSO optimizer - 3 procs:  12%|█▏        |6/50, best_cost=0.0658    PSO optimizer - 3 procs:  12%|█▏        |6/50, best_cost=0.035     PSO optimizer - 3 procs:  14%|█▍        |7/50, best_cost=0.035    PSO optimizer - 3 procs:  14%|█▍        |7/50, best_cost=0.035    PSO optimizer - 3 procs:  16%|█▌        |8/50, best_cost=0.035    PSO optimizer - 3 procs:  16%|█▌        |8/50, best_cost=0.035    PSO optimizer - 3 procs:  18%|█▊        |9/50, best_cost=0.035    PSO optimizer - 3 procs:  18%|█▊        |9/50, best_cost=0.035    PSO optimizer - 3 procs:  20%|██        |10/50, best_cost=0.035    PSO optimizer - 3 procs:  20%|██        |10/50, best_cost=0.035    PSO optimizer - 3 procs:  22%|██▏       |11/50, best_cost=0.035    PSO optimizer - 3 procs:  22%|██▏       |11/50, best_cost=0.035    PSO optimizer - 3 procs:  24%|██▍       |12/50, best_cost=0.035    PSO optimizer - 3 procs:  24%|██▍       |12/50, best_cost=0.031    PSO optimizer - 3 procs:  26%|██▌       |13/50, best_cost=0.031    PSO optimizer - 3 procs:  26%|██▌       |13/50, best_cost=0.031    PSO optimizer - 3 procs:  28%|██▊       |14/50, best_cost=0.031    PSO optimizer - 3 procs:  28%|██▊       |14/50, best_cost=0.031    PSO optimizer - 3 procs:  30%|███       |15/50, best_cost=0.031    PSO optimizer - 3 procs:  30%|███       |15/50, best_cost=0.031    PSO optimizer - 3 procs:  32%|███▏      |16/50, best_cost=0.031    PSO optimizer - 3 procs:  32%|███▏      |16/50, best_cost=0.031    PSO optimizer - 3 procs:  34%|███▍      |17/50, best_cost=0.031    PSO optimizer - 3 procs:  34%|███▍      |17/50, best_cost=0.031    PSO optimizer - 3 procs:  36%|███▌      |18/50, best_cost=0.031    PSO optimizer - 3 procs:  36%|███▌      |18/50, best_cost=0.031    PSO optimizer - 3 procs:  38%|███▊      |19/50, best_cost=0.031    PSO optimizer - 3 procs:  38%|███▊      |19/50, best_cost=0.031    PSO optimizer - 3 procs:  40%|████      |20/50, best_cost=0.031    PSO optimizer - 3 procs:  40%|████      |20/50, best_cost=0.031    PSO optimizer - 3 procs:  42%|████▏     |21/50, best_cost=0.031    PSO optimizer - 3 procs:  42%|████▏     |21/50, best_cost=0.031    PSO optimizer - 3 procs:  44%|████▍     |22/50, best_cost=0.031    PSO optimizer - 3 procs:  44%|████▍     |22/50, best_cost=0.031    PSO optimizer - 3 procs:  46%|████▌     |23/50, best_cost=0.031    PSO optimizer - 3 procs:  46%|████▌     |23/50, best_cost=0.031    PSO optimizer - 3 procs:  48%|████▊     |24/50, best_cost=0.031    PSO optimizer - 3 procs:  48%|████▊     |24/50, best_cost=0.0305    PSO optimizer - 3 procs:  50%|█████     |25/50, best_cost=0.0305    PSO optimizer - 3 procs:  50%|█████     |25/50, best_cost=0.0305    PSO optimizer - 3 procs:  52%|█████▏    |26/50, best_cost=0.0305    PSO optimizer - 3 procs:  52%|█████▏    |26/50, best_cost=0.0305    PSO optimizer - 3 procs:  54%|█████▍    |27/50, best_cost=0.0305    PSO optimizer - 3 procs:  54%|█████▍    |27/50, best_cost=0.0305    PSO optimizer - 3 procs:  56%|█████▌    |28/50, best_cost=0.0305    PSO optimizer - 3 procs:  56%|█████▌    |28/50, best_cost=0.0302    PSO optimizer - 3 procs:  58%|█████▊    |29/50, best_cost=0.0302    PSO optimizer - 3 procs:  58%|█████▊    |29/50, best_cost=0.0302    PSO optimizer - 3 procs:  60%|██████    |30/50, best_cost=0.0302    PSO optimizer - 3 procs:  60%|██████    |30/50, best_cost=0.0302    PSO optimizer - 3 procs:  62%|██████▏   |31/50, best_cost=0.0302    PSO optimizer - 3 procs:  62%|██████▏   |31/50, best_cost=0.0297    PSO optimizer - 3 procs:  64%|██████▍   |32/50, best_cost=0.0297    PSO optimizer - 3 procs:  64%|██████▍   |32/50, best_cost=0.0297    PSO optimizer - 3 procs:  66%|██████▌   |33/50, best_cost=0.0297    PSO optimizer - 3 procs:  66%|██████▌   |33/50, best_cost=0.0297    PSO optimizer - 3 procs:  68%|██████▊   |34/50, best_cost=0.0297    PSO optimizer - 3 procs:  68%|██████▊   |34/50, best_cost=0.0297    PSO optimizer - 3 procs:  70%|███████   |35/50, best_cost=0.0297    PSO optimizer - 3 procs:  70%|███████   |35/50, best_cost=0.0297    PSO optimizer - 3 procs:  72%|███████▏  |36/50, best_cost=0.0297    PSO optimizer - 3 procs:  72%|███████▏  |36/50, best_cost=0.0295    PSO optimizer - 3 procs:  74%|███████▍  |37/50, best_cost=0.0295    PSO optimizer - 3 procs:  74%|███████▍  |37/50, best_cost=0.0295    PSO optimizer - 3 procs:  76%|███████▌  |38/50, best_cost=0.0295    PSO optimizer - 3 procs:  76%|███████▌  |38/50, best_cost=0.0295    PSO optimizer - 3 procs:  78%|███████▊  |39/50, best_cost=0.0295    PSO optimizer - 3 procs:  78%|███████▊  |39/50, best_cost=0.0294    PSO optimizer - 3 procs:  80%|████████  |40/50, best_cost=0.0294    PSO optimizer - 3 procs:  80%|████████  |40/50, best_cost=0.0294    PSO optimizer - 3 procs:  82%|████████▏ |41/50, best_cost=0.0294    PSO optimizer - 3 procs:  82%|████████▏ |41/50, best_cost=0.0294    PSO optimizer - 3 procs:  84%|████████▍ |42/50, best_cost=0.0294    PSO optimizer - 3 procs:  84%|████████▍ |42/50, best_cost=0.0294    PSO optimizer - 3 procs:  86%|████████▌ |43/50, best_cost=0.0294    PSO optimizer - 3 procs:  86%|████████▌ |43/50, best_cost=0.0294    PSO optimizer - 3 procs:  88%|████████▊ |44/50, best_cost=0.0294    PSO optimizer - 3 procs:  88%|████████▊ |44/50, best_cost=0.0294    PSO optimizer - 3 procs:  90%|█████████ |45/50, best_cost=0.0294    PSO optimizer - 3 procs:  90%|█████████ |45/50, best_cost=0.0294    PSO optimizer - 3 procs:  92%|█████████▏|46/50, best_cost=0.0294    PSO optimizer - 3 procs:  92%|█████████▏|46/50, best_cost=0.0293    PSO optimizer - 3 procs:  94%|█████████▍|47/50, best_cost=0.0293    PSO optimizer - 3 procs:  94%|█████████▍|47/50, best_cost=0.0293    PSO optimizer - 3 procs:  96%|█████████▌|48/50, best_cost=0.0293    PSO optimizer - 3 procs:  96%|█████████▌|48/50, best_cost=0.0293    PSO optimizer - 3 procs:  98%|█████████▊|49/50, best_cost=0.0293    PSO optimizer - 3 procs:  98%|█████████▊|49/50, best_cost=0.0293    PSO optimizer - 3 procs: 100%|██████████|50/50, best_cost=0.0293    PSO optimizer - 3 procs: 100%|██████████|50/50, best_cost=0.0293
+
 
 
 
@@ -535,7 +557,7 @@ In this new problem, we can define the stimulus as a cathodic pulse through inte
 
 With :math:`I_{s_1}` and :math:`t_{s_1}` the amplitude and time of the first point and :math:`I_{s_2}` and :math:`t_{s_2}` those of the second.
 
-As in the first optimization, the stimulus generation from input vector is handled by the :doc:`context_modifier <../usersguide/optimization#context-modifier>`. So let's define a new one which will fit our purpose. This can be done using another built-in class in NRV: :meth:`~nrv.optim.optim_utils.biphasic_stimulus_CM`. 
+As in the first optimization, the stimulus generation from input vector is handled by the `context_modifier <../usersguide/optimization.html#context-modifier>`_. So let's define a new one which will fit our purpose. This can be done using another built-in class in NRV: :meth:`~nrv.optim.optim_utils.biphasic_stimulus_CM`. 
 To fit with our problem the following parameters are set
 
 .. GENERATED FROM PYTHON SOURCE LINES 326-341
@@ -649,6 +671,12 @@ Since the number of dimensions and the bounds of each dimension are different fr
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    PSO optimizer - 3 procs:   0%|          |0/50    PSO optimizer - 3 procs:   0%|          |0/50, best_cost=0.132    PSO optimizer - 3 procs:   2%|▏         |1/50, best_cost=0.132    PSO optimizer - 3 procs:   2%|▏         |1/50, best_cost=0.0711    PSO optimizer - 3 procs:   4%|▍         |2/50, best_cost=0.0711    PSO optimizer - 3 procs:   4%|▍         |2/50, best_cost=0.0711    PSO optimizer - 3 procs:   6%|▌         |3/50, best_cost=0.0711    PSO optimizer - 3 procs:   6%|▌         |3/50, best_cost=0.0656    PSO optimizer - 3 procs:   8%|▊         |4/50, best_cost=0.0656    PSO optimizer - 3 procs:   8%|▊         |4/50, best_cost=0.0656    PSO optimizer - 3 procs:  10%|█         |5/50, best_cost=0.0656    PSO optimizer - 3 procs:  10%|█         |5/50, best_cost=0.041     PSO optimizer - 3 procs:  12%|█▏        |6/50, best_cost=0.041    PSO optimizer - 3 procs:  12%|█▏        |6/50, best_cost=0.041    PSO optimizer - 3 procs:  14%|█▍        |7/50, best_cost=0.041    PSO optimizer - 3 procs:  14%|█▍        |7/50, best_cost=0.0352    PSO optimizer - 3 procs:  16%|█▌        |8/50, best_cost=0.0352    PSO optimizer - 3 procs:  16%|█▌        |8/50, best_cost=0.0352    PSO optimizer - 3 procs:  18%|█▊        |9/50, best_cost=0.0352    PSO optimizer - 3 procs:  18%|█▊        |9/50, best_cost=0.0352    PSO optimizer - 3 procs:  20%|██        |10/50, best_cost=0.0352    PSO optimizer - 3 procs:  20%|██        |10/50, best_cost=0.0352    PSO optimizer - 3 procs:  22%|██▏       |11/50, best_cost=0.0352    PSO optimizer - 3 procs:  22%|██▏       |11/50, best_cost=0.0352    PSO optimizer - 3 procs:  24%|██▍       |12/50, best_cost=0.0352    PSO optimizer - 3 procs:  24%|██▍       |12/50, best_cost=0.0352    PSO optimizer - 3 procs:  26%|██▌       |13/50, best_cost=0.0352    PSO optimizer - 3 procs:  26%|██▌       |13/50, best_cost=0.0352    PSO optimizer - 3 procs:  28%|██▊       |14/50, best_cost=0.0352    PSO optimizer - 3 procs:  28%|██▊       |14/50, best_cost=0.0352    PSO optimizer - 3 procs:  30%|███       |15/50, best_cost=0.0352    PSO optimizer - 3 procs:  30%|███       |15/50, best_cost=0.0352    PSO optimizer - 3 procs:  32%|███▏      |16/50, best_cost=0.0352    PSO optimizer - 3 procs:  32%|███▏      |16/50, best_cost=0.0352    PSO optimizer - 3 procs:  34%|███▍      |17/50, best_cost=0.0352    PSO optimizer - 3 procs:  34%|███▍      |17/50, best_cost=0.0352    PSO optimizer - 3 procs:  36%|███▌      |18/50, best_cost=0.0352    PSO optimizer - 3 procs:  36%|███▌      |18/50, best_cost=0.0349    PSO optimizer - 3 procs:  38%|███▊      |19/50, best_cost=0.0349    PSO optimizer - 3 procs:  38%|███▊      |19/50, best_cost=0.0337    PSO optimizer - 3 procs:  40%|████      |20/50, best_cost=0.0337    PSO optimizer - 3 procs:  40%|████      |20/50, best_cost=0.0337    PSO optimizer - 3 procs:  42%|████▏     |21/50, best_cost=0.0337    PSO optimizer - 3 procs:  42%|████▏     |21/50, best_cost=0.0334    PSO optimizer - 3 procs:  44%|████▍     |22/50, best_cost=0.0334    PSO optimizer - 3 procs:  44%|████▍     |22/50, best_cost=0.0301    PSO optimizer - 3 procs:  46%|████▌     |23/50, best_cost=0.0301    PSO optimizer - 3 procs:  46%|████▌     |23/50, best_cost=0.0301    PSO optimizer - 3 procs:  48%|████▊     |24/50, best_cost=0.0301    PSO optimizer - 3 procs:  48%|████▊     |24/50, best_cost=0.0301    PSO optimizer - 3 procs:  50%|█████     |25/50, best_cost=0.0301    PSO optimizer - 3 procs:  50%|█████     |25/50, best_cost=0.0301    PSO optimizer - 3 procs:  52%|█████▏    |26/50, best_cost=0.0301    PSO optimizer - 3 procs:  52%|█████▏    |26/50, best_cost=0.0293    PSO optimizer - 3 procs:  54%|█████▍    |27/50, best_cost=0.0293    PSO optimizer - 3 procs:  54%|█████▍    |27/50, best_cost=0.0293    PSO optimizer - 3 procs:  56%|█████▌    |28/50, best_cost=0.0293    PSO optimizer - 3 procs:  56%|█████▌    |28/50, best_cost=0.0293    PSO optimizer - 3 procs:  58%|█████▊    |29/50, best_cost=0.0293    PSO optimizer - 3 procs:  58%|█████▊    |29/50, best_cost=0.0293    PSO optimizer - 3 procs:  60%|██████    |30/50, best_cost=0.0293    PSO optimizer - 3 procs:  60%|██████    |30/50, best_cost=0.0286    PSO optimizer - 3 procs:  62%|██████▏   |31/50, best_cost=0.0286    PSO optimizer - 3 procs:  62%|██████▏   |31/50, best_cost=0.0286    PSO optimizer - 3 procs:  64%|██████▍   |32/50, best_cost=0.0286    PSO optimizer - 3 procs:  64%|██████▍   |32/50, best_cost=0.0281    PSO optimizer - 3 procs:  66%|██████▌   |33/50, best_cost=0.0281    PSO optimizer - 3 procs:  66%|██████▌   |33/50, best_cost=0.0281    PSO optimizer - 3 procs:  68%|██████▊   |34/50, best_cost=0.0281    PSO optimizer - 3 procs:  68%|██████▊   |34/50, best_cost=0.0281    PSO optimizer - 3 procs:  70%|███████   |35/50, best_cost=0.0281    PSO optimizer - 3 procs:  70%|███████   |35/50, best_cost=0.0281    PSO optimizer - 3 procs:  72%|███████▏  |36/50, best_cost=0.0281    PSO optimizer - 3 procs:  72%|███████▏  |36/50, best_cost=0.0281    PSO optimizer - 3 procs:  74%|███████▍  |37/50, best_cost=0.0281    PSO optimizer - 3 procs:  74%|███████▍  |37/50, best_cost=0.0281    PSO optimizer - 3 procs:  76%|███████▌  |38/50, best_cost=0.0281    PSO optimizer - 3 procs:  76%|███████▌  |38/50, best_cost=0.0279    PSO optimizer - 3 procs:  78%|███████▊  |39/50, best_cost=0.0279    PSO optimizer - 3 procs:  78%|███████▊  |39/50, best_cost=0.0279    PSO optimizer - 3 procs:  80%|████████  |40/50, best_cost=0.0279    PSO optimizer - 3 procs:  80%|████████  |40/50, best_cost=0.0279    PSO optimizer - 3 procs:  82%|████████▏ |41/50, best_cost=0.0279    PSO optimizer - 3 procs:  82%|████████▏ |41/50, best_cost=0.0279    PSO optimizer - 3 procs:  84%|████████▍ |42/50, best_cost=0.0279    PSO optimizer - 3 procs:  84%|████████▍ |42/50, best_cost=0.0279    PSO optimizer - 3 procs:  86%|████████▌ |43/50, best_cost=0.0279    PSO optimizer - 3 procs:  86%|████████▌ |43/50, best_cost=0.0279    PSO optimizer - 3 procs:  88%|████████▊ |44/50, best_cost=0.0279    PSO optimizer - 3 procs:  88%|████████▊ |44/50, best_cost=0.0279    PSO optimizer - 3 procs:  90%|█████████ |45/50, best_cost=0.0279    PSO optimizer - 3 procs:  90%|█████████ |45/50, best_cost=0.0279    PSO optimizer - 3 procs:  92%|█████████▏|46/50, best_cost=0.0279    PSO optimizer - 3 procs:  92%|█████████▏|46/50, best_cost=0.0279    PSO optimizer - 3 procs:  94%|█████████▍|47/50, best_cost=0.0279    PSO optimizer - 3 procs:  94%|█████████▍|47/50, best_cost=0.0279    PSO optimizer - 3 procs:  96%|█████████▌|48/50, best_cost=0.0279    PSO optimizer - 3 procs:  96%|█████████▌|48/50, best_cost=0.0279    PSO optimizer - 3 procs:  98%|█████████▊|49/50, best_cost=0.0279    PSO optimizer - 3 procs:  98%|█████████▊|49/50, best_cost=0.0279    PSO optimizer - 3 procs: 100%|██████████|50/50, best_cost=0.0279    PSO optimizer - 3 procs: 100%|██████████|50/50, best_cost=0.0279
+
 
 
 
@@ -696,7 +724,7 @@ Finally, we can update the figure of the first results with this new optimized s
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 9.416 seconds)
+   **Total running time of the script:** (1 minutes 6.638 seconds)
 
 
 .. _sphx_glr_download_tutorials_5_first_optimization.py:

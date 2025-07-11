@@ -45,7 +45,7 @@ my_cost0 = nrv.cost_function()
 # .. note::
 #     To speed up the simulations done later, in the optimization, the footprints of the electrode on the axon are computed with `get_electrodes_footprints_on_axon` method and save with the context.
 #
-# Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV `save` methods (:doc:`save methods <../usersguide#note-on-object-saving>`). This file will be loaded by the `cost_function` every times it will be called for the optimization.
+# Once generated, the axon and its extracellular context can be saved in a `.json` file with using NRV `save` methods (`save methods <../usersguide.html#note-on-object-saving>`_). This file will be loaded by the `cost_function` every times it will be called for the optimization.
 
 
 ax_l = 10000 # um
@@ -114,7 +114,7 @@ my_cost0.set_static_context(static_context, **kwarg_sim)
 #
 # In NRV, the modification of the static context can either be done with a callable class or a function. Some `context_modifier` classes have already been implemented in NRV.
 #
-# The :doc:`biphasic_stimulus_CM <../usersguide/optimization#context-modifier>` is appropriate for our problem. Such :doc:`simulable <../usersguide/simulables>` add a biphasic pulse to a given electrode of a `nrv_simulable` object. 
+# The `biphasic_stimulus_CM <../usersguide/optimization.html#context-modifier>`_ is appropriate for our problem. Such :doc:`simulable <../usersguide/simulables>` add a biphasic pulse to a given electrode of a `nrv_simulable` object. 
 # To fit with our problem, we set the following arguments:
 #  - `start=1`: the cathodic pulse to start at :math:`1ms`.
 #  - `s_cathod="0"` the cathodic pulse amplitude is defined by the first value of the input vector :math:`\mathcal{X}_{sq}`.
@@ -154,9 +154,9 @@ for X in test_points:
 # """""""""""""""
 #
 # In our problem, we want at the same time to minimize the energy of the stimulus and maximize the number of fibre recruited. Therefore, we can evaluate the *cost* of a stimulus on the context using the following equation:
-# .. math::
 #
-#     Cost = \alpha_e\sum_{t_k}{i_{stim}^2(t_k)}+\alpha_r(N_{axon}-N_{recruited})
+# .. math::
+#     Cost = \alpha_e\sum_{t_k}(i_{stim}^2(t_k))+\alpha_r(N_{axon}-N_{recruited})
 #
 #
 # With:
@@ -321,7 +321,7 @@ plt.tight_layout()
 #
 # With :math:`I_{s_1}` and :math:`t_{s_1}` the amplitude and time of the first point and :math:`I_{s_2}` and :math:`t_{s_2}` those of the second.
 #
-# As in the first optimization, the stimulus generation from input vector is handled by the :doc:`context_modifier <../usersguide/optimization#context-modifier>`. So let's define a new one which will fit our purpose. This can be done using another built-in class in NRV: :meth:`~nrv.optim.optim_utils.biphasic_stimulus_CM`. 
+# As in the first optimization, the stimulus generation from input vector is handled by the `context_modifier <../usersguide/optimization.html#context-modifier>`_. So let's define a new one which will fit our purpose. This can be done using another built-in class in NRV: :meth:`~nrv.optim.optim_utils.biphasic_stimulus_CM`. 
 # To fit with our problem the following parameters are set
 
 kwrgs_interp = {

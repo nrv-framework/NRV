@@ -46,7 +46,7 @@ class Polygon(CShape):
     @property
     def area(self) -> float:
         # Shoelace formula
-        _i = np.linspace(self.n_gon)
+        _i = np.arange(self.n_gon)
         return np.abs(
             np.sum(
                 self.vertices[_i, 0] * self.vertices[_i - 1, 1]

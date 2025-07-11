@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:23.277** total execution time for 35 files **from all galleries**:
+**01:06.638** total execution time for 36 files **from all galleries**:
 
 .. container::
 
@@ -32,8 +32,8 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py` (``../examples/generic/24_mp_nerve_sim.py``)
-     - 00:23.277
+   * - :ref:`sphx_glr_tutorials_5_first_optimization.py` (``../tutorials/5_first_optimization.py``)
+     - 01:06.638
      - 0.0
    * - :ref:`sphx_glr_examples_00_dummy_example.py` (``../examples/00_dummy_example.py``)
      - 00:00.000
@@ -104,6 +104,12 @@ Computation times
    * - :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py` (``../examples/generic/23_subpop_iclamp.py``)
      - 00:00.000
      - 0.0
+   * - :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py` (``../examples/generic/24_mp_nerve_sim.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_25_test_fit_fasc.py` (``../examples/generic/25_test_fit_fasc.py``)
+     - 00:00.000
+     - 0.0
    * - :ref:`sphx_glr_examples_optim_o01_nerve_optimization.py` (``../examples/optim/o01_nerve_optimization.py``)
      - 00:00.000
      - 0.0
@@ -132,8 +138,5 @@ Computation times
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_tutorials_4_nerve_simulation.py` (``../tutorials/4_nerve_simulation.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_tutorials_5_first_optimization.py` (``../tutorials/5_first_optimization.py``)
      - 00:00.000
      - 0.0

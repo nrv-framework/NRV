@@ -23,7 +23,7 @@ Propagation of spike along the axon
 
 This code performs basic simulation showing the propagation of action potential along axons for both unmyelinated and myelinated (saltatory conduction) fibers.
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-55
+.. GENERATED FROM PYTHON SOURCE LINES 7-52
 
 
 
@@ -50,9 +50,6 @@ This code performs basic simulation showing the propagation of action potential 
 
 .. code-block:: Python
 
-
-    import sys
-    sys.path.append("../../")
 
     import nrv
     import matplotlib.pyplot as plt
@@ -102,7 +99,7 @@ This code performs basic simulation showing the propagation of action potential 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.865 seconds)
+   **Total running time of the script:** (0 minutes 0.811 seconds)
 
 
 .. _sphx_glr_download_examples_generic_01_propagation_Vmem.py:

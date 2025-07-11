@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:23.277** total execution time for 23 files **from examples/generic**:
+**00:00.811** total execution time for 24 files **from examples/generic**:
 
 .. container::
 
@@ -32,11 +32,8 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py` (``24_mp_nerve_sim.py``)
-     - 00:23.277
-     - 0.0
    * - :ref:`sphx_glr_examples_generic_01_propagation_Vmem.py` (``01_propagation_Vmem.py``)
-     - 00:00.000
+     - 00:00.811
      - 0.0
    * - :ref:`sphx_glr_examples_generic_02_activation_function.py` (``02_activation_function.py``)
      - 00:00.000
@@ -99,5 +96,11 @@ Computation times
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py` (``23_subpop_iclamp.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py` (``24_mp_nerve_sim.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_examples_generic_25_test_fit_fasc.py` (``25_test_fit_fasc.py``)
      - 00:00.000
      - 0.0

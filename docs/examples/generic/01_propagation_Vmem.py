@@ -5,9 +5,6 @@ Propagation of spike along the axon
 This code performs basic simulation showing the propagation of action potential along axons for both unmyelinated and myelinated (saltatory conduction) fibers.
 """
 
-import sys
-sys.path.append("../../")
-
 import nrv
 import matplotlib.pyplot as plt
 

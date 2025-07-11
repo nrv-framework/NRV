@@ -1205,13 +1205,6 @@
   {
    "is_class": false,
    "is_explicit": false,
-   "module": "_cython_3_0_12",
-   "module_short": "_cython_3_0_12",
-   "name": "cython_function_or_method"
-  },
-  {
-   "is_class": false,
-   "is_explicit": false,
    "module": "numpy.random",
    "module_short": "numpy.random",
    "name": "seed"
