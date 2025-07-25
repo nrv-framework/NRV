@@ -81,6 +81,7 @@ setup(
         "nrv.fmod.FEM.mesh_creator",
         "nrv.nmod",
         "nrv.nmod.results",
+        "nrv.nmod.utils",
         "nrv.optim",
         "nrv.optim.optim_utils",
         "nrv.ui",
