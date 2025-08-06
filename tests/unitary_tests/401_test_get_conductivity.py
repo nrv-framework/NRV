@@ -4,11 +4,12 @@ import numpy as np
 import matplotlib as mpl
 mpl.rcParams['hatch.linewidth'] = 4 
 
-
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_id = __fname__[:__fname__.find("_")]
 if __name__ == "__main__":
     # add path to nrvdev (remove ater realese)
-    test_num = "401"
-    fig_file = f"./unitary_tests/figures/{test_num}_"
+    fig_file = f"./unitary_tests/figures/{test_id}_"
 
     # myelinated specific
     du = 1
