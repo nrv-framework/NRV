@@ -11,6 +11,9 @@ from ._MshCreator import (
 from ._NerveMshCreator import (
     is_NerveMshCreator,
     NerveMshCreator,
+    ENT_DOM_offset,
+    get_mesh_domid,
+    get_node_physical_id,
 )
 
 submodules = []
@@ -28,6 +31,12 @@ functions = [
     "is_MshCreator",
     "clear_gmsh",
     "is_NerveMshCreator",
+    "get_mesh_domid", 
+    "get_node_physical_id",
+]
+
+instances = [
+    "ENT_DOM_offset",
 ]
 
 __all__ = []
@@ -35,3 +44,4 @@ __all__ = []
 __all__ += submodules
 __all__ += classes
 __all__ += functions
+__all__ += instances

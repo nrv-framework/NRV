@@ -4,23 +4,27 @@ from rich.table import Table
 from rich.progress import Progress, BarColumn, TimeRemainingColumn, TimeElapsedColumn, track, MofNCompleteColumn
 
 from petsc4py.PETSc import ScalarType
-from time import perf_counter, sleep
+from time import perf_counter
 from abc import abstractmethod
 from math import isnan
-from copy import deepcopy
 from pandas import DataFrame
 import numpy as np
 import os
-# from rich import progress
-import nrv
 import traceback
 
-from .utils import split_job_from_arrays, compute_myelin_ppt, sample_nerve_results, touch, sample_keys_mdt
-from ._eit_class_results import eit_class_results
+from .utils._misc import split_job_from_arrays, compute_myelin_ppt, sample_nerve_results, touch, sample_keys_mdt
+from .results import eit_class_results
+
+from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning
+from ..nmod import nerve
+from ..nmod.results import nerve_results
+from ..fmod import load_material, recorder
+from ..utils import convert, get_MRG_parameters
+from ..utils.geom import CShape
 
 static_env = np.dtype(ScalarType).kind != 'c'
 
-class eit_forward:
+class eit_forward(NRV_class):
     """_summary_
 
     Returns
@@ -35,6 +39,7 @@ class eit_forward:
     """
     @abstractmethod
     def __init__(self, nervedata, res_dname=None, label="eit_1",**parameters):
+        super().__init__()
         self.label = label
         self.nervedata = nervedata
         self.parameters = parameters
@@ -53,7 +58,7 @@ class eit_forward:
             os.mkdir(self.res_dir)
 
         # loading nerve files
-        self.nerve:nrv.nerve = nrv.load_any(self.nervedata)
+        self.nerve:nerve = load_any(self.nervedata)
         self.is_nerve_res = "results" in self.nerve.nrv_type
         self.l_nerve:None|float = None
         ## default parameters
@@ -86,12 +91,12 @@ class eit_forward:
         self.use_pbar:bool = True
 
         # Material properties
-        self.ax_mem_th:float = nrv.convert(10, unitin="nm", unitout="um")  # um 
+        self.ax_mem_th:float = convert(10, unitin="nm", unitout="um")  # um 
         #! changed from m to um 04/02/25 as all other length are in um
-        self.sigma_epi:float = nrv.convert(nrv.load_material("epineurium").sigma, unitin="S/m", unitout="S/m")  # S/m
-        self.sigma_endo:float = nrv.convert(nrv.load_material("endoneurium_bhadra").sigma, unitin="S/m", unitout="S/m")  # S/m
+        self.sigma_epi:float = convert(load_material("epineurium").sigma, unitin="S/m", unitout="S/m")  # S/m
+        self.sigma_endo:float = convert(load_material("endoneurium_bhadra").sigma, unitin="S/m", unitout="S/m")  # S/m
         # self.sigma_endo = self.sigma_epi  # S/m
-        self.sigma_axp:float = nrv.convert(1.83, unitin="S/m", unitout="S/m")  # S/m
+        self.sigma_axp:float = convert(1.83, unitin="S/m", unitout="S/m")  # S/m
 
 
         self.myelin_mat:float = compute_myelin_ppt(d=10)
@@ -127,7 +132,7 @@ class eit_forward:
         self.__fem_res_file:None|str = None
 
         # current results
-        self.nerve_results:None|nrv.nerve_results = None
+        self.nerve_results:None|nerve_results = None
         self.mesh = None
         self.mesh_info:dict = {}
         self.fem_results:eit_class_results = eit_class_results()
@@ -153,8 +158,6 @@ class eit_forward:
                 "ksp_atol": 1e-18,
                 "ksp_max_it": int(1e7),
             }
-
-
 
     @property
     def timers_dict(self)->dict:
@@ -243,7 +246,7 @@ class eit_forward:
         float
         """
 
-        return nrv.convert(self.i_drive, unitin="uA", unitout="A")
+        return convert(self.i_drive, unitin="uA", unitout="A")
 
 
     @property
@@ -375,22 +378,9 @@ class eit_forward:
         assert self.l_fem >= self.l_elec, "elec out of FEM x-boundaries, please check you parameters before lanching simulation"
         assert self.x_rec + self.l_fem/2 <= self.nerve_results.L, "FEM x-boundaries out of the nerve, please check you parameters before lanching simulation"
 
-    def set_parameters(self, **kwgs) -> None:
-        """
-        Generic method to set any attribute of ``NRV_class`` instance
-
-        Parameters
-        ----------
-        ***kwargs
-            Key arguments containing one or multiple parameters to set.
-        """
-        self.parameters.update(kwgs)
-        for key in kwgs:
-            if key in self.__dict__:
-                self.__dict__[key] = kwgs[key]
 
     # TODO: rename method: simulate_nerve
-    def simulate_recording(
+    def simulate_nerve(
         self,
         t_start=1,
         duration=0.2,
@@ -400,18 +390,26 @@ class eit_forward:
         save=True
     ):
         """
-        Parameters 
+        Simulate the neural context: fibres conductivity and extracelullar context.
+
+        Parameters
         ----------
-        res_file: str | None, optional
-        filename of the mesh, by default None
-        t_start: time to start to current clamp
-        duration: duration of current clamp
-        amplitude: current amplitude
-        dir_res: directory of the results filename
+        t_start : int, optional
+            time to start to current clamp in ms, by default 1
+        duration : float, optional
+            duration of current clamp in ms, by default 0.2
+        amplitude : int, optional
+            current amplitude of the current clamp in uA, by default 5
+        sim_param : dict, optional
+            nerve parameters to change before the simulation, by default {}
+        ax_param : dict, optional
+            axons parameters to change before the simulation, by default {}
+        save : bool, optional
+            if True save the simulation result, by default True
         """
         __ts = perf_counter()
         if not self.is_nerve_res:
-            nrv.parameters.set_ncores(n_nrv=self.get_nproc("nerve"), n_nmod=self.n_proc_nerve)
+            parameters.set_ncores(n_nrv=self.get_nproc("nerve"), n_nmod=self.n_proc_nerve)
             if self.l_nerve is not None:
                 self.nerve.define_length(self.l_nerve)
 
@@ -424,7 +422,7 @@ class eit_forward:
             # current clamp
             self.nerve.insert_I_Clamp(0, t_start, duration, amplitude)
             # Analitical recorder
-            __testrec = nrv.recorder('endoneurium_ranck')
+            __testrec = recorder('endoneurium_ranck')
             for i_elec in range(self.n_elec):
                 z_elec = self.nerve.D/2 * np.exp(2j*i_elec*np.pi/self.n_elec)
                 __testrec.set_recording_point(self.x_rec, z_elec.real, z_elec.imag)
@@ -457,6 +455,32 @@ class eit_forward:
         return self.nerve_results
 
 
+    def simulate_recording(
+        self,
+        t_start=1,
+        duration=0.2,
+        amplitude=5,
+        sim_param={},
+        ax_param={},
+        save=True
+    ):
+        """
+        Simulate the neural context: fibres conductivity and extracelullar context.
+
+        Warning
+        -------
+        Deprecated use :meth:`self.simulate_nerve` instead
+        """
+        rise_warning("Deprecated: simulate_recording is deprecated use simulate_nerve method instead")
+        return self.simulate_nerve(
+            t_start=t_start,
+            duration=duration,
+            amplitude=amplitude,
+            sim_param=sim_param,
+            ax_param=ax_param,
+            save=save,
+        )
+
     def _define_problem(self):
         """
         Set FEM parameters from 
@@ -465,14 +489,14 @@ class eit_forward:
 
         # Recovering nerve pties from nrvsim
         self.times = self.nerve_results[self.nerve_results.fascicle_keys[0]].axon0.t
-        self.fasc_geometries:dict[str, nrv.CShape] = self.nerve_results.fasc_geometries
+        self.fasc_geometries:dict[str, CShape] = self.nerve_results.fasc_geometries
 
         self._axons_pop_ppts:DataFrame = self.nerve_results.axons
 
         self.n_c = self._axons_pop_ppts.shape[0]
         i_mye = self._axons_pop_ppts["types"].to_numpy( dtype=bool)
-        self.axnod_d = self._axons_pop_ppts["diameters"].to_numpy(dtype=float)
-        self.axnod_d[i_mye]= nrv.get_MRG_parameters(self.axnod_d[i_mye])[2]
+        self.axnod_d = self._axons_pop_ppts["diameters"].copy(deep=True).to_numpy(dtype=float)
+        self.axnod_d[i_mye]= get_MRG_parameters(self.axnod_d[i_mye])[2]
         self.myelin_mat = compute_myelin_ppt(self.axnod_d)
         self.alpha_in_c = (
             self.ax_mem_th / (self.axnod_d/2)
@@ -485,7 +509,7 @@ class eit_forward:
             E_label = "E"+str(E)
             self.electrodes[E_label] = 0
         # TODO custom_eit_elec
-        # change line bellow by an attach_electrode method(elec:nrv.FEM_electrode) method ?
+        # change line bellow by an attach_electrode method(elec:FEM_electrode) method ?
         if self.inj_offset == 1:
             self.n_rec_per_inj = self.n_elec - 3
         else:
@@ -495,12 +519,12 @@ class eit_forward:
         # Setting mesh resolution
         self.res_n = self.nerve_results.D * self.n_elt_r
         self.res_f = [2 * np.min(g.radius) * self.f_elt_r for g in self.fasc_geometries.values()]
-        self.res_a = self.axnod_d * self.a_elt_r
+        self.res_a = self._axons_pop_ppts["diameters"].to_numpy(dtype=float) * self.a_elt_r
         self.res_e = self.w_elec * self.e_elt_r
 
     def build_mesh(self, with_axons:bool=True):
         """
-        creation of mesh file
+        creation of mesh
 
         Parameters 
         ----------
@@ -600,7 +624,7 @@ class eit_forward:
         np.ndarray(self.n_t, self.n_e)
         """
         task_name, task_id, total, progress_dict = task_info
-        nrv.parameters.set_nrv_verbosity(2)
+        parameters.set_nrv_verbosity(2)
         _sim_list = self.sim_list[task_id]
         # print(task_id, _sim_list)
 
@@ -632,7 +656,7 @@ class eit_forward:
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
             except:
-                nrv.rise_warning(
+                rise_warning(
                     f"Simulation induced an error at initialisation"
                     + traceback.format_exc()
                 )
@@ -658,7 +682,7 @@ class eit_forward:
                 except KeyboardInterrupt:
                     raise KeyboardInterrupt
                 except:
-                    nrv.rise_warning(
+                    rise_warning(
                         f"Simulation induced an error computing for {self.current_freq}kHz at {self.times[i_t]}ms\n"
                         + traceback.format_exc()
                     )
@@ -674,7 +698,7 @@ class eit_forward:
         
         """
         task_name, task_id, total, progress_dict = task_info
-        nrv.parameters.set_nrv_verbosity(2)
+        parameters.set_nrv_verbosity(2)
         _sim_list = self.sim_list[task_id]
         v_elecs = np.zeros((self.n_t, self.n_elec), dtype=ScalarType)
         if not self.fem_initialized:
@@ -704,7 +728,7 @@ class eit_forward:
                 except KeyboardInterrupt:
                     raise KeyboardInterrupt
                 except:
-                    nrv.rise_warning(
+                    rise_warning(
                         f"Simulation induced an error computing{i_t, self.current_freq} \n"
                         + traceback.format_exc()
                     )
@@ -848,7 +872,7 @@ class eit_forward:
 
         if save:
             # Saving
-            nrv.json_dump(self.fem_results, self.fem_res_file)
+            json_dump(self.fem_results, self.fem_res_file)
         if self.use_backup and os.path.isfile(self.__backup_fname):
             os.remove(self.__backup_fname)
         return self.fem_results
@@ -889,7 +913,7 @@ class eit_forward:
 
         if save:
             # Saving
-            nrv.json_dump(self.fem_results, self.fem_res_file)
+            json_dump(self.fem_results, self.fem_res_file)
         return self.fem_results
 
     def run_and_savefem(self, sfile:str, sim_list:list[int]=[0], with_axons:bool=True)->np.ndarray:
@@ -909,7 +933,7 @@ class eit_forward:
         -------
         np.ndarray
         """
-        nrv.parameters.set_nrv_verbosity(2)
+        parameters.set_nrv_verbosity(2)
         if not self.defined_pb:
             self._define_problem()
         self.build_mesh(with_axons=with_axons)

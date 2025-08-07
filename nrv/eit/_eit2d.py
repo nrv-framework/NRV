@@ -20,14 +20,21 @@ import gmsh
 import numpy as np
 import matplotlib.pyplot as plt
 from time import perf_counter
-import nrv
+
+from ..utils import _units as uni
 
 from ._eit_forward import eit_forward
-from .utils import compute_sigma_2D_old, compute_sigma_2D, in_circle, in_bbox, compute_mye_sigma_2D
+from .utils._misc import compute_sigma_2D_old, compute_sigma_2D, in_circle, in_bbox, compute_mye_sigma_2D
 
+from ..backend import pass_info, rmv_ext
+from ..fmod.FEM.mesh_creator import get_mesh_domid
+from ..fmod.FEM.fenics_utils import read_gmsh, layered_material
+from ..nmod.results import axon_results
+from ..utils import convert
+from ..utils.geom import CShape
 
 #def empty_cache():
-    #if nrv.MCH.do_master_only_work():
+    #if MCH.do_master_only_work():
         #os.system("rm -rf ~/.cache/fenics/*")
 
 sig_2D_method_list=[
@@ -80,7 +87,7 @@ class EIT2DProblem(eit_forward):
         self.r_ax = self.axnod_d/2
         self.y_ax = self._axons_pop_ppts["y"]
         self.z_ax = self._axons_pop_ppts["z"]
-        self.UN = nrv.S / nrv.m
+        self.UN = uni.S / uni.m
         self.unaligned_axons = np.array([])
 
 
@@ -101,17 +108,17 @@ class EIT2DProblem(eit_forward):
         n_elements = sum(len(i) for i in elemTags)
         n_proc = self.get_nproc("mesh")
         if verbose:
-            nrv.pass_info("Mesh properties:")
-            nrv.pass_info("Number of processes : " + str(n_proc))
-            nrv.pass_info("Number of entities : " + str(n_entities))
-            nrv.pass_info("Number of nodes : " + str(n_nodes))
-            nrv.pass_info("Number of elements : " + str(n_elements))
+            pass_info("Mesh properties:")
+            pass_info("Number of processes : " + str(n_proc))
+            pass_info("Number of entities : " + str(n_entities))
+            pass_info("Number of nodes : " + str(n_nodes))
+            pass_info("Number of elements : " + str(n_elements))
         return n_proc, n_entities, n_nodes, n_elements
 
 
     def __add_from_cshape(
         self,
-        shape: nrv.CShape,
+        shape: CShape,
         n_pts_trace: int = 100,
         x: float = 0,
         dx: float = 10,
@@ -283,17 +290,17 @@ class EIT2DProblem(eit_forward):
 
         # set 1D physical groups
         for i_elec in range(self.n_elec):
-            id_ph = nrv.get_mesh_domid("e", i_elec, is_surf=True)
+            id_ph = get_mesh_domid("e", i_elec, is_surf=True)
             gmsh.model.addPhysicalGroup(1, line_elec[i_elec], id_ph)
 
         # set 2D physical groups
 
         gmsh.model.addPhysicalGroup(2, id_elt_ne, 1)
         for i_fa, id_elt in enumerate(id_elt_fa):
-            id_ph = nrv.get_mesh_domid("f", i_fa)
+            id_ph = get_mesh_domid("f", i_fa)
             gmsh.model.addPhysicalGroup(2, id_elt, id_ph)
         for i_ax, id_elt in enumerate(id_elt_ax):
-            id_ph = nrv.get_mesh_domid("a", i_ax)
+            id_ph = get_mesh_domid("a", i_ax)
             gmsh.model.addPhysicalGroup(2, id_elt, id_ph)
 
         ## Resolution
@@ -358,7 +365,7 @@ class EIT2DProblem(eit_forward):
             self.build_mesh()
         # load mesh
         
-        self.domain, self.ct, self.ft = nrv.read_gmsh(
+        self.domain, self.ct, self.ft = read_gmsh(
             self.nerve_mesh_file, comm=MPI.COMM_SELF, gdim=3
         )
         # FEM INIT HERE
@@ -377,7 +384,7 @@ class EIT2DProblem(eit_forward):
         self.sigax = [Constant(self.domain, ScalarType(0)) for _ in range(self.n_c)]
         bcs = []
         if self.use_gnd_elec:
-            e_dom = nrv.get_mesh_domid("e", self.gnd_elec_id, is_surf=True)
+            e_dom = get_mesh_domid("e", self.gnd_elec_id, is_surf=True)
             label = self.ft.find(e_dom)
             dofs = locate_dofs_topological(
                 self.V, 1, label
@@ -389,10 +396,10 @@ class EIT2DProblem(eit_forward):
         v = TestFunction(self.V)
         a = self.sigepi * inner(grad(u), grad(v)) * dx(1)
         for i_fa in range(self.n_fa):
-            id_ph = nrv.get_mesh_domid("f", i_fa)
+            id_ph = get_mesh_domid("f", i_fa)
             a += self.sigendo * inner(grad(u), grad(v)) * dx(id_ph)
         for i_ax in range(self.n_c):
-            id_ph = nrv.get_mesh_domid("a", i_ax)
+            id_ph = get_mesh_domid("a", i_ax)
             a += self.sigax[i_ax] * inner(grad(u), grad(v)) * dx(id_ph)
         L = inner(f, v) * dx
 
@@ -400,7 +407,7 @@ class EIT2DProblem(eit_forward):
         self.j_elecs = []
         self.s_elec = []
         for i_elec in range(self.n_elec):
-            id_ph = nrv.get_mesh_domid("e", i_elec, is_surf=True)
+            id_ph = get_mesh_domid("e", i_elec, is_surf=True)
             self.j_elecs += [Constant(self.domain, ScalarType(0))]
             L += inner(self.j_elecs[-1], v) * self.ds(id_ph)
             self.s_elec += [assemble_scalar(form(1 * self.ds(id_ph)))]
@@ -429,7 +436,7 @@ class EIT2DProblem(eit_forward):
             self.fem_initialized = False
 
 
-    def __get_mat_axon_mem(self,ax_res:nrv.axon_results,i_t:int, method:str|None=None)->float|complex:
+    def __get_mat_axon_mem(self,ax_res:axon_results,i_t:int, method:str|None=None)->float|complex:
         if method is None:
             method = self.sigma_method.lower()
         if "mye" in method:
@@ -501,19 +508,19 @@ class EIT2DProblem(eit_forward):
                     if i_t == -1 and len(ax_res["x_rec"])==0:
                         np.append(self.unaligned_axons, i_ax)
                     self.sigax[i_ax].value = sigma_ax
-                    # ax_mat = nrv.layered_material(mat_in=self.sigma_axp, mat_lay=sigma_ax, alpha_lay=)
+                    # ax_mat = layered_material(mat_in=self.sigma_axp, mat_lay=sigma_ax, alpha_lay=)
                     # frac_l_node = 1. * len(ax_res["x_rec"])/self.l_elec
                     # self.sigax[i_ax].value = frac_l_node*ax_mat.sigma +(1-frac_l_node)*self.myelin_mat #*self.UN
                 else:
                     frac_l_node = 1. * len(ax_res["x_rec"])/self.l_elec
                     Y_mem_t = ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
-                    ax_node_mat = nrv.layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
+                    ax_node_mat = layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
 
                     self.sigax[i_ax].value = ax_mat.sigma +(1-frac_l_node)*self.myelin_mat[i_ax]
             # Unmyelinated axon
             else:
                 Y_mem_t = self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t)
-                ax_mat = nrv.layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
+                ax_mat = layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
                 self.sigax[i_ax].value = ax_mat.sigma #*self.UN
                 if not has_changed:
                     Y_mem_t_1 = self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t_1)
@@ -531,12 +538,12 @@ class EIT2DProblem(eit_forward):
         u_n = self.problem.solve()
         # extract single ended measurements
         for i_rec in range(self.n_elec):
-            id_ph = nrv.get_mesh_domid("e", i_rec, is_surf=True)
+            id_ph = get_mesh_domid("e", i_rec, is_surf=True)
             __v[i_rec] = assemble_scalar(
                 form(u_n * self.ds(id_ph))
             ) / self.s_elec[i_rec]
         if sfile is not None:
-            fname = nrv.rmv_ext(sfile)+".bp"
+            fname = rmv_ext(sfile)+".bp"
             with VTXWriter(self.domain.comm, fname, u_n, "bp4") as f:
                 f.write(self.times[i_t])
             return self.V, u_n, __v
@@ -545,5 +552,5 @@ class EIT2DProblem(eit_forward):
         # Conversion: (mesh unit:= [um])
         # sigma ∇ __v = j -> [__v] = [j]([∇][sigma])^-1
         # [__v] = [A].[um]-2 . [um].[m][S]^-1 = [A]([S].10^-6)^-1 = [MV]
-        __v = nrv.convert(__v, unitin="MV", unitout="V")
+        __v = convert(__v, unitin="MV", unitout="V")
         return __v

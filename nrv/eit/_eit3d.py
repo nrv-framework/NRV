@@ -1,11 +1,15 @@
 
 from time import perf_counter
 import numpy as np
-import os
-import nrv
-from nrv import ENT_DOM_offset
 
 from ._eit_forward import eit_forward
+
+from ..backend import pass_info
+from ..fmod import CUFF_MP_electrode, CUFF_electrode
+from ..fmod.FEM import check_sim_dom
+from ..fmod.FEM.fenics_utils import FEMSimulation, layered_material
+from ..fmod.FEM.mesh_creator import ENT_DOM_offset, get_mesh_domid, get_node_physical_id
+from ..ui import mesh_from_nerve, mesh_from_electrode
 
 
 ScalarType = np.float64
@@ -22,11 +26,11 @@ class EIT3DProblem(eit_forward):
     def _define_problem(self):
         super()._define_problem()
         if self.use_gnd_elec and (self.gnd_elec_id < 0 or self.n_elec < 0):
-            self.eit_elec = nrv.CUFF_MP_electrode(N_contact=self.n_elec, x_center=self.l_fem/2-self.l_elec,contact_width=self.w_elec, contact_length=self.l_elec, insulator=False)
-            self.gnd_elec = nrv.CUFF_electrode(x_center=self.l_fem/2+self.l_elec, contact_length=self.l_elec/2, insulator=False)
+            self.eit_elec = CUFF_MP_electrode(N_contact=self.n_elec, x_center=self.l_fem/2-self.l_elec,contact_width=self.w_elec, contact_length=self.l_elec, insulator=False)
+            self.gnd_elec = CUFF_electrode(x_center=self.l_fem/2+self.l_elec, contact_length=self.l_elec/2, insulator=False)
             self.gnd_elec_id = self.n_elec
         else:
-            self.eit_elec = nrv.CUFF_MP_electrode(N_contact=self.n_elec, x_center=self.l_fem/2,contact_width=self.w_elec, contact_length=self.l_elec, insulator=False)
+            self.eit_elec = CUFF_MP_electrode(N_contact=self.n_elec, x_center=self.l_fem/2,contact_width=self.w_elec, contact_length=self.l_elec, insulator=False)
             self.gnd_elec = None
 
     def build_mesh(self, with_axons:bool=True):
@@ -45,16 +49,16 @@ class EIT3DProblem(eit_forward):
         if not self.defined_pb:
             self._define_problem()
         # MESH JOB
-        self.mesh = nrv.mesh_from_nerve(self.nerve, length=self.l_fem, x_shift=self.x_bounds_fem[0], add_axons=with_axons,res_nerve=self.res_n, res_fasc=self.res_f, res_ax=self.res_a)
+        self.mesh = mesh_from_nerve(self.nerve, length=self.l_fem, x_shift=self.x_bounds_fem[0], add_axons=with_axons,res_nerve=self.res_n, res_fasc=self.res_f, res_ax=self.res_a)
         self.mesh.n_core = self.get_nproc("mesh")
-        self.mesh = nrv.mesh_from_electrode(elec=self.eit_elec, mesh=self.mesh, res=self.res_e)
+        self.mesh = mesh_from_electrode(elec=self.eit_elec, mesh=self.mesh, res=self.res_e)
         if self.gnd_elec is not None:
-            self.mesh = nrv.mesh_from_electrode(elec=self.gnd_elec, mesh=self.mesh)
+            self.mesh = mesh_from_electrode(elec=self.gnd_elec, mesh=self.mesh)
         self.mesh.set_verbosity(4)
-        nrv.pass_info("... start meshing")
+        pass_info("... start meshing")
         self.mesh.compute_mesh()
         self.mesh.save(self.nerve_mesh_file)
-        nrv.pass_info("... meshing done")
+        pass_info("... meshing done")
         # Store info
         self.mesh_info["fname"] = self.nerve_mesh_file
         self.mesh_info["n_proc"], self.mesh_info["n_entities"], self.mesh_info["n_nodes"], self.mesh_info["n_elements"] = self.mesh.get_info(verbose=True)
@@ -77,7 +81,7 @@ class EIT3DProblem(eit_forward):
             
         """
         if not self.fem_initialized:
-            self.sim = nrv.FEMSimulation(D=3, mesh_file=self.nerve_mesh_file, elem=("Lagrange", 2), ummesh=True)
+            self.sim = FEMSimulation(D=3, mesh_file=self.nerve_mesh_file, elem=("Lagrange", 2), ummesh=True)
             self.sim.set_solver_opt(**self.petsc_opt)
             self.__set_domains()
             # TO ADD :SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
@@ -87,9 +91,9 @@ class EIT3DProblem(eit_forward):
             # SETTING BOUNDARY CONDITION
             # Ground (to the external ring of Outerbox)
             self.__set_boundaries()
-            # print(nrv.check_sim_dom(self.sim, self.mesh))
+            # print(check_sim_dom(self.sim, self.mesh))
             if self.mesh is not None:
-                assert nrv.check_sim_dom(self.sim, self.mesh), "all domains are not set. Please check parameters of your simulation"
+                assert check_sim_dom(self.sim, self.mesh), "all domains are not set. Please check parameters of your simulation"
             self.sim.setup_sim(**self.electrodes)
             self.s_elec = []
             for i_elec in range(self.n_elec):
@@ -151,14 +155,14 @@ class EIT3DProblem(eit_forward):
         """
         # GND DBS
         if self.use_gnd_elec:
-            gnd_dom = nrv.get_mesh_domid("e", self.gnd_elec_id, is_surf=True)
+            gnd_dom = get_mesh_domid("e", self.gnd_elec_id, is_surf=True)
             self.sim.add_boundary(mesh_domain=gnd_dom, btype="Dirichlet", value=0)
         else:
             gnd_dom = 1
             self.sim.add_boundary(mesh_domain=gnd_dom, btype="Dirichlet", value=0)
         for E in range(self.n_elec):
             E_label = "E"+str(E)
-            e_dom = nrv.ENT_DOM_offset["Surface"] + nrv.ENT_DOM_offset["Electrode"]+2*E
+            e_dom = ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"]+2*E
             self.sim.add_boundary(mesh_domain=e_dom, btype="Neuman", variable=E_label)
             # print(E_label, "linked with ", e_dom)
 
@@ -211,8 +215,8 @@ class EIT3DProblem(eit_forward):
                             mat_pty=self.myelin_mat[i_ax],
                         )
                     for i_node, g_node in enumerate(Y_mem_t):
-                        node_mat = nrv.layered_material(mat_in=self.sigma_axp, mat_lay=g_node, alpha_lay=self.alpha_in_c[i_ax])
-                        id_node = nrv.get_node_physical_id(id_ax=i_dom, i_node=i_node)
+                        node_mat = layered_material(mat_in=self.sigma_axp, mat_lay=g_node, alpha_lay=self.alpha_in_c[i_ax])
+                        id_node = get_node_physical_id(id_ax=i_dom, i_node=i_node)
                         # print(i_node, id_node)
                         self.sim.add_domain(mesh_domain=id_node,mat_pty=node_mat)
                 else:
@@ -224,11 +228,11 @@ class EIT3DProblem(eit_forward):
                     ax_res["x_rec"]-ax_res["x_rec"][0],
                     Y_mem_t
                 ))
-                ax_mat = nrv.layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
+                ax_mat = layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
                 self.sim.add_domain(
                     mesh_domain=i_dom, mat_pty=ax_mat
                 )
-                X_ = np.array([[x, 0, 0] for x in Y_mem_t[0,:]]).T
+                # X_ = np.array([[x, 0, 0] for x in Y_mem_t[0,:]]).T
                 # fig = plt.figure()
                 # plt.plot(Y_mem_t[0,:], Y_mem_t[1,:])
             #     plt.plot(Y_mem_t[0,:], ax_mat.sigma(X_))
@@ -248,7 +252,7 @@ class EIT3DProblem(eit_forward):
         res = self.sim.solve()
         # extract single ended measurements
         for i_rec in range(self.n_elec):
-            id_ph = nrv.get_mesh_domid("e", i_rec, is_surf=True)
+            id_ph = get_mesh_domid("e", i_rec, is_surf=True)
             __v[i_rec] = self.sim.get_domain_potential(id_ph ,surf=self.s_elec[i_rec])
         if sfile is not None:
             res.save(sfile, t=self.times[i_t])

@@ -2,14 +2,11 @@ from abc import abstractmethod
 import numpy as np
 import matplotlib.pyplot as plt
 from multiprocessing import Pool, Manager
-from rich.live import Live
 from rich import progress
-from rich.table import Table
 from itertools import product
-from nrv import json_load, load_any, nerve_results, nrv_interp
 
-from .utils import set_idxs, split_job_from_arrays
-from ._eit_class_results import eit_class_results
+from .utils._misc import set_idxs
+from .results import eit_class_results
 
 class eit_inverse():
     @abstractmethod

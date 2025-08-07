@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ._eit_class_results import eit_class_results
-from ._eit_inverse import eit_inverse
 
+from . import eit_inverse
+from .results import eit_class_results
 from typing import Literal
 
 from pyeit.eit import jac, bp

@@ -10,7 +10,7 @@ __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
 ofname = f"../{nrv.rmv_ext(__fname__)}.json"
 
 
-outer_d = 5     # mm
+outer_d = None     # mm
 nerve_d = 105  # um
 nerve_l = 5010  # um
 fasc1_d = 70   # um

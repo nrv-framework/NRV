@@ -1,9 +1,13 @@
 import numpy as np
-from nrv import nerve_results, sample_keys, get_MRG_parameters, convert, get_sig_ap, sci_round, axon_results
 import os
 from scipy.signal import savgol_filter
 import matplotlib.pyplot as plt
 from copy import deepcopy
+
+from ...fmod.FEM.fenics_utils import get_sig_ap
+from ...nmod.results import nerve_results, axon_results
+from ...ui import sample_keys
+from ...utils import sci_round, get_MRG_parameters, convert
 
 # File handling
 def touch(path):

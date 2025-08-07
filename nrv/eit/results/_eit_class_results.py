@@ -1,4 +1,3 @@
-from nrv import json_load, load_any, nerve_results, nrv_interp
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,7 +5,12 @@ import os
 import pandas as pd
 
 from typing_extensions import Literal
-from .utils import set_idxs, gen_idx_arange, plot_array, adjust_axes, compute_v_rec_cap_idxs
+from ..utils._misc import set_idxs, gen_idx_arange, plot_array, adjust_axes, compute_v_rec_cap_idxs
+
+from ...backend import json_load, load_any
+from ...nmod.results import nerve_results
+from ...utils import nrv_interp
+
 
 class eit_class_results(dict):
     def __init__(self, nerve_res:nerve_results|str|dict|dict|None=None, fem_res:dict|None=None, data:str|dict|None=None):

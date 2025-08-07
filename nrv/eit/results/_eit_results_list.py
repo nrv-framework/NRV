@@ -1,10 +1,9 @@
-from ._eit_class_results import eit_class_results, synchronize_times, Literal
 import numpy as np
 import os
 
-import pandas as pd
 
-from .utils import iterable_gen, set_idxs, get_query
+from ._eit_class_results import eit_class_results, Literal
+from ..utils._misc import set_idxs, get_query
 
 
 class eit_results_list(eit_class_results):

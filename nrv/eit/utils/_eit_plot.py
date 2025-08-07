@@ -1,11 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from copy import deepcopy
-from nrv import load_any, load_nerve, CUFF_MP_electrode, sci_round, get_MRG_parameters
 from pandas import DataFrame
 import seaborn as sns
-from ._eit_results_list import eit_results_list
 
+from ..results import eit_results_list
+
+from ...backend import load_any
+from ...fmod import CUFF_MP_electrode
+from ...ui import load_nerve
+from ...utils import sci_round, get_MRG_parameters
 
 
 

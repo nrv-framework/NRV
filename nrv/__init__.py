@@ -132,4 +132,4 @@ from .optim.optim_utils._CostEvaluation import *
 from .optim.optim_utils._OptimFunctions import *
 
 
-from .eit._protocol import pyeit_protocol
+from .eit.utils._protocol import pyeit_protocol
