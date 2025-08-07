@@ -10,7 +10,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_m1_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
     overwrite_rfile = True
 
     if os.cpu_count() > 20:
@@ -27,6 +27,7 @@ if __name__ == "__main__":
     axs[2].set_xlabel("time (ms)")
     r_list = []
 
+    l_ner = 20000 # um
     l_fem = 1000 # um
     l_elec = 500 # um
     x_rec = 10250 # um
@@ -47,6 +48,7 @@ if __name__ == "__main__":
         "x_rec":x_rec,
         "dt_fem":dt_fem,
         "n_proc_global":n_proc_global,
+        "l_nerve":l_ner,
         "l_elec":l_elec,
         "l_fem":l_fem,
         "e_elt_r":e_elt_r,
@@ -64,7 +66,7 @@ if __name__ == "__main__":
         r_list += [eit_instance.fem_res_file]
         print("3D results loaded")
     else:
-        nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param)
+        nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
         eit_instance._define_problem()
         # Build mesh
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+"2D", **parameters)
     ## Nerve simulation
 
-    nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param)
+    nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
     eit_instance._define_problem()
     # Build mesh

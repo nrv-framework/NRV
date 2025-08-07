@@ -10,7 +10,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_u1_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
     src_f = [f"./sources/SA_{i}_fem.json" for i in range(3)]
     overwrite_rfile = False
 

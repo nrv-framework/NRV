@@ -10,7 +10,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_1max_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
     overwrite_rfile = True
 
     if os.cpu_count() > 20:
@@ -27,6 +27,7 @@ if __name__ == "__main__":
     axs[2].set_xlabel("time (ms)")
     r_list = []
 
+    l_ner = 20000 # um
     l_fem = 2600 # um
     l_elec = 2000 # um
     x_rec = 10250 # um
@@ -49,6 +50,7 @@ if __name__ == "__main__":
         "n_proc_global":n_proc_global,
         "l_elec":l_elec,
         "l_fem":l_fem,
+        "l_nerve":l_ner,
         # "e_elt_r":e_elt_r,
         # "n_elt_r":n_elt_r,
         # "f_elt_r":f_elt_r,
@@ -56,14 +58,14 @@ if __name__ == "__main__":
         "use_gnd_elec":use_gnd_elec,
     }
 
-    eit_instance = eit.EIT3DProblem(nerves_fname, res_dname=res_dir, label=test_id+"3D_mye", **parameters)
+    eit_instance = eit.EIT3DProblem(nerves_fname, res_dname=res_dir, label=test_id+"_3D_mye", **parameters)
     ## Nerve simulation
     # print(eit_instance.fem_res_file)
     if os.path.isfile(eit_instance.fem_res_file) and not overwrite_rfile:
         r_list += [eit_instance.fem_res_file]
         print("3D results loaded")
     else:
-        nrn_res = eit_instance.simulate_recording(save=False, t_start=t_iclamp, sim_param=sim_param)
+        nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
         eit_instance._define_problem()
         # Build mesh
@@ -81,10 +83,10 @@ if __name__ == "__main__":
     # parameters["e_elt_r"] = 0.2
     # parameters["n_elt_r"] = 0.2
     # parameters["f_elt_r"] = 0.2
-    eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+"2D_mye", **parameters)
+    eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+"_2D_mye", **parameters)
     ## Nerve simulation
 
-    nrn_res = eit_instance.simulate_recording(save=False, t_start=t_iclamp, sim_param=sim_param)
+    nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
     eit_instance._define_problem()
     # Build mesh

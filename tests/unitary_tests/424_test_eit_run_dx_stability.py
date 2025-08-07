@@ -9,7 +9,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_u1_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
 
     i_e = np.arange(1)
     fig, axs = plt.subplots(3, figsize=(8,6))
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     eit_instance.use_pbar = False
     ## Nerve simulation
 
-    nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
+    nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
     eit_instance._define_problem()
     # Build mesh
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+sigma_method, **parameters)
     eit_instance.use_pbar = False
     ## Nerve simulation
-    nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
+    nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
     eit_instance._define_problem()
     # Build mesh
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+sigma_method, **parameters)
     eit_instance.use_pbar = False
     ## Nerve simulation
-    nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
+    nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
     eit_instance._define_problem()
     # Build mesh

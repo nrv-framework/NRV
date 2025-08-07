@@ -64,7 +64,7 @@ def create_nerve():
     return nerve
 
 
-def simulate_nerve(nerve, nproc=4):
+defeit_instance.simulate_nerve(nerve, nproc=4):
     nrv.parameters.set_nmod_ncore(nproc)
     results = nerve(t_sim=3,postproc_script = "is_recruited")
     return results
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     # This is computationally intensive,
     # so we can use multiple processes
-    results = simulate_nerve(sim_nerve, nproc=4)
+    results =eit_instance.simulate_nerve(sim_nerve, nproc=4)
 
     ##################
     # POSTPROCESSING #

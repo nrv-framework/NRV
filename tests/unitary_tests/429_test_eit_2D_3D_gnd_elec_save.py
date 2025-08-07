@@ -9,7 +9,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_1uax_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
 
     if os.cpu_count() > 20:
         n_proc_global = 10
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label="2D"+test_id, **parameters)
 
     ## Nerve simulation
-    nrn_res = eit_instance.simulate_recording(save=False,t_start=t_iclamp, sim_param=sim_param)
+    nrn_res =eit_instance.simulate_nerve(save=False,t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
     fem_res = eit_instance.run_and_savefem(sfile=res_dir+"2Dtest", with_axons=False)
     del eit_instance
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     eit_instance = eit.EIT3DProblem(nerves_fname, res_dname=res_dir, label="3D"+test_id, **parameters)
 
     ## Nerve simulation
-    nrn_res = eit_instance.simulate_recording(save=False,t_start=t_iclamp, sim_param=sim_param)
+    nrn_res =eit_instance.simulate_nerve(save=False,t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
     fem_res = eit_instance.run_and_savefem(sfile=res_dir+"3Dtest", with_axons=False)
     del eit_instance

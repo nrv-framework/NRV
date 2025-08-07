@@ -7,8 +7,8 @@ test_dir = "./unitary_tests/"
 __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
 test_id = __fname__[:__fname__.find("_")]
 if __name__ == "__main__":
-    nerves_fname = "./unitary_tests/sources/400_u1_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    nerves_fname = "./unitary_tests/sources/400_1uax_nerve.json"
+    res_dir  = f"./unitary_tests/results/outputs/"
 
     if os.cpu_count() > 20:
         n_proc_global = 10
@@ -16,8 +16,8 @@ if __name__ == "__main__":
         n_proc_global = 3
 
 
-    l_fem = 1000 # um
-    l_elec = 300 # um
+    l_fem = 500 # um
+    l_elec = 200 # um
     x_rec = 3000 # um
     i_drive = 30 # uA
     #dt_fem = 1 # ms
@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     ## Nerve simulation
     sim_param = {"t_sim":t_sim}
-    nrn_res = eit_instance.simulate_recording(t_start=t_iclamp, sim_param=sim_param)
+    nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
 
     ## Impedance simulation
     eit_instance._define_problem()

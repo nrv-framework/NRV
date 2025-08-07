@@ -9,7 +9,7 @@ test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_u1_nerve.json"
-    res_dir  = f"./unitary_tests/results/{test_id}/"
+    res_dir  = f"./unitary_tests/results/outputs/"
     overwrite_rfile = False
 
     if os.cpu_count() > 20:
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         r_list += [eit_instance.fem_res_file]
         print("results loaded")
     else:
-        nrn_res = eit_instance.simulate_recording(save=False, t_start=t_iclamp, sim_param=sim_param)
+        nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
         eit_instance._define_problem()
         # Build mesh
