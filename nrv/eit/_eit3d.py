@@ -20,11 +20,15 @@ class EIT3DProblem(eit_forward):
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
 
     @property
+    def dim(self)->int:
+        return 3
+
+    @property
     def x_bounds_fem(self):
         return (self.x_rec - self.l_fem/2, self.x_rec + self.l_fem/2)
 
-    def _define_problem(self):
-        super()._define_problem()
+    def _setup_problem(self):
+        super()._setup_problem()
         if self.use_gnd_elec and (self.gnd_elec_id < 0 or self.n_elec < 0):
             self.eit_elec = CUFF_MP_electrode(N_contact=self.n_elec, x_center=self.l_fem/2-self.l_elec,contact_width=self.w_elec, contact_length=self.l_elec, insulator=False)
             self.gnd_elec = CUFF_electrode(x_center=self.l_fem/2+self.l_elec, contact_length=self.l_elec/2, insulator=False)
@@ -47,7 +51,7 @@ class EIT3DProblem(eit_forward):
         __ts = perf_counter()
         # check if problem is defined
         if not self.defined_pb:
-            self._define_problem()
+            self._setup_problem()
         # MESH JOB
         self.mesh = mesh_from_nerve(self.nerve, length=self.l_fem, x_shift=self.x_bounds_fem[0], add_axons=with_axons,res_nerve=self.res_n, res_fasc=self.res_f, res_ax=self.res_a)
         self.mesh.n_core = self.get_nproc("mesh")

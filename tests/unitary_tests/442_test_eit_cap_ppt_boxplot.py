@@ -26,7 +26,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1,2, layout="constrained")
     sns.boxplot(ax=axs[0],data=cap_ppt, x="i_e", y="duration", hue="i_cap", fill=True)
     sns.boxplot(ax=axs[1],data=cap_ppt, x="i_e", y="dv_pc_min", hue="i_cap", fill=True)
-    fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
 
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     figbplot.boxplot(data=cap_ppt, expr="", hue="i_cap", y="duration", palette=["r", "b"])
     figbplot.scale_axs(zerox=True)
 
-    figbplot.fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    figbplot.fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
     dv_pc_capu15, t_capu15 = r_list.get_cap_res(i_res=None, which="dv_eit_pc", with_t=True, expr={"i_e":[3,4], "i_cap":1}, ext_factor=1.5)
     dv_pc_capm15, t_capm15 = r_list.get_cap_res(i_res=None, which="dv_eit_pc", with_t=True, expr={"i_e":[3,4], "i_cap":0}, ext_factor=1.5)
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     fig2.plot_all_elec(t=t_capu15, data=dv_pc_capu15, i_res=None, linestyle="--", color="r")
     fig2.plot_all_elec(t=t_capm15, data=dv_pc_capm15, i_res=None, linestyle="--", color="b")
     fig2.scale_axs(zerox=True)
-    fig2.fig.savefig(f"./unitary_tests/figures/{test_id}_C.pdf")
+    fig2.fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
     
 
-    plt.show()
+    # plt.show()

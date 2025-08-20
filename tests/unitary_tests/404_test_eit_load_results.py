@@ -1,6 +1,7 @@
-import eit
+import nrv.eit as eit
 import matplotlib.pyplot as plt
 import numpy as np
+
 test_dir = "./unitary_tests/"
 __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
 test_id = __fname__[:__fname__.find("_")]
@@ -13,11 +14,12 @@ if __name__ == "__main__":
     labelu = "02"
     labelm = "03"
 
-    res_dir  = f"./unitary_tests/results/{labelu}/"
-    fem_resu = eit.eit_class_results(data=f"{res_dir}/{labelu}_fem.json")
-    res_dir  = f"./unitary_tests/results/{labelm}/"
-    fem_resm = eit.eit_class_results(data=f"{res_dir}/{labelm}_fem.json")
+    res_dir  = f"./unitary_tests/sources/"
+    fem_resu = eit.results.eit_forward_results(data=f"{res_dir}SA_1_fem.json")
+
+    fem_resm = eit.results.eit_forward_results(data=f"{res_dir}SA_2_fem.json")
     print("m nerve sim time :", fem_resu['computation_time'], "s")
+
     fig, axs = plt.subplots(3, 2, figsize=(12,6))
     fem_resu.plot(axs[0,0], i_e=i_e, which="v_eit", color="r", marker=".")
     fem_resu.plot(axs[1,0], i_e=i_e, which="dv_eit", color="r", marker=".")
@@ -37,6 +39,6 @@ if __name__ == "__main__":
     axs[1,1].set_ylabel("$dV_{EIT}$ (V)")
     axs[2,1].set_ylabel("$V_{REC}$ (mV)")
     axs[2,1].set_xlabel("time (ms)")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_m1_nerve.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
-    plt.show()
+    # plt.show()

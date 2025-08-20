@@ -2,6 +2,7 @@ from multiprocessing import Pool, Manager
 from rich.live import Live
 from rich.table import Table
 from rich.progress import Progress, BarColumn, TimeRemainingColumn, TimeElapsedColumn, track, MofNCompleteColumn
+from typing import Iterable, Literal
 
 from petsc4py.PETSc import ScalarType
 from time import perf_counter
@@ -13,7 +14,7 @@ import os
 import traceback
 
 from .utils._misc import split_job_from_arrays, compute_myelin_ppt, sample_nerve_results, touch, sample_keys_mdt
-from .results import eit_class_results
+from .results import eit_forward_results
 
 from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning
 from ..nmod import nerve
@@ -25,20 +26,204 @@ from ..utils.geom import CShape
 static_env = np.dtype(ScalarType).kind != 'c'
 
 class eit_forward(NRV_class):
-    """_summary_
+    """
+    Abstract base class for Electrical Impedance Tomography (EIT) forward simulation in neural contexts.
 
-    Returns
+    This class provides the interface and core logic for simulating EIT problems on nerve models, including
+    nerve simulation, mesh generation, FEM problem definition, and result management. It supports multi-core
+    parallelization, custom electrode protocols, and backup/retry mechanisms for failed simulation steps.
+    
+    Attributes
+    ----------
+    label : str
+        Simulation label.
+        Nerve data source.
+    parameters : dict
+        Simulation parameters.
+    res_dir : str
+        Directory for saving results.
+    nerve : nerve
+        Loaded nerve object.
+    is_nerve_res : bool
+        Indicates if nerve data is a results object.
+    l_nerve : float or None
+        Nerve length.
+    x_rec : float
+        Electrode recording position (um).
+    n_elec : int
+    inj_offset : int
+        Electrode offset for current injection.
+    inj_protocol_type : str or list
+        Injection protocol type or custom protocol.
+    i_drive : float
+        Current amplitude injected (uA).
+    l_elec : float
+        Electrode length (um).
+    gnd_elec_id : int
+        Ground electrode index.
+    use_gnd_elec : bool
+        Use ground electrode.
+    freqs : np.ndarray
+        Array of simulation frequencies (kHz).
+    times : np.ndarray
+        Array of simulation time points (ms).
+    current_freq : float
+        Current simulation frequency.
+    dt_fem : float
+        FEM time step.
+    t_start_fem : float
+        FEM simulation start time.
+    t_stop_fem : float
+        FEM simulation stop time.
+    n_fem_step : int or None
+        Number of FEM steps.
+    aplha_fem_step : float
+        Alpha parameter for FEM step.
+    l_fem : float
+        FEM domain length.
+    use_pbar : bool
+        Use progress bar in simulation.
+    ax_mem_th : float
+        Axon membrane thickness (um).
+    sigma_epi : float
+        Epineurium conductivity (S/m).
+    sigma_endo : float
+        Endoneurium conductivity (S/m).
+    sigma_axp : float
+        Axoplasm conductivity (S/m).
+    myelin_mat : float
+        Myelin material property.
+    n_proc_global : int or None
+        Global number of processes.
+    n_proc_nerve : int or None
+        Number of processes for nerve simulation.
+    n_proc_mesh : int or None
+        Number of processes for mesh generation.
+    n_proc_fem : int or None
+        Number of processes for FEM simulation.
+    nerve_timer : float
+        Timer for nerve simulation.
+    mesh_timer : float
+        Timer for mesh generation.
+    fem_timer : float
+        Timer for FEM simulation.
+    use_backup : bool
+        Enable backup saving during simulation.
+    __backup_fname : str
+        Backup file name.
+    n_elt_r, f_elt_r, a_elt_r, e_elt_r : float
+        Mesh resolution rates for nerve, fascicle, axon, and electrode.
+    v_elecs : np.ndarray or None
+        Simulated electrode voltages.
+    __nerve_res_file : str or None
+        Nerve results file path.
+    __nerve_mesh_file : str or None
+        Nerve mesh file path.
+    __fem_res_file : str or None
+        FEM results file path.
+    nerve_results : nerve_results or None
+        Results of nerve simulation.
+    mesh : object or None
+        FEM mesh object.
+    mesh_info : dict
+        Mesh information.
+    fem_results : eit_forward_results
+        Results of FEM simulation.
+    mesh_built : bool
+        Indicates if mesh is built.
+    defined_pb : bool
+        Indicates if FEM problem is defined.
+    fem_initialized : bool
+        Indicates if FEM is initialized.
+    petsc_opt : dict
+        PETSc solver options.
+
+    Methods
     -------
-    _type_
-        _description_
+    timers_dict : dict
+        Returns timers for nerve, mesh, and FEM simulation.
+    nerve_res_file : str
+        Returns nerve results file path.
+    nerve_mesh_file : str
+        Returns nerve mesh file path.
+    fem_res_file : str
+        Returns FEM results file path.
+    x_bounds_fem : tuple of float
+        Returns x bounds of FEM domain.
+    i_drive_A : float
+        Returns injected current in Amperes.
+    n_e : int
+        Returns number of electrodes.
+    n_t : int
+        Returns number of time steps.
+    n_f : int
+        Returns number of frequency steps.
+    n_p : int
+        Returns number of injection patterns.
+    v_shape : tuple of int
+        Returns shape of voltage results array.
+    inj_protocol : list of tuple
+        Returns injection protocol.
+    is_multi_patern : bool
+        Returns True if multiple injection patterns.
+    get_nproc(which="") : int
+        Returns number of processes for a simulation step.
+    simulate_nerve(...)
+        Simulates neural context and returns nerve results.
+    simulate_recording(...)
+        Deprecated. Use simulate_nerve.
+    _setup_problem()
+        Defines FEM problem from nerve results.
+    build_mesh(with_axons=True)
+        Builds FEM mesh.
+    _init_fem()
+        Initializes FEM problem.
+    _clear_fem()
+        Clears FEM problem state.
+    clear_fem_res()
+        Clears FEM results and resets result file.
+    _update_mat_axons(t)
+        Updates axon material properties for time step.
+    _compute_v_elec(sfile=None, i_t=0)
+        Computes electrode voltages for a time step.
+    __check_v_elec(v_elecs, task_id, i_t)
+        Checks and handles failed FEM steps.
+    run_fem(task_info)
+        Runs FEM simulation for all time steps of a task.
+    run_fem_1core(task_info)
+        Runs FEM simulation on a single core.
+    run_all_fem(task_info)
+        Runs FEM simulation for all frequencies and patterns.
+    simulate_eit(save=True, sim_list=None)
+        Runs EIT simulation for all time steps and saves results.
+    rerun_failed_steps(eit_results=None, save=True)
+        Reruns failed FEM simulation steps.
+    run_and_savefem(sfile, sim_list=[0], with_axons=True)
+        Computes and saves electric field for selected time steps.
 
-    Raises
-    ------
-    IOError
-        _description_
+    Notes
+    -----
+    - This class is abstract and requires implementation of certain methods in subclasses.
+    - Designed for extensibility to support custom electrode configurations and protocols.
+    - Uses numpy array formalism for simulation data.
+    - Supports multiprocessing for large-scale simulations.
     """
     @abstractmethod
     def __init__(self, nervedata, res_dname=None, label="eit_1",**parameters):
+        """
+        Initialize the EIT forward simulation class.
+
+        Parameters
+        ----------
+        nervedata : str or nerve
+            Path to nerve data file or nerve object.
+        res_dname : str, optional
+            Directory name for saving results, by default None.
+        label : str, optional
+            Label for the simulation, by default "eit_1".
+        **parameters : dict
+            Additional simulation parameters.
+        """
         super().__init__()
         self.label = label
         self.nervedata = nervedata
@@ -135,7 +320,7 @@ class eit_forward(NRV_class):
         self.nerve_results:None|nerve_results = None
         self.mesh = None
         self.mesh_info:dict = {}
-        self.fem_results:eit_class_results = eit_class_results()
+        self.fem_results:eit_forward_results = eit_forward_results()
         # EIT FEM simulation steps
         self.mesh_built:bool = False
         self.defined_pb:bool = False
@@ -167,6 +352,7 @@ class eit_forward(NRV_class):
         Returns
         -------
         dict
+            Dictionary with timers for nerve, mesh, and FEM simulation.
         """
         return {
             "nerve_timer":self.nerve_timer,
@@ -232,7 +418,7 @@ class eit_forward(NRV_class):
 
         Returns
         -------
-        bool[float]
+        tuple[float]
         """
         pass
 
@@ -248,6 +434,16 @@ class eit_forward(NRV_class):
 
         return convert(self.i_drive, unitin="uA", unitout="A")
 
+    @property
+    def dim(self)->Literal[None,2,3]:
+        """
+        Spatial dimension number of the problem.
+
+        Returns
+        -------
+        int
+        """
+        return self.n_elec
 
     @property
     def n_e(self)->int:
@@ -297,6 +493,14 @@ class eit_forward(NRV_class):
         return len(self.inj_protocol)
     
     def v_shape(self)->tuple[int]:
+        """
+        Get the shape of the voltage results array.
+
+        Returns
+        -------
+        tuple of int
+            Shape of the voltage results array.
+        """
         _s = [self.n_p, self.n_f, self.n_t, self.n_e]
         return tuple([_n for _n in _s if _n > 1])
 
@@ -321,7 +525,7 @@ class eit_forward(NRV_class):
         Raises
         ------
         ValueError
-            _description_
+            For unrecognized injection protocole type
         """
         if isinstance(self.inj_protocol_type, list):
             __inj_prot = self.inj_protocol_type
@@ -336,11 +540,12 @@ class eit_forward(NRV_class):
     @property
     def is_multi_patern(self)->bool:
         """
-        Returns True if the injections protocole contains more than one patern.
+        Check if the injection protocol contains more than one pattern.
 
         Returns
         -------
         bool
+            True if multiple patterns, False otherwise.
         """
         return len(self.inj_protocol)>1
 
@@ -360,6 +565,7 @@ class eit_forward(NRV_class):
         Returns
         -------
         int
+            Number of processes.
         """
         n_proc = 1
         if "nerve" in which and self.n_proc_nerve is not None:
@@ -374,38 +580,63 @@ class eit_forward(NRV_class):
 
 
     def __check_geometry(self):
+        """
+        Check the geometry consistency for the simulation.
+
+        Raises
+        ------
+        AssertionError
+            If geometry parameters are inconsistent.
+        """
         # assert self.dt_fem >= self.nerve.dt, "Nerve simulation dt should be smaller than dt_fem, please check you parameters before lanching simulation"
-        assert self.l_fem >= self.l_elec, "elec out of FEM x-boundaries, please check you parameters before lanching simulation"
+        assert self.dim == 2 or (self.l_fem >= self.l_elec), "elec out of FEM x-boundaries, please check you parameters before lanching simulation"
         assert self.x_rec + self.l_fem/2 <= self.nerve_results.L, "FEM x-boundaries out of the nerve, please check you parameters before lanching simulation"
 
 
     # TODO: rename method: simulate_nerve
     def simulate_nerve(
         self,
-        t_start=1,
-        duration=0.2,
-        amplitude=5,
-        sim_param={},
-        ax_param={},
-        save=True
+        t_start:float=1,
+        duration:float=0.2,
+        amplitude:float=5,
+        expr: str | None = None,
+        mask_labels: None | Iterable[str] | str = [],
+        ax_list: None | list = None,
+        fasc_list: None | list = None,
+        sim_param:dict={},
+        ax_param:dict={},
+        save:bool=False
     ):
         """
-        Simulate the neural context: fibres conductivity and extracelullar context.
+        Simulate the neural context: fibres conductivity and extracellular context.
 
         Parameters
         ----------
-        t_start : int, optional
-            time to start to current clamp in ms, by default 1
-        duration : float, optional
-            duration of current clamp in ms, by default 0.2
-        amplitude : int, optional
-            current amplitude of the current clamp in uA, by default 5
+        t_start     : float
+            Time to start current clamp in ms, by default 1.
+        duration    : float
+            Duration of current clamp in ms, by default 0.2.
+        amplitude   : float
+            Current amplitude of the clamp in uA, by default 5.
+        expr : str | None, optional
+            To select a subpopulation of axon for the clamp, If not None mask is generated using :meth:`pandas.DataFrame.eval` of this expression, by default None
+        mask_labels : None | Iterable[str] | str, optional
+            To select a subpopulation of axon for the clamp, Label or list of labels already added to the axon populations population, by default []
+        ax_list     : None | list
+            To select a subpopulation of axon for the clamp, list of axons to insert the clamp on, if None, all axons are stimulated, by default None
+        fasc_list     : None | list
+            To select a subpopulation of axon for the clamp, list of fascicle to insert the clamp on, if None, all fascicle are stimulated, by default None
         sim_param : dict, optional
-            nerve parameters to change before the simulation, by default {}
+            Nerve parameters to change before simulation, by default {}.
         ax_param : dict, optional
-            axons parameters to change before the simulation, by default {}
+            Axon parameters to change before simulation, by default {}.
         save : bool, optional
-            if True save the simulation result, by default True
+            If True, save the simulation result, by default True.
+
+        Returns
+        -------
+        nerve_results
+            Results of the nerve simulation.
         """
         __ts = perf_counter()
         if not self.is_nerve_res:
@@ -420,7 +651,7 @@ class eit_forward(NRV_class):
 
             # TODO: idealy reset Iclamps... need new methods in axon
             # current clamp
-            self.nerve.insert_I_Clamp(0, t_start, duration, amplitude)
+            self.nerve.insert_I_Clamp(position=0, t_start=t_start, duration=duration, amplitude=amplitude,expr=expr, mask_labels=mask_labels, ax_list=ax_list,fasc_list=fasc_list)
             # Analitical recorder
             __testrec = recorder('endoneurium_ranck')
             for i_elec in range(self.n_elec):
@@ -469,7 +700,27 @@ class eit_forward(NRV_class):
 
         Warning
         -------
-        Deprecated use :meth:`self.simulate_nerve` instead
+        Deprecated. Use :meth:`simulate_nerve` instead.
+
+        Parameters
+        ----------
+        t_start : int, optional
+            Time to start current clamp in ms, by default 1.
+        duration : float, optional
+            Duration of current clamp in ms, by default 0.2.
+        amplitude : int, optional
+            Current amplitude of the clamp in uA, by default 5.
+        sim_param : dict, optional
+            Nerve parameters to change before simulation, by default {}.
+        ax_param : dict, optional
+            Axon parameters to change before simulation, by default {}.
+        save : bool, optional
+            If True, save the simulation result, by default True.
+
+        Returns
+        -------
+        nerve_results
+            Results of the nerve simulation.
         """
         rise_warning("Deprecated: simulate_recording is deprecated use simulate_nerve method instead")
         return self.simulate_nerve(
@@ -481,9 +732,9 @@ class eit_forward(NRV_class):
             save=save,
         )
 
-    def _define_problem(self):
+    def _setup_problem(self):
         """
-        Set FEM parameters from 
+        Setup FEM problem parameters from nerve simulation results.
         """
         self.__check_geometry()
 
@@ -522,18 +773,21 @@ class eit_forward(NRV_class):
         self.res_a = self._axons_pop_ppts["diameters"].to_numpy(dtype=float) * self.a_elt_r
         self.res_e = self.w_elec * self.e_elt_r
 
+    def _define_problem(self):
+        rise_warning("Deprecated: _define_problem is deprecated use _setup_problem method instead")
+        self._setup_problem()
+
     def build_mesh(self, with_axons:bool=True):
         """
-        creation of mesh
+        Create the mesh for FEM simulation.
 
-        Parameters 
+        Parameters
         ----------
-        mesh_file: str | None, optional
-            filename of the mesh, by default None
-            if true output .msh saved in a .json
+        with_axons : bool, optional
+            Include axons in the mesh, by default True.
         """
         if not self.defined_pb:
-            self._define_problem()
+            self._setup_problem()
 
 
     def _init_fem(self):
@@ -542,31 +796,58 @@ class eit_forward(NRV_class):
         """
         pass
 
+    def clear(self):
+        """
+        Clear all simulations outputs.
+        """
+        pass
+
     def _clear_fem(self):
+        """
+        Clear FEM problem state.
+        """
         pass
 
     def clear_fem_res(self):
+        """
+        Clear FEM results and reset result file.
+        """
         self.__fem_res_file = None
-        self.fem_results = eit_class_results()
+        self.fem_results = eit_forward_results()
 
 
     def _update_mat_axons(self, t: float) -> bool:
         """
-        problem is already defined, update sigma axons between time steps
+        Update axon material properties between time steps.
 
         Parameters
         ----------
-        t : float , the time step
-            if t is different from 0, by default False
-
+        t : float
+            Time step.
 
         Returns
         -------
-        Bool , by default True
+        bool
+            True if update successful.
         """
         return True
 
     def _compute_v_elec(self, sfile:None|str=None, i_t:int=0)->np.ndarray|None:
+        """
+        Compute electrode voltages for a given time step.
+
+        Parameters
+        ----------
+        sfile : str or None, optional
+            File to save results, by default None.
+        i_t : int, optional
+            Time step index, by default 0.
+
+        Returns
+        -------
+        np.ndarray or None
+            Computed electrode voltages.
+        """
         pass
 
     def __check_v_elec(self, v_elecs:np.ndarray, task_id:int, i_t:int)->np.ndarray:
@@ -603,7 +884,7 @@ class eit_forward(NRV_class):
 
     def run_fem(self, task_info:list)->np.ndarray:
         """
-        Run the FEM simulation for all time step of a given task (process). Depending of the problem definition, the simulation if run for all injection frequencies and over the whole frequency.
+        Run the FEM simulation for all time step of a given task (process). Depending of the problem definition, the simulation is run for all injection partens and only for the current frequency.
 
         Note
         ----
@@ -676,7 +957,6 @@ class eit_forward(NRV_class):
                         self.electrodes[e_str] = -self.i_drive_A / self.s_elec[i_elec]
                     else:
                         self.electrodes[e_str] = 0
-
                 try:
                     v_elecs[i_p, i_t, :] = self._compute_v_elec()
                 except KeyboardInterrupt:
@@ -700,11 +980,10 @@ class eit_forward(NRV_class):
         task_name, task_id, total, progress_dict = task_info
         parameters.set_nrv_verbosity(2)
         _sim_list = self.sim_list[task_id]
-        v_elecs = np.zeros((self.n_t, self.n_elec), dtype=ScalarType)
+        v_elecs = np.zeros((self.n_p, self.n_t, self.n_e), dtype=ScalarType)
         if not self.fem_initialized:
             self._init_fem()
         for i_ in track(range(len(_sim_list))):
-        # for i_ in 70+np.arange(9):
             # update and solve
             i_t = _sim_list[i_]
             # update and solve
@@ -722,7 +1001,6 @@ class eit_forward(NRV_class):
                         self.electrodes[e_str] = -self.i_drive_A / self.s_elec[i_elec]
                     else:
                         self.electrodes[e_str] = 0
-
                 try:
                     v_elecs[i_p, i_t, :] = self._compute_v_elec()
                 except KeyboardInterrupt:
@@ -779,7 +1057,7 @@ class eit_forward(NRV_class):
         return v_elecs
 
 
-    def simulate_eit(self, save:bool=True, sim_list:np.ndarray|None=None)->eit_class_results:
+    def simulate_eit(self, save:bool=True, sim_list:np.ndarray|None=None)->eit_forward_results:
         """
         Run the eit problem for all time steps
 
@@ -792,15 +1070,11 @@ class eit_forward(NRV_class):
 
         Returns
         -------
-        dict
-            dictionnary containing "v_elecs" and "dv_elecs" results
-
-        Warning
-        -------
-        If run on multiple cores the full results dictionnary is return only on master core (rank = 0)
+        eit_forward_results
+            EIT simulation results.
         """
         if not self.defined_pb:
-            self._define_problem()
+            self._setup_problem()
         __ts = perf_counter()
         if self.use_backup:
             touch(self.__backup_fname)
@@ -883,11 +1157,26 @@ class eit_forward(NRV_class):
     # ----------------------------------------- #
 
 
-    def rerun_failed_steps(self, eit_results:eit_class_results|str|None=None, save:bool=True)->eit_class_results:
+    def rerun_failed_steps(self, eit_results:eit_forward_results|str|None=None, save:bool=True)->eit_forward_results:
+        """
+        Rerun failed FEM simulation steps.
+
+        Parameters
+        ----------
+        eit_results : eit_forward_results, str, or None, optional
+            EIT results object or file path, by default None.
+        save : bool, optional
+            If True, save updated results, by default True.
+
+        Returns
+        -------
+        eit_forward_results
+            Updated EIT simulation results.
+        """
         if eit_results is None:
             eit_results = self.fem_res_file
         if isinstance(eit_results, str):
-            eit_results = eit_class_results(data=eit_results)
+            eit_results = eit_forward_results(data=eit_results)
         if "res_dir" in eit_results and "label" in eit_results:
             assert eit_results["res_dir"] == self.res_dir and eit_results["label"] == self.label
 
@@ -935,7 +1224,7 @@ class eit_forward(NRV_class):
         """
         parameters.set_nrv_verbosity(2)
         if not self.defined_pb:
-            self._define_problem()
+            self._setup_problem()
         self.build_mesh(with_axons=with_axons)
 
         if len(sim_list)>0 and not self.fem_initialized:

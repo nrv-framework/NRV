@@ -145,4 +145,4 @@ if __name__ == "__main__":
     plt.xlabel("Number of process")
     plt.ylabel("PSO duration (s)")
     plt.savefig(figdir+"B.png")
-    plt.show()
+    # plt.show()

@@ -66,7 +66,7 @@ if __name__ == "__main__":
     else:
         nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
-        eit_instance._define_problem()
+        eit_instance._setup_problem()
         # Build mesh
         eit_instance.build_mesh()
         r_list += [eit_instance.simulate_eit()]
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         r_list[-1].plot(axs[0], i_e=i_e, which="v_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[2], i_e=i_e, which="v_rec", linestyle=":")
-        fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+        fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
     del eit_instance
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     figdvpc_.scale_axs(unit_y="%", zerox=True)
     figdvpc_.fig.text(0.5,0.7,__which,ha="center",va="center")
-    figdvpc_.fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    figdvpc_.fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
     dv_pc = r_list.get_res(i_res=i_r_, i_e=i_e, which=__which)
     t_ = r_list.t()*np.ones(dv_pc.shape)
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     ax.plot(t_, dv_pc)
     ax.plot(t_[cap_mask], dv_pc[cap_mask])
 
-    plt.show()
+    # plt.show()

@@ -73,7 +73,7 @@ if __name__ == "__main__":
         t_ = r_list["t"][i_start+1:]
         axu.plot(t_, dv_rec_dt/np.max(abs(dv_rec_dt)) ,color=c[_i_r],alpha=0.2)
         axu.plot(t_, dv_rec_dt_f, "--",color=c[_i_r],alpha=0.5)
-        figu.savefig(f"figures/{test_id}_B.pdf")
+        figu.savefig(f"figures/{test_id}_B.png")
 
         if use_filter:
             dv_rec_dt = dv_rec_dt_f
@@ -94,7 +94,4 @@ if __name__ == "__main__":
         ax.add_artist(r_u)
 
 
-        
-
-
-    plt.show()
+    # plt.show()

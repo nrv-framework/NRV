@@ -1,10 +1,5 @@
 import nrv.eit as eit
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
-import os
-from time import perf_counter
-from scipy.signal import savgol_filter, lfilter
 
 __fname__ = __file__[__file__.find("tests/")+6:]
 test_id = __fname__[:__fname__.find("_")]
@@ -67,5 +62,6 @@ if __name__ == "__main__":
         ax.plot(t_m, dv_pc.T, color="b", alpha=.1)
         ax.axvline(r_list["t"][757])
     # ax_m.set_ylim(-25e-6,0)
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
-    plt.show()
+    # plt.show()

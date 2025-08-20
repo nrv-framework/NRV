@@ -2,12 +2,12 @@ import numpy as np
 import os
 
 
-from ._eit_class_results import eit_class_results, Literal
-from ..utils._misc import set_idxs, get_query
+from ._eit_forward_results import eit_forward_results, Literal
+from ...backend._extlib_interface import set_idxs, get_query
 
 
-class eit_results_list(eit_class_results):
-    def __init__(self, dt:float|None=0.001, t_sim:float|None=None, results:list[eit_class_results]|eit_class_results|str=None, include_rec:bool=False):
+class eit_results_list(eit_forward_results):
+    def __init__(self, dt:float|None=0.001, t_sim:float|None=None, results:list[eit_forward_results]|eit_forward_results|str=None, include_rec:bool=False):
         super().__init__()
         self.dt:float = dt
         self.t_sim:float|None = t_sim
@@ -28,8 +28,8 @@ class eit_results_list(eit_class_results):
         return ["i_res"] + super()._column_labels
 
     ## add and access results methods
-    def add_results(self, results:list[eit_class_results]|eit_class_results|str, include_rec:bool=False):
-        if isinstance(results, eit_class_results):
+    def add_results(self, results:list[eit_forward_results]|eit_forward_results|str, include_rec:bool=False):
+        if isinstance(results, eit_forward_results):
             #first results
             if self.t_sim is None:
                 self.t_sim = results["t"][-1]
@@ -67,10 +67,10 @@ class eit_results_list(eit_class_results):
                 # print(results["parameters"])
                 self.res_info[f"{self.n_res}"].update(results["parameters"])
             else:
-                print(DeprecationWarning("eit_class_results not up to date"))
+                print(DeprecationWarning("eit_forward_results not up to date"))
             self.n_res += 1
         elif isinstance(results, str):
-            self.add_results(eit_class_results(data=results), include_rec=include_rec)
+            self.add_results(eit_forward_results(data=results), include_rec=include_rec)
         elif isinstance(results, list):
             rl = sort_list_res(results)
             for res in rl:
@@ -104,7 +104,7 @@ class eit_results_list(eit_class_results):
             ok_res = self.res_where(to_check)
         return list_res[ok_res]
 
-    ## eit_class_results methods overwrite
+    ## eit_forward_results methods overwrite
     def v_0(self, i_e:np.ndarray|int|None=None, i_f:np.ndarray|int|None=None, i_p:np.ndarray|int|None=None, **kwgs):
         return super().v_0(i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
 
@@ -282,10 +282,10 @@ def sort_list_res(list_res:list):
     lr = []
     t_sim = 0
     for res_i in list_res: 
-        if isinstance(res_i, eit_class_results):
+        if isinstance(res_i, eit_forward_results):
             res = res_i
         else:
-            res = eit_class_results(data=res_i)
+            res = eit_forward_results(data=res_i)
         if res["t"][-1] > t_sim:
             t_sim = res["t"][-1]
             lr = [res] + lr

@@ -49,4 +49,5 @@ if __name__ == "__main__":
     axs[0].set_ylabel("$dV_{EIT}$ (V)")
     axs[1].set_ylabel("$dV_{EIT}$ (V)")
     axs[1].set_xlabel("time (ms)")
-    plt.show()
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
+    # plt.show()

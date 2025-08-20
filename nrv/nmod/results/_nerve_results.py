@@ -322,6 +322,7 @@ class nerve_results(sim_results):
         unmyel_color: str = "r",
         elec_color: str = "gold",
         num: bool = False,
+        vm_key:str = "V_mem",
         **kwgs,
     ):
         """ """
@@ -344,6 +345,7 @@ class nerve_results(sim_results):
                 myel_color=myel_color,
                 unmyel_color=unmyel_color,
                 num=num,
+                vm_key=vm_key,
             )
 
         if "extra_stim" in self:

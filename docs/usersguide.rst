@@ -52,6 +52,7 @@ Chapters of the User's Guide
    usersguide/parallel
    usersguide/optimization
    usersguide/axon_simulations
+   usersguide/eit
 
 
 Note on object saving

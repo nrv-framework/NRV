@@ -44,7 +44,8 @@ if __name__ == "__main__":
     axs[1].plot(t, dv_1,"--")
     axs[2].plot(t, dv_err,"--")
 
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
 
 
-    plt.show()
+    # plt.show()

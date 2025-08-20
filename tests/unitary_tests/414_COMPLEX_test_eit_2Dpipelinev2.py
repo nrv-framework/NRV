@@ -36,7 +36,7 @@ if __name__ == "__main__":
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
 
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -57,14 +57,14 @@ if __name__ == "__main__":
     axs[1].set_ylabel("$dV_{EIT}$ (V)")
     axs[2].set_ylabel("$V_{REC}$ (mV)")
     axs[2].set_xlabel("time (ms)")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_u1_nerve.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     if fem_res.is_multi_freqs:
         f = fem_res["f"]
         v_elecs = fem_res.v_eit(i_t=0, i_e=0)
 
         fig, ax = plt.subplots( figsize=(8,6))
         ax.plot(f, v_elecs, color="k")
-        fig.savefig(f"./unitary_tests/figures/{test_id}_f.pdf")
+        fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
     del eit_instance
-    plt.show()
+    # plt.show()

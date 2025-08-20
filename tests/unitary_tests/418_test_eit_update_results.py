@@ -9,7 +9,7 @@ test_id = __fname__[:__fname__.find("_")]
 if __name__ == "__main__":
 
     res_fname  = f"./results/S0_3D_static_0_fem.json"
-    fem_res = eit.eit_class_results(data=res_fname)
+    fem_res = eit.eit_forward_results(data=res_fname)
 
     print("m nerve sim time :", fem_res['computation_time'], "s")
     fem_res.filter_res = False
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     axs[1,0].set_ylabel("$dV_{EIT}$ (V)")
     axs[2,0].set_ylabel("$V_{REC}$ (mV)")
     axs[2,0].set_xlabel("time (ms)")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_m1_nerve.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
 
     __v_eit = np.ones(fem_res.shape)
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     axs[1,1].set_ylabel("$dV_{EIT}$ (V)")
     axs[2,1].set_ylabel("$V_{REC}$ (mV)")
     axs[2,1].set_xlabel("time (ms)")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_m1_nerve.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
     del fem_res
-    plt.show()
+    # plt.show()

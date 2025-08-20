@@ -1,4 +1,4 @@
-from ._eit_class_results import eit_class_results, synchronize_times, load_res
+from ._eit_forward_results import eit_forward_results, synchronize_times, load_res
 from ._eit_results_list import eit_results_list, res_list_from_labels
 
 # from . import
@@ -6,7 +6,7 @@ from ._eit_results_list import eit_results_list, res_list_from_labels
 submodules = []
 
 classes = [
-    "eit_class_results",
+    "eit_forward_results",
     "eit_results_list",
 ]
 

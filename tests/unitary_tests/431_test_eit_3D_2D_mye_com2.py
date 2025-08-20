@@ -68,7 +68,7 @@ if __name__ == "__main__":
     else:
         nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
-        eit_instance._define_problem()
+        eit_instance._setup_problem()
         # Build mesh
         eit_instance.build_mesh()
         # Simulate nerve
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         r_list[-1].plot(axs[0], i_e=i_e, which="v_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[2], i_e=i_e, which="v_rec", linestyle=":")
-        fig.savefig(f"./unitary_tests/figures/{test_id}_u1_nerve.pdf")
+        fig.savefig(f"./unitary_tests/figures/{test_id}A.png")
     del eit_instance
 
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+"2D", **parameters)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     eit.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv_pc, i_res=i_r_, which="dv_eit")
     axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
     axs[0].legend(labels)
-    fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
     fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
     axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     eit.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv, i_res=i_r_,linestyle=":", alpha=.5)
 
     axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
-    fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
 
     fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
     axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
@@ -124,6 +124,6 @@ if __name__ == "__main__":
 
     # axs = eit.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1]), which="dv_eit")
     axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
-    fig.savefig(f"./unitary_tests/figures/{test_id}_C.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
 
-    plt.show()
+    # plt.show()

@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
         nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
         ## Impedance simulation
-        eit_instance._define_problem()
+        eit_instance._setup_problem()
         # Build mesh
         eit_instance.build_mesh()
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
         r_list[-1].plot(axs[0], i_e=i_e, which="v_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
         r_list[-1].plot(axs[2], i_e=i_e, which="v_rec", linestyle=":")
-        fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+        fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
         del eit_instance
 

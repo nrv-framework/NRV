@@ -16,53 +16,6 @@ def touch(path):
 
 
 # Numpy usefull
-def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
-    """
-    convert an object _i into an 1D array of index
-
-    Parameters
-    ----------
-    _i : np.ndarray | int | tuple | None
-        Indexes considered, can be either:
-         - None (default): all indexes from 0 to ``_n-1``
-         - int: single indexe corresponding to _i
-         - tuple: all indexes between _i[0] and _i[1]
-    _n : int | None
-        _description_
-
-    Returns
-    -------
-    np.ndarray
-    """
-    if _i is None and _n is not None:
-        _i = np.arange(_n)
-    elif not np.iterable(_i):
-        _i = np.array([_i])
-    elif isinstance(_i,tuple) and len(_i) == 2:
-        _i = np.arange(*_i)
-    elif isinstance(_i, list):
-        _i = np.array(_i)
-    if isinstance(_i, np.ndarray) and _n is not None:
-        _i = _i[_i<_n]
-    return _i
-
-def get_query(**kwgs):
-    queries = []
-    for i_lab, i_val in kwgs.items():
-        if i_val is not None:
-            if isinstance(i_val, str):
-                queries += [i_val]
-            elif isinstance(i_val, dict):
-                queries += [get_query(**i_val)]
-            else:
-                queries += [f"{i_lab}.isin({set_idxs(i_val, None).tolist()})"]
-    if len(queries)==0:
-        return None
-    
-    queries = " and ".join(queries)
-    return queries
-
-
 def gen_from_idx(idx: np.ndarray, n: int, add_0:bool=False) -> np.ndarray:
     _arr = np.arange(n)
     if np.sum(idx==0)>0:
@@ -173,7 +126,6 @@ def split_job_from_arrays(len_arrays, n_split, stype="default"):
     return mask
 
 
-import numpy as np
 def rotate_axes(arr:np.ndarray, axis:int, target=0)->np.ndarray:
     """_summary_
 
@@ -357,8 +309,7 @@ def sum_sigma_ax(results):
 
 
 ## Additionnal On the flight posporoc functions
-
-def sample_keys_mdt(results:axon_results, keys_to_sample:str|set[str]={}, sample_dt:list|None|float=None, t_start_rec:float=0, t_stop_rec:float=-1, i_sampled_t:None|np.ndarray=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]={}, keys_to_keep:set[str]={})->axon_results:
+def sample_keys_mdt(results:axon_results, keys_to_sample:str|set[str]={}, sample_dt:list|None|float=None, t_start_rec:float=0, t_stop_rec:float=-1, i_sampled_t:None|np.ndarray=None, x_bounds:None|float|tuple[float]=None, keys_to_remove:str|set[str]=set(), keys_to_keep:set[str]=set())->axon_results:
     """
     extension of sample_key axon postproc function from nrv allowing to simply set an addaptative dt
 
@@ -386,6 +337,9 @@ def sample_keys_mdt(results:axon_results, keys_to_sample:str|set[str]={}, sample
          - tupple: `g_mem` values are stored for all positions included between the two boundaries.
          - None (default): `g_mem` values are stored for all positions.
     """
+    results.is_recruited()
+    keys_to_keep = keys_to_keep.union({"recruited"})
+
     if not np.iterable(sample_dt):
         return sample_keys(
             results=results,

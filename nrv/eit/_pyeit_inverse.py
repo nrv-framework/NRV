@@ -1,14 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-from . import eit_inverse
-from .results import eit_class_results
 from typing import Literal
-
 from pyeit.eit import jac, bp
 import pyeit.eit.protocol as protocol
 import pyeit.mesh as mesh
 
+from . import eit_inverse
+from .results import eit_forward_results
 
 pyeit_methods = {
     "jac":{"solver":jac.JAC, "default":{"p":0.50, "lamb":1e-3, "method":"kotre"}},
@@ -17,7 +15,7 @@ pyeit_methods = {
 
 
 class pyeit_inverse(eit_inverse):
-    def __init__(self, data:None|eit_class_results=None, method:Literal["jac", "bp"]="jac", **kwgs):
+    def __init__(self, data:None|eit_forward_results=None, method:Literal["jac", "bp"]="jac", **kwgs):
 
         # Attribute instantiated when data is set
         # NOTE Must be initialised before super().__init__
@@ -34,10 +32,10 @@ class pyeit_inverse(eit_inverse):
 
 
     @eit_inverse.data.setter
-    def data(self, data:None|eit_class_results):
+    def data(self, data:None|eit_forward_results):
         if data is None:
             self._data=data
-        elif isinstance(data, eit_class_results) and data.is_multi_patern:
+        elif isinstance(data, eit_forward_results) and data.is_multi_patern:
             self._data=data
             self.n_elec = data.n_e
             self.inj_offset = (self.data["p"][0][1] - self.data["p"][0][0])%self.n_elec
@@ -45,7 +43,7 @@ class pyeit_inverse(eit_inverse):
             self.update_mesh()
 
         else:
-            raise TypeError("data must be None or eit_class_results")
+            raise TypeError("data must be None or eit_forward_results")
 
 
 

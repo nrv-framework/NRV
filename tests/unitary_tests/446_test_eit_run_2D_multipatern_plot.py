@@ -52,7 +52,7 @@ if __name__ == "__main__":
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
 
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -69,6 +69,6 @@ if __name__ == "__main__":
         axs = np.concatenate([axs, axs2[1:-1]])
 
     eit.scale_axs(axs=axs, e_gnd=[], has_nerve=False)
-    fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     
-    plt.show()
+    # plt.show()

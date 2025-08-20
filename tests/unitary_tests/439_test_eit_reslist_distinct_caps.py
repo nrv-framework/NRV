@@ -37,7 +37,7 @@ if __name__ == "__main__":
     figdvpc_.plot_all_elec(t=r_list.t(), data=dv_pc, i_res=i_r_,)
 
     figdvpc_.plot_all_elec(t=t_cap, data=dv_pc_cap, i_res=i_r_, linestyle="--")
-    figdvpc_.fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    figdvpc_.fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
     dv_pc_capm, t_capm = r_list.get_cap_res(i_res=[1,2], which=__which, with_t=True, expr={"i_cap":0,"":"duration < 1."})
     dv_pc_capm15, t_capm15 = r_list.get_cap_res(i_res=[1,2], which=__which, with_t=True, expr={"i_e":[3,4], "i_cap":0}, ext_factor=1.5)
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     figemye.add_nerve_plot(data=nerves_fname, drive_pair=(0,5))
     figemye.plot_all_elec(t=t_capm15, data=dv_pc_capm15, i_res=i_r_, linestyle="--")
     figemye.plot_all_elec(t=t_capm, data=dv_pc_capm, i_res=i_r_, linestyle="--")
-    figemye.fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    figemye.fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
 
 
@@ -60,8 +60,8 @@ if __name__ == "__main__":
     figeunm.add_nerve_plot(data=nerves_fname, drive_pair=(0,5))
     figeunm.plot_all_elec(t=t_capu15, data=dv_pc_capu15, i_res=i_r_, linestyle="--")
     figeunm.plot_all_elec(t=t_capu, data=dv_pc_capu, i_res=i_r_, linestyle="--")
-    figeunm.fig.savefig(f"./unitary_tests/figures/{test_id}_C.pdf")
+    figeunm.fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
 
     # figemye.plot_all_elec(t=t_capu15, data=dv_pc_capumean, i_res=i_r_, color="k",linestyle="-")
 
-    plt.show()
+    # plt.show()

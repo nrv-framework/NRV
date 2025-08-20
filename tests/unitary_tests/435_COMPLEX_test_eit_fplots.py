@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     axs[1].set_xlabel("time (ms)")
     r_list[-1].plot(axs[0], i_e=i_e, which="v_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     fem_res = r_list[-1]
 
     i_t = r_list[-1].n_t//2
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     axs[1].set_xlabel("freq (kHz)")
     r_list[-1].plot(axs[0], i_e=i_e, i_t=i_t, xtype="f",which="v_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[1], i_e=i_e, i_t=i_t, xtype="f",which="dv_eit", marker=".", linestyle=":")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
     fem_res = r_list[-1]
 
     i_t = None
@@ -90,8 +90,8 @@ if __name__ == "__main__":
     axs[1].set_xlabel("freq (kHz)")
     r_list[-1].plot(axs[0], i_e=i_e, i_t=i_t, xtype="f",which="v_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[1], i_e=i_e, i_t=i_t, xtype="f",which="dv_eit", marker=".", linestyle=":")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
     fem_res = r_list[-1]
 
-    plt.show()
+    # plt.show()
 

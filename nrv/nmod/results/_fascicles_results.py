@@ -385,9 +385,10 @@ class fascicle_results(sim_results):
         myel_color: str = "b",
         unmyel_color: str = "r",
         num: bool = False,
+        vm_key: str = "V_mem",
     ) -> None:
         ## plot axons
-        self.get_axons()
+        self.get_axons(vm_key=vm_key)
 
         self.axons.plot(
             axes=axes,

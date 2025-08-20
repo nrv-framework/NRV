@@ -35,7 +35,7 @@ if __name__ == "__main__":
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param)
 
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve

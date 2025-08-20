@@ -5,12 +5,12 @@ from multiprocessing import Pool, Manager
 from rich import progress
 from itertools import product
 
-from .utils._misc import set_idxs
-from .results import eit_class_results
+from ..backend._extlib_interface import set_idxs
+from .results import eit_forward_results
 
 class eit_inverse():
     @abstractmethod
-    def __init__(self, data:None|eit_class_results=None, **kwgs):
+    def __init__(self, data:None|eit_forward_results=None, **kwgs):
         self.data = data #TODO [NRV] load_any(data) for merge with nrv
         self.n_proc:int = 1
         self.results = []
@@ -25,11 +25,11 @@ class eit_inverse():
         return self.data is not None
 
     @property
-    def data(self)->None|eit_class_results:
+    def data(self)->None|eit_forward_results:
         return self._data
 
     @data.setter
-    def data(self, data:None|eit_class_results):
+    def data(self, data:None|eit_forward_results):
         self._data = data
 
     @data.deleter
@@ -38,7 +38,7 @@ class eit_inverse():
 
 
 
-    def fromat_data(data:None|eit_class_results=None)->np.ndarray:
+    def fromat_data(data:None|eit_forward_results=None)->np.ndarray:
         pass
 
     def _get_i_to_solve(self, i_to_solve=None, i_t:int=0, i_f:int=0, i_res:int=0)->tuple[int]:

@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     ## Nerve simulation
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     ## Nerve simulation
     nrn_res =eit_instance.simulate_nerve(t_start=t_iclamp, sim_param=sim_param, ax_param=ax_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[2], i_e=i_e, which="v_rec", linestyle=":")
 
-    fig.savefig(f"./unitary_tests/figures/{test_id}_u1_nerve.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     del eit_instance
 
 
@@ -112,4 +112,4 @@ if __name__ == "__main__":
 
     axs = eit.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1,2]), which="dv_eit")
     axs = eit.scale_axs(axs=axs)
-    plt.show()
+    # plt.show()

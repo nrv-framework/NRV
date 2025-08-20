@@ -1,0 +1,2702 @@
+{
+ "_": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "SubFigure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "SubFigure"
+  }
+ ],
+ "_dv": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "ax.axvline": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.axvline"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.axvline"
+  }
+ ],
+ "ax.legend": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.legend"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.legend"
+  }
+ ],
+ "ax.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.plot"
+  }
+ ],
+ "ax.set_xlabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_xlabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_xlabel"
+  }
+ ],
+ "ax.set_ylabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._base",
+   "module_short": "matplotlib.axes._base",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "_AxesBase.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_ylabel"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_ylabel"
+  }
+ ],
+ "ax2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "axons_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "axs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "axs2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "dict": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "ds": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "ds.shape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "dt_fem": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "dv_pc": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "eit.EIT2DProblem": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_forward",
+   "module_short": "nrv.eit",
+   "name": "eit_forward"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  }
+ ],
+ "eit.pyeit_inverse": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  }
+ ],
+ "eit.utils.add_nerve_plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "add_nerve_plot"
+  }
+ ],
+ "eit.utils.gen_fig_elec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "gen_fig_elec"
+  }
+ ],
+ "eit.utils.plot_all_elec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "plot_all_elec"
+  }
+ ],
+ "eit.utils.scale_axs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "scale_axs"
+  }
+ ],
+ "eit.utils.thr_window": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "thr_window"
+  }
+ ],
+ "eit_instance": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem"
+  }
+ ],
+ "eit_instance._setup_problem": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_forward",
+   "module_short": "nrv.eit",
+   "name": "eit_forward._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class._setup_problem"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class._setup_problem"
+  }
+ ],
+ "eit_instance.build_mesh": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_forward",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.build_mesh"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.build_mesh"
+  }
+ ],
+ "eit_instance.simulate_eit": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_forward",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.simulate_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.simulate_eit"
+  }
+ ],
+ "eit_instance.simulate_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit2d",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "EIT2DProblem.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_forward",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.simulate_nerve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.simulate_nerve"
+  }
+ ],
+ "fasc1_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "fasc1_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc1_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc2_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc2_y": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fasc2_z": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "fascicle_1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fascicle_1.fill": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.fill"
+  }
+ ],
+ "fascicle_2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "fascicle_2.fill": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv.backend._NRV_Simulable",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.fill"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.fill"
+  }
+ ],
+ "fem_res": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results"
+  }
+ ],
+ "fem_res.dv_eit": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.dv_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.dv_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results.dv_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results.dv_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.dv_eit"
+  }
+ ],
+ "fem_res.n_e": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.n_e"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.n_e"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results.n_e"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results.n_e"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.n_e"
+  }
+ ],
+ "fem_res.t": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.t"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.t"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results.t"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results.t"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.t"
+  }
+ ],
+ "fem_res.v_eit": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.v_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results.v_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results.v_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results.v_eit"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.v_eit"
+  }
+ ],
+ "fem_res_2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results._eit_forward_results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_forward_results"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig.subfigures": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure.subfigures"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure.subfigures"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "FigureBase.subfigures"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FigureBase.subfigures"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.subfigures"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.subfigures"
+  }
+ ],
+ "i_drive": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "i_p": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "i_tmax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "int64"
+  }
+ ],
+ "inj_protocol_type": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "inv_pb": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse"
+  }
+ ],
+ "inv_pb.fromat_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.fromat_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.fromat_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse.fromat_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.fromat_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.fromat_data"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse.fromat_data"
+  }
+ ],
+ "inv_pb.mesh_obj.element.shape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "inv_pb.mesh_obj.node.shape": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "inv_pb.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse.plot"
+  }
+ ],
+ "inv_pb.solve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse.solve"
+  }
+ ],
+ "inv_pb_2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse"
+  }
+ ],
+ "inv_pb_2.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.plot"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse.plot"
+  }
+ ],
+ "inv_pb_2.solve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._pyeit_inverse",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "pyeit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit._eit_inverse",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "eit_inverse.solve"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "eit_inverse.solve"
+  }
+ ],
+ "l_elec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "n_ax1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "n_ax2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "n_elec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "n_fem_step": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "n_proc_global": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "nerve_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "nerve_data": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "nerve_l": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "np.abs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ufunc"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "abs"
+  }
+ ],
+ "np.argmax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "_ArrayFunctionDispatcher"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "argmax"
+  }
+ ],
+ "np.array": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "array"
+  }
+ ],
+ "np.concatenate": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "_ArrayFunctionDispatcher"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "concatenate"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "nrn_res": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results"
+  }
+ ],
+ "nrn_res.plot_recruited_fibers": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_recruited_fibers"
+  }
+ ],
+ "nrn_res_2": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results"
+  }
+ ],
+ "nrn_res_2.plot_recruited_fibers": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._nerve_results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "sim_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Results",
+   "module_short": "nrv.backend._NRV_Results",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_results.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv.backend._NRV_Class",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv.backend",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class.plot_recruited_fibers"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict.plot_recruited_fibers"
+  }
+ ],
+ "nrv.eit.EIT2DProblem": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "EIT2DProblem"
+  }
+ ],
+ "nrv.eit.eit_forward._setup_problem": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "_setup_problem"
+  }
+ ],
+ "nrv.eit.eit_forward.build_mesh": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "build_mesh"
+  }
+ ],
+ "nrv.eit.eit_forward.nerve_res_file": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "nerve_res_file"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "nerve_res_file"
+  }
+ ],
+ "nrv.eit.eit_forward.run_and_savefem": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "run_and_savefem"
+  }
+ ],
+ "nrv.eit.eit_forward.simulate_eit": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "simulate_eit"
+  }
+ ],
+ "nrv.eit.eit_forward.simulate_nerve": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.eit_forward",
+   "module_short": "nrv.eit.eit_forward",
+   "name": "simulate_nerve"
+  }
+ ],
+ "nrv.eit.pyeit_inverse": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit",
+   "module_short": "nrv.eit",
+   "name": "pyeit_inverse"
+  }
+ ],
+ "nrv.eit.results.eit_forward_results": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.results",
+   "module_short": "nrv.eit.results",
+   "name": "eit_forward_results"
+  }
+ ],
+ "nrv.eit.utils.sample_nerve_results": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.eit.utils",
+   "module_short": "nrv.eit.utils",
+   "name": "sample_nerve_results"
+  }
+ ],
+ "nrv.fascicle": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._fascicles",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "fascicle"
+  }
+ ],
+ "nrv.nerve": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._nerve",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "nrv.nmod.nerve": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "nerve"
+  }
+ ],
+ "nrv.nmod.nerve.set_axons_parameters": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.nerve",
+   "module_short": "nrv.nmod.nerve",
+   "name": "set_axons_parameters"
+  }
+ ],
+ "nrv.nmod.nerve.simulate": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.nerve",
+   "module_short": "nrv.nmod.nerve",
+   "name": "simulate"
+  }
+ ],
+ "nrv.nmod.results.nerve_results": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "nerve_results"
+  }
+ ],
+ "nrv.nrv.nmod.nerve.insert_I_Clamp": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "nrv.nrv.nmod.nerve",
+   "module_short": "nrv.nrv.nmod.nerve",
+   "name": "insert_I_Clamp"
+  }
+ ],
+ "os.listdir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "listdir"
+  }
+ ],
+ "outer_d": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "parameters": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "pat": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "tuple"
+  }
+ ],
+ "percent_unmyel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "plt.figure": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "figure"
+  }
+ ],
+ "plt.plot": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "plot"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "plt.title": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "title"
+  }
+ ],
+ "plt.xlabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "xlabel"
+  }
+ ],
+ "plt.ylabel": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "ylabel"
+  }
+ ],
+ "res_dir": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "sigma_method": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "sim_param": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "dict"
+  }
+ ],
+ "subfigs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "t_iclamp": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "t_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "test_id": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "unmyelinated_nseg": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "use_gnd_elec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "bool"
+  }
+ ],
+ "v0": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "v1": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "x_rec": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ]
+}

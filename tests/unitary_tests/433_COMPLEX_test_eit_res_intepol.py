@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     nrn_res =eit_instance.simulate_nerve(save=False, t_start=t_iclamp, sim_param=sim_param)
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
     # Simulate nerve
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     r_list[-1].plot(axs[0], i_e=i_e, which="v_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[1], i_e=i_e, which="dv_eit", marker=".", linestyle=":")
     r_list[-1].plot(axs[2], i_e=i_e, which="v_rec", linestyle=":")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     fem_res = r_list[-1]
 
     print("m nerve sim time :", fem_res['computation_time'], "s")
@@ -99,6 +99,6 @@ if __name__ == "__main__":
     axs[1,1].set_ylabel("$dV_{EIT}$ (V)")
     axs[2,1].set_ylabel("$V_{REC}$ (mV)")
     axs[2,1].set_xlabel("time (ms)")
-    fig.savefig(f"./unitary_tests/figures/{test_id}_B.pdf")
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
     del fem_res

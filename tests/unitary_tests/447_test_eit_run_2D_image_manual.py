@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
 
     ## Impedance simulation
-    eit_instance._define_problem()
+    eit_instance._setup_problem()
     # Build mesh
     eit_instance.build_mesh()
 
@@ -104,10 +104,10 @@ if __name__ == "__main__":
             axs = np.concatenate([axs, axs2[1:-1]])
 
             eit.scale_axs(axs=axs2, e_gnd=[0], has_nerve=True)
-        fig.savefig(f"./unitary_tests/figures/{test_id}_A.pdf")
+        fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
 
-    def extract_pyEIT_meas(res:eit.eit_class_results, i_t:int=0, i_f:int=0, verbose:bool=False)->np.ndarray:
+    def extract_pyEIT_meas(res:eit.eit_forward_results, i_t:int=0, i_f:int=0, verbose:bool=False)->np.ndarray:
         if not res.is_multi_patern:
             return None
         i_p0 = res["p"][0]

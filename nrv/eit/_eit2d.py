@@ -1,4 +1,3 @@
-
 from dolfinx.fem.petsc import LinearProblem
 from ufl import TestFunction, TrialFunction, grad, inner, Measure
 from basix.ufl import element
@@ -65,6 +64,9 @@ class EIT2DProblem(eit_forward):
         self.sigma_method:str="avg_ind"
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
         
+    @property
+    def dim(self)->int:
+        return 2
 
     @property
     def x_bounds_fem(self):
@@ -75,18 +77,15 @@ class EIT2DProblem(eit_forward):
         return self.x_rec
 
 
-    def _define_problem(self):
-        super()._define_problem()
+    def _setup_problem(self):
+        super()._setup_problem()
         self.r_cir = self.nerve_results.D / 2
 
         self.n_fa = self.nerve_results.n_fasc
-        # self.r_fa = self.fasc_properties[:, 1]/2
-        # self.y_fa = self.fasc_properties[:, 2]
-        # self.z_fa = self.fasc_properties[:, 3]
 
         self.r_ax = self.axnod_d/2
-        self.y_ax = self._axons_pop_ppts["y"]
-        self.z_ax = self._axons_pop_ppts["z"]
+        self.y_ax = self._axons_pop_ppts["y"].to_numpy(dtype=float)
+        self.z_ax = self._axons_pop_ppts["z"].to_numpy(dtype=float)
         self.UN = uni.S / uni.m
         self.unaligned_axons = np.array([])
 
@@ -165,8 +164,6 @@ class EIT2DProblem(eit_forward):
         loop = gmsh.model.occ.addCurveLoop([curve])
         surf = gmsh.model.occ.addPlaneSurface([loop])
         gmsh.model.occ.synchronize()
-
-
         return surf
 
 
@@ -185,7 +182,7 @@ class EIT2DProblem(eit_forward):
         __ts = perf_counter()
         # check if problem is defined
         if not self.defined_pb:
-            self._define_problem()
+            self._setup_problem()
         
         if with_axons:
             __n_ax = self.n_c
@@ -277,8 +274,7 @@ class EIT2DProblem(eit_forward):
             # Fascicles surfaces
             for i in range(self.n_fa):
                 bb_mask = np.allclose(np.round(bbox, 4), fasc_bbox[i])
-                com_mask = in_bbox(y, z, fasc_bbox[i])
-                if bb_mask & com_mask:
+                if bb_mask:
                     id_elt_fa[i] += [surf[1]]
             # Axons surfaces
             for i in range(__n_ax):
