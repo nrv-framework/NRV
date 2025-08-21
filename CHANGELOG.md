@@ -9,9 +9,9 @@ All notable changes to NRV are summed up in this file.
 - Added Fixing [Tutorial 6](docs/tutorials/6_play_with_eit.py) --- Play with EIT using NRV.
 - Added first version of [EIT users' guide](docs/usersguide/eit.rst)
 - Version of deprecation of tests added as comment
-
 ### Fixed
 - Import problem solved (fciotti suggestion), by adding nrv.nmod.utils in setup file
+- Adding static doc to the git repository in docs/_nrv (to speed up compilation and avoid time out error from readthedoc). Think to regenerate locally for future updates.
 
 
 ## [1.2.2] - 2025-07-09

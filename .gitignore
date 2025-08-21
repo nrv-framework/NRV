@@ -207,7 +207,7 @@ tests/log_NRV_test.txt
 .vscode/settings.json
 tests/log_NRV_test.txt
 .vscode/*
-docs/_nrv/*
+# docs/_nrv/*
 
 # logs
 *.log
