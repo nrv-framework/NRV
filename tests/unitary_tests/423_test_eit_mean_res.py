@@ -1,4 +1,4 @@
-import eit
+import nrv.eit as eit
 import matplotlib.pyplot as plt
 import numpy as np
 from pandas import DataFrame
@@ -15,13 +15,13 @@ if __name__ == "__main__":
     labelu = "S0_2Dv1_static_0"
     labelm = "S0_3D_static_0"
 
-    res_dir  = f"./unitary_tests/results/"
-    fem_resu = eit.load_res(label=labelu,res_dname=res_dir)
-    fem_resm = eit.load_res(label=labelm,res_dname=res_dir)
+    res_fname_1  = f"./unitary_tests/sources/SA_1_fem.json"
+    res_fname_2  = f"./unitary_tests/sources/SA_1_fem.json"
 
+    fem_res_1 = eit.results.eit_forward_results(data=res_fname_1)
+    fem_res_2 = eit.results.eit_forward_results(data=res_fname_2)
+    l_res = eit.results.eit_results_list(results=[fem_res_1, fem_res_2])
 
-
-    l_res = eit.eit_results_list(results=[fem_resu, fem_resm])
 
     t = l_res.t()
 

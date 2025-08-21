@@ -12,7 +12,7 @@ if __name__ == "__main__":
     src_f = [f"./sources/REC_{i}_fem.json" for i in range(3,6)]
     overwrite_rfile = False
 
-    r_list = eit.eit_results_list(results=src_f, include_rec=True)
+    r_list = eit.results.eit_results_list(results=src_f, include_rec=True)
     print(r_list.has_nerve_res, r_list["v_rec"].shape)
     print(r_list.has_nerve_res, r_list.get_res(which="v_rec").shape)
     reccap_ppt = r_list.get_reccap_ppt()

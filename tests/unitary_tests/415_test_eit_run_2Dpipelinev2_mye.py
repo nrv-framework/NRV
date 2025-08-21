@@ -26,7 +26,7 @@ if __name__ == "__main__":
     dt_fem = t_sim/(3*n_proc_global-1) # ms
 
 
-    sigma_method = "mean"
+    sigma_method = "single_val"
 
     parameters = {"x_rec":x_rec, "dt_fem":dt_fem,"n_proc_global":n_proc_global, "l_elec":l_elec, "l_fem":l_fem, "i_drive":i_drive, "sigma_method":sigma_method}
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id, **parameters)

@@ -36,7 +36,7 @@ if __name__ == "__main__":
         (-1,dt_1),
          ]# ms
     n_fem_step = 10*n_proc_global
-    sigma_method = "mean"
+    sigma_method = "avg_ind"
 
 
     parameters = {"x_rec":x_rec, "dt_fem":dt_fem,"n_proc_global":n_proc_global, "l_elec":l_elec, "l_fem":l_fem, "i_drive":i_drive, "sigma_method":sigma_method}

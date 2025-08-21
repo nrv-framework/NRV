@@ -41,7 +41,7 @@ if __name__ == "__main__":
             parameters["aplha_fem_step"] = 0
 
 
-        eit_instance = eit.EIT2DProblemv2(nerves_fname, res_dname=res_dir, label=test_id+f"_{i}", **parameters)
+        eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id+f"_{i}", **parameters)
 
         ## Nerve simulation
         sim_param = {"t_sim":t_sim}

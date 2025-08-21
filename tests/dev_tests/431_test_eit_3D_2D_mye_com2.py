@@ -98,32 +98,32 @@ if __name__ == "__main__":
     del eit_instance
 
     i_r_ = np.arange(len(r_list))
-    r_list = eit.eit_results_list(results=r_list)
+    r_list = eit.results.eit_results_list(results=r_list)
     labels = [r["label"] for r in r_list.res_info.values()]
 
-    fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
+    fig, axs = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axs = eit.utils.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
     dv_pc = r_list.get_res(i_res=i_r_, which="dv_eit",pc=True)
-    eit.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv_pc, i_res=i_r_, which="dv_eit")
-    axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
+    eit.utils.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv_pc, i_res=i_r_, which="dv_eit")
+    axs = eit.utils.scale_axs(axs=axs, unit_y="V", zerox=False)
     axs[0].legend(labels)
     fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
 
-    fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
+    fig, axs = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axs = eit.utils.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
     dv = r_list.get_res(i_res=i_r_, which="dv_eit",pc=False)
-    eit.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv, i_res=i_r_,linestyle=":", alpha=.5)
+    eit.utils.plot_all_elec(axs=axs, t=r_list.t(), res_list=dv, i_res=i_r_,linestyle=":", alpha=.5)
 
-    axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
+    axs = eit.utils.scale_axs(axs=axs, unit_y="V", zerox=False)
     fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
 
-    fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
+    fig, axs = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axs = eit.utils.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
     v_ = r_list.get_res(i_res=i_r_, which="v_eit")
-    eit.plot_all_elec(axs=axs, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
+    eit.utils.plot_all_elec(axs=axs, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
 
-    # axs = eit.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1]), which="dv_eit")
-    axs = eit.scale_axs(axs=axs, unit_y="V", zerox=False)
+    # axs = eit.utils.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1]), which="dv_eit")
+    axs = eit.utils.scale_axs(axs=axs, unit_y="V", zerox=False)
     fig.savefig(f"./unitary_tests/figures/{test_id}_C.png")
 
     # plt.show()

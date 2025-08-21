@@ -1,7 +1,14 @@
 from multiprocessing import Pool, Manager
 from rich.live import Live
 from rich.table import Table
-from rich.progress import Progress, BarColumn, TimeRemainingColumn, TimeElapsedColumn, track, MofNCompleteColumn
+from rich.progress import (
+    Progress,
+    BarColumn,
+    TimeRemainingColumn,
+    TimeElapsedColumn,
+    track,
+    MofNCompleteColumn,
+)
 from typing import Iterable, Literal
 
 from petsc4py.PETSc import ScalarType
@@ -13,7 +20,13 @@ import numpy as np
 import os
 import traceback
 
-from .utils._misc import split_job_from_arrays, compute_myelin_ppt, sample_nerve_results, touch, sample_keys_mdt
+from .utils._misc import (
+    split_job_from_arrays,
+    compute_myelin_ppt,
+    sample_nerve_results,
+    touch,
+    sample_keys_mdt,
+)
 from .results import eit_forward_results
 
 from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning
@@ -23,7 +36,8 @@ from ..fmod import load_material, recorder
 from ..utils import convert, get_MRG_parameters
 from ..utils.geom import CShape
 
-static_env = np.dtype(ScalarType).kind != 'c'
+static_env = np.dtype(ScalarType).kind != "c"
+
 
 class eit_forward(NRV_class):
     """
@@ -32,7 +46,7 @@ class eit_forward(NRV_class):
     This class provides the interface and core logic for simulating EIT problems on nerve models, including
     nerve simulation, mesh generation, FEM problem definition, and result management. It supports multi-core
     parallelization, custom electrode protocols, and backup/retry mechanisms for failed simulation steps.
-    
+
     Attributes
     ----------
     label : str
@@ -208,8 +222,9 @@ class eit_forward(NRV_class):
     - Uses numpy array formalism for simulation data.
     - Supports multiprocessing for large-scale simulations.
     """
+
     @abstractmethod
-    def __init__(self, nervedata, res_dname=None, label="eit_1",**parameters):
+    def __init__(self, nervedata, res_dname=None, label="eit_1", **parameters):
         """
         Initialize the EIT forward simulation class.
 
@@ -234,7 +249,7 @@ class eit_forward(NRV_class):
             self.res_dir = res_dname
 
         # sanity checks
-        if isinstance(self.nervedata,str):
+        if isinstance(self.nervedata, str):
             if not os.path.isfile(self.nervedata):
                 raise IOError(f"No such file for nerve description: '{self.nervedata}'")
         assert isinstance(self.parameters, dict)
@@ -243,89 +258,93 @@ class eit_forward(NRV_class):
             os.mkdir(self.res_dir)
 
         # loading nerve files
-        self.nerve:nerve = load_any(self.nervedata)
+        self.nerve: nerve = load_any(self.nervedata)
         self.is_nerve_res = "results" in self.nerve.nrv_type
-        self.l_nerve:None|float = None
+        self.l_nerve: None | float = None
         ## default parameters
 
         # Electrodes context
         # (supposed to be CUFF_MP See if it can be generalised)
-        # improvement label: 
+        # improvement label:
         # TODO custom_eit_elec
-        self.x_rec:float = 2000
-        self.n_elec:int = 8
-        self.inj_offset:int = 5
+        self.x_rec: float = 2000
+        self.n_elec: int = 8
+        self.inj_offset: int = 5
         self.inj_protocol_type = "single"
         #:float: current amplitude injected in uA. for impedance meau
-        self.i_drive = 1 # uA
-        self.l_elec = 30 # um
+        self.i_drive = 1  # uA
+        self.l_elec = 30  # um
         self.gnd_elec_id = 0
         self.use_gnd_elec = False
 
-        self.freqs:np.ndarray = np.ones(1) # kHz
-        self.times:np.ndarray = np.zeros(1) # ms
-        self.current_freq:float = 0
+        self.freqs: np.ndarray = np.ones(1)  # kHz
+        self.times: np.ndarray = np.zeros(1)  # ms
+        self.current_freq: float = 0
 
         # FEM simulation Parameters
-        self.dt_fem:float = 0.02
-        self.t_start_fem:float = 0
-        self.t_stop_fem:float = -1
-        self.n_fem_step:None|int = None
-        self.aplha_fem_step:bool = 0.001
-        self.l_fem:bool = 10 * self.l_elec
-        self.use_pbar:bool = True
+        self.dt_fem: float = 0.02
+        self.t_start_fem: float = 0
+        self.t_stop_fem: float = -1
+        self.n_fem_step: None | int = None
+        self.aplha_fem_step: bool = 0.001
+        self.l_fem: bool = 10 * self.l_elec
+        self.use_pbar: bool = True
 
         # Material properties
-        self.ax_mem_th:float = convert(10, unitin="nm", unitout="um")  # um 
+        self.ax_mem_th: float = convert(10, unitin="nm", unitout="um")  # um
         #! changed from m to um 04/02/25 as all other length are in um
-        self.sigma_epi:float = convert(load_material("epineurium").sigma, unitin="S/m", unitout="S/m")  # S/m
-        self.sigma_endo:float = convert(load_material("endoneurium_bhadra").sigma, unitin="S/m", unitout="S/m")  # S/m
+        self.sigma_epi: float = convert(
+            load_material("epineurium").sigma, unitin="S/m", unitout="S/m"
+        )  # S/m
+        self.sigma_endo: float = convert(
+            load_material("endoneurium_bhadra").sigma, unitin="S/m", unitout="S/m"
+        )  # S/m
         # self.sigma_endo = self.sigma_epi  # S/m
-        self.sigma_axp:float = convert(1.83, unitin="S/m", unitout="S/m")  # S/m
+        self.sigma_axp: float = convert(1.83, unitin="S/m", unitout="S/m")  # S/m
 
-
-        self.myelin_mat:float = compute_myelin_ppt(d=10)
+        self.myelin_mat: float = compute_myelin_ppt(d=10)
         # print(self.myelin_mat)
 
-        self.n_proc_global:None|int = None
-        self.n_proc_nerve:None|int = None
-        self.n_proc_mesh:None|int = None
-        self.n_proc_fem:None|int = None
+        self.n_proc_global: None | int = None
+        self.n_proc_nerve: None | int = None
+        self.n_proc_mesh: None | int = None
+        self.n_proc_fem: None | int = None
 
-        self.nerve_timer:float = 0
-        self.mesh_timer:float = 0
-        self.fem_timer:float = 0
+        self.nerve_timer: float = 0
+        self.mesh_timer: float = 0
+        self.fem_timer: float = 0
 
-        #: bool: if true simulation resutls are save on the fligth 
-        self.use_backup:bool = False
-        self.__backup_fname: str = "./." + f"_BCKP_Store_{perf_counter()}".replace(".", "")
+        #: bool: if true simulation resutls are save on the fligth
+        self.use_backup: bool = False
+        self.__backup_fname: str = "./." + f"_BCKP_Store_{perf_counter()}".replace(
+            ".", ""
+        )
 
         # mesh resolution rate
-        self.n_elt_r:float = 0.2
-        self.f_elt_r:float = 0.1
-        self.a_elt_r:float = 0.3
-        self.e_elt_r:float = 0.2
+        self.n_elt_r: float = 0.2
+        self.f_elt_r: float = 0.1
+        self.a_elt_r: float = 0.3
+        self.e_elt_r: float = 0.2
 
         # overwriting parameters
         self.set_parameters(**parameters)
 
         # Simulations Outputs
-        self.v_elecs:None|np.ndarray = None
+        self.v_elecs: None | np.ndarray = None
         # fnames
-        self.__nerve_res_file:None|str = None
-        self.__nerve_mesh_file:None|str = None
-        self.__fem_res_file:None|str = None
+        self.__nerve_res_file: None | str = None
+        self.__nerve_mesh_file: None | str = None
+        self.__fem_res_file: None | str = None
 
         # current results
-        self.nerve_results:None|nerve_results = None
+        self.nerve_results: None | nerve_results = None
         self.mesh = None
-        self.mesh_info:dict = {}
-        self.fem_results:eit_forward_results = eit_forward_results()
+        self.mesh_info: dict = {}
+        self.fem_results: eit_forward_results = eit_forward_results()
         # EIT FEM simulation steps
-        self.mesh_built:bool = False
-        self.defined_pb:bool = False
-        self.fem_initialized:bool = False
-
+        self.mesh_built: bool = False
+        self.defined_pb: bool = False
+        self.fem_initialized: bool = False
 
         if static_env:
             self.petsc_opt = {
@@ -345,7 +364,7 @@ class eit_forward(NRV_class):
             }
 
     @property
-    def timers_dict(self)->dict:
+    def timers_dict(self) -> dict:
         """
         Duration of all the simulations
 
@@ -355,13 +374,13 @@ class eit_forward(NRV_class):
             Dictionary with timers for nerve, mesh, and FEM simulation.
         """
         return {
-            "nerve_timer":self.nerve_timer,
-            "mesh_timer":self.mesh_timer,
-            "fem_timer":self.fem_timer,
+            "nerve_timer": self.nerve_timer,
+            "mesh_timer": self.mesh_timer,
+            "fem_timer": self.fem_timer,
         }
 
     @property
-    def nerve_res_file(self)->str:
+    def nerve_res_file(self) -> str:
         """
         File where the nerve simulation results are saved
 
@@ -378,7 +397,7 @@ class eit_forward(NRV_class):
         return self.__nerve_res_file
 
     @property
-    def nerve_mesh_file(self)->str:
+    def nerve_mesh_file(self) -> str:
         """
         File where the nerve mesh is saved
 
@@ -395,7 +414,7 @@ class eit_forward(NRV_class):
         return self.__nerve_mesh_file
 
     @property
-    def fem_res_file(self)->str:
+    def fem_res_file(self) -> str:
         """
         File where the fem results are saved
 
@@ -412,7 +431,7 @@ class eit_forward(NRV_class):
         return self.__fem_res_file
 
     @property
-    def x_bounds_fem(self)->tuple[float]:
+    def x_bounds_fem(self) -> tuple[float]:
         """
         x bounds of the nerve section over which FEM is simulated
 
@@ -423,7 +442,7 @@ class eit_forward(NRV_class):
         pass
 
     @property
-    def i_drive_A(self)->float:
+    def i_drive_A(self) -> float:
         """
         Injected current in A
 
@@ -435,7 +454,7 @@ class eit_forward(NRV_class):
         return convert(self.i_drive, unitin="uA", unitout="A")
 
     @property
-    def dim(self)->Literal[None,2,3]:
+    def dim(self) -> Literal[None, 2, 3]:
         """
         Spatial dimension number of the problem.
 
@@ -446,7 +465,7 @@ class eit_forward(NRV_class):
         return self.n_elec
 
     @property
-    def n_e(self)->int:
+    def n_e(self) -> int:
         """
         Number of electrodes.
 
@@ -457,7 +476,7 @@ class eit_forward(NRV_class):
         return self.n_elec
 
     @property
-    def n_t(self)->int:
+    def n_t(self) -> int:
         """
         Number of time step in the EIT simulation.
 
@@ -468,7 +487,7 @@ class eit_forward(NRV_class):
         return len(self.times)
 
     @property
-    def n_f(self)->int:
+    def n_f(self) -> int:
         """
         Number of frequency step in the EIT simulation.
 
@@ -479,10 +498,9 @@ class eit_forward(NRV_class):
         if static_env:
             return 1
         return len(self.freqs)
-    
 
     @property
-    def n_p(self)->int:
+    def n_p(self) -> int:
         """
         Number of injection paterns in the protocol.
 
@@ -491,8 +509,8 @@ class eit_forward(NRV_class):
         int
         """
         return len(self.inj_protocol)
-    
-    def v_shape(self)->tuple[int]:
+
+    def v_shape(self) -> tuple[int]:
         """
         Get the shape of the voltage results array.
 
@@ -504,9 +522,8 @@ class eit_forward(NRV_class):
         _s = [self.n_p, self.n_f, self.n_t, self.n_e]
         return tuple([_n for _n in _s if _n > 1])
 
-
     @property
-    def inj_protocol(self)->list[tuple]:
+    def inj_protocol(self) -> list[tuple]:
         """
         Injection protocole.
 
@@ -530,15 +547,22 @@ class eit_forward(NRV_class):
         if isinstance(self.inj_protocol_type, list):
             __inj_prot = self.inj_protocol_type
         elif self.inj_protocol_type == "simple":
-            __inj_prot = [(i_inj, (i_inj + self.inj_offset) % self.n_elec) for i_inj in range(self.n_elec)]
+            __inj_prot = [
+                (i_inj, (i_inj + self.inj_offset) % self.n_elec)
+                for i_inj in range(self.n_elec)
+            ]
         elif self.inj_protocol_type == "single":
-            __inj_prot = [(i_inj, (i_inj + self.inj_offset) % self.n_elec) for i_inj in range(1)]
+            __inj_prot = [
+                (i_inj, (i_inj + self.inj_offset) % self.n_elec) for i_inj in range(1)
+            ]
         else:
-            raise ValueError(f"Unrecognized injection protocole type: {self.inj_protocol_type}")
+            raise ValueError(
+                f"Unrecognized injection protocole type: {self.inj_protocol_type}"
+            )
         return __inj_prot
 
     @property
-    def is_multi_patern(self)->bool:
+    def is_multi_patern(self) -> bool:
         """
         Check if the injection protocol contains more than one pattern.
 
@@ -547,9 +571,9 @@ class eit_forward(NRV_class):
         bool
             True if multiple patterns, False otherwise.
         """
-        return len(self.inj_protocol)>1
+        return len(self.inj_protocol) > 1
 
-    def get_nproc(self, which:str="")->int:
+    def get_nproc(self, which: str = "") -> int:
         """
         return the number of process of a given simualtion step
 
@@ -578,7 +602,6 @@ class eit_forward(NRV_class):
             n_proc = self.n_proc_global
         return n_proc
 
-
     def __check_geometry(self):
         """
         Check the geometry consistency for the simulation.
@@ -589,23 +612,26 @@ class eit_forward(NRV_class):
             If geometry parameters are inconsistent.
         """
         # assert self.dt_fem >= self.nerve.dt, "Nerve simulation dt should be smaller than dt_fem, please check you parameters before lanching simulation"
-        assert self.dim == 2 or (self.l_fem >= self.l_elec), "elec out of FEM x-boundaries, please check you parameters before lanching simulation"
-        assert self.x_rec + self.l_fem/2 <= self.nerve_results.L, "FEM x-boundaries out of the nerve, please check you parameters before lanching simulation"
-
+        assert self.dim == 2 or (
+            self.l_fem >= self.l_elec
+        ), "elec out of FEM x-boundaries, please check you parameters before lanching simulation"
+        assert (
+            self.x_rec + self.l_fem / 2 <= self.nerve_results.L
+        ), "FEM x-boundaries out of the nerve, please check you parameters before lanching simulation"
 
     # TODO: rename method: simulate_nerve
     def simulate_nerve(
         self,
-        t_start:float=1,
-        duration:float=0.2,
-        amplitude:float=5,
+        t_start: float = 1,
+        duration: float = 0.2,
+        amplitude: float = 5,
         expr: str | None = None,
         mask_labels: None | Iterable[str] | str = [],
         ax_list: None | list = None,
         fasc_list: None | list = None,
-        sim_param:dict={},
-        ax_param:dict={},
-        save:bool=False
+        sim_param: dict = {},
+        ax_param: dict = {},
+        save: bool = False,
     ):
         """
         Simulate the neural context: fibres conductivity and extracellular context.
@@ -640,7 +666,9 @@ class eit_forward(NRV_class):
         """
         __ts = perf_counter()
         if not self.is_nerve_res:
-            parameters.set_ncores(n_nrv=self.get_nproc("nerve"), n_nmod=self.n_proc_nerve)
+            parameters.set_ncores(
+                n_nrv=self.get_nproc("nerve"), n_nmod=self.n_proc_nerve
+            )
             if self.l_nerve is not None:
                 self.nerve.define_length(self.l_nerve)
 
@@ -651,15 +679,29 @@ class eit_forward(NRV_class):
 
             # TODO: idealy reset Iclamps... need new methods in axon
             # current clamp
-            self.nerve.insert_I_Clamp(position=0, t_start=t_start, duration=duration, amplitude=amplitude,expr=expr, mask_labels=mask_labels, ax_list=ax_list,fasc_list=fasc_list)
+            self.nerve.insert_I_Clamp(
+                position=0,
+                t_start=t_start,
+                duration=duration,
+                amplitude=amplitude,
+                expr=expr,
+                mask_labels=mask_labels,
+                ax_list=ax_list,
+                fasc_list=fasc_list,
+            )
             # Analitical recorder
-            __testrec = recorder('endoneurium_ranck')
+            __testrec = recorder("endoneurium_ranck")
             for i_elec in range(self.n_elec):
-                z_elec = self.nerve.D/2 * np.exp(2j*i_elec*np.pi/self.n_elec)
+                z_elec = self.nerve.D / 2 * np.exp(2j * i_elec * np.pi / self.n_elec)
                 __testrec.set_recording_point(self.x_rec, z_elec.real, z_elec.imag)
             self.nerve.attach_extracellular_recorder(__testrec)
 
-            pp_kwg = {"keys_to_sample":"g_mem", "x_bounds": self.x_bounds_fem, "t_start_rec":self.t_start_fem, "t_stop_rec":self.t_stop_fem}
+            pp_kwg = {
+                "keys_to_sample": "g_mem",
+                "x_bounds": self.x_bounds_fem,
+                "t_start_rec": self.t_start_fem,
+                "t_stop_rec": self.t_stop_fem,
+            }
             if self.n_fem_step is None:
                 pp_kwg["sample_dt"] = self.dt_fem
             else:
@@ -674,26 +716,27 @@ class eit_forward(NRV_class):
             )
             if self.n_fem_step is not None:
                 d_iclamp = duration
-                if self.x_rec >10000:
+                if self.x_rec > 10000:
                     d_iclamp = 0
-                self.nerve_results = sample_nerve_results(self.nerve_results, self.n_fem_step, alpha=self.aplha_fem_step, t_iclamp=t_start, d_iclamp=d_iclamp)
-            self.nerve_results.save(save=save, fname=self.nerve_res_file, rec_context=True)
+                self.nerve_results = sample_nerve_results(
+                    self.nerve_results,
+                    self.n_fem_step,
+                    alpha=self.aplha_fem_step,
+                    t_iclamp=t_start,
+                    d_iclamp=d_iclamp,
+                )
+            self.nerve_results.save(
+                save=save, fname=self.nerve_res_file, rec_context=True
+            )
         else:
             self.nerve_results = self.nerve
         __tf = perf_counter()
-        self.nerve_timer +=  __tf - __ts
+        self.nerve_timer += __tf - __ts
         self.defined_pb = False
         return self.nerve_results
 
-
     def simulate_recording(
-        self,
-        t_start=1,
-        duration=0.2,
-        amplitude=5,
-        sim_param={},
-        ax_param={},
-        save=True
+        self, t_start=1, duration=0.2, amplitude=5, sim_param={}, ax_param={}, save=True
     ):
         """
         Simulate the neural context: fibres conductivity and extracelullar context.
@@ -722,7 +765,9 @@ class eit_forward(NRV_class):
         nerve_results
             Results of the nerve simulation.
         """
-        rise_warning("Deprecated: simulate_recording is deprecated use simulate_nerve method instead")
+        rise_warning(
+            "Deprecated: simulate_recording is deprecated use simulate_nerve method instead"
+        )
         return self.simulate_nerve(
             t_start=t_start,
             duration=duration,
@@ -740,24 +785,24 @@ class eit_forward(NRV_class):
 
         # Recovering nerve pties from nrvsim
         self.times = self.nerve_results[self.nerve_results.fascicle_keys[0]].axon0.t
-        self.fasc_geometries:dict[str, CShape] = self.nerve_results.fasc_geometries
+        self.fasc_geometries: dict[str, CShape] = self.nerve_results.fasc_geometries
 
-        self._axons_pop_ppts:DataFrame = self.nerve_results.axons
+        self._axons_pop_ppts: DataFrame = self.nerve_results.axons
 
         self.n_c = self._axons_pop_ppts.shape[0]
-        i_mye = self._axons_pop_ppts["types"].to_numpy( dtype=bool)
-        self.axnod_d = self._axons_pop_ppts["diameters"].copy(deep=True).to_numpy(dtype=float)
-        self.axnod_d[i_mye]= get_MRG_parameters(self.axnod_d[i_mye])[2]
-        self.myelin_mat = compute_myelin_ppt(self.axnod_d)
-        self.alpha_in_c = (
-            self.ax_mem_th / (self.axnod_d/2)
+        i_mye = self._axons_pop_ppts["types"].to_numpy(dtype=bool)
+        self.axnod_d = (
+            self._axons_pop_ppts["diameters"].copy(deep=True).to_numpy(dtype=float)
         )
+        self.axnod_d[i_mye] = get_MRG_parameters(self.axnod_d[i_mye])[2]
+        self.myelin_mat = compute_myelin_ppt(self.axnod_d)
+        self.alpha_in_c = self.ax_mem_th / (self.axnod_d / 2)
         # Setting electrode properties
         self.w_elec = 0.5 * np.pi * self.nerve_results.D / self.n_elec
         self.electrodes = {}
 
         for E in range(self.n_elec):
-            E_label = "E"+str(E)
+            E_label = "E" + str(E)
             self.electrodes[E_label] = 0
         # TODO custom_eit_elec
         # change line bellow by an attach_electrode method(elec:FEM_electrode) method ?
@@ -769,15 +814,21 @@ class eit_forward(NRV_class):
 
         # Setting mesh resolution
         self.res_n = self.nerve_results.D * self.n_elt_r
-        self.res_f = [2 * np.min(g.radius) * self.f_elt_r for g in self.fasc_geometries.values()]
-        self.res_a = self._axons_pop_ppts["diameters"].to_numpy(dtype=float) * self.a_elt_r
+        self.res_f = [
+            2 * np.min(g.radius) * self.f_elt_r for g in self.fasc_geometries.values()
+        ]
+        self.res_a = (
+            self._axons_pop_ppts["diameters"].to_numpy(dtype=float) * self.a_elt_r
+        )
         self.res_e = self.w_elec * self.e_elt_r
 
     def _define_problem(self):
-        rise_warning("Deprecated: _define_problem is deprecated use _setup_problem method instead")
+        rise_warning(
+            "Deprecated: _define_problem is deprecated use _setup_problem method instead"
+        )
         self._setup_problem()
 
-    def build_mesh(self, with_axons:bool=True):
+    def build_mesh(self, with_axons: bool = True):
         """
         Create the mesh for FEM simulation.
 
@@ -788,7 +839,6 @@ class eit_forward(NRV_class):
         """
         if not self.defined_pb:
             self._setup_problem()
-
 
     def _init_fem(self):
         """
@@ -815,7 +865,6 @@ class eit_forward(NRV_class):
         self.__fem_res_file = None
         self.fem_results = eit_forward_results()
 
-
     def _update_mat_axons(self, t: float) -> bool:
         """
         Update axon material properties between time steps.
@@ -832,7 +881,9 @@ class eit_forward(NRV_class):
         """
         return True
 
-    def _compute_v_elec(self, sfile:None|str=None, i_t:int=0)->np.ndarray|None:
+    def _compute_v_elec(
+        self, sfile: None | str = None, i_t: int = 0
+    ) -> np.ndarray | None:
         """
         Compute electrode voltages for a given time step.
 
@@ -850,9 +901,9 @@ class eit_forward(NRV_class):
         """
         pass
 
-    def __check_v_elec(self, v_elecs:np.ndarray, task_id:int, i_t:int)->np.ndarray:
+    def __check_v_elec(self, v_elecs: np.ndarray, task_id: int, i_t: int) -> np.ndarray:
         """
-        Internal use only: check if an FEM step did not fail (i.e. corresponding v_elec are not NaN). In such cases set the voltage value to 0 and reset the FEM. Additionally, if backup saving is activated, save the results in backup file. 
+        Internal use only: check if an FEM step did not fail (i.e. corresponding v_elec are not NaN). In such cases set the voltage value to 0 and reset the FEM. Additionally, if backup saving is activated, save the results in backup file.
 
         Parameters
         ----------
@@ -882,13 +933,13 @@ class eit_forward(NRV_class):
             file_object.close()
         return v_elecs
 
-    def run_fem(self, task_info:list)->np.ndarray:
+    def run_fem(self, task_info: list) -> np.ndarray:
         """
         Run the FEM simulation for all time step of a given task (process). Depending of the problem definition, the simulation is run for all injection partens and only for the current frequency.
 
         Note
         ----
-        By contrast with `self.run_fem` is that 
+        By contrast with `self.run_fem` is that
 
         Parameters
         ----------
@@ -925,7 +976,7 @@ class eit_forward(NRV_class):
             task = progress.add_task(task_name, total=total)
             progress.advance(task, 0)
             progress_dict[task_id] = progress.get_renderable()
-        if len(_sim_list)>0 and not self.fem_initialized:
+        if len(_sim_list) > 0 and not self.fem_initialized:
             try:
                 self._init_fem()
             except TimeoutError:
@@ -946,14 +997,14 @@ class eit_forward(NRV_class):
             if i_ == 0:
                 i_t_1 = -1
             else:
-                i_t_1 = _sim_list[i_-1]
+                i_t_1 = _sim_list[i_ - 1]
             self._update_mat_axons(i_t, i_t_1)
             for i_p, inj_pat in enumerate(self.inj_protocol):
                 # Set current injection
                 for i_elec, e_str in enumerate(self.electrodes):
-                    if "E"+str(inj_pat[0]) == e_str:
+                    if "E" + str(inj_pat[0]) == e_str:
                         self.electrodes[e_str] = self.i_drive_A / self.s_elec[i_elec]
-                    elif "E"+str(inj_pat[1]) == e_str:
+                    elif "E" + str(inj_pat[1]) == e_str:
                         self.electrodes[e_str] = -self.i_drive_A / self.s_elec[i_elec]
                     else:
                         self.electrodes[e_str] = 0
@@ -966,17 +1017,17 @@ class eit_forward(NRV_class):
                         f"Simulation induced an error computing for {self.current_freq}kHz at {self.times[i_t]}ms\n"
                         + traceback.format_exc()
                     )
-                v_elecs[i_p, i_t, :] = self.__check_v_elec(v_elecs[i_p, i_t, :], task_id, i_t)
+                v_elecs[i_p, i_t, :] = self.__check_v_elec(
+                    v_elecs[i_p, i_t, :], task_id, i_t
+                )
                 # Update the shared progress state
                 if self.use_pbar:
-                    progress.update(task, advance=1 ,value=v_str)
+                    progress.update(task, advance=1, value=v_str)
                     progress_dict[task_id] = progress.get_renderable()
         return v_elecs
 
     def run_fem_1core(self, task_info):
-        """
-        
-        """
+        """ """
         task_name, task_id, total, progress_dict = task_info
         parameters.set_nrv_verbosity(2)
         _sim_list = self.sim_list[task_id]
@@ -990,14 +1041,14 @@ class eit_forward(NRV_class):
             if i_ == 0:
                 i_t_1 = -1
             else:
-                i_t_1 = _sim_list[i_-1]
+                i_t_1 = _sim_list[i_ - 1]
             self._update_mat_axons(i_t, i_t_1)
             for i_p, inj_pat in enumerate(self.inj_protocol):
                 # Set current injection
                 for i_elec, e_str in enumerate(self.electrodes):
-                    if "E"+str(inj_pat[0]) == e_str:
+                    if "E" + str(inj_pat[0]) == e_str:
                         self.electrodes[e_str] = self.i_drive_A / self.s_elec[i_elec]
-                    elif "E"+str(inj_pat[1]) == e_str:
+                    elif "E" + str(inj_pat[1]) == e_str:
                         self.electrodes[e_str] = -self.i_drive_A / self.s_elec[i_elec]
                     else:
                         self.electrodes[e_str] = 0
@@ -1010,16 +1061,18 @@ class eit_forward(NRV_class):
                         f"Simulation induced an error computing{i_t, self.current_freq} \n"
                         + traceback.format_exc()
                     )
-                v_elecs[i_p, i_t, :] = self.__check_v_elec(v_elecs[i_p, i_t, :], task_id, i_t)
+                v_elecs[i_p, i_t, :] = self.__check_v_elec(
+                    v_elecs[i_p, i_t, :], task_id, i_t
+                )
         return v_elecs
-    
-    def run_all_fem(self, task_info:list)->np.ndarray:
+
+    def run_all_fem(self, task_info: list) -> np.ndarray:
         """
         Run the FEM simulation for all time step of a given task (process). Depending of the problem definition, the simulation if run for all injection frequencies and over the whole frequency.
 
         Note
         ----
-        By contrast with `self.run_fem` is that 
+        By contrast with `self.run_fem` is that
 
         Parameters
         ----------
@@ -1043,8 +1096,10 @@ class eit_forward(NRV_class):
             else:
                 v_elecs = self.run_fem(task_info=task_info)
         else:
-            v_elecs = np.zeros((self.n_p,self.n_f, self.n_t, self.n_e), dtype=ScalarType)
-            task_info[0] = task_info[0]+f"freq 0/{self.n_f}"
+            v_elecs = np.zeros(
+                (self.n_p, self.n_f, self.n_t, self.n_e), dtype=ScalarType
+            )
+            task_info[0] = task_info[0] + f"freq 0/{self.n_f}"
             for i_f in range(self.n_f):
                 self.current_freq = self.freqs[i_f]
                 self.myelin_mat = compute_myelin_ppt(self.axnod_d, f=self.current_freq)
@@ -1056,8 +1111,9 @@ class eit_forward(NRV_class):
         self._clear_fem()
         return v_elecs
 
-
-    def simulate_eit(self, save:bool=True, sim_list:np.ndarray|None=None)->eit_forward_results:
+    def simulate_eit(
+        self, save: bool = True, sim_list: np.ndarray | None = None
+    ) -> eit_forward_results:
         """
         Run the eit problem for all time steps
 
@@ -1080,7 +1136,9 @@ class eit_forward(NRV_class):
             touch(self.__backup_fname)
         n_proc = self.get_nproc("fem")
         if sim_list is None:
-            self.sim_list = split_job_from_arrays(self.n_t, n_split=n_proc, stype="default")
+            self.sim_list = split_job_from_arrays(
+                self.n_t, n_split=n_proc, stype="default"
+            )
         else:
             if len(sim_list) < n_proc:
                 self.n_proc_fem = len(sim_list)
@@ -1088,7 +1146,14 @@ class eit_forward(NRV_class):
             self.sim_list = np.array_split(sim_list, n_proc, axis=0)
 
         # Set each process task property
-        tasks = [{"task_name": f"process {i+1} -- {n_proc} :", "total": self.n_p*len(self.sim_list[i]), "task_id": i} for i in range(n_proc)]
+        tasks = [
+            {
+                "task_name": f"process {i+1} -- {n_proc} :",
+                "total": self.n_p * len(self.sim_list[i]),
+                "task_id": i,
+            }
+            for i in range(n_proc)
+        ]
         manager = Manager()
         progress_dict = manager.dict()
         task_info_list = [
@@ -1101,7 +1166,10 @@ class eit_forward(NRV_class):
         else:
             with Pool(n_proc) as pool:
                 with Live(refresh_per_second=10) as live:
-                    async_results = [pool.apply_async(self.run_all_fem, args=(task_info,)) for task_info in task_info_list]
+                    async_results = [
+                        pool.apply_async(self.run_all_fem, args=(task_info,))
+                        for task_info in task_info_list
+                    ]
                     while any(not result.ready() for result in async_results):
                         table = Table.grid()
                         for task_id, progress in progress_dict.items():
@@ -1114,15 +1182,14 @@ class eit_forward(NRV_class):
                 pool.close()
                 pool.join()
             self.v_elecs = np.sum(arrays, axis=0).squeeze()
-        #print(self.v_elecs, type(self.v_elecs))
+        # print(self.v_elecs, type(self.v_elecs))
         self.fem_results["res_dir"] = self.res_dir
         self.fem_results["label"] = self.label
         self.fem_results["parameters"] = self.parameters
 
-        if isinstance(self.nervedata,str):
+        if isinstance(self.nervedata, str):
             self.fem_results["nervefile"] = self.nervedata
-        
-        
+
         self.fem_results["mesh_info"] = self.mesh_info
         self.fem_results["t"] = self.times
         self.fem_results["p"] = self.inj_protocol
@@ -1139,7 +1206,7 @@ class eit_forward(NRV_class):
         self.fem_results["v_eit"] = abs(self.v_elecs)
         self.fem_results["v_eit_phase"] = np.angle(self.v_elecs)
         __tf = perf_counter()
-        self.fem_timer +=  __tf - __ts
+        self.fem_timer += __tf - __ts
 
         self.fem_results["computation_time"] = self.timers_dict
         self.fem_results.incorporate_nerve_res(self.nerve_results)
@@ -1151,13 +1218,13 @@ class eit_forward(NRV_class):
             os.remove(self.__backup_fname)
         return self.fem_results
 
-
     # ----------------------------------------- #
     # Complementary and debug simulation method #
     # ----------------------------------------- #
 
-
-    def rerun_failed_steps(self, eit_results:eit_forward_results|str|None=None, save:bool=True)->eit_forward_results:
+    def rerun_failed_steps(
+        self, eit_results: eit_forward_results | str | None = None, save: bool = True
+    ) -> eit_forward_results:
         """
         Rerun failed FEM simulation steps.
 
@@ -1178,7 +1245,10 @@ class eit_forward(NRV_class):
         if isinstance(eit_results, str):
             eit_results = eit_forward_results(data=eit_results)
         if "res_dir" in eit_results and "label" in eit_results:
-            assert eit_results["res_dir"] == self.res_dir and eit_results["label"] == self.label
+            assert (
+                eit_results["res_dir"] == self.res_dir
+                and eit_results["label"] == self.label
+            )
 
         if not eit_results.has_failed_test:
             print("All good, nothing to retry")
@@ -1189,14 +1259,16 @@ class eit_forward(NRV_class):
             self.times = eit_results["t"]
             print(f"...following simulation steps will be restarted\n{sim_list}")
             self.simulate_eit(save=False, sim_list=sim_list)
-            #updating results
+            # updating results
             print("...updating results")
 
-            eit_results["computation_time"]["fem_timer"] += self.fem_results["computation_time"]["fem_timer"]
+            eit_results["computation_time"]["fem_timer"] += self.fem_results[
+                "computation_time"
+            ]["fem_timer"]
 
             eit_results.update_failed_results(
                 _v_eit=self.fem_results["v_eit"],
-                _v_eit_phase=self.fem_results["v_eit_phase"]
+                _v_eit_phase=self.fem_results["v_eit_phase"],
             )
             self.fem_results = eit_results
 
@@ -1205,7 +1277,9 @@ class eit_forward(NRV_class):
             json_dump(self.fem_results, self.fem_res_file)
         return self.fem_results
 
-    def run_and_savefem(self, sfile:str, sim_list:list[int]=[0], with_axons:bool=True)->np.ndarray:
+    def run_and_savefem(
+        self, sfile: str, sim_list: list[int] = [0], with_axons: bool = True
+    ) -> np.ndarray:
         """
         Compute only a few time step of the EIT simulation and save the computed electric field in the whole domain
 
@@ -1227,21 +1301,21 @@ class eit_forward(NRV_class):
             self._setup_problem()
         self.build_mesh(with_axons=with_axons)
 
-        if len(sim_list)>0 and not self.fem_initialized:
+        if len(sim_list) > 0 and not self.fem_initialized:
             self._init_fem()
         for i_, i_t in enumerate(sim_list):
             # update and solve
             if i_ == 0:
                 i_t_1 = -1
             else:
-                i_t_1 = sim_list[i_-1]
+                i_t_1 = sim_list[i_ - 1]
             self._update_mat_axons(i_t, i_t_1)
             for inj_pat in self.inj_protocol:
                 # Set current injection
                 for i_elec, e_str in enumerate(self.electrodes):
-                    if "E"+str(inj_pat[0]) == e_str:
+                    if "E" + str(inj_pat[0]) == e_str:
                         self.electrodes[e_str] = self.i_drive_A / self.s_elec[i_elec]
-                    elif "E"+str(inj_pat[1]) == e_str:
+                    elif "E" + str(inj_pat[1]) == e_str:
                         self.electrodes[e_str] = -self.i_drive_A / self.s_elec[i_elec]
                     else:
                         self.electrodes[e_str] = 0

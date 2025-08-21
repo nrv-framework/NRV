@@ -97,11 +97,11 @@ if __name__ == "__main__":
     del eit_instance
 
 
-    r_list = eit.eit_results_list(results=r_list)
-    fig, axs = eit.gen_fig_elec(n_e=8, figsize=(10,9))
+    r_list = eit.results.eit_results_list(results=r_list)
+    fig, axs = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
 
-    axs = eit.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
+    axs = eit.utils.add_nerve_plot(axs=axs, data=nerves_fname, drive_pair=(0,5))
 
-    axs = eit.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1,2]), which="dv_eit")
-    axs = eit.scale_axs(axs=axs)
+    axs = eit.utils.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1,2]), which="dv_eit")
+    axs = eit.utils.scale_axs(axs=axs)
     # plt.show()

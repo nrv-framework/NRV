@@ -23,7 +23,13 @@ from time import perf_counter
 from ..utils import _units as uni
 
 from ._eit_forward import eit_forward
-from .utils._misc import compute_sigma_2D_old, compute_sigma_2D, in_circle, in_bbox, compute_mye_sigma_2D
+from .utils._misc import (
+    compute_sigma_2D_old,
+    compute_sigma_2D,
+    in_circle,
+    in_bbox,
+    compute_mye_sigma_2D,
+)
 
 from ..backend import pass_info, rmv_ext
 from ..fmod.FEM.mesh_creator import get_mesh_domid
@@ -32,50 +38,63 @@ from ..nmod.results import axon_results
 from ..utils import convert
 from ..utils.geom import CShape
 
-#def empty_cache():
-    #if MCH.do_master_only_work():
-        #os.system("rm -rf ~/.cache/fenics/*")
+# def empty_cache():
+# if MCH.do_master_only_work():
+# os.system("rm -rf ~/.cache/fenics/*")
 
-sig_2D_method_list=[
+sig_2D_method_list = [
     "single_val",
     "avg_ind",
     "avg_inter",
     "avg_inter_approx",
 ]
 
-sig_2D_method_list_deprecated=[
-    "mean",
-    "convolve",
-]
+sig_2D_method_list_deprecated = {
+    "mean": "avg_ind",
+    "convolve": "avg_inter",
+}
+
 
 class EIT2DProblem(eit_forward):
-    def __init__(self, nervefile:str, res_dname:str|None=None, label:str="2deit_1", **parameters):
-        """_summary_
+    """
+    End-used class for Electrical Impedance Tomography (EIT) forward simulation in neural contexts solved with a 2D approximation.
 
-        Parameters
-        ----------
-        nervefile : str
-            file where nerve object or nerve result is stored
-        res_dname : str | None, optional
-            _description_, by default None
-        label : str, optional
-            _description_, by default "3deit_1"
-        """
-        self.sigma_method:str="avg_ind"
+    This class extends `eit_forward` to provide specialized methods for setting up, meshing, and solving EIT problems in a 2D (Oyz) plan. It supports:
+      - mesh generation with axons
+      - physical domain assignment
+      - finite element method (FEM) initialization
+      - conductivity updates.
+
+
+
+    Notes
+    -----
+    - This class is designed for 2D EIT simulations of nerve structures.
+    - Mesh generation and FEM setup rely on GMSH and FEniCS/Dolfinx libraries.
+    - Conductivity calculations support various methods, including myelinated and unmyelinated axons.
+    """
+
+    def __init__(
+        self,
+        nervefile: str,
+        res_dname: str | None = None,
+        label: str = "2deit_1",
+        **parameters
+    ):
+        self.sigma_method: str = "avg_ind"
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
-        
+
     @property
-    def dim(self)->int:
+    def dim(self) -> int:
         return 2
 
     @property
     def x_bounds_fem(self):
         if self.sigma_method in ["mean", "avg_ind"] or "inter" in self.sigma_method:
-            return (self.x_rec-self.l_elec/2, self.x_rec+self.l_elec/2)
+            return (self.x_rec - self.l_elec / 2, self.x_rec + self.l_elec / 2)
         # elif "inter"  in self.sigma_method:
         #     return (self.x_rec-self.l_fem/2, self.x_rec+self.l_fem/2)
         return self.x_rec
-
 
     def _setup_problem(self):
         super()._setup_problem()
@@ -83,12 +102,11 @@ class EIT2DProblem(eit_forward):
 
         self.n_fa = self.nerve_results.n_fasc
 
-        self.r_ax = self.axnod_d/2
+        self.r_ax = self.axnod_d / 2
         self.y_ax = self._axons_pop_ppts["y"].to_numpy(dtype=float)
         self.z_ax = self._axons_pop_ppts["z"].to_numpy(dtype=float)
         self.UN = uni.S / uni.m
         self.unaligned_axons = np.array([])
-
 
     def set_ncore_gmsh(self, ncore_meshing):
         gmsh.option.setNumber("General.NumThreads", ncore_meshing)
@@ -113,7 +131,6 @@ class EIT2DProblem(eit_forward):
             pass_info("Number of nodes : " + str(n_nodes))
             pass_info("Number of elements : " + str(n_elements))
         return n_proc, n_entities, n_nodes, n_elements
-
 
     def __add_from_cshape(
         self,
@@ -166,12 +183,11 @@ class EIT2DProblem(eit_forward):
         gmsh.model.occ.synchronize()
         return surf
 
-
-    def build_mesh(self, with_axons:bool=True):
+    def build_mesh(self, with_axons: bool = True):
         """
         creation of mesh file
 
-        Parameters 
+        Parameters
         ----------
         mesh_file: str | None, optional
             filename of the mesh, by default None
@@ -183,14 +199,14 @@ class EIT2DProblem(eit_forward):
         # check if problem is defined
         if not self.defined_pb:
             self._setup_problem()
-        
+
         if with_axons:
             __n_ax = self.n_c
         else:
             __n_ax = 0
         # MESH JOB
-        _zaxis = [0,0,1]
-        _xaxis = [-1,0,0]
+        _zaxis = [0, 0, 1]
+        _xaxis = [-1, 0, 0]
         gmsh.initialize()
         gmsh.option.setNumber("General.Verbosity", 2)
         gmsh.model.add("self.circle")
@@ -198,7 +214,9 @@ class EIT2DProblem(eit_forward):
 
         ## Geometry
         all_ids = []
-        cir = gmsh.model.occ.addDisk(0, 0, 0, self.r_cir, self.r_cir, zAxis=_zaxis, xAxis=_xaxis, tag=1)
+        cir = gmsh.model.occ.addDisk(
+            0, 0, 0, self.r_cir, self.r_cir, zAxis=_zaxis, xAxis=_xaxis, tag=1
+        )
         all_ids += [(2, cir)]
 
         self.c_fa_ids = []
@@ -231,7 +249,7 @@ class EIT2DProblem(eit_forward):
             bar = gmsh.model.occ.addRectangle(
                 0, -self.w_elec / 2, 0, self.r_cir * 1.1, self.w_elec
             )
-            angle = (np.pi/2)-((2 * np.pi * i) / (self.n_elec))
+            angle = (np.pi / 2) - ((2 * np.pi * i) / (self.n_elec))
             gmsh.model.occ.rotate([(2, bar)], 0, 0, 0, 0, 0, 1, angle)
             bar_ids += [(2, bar)]
 
@@ -240,10 +258,12 @@ class EIT2DProblem(eit_forward):
             elec_coms[i][0] = np.real(z_elec_com)
             elec_coms[i][1] = np.imag(z_elec_com)
 
-        dis3 = gmsh.model.occ.addDisk(0, 0, 0, self.r_cir, self.r_cir, zAxis=_zaxis, xAxis=_xaxis)
+        dis3 = gmsh.model.occ.addDisk(
+            0, 0, 0, self.r_cir, self.r_cir, zAxis=_zaxis, xAxis=_xaxis
+        )
         elec = gmsh.model.occ.cut(bar_ids, [(2, dis3)])[0]
         all_ids += elec
-        gmsh.model.occ.rotate(all_ids, 0, 0, 0, 0, 1, 0, np.pi/2)
+        gmsh.model.occ.rotate(all_ids, 0, 0, 0, 0, 1, 0, np.pi / 2)
 
         gmsh.model.occ.fragment([(2, 1)], elec + self.c_fa_ids + self.c_in_ids)
         gmsh.model.occ.synchronize()
@@ -253,7 +273,7 @@ class EIT2DProblem(eit_forward):
         lines = gmsh.model.occ.getEntities(dim=1)
         line_elec = [[] for _ in range(self.n_elec)]
         for line in lines:
-            _, x, y  = gmsh.model.occ.getCenterOfMass(line[0], line[1])
+            _, x, y = gmsh.model.occ.getCenterOfMass(line[0], line[1])
             if np.isclose(y, CoF_arc):
                 line_elec[0] += [line[1]]
             for i in range(self.n_elec):
@@ -265,8 +285,8 @@ class EIT2DProblem(eit_forward):
         id_elt_fa = [[] for _ in range(self.n_fa)]
         id_elt_ax = [[] for _ in range(__n_ax)]
         for surf in surfs:
-            _, y, z  = gmsh.model.occ.getCenterOfMass(surf[0], surf[1])
-            bbox  = gmsh.model.occ.getBoundingBox(surf[0], surf[1])
+            _, y, z = gmsh.model.occ.getCenterOfMass(surf[0], surf[1])
+            bbox = gmsh.model.occ.getBoundingBox(surf[0], surf[1])
             dx, dy = abs(bbox[1] - bbox[4]), abs(bbox[2] - bbox[5])
             # Nerve surface
             if np.allclose([dx, dy], [self.nerve_results.D, self.nerve_results.D]):
@@ -279,7 +299,7 @@ class EIT2DProblem(eit_forward):
             # Axons surfaces
             for i in range(__n_ax):
                 __y_dom, __z_dom = self.y_ax[i], self.z_ax[i]
-                bb_mask = np.allclose([dx, dy], [self.r_ax[i]*2, self.r_ax[i]*2])
+                bb_mask = np.allclose([dx, dy], [self.r_ax[i] * 2, self.r_ax[i] * 2])
                 com_mask = np.allclose([y, z], [__y_dom, __z_dom])
                 if bb_mask & com_mask:
                     id_elt_ax[i] += [surf[1]]
@@ -339,28 +359,33 @@ class EIT2DProblem(eit_forward):
         gmsh.model.mesh.generate(2)
         gmsh.write(self.nerve_mesh_file)
         # Store info
-        self.mesh_info["fname"]= self.nerve_mesh_file
-        self.mesh_info["n_proc"], self.mesh_info["n_entities"], self.mesh_info["n_nodes"], self.mesh_info["n_elements"] = self.get_info(verbose=True)
+        self.mesh_info["fname"] = self.nerve_mesh_file
+        (
+            self.mesh_info["n_proc"],
+            self.mesh_info["n_entities"],
+            self.mesh_info["n_nodes"],
+            self.mesh_info["n_elements"],
+        ) = self.get_info(verbose=True)
         gmsh.finalize()
         self.mesh_built = True
         self.fem_initialized = False
         __tf = perf_counter()
-        self.mesh_timer +=  __tf - __ts
+        self.mesh_timer += __tf - __ts
 
     def _init_fem(self):
         """
-        initialization of fem 
+        initialization of fem
 
-        Parameters 
+        Parameters
         ----------
         mesh_file: str | None, optional
             filename of the mesh, by default None
-            
+
         """
         if not self.mesh_built:
             self.build_mesh()
         # load mesh
-        
+
         self.domain, self.ct, self.ft = read_gmsh(
             self.nerve_mesh_file, comm=MPI.COMM_SELF, gdim=3
         )
@@ -375,16 +400,14 @@ class EIT2DProblem(eit_forward):
 
         f = Constant(self.domain, ScalarType(0))
         Gnd = Constant(self.domain, ScalarType(0))
-        self.sigepi = Constant(self.domain, ScalarType(self.sigma_epi))#*self.UN))
-        self.sigendo = Constant(self.domain, ScalarType(self.sigma_endo))#*self.UN))
+        self.sigepi = Constant(self.domain, ScalarType(self.sigma_epi))  # *self.UN))
+        self.sigendo = Constant(self.domain, ScalarType(self.sigma_endo))  # *self.UN))
         self.sigax = [Constant(self.domain, ScalarType(0)) for _ in range(self.n_c)]
         bcs = []
         if self.use_gnd_elec:
             e_dom = get_mesh_domid("e", self.gnd_elec_id, is_surf=True)
             label = self.ft.find(e_dom)
-            dofs = locate_dofs_topological(
-                self.V, 1, label
-            )
+            dofs = locate_dofs_topological(self.V, 1, label)
             bcs.append(dirichletbc(Gnd, dofs, self.V))
 
         # Static Laplace equations (weak formulation)
@@ -408,13 +431,9 @@ class EIT2DProblem(eit_forward):
             L += inner(self.j_elecs[-1], v) * self.ds(id_ph)
             self.s_elec += [assemble_scalar(form(1 * self.ds(id_ph)))]
 
-
         # Compute solution
-        self.problem = LinearProblem(
-            a, L, bcs=bcs, petsc_options=self.petsc_opt
-        )
+        self.problem = LinearProblem(a, L, bcs=bcs, petsc_options=self.petsc_opt)
         self.fem_initialized = True
-
 
     def _clear_fem(self):
         if self.fem_initialized:
@@ -431,41 +450,114 @@ class EIT2DProblem(eit_forward):
             )
             self.fem_initialized = False
 
+    def __get_mat_axon_mem(
+        self, ax_res: axon_results, i_t: int, method: str | None = None
+    ) -> float | complex:
+        """
+        Computes the axonal membrane admittance or conductivity for a given time index and method.
 
-    def __get_mat_axon_mem(self,ax_res:axon_results,i_t:int, method:str|None=None)->float|complex:
+        Parameters
+        ----------
+        ax_res : axon_results
+            The results object containing axon properties and methods for retrieving membrane parameters.
+        i_t : int
+            The time index at which to compute the membrane property.
+        method : str or None, optional
+            The method to use for computation. If None, uses `self.sigma_method`. Supported methods include:
+            - "mye": Myelinated axon calculation.
+            - "mean", "avg_ind": Mean or average individual calculation.
+            - "inter", "convolve": Interpolated or convolved calculation (with optional "old" variant).
+            - Other methods default to direct calculation at `self.x_rec`.
+
+        Returns
+        -------
+        float or complex
+            The computed membrane admittance or conductivity, depending on the frequency and method.
+        """
+
         if method is None:
             method = self.sigma_method.lower()
         if "mye" in method:
-            if len(ax_res["x_rec"])>0:
-                if self.current_freq==0:
-                    Y_mem_t = ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+            if len(ax_res["x_rec"]) > 0:
+                if self.current_freq == 0:
+                    Y_mem_t = ax_res.get_membrane_conductivity(
+                        x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"
+                    )
                 else:
-                    Y_mem_t = ax_res.get_membrane_complexe_admitance(f=self.current_freq, x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+                    Y_mem_t = ax_res.get_membrane_complexe_admitance(
+                        f=self.current_freq,
+                        x=None,
+                        i_t=i_t,
+                        mem_th=self.ax_mem_th,
+                        unit="S/m",
+                    )
             else:
                 Y_mem_t = np.array([])
         elif method in ["mean", "avg_ind"]:
-            if self.current_freq==0:
-                Y_mem_t = np.mean(ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"))
+            if self.current_freq == 0:
+                Y_mem_t = np.mean(
+                    ax_res.get_membrane_conductivity(
+                        x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"
+                    )
+                )
             else:
-                Y_mem_t = np.mean(ax_res.get_membrane_complexe_admitance(f=self.current_freq, x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"))
+                Y_mem_t = np.mean(
+                    ax_res.get_membrane_complexe_admitance(
+                        f=self.current_freq,
+                        x=None,
+                        i_t=i_t,
+                        mem_th=self.ax_mem_th,
+                        unit="S/m",
+                    )
+                )
         elif "inter" in method or "convolve" in method:
-            if self.current_freq==0:
-                Y_m_t = ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+            if self.current_freq == 0:
+                Y_m_t = ax_res.get_membrane_conductivity(
+                    x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"
+                )
             else:
-                Y_m_t = ax_res.get_membrane_complexe_admitance(f=self.current_freq, x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+                Y_m_t = ax_res.get_membrane_complexe_admitance(
+                    f=self.current_freq,
+                    x=None,
+                    i_t=i_t,
+                    mem_th=self.ax_mem_th,
+                    unit="S/m",
+                )
             if "old" in method:
-                Y_mem_t = compute_sigma_2D_old(Y_m_t, ax_res["x_rec"], sig_in=self.sigma_axp, sig_out=self.sigma_endo, l_elec=self.l_elec)
+                Y_mem_t = compute_sigma_2D_old(
+                    Y_m_t,
+                    ax_res["x_rec"],
+                    sig_in=self.sigma_axp,
+                    sig_out=self.sigma_endo,
+                    l_elec=self.l_elec,
+                )
             else:
-                Y_mem_t = compute_sigma_2D(Y_m_t, ax_res["x_rec"], sig_in=self.sigma_axp, sig_out=self.sigma_endo, d_ax=ax_res["d"], th_mem=self.ax_mem_th, l_elec=self.l_elec, method=method)
+                Y_mem_t = compute_sigma_2D(
+                    Y_m_t,
+                    ax_res["x_rec"],
+                    sig_in=self.sigma_axp,
+                    sig_out=self.sigma_endo,
+                    d_ax=ax_res["d"],
+                    th_mem=self.ax_mem_th,
+                    l_elec=self.l_elec,
+                    method=method,
+                )
         else:
-            if self.current_freq==0:
-                Y_mem_t = ax_res.get_membrane_conductivity(x=self.x_rec, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+            if self.current_freq == 0:
+                Y_mem_t = ax_res.get_membrane_conductivity(
+                    x=self.x_rec, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m"
+                )
             else:
-                Y_mem_t = ax_res.get_membrane_complexe_admitance(f=self.current_freq, x=self.x_rec, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
+                Y_mem_t = ax_res.get_membrane_complexe_admitance(
+                    f=self.current_freq,
+                    x=self.x_rec,
+                    i_t=i_t,
+                    mem_th=self.ax_mem_th,
+                    unit="S/m",
+                )
         return Y_mem_t
-        
 
-    def _update_mat_axons(self, i_t:int, i_t_1:int=-1) -> bool:
+    def _update_mat_axons(self, i_t: int, i_t_1: int = -1) -> bool:
         """
         problem is already defined, update sigma axons between time steps
 
@@ -478,52 +570,69 @@ class EIT2DProblem(eit_forward):
         Returns
         -------
         Bool , by default True
-        
+
         """
         has_changed = i_t_1 > 0
-        for i_ax , (i_ax_pop, _ax_ppts) in enumerate(self._axons_pop_ppts.iterrows()):
+        for i_ax, (i_ax_pop, _ax_ppts) in enumerate(self._axons_pop_ppts.iterrows()):
             ax_res = self.nerve_results[_ax_ppts["fkey"]][_ax_ppts["akey"]]
             if "d" not in ax_res.keys():
                 ax_res["d"] = _ax_ppts["diameters"]
 
             # Myelinated axon
             if _ax_ppts["types"]:
-                if ax_res["rec"]=="nodes":
-                    Y_mem_t = self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t, method="mye")
+                if ax_res["rec"] == "nodes":
+                    Y_mem_t = self.__get_mat_axon_mem(
+                        ax_res=ax_res, i_t=i_t, method="mye"
+                    )
                     # ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
                     sigma_ax = compute_mye_sigma_2D(
-                        Y_mem_t, x_rec=ax_res["x_rec"],
+                        Y_mem_t,
+                        x_rec=ax_res["x_rec"],
                         sig_mye=self.myelin_mat[i_ax],
                         sig_in=self.sigma_axp,
                         sig_out=self.sigma_endo,
                         d_ax=ax_res["d"],
                         d_node=self.axnod_d[i_ax],
                         alpha_th=self.alpha_in_c[i_ax],
-                        l_elec=self.l_elec
-                        )
-                    if i_t == -1 and len(ax_res["x_rec"])==0:
+                        l_elec=self.l_elec,
+                    )
+                    if i_t == -1 and len(ax_res["x_rec"]) == 0:
                         np.append(self.unaligned_axons, i_ax)
                     self.sigax[i_ax].value = sigma_ax
                     # ax_mat = layered_material(mat_in=self.sigma_axp, mat_lay=sigma_ax, alpha_lay=)
                     # frac_l_node = 1. * len(ax_res["x_rec"])/self.l_elec
                     # self.sigax[i_ax].value = frac_l_node*ax_mat.sigma +(1-frac_l_node)*self.myelin_mat #*self.UN
                 else:
-                    frac_l_node = 1. * len(ax_res["x_rec"])/self.l_elec
-                    Y_mem_t = ax_res.get_membrane_conductivity(x=None, i_t=i_t, mem_th=self.ax_mem_th, unit="S/m")
-                    ax_node_mat = layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
+                    frac_l_node = 1.0 * len(ax_res["x_rec"]) / self.l_elec
+                    Y_mem_t = np.mean(
+                        self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t, method="mye")
+                    )
+                    ax_node_mat = layered_material(
+                        mat_in=self.sigma_axp,
+                        mat_lay=Y_mem_t,
+                        alpha_lay=self.alpha_in_c[i_ax],
+                    )
 
-                    self.sigax[i_ax].value = ax_mat.sigma +(1-frac_l_node)*self.myelin_mat[i_ax]
+                    self.sigax[i_ax].value = (
+                        ax_node_mat.sigma + (1 - frac_l_node) * self.myelin_mat[i_ax]
+                    )
             # Unmyelinated axon
             else:
                 Y_mem_t = self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t)
-                ax_mat = layered_material(mat_in=self.sigma_axp, mat_lay=Y_mem_t, alpha_lay=self.alpha_in_c[i_ax])
-                self.sigax[i_ax].value = ax_mat.sigma #*self.UN
+                ax_mat = layered_material(
+                    mat_in=self.sigma_axp,
+                    mat_lay=Y_mem_t,
+                    alpha_lay=self.alpha_in_c[i_ax],
+                )
+                self.sigax[i_ax].value = ax_mat.sigma  # *self.UN
                 if not has_changed:
                     Y_mem_t_1 = self.__get_mat_axon_mem(ax_res=ax_res, i_t=i_t_1)
-                    has_changed = not np.isclose(Y_mem_t, Y_mem_t_1, rtol=1e-7, atol=1.0e-13)
+                    has_changed = not np.isclose(
+                        Y_mem_t, Y_mem_t_1, rtol=1e-7, atol=1.0e-13
+                    )
         return has_changed
 
-    def _compute_v_elec(self, sfile:None|str=None, i_t:int=0)->np.ndarray:
+    def _compute_v_elec(self, sfile: None | str = None, i_t: int = 0) -> np.ndarray:
         __v = np.zeros(self.n_elec, dtype=ScalarType)
         for i_elec, e_str in enumerate(self.electrodes):
             self.j_elecs[i_elec].value = self.electrodes[e_str] / self.l_elec
@@ -535,11 +644,11 @@ class EIT2DProblem(eit_forward):
         # extract single ended measurements
         for i_rec in range(self.n_elec):
             id_ph = get_mesh_domid("e", i_rec, is_surf=True)
-            __v[i_rec] = assemble_scalar(
-                form(u_n * self.ds(id_ph))
-            ) / self.s_elec[i_rec]
+            __v[i_rec] = (
+                assemble_scalar(form(u_n * self.ds(id_ph))) / self.s_elec[i_rec]
+            )
         if sfile is not None:
-            fname = rmv_ext(sfile)+".bp"
+            fname = rmv_ext(sfile) + ".bp"
             with VTXWriter(self.domain.comm, fname, u_n, "bp4") as f:
                 f.write(self.times[i_t])
             return self.V, u_n, __v

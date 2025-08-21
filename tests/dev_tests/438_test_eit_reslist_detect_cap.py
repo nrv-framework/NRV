@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     del eit_instance
 
-    r_list = eit.eit_results_list(results=r_list)
+    r_list = eit.results.eit_results_list(results=r_list)
     i_r_ = np.arange(r_list.shape[0])
     cap_mask = r_list.get_cap_mask(i_res=i_r_)
     cap_i_t = r_list.get_cap_i_t(i_res=i_r_)

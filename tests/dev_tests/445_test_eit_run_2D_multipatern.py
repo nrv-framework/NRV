@@ -27,13 +27,13 @@ if __name__ == "__main__":
     n_fem_step = 10*n_proc_global
     dt_fem = [
         (2.5, .5),
-        (8,.1),
+        (8,.05),
         (-1,.5),
          ]# ms
 
-    sigma_method = "mean"
+    sigma_method = "avg_ind"
     inj_protocol_type = "simple"
-    use_gnd_elec = True
+
     parameters = {"x_rec":x_rec,
     "dt_fem":dt_fem,
     "inj_protocol_type":inj_protocol_type,
@@ -41,9 +41,7 @@ if __name__ == "__main__":
     "l_elec":l_elec,
     "l_fem":l_fem,
     "i_drive":i_drive,
-    "sigma_method":sigma_method,
-    "use_gnd_elec":use_gnd_elec,
-    }
+    "sigma_method":sigma_method}
 
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id, **parameters)
 
@@ -57,18 +55,20 @@ if __name__ == "__main__":
     eit_instance.build_mesh()
     # Simulate nerve
     fem_res = eit_instance.simulate_eit()
-    del eit_instance
-    fig = plt.figure(figsize=(20, 9))#, layout="constrained")
-    subfigs = fig.subfigures(2, 4)
-    axs = np.array([])
-    for i_p, pat in enumerate(fem_res["p"]):
-        dv_pc = fem_res.dv_eit(i_p=i_p)
-        _, axs2 = eit.gen_fig_elec(n_e=fem_res.n_e, fig=subfigs[i_p%2, i_p//2], small_fig=True)
-        eit.add_nerve_plot(axs=axs2, data=nerves_fname, drive_pair=pat)
-        eit.plot_all_elec(axs=axs2, t=fem_res.t(), res_list=dv_pc,)
-        axs = np.concatenate([axs, axs2[1:-1]])
 
-    eit.scale_axs(axs=axs, e_gnd=[], has_nerve=False)
+
+    # Plot results
+    i_e = np.arange(2)
+
+    fig, axs = plt.subplots(3, figsize=(8,6))
+    fem_res.plot(axs[0], i_e=i_e, which="v_eit", color="r", marker=".")
+    fem_res.plot(axs[1], i_e=i_e, which="dv_eit", color="r", marker=".")
+    fem_res.plot(axs[2], i_e=i_e, which="v_rec", color="r")
+
+    axs[0].set_ylabel("$V_{EIT}$ (V)")
+    axs[1].set_ylabel("$dV_{EIT}$ (V)")
+    axs[2].set_ylabel("$V_{REC}$ (mV)")
+    axs[2].set_xlabel("time (ms)")
     fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
-    
+    del eit_instance
     # plt.show()

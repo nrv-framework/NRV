@@ -3,9 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+test_dir = "./unitary_tests/"
+__fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
+test_id = __fname__[:__fname__.find("_")]
+
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_1max_nerve.json"
-    test_id = "12"
     res_dir  = f"./unitary_tests/results/outputs/"
 
     if os.cpu_count() > 20:

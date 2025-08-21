@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     del eit_instance
 
-    r_list = eit.eit_results_list(results=r_list)
+    r_list = eit.results.eit_results_list(results=r_list)
     i_r_ = np.arange(r_list.shape[0])
 
     labels = [r["label"] for r in r_list.res_info.values()]
@@ -85,53 +85,53 @@ if __name__ == "__main__":
     ###
     __which="dv_eit_pc"
     ###
-    figdvpc_, axsdvpc_ = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axsdvpc_ = eit.add_nerve_plot(axs=axsdvpc_, data=nerves_fname, drive_pair=(0,5))
+    figdvpc_, axsdvpc_ = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axsdvpc_ = eit.utils.add_nerve_plot(axs=axsdvpc_, data=nerves_fname, drive_pair=(0,5))
     dv_pc = r_list.get_res(i_res=i_r_, which=__which)
-    eit.plot_all_elec(axs=axsdvpc_, t=r_list.t(), res_list=dv_pc, i_res=i_r_, which="dv_eit")
-    axsdvpc_ = eit.scale_axs(axs=axsdvpc_, unit_y="%", zerox=True)
+    eit.utils.plot_all_elec(axs=axsdvpc_, t=r_list.t(), res_list=dv_pc, i_res=i_r_, which="dv_eit")
+    axsdvpc_ = eit.utils.scale_axs(axs=axsdvpc_, unit_y="%", zerox=True)
     figdvpc_.text(0.5,0.7,__which,ha="center",va="center")
-    figdvpc_.savefig(f"figures/{test_id}_A.png")
+    figdvpc_.savefig(f"./unitary_testsfigures/{test_id}_A.png")
 
 
     ###
     __which="dv_eit"
     ###
-    figdv_, axsdv_ = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axsdv_ = eit.add_nerve_plot(axs=axsdv_, data=nerves_fname, drive_pair=(0,5))
+    figdv_, axsdv_ = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axsdv_ = eit.utils.add_nerve_plot(axs=axsdv_, data=nerves_fname, drive_pair=(0,5))
     dv = r_list.get_res(i_res=i_r_, which=__which,pc=False)
-    eit.plot_all_elec(axs=axsdv_, t=r_list.t(), res_list=dv, i_res=i_r_,linestyle=":", alpha=.5)
-    axsdv_ = eit.scale_axs(axs=axsdv_, unit_y="V", zerox=False)
+    eit.utils.plot_all_elec(axs=axsdv_, t=r_list.t(), res_list=dv, i_res=i_r_,linestyle=":", alpha=.5)
+    axsdv_ = eit.utils.scale_axs(axs=axsdv_, unit_y="V", zerox=False)
     figdv_.text(0.5,0.7,__which,ha="center",va="center")
-    figdv_.savefig(f"figures/{test_id}_B.png")
+    figdv_.savefig(f"./unitary_testsfigures/{test_id}_B.png")
 
 
 
     ###
     __which="v_eit"
     ###
-    figv_, axsv_ = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axsv_ = eit.add_nerve_plot(axs=axsv_, data=nerves_fname, drive_pair=(0,5))
+    figv_, axsv_ = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axsv_ = eit.utils.add_nerve_plot(axs=axsv_, data=nerves_fname, drive_pair=(0,5))
     v_ = r_list.get_res(i_res=i_r_, which=__which)
-    eit.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
-    axs = eit.scale_axs(axs=axsv_, unit_y="V", zerox=False)
+    eit.utils.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
+    axs = eit.utils.scale_axs(axs=axsv_, unit_y="V", zerox=False)
     figv_.text(0.5,0.7,__which,ha="center",va="center")
-    figv_.savefig(f"figures/{test_id}_C.png")
+    figv_.savefig(f"./unitary_testsfigures/{test_id}_C.png")
 
     ###
     __which="dv_eit_normalized"
     ###
-    figv_, axsv_ = eit.gen_fig_elec(n_e=8, figsize=(10,9))
-    axsv_ = eit.add_nerve_plot(axs=axsv_, data=nerves_fname, drive_pair=(0,5))
+    figv_, axsv_ = eit.utils.gen_fig_elec(n_e=8, figsize=(10,9))
+    axsv_ = eit.utils.add_nerve_plot(axs=axsv_, data=nerves_fname, drive_pair=(0,5))
     v_ = r_list.get_res(i_res=i_r_, which=__which)
-    eit.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle="--", alpha=.5)
-    axs = eit.scale_axs(axs=axsv_, unit_y="V", zerox=False)
+    eit.utils.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle="--", alpha=.5)
+    axs = eit.utils.scale_axs(axs=axsv_, unit_y="V", zerox=False)
 
     v_ = r_list.get_res(i_res=i_r_, which=__which, axis=(-2,-1))
-    eit.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
-    axs = eit.scale_axs(axs=axsv_, unit_y="V", zerox=False)
+    eit.utils.plot_all_elec(axs=axsv_, t=r_list.t(), res_list=v_, i_res=i_r_,linestyle=":", alpha=.5)
+    axs = eit.utils.scale_axs(axs=axsv_, unit_y="V", zerox=False)
 
     figv_.text(0.5,0.7,__which,ha="center",va="center")
-    figv_.savefig(f"figures/{test_id}_C.png")
+    figv_.savefig(f"./unitary_testsfigures/{test_id}_C.png")
 
     # plt.show()

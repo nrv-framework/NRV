@@ -54,7 +54,7 @@ if __name__ == "__main__":
     n_elec = 16
 
 
-    sigma_method = "mean"
+    sigma_method = "avg_ind"
     inj_protocol_type = "simple"
     use_gnd_elec = True
     parameters = {"x_rec":x_rec,

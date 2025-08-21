@@ -1,4 +1,4 @@
-import eit
+import nrv.eit as eit
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -9,8 +9,8 @@ test_id = __fname__[:__fname__.find("_")]
 if __name__ == "__main__":
     nerves_fname = "./unitary_tests/sources/400_1uax_nerve.json"
 
-    res_fname  = f"./results/S0_3D_static_0_fem.json"
-    fem_res = eit.eit_forward_results(data=res_fname)
+    res_fname  = f"./unitary_tests/sources/SA_1_fem.json"
+    fem_res = eit.results.eit_forward_results(data=res_fname)
 
     print("m nerve sim time :", fem_res['computation_time'], "s")
     i_e = np.arange(8)

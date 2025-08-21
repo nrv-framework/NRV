@@ -8,7 +8,7 @@ __fname__ = __file__[__file__.find(test_dir)+len(test_dir):]
 test_id = __fname__[:__fname__.find("_")]
 
 if __name__ == "__main__":
-    nerves_fname = "./unitary_tests/sources/400_1max_nerve.json"
+    nerves_fname = "./unitary_tests/sources/400_m1_nerve.json"
     res_dir  = f"./unitary_tests/results/outputs/"
 
     if os.cpu_count() > 20:

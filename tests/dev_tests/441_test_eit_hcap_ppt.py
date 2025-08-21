@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
 
 
-    r_list = eit.eit_results_list(results=src_f)
+    r_list = eit.results.eit_results_list(results=src_f)
     i_r_ = np.arange(r_list.shape[0])
 
 

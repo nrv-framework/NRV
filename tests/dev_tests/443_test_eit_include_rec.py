@@ -17,7 +17,7 @@ if __name__ == "__main__":
     src_f = [f"./sources/REC_{i}_fem.json" for i in range(3,5)]
     overwrite_rfile = False
 
-    r_list = eit.eit_results_list(results=src_f, include_rec=True)
+    r_list = eit.results.eit_results_list(results=src_f, include_rec=True)
     print(r_list.has_nerve_res, r_list["v_rec"].shape)
     print(r_list.has_nerve_res, r_list.get_res(which="v_rec").shape)
     r_list.get_reccap_ppt()
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         t_ = r_list["t"][i_start+1:]
         axu.plot(t_, dv_rec_dt/np.max(abs(dv_rec_dt)) ,color=c[_i_r],alpha=0.2)
         axu.plot(t_, dv_rec_dt_f, "--",color=c[_i_r],alpha=0.5)
-        figu.savefig(f"figures/{test_id}_B.png")
+        figu.savefig(f"./unitary_testsfigures/{test_id}_B.png")
 
         if use_filter:
             dv_rec_dt = dv_rec_dt_f

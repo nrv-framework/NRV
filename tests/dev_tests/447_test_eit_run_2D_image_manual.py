@@ -49,7 +49,7 @@ if __name__ == "__main__":
     n_elec = 16
 
 
-    sigma_method = "mean"
+    sigma_method = "avg_ind"
     inj_protocol_type = "simple"
     use_gnd_elec = True
     parameters = {"x_rec":x_rec,
@@ -98,16 +98,16 @@ if __name__ == "__main__":
         axs = np.array([])
         for i_p, pat in enumerate(fem_res["p"]):
             dv_pc = fem_res.dv_eit(i_p=i_p)#, signed=True)
-            _, axs2 = eit.gen_fig_elec(n_e=fem_res.n_e, fig=subfigs[i_p//4, i_p%4], small_fig=True)
-            eit.add_nerve_plot(axs=axs2, data=nerves_fname, drive_pair=pat)
-            eit.plot_all_elec(axs=axs2, t=fem_res.t(), res_list=dv_pc,)
+            _, axs2 = eit.utils.gen_fig_elec(n_e=fem_res.n_e, fig=subfigs[i_p//4, i_p%4], small_fig=True)
+            eit.utils.add_nerve_plot(axs=axs2, data=nerves_fname, drive_pair=pat)
+            eit.utils.plot_all_elec(axs=axs2, t=fem_res.t(), res_list=dv_pc,)
             axs = np.concatenate([axs, axs2[1:-1]])
 
-            eit.scale_axs(axs=axs2, e_gnd=[0], has_nerve=True)
+            eit.utils.scale_axs(axs=axs2, e_gnd=[0], has_nerve=True)
         fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
 
 
-    def extract_pyEIT_meas(res:eit.eit_forward_results, i_t:int=0, i_f:int=0, verbose:bool=False)->np.ndarray:
+    def extract_pyEIT_meas(res:eit.results.eit_forward_results, i_t:int=0, i_f:int=0, verbose:bool=False)->np.ndarray:
         if not res.is_multi_patern:
             return None
         i_p0 = res["p"][0]

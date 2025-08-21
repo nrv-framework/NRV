@@ -193,6 +193,24 @@ def plot_array(ax:plt.Axes, x:np.ndarray, arr:np.ndarray, axis:int|None=None, **
 
 ## Nerve conductivities methods
 def compute_myelin_ppt(d, model="MRG", f=0):
+    """
+    Extract the apparent conductivity of the myelin sheath for a given axon diameter.
+
+    Parameters
+    ----------
+    d : float
+        Axon diameter in micrometers (µm).
+    model : str, optional
+        Model used for parameter extraction. Default is "MRG".
+    f : float, optional
+        Frequency in kilohertz (kHz). If greater than 0, the capacitive effect is included. Default is 0.
+
+    Returns
+    -------
+    sig_mye : complex or float
+        Apparent myelin conductivity in S/m². If frequency is specified, returns a complex value.
+    """
+
     g , axonD , nodeD , paraD1 , paraD2 , deltax , paralength2 , nl = get_MRG_parameters(d)
     mycm = 0.1  # uF/cm2/lamella membrane
     mygm = 0.001  # S/cm2/lamella membrane
@@ -209,6 +227,24 @@ def compute_myelin_ppt(d, model="MRG", f=0):
 
 
 def compute_y_wth_uv(y:np.ndarray, R_x:np.ndarray)->tuple[np.ndarray]:
+    """
+    Computes the equivalent admittance array using the provided admittance values `y` and resistance values `R_x`.
+    The function performs a calculation involving the transformation of admittance to impedance, then iteratively
+    computes two intermediate variables `u` and `v` for each element, which are used to determine the equivalent
+    admittance for each position in the input array.
+
+    Parameters
+    ----------
+    y : np.ndarray
+        Array of admittance values.
+    R_x : np.ndarray
+        Array of resistance values. If not iterable, it is broadcasted to match the length of `y`.
+    Returns
+    -------
+    np.ndarray
+        Array of computed equivalent admittance values for each position.
+    """
+
     z = 1/y
     n_x = len(z)
     if not np.iterable(R_x):
@@ -238,6 +274,31 @@ def compute_y_wth_uv(y:np.ndarray, R_x:np.ndarray)->tuple[np.ndarray]:
     return 1/z_eq
 
 def compute_y_app(y:np.ndarray, x_rec:np.ndarray, r_x:np.ndarray)->tuple[np.ndarray]:
+    """
+    Approximates the values of `y` based on the provided `x_rec` and `r_x` arrays.
+
+    For each element in `y`, computes a weighted sum using the formula:
+        y_app[n] = sum(y / (1 + abs(x_rec[n] - x_rec) * r_x * y))
+
+    Warning
+    -------
+    For now the 2D approximation isn't well documented. Further explaination will be added to the doc in the future.
+
+    Parameters
+    ----------
+    y : np.ndarray
+        Input array of values to be approximated.
+    x_rec : np.ndarray
+        Array of reference x positions.
+    r_x : np.ndarray
+        Array of scaling factors for each x position.
+
+    Returns
+    -------
+    y_app : np.ndarray
+        Array of approximated values, same length as `y`.
+    """
+
     n_x = len(y)
     y_app = np.zeros(n_x)
     for n in range(n_x):
@@ -245,7 +306,40 @@ def compute_y_app(y:np.ndarray, x_rec:np.ndarray, r_x:np.ndarray)->tuple[np.ndar
         y_app[n] = np.sum(y/(1+kR_x*y))
     return y_app
 
-def compute_mye_sigma_2D(sig_m_t:np.ndarray, x_rec:np.ndarray, sig_mye:float, sig_in:float, sig_out:float, d_ax:float, d_node:float, alpha_th:float, l_elec:float):
+def compute_mye_sigma_2D(sig_m_t:np.ndarray, x_rec:np.ndarray, sig_mye:float, sig_in:float, sig_out:float, d_ax:float, d_node:float, alpha_th:float, l_elec:float)->float:
+    """
+    Computes the apparent 2D myelin conductivity (sigma_2d) at a given time for a nerve fiber segment, taking into account the presence of nodes and their properties.
+
+    Warning
+    -------
+    For now the 2D approximation isn't well documented. Further explaination will be added to the doc in the future.
+
+    Parameters
+    ----------
+    sig_m_t : np.ndarray
+        Array of node membrane conductivities at the given time for various locations.
+    x_rec : np.ndarray
+        Array of node positions along the fiber.
+    sig_mye : float
+        Constant myelin conductivity.
+    sig_in : float
+        Intracellular conductivity.
+    sig_out : float
+        Extracellular conductivity.
+    d_ax : float
+        Axon diameter.
+    d_node : float
+        Node diameter.
+    alpha_th : float
+        Threshold parameter for conductivity adjustment.
+    l_elec : float
+        Electrode length.
+
+    Returns
+    -------
+    sigma_2d : float
+        Apparent 2D myelin conductivity for the simulated FEM segment.
+    """
     d_node = float(sci_round(d_node, 5))
     n_nodes = len(x_rec)
     if n_nodes>=1:
@@ -259,7 +353,34 @@ def compute_mye_sigma_2D(sig_m_t:np.ndarray, x_rec:np.ndarray, sig_mye:float, si
     return sigma_2d
 
 
-def compute_sigma_2D(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_out:float, d_ax:np.ndarray, th_mem:float, l_elec:float, method=""):
+def compute_sigma_2D(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_out:float, d_ax:np.ndarray, th_mem:float, l_elec:float, method="")->float:
+    """
+    Computes the apparent 2D conductivity (sigma_2D) at a given time of a membrane using admittance measurements and geometric parameters.
+
+    Parameters
+    ----------
+    Y_m_t : np.ndarray
+        Array of node membrane conductivities at the given time for various locations.
+    x_rec : np.ndarray
+        Array of spatial positions (in micrometers) along the recording axis.
+    sig_in : float
+        Conductivity inside the membrane.
+    sig_out : float
+        Conductivity outside the membrane.
+    d_ax : np.ndarray
+        Array of membrane diameters (in micrometers).
+    th_mem : float
+        Membrane thickness (in meters).
+    l_elec : float
+        Electrode length (in micrometers).
+    method : str, optional
+        Method for computing admittance normalization. If contains "approx", uses an approximate method.
+
+    Returns
+    -------
+    sigma_2d : float
+        The computed 2D conductivity of the membrane.
+    """
     x_rec_m = convert(x_rec, unitin="um", unitout="m")
     d_ax_m = convert(d_ax, unitin="um", unitout="m")
     l_elec_m = convert(l_elec, unitin="um", unitout="m")
@@ -280,7 +401,7 @@ def compute_sigma_2D(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_out:f
     # print(dx[0], Y_mem_x[0], sigma_2d)
     return sigma_2d
 
-def compute_sigma_2D_old(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_out:float, l_elec:float):
+def compute_sigma_2D_old(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_out:float, l_elec:float)->np.ndarray:
     # print("hello old")
     n_x = len(x_rec)
     I = np.arange(n_x)
@@ -294,7 +415,21 @@ def compute_sigma_2D_old(Y_m_t:np.ndarray, x_rec:np.ndarray, sig_in:float, sig_o
     Y_ = np.mean(Y_m_eq)
     return Y_
 
-def sum_sigma_ax(results):
+def sum_sigma_ax(results:nerve_results)->np.ndarray:
+    """
+    Computes the sum of the mean membrane conductivity across all axons in the given nerve results.
+
+    Parameters
+    ----------
+    results : nerve_results
+        An object containing the results of nerve simulations, including axon population properties and methods to retrieve individual axon results.
+
+    Returns
+    -------
+    np.ndarray
+        The summed mean membrane conductivity across all axons, as a NumPy array.
+    """
+
     _axons_pop_ppts = results.axons_pop_properties
     sy_mem_t = None
     for i_ax in range(results.n_ax):
@@ -382,6 +517,44 @@ def sample_keys_mdt(results:axon_results, keys_to_sample:str|set[str]={}, sample
 
 
 def get_samples_index(results:nerve_results, n_pts:int, alpha:float=0.001, t_iclamp:float=1, d_iclamp:float=0.2, n_pts_min=None)->np.ndarray:
+    """
+    Selects sample indices from nerve simulation results to achieve adaptative sampling along the arc length of the signal.
+
+    Note
+    ----
+    For now, the sampling indexes are computed from the analytical recorder's variation, i.e. proximity between indexes is proportionnal to the time derivative of the recoeder's values.
+
+    Warning
+    -------
+    In future version, the previous note might be extended to the global variation of conductivity in axons' membrane in the nerve (instead of only analytical recorder).
+
+
+    Parameters
+    ----------
+    results : nerve_results
+        The results object containing simulation recordings and time points.
+    n_pts : int
+        The desired number of sample points.
+    alpha : float, optional
+        Regularization parameter for arc length calculation (default is 0.001).
+    t_iclamp : float, optional
+        Start time of the current clamp artifact to be removed (default is 1).
+    d_iclamp : float, optional
+        Duration of the current clamp artifact to be removed (default is 0.2).
+    n_pts_min : int, optional
+        Minimum number of sample points to return. If not specified, defaults to `n_pts`.
+
+    Returns
+    -------
+    np.ndarray
+        Array of indices corresponding to selected sample points, distributed homogeneously along the arc length of the signal.
+
+    Note
+    ----
+    - Removes the effect of current clamp artifact from the signal before sampling.
+    """
+
+    #TODO: From sum of gmem instead of recorder
     if "recorder" in results:
         if n_pts_min is None:
             n_pts_min = n_pts
@@ -417,11 +590,43 @@ def get_samples_index(results:nerve_results, n_pts:int, alpha:float=0.001, t_icl
         return i_t_samples
 
 def sample_nerve_results(results:nerve_results, n_pts:int, alpha:float=0.001, t_iclamp:float=1, d_iclamp:float=0.2, keys_to_sample="g_mem")->nerve_results:
+    """
+    Samples specific keys from nerve simulation results at selected time points.
+
+    Note
+    ----
+    By contrast with the :func:`sample_keys`-function, this one must be call after the nerve simulation on the whole :class:`nerve_results`.
+
+    Parameters
+    ----------
+    results : nerve_results
+        The nerve simulation results object containing axon population properties and results.
+    n_pts : int
+        Number of time points to sample from the results.
+    alpha : float, optional
+        Threshold parameter used for sample index selection (default is 0.001).
+    t_iclamp : float, optional
+        Time of current clamp onset in milliseconds (default is 1).
+    d_iclamp : float, optional
+        Duration of current clamp in milliseconds (default is 0.2).
+    keys_to_sample : str or list of str, optional
+        Keys of the results to sample (default is "g_mem").
+
+    Returns
+    -------
+    nerve_results
+        The updated nerve_results object with sampled keys at selected time points.
+
+    Note
+    ----
+    This function modifies the input `results` object in place by sampling the specified keys for each axon at the selected time indices.
+    """
+    import pandas as pd
     i_t_fem = get_samples_index(results, n_pts, alpha=alpha, d_iclamp=d_iclamp, t_iclamp=t_iclamp)
-    _axons_pop_ppts = results.axons_pop_properties
-    for i_ax in range(results.n_ax):
-        _ax_ppts = _axons_pop_ppts[i_ax, :]
-        ax_res = results.get_axon_results(_ax_ppts[0], _ax_ppts[1])
+    _axons_pop_ppts:pd.DataFrame = results.axons
+    for i_ax in _axons_pop_ppts.index:
+        _ax_ppts = _axons_pop_ppts.loc[i_ax]
+        ax_res = results[_ax_ppts["fkey"]] [_ax_ppts["akey"]]
         ax_res = sample_keys(ax_res, keys_to_sample=keys_to_sample, i_sampled_t=i_t_fem)
     return results
 
