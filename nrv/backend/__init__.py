@@ -52,7 +52,7 @@ from ._NRV_Class import (
 from ._NRV_Results import generate_results, NRV_results, sim_results
 from ._NRV_Simulable import is_NRV_simulable, simulable, NRV_simulable
 from ._NRV_Singleton import NRV_singleton
-from ._parameters import nrv_parameters, ncore_autoset
+from ._parameters import nrv_parameters, ncore_autoset, parameters
 
 submodules = []
 
@@ -106,8 +106,14 @@ functions = [
     "ncore_autoset",
 ]
 
+instances = [
+    "parameters",
+]
+
 __all__ = []
 
 __all__ += submodules
 __all__ += classes
 __all__ += functions
+__all__ += instances
+

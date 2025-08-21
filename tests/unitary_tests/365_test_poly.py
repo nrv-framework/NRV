@@ -16,7 +16,7 @@ def test_cercle():
     bbox = bbox_pts[np.array([0,0,2,2,0])],bbox_pts[np.array([1,3,3,1,1])]
     assert np.allclose(points, poly.vertices), "Center should be set correctly."
     inside_pts = poly.get_point_inside(1000)
-    assert poly.is_inside((inside_pts[0],inside_pts[1])), "Generated points should be inside the rotated ellipse."
+    assert poly.is_inside((inside_pts[:,0],inside_pts[:,1])), "Generated points should be inside the rotated ellipse."
 
     # Plot the poly
     fig, ax = plt.subplots(figsize=(6, 6))

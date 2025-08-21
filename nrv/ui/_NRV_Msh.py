@@ -103,27 +103,28 @@ def mesh_from_fascicle(
         if res_nerve != "default":
             mesh.reshape_nerve(res=res_nerve)
 
-    mesh.reshape_fascicle(geometry=fasc.geom)
+    mesh.reshape_fascicle(geometry=fasc.geom, res=res_fasc)
     if add_axons:
+        ax_pop = fasc.axons.get_sub_population(mask_labels=fasc.sim_mask)
         if fasc.axons.has_node_shift:
-            node_shift = fasc.axons["node_shift"]
+            node_shift = ax_pop["node_shift"]
         else:
             node_shift = np.zeros(fasc.n_ax)
         if x_shift is not None:
-            i_myel = fasc.axons["types"].astype(bool)
-            __deltaxs = get_MRG_parameters(fasc.axons["diameters"][i_myel])[5]
-            __l1_ = fasc.NoR_relative_position[i_myel] * __deltaxs
+            i_myel = ax_pop["types"].astype(bool)
+            __deltaxs = get_MRG_parameters(ax_pop["diameters"][i_myel].to_numpy())[5]
+            __l1_ = ax_pop["node_shift"][i_myel] * __deltaxs
             __x_l = (__l1_ - x_shift) % __deltaxs
             node_shift[i_myel] = __x_l / __deltaxs
 
-        for i_ax in range(fasc.n_ax):
-            ax_d = round(fasc.axons["diameters"][i_ax], 3)
-            ax_y = round(fasc.axons["y"][i_ax], 3)
-            ax_z = round(fasc.axons["z"][i_ax], 3)
-            mye = bool(fasc.axons["types"][i_ax])
+        for i_ax, id_ax in enumerate(ax_pop.index):
+            ax_d = round(ax_pop["diameters"][id_ax], 3)
+            ax_y = round(ax_pop["y"][id_ax], 3)
+            ax_z = round(ax_pop["z"][id_ax], 3)
+            mye = bool(ax_pop["types"][id_ax])
             res_ax_ = res_ax
             if isinstance(res_ax, str) and res_ax != "default":
-                res_ax_ = eval(str(fasc.axons["diameters"][i_ax]) + res_ax)
+                res_ax_ = eval(str(ax_pop["diameters"][id_ax]) + res_ax)
             elif np.iterable(res_ax) and not isinstance(res_ax, str):
                 res_ax_ = res_ax[i_ax]
             mesh.reshape_axon(
@@ -131,7 +132,7 @@ def mesh_from_fascicle(
                 y=ax_y,
                 z=ax_z,
                 myelinated=mye,
-                node_shift=node_shift[i_ax],
+                node_shift=node_shift[id_ax],
                 res=res_ax_,
             )
     if add_context and fasc.extra_stim is not None:

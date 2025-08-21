@@ -87,7 +87,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this tutorial, the optimization formalism used in NRV is illustrated through a detailed example. Further details on NRV optimization formalism can be found in usersguide&#x27;s optimization section &lt;../usersguide/optimization&gt;.">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this tutorial, the optimization formalism used in NRV is illustrated through a detailed example.">
 
 .. only:: html
 
@@ -99,6 +99,23 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Tutorial 5 - First optimization problem using NRV</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Here is a tutorial showing the basic usage of nrv.eit sub-package. ">
+
+.. only:: html
+
+  .. image:: /tutorials/images/thumb/sphx_glr_6_play_with_eit_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_tutorials_6_play_with_eit.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Tutorial 6 - Play with EIT using NRV</div>
     </div>
 
 
@@ -117,4 +134,5 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
    /tutorials/3_single_fiber_simulation
    /tutorials/4_nerve_simulation
    /tutorials/5_first_optimization
+   /tutorials/6_play_with_eit
 

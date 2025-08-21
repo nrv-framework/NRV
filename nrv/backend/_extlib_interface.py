@@ -30,8 +30,7 @@ def is_empty_iterable(x):
         return True
     return False
 
-
-def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
+def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
     """
     convert an object _i into an 1D array of index
 
@@ -43,7 +42,7 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
          - int: single indexe corresponding to _i
          - tuple: all indexes between _i[0] and _i[1]
     _n : int | None
-        _description_
+        Indexes number when _i is `None`
 
     Returns
     -------
@@ -53,12 +52,12 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
         _i = np.arange(_n)
     elif not np.iterable(_i):
         _i = np.array([_i])
-    elif isinstance(_i, tuple) and len(_i) == 2:
+    elif isinstance(_i,tuple) and len(_i) == 2:
         _i = np.arange(*_i)
     elif isinstance(_i, list):
         _i = np.array(_i)
     if isinstance(_i, np.ndarray) and _n is not None:
-        _i = _i[_i < _n]
+        _i = _i[_i<_n]
     return _i
 
 
@@ -67,7 +66,7 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
 # ---------------------------------- #
 def get_query(*args, **kwgs):
     """
-    Combine a list of kwargs into a `str` compatible with pandas.DataFrame.query
+    Convert a list of kwargs into a `str` compatible with pandas.DataFrame.query
 
     """
     queries = []
