@@ -29,6 +29,7 @@ class EIT3DProblem(eit_forward):
     - Mesh generation and FEM setup rely on :class:`nrv.fmod.FEM.mesh_creator.NerveMshCreator` and :class:`nrv.fmod.FEM.fenics_utils.FEMSimulation` classes.
     - Conductivity calculations support various methods, including myelinated and unmyelinated axons.
     """
+
     def __init__(self, nervefile, res_dname=None, label="3deit_1", **parameters):
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
 

@@ -30,7 +30,8 @@ def is_empty_iterable(x):
         return True
     return False
 
-def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
+
+def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
     """
     convert an object _i into an 1D array of index
 
@@ -52,12 +53,12 @@ def set_idxs(_i:np.ndarray|int|tuple|None, _n:int|None)->np.ndarray:
         _i = np.arange(_n)
     elif not np.iterable(_i):
         _i = np.array([_i])
-    elif isinstance(_i,tuple) and len(_i) == 2:
+    elif isinstance(_i, tuple) and len(_i) == 2:
         _i = np.arange(*_i)
     elif isinstance(_i, list):
         _i = np.array(_i)
     if isinstance(_i, np.ndarray) and _n is not None:
-        _i = _i[_i<_n]
+        _i = _i[_i < _n]
     return _i
 
 

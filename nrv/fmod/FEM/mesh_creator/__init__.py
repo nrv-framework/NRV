@@ -31,7 +31,7 @@ functions = [
     "is_MshCreator",
     "clear_gmsh",
     "is_NerveMshCreator",
-    "get_mesh_domid", 
+    "get_mesh_domid",
     "get_node_physical_id",
 ]
 

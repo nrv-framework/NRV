@@ -29,7 +29,14 @@ from .utils._misc import (
 )
 from .results import eit_forward_results
 
-from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning, rise_error
+from ..backend import (
+    NRV_class,
+    json_dump,
+    load_any,
+    parameters,
+    rise_warning,
+    rise_error,
+)
 from ..nmod import nerve
 from ..nmod.results import nerve_results
 from ..fmod import load_material, recorder
@@ -41,15 +48,13 @@ from ..utils.geom import CShape
 try:
     static_env = np.dtype(ScalarType).kind != "c"
 except RecursionError:
-    rise_warning("Could not check environment type (real/complex)\n",
-                "ignore for doc compilation")
+    rise_warning(
+        "Could not check environment type (real/complex)\n",
+        "ignore for doc compilation",
+    )
     static_env = True
 except:
-    rise_error(
-    traceback.format_exc()
-)
-
-
+    rise_error(traceback.format_exc())
 
 
 class eit_forward(NRV_class):
@@ -79,6 +84,7 @@ class eit_forward(NRV_class):
     ---
     - Supports multiprocessing for large-scale simulations. Number of core can either be set for all steps (by setting :attr:`eit_forward.n_proc_global`) or for each step individually (by setting :attr:`eit_forward.n_proc_nerve`, :attr:`eit_forward.n_proc_mesh` and :attr:`eit_forward.n_proc_fem`).
     """
+
     @abstractmethod
     def __init__(self, nervedata, res_dname=None, label="eit_1", **parameters):
         """
