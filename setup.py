@@ -6,7 +6,7 @@ from pathlib import Path
 PACKAGE_NAME = 'nrv-py'
 DESCRIPTION = 'NeuRon Virtualizer (NRV)'
 AUTHOR_NAME = 'Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey'
-PROJECT_URL = "https://github.com/fkolbl/NRV"
+PROJECT_URL = "https://github.com/nrv-framework/NRV"
 this_directory = Path(__file__).parent
 long_description = (this_directory / "ReadMe.md").read_text()
 
@@ -123,11 +123,11 @@ setup(
     # * sorted by alphabetical order *
     install_requires=[
         #"gmsh",
+        #"numba",
         "icecream",
         "matplotlib",
         "mph",
         "neuron",
-        "numba",
         "numpy",
         "pandas",
         "pathos",
@@ -136,6 +136,7 @@ setup(
         "pyswarms",
         "rich",
         "scipy",
+        "seaborn",
         "shapely",
     ],  # external packages as dependencies
     python_requires=">=3.12",

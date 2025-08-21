@@ -1,19 +1,19 @@
 [![PyPI version](https://badge.fury.io/py/nrv-py.svg)](https://badge.fury.io/py/nrv-py)
 [![Documentation Status](https://readthedocs.org/projects/nrv/badge/?version=latest)](https://nrv.readthedocs.io/en/latest/?badge=latest)
 [![License: CeCill](https://img.shields.io/badge/Licence-CeCill-blue )](https://github.com/fkolbl/NRV/blob/master/Licence.txt)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497741.svg)](https://doi.org/10.5281/zenodo.10497741)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497741.svg)](https://doi.org/10.5281/zenodo.15849132)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nrv-framework/NRV-demo/main)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/nrv-py)
 
+<!---![PyPI - Downloads](https://img.shields.io/pypi/dm/nrv-py)-->
 <!---[![DOI](xxxx)](xxx)-->
 <!---[![Build Status](xxxx)](xxx)-->
 
-<img src="https://github.com/nrv-framework/NRV/blob/master/docs/__logo/logo.png" alt="NRV" width="50%" height="auto" class="center">
+<img src="https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/docs/__logo/logo.png" alt="NRV" width="50%" height="auto" class="center">
 
 # NRV
 *Python library for Peripheral Nervous System stimulation modeling*
 
-NRV (or NeuRon Virtualizer) is a pythonic framework to enable fast and user friendly simulations of the Peripheral Nervous System. Axons models are simulated with the [NEURON](http://www.neuron.yale.edu/neuron) software, and extracellular fields are computed either from analytic equations such as point source approximation or with a more detailed description of the nerve and electrode geometry and Finite Elements Method, either using [COMSOL](https://www.comsol.com) (additional commercial licence requiered) or the [FENICS project](https://fenicsproject.org). All computations are performed with the quasistatic approximation of the Maxwell equations, no ephaptic coupling. Stimulation waveform can be of random shapes, and any kinds of electrode can be combined to model complex stimulation strategies.
+NRV (or NeuRon Virtualizer) is a pythonic framework to enable fast and user friendly simulations of the Peripheral Nervous System. Axons models are simulated with the [NEURON](http://www.neuron.yale.edu/neuron) software, and extracellular fields are computed either from analytic equations such as point source approximation or with a more detailed description of the nerve and electrode geometry and Finite Elements Method, either using [COMSOL](https://www.comsol.com) (additional commercial licence requiered) or the [FENICS project](https://fenicsproject.org). All computations are performed with the quasistatic approximation of the Maxwell equations, no ephaptic coupling. Stimulation waveform can be of random shapes, and any kinds of electrode can be combined to model complex stimulation strategies. Since version 1.3, NRV also includes tools to create detailed forward models of nerve impedance, to enable investigation on nerve impedance measurements and impedance tomography.
 
 NRV has been optimized for large population of axons, from generating correct population following a specific diameter repartition, through automatic placement to computation and post-processing of the axons activity when a stimulus is applied. Parallel computation, interface with NEURON and COMSOL and FENICS is automatically handled by NRV. For a detailed description and full help on installation, basic usage and API documentation, please visit ou [NRV readthedocs page](https://nrv.readthedocs.io/en/latest/).
 
