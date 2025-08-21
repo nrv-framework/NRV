@@ -10,6 +10,26 @@ from .results import eit_forward_results
 
 
 class eit_inverse:
+    """
+    Abstract base class for solving the Electrical Impedance Tomography (EIT) inverse problem.
+
+    This class provides the interface for solving EIT problems inverse problem on nerve models :class:`eit_forward_results` simulation results
+
+    .. seealso::
+    :doc:`EIT users guide </usersguide/eit>` --- For generic description.
+
+    :doc:`Tutorial 6 </tutorials/6_play_with_eit>` --- For usage description.
+
+    Note
+    ----
+    This class is abstract and cannot be instantiated directely. For now only the following daughter class can be used:
+        - :class:`nrv.eit.pyeit_inverse`:  Interface EIT of inverse problem solving using PyEIT methods.
+
+    Note
+    ----
+    In future version additional solver could be add to NRV.
+    """
+
     @abstractmethod
     def __init__(self, data: None | eit_forward_results = None, **kwgs):
         self.data = data  # TODO [NRV] load_any(data) for merge with nrv
@@ -22,6 +42,13 @@ class eit_inverse:
     # ---------------------- #
     @property
     def has_data(self) -> bool:
+        """
+        Check if the object contains data.
+
+        Returns
+        -------
+            bool: True if data is present, False otherwise.
+        """
         return self.data is not None
 
     @property

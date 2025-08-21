@@ -15,6 +15,20 @@ ScalarType = np.float64
 
 
 class EIT3DProblem(eit_forward):
+    """
+    End-used class for Electrical Impedance Tomography (EIT) forward simulation in neural contexts In a 3D.
+
+    This class extends `eit_forward` to provide specialized methods for setting up, meshing, and solving EIT problems in a 2D (Oyz) plan. It supports:
+      - mesh generation with axons
+      - physical domain assignment
+      - finite element method (FEM) initialization
+      - conductivity updates during the simulation.
+
+    Note
+    ----
+    - Mesh generation and FEM setup rely on :class:`nrv.fmod.FEM.mesh_creator.NerveMshCreator` and :class:`nrv.fmod.FEM.fenics_utils.FEMSimulation` classes.
+    - Conductivity calculations support various methods, including myelinated and unmyelinated axons.
+    """
     def __init__(self, nervefile, res_dname=None, label="3deit_1", **parameters):
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
 

@@ -10,6 +10,9 @@ Here is a tutorial showing the basic usage of ``nrv.eit`` sub-package.
 The tutorial is divided in 2 sections:
  - **The forward problem**: Measurement data are generated with FEM simulation (using `GMSH <https://gmsh.info/doc/texinfo/gmsh.html>`_ and `FEniCSx <https://docs.fenicsproject.org>`_ libraries) methods embedded in `nrv.eit.forward_problem`.
  - **The forward problem**: Image reconstruction is performed on the measurement data (using `pyEIT <https://github.com/eitcom/pyEIT>`_) methods implemented in `nrv.eit.inverse_problem`.
+
+.. note::
+    This tutorial is inspired by the proof of principle of the application of EIT to imaging peripheral nerve activity, as published by `K. Aristovich et al. in 2018 <https://iopscience.iop.org/article/10.1088/1741-2552/aad78e>`_
 """
 import nrv
 import nrv.eit as eit
@@ -150,6 +153,7 @@ eit_instance = eit.EIT2DProblem(nerve_data, res_dname=res_dir, label=test_id, **
 #     The arguments can be more simply understood as the combinaison of three arguments of the :class:`nrv.nmod.nerve`-class: :meth:`nrv.nrv.nmod.nerve.insert_I_Clamp`, :meth:`nrv.nmod.nerve.set_axons_parameters` and :meth:`nrv.nmod.nerve.simulate`.
 #
 # Basically, this method:
+#
 # 1. Adapt the nerve-object to match with the problem parameter.
 # 2. Attach a current clamp to axons in the nerve.
 # 3. Attach analytical recording points at the center of each electrode
@@ -175,6 +179,7 @@ nrn_res.plot_recruited_fibers(ax)
 # Once the nerve simulation is complete, the goal of the following steps is to compute how changes in axonal membrane conductivity affect impedance measurements from extracellular electrodes. This is achieved by using FEM to calculate the electric field inside the nerve over time, for a given current injection between a pair of electrodes.
 #
 # Although this process may seem complex, it has been fully integrated into the ``eit_forward`` class and can be performed in three lines:
+#
 # 1. :meth:`nrv.eit.eit_forward._setup_problem`: Sets up the FEM problem using the geometrical and electrical properties stored in the :class:`nrv.nmod.results.nerve_results` output from the nerve simulation.
 #
 # .. warning::
@@ -196,6 +201,7 @@ fem_res = eit_instance.simulate_eit()
 
 # %%
 # The object returned by the EIT simulation is an instance of :class:`nrv.eit.results.eit_forward_results`. The main purposes of this class are to:
+#
 # - Store the results of the simulations.
 # - Facilitate access to specific results.
 # - Provide post-processing and plotting tools to analyze the results.
@@ -250,7 +256,6 @@ if n_elec in [8, 16]:
 # .. tip::
 #     As mention above, only the voltage measured by the electrode is saved in eit_forward_results. To better understand the computed results, or to debug some eventual issues, it is still possible to save the electric field in the whole nerve. This can be done using the :meth:`nrv.eit.eit_forward.run_and_savefem`-method as bellow. This method save the output of the FEM in a ``.bp`` folder which can be open with `Paraview <https://www.paraview.org>`_.
 #
-#     .. code-block::
 #         eit_instance.run_and_savefem(sfile=res_dir+"test")
 
 
@@ -362,9 +367,9 @@ inv_pb.plot(ax=ax2, i_t=i_tmax, filter=eit.utils.thr_window)
 # %%
 # Second fascicle activation
 # --------------------------
-
+#
 # To summarize more concisely, the same process can be repeated for activity generated only in the second (left) fascicle.
-
+#
 # Forward problem
 # ~~~~~~~~~~~~~~~
 

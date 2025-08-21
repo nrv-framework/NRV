@@ -19,7 +19,7 @@ Features:
 - Result management and visualization tools.
 - Utilities for protocol definition and plotting.
 
-.. SeeAlso::
+.. seealso::
    :doc:`EIT users guide </usersguide/eit>` --- For generic description.
 
     :doc:`Tutorial 6 </tutorials/6_play_with_eit>` --- For usage description.

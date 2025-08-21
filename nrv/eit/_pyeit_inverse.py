@@ -15,6 +15,10 @@ pyeit_methods = {
 
 
 class pyeit_inverse(eit_inverse):
+    """
+    Subclass of eit_inverse for performing Electrical Impedance Tomography (EIT) inverse problem solving using PyEIT methods.
+    """
+
     def __init__(
         self,
         data: None | eit_forward_results = None,

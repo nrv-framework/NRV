@@ -60,182 +60,25 @@ class eit_forward(NRV_class):
     nerve simulation, mesh generation, FEM problem definition, and result management. It supports multi-core
     parallelization, custom electrode protocols, and backup/retry mechanisms for failed simulation steps.
 
-    Attributes
-    ----------
-    label : str
-        Simulation label.
-        Nerve data source.
-    parameters : dict
-        Simulation parameters.
-    res_dir : str
-        Directory for saving results.
-    nerve : nerve
-        Loaded nerve object.
-    is_nerve_res : bool
-        Indicates if nerve data is a results object.
-    l_nerve : float or None
-        Nerve length.
-    x_rec : float
-        Electrode recording position (um).
-    n_elec : int
-    inj_offset : int
-        Electrode offset for current injection.
-    inj_protocol_type : str or list
-        Injection protocol type or custom protocol.
-    i_drive : float
-        Current amplitude injected (uA).
-    l_elec : float
-        Electrode length (um).
-    gnd_elec_id : int
-        Ground electrode index.
-    use_gnd_elec : bool
-        Use ground electrode.
-    freqs : np.ndarray
-        Array of simulation frequencies (kHz).
-    times : np.ndarray
-        Array of simulation time points (ms).
-    current_freq : float
-        Current simulation frequency.
-    dt_fem : float
-        FEM time step.
-    t_start_fem : float
-        FEM simulation start time.
-    t_stop_fem : float
-        FEM simulation stop time.
-    n_fem_step : int or None
-        Number of FEM steps.
-    aplha_fem_step : float
-        Alpha parameter for FEM step.
-    l_fem : float
-        FEM domain length.
-    use_pbar : bool
-        Use progress bar in simulation.
-    ax_mem_th : float
-        Axon membrane thickness (um).
-    sigma_epi : float
-        Epineurium conductivity (S/m).
-    sigma_endo : float
-        Endoneurium conductivity (S/m).
-    sigma_axp : float
-        Axoplasm conductivity (S/m).
-    myelin_mat : float
-        Myelin material property.
-    n_proc_global : int or None
-        Global number of processes.
-    n_proc_nerve : int or None
-        Number of processes for nerve simulation.
-    n_proc_mesh : int or None
-        Number of processes for mesh generation.
-    n_proc_fem : int or None
-        Number of processes for FEM simulation.
-    nerve_timer : float
-        Timer for nerve simulation.
-    mesh_timer : float
-        Timer for mesh generation.
-    fem_timer : float
-        Timer for FEM simulation.
-    use_backup : bool
-        Enable backup saving during simulation.
-    __backup_fname : str
-        Backup file name.
-    n_elt_r, f_elt_r, a_elt_r, e_elt_r : float
-        Mesh resolution rates for nerve, fascicle, axon, and electrode.
-    v_elecs : np.ndarray or None
-        Simulated electrode voltages.
-    __nerve_res_file : str or None
-        Nerve results file path.
-    __nerve_mesh_file : str or None
-        Nerve mesh file path.
-    __fem_res_file : str or None
-        FEM results file path.
-    nerve_results : nerve_results or None
-        Results of nerve simulation.
-    mesh : object or None
-        FEM mesh object.
-    mesh_info : dict
-        Mesh information.
-    fem_results : eit_forward_results
-        Results of FEM simulation.
-    mesh_built : bool
-        Indicates if mesh is built.
-    defined_pb : bool
-        Indicates if FEM problem is defined.
-    fem_initialized : bool
-        Indicates if FEM is initialized.
-    petsc_opt : dict
-        PETSc solver options.
+    .. seealso::
+    :doc:`EIT users guide </usersguide/eit>` --- For generic description.
 
-    Methods
+    :doc:`Tutorial 6 </tutorials/6_play_with_eit>` --- For usage description.
+
+    Note
+    ----
+    This class is abstract and cannot be instantiated directely. Use either:
+        - :class:`nrv.eit.EIT3DProblem`:  FEM is solved in a 3D-space (Oxyz), with an extremely large computational cost
+        - :class:`nrv.eit.EIT2DProblem` (recommended): FEM is solved in a 2D-plan (Oyz) using apparent condictivity approximations.
+
+    Warning
     -------
-    timers_dict : dict
-        Returns timers for nerve, mesh, and FEM simulation.
-    nerve_res_file : str
-        Returns nerve results file path.
-    nerve_mesh_file : str
-        Returns nerve mesh file path.
-    fem_res_file : str
-        Returns FEM results file path.
-    x_bounds_fem : tuple of float
-        Returns x bounds of FEM domain.
-    i_drive_A : float
-        Returns injected current in Amperes.
-    n_e : int
-        Returns number of electrodes.
-    n_t : int
-        Returns number of time steps.
-    n_f : int
-        Returns number of frequency steps.
-    n_p : int
-        Returns number of injection patterns.
-    v_shape : tuple of int
-        Returns shape of voltage results array.
-    inj_protocol : list of tuple
-        Returns injection protocol.
-    is_multi_patern : bool
-        Returns True if multiple injection patterns.
-    get_nproc(which="") : int
-        Returns number of processes for a simulation step.
-    simulate_nerve(...)
-        Simulates neural context and returns nerve results.
-    simulate_recording(...)
-        Deprecated. Use simulate_nerve.
-    _setup_problem()
-        Defines FEM problem from nerve results.
-    build_mesh(with_axons=True)
-        Builds FEM mesh.
-    _init_fem()
-        Initializes FEM problem.
-    _clear_fem()
-        Clears FEM problem state.
-    clear_fem_res()
-        Clears FEM results and resets result file.
-    _update_mat_axons(t)
-        Updates axon material properties for time step.
-    _compute_v_elec(sfile=None, i_t=0)
-        Computes electrode voltages for a time step.
-    __check_v_elec(v_elecs, task_id, i_t)
-        Checks and handles failed FEM steps.
-    run_fem(task_info)
-        Runs FEM simulation for all time steps of a task.
-    run_fem_1core(task_info)
-        Runs FEM simulation on a single core.
-    run_all_fem(task_info)
-        Runs FEM simulation for all frequencies and patterns.
-    simulate_eit(save=True, sim_list=None)
-        Runs EIT simulation for all time steps and saves results.
-    rerun_failed_steps(eit_results=None, save=True)
-        Reruns failed FEM simulation steps.
-    run_and_savefem(sfile, sim_list=[0], with_axons=True)
-        Computes and saves electric field for selected time steps.
+    For now the 2D approximation isn't well documented. Further explaination will be added to the doc in the future.
 
-    Notes
-    -----
-    - This class is abstract and requires implementation of certain methods in subclasses.
-    - Designed for extensibility to support custom electrode configurations and protocols.
-    - Uses numpy array formalism for simulation data.
-    - Supports multiprocessing for large-scale simulations.
+    Tip
+    ---
+    - Supports multiprocessing for large-scale simulations. Number of core can either be set for all steps (by setting :attr:`eit_forward.n_proc_global`) or for each step individually (by setting :attr:`eit_forward.n_proc_nerve`, :attr:`eit_forward.n_proc_mesh` and :attr:`eit_forward.n_proc_fem`).
     """
-
     @abstractmethod
     def __init__(self, nervedata, res_dname=None, label="eit_1", **parameters):
         """

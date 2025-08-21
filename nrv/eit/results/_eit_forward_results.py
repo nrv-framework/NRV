@@ -19,6 +19,36 @@ from ...utils import nrv_interp
 
 
 class eit_forward_results(dict):
+    """
+    Stores and manages the results of an Electrical Impedance Tomography (EIT) forward simulation.
+
+    This class combines outputs from both the nerve simulation and the finite element (FEM) EIT simulation,
+    providing convenient access to time series, electrode measurements, protocol information, and post-processing tools.
+
+    Parameters
+    ----------
+    nerve_res : nerve_results, str, dict, or None, optional
+        Results from the nerve simulation, or a path/dictionary to load them.
+    fem_res : dict or None, optional
+        Results from the FEM EIT simulation.
+    data : str or dict or None, optional
+        Path or dictionary containing saved results to load.
+
+    Notes
+    -----
+    - This class is designed for efficient post-processing and visualization of EIT simulation results.
+    - It supports multi-frequency and multi-protocol EIT simulations.
+    - Failed or invalid time steps are automatically detected and can be filtered out.
+    - Provides tools for CAP detection and analysis.
+
+    Examples
+    --------
+    >>> res = eit_forward_results(nerve_res=nerve_sim, fem_res=fem_sim) # create results
+    >>> dv = res.dv_eit(i_e=0) # Access voltage shift of the first electrode
+    >>> cap_mask = res.get_cap_mask(thr=0.1)
+    >>> res.plot_recruited_fibers(ax)
+    """
+    # ...existing code...
     def __init__(
         self,
         nerve_res: nerve_results | str | dict | dict | None = None,

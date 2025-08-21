@@ -30,7 +30,10 @@ The tutorial is divided in 2 sections:
  - **The forward problem**: Measurement data are generated with FEM simulation (using `GMSH <https://gmsh.info/doc/texinfo/gmsh.html>`_ and `FEniCSx <https://docs.fenicsproject.org>`_ libraries) methods embedded in `nrv.eit.forward_problem`.
  - **The forward problem**: Image reconstruction is performed on the measurement data (using `pyEIT <https://github.com/eitcom/pyEIT>`_) methods implemented in `nrv.eit.inverse_problem`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-28
+.. note::
+    This tutorial is inspired by the proof of principle of the application of EIT to imaging peripheral nerve activity, as published by `K. Aristovich et al. in 2018 <https://iopscience.iop.org/article/10.1088/1741-2552/aad78e>`_
+
+.. GENERATED FROM PYTHON SOURCE LINES 17-31
 
 .. code-block:: Python
 
@@ -55,7 +58,7 @@ The tutorial is divided in 2 sections:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-41
+.. GENERATED FROM PYTHON SOURCE LINES 32-44
 
 Simulate the Measure (*forward problem*)
 ----------------------------------------
@@ -70,7 +73,7 @@ First, let's define the nerve geometry for the simulation. As a case study, we c
 .. note::
     Here the generated nerve is only stored in a ``dict``, but it could also be saved in a `.json` file and loaded afterwards.
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-83
+.. GENERATED FROM PYTHON SOURCE LINES 44-86
 
 .. code-block:: Python
 
@@ -137,11 +140,11 @@ First, let's define the nerve geometry for the simulation. As a case study, we c
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-85
+.. GENERATED FROM PYTHON SOURCE LINES 87-88
 
 Next, let's define the simulation parameters for the EIT forward problem. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-122
+.. GENERATED FROM PYTHON SOURCE LINES 88-125
 
 .. code-block:: Python
 
@@ -189,7 +192,7 @@ Next, let's define the simulation parameters for the EIT forward problem.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-141
+.. GENERATED FROM PYTHON SOURCE LINES 126-144
 
 Run the simulation
 ~~~~~~~~~~~~~~~~~~
@@ -210,7 +213,7 @@ Let's start by instantiate the problem using the parameter set above.
 .. tip::
     You can find a list of tunable attribute in the API documentation (see :class:`nrv.eit.EIT2DProblem`)
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-144
+.. GENERATED FROM PYTHON SOURCE LINES 144-147
 
 .. code-block:: Python
 
@@ -224,7 +227,7 @@ Let's start by instantiate the problem using the parameter set above.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-161
+.. GENERATED FROM PYTHON SOURCE LINES 148-165
 
 **Nerve Simulation**
 
@@ -234,6 +237,7 @@ As mention, the first step consist at simulated the electrical conductivity chan
     The arguments can be more simply understood as the combinaison of three arguments of the :class:`nrv.nmod.nerve`-class: :meth:`nrv.nrv.nmod.nerve.insert_I_Clamp`, :meth:`nrv.nmod.nerve.set_axons_parameters` and :meth:`nrv.nmod.nerve.simulate`.
 
 Basically, this method:
+
 1. Adapt the nerve-object to match with the problem parameter.
 2. Attach a current clamp to axons in the nerve.
 3. Attach analytical recording points at the center of each electrode
@@ -243,7 +247,7 @@ Basically, this method:
 .. note::
     A customized on the flight post-processing is used to only store required values of membranes conductivity (see :func:`nrv.eit.utils.sample_nerve_results`).
 
-.. GENERATED FROM PYTHON SOURCE LINES 161-166
+.. GENERATED FROM PYTHON SOURCE LINES 165-170
 
 .. code-block:: Python
 
@@ -261,18 +265,18 @@ Basically, this method:
  .. code-block:: none
 
     NRV INFO: Starting nerve simulation
-    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:23
-    fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:12
+    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:25
+    fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:13
     NRV INFO: ...Done!
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-168
+.. GENERATED FROM PYTHON SOURCE LINES 171-172
 
 Let's now plot the nerve highlighting the fibres activated during the simulation, as done in :doc:`Tutorial 4 <./4_nerve_simulation>`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-172
+.. GENERATED FROM PYTHON SOURCE LINES 172-176
 
 .. code-block:: Python
 
@@ -292,13 +296,14 @@ Let's now plot the nerve highlighting the fibres activated during the simulation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-188
+.. GENERATED FROM PYTHON SOURCE LINES 177-193
 
 **FEM Problem**
 
 Once the nerve simulation is complete, the goal of the following steps is to compute how changes in axonal membrane conductivity affect impedance measurements from extracellular electrodes. This is achieved by using FEM to calculate the electric field inside the nerve over time, for a given current injection between a pair of electrodes.
 
 Although this process may seem complex, it has been fully integrated into the ``eit_forward`` class and can be performed in three lines:
+
 1. :meth:`nrv.eit.eit_forward._setup_problem`: Sets up the FEM problem using the geometrical and electrical properties stored in the :class:`nrv.nmod.results.nerve_results` output from the nerve simulation.
 
 .. warning::
@@ -310,7 +315,7 @@ Although this process may seem complex, it has been fully integrated into the ``
 .. note::
     Currently, the mesh is always saved in a `.msh` file (see :attr:`nrv.eit.eit_forward.nerve_res_file`) and reloaded at the beginning of each process during the simulation. This behaviour may change in future versions of NRV.
 
-.. GENERATED FROM PYTHON SOURCE LINES 188-197
+.. GENERATED FROM PYTHON SOURCE LINES 193-202
 
 .. code-block:: Python
 
@@ -336,15 +341,16 @@ Although this process may seem complex, it has been fully integrated into the ``
     NRV INFO: Number of entities : 489
     NRV INFO: Number of nodes : 5619
     NRV INFO: Number of elements : 11688
-    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:35
-    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:36
-    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:36
+    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
+    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:38
+    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-221
+.. GENERATED FROM PYTHON SOURCE LINES 203-227
 
 The object returned by the EIT simulation is an instance of :class:`nrv.eit.results.eit_forward_results`. The main purposes of this class are to:
+
 - Store the results of the simulations.
 - Facilitate access to specific results.
 - Provide post-processing and plotting tools to analyze the results.
@@ -368,7 +374,7 @@ In this tutorial, we primarily use the results to feed the inverse problem and p
 
 Let's plot the impedance shift measured at each electrode over time for one drive pattern to better understand what have been simulated.
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-234
+.. GENERATED FROM PYTHON SOURCE LINES 227-240
 
 .. code-block:: Python
 
@@ -403,11 +409,11 @@ Let's plot the impedance shift measured at each electrode over time for one driv
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 235-236
+.. GENERATED FROM PYTHON SOURCE LINES 241-242
 
 The previous plot can be extended to all injection patterns. However, for a 16-electrode protocol, the resulting image is not very readable.
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-249
+.. GENERATED FROM PYTHON SOURCE LINES 242-255
 
 .. code-block:: Python
 
@@ -436,15 +442,14 @@ The previous plot can be extended to all injection patterns. However, for a 16-e
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-255
+.. GENERATED FROM PYTHON SOURCE LINES 256-260
 
 .. tip::
     As mention above, only the voltage measured by the electrode is saved in eit_forward_results. To better understand the computed results, or to debug some eventual issues, it is still possible to save the electric field in the whole nerve. This can be done using the :meth:`nrv.eit.eit_forward.run_and_savefem`-method as bellow. This method save the output of the FEM in a ``.bp`` folder which can be open with `Paraview <https://www.paraview.org>`_.
 
-    .. code-block::
         eit_instance.run_and_savefem(sfile=res_dir+"test")
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-272
+.. GENERATED FROM PYTHON SOURCE LINES 263-277
 
 Reconstruct the image (*inverse problem*)
 -----------------------------------------
@@ -461,7 +466,7 @@ The reconstruction consists of finding the conductivity distribution in a mesh t
 
 In NRV, this all this can be done using the :class:`nrv.eit.pyeit_inverse`-class. As shown bellow, this class can be directly instantiated from an :class:`nrv.eit.results.eit_forward_results`
 
-.. GENERATED FROM PYTHON SOURCE LINES 272-275
+.. GENERATED FROM PYTHON SOURCE LINES 277-280
 
 .. code-block:: Python
 
@@ -475,7 +480,7 @@ In NRV, this all this can be done using the :class:`nrv.eit.pyeit_inverse`-class
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 276-291
+.. GENERATED FROM PYTHON SOURCE LINES 281-296
 
 .. code-block:: Python
 
@@ -525,7 +530,7 @@ In NRV, this all this can be done using the :class:`nrv.eit.pyeit_inverse`-class
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 292-300
+.. GENERATED FROM PYTHON SOURCE LINES 297-305
 
 For this first tutorial, only one image will be generated at the peak of activity.
 
@@ -536,7 +541,7 @@ The reconstruction method used is dynamic, thus two sets of measurements are req
 
 To find the index ``i_tmax``, a simple method consists of examining ``res.dv_eit`` for one electrode over time and finding the time point where the absolute value is maximal, as done in the next cell.
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-315
+.. GENERATED FROM PYTHON SOURCE LINES 305-320
 
 .. code-block:: Python
 
@@ -570,15 +575,15 @@ To find the index ``i_tmax``, a simple method consists of examining ``res.dv_eit
 
     t_max=3.6000000000003696ms, (i_tmax=7)
 
-    <matplotlib.legend.Legend object at 0x30980a630>
+    <matplotlib.legend.Legend object at 0x318cf7350>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 316-317
+.. GENERATED FROM PYTHON SOURCE LINES 321-322
 
 If required the data formatted for pyEIT solvers can be extracted using `fromat_data` as shown bellow:
 
-.. GENERATED FROM PYTHON SOURCE LINES 317-327
+.. GENERATED FROM PYTHON SOURCE LINES 322-332
 
 .. code-block:: Python
 
@@ -606,11 +611,11 @@ If required the data formatted for pyEIT solvers can be extracted using `fromat_
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x309a332f0>]
+    [<matplotlib.lines.Line2D object at 0x318e2a1e0>]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 328-333
+.. GENERATED FROM PYTHON SOURCE LINES 333-338
 
 Here is where the reconstruction is done. 
 
@@ -618,7 +623,7 @@ To reconstruct the images from the measurements the mesh and scan protocol have 
 
 Then the solver object is defined and used on the two sets of measurements. 
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-339
+.. GENERATED FROM PYTHON SOURCE LINES 338-344
 
 .. code-block:: Python
 
@@ -641,11 +646,11 @@ Then the solver object is defined and used on the two sets of measurements.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-341
+.. GENERATED FROM PYTHON SOURCE LINES 345-346
 
 Finally, the reconstruction can be plotted with `matplotlib` as bellow:
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-353
+.. GENERATED FROM PYTHON SOURCE LINES 346-358
 
 .. code-block:: Python
 
@@ -673,11 +678,11 @@ Finally, the reconstruction can be plotted with `matplotlib` as bellow:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 354-355
+.. GENERATED FROM PYTHON SOURCE LINES 359-360
 
 An additional filter can be applied when plotting the reconstructed image.
 
-.. GENERATED FROM PYTHON SOURCE LINES 355-362
+.. GENERATED FROM PYTHON SOURCE LINES 360-367
 
 .. code-block:: Python
 
@@ -700,20 +705,20 @@ An additional filter can be applied when plotting the reconstructed image.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 363-365
+.. GENERATED FROM PYTHON SOURCE LINES 368-375
 
 Second fascicle activation
 --------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 365-385
+To summarize more concisely, the same process can be repeated for activity generated only in the second (left) fascicle.
+
+Forward problem
+~~~~~~~~~~~~~~~
+
+.. GENERATED FROM PYTHON SOURCE LINES 375-390
 
 .. code-block:: Python
 
-
-    # To summarize more concisely, the same process can be repeated for activity generated only in the second (left) fascicle.
-
-    # Forward problem
-    # ~~~~~~~~~~~~~~~
 
     eit_instance = eit.EIT2DProblem(nerve_data, res_dname=res_dir, label=test_id, **parameters)
 
@@ -738,26 +743,26 @@ Second fascicle activation
  .. code-block:: none
 
     NRV INFO: Starting nerve simulation
-    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:24
-    fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:12
+    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:26
+    fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:13
     NRV INFO: ...Done!
     NRV INFO: Mesh properties:
     NRV INFO: Number of processes : 3
     NRV INFO: Number of entities : 489
     NRV INFO: Number of nodes : 5619
     NRV INFO: Number of elements : 11688
-    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:36
-    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:35
+    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
     process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:36
+    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-388
+.. GENERATED FROM PYTHON SOURCE LINES 391-393
 
 Inverse problem
 ~~~~~~~~~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-403
+.. GENERATED FROM PYTHON SOURCE LINES 393-408
 
 .. code-block:: Python
 
@@ -788,12 +793,12 @@ Inverse problem
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 404-406
+.. GENERATED FROM PYTHON SOURCE LINES 409-411
 
 Final summary plot
 ~~~~~~~~~~~~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 406-430
+.. GENERATED FROM PYTHON SOURCE LINES 411-435
 
 .. code-block:: Python
 
@@ -842,7 +847,7 @@ Final summary plot
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 39.131 seconds)
+   **Total running time of the script:** (2 minutes 51.386 seconds)
 
 
 .. _sphx_glr_download_tutorials_6_play_with_eit.py:

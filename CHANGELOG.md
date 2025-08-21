@@ -2,7 +2,13 @@
 
 All notable changes to NRV are summed up in this file.
 
-## [1.2.3] - XXX
+## [1.3.0] - 2025-08-21
+
+### Added
+- Added a first version of the [nrv.eit](nrv/eit/) sub-package: to allow simulation of electrical impedance tomography of peripheral nerve activity
+- Added Fixing [Tutorial 6](docs/tutorials/6_play_with_eit.py) --- Play with EIT using NRV.
+- Added first version of [EIT users' guide](docs/usersguide/eit.rst)
+- Version of deprecation of tests added as comment
 
 ### Fixed
 - Import problem solved (fciotti suggestion), by adding nrv.nmod.utils in setup file

@@ -1378,8 +1378,8 @@ class fascicle(NRV_simulable):
             can only be False if return_parameters_only is False
 
 
-        Return
-        ------
+        Returns
+        -------
             fasc_sim    : sim_results
                 results of the simulation
         """

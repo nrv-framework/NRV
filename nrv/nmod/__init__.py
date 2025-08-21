@@ -18,7 +18,7 @@ care of handling the simulation, potential combination with subpackages
 (such as nmod or eit for instance). Parallel computing is also handled
 internally.
 
-.. SeeAlso::
+.. seealso::
    :doc:`Scientific details</scientific>`, :doc:`Simulables users guide</usersguide/simulables>`
 """
 

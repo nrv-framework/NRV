@@ -7,6 +7,38 @@ from ...backend._extlib_interface import set_idxs, get_query
 
 
 class eit_results_list(eit_forward_results):
+    """
+    Container for multiple EIT forward simulation results, enabling batch analysis, comparison, and post-processing.
+
+    This class extends `eit_forward_results` to handle a list of EIT results, providing unified access to temporal, electrode, frequency, and protocol axes across all simulations.
+    It supports adding results from files, objects, or lists, and offers methods for filtering, slicing, and statistical analysis.
+
+    Parameters
+    ----------
+    dt : float, optional
+        Time step for resampling all results (default: 0.001).
+    t_sim : float or None, optional
+        Total simulation time. If None, inferred from first result.
+    results : list of eit_forward_results, eit_forward_results, or str, optional
+        Initial results to add (can be a list, single object, or filename).
+    include_rec : bool, optional
+        If True, include analytical nerve recordings in the container.
+
+    Notes
+    -----
+    - Results can be added from files, objects, or lists, and are automatically resampled to a common time axis.
+    - Provides batch post-processing and statistical analysis tools for EIT simulations.
+    - CAP detection and analysis methods are extended to handle multiple results.
+    - Useful for comparing different simulation conditions, protocols, or geometries.
+
+    Examples
+    --------
+    >>> res_list = eit_results_list(dt=0.001)
+    >>> res_list.add_results([res1, res2, res3])
+    >>> mean_v = res_list.mean(which="v_eit")
+    >>> cap_times = res_list.get_cap_i_t(thr=0.1)
+    >>> error = res_list.error(which="v_eit", i_res_ref=0)
+    """
     def __init__(
         self,
         dt: float | None = 0.001,

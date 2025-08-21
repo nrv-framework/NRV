@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**02:39.131** total execution time for 6 files **from tutorials**:
+**02:51.386** total execution time for 6 files **from tutorials**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_tutorials_6_play_with_eit.py` (``6_play_with_eit.py``)
-     - 02:39.131
+     - 02:51.386
      - 0.0
    * - :ref:`sphx_glr_tutorials_1_intracellular_stimulation.py` (``1_intracellular_stimulation.py``)
      - 00:00.000

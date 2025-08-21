@@ -1,3 +1,4 @@
+# deprecated since at least v1.2.2
 import sys
 import matplotlib.pyplot as plt
 import numpy as np

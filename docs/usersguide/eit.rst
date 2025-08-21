@@ -8,6 +8,9 @@ NRV includes an integrated optimization layer, enabling direct tuning of input p
 
     :doc:`Tutorial 6 </tutorials/6_play_with_eit>` --- Play with EIT using NRV
 
+.. warning::
+    The documentation on the nrv.eit sub-package may be incomplete or unclear in some places. This will be corrected in future patches.
+
 Overview
 --------
 

@@ -38,10 +38,6 @@ from ..nmod.results import axon_results
 from ..utils import convert
 from ..utils.geom import CShape
 
-# def empty_cache():
-# if MCH.do_master_only_work():
-# os.system("rm -rf ~/.cache/fenics/*")
-
 sig_2D_method_list = [
     "single_val",
     "avg_ind",
@@ -63,14 +59,16 @@ class EIT2DProblem(eit_forward):
       - mesh generation with axons
       - physical domain assignment
       - finite element method (FEM) initialization
-      - conductivity updates.
+      - conductivity updates during the simulation.
+
+    Warning
+    -------
+    For now the 2D approximation isn't well documented. Further explaination will be added to the doc in the future.
 
 
-
-    Notes
-    -----
-    - This class is designed for 2D EIT simulations of nerve structures.
-    - Mesh generation and FEM setup rely on GMSH and FEniCS/Dolfinx libraries.
+    Note
+    ----
+    - Mesh generation and FEM setup rely on GMSH and FEniCS/Dolfinx libraries with interface integrated into this class classes.
     - Conductivity calculations support various methods, including myelinated and unmyelinated axons.
     """
 
