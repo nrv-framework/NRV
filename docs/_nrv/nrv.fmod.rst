@@ -14,7 +14,7 @@ Subpackages
     :toctree: fmod
     :recursive:
     
-    FEM
+    nrv.fmod.FEM
     
 
 

@@ -117,7 +117,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/*
+# docs/_build/*
 doc/_build/*
 
 # PyBuilder
@@ -207,7 +207,6 @@ tests/log_NRV_test.txt
 .vscode/settings.json
 tests/log_NRV_test.txt
 .vscode/*
-# docs/_nrv/*
 
 # logs
 *.log

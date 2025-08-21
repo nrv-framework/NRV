@@ -14,7 +14,7 @@ Subpackages
     :toctree: utils
     :recursive:
     
-    geom
+    nrv.utils.geom
     
 
 
