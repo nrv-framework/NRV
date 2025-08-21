@@ -29,14 +29,27 @@ from .utils._misc import (
 )
 from .results import eit_forward_results
 
-from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning
+from ..backend import NRV_class, json_dump, load_any, parameters, rise_warning, rise_error
 from ..nmod import nerve
 from ..nmod.results import nerve_results
 from ..fmod import load_material, recorder
 from ..utils import convert, get_MRG_parameters
 from ..utils.geom import CShape
 
-static_env = np.dtype(ScalarType).kind != "c"
+
+# required to prevent infinite loop bug whn compiling the doc
+try:
+    static_env = np.dtype(ScalarType).kind != "c"
+except RecursionError:
+    rise_warning("Could not check environment type (real/complex)\n",
+                "ignore for doc compilation")
+    static_env = True
+except:
+    rise_error(
+    traceback.format_exc()
+)
+
+
 
 
 class eit_forward(NRV_class):
