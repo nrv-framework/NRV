@@ -14,5 +14,4 @@ build:
     build:
       html:
         - echo "Building the documentation..."
-        - mkdir $READTHEDOCS_OUTPUT/html
         - python3 -m sphinx.cmd.build  -T -b html -d docs/_build/doctrees/ -D language=en docs/ $READTHEDOCS_OUTPUT/html
