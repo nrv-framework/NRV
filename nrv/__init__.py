@@ -33,7 +33,7 @@ U. of Bordeaux.
   https://doi.org/10.1371/journal.pcbi.1011826
 
 
-.. SeeAlso::
+.. seealso::
    - **General information**: `nrv-framework.org <https://nrv-framework.org>`_
    - **Discussions and queries**: `Forum NRV <https://nrv-framework.org/forum>`_
    - **Full code**: `Github repository <https://github.com/nrv-framework/NRV>`_
@@ -132,4 +132,4 @@ from .optim.optim_utils._CostEvaluation import *
 from .optim.optim_utils._OptimFunctions import *
 
 
-from .eit._protocol import pyeit_protocol
+from .eit.utils._protocol import pyeit_protocol

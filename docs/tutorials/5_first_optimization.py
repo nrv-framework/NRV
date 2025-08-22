@@ -2,13 +2,15 @@ r"""
 Tutorial 5 - First optimization problem using NRV
 =================================================
 
-In this tutorial, the optimization formalism used in NRV is illustrated through a detailed example. Further details on NRV optimization formalism can be found in :doc:`usersguide's optimization section <../usersguide/optimization>`.
+In this tutorial, the optimization formalism used in NRV is illustrated through a detailed example.
+
+.. seealso::
+    Further details on NRV optimization formalism can be found in :doc:`usersguide's optimization section <../usersguide/optimization>`.
 
 To reduce the computation time, this optimization will be done on a single myelinated axon. The exact same optimization problem could be applied to a nerve filled with multiple myelinated axons (see :doc:`example o01 <../examples/optim/o06_mproc_optimization>`)
 
 The very first step is, as usual, to import NRV and the required packages and to generate an outputs' repository.
 """
-
 import numpy as np
 import matplotlib.pyplot as plt
 import nrv

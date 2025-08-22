@@ -64,6 +64,13 @@ from ._NRV_Msh import (
     mesh_from_nerve,
 )
 
+from ._spec_loaders import (
+    load_nerve,
+    load_fascicle,
+    load_axon,
+    update_fascicle_file,
+)
+
 submodules = []
 
 classes = []
@@ -115,6 +122,10 @@ functions = [
     "mesh_from_extracellular_context",
     "mesh_from_fascicle",
     "mesh_from_nerve",
+    "load_nerve",
+    "load_fascicle",
+    "load_axon",
+    "update_fascicle_file",
 ]
 
 __all__ = []

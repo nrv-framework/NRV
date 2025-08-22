@@ -184,8 +184,8 @@ def get_perineurial_thickness(fasc_d: float, nerve_type: str = "default") -> flo
                         - "radial"
                         - "median"
 
-    Return
-    ------
+    Returns
+    -------
     float:
         thickness of the perineurium
 

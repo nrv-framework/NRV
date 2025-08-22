@@ -1,3 +1,4 @@
+# deprecated since at least v1.2.2
 #pragma parallel
 import nrv
 import time

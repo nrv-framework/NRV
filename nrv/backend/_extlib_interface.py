@@ -43,7 +43,7 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
          - int: single indexe corresponding to _i
          - tuple: all indexes between _i[0] and _i[1]
     _n : int | None
-        _description_
+        Indexes number when _i is `None`
 
     Returns
     -------
@@ -67,7 +67,7 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
 # ---------------------------------- #
 def get_query(*args, **kwgs):
     """
-    Combine a list of kwargs into a `str` compatible with pandas.DataFrame.query
+    Convert a list of kwargs into a `str` compatible with pandas.DataFrame.query
 
     """
     queries = []

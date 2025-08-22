@@ -434,6 +434,8 @@ class MshCreator(NRV_class):
         if self.D == 3:
             cyl = gmsh.model.occ.extrude([(2, surf)], dx, 0, 0)
             gmsh.model.occ.synchronize()
+        else:
+            cyl = surf
         return cyl
 
     def add_cylinder(self, x=0, y=0, z=0, L=5, R=1):

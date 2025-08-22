@@ -1,0 +1,6 @@
+unmyelinated\_results.\_\_init\_\_
+==================================
+
+.. currentmodule:: nrv.nmod.results
+
+.. automethod:: unmyelinated_results.__init__

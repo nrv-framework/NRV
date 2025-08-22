@@ -9,6 +9,8 @@ from ...backend._log_interface import rise_error, rise_warning, pass_info
 from ...utils._units import nm, convert, from_nrv_unit
 from ...utils._misc import membrane_capacitance_from_model
 
+# Typing only
+from ...utils.geom import CShape
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -89,7 +91,7 @@ class nerve_results(sim_results):
         return _fasc
 
     @property
-    def fasc_geometries(self) -> dict:
+    def fasc_geometries(self) -> dict[str, CShape]:
         """
         Porperties of axons population of each fascicles
 
@@ -103,7 +105,7 @@ class nerve_results(sim_results):
         for i_fasc, key in enumerate(fasc_keys):
             _fasc = self[key]
             _fasc_geom[str(_fasc.ID)] = _fasc.geom
-        return _fasc
+        return _fasc_geom
 
     @property
     def axons_pop_properties(self) -> np.ndarray:
@@ -146,10 +148,13 @@ class nerve_results(sim_results):
         if self._axons.empty:
             fasc_keys = self.fascicle_keys
             for key in fasc_keys:
-                _ax_pop = self[key].axons.axon_pop
+                _ax_pop: DataFrame = self[key].axons.get_sub_population(
+                    mask_labels=self[key].sim_mask
+                )
+                # _ax_pop["akey"] = "axon" + _ax_pop.index.astype(str)
+                _ax_pop["akey"] = [f"axon{k}" for k in range(len(_ax_pop))]
                 _ax_pop["fkey"] = [key for _ in range(len(_ax_pop))]
                 self._axons = concat((self._axons, _ax_pop))
-                print(self[key].axons.axon_pop.keys())
         return self._axons
 
     def get_fascicle_results(self, ID: int) -> fascicle_results:
@@ -319,6 +324,7 @@ class nerve_results(sim_results):
         unmyel_color: str = "r",
         elec_color: str = "gold",
         num: bool = False,
+        vm_key: str = "V_mem",
         **kwgs,
     ):
         """ """
@@ -341,6 +347,7 @@ class nerve_results(sim_results):
                 myel_color=myel_color,
                 unmyel_color=unmyel_color,
                 num=num,
+                vm_key=vm_key,
             )
 
         if "extra_stim" in self:
