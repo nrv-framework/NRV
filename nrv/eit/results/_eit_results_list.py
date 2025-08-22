@@ -39,6 +39,7 @@ class eit_results_list(eit_forward_results):
     >>> cap_times = res_list.get_cap_i_t(thr=0.1)
     >>> error = res_list.error(which="v_eit", i_res_ref=0)
     """
+
     def __init__(
         self,
         dt: float | None = 0.001,

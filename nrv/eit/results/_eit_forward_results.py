@@ -48,6 +48,7 @@ class eit_forward_results(dict):
     >>> cap_mask = res.get_cap_mask(thr=0.1)
     >>> res.plot_recruited_fibers(ax)
     """
+
     # ...existing code...
     def __init__(
         self,
