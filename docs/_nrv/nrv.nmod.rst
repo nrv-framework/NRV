@@ -14,9 +14,9 @@ Subpackages
     :toctree: nmod
     :recursive:
     
-    nrv.nmod.results
+    results
     
-    nrv.nmod.utils
+    utils
     
 
 

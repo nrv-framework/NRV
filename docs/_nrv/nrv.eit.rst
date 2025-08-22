@@ -14,9 +14,9 @@ Subpackages
     :toctree: eit
     :recursive:
     
-    nrv.eit.utils
+    utils
     
-    nrv.eit.results
+    results
     
 
 

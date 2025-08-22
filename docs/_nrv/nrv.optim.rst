@@ -14,7 +14,7 @@ Subpackages
     :toctree: optim
     :recursive:
     
-    nrv.optim.optim_utils
+    optim_utils
     
 
 

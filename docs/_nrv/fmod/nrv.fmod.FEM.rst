@@ -14,9 +14,9 @@ Subpackages
     :toctree: FEM
     :recursive:
     
-    nrv.fmod.FEM.fenics_utils
+    fenics_utils
     
-    nrv.fmod.FEM.mesh_creator
+    mesh_creator
     
 
 
