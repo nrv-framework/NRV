@@ -13,5 +13,6 @@ build:
   jobs:
     build:
       html:
-        - echo "Building the documentation..."
-        - python3 -m sphinx.cmd.build  -T -b html -d docs/_build/doctrees/ -D language=en docs/ $READTHEDOCS_OUTPUT/html
+        - echo "Copying offline built documentation..."
+        - mkdir -p $READTHEDOCS_OUTPUT/html
+        - cp -r docs/build/html/* $READTHEDOCS_OUTPUT/html
