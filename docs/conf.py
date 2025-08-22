@@ -96,8 +96,7 @@ version = release
 # -- General configuration ---------------------------------------------------
 extensions = [
     'sphinx_gallery.gen_gallery',
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
+    "autoapi.extension",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
@@ -148,9 +147,22 @@ intersphinx_mapping = {
 napoleon_include_special_with_doc = True
 
 # Autodoc config
-autodoc_member_order = 'bysource'
-autosummary_generate = True
-autosummary_ignore_module_all = False
+#autodoc_member_order = 'bysource'
+#autosummary_generate = True
+#autosummary_ignore_module_all = False
+
+# -- AutoAPI configuration ---------------------------------------------------
+autoapi_type = "python"
+autoapi_dirs = ["../nrv"]  
+autoapi_add_toctree_entry = True
+autoapi_keep_files = False
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "private-members",
+    "show-inheritance",
+    "special-members",
+]
 
 
 # -- Sphinx Gallery configuration ---------------------------------------------
@@ -168,4 +180,3 @@ sphinx_gallery_conf = {
     'download_all_examples': False, # Remove "Download all examples" button (optional)
     'remove_config_comments': True, # Avoid re-executing examples if nothing changed
 }
-
