@@ -1,7 +1,6 @@
 # new configuration for docs since 1.3.0 to prevent from timeouts
 version: 2
 
-formats: [html]
 sphinx:
    configuration: docs/conf.py
 python:
