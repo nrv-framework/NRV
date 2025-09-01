@@ -371,17 +371,12 @@ class eit_forward_results(dict):
             self.ix_(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
         ].squeeze()
         if signed:
-            sign = (
-                2
-                * (
-                    self["v_eit_phase"][
-                        self.ix_(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
-                    ].squeeze()
-                    < np.pi
-                )
-                - 1
-            )
-            _v = _v * sign
+            phi = self["v_eit_phase"][
+                self.ix_(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
+            ].squeeze()
+            sign = 2 * (phi < np.pi) - 1
+            _v = _v * np.cos(phi)
+            # _v = _v * sign
 
         if __filter_res and self.has_failed_test:
             _v = np.delete(_v, self.fail_results, axis=0)

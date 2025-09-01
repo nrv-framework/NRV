@@ -132,11 +132,39 @@ class eit_inverse:
         return self.results
 
     def get_results(self, i_t: int = 0, i_f: int = 0, i_res: int = 0) -> np.ndarray:
+        """
+        Retrieves the computed result for the specified time, frequency, and result indices.
+        If the result is not already computed, it triggers the computation.
+
+        Parameters
+        ----------
+        i_t : int, optional
+            Index for the time corresponding to the result, default is 0.
+        i_f : int, optional
+            Index for the frequency corresponding to the result, default is 0.
+        i_res : int, optional
+            Index for the result corresponding to the result, default is 0.
+
+        Returns
+        -------
+        np.ndarray
+            The result corresponding to the specified indices.
+
+        Notes
+        -----
+        If the requested result is not found in `self.results_ppt`, the method will
+        call `self.solve` to compute it before returning.
+        """
+
         res_id = i_t, i_f, i_res
         if not res_id in self.results_ppt:
             print("Result not found. Computing...")
             self.solve(*res_id)
         return self.results[self.results_ppt.index(res_id)]
+
+    def get_results_range(self, i_t: int = 0, i_f: int = 0, i_res: int = 0) -> tuple:
+        _dv = self.get_results(i_t=i_t, i_f=i_f, i_res=i_res)
+        return np.min(_dv), np.max(_dv)
 
     def plot(ax: plt.Axes, **kwgs):
         pass
