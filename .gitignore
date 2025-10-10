@@ -117,8 +117,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/*
-docs/_nrv/*
+# docs/_build/*
+# docs/_nrv/*
 
 # PyBuilder
 target/

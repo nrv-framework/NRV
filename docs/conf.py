@@ -96,7 +96,8 @@ version = release
 # -- General configuration ---------------------------------------------------
 extensions = [
     'sphinx_gallery.gen_gallery',
-    "autoapi.extension",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
@@ -147,44 +148,9 @@ intersphinx_mapping = {
 napoleon_include_special_with_doc = True
 
 # Autodoc config
-#autodoc_member_order = 'bysource'
-#autosummary_generate = True
-#autosummary_ignore_module_all = False
-
-# -- AutoAPI configuration ---------------------------------------------------
-autoapi_type = "python"
-autoapi_dirs = ["../nrv"]  
-autoapi_add_toctree_entry = True
-autoapi_keep_files = False
-autoapi_options = [
-    "members",
-    "undoc-members",
-    "private-members",
-    "show-inheritance",
-    "show-module-summary",
-    "special-members",
-    "imported-members",
-]
-autodoc_typehints = "signature"
-
-rst_prolog = """
-.. role:: summarylabel
-"""
-
-def skip_member(app, what, name, obj, skip, options):
-    # conditional breakpoint here
-    return skip
-
-def setup(sphinx):
-    sphinx.connect("autoapi-skip-member", skip_member)
-
-def contains(seq, item):
-    return item in seq
-
-def prepare_jinja_env(jinja_env) -> None:
-    jinja_env.tests["contains"] = contains
-
-autoapi_prepare_jinja_env = prepare_jinja_env
+autodoc_member_order = 'bysource'
+autosummary_generate = True
+autosummary_ignore_module_all = False
 
 
 # -- Sphinx Gallery configuration ---------------------------------------------
@@ -202,3 +168,4 @@ sphinx_gallery_conf = {
     'download_all_examples': False, # Remove "Download all examples" button (optional)
     'remove_config_comments': True, # Avoid re-executing examples if nothing changed
 }
+

@@ -506,7 +506,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.stimulus_CM.">
 
 .. only:: html
 
@@ -523,7 +523,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.biphasic_stimulus_CM.">
 
 .. only:: html
 

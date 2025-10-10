@@ -1,11 +1,10 @@
+sphinx_rtd_theme
 furo
-ipython
-matplotlib
-numpy
 Pygments
-sphinx-autoapi
+sphinx_mdinclude
 sphinx_copybutton
 sphinx_gallery
-sphinx_mdinclude
-sphinx_rtd_theme
+ipython
 sphinx_codeautolink
+numpy
+matplotlib

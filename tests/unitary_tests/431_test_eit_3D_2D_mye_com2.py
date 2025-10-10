@@ -58,7 +58,6 @@ if __name__ == "__main__":
         "use_gnd_elec":use_gnd_elec,
     }
 
-    
     eit_instance = eit.EIT3DProblem(nerves_fname, res_dname=res_dir, label=test_id+"3D", **parameters)
     ## Nerve simulation
     # print(eit_instance.fem_res_file)
