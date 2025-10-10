@@ -150,8 +150,8 @@ class eit_inverse:
         np.ndarray
             The result corresponding to the specified indices.
 
-        Notes
-        -----
+        Note
+        ----
         If the requested result is not found in `self.results_ppt`, the method will
         call `self.solve` to compute it before returning.
         """
@@ -161,6 +161,37 @@ class eit_inverse:
             print("Result not found. Computing...")
             self.solve(*res_id)
         return self.results[self.results_ppt.index(res_id)]
+    
+    def clear_results(self, i_t: int = 0, i_f: int = 0, i_res: int = 0):
+        """
+        Removes the result entry corresponding to the specified indices from the results.
+
+        Parameters
+        ----------
+        i_t : int, optional
+            Index for time (default is 0).
+        i_f : int, optional
+            Index for frequency (default is 0).
+        i_res : int, optional
+            Index for result (default is 0).
+
+        Note
+        ----
+        If the specified result identifier exists in `self.results_ppt`, the corresponding
+        result is removed from both `self.results` and `self.results_ppt`.
+        """
+        res_id = i_t, i_f, i_res
+        if res_id in self.results_ppt:
+            _idx = self.results_ppt.index(res_id)
+            self.results.pop(_idx)
+            self.results_ppt.pop(_idx)
+
+    def clear_all_results(self):
+        """
+        Clears all stored results by resetting the `results` and `results_ppt` attributes to empty lists.
+        """
+        self.results = []
+        self.results_ppt = []
 
     def get_results_range(self, i_t: int = 0, i_f: int = 0, i_res: int = 0) -> tuple:
         _dv = self.get_results(i_t=i_t, i_f=i_f, i_res=i_res)
