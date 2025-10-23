@@ -45,9 +45,9 @@ class pyeit_inverse(eit_inverse):
         elif isinstance(data, eit_forward_results) and data.is_multi_patern:
             self._data = data
             self.n_elec = data.n_e
-            self.inj_offset = int(
-                self.data["p"][0][1] - self.data["p"][0][0]
-            ) % self.n_elec
+            self.inj_offset = (
+                int(self.data["p"][0][1] - self.data["p"][0][0]) % self.n_elec
+            )
             self.protocol_obj = protocol.create(
                 n_el=self.n_elec,
                 dist_exc=self.inj_offset,

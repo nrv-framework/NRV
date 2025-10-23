@@ -161,7 +161,7 @@ class eit_inverse:
             print("Result not found. Computing...")
             self.solve(*res_id)
         return self.results[self.results_ppt.index(res_id)]
-    
+
     def clear_results(self, i_t: int = 0, i_f: int = 0, i_res: int = 0):
         """
         Removes the result entry corresponding to the specified indices from the results.
