@@ -47,7 +47,7 @@ U. of Bordeaux.
 
 __copyright__ = "2023, nrv-framework.org"
 __license__ = "CeCILL"
-__version__ = "1.3.0"
+__version__ = "1.3.1"
 __title__ = "NeuRon Virtualizer"
 __authors__ = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
 __contributors__ = __authors__
