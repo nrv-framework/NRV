@@ -1834,8 +1834,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1919,8 +1922,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2509,15 +2515,15 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – minimal x postion for recording points, in um</p></li>
-<li><p><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – maximal x postion for recording points, in um</p></li>
-<li><p><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – minimal y postion for recording points, in um</p></li>
-<li><p><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – maximal y postion for recording points, in um</p></li>
-<li><p><strong>z_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – minimal z postion for recording points, in um</p></li>
-<li><p><strong>z_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – maximal z postion for recording points, in um</p></li>
-<li><p><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – distance between recording points on the x coordinate, in um</p></li>
-<li><p><strong>dy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – distance between recording points on the y coordinate, in um</p></li>
-<li><p><strong>dz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – distance between recording points on the z coordinate, in um</p></li>
+<li><p><strong>x_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – minimal x postion for recording points, in um</p></li>
+<li><p><strong>x_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – maximal x postion for recording points, in um</p></li>
+<li><p><strong>y_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – minimal y postion for recording points, in um</p></li>
+<li><p><strong>y_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – maximal y postion for recording points, in um</p></li>
+<li><p><strong>z_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – minimal z postion for recording points, in um</p></li>
+<li><p><strong>z_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – maximal z postion for recording points, in um</p></li>
+<li><p><strong>dx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – distance between recording points on the x coordinate, in um</p></li>
+<li><p><strong>dy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – distance between recording points on the y coordinate, in um</p></li>
+<li><p><strong>dz</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – distance between recording points on the z coordinate, in um</p></li>
 <li><p><strong>method</strong> (<em>string</em>) – electrical potential approximation method, can be “PSA” (Point Source Approximation)
 or “LSA” (Line Source Approximation).
 set to “PSA” by default. Note that if LSA is requested with an anisotropic material, computation

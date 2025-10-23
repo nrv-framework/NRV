@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="pyeit_inverse.set_inversor" href="nrv.eit.pyeit_inverse.set_inversor.html" /><link rel="prev" title="pyeit_inverse.get_results" href="nrv.eit.pyeit_inverse.get_results.html" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="pyeit_inverse.set_inversor" href="nrv.eit.pyeit_inverse.set_inversor.html" /><link rel="prev" title="pyeit_inverse.get_results_range" href="nrv.eit.pyeit_inverse.get_results_range.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.05.06 -->
         <title>pyeit_inverse.plot - NeuRon Virtualizer (NRV) 1.3.0</title>
@@ -1834,8 +1834,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1919,8 +1922,11 @@
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2504,7 +2510,7 @@
 <h1>pyeit_inverse.plot<a class="headerlink" href="#pyeit-inverse-plot" title="Link to this heading"></a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="nrv.eit.pyeit_inverse.plot">
-<span class="sig-prename descclassname"><span class="pre">pyeit_inverse.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.5)"><span class="pre">Axes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nrv/eit/_pyeit_inverse.html#pyeit_inverse.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.eit.pyeit_inverse.plot" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyeit_inverse.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.7)"><span class="pre">Axes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nrv/eit/_pyeit_inverse.html#pyeit_inverse.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.eit.pyeit_inverse.plot" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -2523,14 +2529,14 @@
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="nrv.eit.pyeit_inverse.get_results.html">
+          <a class="prev-page" href="nrv.eit.pyeit_inverse.get_results_range.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">pyeit_inverse.get_results</div>
+                <div class="title">pyeit_inverse.get_results_range</div>
                 
               </div>
             </a>

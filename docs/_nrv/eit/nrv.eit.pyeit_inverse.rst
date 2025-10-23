@@ -32,9 +32,15 @@ Methods
 
     pyeit_inverse.cbar
 
+    pyeit_inverse.clear_all_results
+
+    pyeit_inverse.clear_results
+
     pyeit_inverse.fromat_data
 
     pyeit_inverse.get_results
+
+    pyeit_inverse.get_results_range
 
     pyeit_inverse.plot
 

@@ -371,7 +371,7 @@ def compute_mye_sigma_2D(
         sig_nodes = get_sig_ap(sig_in, sig_m_t, alpha_th)
         sig_nodes = get_sig_ap(sig_nodes, sig_out, (d_ax - d_node) / d_ax)
         sig_nodes_2d = np.mean(sig_nodes)
-        frac_l_node = 0.1 * n_nodes / l_elec
+        frac_l_node = n_nodes / l_elec
         sigma_2d = frac_l_node * sig_nodes_2d + (1 - frac_l_node) * sig_mye
     else:
         sigma_2d = sig_mye

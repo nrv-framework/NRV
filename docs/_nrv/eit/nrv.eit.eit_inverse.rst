@@ -30,9 +30,15 @@ Methods
 
     eit_inverse.__init__
 
+    eit_inverse.clear_all_results
+
+    eit_inverse.clear_results
+
     eit_inverse.fromat_data
 
     eit_inverse.get_results
+
+    eit_inverse.get_results_range
 
     eit_inverse.plot
 

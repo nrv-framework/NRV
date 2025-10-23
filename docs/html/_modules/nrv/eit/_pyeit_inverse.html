@@ -1833,8 +1833,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1918,8 +1921,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2527,7 +2533,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">eit_forward_results</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;jac&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;jac&quot;</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwgs</span>
+        <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
 
         <span class="c1"># Attribute instantiated when data is set</span>
@@ -2550,7 +2556,7 @@
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">eit_forward_results</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">n_e</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inj_offset</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inj_offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;p&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">protocol_obj</span> <span class="o">=</span> <span class="n">protocol</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
@@ -2628,13 +2634,12 @@
         <span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_i_to_solve</span><span class="p">(</span>
             <span class="n">i_to_solve</span><span class="o">=</span><span class="n">i_to_solve</span><span class="p">,</span> <span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">v0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromat_data</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
+        <span class="n">v0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromat_data</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_inversor</span><span class="p">()</span>
 
         <span class="n">v1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fromat_data</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_obj</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv_obj</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="p">)</span>
 
     <span class="c1"># ------------------- #</span>
     <span class="c1"># Plot images methods #</span>
@@ -2648,7 +2653,7 @@
         <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwgs</span>
+        <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># extract node, element, alpha</span>
         <span class="n">_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="p">)</span>
@@ -2659,7 +2664,7 @@
         <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_obj</span><span class="o">.</span><span class="n">node</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">@</span> <span class="n">rotation_90_matrix</span>
         <span class="n">tri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_obj</span><span class="o">.</span><span class="n">element</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tri</span><span class="p">,</span> <span class="n">_ds</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">pts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">pts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tri</span><span class="p">,</span> <span class="n">_ds</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span></div>
 
@@ -2673,7 +2678,7 @@
         <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwgs</span>
+        <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="c1"># extract node, element, alpha</span>
         <span class="n">_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="p">)</span>

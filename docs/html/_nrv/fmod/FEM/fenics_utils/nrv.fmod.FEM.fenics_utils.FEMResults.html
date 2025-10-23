@@ -1834,8 +1834,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1919,8 +1922,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2504,7 +2510,7 @@
 <h1>FEMResults<a class="headerlink" href="#femresults" title="Link to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="nrv.fmod.FEM.fenics_utils.FEMResults">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nrv.fmod.FEM.fenics_utils.</span></span><span class="sig-name descname"><span class="pre">FEMResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elem=('Lagrange'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm=&lt;MagicMock</span> <span class="pre">name='mock.COMM_WORLD'</span> <span class="pre">id='4367253472'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/nrv/fmod/FEM/fenics_utils/_FEMResults.html#FEMResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.fmod.FEM.fenics_utils.FEMResults" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nrv.fmod.FEM.fenics_utils.</span></span><span class="sig-name descname"><span class="pre">FEMResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_file=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elem=('Lagrange'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">1)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vout=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comm=&lt;MagicMock</span> <span class="pre">name='mock.COMM_WORLD'</span> <span class="pre">id='4439588592'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/nrv/fmod/FEM/fenics_utils/_FEMResults.html#FEMResults"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.fmod.FEM.fenics_utils.FEMResults" title="Link to this definition"></a></dt>
 <dd><p>Result of a FEMSimulation.
 Store the resulting function space giving the possibility to apply basic mathematical
 operations on multiple results</p>

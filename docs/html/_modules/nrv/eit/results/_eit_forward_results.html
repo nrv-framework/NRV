@@ -1833,8 +1833,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1918,8 +1921,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2896,17 +2902,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">signed</span><span class="p">:</span>
-            <span class="n">sign</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="mi">2</span>
-                <span class="o">*</span> <span class="p">(</span>
-                    <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_eit_phase&quot;</span><span class="p">][</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
-                    <span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
-                    <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-                <span class="p">)</span>
-                <span class="o">-</span> <span class="mi">1</span>
-            <span class="p">)</span>
-            <span class="n">_v</span> <span class="o">=</span> <span class="n">_v</span> <span class="o">*</span> <span class="n">sign</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_eit_phase&quot;</span><span class="p">][</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">sign</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">phi</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">_v</span> <span class="o">=</span> <span class="n">_v</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+            <span class="c1"># _v = _v * sign</span>
 
         <span class="k">if</span> <span class="n">__filter_res</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_failed_test</span><span class="p">:</span>
             <span class="n">_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">_v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail_results</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>

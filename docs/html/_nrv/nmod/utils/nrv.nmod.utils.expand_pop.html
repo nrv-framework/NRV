@@ -1834,8 +1834,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1919,8 +1922,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2504,14 +2510,14 @@
 <h1>expand_pop<a class="headerlink" href="#expand-pop" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="nrv.nmod.utils.expand_pop">
-<span class="sig-prename descclassname"><span class="pre">nrv.nmod.utils.</span></span><span class="sig-name descname"><span class="pre">expand_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_axons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_axons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../../../_modules/nrv/nmod/utils/_packers.html#expand_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.nmod.utils.expand_pop" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nrv.nmod.utils.</span></span><span class="sig-name descname"><span class="pre">expand_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_axons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_axons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="../../../_modules/nrv/nmod/utils/_packers.html#expand_pop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.nmod.utils.expand_pop" title="Link to this definition"></a></dt>
 <dd><p>Expand population of placed axons by a specified number</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y_axons</strong> (<em>np.ndarray</em>) – y coordinate of the axons, in um</p></li>
 <li><p><strong>z_axons</strong> (<em>np.ndarray</em>) – z coordinate of the axons, in um</p></li>
-<li><p><strong>factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>) – expansion factor, unitless</p></li>
+<li><p><strong>factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – expansion factor, unitless</p></li>
 </ul>
 </dd>
 </dl>

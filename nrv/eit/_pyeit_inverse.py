@@ -23,7 +23,7 @@ class pyeit_inverse(eit_inverse):
         self,
         data: None | eit_forward_results = None,
         method: Literal["jac", "bp"] = "jac",
-        **kwgs
+        **kwgs,
     ):
 
         # Attribute instantiated when data is set
@@ -46,8 +46,8 @@ class pyeit_inverse(eit_inverse):
             self._data = data
             self.n_elec = data.n_e
             self.inj_offset = (
-                self.data["p"][0][1] - self.data["p"][0][0]
-            ) % self.n_elec
+                int(self.data["p"][0][1] - self.data["p"][0][0]) % self.n_elec
+            )
             self.protocol_obj = protocol.create(
                 n_el=self.n_elec,
                 dist_exc=self.inj_offset,
@@ -114,13 +114,12 @@ class pyeit_inverse(eit_inverse):
         i_t, i_f, i_res = self._get_i_to_solve(
             i_to_solve=i_to_solve, i_t=i_t, i_f=i_f, i_res=i_res
         )
-        if self.v0 is None:
-            self.v0 = self.fromat_data(i_t=0, i_f=i_f, i_res=i_res)
+        v0 = self.fromat_data(i_t=0, i_f=i_f, i_res=i_res)
         if self.inv_obj is None:
             self.set_inversor()
 
         v1 = self.fromat_data(i_t=i_t, i_f=i_f, i_res=i_res)
-        return self.inv_obj.solve(v1, self.v0, normalize=True), (i_t, i_f, i_res)
+        return self.inv_obj.solve(v1, v0, normalize=True), (i_t, i_f, i_res)
 
     # ------------------- #
     # Plot images methods #
@@ -132,7 +131,7 @@ class pyeit_inverse(eit_inverse):
         i_f: int = 0,
         i_res: int = 0,
         filter=None,
-        **kwgs
+        **kwgs,
     ):
         # extract node, element, alpha
         _ds = self.get_results(i_t, i_f, i_res)
@@ -143,7 +142,7 @@ class pyeit_inverse(eit_inverse):
         pts = self.mesh_obj.node[:, [0, 1]] @ rotation_90_matrix
         tri = self.mesh_obj.element
 
-        ax.tripcolor(pts[:, 0], pts[:, 1], tri, _ds)
+        ax.tripcolor(pts[:, 0], pts[:, 1], tri, _ds, **kwgs)
         ax.axis("equal")
         ax.set_axis_off()
 
@@ -154,7 +153,7 @@ class pyeit_inverse(eit_inverse):
         i_t: int = 0,
         i_f: int = 0,
         i_res: int = 0,
-        **kwgs
+        **kwgs,
     ):
         # extract node, element, alpha
         _ds = self.get_results(i_t, i_f, i_res)

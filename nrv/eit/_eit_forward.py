@@ -896,7 +896,8 @@ class eit_forward(NRV_class):
         v_elecs = np.zeros((self.n_p, self.n_t, self.n_e), dtype=ScalarType)
         if not self.fem_initialized:
             self._init_fem()
-        for i_ in track(range(len(_sim_list))):
+        _n_sim = len(_sim_list)
+        for i_ in track(range(_n_sim), description="single proc:"):
             # update and solve
             i_t = _sim_list[i_]
             # update and solve
@@ -1024,7 +1025,7 @@ class eit_forward(NRV_class):
         ]
         if n_proc == 1:
             print("single core")
-            self.v_elecs = self.run_all_fem(task_info_list[0])
+            self.v_elecs = self.run_all_fem(task_info_list[0]).squeeze()
         else:
             with Pool(n_proc) as pool:
                 with Live(refresh_per_second=10) as live:

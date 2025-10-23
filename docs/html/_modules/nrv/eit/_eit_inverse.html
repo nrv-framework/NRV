@@ -1833,8 +1833,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.data.html">eit_inverse.data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.has_data.html">eit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.__init__.html">eit_inverse.__init__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html">eit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html">eit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html">eit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results.html">eit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html">eit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.plot.html">eit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.solve.html">eit_inverse.solve</a></li>
 </ul>
@@ -1918,8 +1921,11 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.has_data.html">pyeit_inverse.has_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.__init__.html">pyeit_inverse.__init__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.cbar.html">pyeit_inverse.cbar</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_all_results.html">pyeit_inverse.clear_all_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.clear_results.html">pyeit_inverse.clear_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.fromat_data.html">pyeit_inverse.fromat_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results.html">pyeit_inverse.get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.get_results_range.html">pyeit_inverse.get_results_range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.plot.html">pyeit_inverse.plot</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.set_inversor.html">pyeit_inverse.set_inversor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/eit/pyeit_inverse/nrv.eit.pyeit_inverse.solve.html">pyeit_inverse.solve</a></li>
@@ -2645,11 +2651,79 @@
 <div class="viewcode-block" id="eit_inverse.get_results">
 <a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results.html#nrv.eit.eit_inverse.get_results">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the computed result for the specified time, frequency, and result indices.</span>
+<span class="sd">        If the result is not already computed, it triggers the computation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Index for the time corresponding to the result, default is 0.</span>
+<span class="sd">        i_f : int, optional</span>
+<span class="sd">            Index for the frequency corresponding to the result, default is 0.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Index for the result corresponding to the result, default is 0.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            The result corresponding to the specified indices.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        If the requested result is not found in `self.results_ppt`, the method will</span>
+<span class="sd">        call `self.solve` to compute it before returning.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">res_id</span> <span class="o">=</span> <span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">res_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Result not found. Computing...&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="o">*</span><span class="n">res_id</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">res_id</span><span class="p">)]</span></div>
+
+    
+<div class="viewcode-block" id="eit_inverse.clear_results">
+<a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_results.html#nrv.eit.eit_inverse.clear_results">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes the result entry corresponding to the specified indices from the results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Index for time (default is 0).</span>
+<span class="sd">        i_f : int, optional</span>
+<span class="sd">            Index for frequency (default is 0).</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Index for result (default is 0).</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        If the specified result identifier exists in `self.results_ppt`, the corresponding</span>
+<span class="sd">        result is removed from both `self.results` and `self.results_ppt`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res_id</span> <span class="o">=</span> <span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span>
+        <span class="k">if</span> <span class="n">res_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span><span class="p">:</span>
+            <span class="n">_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">res_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">_idx</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">_idx</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="eit_inverse.clear_all_results">
+<a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.clear_all_results.html#nrv.eit.eit_inverse.clear_all_results">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_all_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears all stored results by resetting the `results` and `results_ppt` attributes to empty lists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_ppt</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="eit_inverse.get_results_range">
+<a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html#nrv.eit.eit_inverse.get_results_range">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_results_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">_dv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">_dv</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">_dv</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="eit_inverse.plot">
