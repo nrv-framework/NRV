@@ -1,14 +1,20 @@
-name: nrv-env
+name: nrv-e
 channels:
   - conda-forge
 dependencies:
   - python==3.12
   - pip
-  - fenics-dolfinx==0.9.0 
+  - fenics-dolfinx==0.9.0
   - mpich
-  - pandas
-  - mpich 
-  - python-gmsh 
-  - ipykernel 
+  - python-gmsh
+  - ipykernel
   - pip:
-    - nrv-py
+    - build
+    - sphinx
+    - sphinx-rtd-theme
+    - furo
+    - Pygments
+    - sphinx-mdinclude
+    - sphinx_copybutton
+    - sphinx_gallery
+    - sphinx_codeautolink

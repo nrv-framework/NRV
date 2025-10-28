@@ -1,0 +1,93 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nrv-py"
+version = "1.3.1"
+description = "NeuRon Virtualizer (NRV)"
+readme = "ReadMe.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Florian Kolbl" },
+    { name = "Roland Giraud" },
+    { name = "Louis Regnacq" },
+    { name = "Thomas Couppey" },
+    { name = "Maroua Kolbl Hammami" },
+]
+requires-python = ">=3.12"
+
+dependencies = [
+    "icecream",
+    "matplotlib",
+    "mph",
+    "neuron",
+    "numpy",
+    "pandas",
+    "pathos",
+    "psutil",
+    "pyeit",
+    "pyswarms",
+    "rich",
+    "scipy",
+    "seaborn",
+    "shapely",
+]
+
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Natural Language :: English",
+]
+
+[project.urls]
+homepage = "https://nrv-framework.org"
+documentation = "https://nrv.readthedocs.io"
+repository = "https://github.com/nrv-framework/NRV"
+
+[project.optional-dependencies]
+dev = [
+  "pytest >=7.0",
+  "pytest-cov",
+  "flake8",
+  "black",
+  "mypy",
+  "build",
+  "pre-commit",
+  "sphinx",
+  "sphinx-rtd-theme",
+  "furo",
+  "Pygments",
+  "sphinx-mdinclude",
+  "sphinx_copybutton",
+  "sphinx_gallery",
+  "sphinx_codeautolink",
+]
+
+# ----------------------------
+#   Setuptools specific part
+# ----------------------------
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nrv*"]
+
+[tool.setuptools.package-data]
+"nrv._misc" = ["NRV.ini"]
+"nrv._misc.comsol_templates" = ["*.mph"]
+"nrv._misc.geom" = ["*.dxf", "*.png"]
+"nrv._misc.log" = ["NRV.log"]
+"nrv._misc.materials" = ["*.mat"]
+"nrv._misc.mods" = ["*.mod"]
+"nrv._misc.pops" = ["*.pop"]
+"nrv._misc.ppops" = ["*.ppop"]
+"nrv._misc.stats" = ["*.csv"]

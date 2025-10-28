@@ -1,4 +1,3 @@
-# pylint: skip-file
 """NRV: NeuRon Virtualizer, modeling of the Nervous System,
 
 NRV is a pythonic framework for simulating bio-electronic phenomena and

@@ -1,3 +1,3 @@
 # CONTRIBUTING
 
-All external contribution description from developers that are not in the main design team
+All external contribution are welcome!
