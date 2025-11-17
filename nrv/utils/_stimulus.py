@@ -13,6 +13,9 @@ import matplotlib.pyplot as plt
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
+def new_stimulus(s_init=0):
+    print('coucou')
+
 
 ###############
 ## Functions ##
@@ -620,3 +623,25 @@ class stimulus(NRV_class):
         slope = (ampstart - ampmax) / (tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
+
+    def gaussian_noise(self, tstart, tstop, standard_dev, offset=0, dt=0.005):
+        """
+        Create a gaussian noise signal
+
+        Parameters
+        ----------
+        tstart       : float
+            starting time of the waveform, in ms
+        tstop        : float
+            stopping time of the waveform, in ms
+        standard_dev : float
+            standard deviation of the gaussian noise, in uA
+        offset       : float
+            offset current of the waveform, in uA, by default set to 0
+        dt           : float
+            sampling time period to generate the sinusoidal shape, by default set to 0.005ms
+        """
+        Nb_points = int((tstop - tstart) / dt) + 1
+        t = np.linspace(tstart, tstop, num=Nb_points)
+        s = np.random.normal(loc=offset, scale=standard_dev, size=Nb_points)
+        self.concatenate(s, t, t_shift=tstart)
