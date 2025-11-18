@@ -501,6 +501,43 @@ class unmyelinated(axon):
         self.intra_current_stim_starts.append(t_start)
         self.intra_current_stim_durations.append(duration)
         self.intra_current_stim_amplitudes.append(amplitude)
+    
+    def insert_I_Clamp_vector(self, position, stimulus):
+        """
+        Insert a I clamp stimulation from a stimulus object
+
+        Parameters
+        ----------
+        position    : float
+            relative position over the axon
+        stimulus    : stimulus object
+            stimulus for the clamp, see Stimulus.py for more information
+        """
+
+        
+        # adapt position to the number of sections
+        portion_length = 1.0 / self.Nsec
+        stim_sec = int(math.floor(position / portion_length))
+        stim_pos = (position / portion_length) - math.floor(position / portion_length)
+        # add the stimulation to the axon
+        self.intra_current_stim.append(
+            neuron.h.IClamp(stim_pos, sec=self.unmyelinated_sections[stim_sec])
+        )
+        # set fake duration
+        self.intra_current_stim[-1].delay = 0.0
+        self.intra_current_stim[-1].dur = 1e9
+        tvector = neuron.h.Vector()
+        svector = neuron.h.Vector()#stimulus.s)
+        tvector.from_python(stimulus.t)
+        svector.from_python(stimulus.s)
+        svector.play(self.intra_current_stim[-1]._ref_amp, tvector, 1)
+
+        # save the stimulation parameter for results
+        self.intra_current_stim_positions.append(position * self.L)
+        # save the stimulus for later use
+        self.intra_current_stim.append(svector)
+
+        
 
     def insert_V_Clamp(self, position, stimulus):
         """
