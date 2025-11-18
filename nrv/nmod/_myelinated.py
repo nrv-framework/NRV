@@ -910,6 +910,27 @@ class myelinated(axon):
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
 
+    def insert_I_Clamp_vector(self, position, stimulus):
+        """
+        Insert a I clamp stimulation from a stimulus object at the midd point of the nearest node to the specified position
+
+        Parameters
+        ----------
+        position    : float
+            relative position over the axon
+        stimulus    : stimulus object
+            stimulus for the clamp, see Stimulus.py for more information
+        """
+        steps = stimulus.s[1:]
+        times = stimulus.t[1:]
+        durations = np.diff(times)
+        durations = np.append(durations, 1e9)  # last step duration set to a big value
+        for k in range(len(steps)):
+            self.insert_I_Clamp(
+                position, times[k], durations[k], steps[k]
+            )
+        # AGAIN, AS FOR MYELINATED AXON, THIS IS A QUICK AND DIRTY WAY TO INSERT A VECTORIAL STIMULUS
+
     def clear_I_Clamp(self):
         """
         Clear any I-clamp attached to the axon

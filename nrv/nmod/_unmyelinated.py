@@ -502,6 +502,7 @@ class unmyelinated(axon):
         self.intra_current_stim_durations.append(duration)
         self.intra_current_stim_amplitudes.append(amplitude)
     
+
     def insert_I_Clamp_vector(self, position, stimulus):
         """
         Insert a I clamp stimulation from a stimulus object
@@ -513,8 +514,17 @@ class unmyelinated(axon):
         stimulus    : stimulus object
             stimulus for the clamp, see Stimulus.py for more information
         """
-
-        
+        steps = stimulus.s[1:]
+        times = stimulus.t[1:]
+        durations = np.diff(times)
+        durations = np.append(durations, 1e9)  # last step duration set to a big value
+        for k in range(len(steps)):
+            self.insert_I_Clamp(
+                position, times[k], durations[k], steps[k]
+            )  #
+        # THE FOLLOWING CODE IS NOT WORKING PROPERLY, KEPT FOR REFERENCE
+        # HOWEVER IT SEEMS MORE ATTRACTIVE THAN THIS LOOP METHOD...
+        """
         # adapt position to the number of sections
         portion_length = 1.0 / self.Nsec
         stim_sec = int(math.floor(position / portion_length))
@@ -536,32 +546,7 @@ class unmyelinated(axon):
         self.intra_current_stim_positions.append(position * self.L)
         # save the stimulus for later use
         self.intra_current_stim.append(svector)
-
-    def insert_I_Clamp_vector2(self, position, stimulus):
         """
-        Insert a I clamp stimulation from a stimulus object
-
-        Parameters
-        ----------
-        position    : float
-            relative position over the axon
-        stimulus    : stimulus object
-            stimulus for the clamp, see Stimulus.py for more information
-        """
-        # adapt position to the number of sections
-        portion_length = 1.0 / self.Nsec
-        stim_sec = int(math.floor(position / portion_length))
-        stim_pos = (position / portion_length) - math.floor(position / portion_length)
-
-        steps = stimulus.s[1:]
-        times = stimulus.t[1:]
-        durations = np.diff(times)
-        durations = np.append(durations, 1e9)  # last step duration set to a big value
-        for k in range(len(steps)):
-            self.insert_I_Clamp(
-                position, times[k], durations[k], steps[k]
-            )  #
-        #self.insert_I_Clamp(self, position, t_start, duration, amplitude)
         
 
     def insert_V_Clamp(self, position, stimulus):

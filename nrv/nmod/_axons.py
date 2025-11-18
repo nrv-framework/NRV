@@ -1263,6 +1263,13 @@ class axon(NRV_simulable):
         pass
 
     @abstractmethod
+    def insert_I_Clamp_vector(self):
+        """
+        :meta private:
+        """
+        pass
+
+    @abstractmethod
     def insert_V_Clamp(self):
         """
         :meta private:
@@ -1386,6 +1393,9 @@ class axon_test(axon):
         )
 
     def insert_I_Clamp(self):
+        pass
+
+    def insert_I_Clamp_vector(self):
         pass
 
     def insert_V_Clamp(self):
