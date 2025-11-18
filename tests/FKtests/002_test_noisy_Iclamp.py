@@ -20,10 +20,17 @@ if __name__ == "__main__":
     standard_dev = 5
     offset = 10
 
-    stim1.gaussian_noise(tstart, tstop, standard_dev, offset=offset, dt=0.005)
+    stim1.gaussian_noise(tstart, tstop, standard_dev, offset=offset, dt=0.01)
     
     axon1 = nrv.unmyelinated(y,z,d,L,dt=0.001,Nrec=100)
-    #axon1.insert_I_Clamp_vector(0.5, stim1) #self, position, stimulus
+    print('lets see... ')
+    axon1.insert_I_Clamp_vector2(0.5, stim1) #self, position, stimulus
+    print('... done')
+
+    t_start = 30
+    duration = 0.5
+    amplitude = 5
+    axon1.insert_I_Clamp(0.1, t_start, duration, amplitude)
     results = axon1.simulate(t_sim=tstop)
     del axon1
 
