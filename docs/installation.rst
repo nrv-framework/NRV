@@ -44,7 +44,7 @@ are conda-installable only. We also recommend to install gmsh and ipython from c
 
     .. code:: bash
 
-        conda install -c conda-forge fenics-dolfinx "libblas=*=*blis"
+        conda install -c conda-forge fenics-dolfinx==0.9.0 "libblas=*=*blis" mpich python-gmsh ipykernel
 
 .. Tip::
     With Mamba, the command is:
