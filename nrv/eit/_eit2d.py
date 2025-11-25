@@ -81,6 +81,7 @@ class EIT2DProblem(eit_forward):
     ):
         self.sigma_method: str = "avg_ind"
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
+        self.use_gnd_elec = True
 
     @property
     def dim(self) -> int:
@@ -247,14 +248,15 @@ class EIT2DProblem(eit_forward):
             bar = gmsh.model.occ.addRectangle(
                 0, -self.w_elec / 2, 0, self.r_cir * 1.1, self.w_elec
             )
-            angle = (np.pi / 2) - ((2 * np.pi * i) / (self.n_elec))
+            # TC 25/11/13: np.pi align first electrode with nerve circle construction point.
+            angle = np.pi - ((2 * np.pi * i) / (self.n_elec))
             gmsh.model.occ.rotate([(2, bar)], 0, 0, 0, 0, 0, 1, angle)
             bar_ids += [(2, bar)]
 
             # Compute the electrode center of map to ecover the line id
             z_elec_com = CoF_arc * np.exp(1j * angle)
-            elec_coms[i][0] = np.real(z_elec_com)
-            elec_coms[i][1] = np.imag(z_elec_com)
+            elec_coms[i][1] = -np.real(z_elec_com)
+            elec_coms[i][0] = np.imag(z_elec_com)
 
         dis3 = gmsh.model.occ.addDisk(
             0, 0, 0, self.r_cir, self.r_cir, zAxis=_zaxis, xAxis=_xaxis
@@ -277,7 +279,6 @@ class EIT2DProblem(eit_forward):
             for i in range(self.n_elec):
                 if np.allclose([x, y], elec_coms[i]):
                     line_elec[i] += [line[1]]
-
         surfs = gmsh.model.occ.getEntities(dim=2)
         id_elt_ne = []
         id_elt_fa = [[] for _ in range(self.n_fa)]

@@ -374,9 +374,7 @@ class eit_forward_results(dict):
             phi = self["v_eit_phase"][
                 self.ix_(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
             ].squeeze()
-            sign = 2 * (phi < np.pi) - 1
             _v = _v * np.cos(phi)
-            # _v = _v * sign
 
         if __filter_res and self.has_failed_test:
             _v = np.delete(_v, self.fail_results, axis=0)
@@ -950,7 +948,7 @@ class eit_forward_results(dict):
             if not self.is_multi_freqs:
                 print("WARNING: cannot plot quasistatic results over frequencies")
                 return None
-            elif i_f is not None:
+            elif i_f is None:
                 _x = self["f"]
             else:
                 _x = self["f"][i_f]

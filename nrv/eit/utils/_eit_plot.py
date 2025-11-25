@@ -34,14 +34,13 @@ class Figure_elec:
     def __init_figure(self, **fig_kwgs):
         if self.n_e == 8:
             fig_dim = (3, 3)
-            i_plots = np.array(
-                [[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]]
-            )
+            i_plots = [
+                [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]
+                 ]
             i_center = (1, 1)
         elif self.n_e == 12:
             fig_dim = (4, 4)
-            i_plots = np.array(
-                [
+            i_plots = [
                     [0, 1],
                     [0, 2],
                     [0, 3],
@@ -53,14 +52,12 @@ class Figure_elec:
                     [3, 0],
                     [1, 0],
                     [0, 0],
-                ]
-            )
+            ]
             idxs = np.arange(2) + 1
             i_center = (slice(1, 3), slice(1, 3))
         elif self.n_e == 16:
             fig_dim = (5, 5)
-            i_plots = np.array(
-                [
+            i_plots = [
                     [0, 2],
                     [0, 3],
                     [0, 4],
@@ -77,8 +74,7 @@ class Figure_elec:
                     [1, 0],
                     [0, 0],
                     [0, 1],
-                ]
-            )
+            ]
             i_center = (slice(1, 4), slice(1, 4))
 
         mask = np.ones(fig_dim, dtype=bool)

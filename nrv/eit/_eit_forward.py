@@ -780,7 +780,6 @@ class eit_forward(NRV_class):
         -------
         np.ndarray(self.n_elec,)
         """
-
         if isnan(v_elecs[0]):
             v_elecs = np.zeros(self.n_elec)
             self._clear_fem()
