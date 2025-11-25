@@ -299,6 +299,11 @@ class axon(NRV_simulable):
         self.intra_voltage_stim_position = []
         self.intra_voltage_stim_stimulus = None
 
+        self.intra_stim = []
+        self.intra_stim_t_vec = []
+        self.intra_stim_s_vec = []
+        self.intra_stim_stype = []
+
         # Extra stims
         self.extra_stim = None
         self.footprints = None
@@ -362,6 +367,10 @@ class axon(NRV_simulable):
                 "intra_voltage_stim_stimulus",
                 "intra_voltage_stim_stimulus",
                 "intra_voltage_stim_stimulus",
+                "intra_stim",
+                "intra_stim_t_vec",
+                "intra_stim_s_vec",
+                "intra_stim_stype",
             ]
         if not extracel_context:
             bc += [
@@ -610,6 +619,58 @@ class axon(NRV_simulable):
         """
         self.record = False
 
+    def _get_sec_from_postion(self, position: float) -> int:
+        """
+        Returns from a global x-coordinate, the section and relative position on this section.
+
+        Parameters
+        ----------
+        position       : float
+            x_posision in um
+        """
+        pass  # define in subclasse as it depends of geometry
+
+    def insert_intra_stim(
+        self,
+        position: float | tuple,
+        stim: stimulus,
+        stype: Literal["I", "i", "V", "v"] = "i",
+    ):
+        """
+        Insert a IC clamp stimulation on a Ranvier node at its midd point position
+
+        Parameters
+        ----------
+        position       : float|tuple
+            x_posision along the axon or tuple containing the targeted section and the relative position along this section
+        t_start     : float
+            starting time (ms)
+        duration    : float
+            duration of the pulse(ms)
+        amplitude   : float
+            amplitude of the pulse (nA)
+        """
+        if isinstance(position, tuple):
+            stim_sec, stim_pos = position
+        else:
+            stim_sec, stim_pos = self._get_sec_from_postion(position=position)
+        # add the stimulation to the axon
+        if stype.lower() == "i":
+            self.intra_stim.append(neuron.h.IClamp(stim_pos, sec=stim_sec))
+            self.intra_stim[-1].delay = 0
+            self.intra_stim[-1].dur = 1e9
+            self.intra_stim[-1].amp = 0
+
+        else:
+            self.intra_stim.append(neuron.h.SEClamp(stim_pos, sec=stim_sec))
+            self.intra_stim[-1].rs = 0.1
+            self.intra_stim[-1].dur1 = 1e9
+            self.intra_stim[-1].amp1 = self.v_init
+
+        self.intra_stim_stype.append(stype.lower())
+        self.intra_stim_t_vec.append(neuron.h.Vector(stim.t))
+        self.intra_stim_s_vec.append(neuron.h.Vector(stim.s))
+
     def simulate(
         self,
         **kwargs,
@@ -662,6 +723,14 @@ class axon(NRV_simulable):
                 self.set_Nav_recorders()
 
         ## initialisation and parameters for neuron - KEEP THIS CODE JUST BEFORE SIMULATION
+        for i in range(len(self.intra_stim_t_vec)):
+            if self.intra_stim_stype[i] == "i":
+                _ref = self.intra_stim[i]._ref_amp
+            else:
+                _ref = self.intra_stim[i]._ref_amp1
+            self.intra_stim_s_vec[i].play(
+                _ref, self.intra_stim_t_vec[i], 0  # no interpollation
+            )
         neuron.h.tstop = t_sim
         neuron.h.celsius = self.T  # set temperature in celsius
         neuron.h.finitialize(self.v_init)  # initialize voltage state
@@ -1263,13 +1332,6 @@ class axon(NRV_simulable):
         pass
 
     @abstractmethod
-    def insert_I_Clamp_vector(self):
-        """
-        :meta private:
-        """
-        pass
-
-    @abstractmethod
     def insert_V_Clamp(self):
         """
         :meta private:
@@ -1393,9 +1455,6 @@ class axon_test(axon):
         )
 
     def insert_I_Clamp(self):
-        pass
-
-    def insert_I_Clamp_vector(self):
         pass
 
     def insert_V_Clamp(self):

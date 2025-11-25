@@ -104,7 +104,7 @@ class optim_results(NRV_results):
         nitstop: int = -1,
         xlog: bool = False,
         ylog: bool = False,
-        **ax_kwargs
+        **ax_kwargs,
     ):
         cost = self["cost_history"]
         ax.plot(cost[0:nitstop], **ax_kwargs)

@@ -88,7 +88,7 @@ class NRV_simulable(NRV_class):
         record_g_mem=False,
         record_g_ions=False,
         loaded_footprints=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self.t_sim = t_sim

@@ -197,7 +197,7 @@ class CShape(NRV_class):
         n_tetha: int = 100,
         add_center: bool = False,
         *args,
-        **kwgs
+        **kwgs,
     ):
         """
         plot the border of the shape
@@ -224,5 +224,5 @@ class CShape(NRV_class):
             self.bbox[np.array([0, 0, 2, 2, 0])],
             self.bbox[np.array([1, 3, 3, 1, 1])],
             *args,
-            **kwgs
+            **kwgs,
         )

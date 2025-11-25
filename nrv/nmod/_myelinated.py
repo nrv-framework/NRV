@@ -6,12 +6,14 @@ import math
 
 import numpy as np
 import matplotlib.pyplot as plt
+from typing import Literal
 
 from nrv.nmod.results._axons_results import axon_results
 
 from ._axons import (
     axon,
     neuron,
+    stimulus,
     myelinated_models,
     rotate_list,
     d_lambda_rule,
@@ -861,6 +863,15 @@ class myelinated(axon):
         else:
             self.x_rec = self.x
 
+    def _get_sec_from_postion(self, position: float, node_only: bool = True):
+        if node_only or self.rec == "nodes":
+            index = round((position * (self.axonnodes - 1) + 0.5))
+            sec = self.node[index]
+            pos = 0.5
+        else:
+            raise NotImplementedError()
+        return sec, pos
+
     ###############################
     ## Intracellular stimulation ##
     ###############################
@@ -891,6 +902,45 @@ class myelinated(axon):
         self.intra_current_stim_durations.append(duration)
         self.intra_current_stim_amplitudes.append(amplitude)
 
+    def insert_intra_stim_node(
+        self, index, stim: stimulus, stype: Literal["I", "i", "V", "v"] = "i"
+    ):
+        """
+        Insert a IC clamp stimulation on a Ranvier node at its midd point position
+
+        Parameters
+        ----------
+        index       : int
+            node number of the node to stimulate
+        t_start     : float
+            starting time (ms)
+        duration    : float
+            duration of the pulse(ms)
+        amplitude   : float
+            amplitude of the pulse (nA)
+        """
+        self.insert_intra_stim(
+            position=(self.node[index], 0.5),
+            stim=stim,
+            stype=stype,
+        )
+        # # add the stimulation to the axon
+        # if stype.lower() == "i":
+        #     self.intra_stim.append(neuron.h.IClamp(0.5, sec=self.node[index]))
+        #     self.intra_stim[-1].delay = 0
+        #     self.intra_stim[-1].dur = 1e9
+        #     self.intra_stim[-1].amp = 0
+
+        # else:
+        #     self.intra_stim.append(neuron.h.SEClamp(0.5, sec=self.node[index]))
+        #     self.intra_stim[-1].rs = 0.1
+        #     self.intra_stim[-1].dur1 = 1e9
+        #     self.intra_stim[-1].amp1 = self.v_init
+
+        # self.intra_stim_stype.append(stype.lower())
+        # self.intra_stim_t_vec.append(neuron.h.Vector(stim.t))
+        # self.intra_stim_s_vec.append(neuron.h.Vector(stim.s))
+
     def insert_I_Clamp(self, position, t_start, duration, amplitude):
         """
         Insert a IC clamp stimulation at the midd point of the nearest node to the specified position
@@ -909,37 +959,6 @@ class myelinated(axon):
         # adapt position to the number of sections
         index = round((position * (self.axonnodes - 1) + 0.5))
         self.insert_I_Clamp_node(index, t_start, duration, amplitude)
-
-    def insert_I_Clamp_vector(self, position, stimulus):
-        """
-        Insert a I clamp stimulation from a stimulus object at the midd point of the nearest node to the specified position
-
-        Parameters
-        ----------
-        position    : float
-            relative position over the axon
-        stimulus    : stimulus object
-            stimulus for the clamp, see Stimulus.py for more information
-        """
-        steps = stimulus.s[1:]
-        times = stimulus.t[1:]
-        durations = np.diff(times)
-        durations = np.append(durations, 1e9)  # last step duration set to a big value
-        for k in range(len(steps)):
-            self.insert_I_Clamp(
-                position, times[k], durations[k], steps[k]
-            )
-        # AGAIN, AS FOR MYELINATED AXON, THIS IS A QUICK AND DIRTY WAY TO INSERT A VECTORIAL STIMULUS
-
-    def clear_I_Clamp(self):
-        """
-        Clear any I-clamp attached to the axon
-        """
-        self.intra_current_stim = []
-        self.intra_current_stim_positions = []
-        self.intra_current_stim_starts = []
-        self.intra_current_stim_durations = []
-        self.intra_current_stim_amplitudes = []
 
     def insert_V_Clamp_node(self, index, stimulus):
         """

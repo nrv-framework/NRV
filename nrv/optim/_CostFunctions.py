@@ -57,7 +57,7 @@ class cost_function(NRV_class):
         filter=None,
         saver=None,
         file_name="cost_saver.csv",
-        **kawrgs
+        **kawrgs,
     ):
         super().__init__()
         self.static_context = static_context

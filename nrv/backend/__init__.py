@@ -8,7 +8,7 @@ sub-packages.
 """
 
 from ._config import nrv_config
-from ._extlib_interface import(
+from ._extlib_interface import (
     is_empty_iterable,
     set_idxs,
     get_query,

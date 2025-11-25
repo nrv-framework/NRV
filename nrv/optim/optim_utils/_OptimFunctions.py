@@ -178,7 +178,7 @@ def interpolate_Npts(
     generatefigure: bool = True,
     strict_bounds: bool = True,
     kwargs_interp: dict = {},
-    **kwargs
+    **kwargs,
 ):
     r"""
     genarte a waveform from a particle position using interpolate where the position
@@ -284,7 +284,7 @@ def interpolate_Npts(
         bounds=bds,
         save=False,
         save_scale=save_scale,
-        **kwargs_interp
+        **kwargs_interp,
     )
 
     if t_shift is not None:

@@ -77,7 +77,7 @@ class EIT2DProblem(eit_forward):
         nervefile: str,
         res_dname: str | None = None,
         label: str = "2deit_1",
-        **parameters
+        **parameters,
     ):
         self.sigma_method: str = "avg_ind"
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)

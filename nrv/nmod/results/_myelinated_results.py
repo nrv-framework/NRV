@@ -127,7 +127,7 @@ class myelinated_results(axon_results):
         color: str = "k",
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
         x_pos = self.x[self.node_index]
         x_index = self.node_index
@@ -141,7 +141,7 @@ class myelinated_results(axon_results):
             color=color,
             switch_axes=switch_axes,
             norm=norm,
-            **kwgs
+            **kwgs,
         )
 
     def plot_x_t_all_seq(
@@ -152,7 +152,7 @@ class myelinated_results(axon_results):
         myelin_color: str = "gray",
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
         if self.rec == "all":
             node_index = self.node_index
@@ -172,7 +172,7 @@ class myelinated_results(axon_results):
                 color=myelin_color,
                 switch_axes=switch_axes,
                 norm=norm,
-                **kwgs
+                **kwgs,
             )
 
         self.plot_x_t(

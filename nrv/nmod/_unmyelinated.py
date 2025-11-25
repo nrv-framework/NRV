@@ -466,6 +466,13 @@ class unmyelinated(axon):
                 sec.L_caintscale = self.L / self.Nsec
                 sec.L_caextscale = self.L / self.Nsec
 
+    def _get_sec_from_postion(self, position):
+        portion_length = 1.0 / self.Nsec
+        index = int(math.floor(position / portion_length))
+        sec = self.unmyelinated_sections[index]
+        pos = (position / portion_length) - math.floor(position / portion_length)
+        return sec, pos
+
     ###############################
     ## Intracellular stimulation ##
     ###############################
@@ -501,7 +508,6 @@ class unmyelinated(axon):
         self.intra_current_stim_starts.append(t_start)
         self.intra_current_stim_durations.append(duration)
         self.intra_current_stim_amplitudes.append(amplitude)
-    
 
     def insert_I_Clamp_vector(self, position, stimulus):
         """
@@ -519,9 +525,7 @@ class unmyelinated(axon):
         durations = np.diff(times)
         durations = np.append(durations, 1e9)  # last step duration set to a big value
         for k in range(len(steps)):
-            self.insert_I_Clamp(
-                position, times[k], durations[k], steps[k]
-            )  #
+            self.insert_I_Clamp(position, times[k], durations[k], steps[k])  #
         # THE FOLLOWING CODE IS NOT WORKING PROPERLY, KEPT FOR REFERENCE
         # HOWEVER IT SEEMS MORE ATTRACTIVE THAN THIS LOOP METHOD...
         """
@@ -547,7 +551,6 @@ class unmyelinated(axon):
         # save the stimulus for later use
         self.intra_current_stim.append(svector)
         """
-        
 
     def insert_V_Clamp(self, position, stimulus):
         """

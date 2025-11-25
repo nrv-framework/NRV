@@ -27,7 +27,7 @@ class unmyelinated_results(axon_results):
         n_jumped_lines: int | None = None,
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
         if n_jumped_lines is not None:
             x_index = np.arange(len(self.x_rec))
@@ -43,5 +43,5 @@ class unmyelinated_results(axon_results):
             color=color,
             switch_axes=switch_axes,
             norm=norm,
-            **kwgs
+            **kwgs,
         )
