@@ -211,6 +211,9 @@ class stimulus(NRV_class):
         self.t = new_t
 
     def snap_time(self, dt_min):
+        """
+        average stimulus values which are separated in time by less than ``dt_min``
+        """
         i_mask = [True for _ in range(len(self.t))]
         for i in range(len(self.t) - 1):
             j = 0

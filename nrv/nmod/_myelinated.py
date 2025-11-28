@@ -875,33 +875,6 @@ class myelinated(axon):
     ###############################
     ## Intracellular stimulation ##
     ###############################
-    def insert_I_Clamp_node(self, index, t_start, duration, amplitude):
-        """
-        Insert a IC clamp stimulation on a Ranvier node at its midd point position
-
-        Parameters
-        ----------
-        index       : int
-            node number of the node to stimulate
-        t_start     : float
-            starting time (ms)
-        duration    : float
-            duration of the pulse(ms)
-        amplitude   : float
-            amplitude of the pulse (nA)
-        """
-        # add the stimulation to the axon
-        self.intra_current_stim.append(neuron.h.IClamp(0.5, sec=self.node[index]))
-        # modify the stimulation parameters
-        self.intra_current_stim[-1].delay = t_start
-        self.intra_current_stim[-1].dur = duration
-        self.intra_current_stim[-1].amp = amplitude
-        # save the stimulation parameter for results
-        self.intra_current_stim_positions.append(self.x_nodes[index])
-        self.intra_current_stim_starts.append(t_start)
-        self.intra_current_stim_durations.append(duration)
-        self.intra_current_stim_amplitudes.append(amplitude)
-
     def insert_intra_stim_node(
         self, index, stim: stimulus, stype: Literal["I", "i", "V", "v"] = "i"
     ):
@@ -924,41 +897,25 @@ class myelinated(axon):
             stim=stim,
             stype=stype,
         )
-        # # add the stimulation to the axon
-        # if stype.lower() == "i":
-        #     self.intra_stim.append(neuron.h.IClamp(0.5, sec=self.node[index]))
-        #     self.intra_stim[-1].delay = 0
-        #     self.intra_stim[-1].dur = 1e9
-        #     self.intra_stim[-1].amp = 0
 
-        # else:
-        #     self.intra_stim.append(neuron.h.SEClamp(0.5, sec=self.node[index]))
-        #     self.intra_stim[-1].rs = 0.1
-        #     self.intra_stim[-1].dur1 = 1e9
-        #     self.intra_stim[-1].amp1 = self.v_init
-
-        # self.intra_stim_stype.append(stype.lower())
-        # self.intra_stim_t_vec.append(neuron.h.Vector(stim.t))
-        # self.intra_stim_s_vec.append(neuron.h.Vector(stim.s))
-
-    def insert_I_Clamp(self, position, t_start, duration, amplitude):
+    def insert_I_Clamp_node(self, index, t_start, duration, amplitude):
         """
-        Insert a IC clamp stimulation at the midd point of the nearest node to the specified position
+        Insert a IC clamp stimulation on a Ranvier node at its midd point position
 
         Parameters
         ----------
-        position    : float
-            relative position over the axon
+        index       : int
+            node number of the node to stimulate
         t_start     : float
             starting time (ms)
-        duration    :
+        duration    : float
             duration of the pulse(ms)
-        amplitude   :
+        amplitude   : float
             amplitude of the pulse (nA)
         """
-        # adapt position to the number of sections
-        index = round((position * (self.axonnodes - 1) + 0.5))
-        self.insert_I_Clamp_node(index, t_start, duration, amplitude)
+        s = stimulus()
+        s.pulse(start=t_start, value=amplitude, duration=duration)
+        self.insert_intra_stim_node(index=index, stim=s, stype="i")
 
     def insert_V_Clamp_node(self, index, stimulus):
         """
@@ -972,36 +929,7 @@ class myelinated(axon):
             stimulus for the clamp, see Stimulus.py for more information
         """
         # add the stimulation to the axon
-        self.intra_voltage_stim = neuron.h.VClamp(0.5, sec=self.node[index])
-        # save the stimulation parameter for results
-        self.intra_voltage_stim_position.append(self.x_nodes[index])
-        # save the stimulus for later use
-        self.intra_voltage_stim_stimulus = stimulus
-        # set fake duration
-        self.intra_voltage_stim.dur[0] = 1e9
-
-    def insert_V_Clamp(self, position, stimulus):
-        """
-        Insert a V clamp stimulation at the midd point of the nearest node to the specified position
-
-        Parameters
-        ----------
-        position    : float
-            relative position over the axon
-        stimulus    : stimulus object
-            stimulus for the clamp, see Stimulus.py for more information
-        """
-        # adapt position to the number of sections
-        index = round((position * (self.axonnodes - 1) + 0.5))
-        self.insert_V_Clamp_node(index, stimulus)
-
-    def clear_V_Clamp(self):
-        """
-        Clear any V-clamp attached to the axon
-        """
-        self.intra_voltage_stim = None
-        self.intra_voltage_stim_position = []
-        self.intra_voltage_stim_stimulus = None
+        self.insert_intra_stim_node(index=index, stim=stimulus, stype="v")
 
     ##############################
     ## Result recording methods ##

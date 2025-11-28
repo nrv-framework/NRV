@@ -20,7 +20,7 @@ if __name__ == "__main__":
     stim1.gaussian_noise(tstart, tstop, standard_dev, offset=offset, dt=0.01)
     
     axon1 = nrv.unmyelinated(y,z,d,L,dt=0.001,Nrec=100, model='HH')
-    axon1.insert_I_Clamp_vector(0.5, stim1) #self, position, stimulus
+    axon1.insert_intra_stim(0.5, stim1) #self, position, stimulus
 
     t_start = 30
     duration = 0.5

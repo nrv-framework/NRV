@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     axon4 = nrv.myelinated(y,z,d,3*L,dt=0.001,Nseg_per_sec=1,rec='nodes')
     block_node = 20
-    block_amp = 40
+    block_amp = 100
     s4 = nrv.stimulus()
     s4.sinus(start=0, amplitude=block_amp, freq=block_freq, duration=t_sim)
     axon4.insert_intra_stim_node(node_index, stim=s)
