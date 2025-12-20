@@ -260,28 +260,28 @@ class axon(NRV_simulable):
         super().__init__(**kwargs)
         self.type = "axon"
         ## Given by user
-        self.x:list[float] = []
-        self.y:float = y
-        self.z:float = z
-        self.d:float = d
-        self.L:float = L
-        self.dt:float = dt
-        self.Nseg_per_sec:int = Nseg_per_sec
-        self.freq:float = freq
-        self.freq_min:float = freq_min
-        self.mesh_shape:Literal[
+        self.x: list[float] = []
+        self.y: float = y
+        self.z: float = z
+        self.d: float = d
+        self.L: float = L
+        self.dt: float = dt
+        self.Nseg_per_sec: int = Nseg_per_sec
+        self.freq: float = freq
+        self.freq_min: float = freq_min
+        self.mesh_shape: Literal[
             "pyramidal",
             "sigmoid",
             "plateau",
             "plateau_sigmoid",
         ] = mesh_shape
-        self.alpha_max:float = alpha_max
-        self.d_lambda:float = d_lambda
-        self.v_init:float = v_init
-        self.T:float = T
-        self.ID:int = ID
-        self.threshold:float = threshold
-        self.model:Literal[
+        self.alpha_max: float = alpha_max
+        self.d_lambda: float = d_lambda
+        self.v_init: float = v_init
+        self.T: float = T
+        self.ID: int = ID
+        self.threshold: float = threshold
+        self.model: Literal[
             "HH",
             "Rattay_Aberham",
             "Sundt",
@@ -292,21 +292,21 @@ class axon(NRV_simulable):
             "Gaines_motor",
             "Gaines_sensory",
         ] = None
-        self.t_sim:float = 0.
+        self.t_sim: float = 0.0
         self.sim_time = 0
         self.timeVector = None
         self.t_len = 0
         ## internal use
-        self.created:bool = False
-        self.Nsec:int = 0
-        self.Nseg:int = 0
-        self.myelinated:None|bool = None
+        self.created: bool = False
+        self.Nsec: int = 0
+        self.Nseg: int = 0
+        self.myelinated: None | bool = None
 
         self.set_parameters(**kwargs)
 
         ## Contexts
         # Intra stims
-        self.intra_stim:intracellular_context = intracellular_context()
+        self.intra_stim: intracellular_context = intracellular_context()
         # self.intra_stimuli:list[stimulus] = []
         # self.intra_stim_stype:list[Literal["i", "v"]] = []
 
@@ -314,17 +314,16 @@ class axon(NRV_simulable):
         # self.intra_stim_t_vec: = []
         # self.intra_stim_s_vec:list[neuron.h.Vector] = []
 
-
         # Extra stims
-        self.extra_stim:extracellular_context = None
-        self.footprints:None|np.ndarray = None
+        self.extra_stim: extracellular_context = None
+        self.footprints: None | np.ndarray = None
         ## recording mechanism
-        self.record:bool = False
-        self.recorder:None|recorder = None
+        self.record: bool = False
+        self.recorder: None | recorder = None
         ## abstract parameters
-        self.x_rec:np.ndarray = np.asarray([])
-        self.rec:str = "all"
-        self.node_index:None|list[float] = None    #! Sould be in myelinated not here
+        self.x_rec: np.ndarray = np.asarray([])
+        self.rec: str = "all"
+        self.node_index: None | list[float] = None  #! Sould be in myelinated not here
         ## required for generate_axon_from_results
         if "diameter" in kwargs:
             self.d = kwargs["diameter"]
@@ -433,7 +432,7 @@ class axon(NRV_simulable):
 
         self.__check_deprecation(key_dic=key_dic, intracel_context=intracel_context)
 
-    def __check_deprecation(self, key_dic:dict, intracel_context:bool):
+    def __check_deprecation(self, key_dic: dict, intracel_context: bool):
         if intracel_context and "intra_current_stim_positions" in key_dic:
             self.intra_stim.generate_from_deprected_fascicle(key_dic)
 
@@ -598,7 +597,9 @@ class axon(NRV_simulable):
         """
         pass  # define in subclasse as it depends of geometry
 
-    def attach_intracell_context(self, data:str | dict | intracellular_context | tuple, overwrite:bool=False):
+    def attach_intracell_context(
+        self, data: str | dict | intracellular_context | tuple, overwrite: bool = False
+    ):
         """
         Attach an intracellular stimulation context to this object.
 
@@ -622,7 +623,7 @@ class axon(NRV_simulable):
             `intracellular_context` constructed from `data`. If False (default),
             append `data` to the existing `self.intra_stim` using its `append` method.
         """
-        
+
         if overwrite:
             self.intra_stim = intracellular_context(data=data)
         else:
@@ -654,14 +655,16 @@ class axon(NRV_simulable):
             stype=stype,
         )
 
-    def __activate_intra_stim(self)-> tuple[list[neuron.h.IClamp], list[neuron.h.Vector], list[neuron.h.Vector]]:
+    def __activate_intra_stim(
+        self,
+    ) -> tuple[list[neuron.h.IClamp], list[neuron.h.Vector], list[neuron.h.Vector]]:
         """
         Internal use only: should only be called in simulation before the simulation loop.
-        Initialize each intracellular stimulation (Iclamps and Vclamps). Return the lists of neuron variables that needs to be stored during the simulation. 
+        Initialize each intracellular stimulation (Iclamps and Vclamps). Return the lists of neuron variables that needs to be stored during the simulation.
         """
-        nrn_intra_stim:list[neuron.h.IClamp] = []
-        t_vec:list[neuron.h.Vector] = []
-        s_vec:list[neuron.h.Vector] = []
+        nrn_intra_stim: list[neuron.h.IClamp] = []
+        t_vec: list[neuron.h.Vector] = []
+        s_vec: list[neuron.h.Vector] = []
         for pos, stim, stype in self.intra_stim:
             if isinstance(pos, tuple):
                 stim_sec, stim_pos = pos
@@ -683,11 +686,8 @@ class axon(NRV_simulable):
                 _ref = nrn_intra_stim[-1]._ref_amp1
             t_vec.append(neuron.h.Vector(stim.t))
             s_vec.append(neuron.h.Vector(stim.s))
-            s_vec[-1].play(
-                _ref, t_vec[-1], 0  # no interpollation
-            )
+            s_vec[-1].play(_ref, t_vec[-1], 0)  # no interpollation
         return nrn_intra_stim, t_vec, s_vec
-
 
     def simulate(
         self,
@@ -1339,7 +1339,6 @@ class axon(NRV_simulable):
             stimulus for the clamp, see Stimulus.py for more information
         """
         self.insert_intra_stim(position=position, stim=stimulus, stype="v")
-
 
     @abstractmethod
     def set_membrane_voltage_recorders(self):

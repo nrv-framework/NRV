@@ -1,4 +1,4 @@
-stimulus
+﻿stimulus
 ========
 
 .. currentmodule:: nrv.utils
@@ -27,6 +27,8 @@ Methods
     stimulus.concatenate
 
     stimulus.constant
+
+    stimulus.gaussian_noise
 
     stimulus.get_parameters
 

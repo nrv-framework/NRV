@@ -160,7 +160,7 @@ class intracellular_context(NRV_class):
             for intra_stim in intra_context:
                 self.insert_intra_stim(*intra_stim)
 
-    def generate_from_deprected_fascicle(self, key_dic:dict):
+    def generate_from_deprected_fascicle(self, key_dic: dict):
         if "intra_current_stim_positions" in key_dic:
             for i in range(len(key_dic["intra_current_stim_positions"])):
                 position = key_dic["intra_current_stim_positions"][i]
@@ -175,7 +175,11 @@ class intracellular_context(NRV_class):
             if key_dic["intra_voltage_stim_stimulus"] is not None:
                 for i in range(len(key_dic["intra_voltage_stim_position"])):
                     position = key_dic["intra_voltage_stim_position"][i]
-                    self.insert_intra_stim(position=position, stim=key_dic["intra_voltage_stim_stimulus"][i], stype="v")
+                    self.insert_intra_stim(
+                        position=position,
+                        stim=key_dic["intra_voltage_stim_stimulus"][i],
+                        stype="v",
+                    )
 
     def clear_i_clamp(self):
         """

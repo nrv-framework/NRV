@@ -34,13 +34,14 @@ class Figure_elec:
     def __init_figure(self, **fig_kwgs):
         if self.n_e == 8:
             fig_dim = (3, 3)
-            i_plots = [
-                [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]
-                 ]
+            i_plots = np.array(
+                [[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]]
+            )
             i_center = (1, 1)
         elif self.n_e == 12:
             fig_dim = (4, 4)
-            i_plots = [
+            i_plots = np.array(
+                [
                     [0, 1],
                     [0, 2],
                     [0, 3],
@@ -52,12 +53,14 @@ class Figure_elec:
                     [3, 0],
                     [1, 0],
                     [0, 0],
-            ]
+                ]
+            )
             idxs = np.arange(2) + 1
             i_center = (slice(1, 3), slice(1, 3))
         elif self.n_e == 16:
             fig_dim = (5, 5)
-            i_plots = [
+            i_plots = np.array(
+                [
                     [0, 2],
                     [0, 3],
                     [0, 4],
@@ -74,7 +77,8 @@ class Figure_elec:
                     [1, 0],
                     [0, 0],
                     [0, 1],
-            ]
+                ]
+            )
             i_center = (slice(1, 4), slice(1, 4))
 
         mask = np.ones(fig_dim, dtype=bool)
@@ -355,33 +359,47 @@ def gen_fig_elec(
 ):
     if n_e == 8:
         fig_dim = (3, 3)
-        i_plots = np.array(
-            [[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]]
-        )
+        i_plots = [[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]]
         i_center = (1, 1)
     elif n_e == 12:
-        fig_dim = (4, 4)
-        i_plots = np.array(
-            [
-                [0, 1],
+        fig_dim = (5, 5)
+        i_plots = [
                 [0, 2],
                 [0, 3],
-                [1, 3],
-                [2, 3],
-                [3, 3],
-                [3, 2],
-                [3, 1],
+                [1, 4],
+                [2, 4],
+                [3, 4],
+                [4, 3],
+                [4, 2],
+                [4, 1],
                 [3, 0],
+                [2, 0],
                 [1, 0],
-                [0, 0],
+                [0, 1],
             ]
-        )
-        idxs = np.arange(2) + 1
-        i_center = (idxs[:, np.newaxis], idxs)
+        i_center = (slice(1, 4), slice(1, 4))
+    elif n_e == 14:
+        fig_dim = (10, 10)
+        i_plots = [
+                [slice(0,2), slice(4,6)],
+                [slice(0,2), slice(6,8)],
+                [slice(1,3), slice(8,10)],
+                [slice(3,5), slice(8,10)],
+                [slice(5,7), slice(8,10)],
+                [slice(7,9), slice(8,10)],
+                [slice(8,10), slice(6,8)],
+                [slice(8,10), slice(4,6)],
+                [slice(8,10), slice(2,4)],
+                [slice(7,9), slice(0,2)],
+                [slice(5,7), slice(0,2)],
+                [slice(3,5), slice(0,2)],
+                [slice(1,3), slice(0,2)],
+                [slice(0,2), slice(2,4)],
+            ]
+        i_center = (slice(2, 8), slice(2, 8))
     elif n_e == 16:
         fig_dim = (5, 5)
-        i_plots = np.array(
-            [
+        i_plots = [
                 [0, 2],
                 [0, 3],
                 [0, 4],
@@ -399,11 +417,9 @@ def gen_fig_elec(
                 [0, 0],
                 [0, 1],
             ]
-        )
         # idxs = np.arange(3)+1
         # i_center = (idxs[:,np.newaxis],idxs)
         i_center = (slice(1, 4), slice(1, 4))
-
     mask = np.ones(fig_dim, dtype=bool)
     mask[*i_center] = False
     if spec is None:

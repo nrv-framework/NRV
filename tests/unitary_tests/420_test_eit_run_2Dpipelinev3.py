@@ -104,4 +104,6 @@ if __name__ == "__main__":
 
     axs = eit.utils.plot_all_elec(axs=axs, res_list=r_list, i_res=np.array([0,1,2]), which="dv_eit")
     axs = eit.utils.scale_axs(axs=axs)
+    fig.savefig(f"./unitary_tests/figures/{test_id}_B.png")
+
     # plt.show()

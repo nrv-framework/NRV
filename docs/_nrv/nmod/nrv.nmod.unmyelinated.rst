@@ -1,4 +1,4 @@
-unmyelinated
+﻿unmyelinated
 ============
 
 .. currentmodule:: nrv.nmod
@@ -32,6 +32,8 @@ Methods
 
     unmyelinated.attach_extracellular_stimulation
 
+    unmyelinated.attach_intracell_context
+
     unmyelinated.change_stimulus_from_electrode
 
     unmyelinated.clear_I_Clamp
@@ -63,6 +65,8 @@ Methods
     unmyelinated.insert_I_Clamp
 
     unmyelinated.insert_V_Clamp
+
+    unmyelinated.insert_intra_stim
 
     unmyelinated.intracel_status
 

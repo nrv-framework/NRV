@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:00.811** total execution time for 24 files **from examples/generic**:
+**01:26.955** total execution time for 25 files **from examples/generic**:
 
 .. container::
 
@@ -32,8 +32,11 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
+   * - :ref:`sphx_glr_examples_generic_26_anim_propagation.py` (``26_anim_propagation.py``)
+     - 01:26.955
+     - 0.0
    * - :ref:`sphx_glr_examples_generic_01_propagation_Vmem.py` (``01_propagation_Vmem.py``)
-     - 00:00.811
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_examples_generic_02_activation_function.py` (``02_activation_function.py``)
      - 00:00.000

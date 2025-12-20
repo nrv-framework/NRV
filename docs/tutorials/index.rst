@@ -26,7 +26,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_1_intracellular_stimulation_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_1_intracellular_stimulation.py`
+  :doc:`/tutorials/1_intracellular_stimulation`
 
 .. raw:: html
 
@@ -43,7 +43,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_2_propagation_velocity_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_2_propagation_velocity.py`
+  :doc:`/tutorials/2_propagation_velocity`
 
 .. raw:: html
 
@@ -60,7 +60,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_3_single_fiber_simulation_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_3_single_fiber_simulation.py`
+  :doc:`/tutorials/3_single_fiber_simulation`
 
 .. raw:: html
 
@@ -77,7 +77,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_4_nerve_simulation_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_4_nerve_simulation.py`
+  :doc:`/tutorials/4_nerve_simulation`
 
 .. raw:: html
 
@@ -94,7 +94,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_5_first_optimization_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_5_first_optimization.py`
+  :doc:`/tutorials/5_first_optimization`
 
 .. raw:: html
 
@@ -111,7 +111,7 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
   .. image:: /tutorials/images/thumb/sphx_glr_6_play_with_eit_thumb.png
     :alt:
 
-  :ref:`sphx_glr_tutorials_6_play_with_eit.py`
+  :doc:`/tutorials/6_play_with_eit`
 
 .. raw:: html
 

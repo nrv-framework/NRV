@@ -13,9 +13,6 @@ import matplotlib.pyplot as plt
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 
-def new_stimulus(s_init=0):
-    print('coucou')
-
 
 ###############
 ## Functions ##
