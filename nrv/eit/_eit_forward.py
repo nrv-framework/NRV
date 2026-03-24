@@ -685,6 +685,14 @@ class eit_forward(NRV_class):
         self.res_e = self.w_elec * self.e_elt_r
 
     def _define_problem(self):
+        """
+        Backward-compatible alias for :meth:`_setup_problem`.
+
+        Notes
+        -----
+        This method is deprecated and only forwards the call to
+        :meth:`_setup_problem`.
+        """
         rise_warning(
             "Deprecated: _define_problem is deprecated use _setup_problem method instead"
         )

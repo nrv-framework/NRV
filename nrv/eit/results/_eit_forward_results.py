@@ -34,19 +34,47 @@ class eit_forward_results(dict):
     data : str or dict or None, optional
         Path or dictionary containing saved results to load.
 
-    Notes
-    -----
+    Note
+    ----
     - This class is designed for efficient post-processing and visualization of EIT simulation results.
     - It supports multi-frequency and multi-protocol EIT simulations.
     - Failed or invalid time steps are automatically detected and can be filtered out.
     - Provides tools for CAP detection and analysis.
 
-    Examples
-    --------
+    Note
+    ----
+    In this class the eit_forward simulation results are stored in multidimensionnal tensor. This tensor contain between 2 and 5 dimensions as shown in the following table:
+
+    .. list-table::
+       :widths: 10 10 10 10 10
+       :header-rows: 1
+
+       * - Dimensions
+         - Paterns
+         - Frequency
+         - Time
+         - Electrode
+        * - Status
+         - Optional
+         - Optional
+         - 
+         - 
+       * - Size
+         - n_p
+         - n_f
+         - n_t
+         - n_e
+       * Corresponding key
+         - ``"p"``
+         - ``"f"``
+         - ``"t"``
+         - ``"e"``
+
+    Example
+    -------
     >>> res = eit_forward_results(nerve_res=nerve_sim, fem_res=fem_sim) # create results
     >>> dv = res.dv_eit(i_e=0) # Access voltage shift of the first electrode
     >>> cap_mask = res.get_cap_mask(thr=0.1)
-    >>> res.plot_recruited_fibers(ax)
     """
 
     # ...existing code...
@@ -56,6 +84,20 @@ class eit_forward_results(dict):
         fem_res: dict | None = None,
         data: str | dict | None = None,
     ):
+        """
+        Build an EIT forward-results container.
+
+        Parameters
+        ----------
+        nerve_res : nerve_results | str | dict | None, optional
+            Nerve simulation result object, or serialized data that can be loaded
+            with :func:`load_any`.
+        fem_res : dict | None, optional
+            Reserved input for FEM results. The current implementation expects FEM
+            data to be provided through ``data``.
+        data : str | dict | None, optional
+            Path to a JSON result file or an already loaded result dictionary.
+        """
         self.incorporate_nerve_res(nerve_res)
         self.filter_res = True
 
@@ -69,6 +111,15 @@ class eit_forward_results(dict):
         self.rec_cap_ppt: None | pd.DataFrame = None
 
     def load(self, data: str | dict):
+        """
+        Load serialized EIT results into the current object.
+
+        Parameters
+        ----------
+        data : str | dict
+            Path to a JSON file or a dictionary containing serialized result
+            entries. Known array-like entries are converted to ``numpy.ndarray``.
+        """
         if isinstance(data, str):
             key_dic = json_load(data)
         else:
@@ -92,14 +143,38 @@ class eit_forward_results(dict):
 
     @property
     def has_nerve_res(self) -> bool:
+        """
+        Whether recording data coming from the nerve simulation is available.
+
+        Returns
+        -------
+        bool
+            ``True`` when ``t_rec`` is present in the container.
+        """
         return "t_rec" in self
 
     @property
     def has_fem_res(self) -> bool:
+        """
+        Whether forward EIT FEM data is available.
+
+        Returns
+        -------
+        bool
+            ``True`` when ``v_eit`` is present in the container.
+        """
         return "v_eit" in self
 
     @property
     def has_failed_test(self) -> bool:
+        """
+        Whether failed EIT samples have been identified.
+
+        Returns
+        -------
+        bool
+            ``True`` when :attr:`fail_results` contains at least one failed index.
+        """
         if np.iterable(self.fail_results):
             return len(self.fail_results) > 0
         return False
@@ -173,7 +248,7 @@ class eit_forward_results(dict):
     @property
     def n_p(self) -> int:
         """
-        number of frequency point
+        number of drive partern point
 
         Returns
         -------
@@ -203,14 +278,38 @@ class eit_forward_results(dict):
 
     @property
     def e_axis(self) -> int:
+        """
+        Index of the electrode axis in EIT arrays.
+
+        Returns
+        -------
+        int
+            The last axis, equal to ``-1``.
+        """
         return -1
 
     @property
     def t_axis(self) -> int:
+        """
+        Index of the time axis in EIT arrays.
+
+        Returns
+        -------
+        int
+            The penultimate axis, equal to ``-2``.
+        """
         return -2
 
     @property
     def f_axis(self) -> int:
+        """
+        Index of the frequency axis in EIT arrays when it exists.
+
+        Returns
+        -------
+        int
+            ``-3`` for multi-frequency datasets.
+        """
         if self.is_multi_freqs:
             return -3
         else:
@@ -218,6 +317,19 @@ class eit_forward_results(dict):
 
     @property
     def fail_results(self):
+        """
+        Indices of failed FEM time samples.
+
+        Failed samples are computed lazily from the first electrode by flagging
+        points equal to ``1e10`` or points whose differential response exceeds
+        ``1e-3``.
+
+        Returns
+        -------
+        np.ndarray
+            Failed time indices for quasi-static data, or failed frequency/time
+            indices for multi-frequency data.
+        """
         if not self.has_fem_res:
             print("No FEM results in object")
             return np.array([])
@@ -232,24 +344,41 @@ class eit_forward_results(dict):
 
     @property
     def v_eit_interp(self):
+        """
+        Interpolator for the EIT electrode potentials.
+
+        Returns
+        -------
+        callable
+            Callable returning interpolated ``v_eit`` values at arbitrary times.
+        """
         if self._v_eit_interp is None:
             X_ = self.t()
             Y_ = self.v_eit()
-            if not self.is_multi_freqs:
+            if not (self.is_multi_freqs or self.is_multi_patern):
                 self._v_eit_interp = nrv_interp(
                     X_values=X_, Y_values=Y_, kind=self.interp_kind
                 )
 
             else:
-                Y_ = Y_.swapaxes(self.t_axis, self.f_axis)
+                # Interpolated dimention (time) must be in np.axe = 0
+                Y_ = Y_.swapaxes(self.t_axis, 0)
                 _interp = nrv_interp(X_values=X_, Y_values=Y_, kind=self.interp_kind)
                 self._v_eit_interp = lambda X: _interp(X).swapaxes(
-                    self.t_axis, self.f_axis
+                    self.t_axis, 0
                 )
         return self._v_eit_interp
 
     @property
     def v_rec_interp(self):
+        """
+        Interpolator for recorder voltages from the nerve simulation.
+
+        Returns
+        -------
+        callable
+            Callable returning interpolated recorder signals at arbitrary times.
+        """
         if self._v_rec_interp is None:
             X_ = self["t_rec"]
             Y_ = self["v_rec"]
@@ -261,6 +390,16 @@ class eit_forward_results(dict):
     def incorporate_nerve_res(
         self, nerve_res: nerve_results | str | dict | dict | None
     ):
+        """
+        Import recorder traces from a nerve simulation result.
+
+        Parameters
+        ----------
+        nerve_res : nerve_results | str | dict | None
+            Nerve result object, or serialized data loadable with
+            :func:`load_any`. When a recorder is present, its time vector and all
+            recording-point traces are copied into ``t_rec`` and ``v_rec``.
+        """
         nerve_res = load_any(nerve_res, rec_context=True)
         if isinstance(nerve_res, nerve_results):
             if "recorder" in nerve_res:
@@ -268,13 +407,23 @@ class eit_forward_results(dict):
                 self["v_rec"] = (len(self["t_rec"]),)
                 n_elec = len(nerve_res.recorder.recording_points)
                 self["v_rec"] = np.zeros((len(self["t_rec"]), n_elec))
-
                 for i in range(n_elec):
                     self["v_rec"][:, i] = np.array(
                         nerve_res.recorder.recording_points[i].recording
                     )
 
     def update_failed_results(self, _v_eit, _v_eit_phase):
+        """
+        Replace entries previously marked as failed.
+
+        Parameters
+        ----------
+        _v_eit : np.ndarray
+            Replacement magnitude array, either with the full ``v_eit`` shape or
+            restricted to the failed entries.
+        _v_eit_phase : np.ndarray
+            Replacement phase array with the same layout as ``_v_eit``.
+        """
         i_t, i_f = None, None
         if self.is_multi_freqs:
             i_t, i_f = self.fail_results[0, :], self.fail_results[1, :]
@@ -293,6 +442,23 @@ class eit_forward_results(dict):
             print("wrong dimensions cannot results be updated")
 
     def t(self, dt=None, i_f=None):
+        """
+        Return the FEM time vector, optionally resampled.
+
+        Parameters
+        ----------
+        dt : float | None, optional
+            If provided, generate a regular time vector from ``0`` to the end of
+            the simulation using this time step. Otherwise return the stored time
+            vector.
+        i_f : int | None, optional
+            Unused placeholder kept for API compatibility.
+
+        Returns
+        -------
+        np.ndarray
+            Time vector, optionally filtered to remove failed samples.
+        """
         if dt is None:
             _t = deepcopy(self["t"])
             if self.filter_res and self.has_failed_test:
@@ -314,29 +480,32 @@ class eit_forward_results(dict):
         include_paterns: bool = True,
     ) -> tuple[np.ndarray]:
         """
-        Return a tuple containing the
+        Build index arrays for advanced slicing of EIT results.
 
         Parameters
         ----------
         i_t : np.ndarray | int | None, optional
-            _description_, by default None
+            Time indices to keep. ``None`` selects all times.
         i_e : np.ndarray | int | None, optional
-            _description_, by default None
+            Electrode indices to keep. ``None`` selects all electrodes.
         i_f : np.ndarray | int | None, optional
-            _description_, by default None
+            Frequency indices to keep. Ignored for quasi-static results.
         i_p : np.ndarray | int | None, optional
-            _description_, by default None
+            Pattern indices to keep. Ignored when a single pattern is stored.
         n_t : int | None, optional
-            _description_, by default None
+            Number of time samples to use when ``i_t`` is converted by
+            :func:`set_idxs`. Defaults to :attr:`n_t`.
         include_freqs : bool, optional
-            _description_, by default True
+            If ``True``, include the frequency axis in the returned tuple when the
+            dataset is multi-frequency.
         include_paterns : bool, optional
-            _description_, by default True
+            If ``True``, include the pattern axis in the returned tuple when the
+            dataset is multi-pattern.
 
         Returns
         -------
         tuple[np.ndarray]
-            _description_
+            Tuple of index arrays ordered to match the internal ``v_eit`` layout.
         """
         i_all = (set_idxs(i_t, n_t or self.n_t), set_idxs(i_e, self.n_e))
         if self.is_multi_freqs and include_freqs:
@@ -354,6 +523,23 @@ class eit_forward_results(dict):
         n_t: int | None = None,
         **kwgs,
     ) -> tuple[np.ndarray]:
+        """
+        Return broadcasting indices ready for ``numpy`` advanced indexing.
+
+        Parameters
+        ----------
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices forwarded to :meth:`get_idxs`.
+        n_t : int | None, optional
+            Number of time samples used when expanding ``i_t``.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`get_idxs`.
+
+        Returns
+        -------
+        tuple[np.ndarray]
+            Output of :func:`numpy.ix_` built from :meth:`get_idxs`.
+        """
         i_ = self.get_idxs(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, n_t=n_t, **kwgs)
         return np.ix_(*i_)
 
@@ -366,6 +552,24 @@ class eit_forward_results(dict):
         signed: bool = False,
         **kwgs,
     ):
+        """
+        Extract raw stored EIT voltages using index-based selection.
+
+        Parameters
+        ----------
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices used to select times, electrodes, frequencies, and patterns.
+        signed : bool, optional
+            If ``True``, convert amplitude and phase into signed voltages through
+            ``v*cos(phi)``.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`ix_`.
+
+        Returns
+        -------
+        np.ndarray
+            Selected EIT voltage values.
+        """
         __filter_res = self.filter_res and i_t is None
         _v = self["v_eit"][
             self.ix_(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
@@ -400,6 +604,26 @@ class eit_forward_results(dict):
         i_p: np.ndarray | int | None = None,
         **kwgs,
     ) -> np.ndarray:
+        """
+        Return EIT voltages, either at stored or interpolated times.
+
+        Parameters
+        ----------
+        t : np.ndarray | float | None, optional
+            Evaluation times. If ``None``, values are extracted from stored
+            samples; otherwise interpolation is used.
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting times, electrodes, frequencies, and patterns.
+            ``i_t`` is ignored when ``t`` is provided.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`v_eit_idx` or
+            :meth:`ix_`.
+
+        Returns
+        -------
+        np.ndarray
+            EIT voltages with singleton dimensions removed.
+        """
         if t is None:
             return self.v_eit_idx(i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
         else:
@@ -422,13 +646,30 @@ class eit_forward_results(dict):
         self,
         i_e: np.ndarray | int | None = None,
         i_f: np.ndarray | int | None = None,
+        i_p: np.ndarray | int | None = None,
         **kwgs,
     ) -> np.ndarray:
+        """
+        Return the baseline EIT voltage at the first time sample.
+
+        Parameters
+        ----------
+        i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting electrodes, frequencies, and patterns.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`v_eit`.
+
+        Returns
+        -------
+        np.ndarray
+            Baseline voltage values at ``i_t = 0``.
+        """
         kwgs.update(
             {
                 "i_t": 0,
                 "i_e": i_e,
                 "i_f": i_f,
+                "i_p": i_p,
             }
         )
         _v_0 = self.v_eit(**kwgs)
@@ -456,6 +697,26 @@ class eit_forward_results(dict):
         pc: bool = False,
         **kwgs,
     ) -> np.ndarray:
+        """
+        Return the voltage variation relative to the baseline sample.
+
+        Parameters
+        ----------
+        t : np.ndarray | float | None, optional
+            Evaluation times. If provided, the differential signal is computed on
+            interpolated voltages.
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting times, electrodes, frequencies, and patterns.
+        pc : bool, optional
+            If ``True``, express the variation as a percentage of the baseline.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`v_eit`.
+
+        Returns
+        -------
+        np.ndarray
+            Differential EIT signal.
+        """
         _v = self.v_eit(t=t, i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
         _v_0 = self.v_0(i_e=i_e, i_f=i_f, i_p=i_p, **kwgs)
         _v, _v_0 = adjust_axes(arr1=_v, arr2=_v_0)
@@ -490,6 +751,23 @@ class eit_forward_results(dict):
         i_p: np.ndarray | int | None = None,
         **kwgs,
     ) -> np.ndarray:
+        """
+        Return the percentage differential EIT signal.
+
+        Parameters
+        ----------
+        t : np.ndarray | float | None, optional
+            Evaluation times.
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting times, electrodes, frequencies, and patterns.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`dv_eit`.
+
+        Returns
+        -------
+        np.ndarray
+            ``dv/v0`` expressed in percent.
+        """
         return self.dv_eit(t=t, i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, pc=True, **kwgs)
 
     def dv_eit_normalized(
@@ -503,6 +781,28 @@ class eit_forward_results(dict):
         axis: np.ndarray | int | None = None,
         **kwgs,
     ):
+        """
+        Return the absolute differential EIT signal normalized by its maximum.
+
+        Parameters
+        ----------
+        t : np.ndarray | float | None, optional
+            Evaluation times.
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting times, electrodes, frequencies, and patterns.
+        pc : bool, optional
+            If ``True``, normalize the percentage variation instead of the raw
+            variation.
+        axis : np.ndarray | int | None, optional
+            Axis along which the maximum is computed. Defaults to the time axis.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`dv_eit`.
+
+        Returns
+        -------
+        np.ndarray
+            Normalized absolute differential signal.
+        """
         _dv = np.abs(
             self.dv_eit(t=t, i_t=i_t, i_e=i_e, i_f=i_f, i_p=i_p, pc=pc, **kwgs)
         )
@@ -516,6 +816,14 @@ class eit_forward_results(dict):
 
     @property
     def _v_rec(self) -> np.ndarray:
+        """
+        Fast access to all recorder voltages.
+
+        Returns
+        -------
+        np.ndarray
+            Copy of the stored ``v_rec`` array.
+        """
         return self["v_rec"].copy()
 
     def v_rec(
@@ -524,6 +832,23 @@ class eit_forward_results(dict):
         i_e: np.ndarray | int | None = None,
         **kwgs,
     ) -> np.ndarray:
+        """
+        Return recorder voltages from the nerve simulation.
+
+        Parameters
+        ----------
+        t : np.ndarray | float | None, optional
+            Evaluation times. If provided, recorder signals are interpolated.
+        i_e : np.ndarray | int | None, optional
+            Recording electrode indices to extract.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`ix_`.
+
+        Returns
+        -------
+        np.ndarray
+            Selected or interpolated recorder voltages.
+        """
         if not self.has_nerve_res:
             print("No nerve results in object v_eit cannot be found")
             return None
@@ -546,9 +871,39 @@ class eit_forward_results(dict):
 
     ## Postprocessing method
     def i_t_duration(self, i_t_start, i_t_stop):
+        """
+        Convert a pair of time indices into a duration.
+
+        Parameters
+        ----------
+        i_t_start : int
+            Start time index.
+        i_t_stop : int
+            Stop time index.
+
+        Returns
+        -------
+        float
+            Duration between the two FEM samples.
+        """
         return self["t"][i_t_stop] - self["t"][i_t_start]
 
     def get_cap_mask(self, thr: float = 0.05, **kwgs):
+        """
+        Detect the global CAP window on the most responsive electrode.
+
+        Parameters
+        ----------
+        thr : float, optional
+            Threshold applied to the normalized percentage differential signal.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`dv_eit_pc`.
+
+        Returns
+        -------
+        np.ndarray
+            Boolean mask over time identifying samples attributed to the CAP.
+        """
         # Computing normailzed dv
         dv_nrmlz = abs(self.dv_eit_pc(i_f=0, **kwgs))
         dv_nrmlz /= dv_nrmlz.max()
@@ -559,6 +914,23 @@ class eit_forward_results(dict):
         return _mask
 
     def get_cap_i_t(self, thr: float = 0.05, verbose: bool = False, **kwgs) -> list:
+        """
+        Split CAP detections into contiguous time-index groups.
+
+        Parameters
+        ----------
+        thr : float, optional
+            Threshold forwarded to :meth:`get_cap_mask`.
+        verbose : bool, optional
+            If ``True``, print intermediate detection arrays.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`get_cap_mask`.
+
+        Returns
+        -------
+        list
+            List of arrays, one per detected CAP interval.
+        """
         _cap_mask = self.get_cap_mask(thr=thr, **kwgs)
         i_cap = np.arange(self.n_t)[_cap_mask]
         if verbose:
@@ -587,6 +959,27 @@ class eit_forward_results(dict):
         res_ax: Literal["default"] | None | tuple = "default",
         **kwgs,
     ):
+        """
+        Detect activity masks independently for each acquisition line.
+
+        Parameters
+        ----------
+        thr : float, optional
+            Threshold applied after line-wise normalization.
+        t_new_cap : float | None, optional
+            Optional time separating two normalization windows, useful when two
+            CAPs should be normalized independently.
+        res_ax : Literal["default"] | None | tuple, optional
+            Axes used to compute normalization maxima. ``"default"`` adapts to the
+            internal EIT layout.
+        **kwgs : dict
+            Unused placeholder kept for API symmetry.
+
+        Returns
+        -------
+        np.ndarray
+            Boolean mask with the same shape as ``_dv_eit_pc``.
+        """
         # Computing normailzed dv
         dv_nrmlz = abs(self._dv_eit_pc)  # - abs(self.dv_eit_pc(**kwgs))
         if res_ax == "default":
@@ -610,31 +1003,124 @@ class eit_forward_results(dict):
         return _mask
 
     def _get_acap_i_e(self, i_l: int | np.ndarray):
+        """
+        Convert flattened acquisition-line indices into electrode indices.
+
+        Parameters
+        ----------
+        i_l : int | np.ndarray
+            Flattened line indices.
+
+        Returns
+        -------
+        int | np.ndarray
+            Electrode indices associated with each line.
+        """
         return i_l % self.n_e
 
     def _get_acap_i_f(self, i_l: int | np.ndarray):
+        """
+        Convert flattened acquisition-line indices into frequency indices.
+
+        Parameters
+        ----------
+        i_l : int | np.ndarray
+            Flattened line indices.
+
+        Returns
+        -------
+        np.ndarray
+            Frequency indices associated with each line.
+        """
         if self.is_multi_freqs:
             return (i_l // self.n_e) % self.n_f
         return np.zeros(i_l.shape)
 
+    def _get_acap_i_p(self, i_l: int | np.ndarray):
+        """
+        Convert flattened acquisition-line indices into drive paterns indices.
+
+        Parameters
+        ----------
+        i_l : int | np.ndarray
+            Flattened line indices.
+
+        Returns
+        -------
+        np.ndarray
+            Frequency indices associated with each line.
+        """
+        if self.is_multi_patern:
+            n_product = self.n_e
+            if self.is_multi_freqs:
+                n_product *= self.n_f
+            return (i_l // n_product) % self.n_p
+        return np.zeros(i_l.shape)
+
     def _get_line_ppt(self, i_l: int | np.ndarray, with_f: bool = True):
+        """
+        Build line descriptors for CAP summary tables.
+
+        Parameters
+        ----------
+        i_l : int | np.ndarray
+            Flattened line indices.
+        with_f : bool, optional
+            If ``True``, include frequency indices together with electrode
+            indices.
+
+        Returns
+        -------
+        np.ndarray
+            Stacked index rows describing each acquisition line.
+        """
         if with_f:
-            return np.vstack(
+            _line_ppt = np.vstack(
                 (
                     self._get_acap_i_f(i_l),
                     self._get_acap_i_e(i_l),
                 )
             )
+            if self.is_multi_patern:
+                _line_ppt = np.vstack(
+                    (
+                        self._get_acap_i_p(i_l),
+                        _line_ppt
+                    )
+                )
+            return _line_ppt
         else:
             return np.vstack((self._get_acap_i_e(i_l),))
 
     @property
     def _axes_labels(self):
-        return ["freq", "elec"]
+        """
+        Labels associated with flattened acquisition dimensions.
+
+        Returns
+        -------
+        list[str]
+            Human-readable names for the frequency and electrode axes.
+        """
+        _a_lab = ["freq", "elec"]
+        if self.is_multi_patern:
+            _a_lab = ["drive patern"] + _a_lab
+        return _a_lab
 
     @property
     def _column_labels(self):
-        return ["i_f", "i_e"]
+        """
+        Column names used in CAP summary tables.
+
+        Returns
+        -------
+        list[str]
+            Column labels corresponding to frequency and electrode indices.
+        """
+        _c_lab = ["i_f", "i_e"]
+        if self.is_multi_patern:
+            _c_lab = ["i_p"] + _c_lab
+        return _c_lab
 
     def get_acap_t_ppt(
         self,
@@ -643,10 +1129,72 @@ class eit_forward_results(dict):
         store: Literal["default", "overwrite", "external"] = "default",
         **kwgs,
     ) -> pd.DataFrame:
+        """
+        Build a dataframe describing CAP time windows for each acquisition line.
 
+        Note
+        ----
+        This methods adds the following columns to the CAP Dataframe:
+        
+
+    .. list-table::
+       :widths: 10  10 50
+       :header-rows: 1
+
+       * - Dimensions
+         - type
+         - Description
+        * - line
+         - ``int``
+         - Acquisition line index
+        * - i_res (Optional)
+         - ``int``
+         - Results index in a ``eit_results_list``
+        * - i_p (Optional)
+         - ``int``
+         - Injection patern index for multipatern simulation
+        * - i_f
+         - ``int``
+         - Frequency index
+        * - i_e
+         - ``int``
+         - Electrode index
+        * - i_cap
+         - ``int``
+         - CAP index
+        * - i_t_min
+         - ``int``
+         - min index in time vector
+        * - i_t_max
+         - ``int``
+         - max index in time vector
+        * - duration
+         - ``float``
+         - CAP duration in ms
+
+        Parameters
+        ----------
+        thr : float, optional
+            Threshold forwarded to :meth:`get_acap_mask`.
+        verbose : bool, optional
+            If ``True``, print intermediate arrays used to build the table.
+        store : Literal["default", "overwrite", "external"], optional
+            Storage policy for the resulting dataframe. ``"default"`` caches the
+            first result, ``"overwrite"`` refreshes the cache, and ``"external"``
+            returns the dataframe without caching it.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`get_acap_mask`.
+
+        Returns
+        -------
+        pd.DataFrame
+            One row per detected CAP segment and acquisition line.
+        """
         if store == "default" and self._cap_ppt is not None:
             return self._cap_ppt
 
+        # A mask tensor is built with one where activity can be mesured
+        # e_axis and t_axis are swapped to ease the next step
         _cap_mask = np.swapaxes(
             self.get_acap_mask(thr=thr, **kwgs), self.e_axis, self.t_axis
         )
@@ -658,13 +1206,16 @@ class eit_forward_results(dict):
             )
             return None
 
+        # Cap detected in the results
+        # The multidimensionnal mask tensor (sized n_res, n_p, n_f, n_e, n_t) is flattened by acquisition-line into a 2 dimensionnal tensor (sized n_res.n_p.n_f.n_e, n_t)
         shape_2axes = (np.prod(_cap_mask.shape[:-1]), _cap_mask.shape[-1])
         _cap_mask = _cap_mask.reshape(shape_2axes).astype(int)
         # i_cap = _i_t[_cap_mask]
+
+        # Detecting all CAPs for each acquisition-line
         # Adding a first column of 0 for line starting with a 1
         padded = np.hstack((_cap_mask, np.zeros((shape_2axes[0], 1), dtype=int)))
         diffs = np.diff(padded, axis=1)
-
         # Start of a CAP (0 -> 1)
         starts = np.where(diffs == 1)
         # End of a CAP (1 -> 0)
@@ -687,6 +1238,7 @@ class eit_forward_results(dict):
             print(f"_cap_mask {_cap_mask.shape}:", _cap_mask)
 
         l_ppt = self._get_line_ppt(i_l=i_l)
+        print("col", self._column_labels, self.is_multi_patern)
         labels = ["line"] + self._column_labels + ["i_cap", "i_t_min", "i_t_max"]
         if verbose:
             print(f"l_ppt {l_ppt.shape}:", l_ppt)
@@ -700,6 +1252,8 @@ class eit_forward_results(dict):
                 i_t_end,
             )
         ).T.astype(int)
+
+        # Building the data frame computed data
         _cap_ppt = pd.DataFrame(data=_data, columns=labels)
         _cap_ppt["duration"] = d_acap
         if store in ["default", "overwrite"]:
@@ -716,20 +1270,23 @@ class eit_forward_results(dict):
         **kwgs,
     ) -> pd.DataFrame:
         """
+        Build a CAP summary table augmented with voltage metrics.
 
         Parameters
         ----------
         thr : float, optional
-            _description_, by default 0.05
+            Threshold forwarded to :meth:`get_acap_t_ppt`.
         verbose : bool, optional
-            _description_, by default False
-        i_res : _type_, optional
-            _description_, by default None
+            If ``True``, print intermediate arrays and the final dataframe.
+        store : Literal["default", "overwrite", "external"], optional
+            Storage policy shared with :meth:`get_acap_t_ppt`.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`get_acap_t_ppt`.
 
         Returns
         -------
-        _type_
-            _description_
+        pd.DataFrame
+            CAP dataframe enriched with amplitude and percentage-based metrics.
         """
         if (
             store == "default"
@@ -738,7 +1295,9 @@ class eit_forward_results(dict):
         ):
             return self._cap_ppt
 
+        # 
         _cap_ppt = self.get_acap_t_ppt(thr=thr, store=store, **kwgs)
+        print(_cap_ppt)
         dv_masked, _v_0 = self.get_dv_from_df(
             _cap_ppt, verbose=verbose, masked_time=True, with_v_0=True
         )
@@ -774,20 +1333,23 @@ class eit_forward_results(dict):
         **kwgs,
     ) -> pd.DataFrame:
         """
+        Refresh the cached CAP dataframe with voltage-derived metrics.
 
         Parameters
         ----------
         thr : float, optional
-            _description_, by default 0.05
+            Threshold forwarded to :meth:`get_acap_v_ppt`.
         verbose : bool, optional
-            _description_, by default False
-        i_res : _type_, optional
-            _description_, by default None
+            If ``True``, print intermediate arrays and the final dataframe.
+        store : Literal["default", "overwrite", "external"], optional
+            Storage policy shared with :meth:`get_acap_v_ppt`.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :meth:`get_acap_v_ppt`.
 
         Returns
         -------
-        _type_
-            _description_
+        pd.DataFrame
+            Updated CAP dataframe.
         """
         _cap_ppt = self.get_acap_v_ppt(thr=thr, store=store, **kwgs)
 
@@ -825,6 +1387,27 @@ class eit_forward_results(dict):
         masked_time: bool = True,
         with_v_0: bool = False,
     ) -> np.ndarray | np.ma.MaskedArray:
+        """
+        Extract differential EIT traces described by a CAP dataframe.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Table containing at least the line descriptors and CAP time bounds.
+        verbose : bool, optional
+            If ``True``, print extracted indices and array shapes.
+        masked_time : bool, optional
+            If ``True``, mask samples outside the ``(i_t_min, i_t_max)`` interval
+            stored in ``data``.
+        with_v_0 : bool, optional
+            If ``True``, also return the baseline voltage used for normalization.
+
+        Returns
+        -------
+        np.ndarray | np.ma.MaskedArray | tuple
+            Differential EIT traces, optionally masked in time and optionally
+            paired with the baseline voltage.
+        """
         c_labs = self._column_labels
         if not self.is_multi_freqs:
             c_labs.remove("i_f")
@@ -864,6 +1447,22 @@ class eit_forward_results(dict):
 
     # Rec ppt
     def get_reccap_ppt(self, thr: float = 0.05, **kwgs):
+        """
+        Build a dataframe summarizing CAPs detected on recorder traces.
+
+        Parameters
+        ----------
+        thr : float, optional
+            Unused placeholder kept for API compatibility.
+        **kwgs : dict
+            Unused placeholder for future extensions.
+
+        Returns
+        -------
+        pd.DataFrame | None
+            Recorder CAP summary table, or ``None`` when recording data is
+            unavailable.
+        """
         # Computing normailzed dv
         if not self.has_fem_res:
             print("WARNING no recording context in the result")
@@ -929,6 +1528,28 @@ class eit_forward_results(dict):
         xtype="t",
         **kwgs,
     ):
+        """
+        Plot stored or interpolated EIT-related signals.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+            Target axes.
+        which : str, optional
+            Signal to plot. Supported values are ``"v_eit"``, ``"dv_eit"``, and
+            ``"v_rec"``.
+        t : np.ndarray | None, optional
+            Optional time vector used for interpolation.
+        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional
+            Indices selecting times, electrodes, frequencies, and patterns.
+        pc : bool, optional
+            For ``which="dv_eit"``, plot the percentage differential signal.
+        xtype : str, optional
+            Use ``"t"`` for time on the x-axis or include ``"f"`` to plot against
+            frequency.
+        **kwgs : dict
+            Additional plotting arguments forwarded to :func:`plot_array`.
+        """
         if t is None:
             i_t = set_idxs(i_t, self.n_t)
             _t = self["t"][i_t]
@@ -962,6 +1583,21 @@ class eit_forward_results(dict):
 
 
 def load_res(res_dname: str, label: str) -> eit_forward_results:
+    """
+    Load an EIT result set from a result directory.
+
+    Parameters
+    ----------
+    res_dname : str
+        Directory containing serialized EIT result files.
+    label : str
+        Common file prefix used to locate ``"{label}_fem.json"``.
+
+    Returns
+    -------
+    eit_forward_results | None
+        Loaded result object, or ``None`` when the directory or file is missing.
+    """
     res = None
     if not os.path.isdir(res_dname):
         print(f"results directory not found: {res_dname}")
@@ -977,6 +1613,23 @@ def load_res(res_dname: str, label: str) -> eit_forward_results:
 def synchronize_times(
     res1: eit_forward_results, res2: eit_forward_results, dt_min=0.001
 ) -> np.ndarray:
+    """
+    Merge two time vectors while removing nearly duplicated samples.
+
+    Parameters
+    ----------
+    res1 : eit_forward_results
+        First result object.
+    res2 : eit_forward_results
+        Second result object.
+    dt_min : float, optional
+        Minimum separation required between consecutive retained samples.
+
+    Returns
+    -------
+    np.ndarray
+        Sorted union of the two time vectors with close duplicates removed.
+    """
     t1 = res1["t"]
     t2 = res2["t"]
     t = np.sort(np.concatenate((t1, t2)))

@@ -79,16 +79,47 @@ class EIT2DProblem(eit_forward):
         label: str = "2deit_1",
         **parameters,
     ):
+        """
+        Create a 2D EIT forward problem from a nerve description.
+
+        Parameters
+        ----------
+        nervefile : str
+            Path to the serialized nerve description or results file.
+        res_dname : str | None, optional
+            Output directory for generated meshes and results.
+        label : str, optional
+            Base label used to name generated artifacts.
+        **parameters : dict
+            Additional simulation parameters forwarded to :class:`eit_forward`.
+        """
         self.sigma_method: str = "avg_ind"
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
         self.use_gnd_elec = True
 
     @property
     def dim(self) -> int:
+        """
+        Spatial dimension of the FEM problem.
+
+        Returns
+        -------
+        int
+            Always ``2`` for this subclass.
+        """
         return 2
 
     @property
     def x_bounds_fem(self):
+        """
+        Axial bounds used to sample axonal properties for the 2D model.
+
+        Returns
+        -------
+        float | tuple[float, float]
+            Either the recording abscissa or the interval centered on it,
+            depending on the selected conductivity approximation method.
+        """
         if self.sigma_method in ["mean", "avg_ind"] or "inter" in self.sigma_method:
             return (self.x_rec - self.l_elec / 2, self.x_rec + self.l_elec / 2)
         # elif "inter"  in self.sigma_method:
@@ -96,6 +127,9 @@ class EIT2DProblem(eit_forward):
         return self.x_rec
 
     def _setup_problem(self):
+        """
+        Initialize geometry- and axon-dependent attributes for the 2D problem.
+        """
         super()._setup_problem()
         self.r_cir = self.nerve_results.D / 2
 
@@ -108,6 +142,14 @@ class EIT2DProblem(eit_forward):
         self.unaligned_axons = np.array([])
 
     def set_ncore_gmsh(self, ncore_meshing):
+        """
+        Configure the number of Gmsh meshing threads.
+
+        Parameters
+        ----------
+        ncore_meshing : int
+            Number of threads to use for mesh generation.
+        """
         gmsh.option.setNumber("General.NumThreads", ncore_meshing)
         if ncore_meshing > 1:
             gmsh.option.set_number("Mesh.Algorithm3D", 10)
@@ -115,6 +157,19 @@ class EIT2DProblem(eit_forward):
             gmsh.option.set_number("Mesh.Algorithm3D", 1)
 
     def get_info(self, verbose=False):
+        """
+        Return basic mesh statistics from the current Gmsh model.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            If ``True``, print the collected statistics.
+
+        Returns
+        -------
+        tuple[int, int, int, int]
+            Number of processes, entities, nodes, and elements.
+        """
         entities = gmsh.model.getEntities()
         nodeTags = gmsh.model.mesh.getNodes()[0]
         elemTags = gmsh.model.mesh.getElements()[1]
@@ -435,6 +490,9 @@ class EIT2DProblem(eit_forward):
         self.fem_initialized = True
 
     def _clear_fem(self):
+        """
+        Release 2D FEM objects and mark the FEM state as uninitialized.
+        """
         if self.fem_initialized:
             del (
                 self.domain,
@@ -632,6 +690,23 @@ class EIT2DProblem(eit_forward):
         return has_changed
 
     def _compute_v_elec(self, sfile: None | str = None, i_t: int = 0) -> np.ndarray:
+        """
+        Solve the 2D FEM problem and extract electrode potentials.
+
+        Parameters
+        ----------
+        sfile : str | None, optional
+            If provided, save the FEM field solution to disk and return it
+            together with the electrode potentials.
+        i_t : int, optional
+            Time index associated with the current solve, used when exporting.
+
+        Returns
+        -------
+        np.ndarray | tuple
+            Electrode potentials in volts, or the exported FEM objects together
+            with those potentials when ``sfile`` is provided.
+        """
         __v = np.zeros(self.n_elec, dtype=ScalarType)
         for i_elec, e_str in enumerate(self.electrodes):
             self.j_elecs[i_elec].value = self.electrodes[e_str] / self.l_elec

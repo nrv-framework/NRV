@@ -31,17 +31,50 @@ class EIT3DProblem(eit_forward):
     """
 
     def __init__(self, nervefile, res_dname=None, label="3deit_1", **parameters):
+        """
+        Create a 3D EIT forward problem from a nerve description.
+
+        Parameters
+        ----------
+        nervefile : str
+            Path to the serialized nerve description or results file.
+        res_dname : str | None, optional
+            Output directory for generated meshes and results.
+        label : str, optional
+            Base label used to name generated artifacts.
+        **parameters : dict
+            Additional simulation parameters forwarded to :class:`eit_forward`.
+        """
         super().__init__(nervefile, res_dname=res_dname, label=label, **parameters)
 
     @property
     def dim(self) -> int:
+        """
+        Spatial dimension of the FEM problem.
+
+        Returns
+        -------
+        int
+            Always ``3`` for this subclass.
+        """
         return 3
 
     @property
     def x_bounds_fem(self):
+        """
+        Axial extent of the 3D FEM subdomain centered on the recorder position.
+
+        Returns
+        -------
+        tuple[float, float]
+            Lower and upper axial bounds of the FEM domain.
+        """
         return (self.x_rec - self.l_fem / 2, self.x_rec + self.l_fem / 2)
 
     def _setup_problem(self):
+        """
+        Initialize electrode objects and geometry-dependent attributes for 3D EIT.
+        """
         super()._setup_problem()
         if self.use_gnd_elec and (self.gnd_elec_id < 0 or self.n_elec < 0):
             self.eit_elec = CUFF_MP_electrode(
@@ -159,6 +192,9 @@ class EIT3DProblem(eit_forward):
             # print(self.s_elec)
 
     def _clear_fem(self):
+        """
+        Release the 3D FEM simulation object and reset the initialization flag.
+        """
         if self.fem_initialized:
             del self.sim
             self.fem_initialized = False
@@ -304,6 +340,23 @@ class EIT3DProblem(eit_forward):
         return True
 
     def _compute_v_elec(self, sfile: None | str = None, i_t: int = 0) -> np.ndarray:
+        """
+        Solve the 3D FEM problem and extract electrode potentials.
+
+        Parameters
+        ----------
+        sfile : str | None, optional
+            If provided, save the FEM field solution and return it together with
+            the electrode potentials.
+        i_t : int, optional
+            Time index associated with the current solve, used when exporting.
+
+        Returns
+        -------
+        np.ndarray | tuple
+            Electrode potentials, or exported FEM objects plus those potentials
+            when ``sfile`` is provided.
+        """
         __v = np.zeros(self.n_elec, dtype=ScalarType)
         # FEM simulation
         self.sim.setup_sim(**self.electrodes)

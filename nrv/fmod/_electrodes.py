@@ -655,7 +655,13 @@ class CUFF_MP_electrode(CUFF_electrode):
             )
 
     def plot(
-        self, axes: plt.axes, color: str = "gold", list_e=None, e_label=True, **kwgs
+        self,
+        axes: plt.axes,
+        color: str = "gold",
+        list_e: list = None,
+        e_label: bool = True,
+        alpha_lab: int = 1.2,
+        **kwgs,
     ) -> None:
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
@@ -681,7 +687,7 @@ class CUFF_MP_electrode(CUFF_electrode):
                     )
                 )
                 if e_label:
-                    z_ = 1.2 * rad * np.exp(1j * theta_)
+                    z_ = alpha_lab * rad * np.exp(1j * theta_)
                     axes.text(z_.real, z_.imag, f"E{i}", va="center", ha="center")
 
         else:

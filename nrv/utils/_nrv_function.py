@@ -488,6 +488,8 @@ class nrv_interp(nrv_function):
     def __check_X_values(self, dx=None):
         """ """
         S = self.X_values.argsort()
+        # print(self.X_values.shape, self.Y_values.shape)
+        # print(self.X_values, self.Y_values)
         self.X_values = self.X_values[S]
         self.Y_values = self.Y_values[S]
         if dx is not None:

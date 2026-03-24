@@ -2,6 +2,18 @@
 
 All notable changes to NRV are summed up in this file.
 
+
+## [1.3.2] - 2026-XXXXX
+
+### Added
+- Docstring of all nrv.eit module
+- EIT plot for 8, 12, 14, 16 array cuff electrodes
+
+
+### Fixed
+- Issues with eit_results_list for multifrequency and multipatern results
+
+
 ## [1.3.0] - 2025-08-21
 
 ### Added

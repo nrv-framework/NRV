@@ -32,6 +32,16 @@ class eit_inverse:
 
     @abstractmethod
     def __init__(self, data: None | eit_forward_results = None, **kwgs):
+        """
+        Initialize an inverse EIT solver.
+
+        Parameters
+        ----------
+        data : eit_forward_results | None, optional
+            Forward EIT results used as reconstruction input.
+        **kwgs : dict
+            Additional subclass-specific keyword arguments.
+        """
         self.data = data  # TODO [NRV] load_any(data) for merge with nrv
         self.n_proc: int = 1
         self.results = []
@@ -53,22 +63,73 @@ class eit_inverse:
 
     @property
     def data(self) -> None | eit_forward_results:
+        """
+        Forward EIT data used by the inverse solver.
+
+        Returns
+        -------
+        eit_forward_results | None
+            Current input dataset.
+        """
         return self._data
 
     @data.setter
     def data(self, data: None | eit_forward_results):
+        """
+        Set the forward EIT dataset used by the inverse solver.
+
+        Parameters
+        ----------
+        data : eit_forward_results | None
+            New input dataset.
+        """
         self._data = data
 
     @data.deleter
     def data(self):
+        """
+        Remove the current forward EIT dataset.
+        """
         self._data = None
 
     def fromat_data(data: None | eit_forward_results = None) -> np.ndarray:
+        """
+        Convert forward EIT data into the format expected by the inverse solver.
+
+        Parameters
+        ----------
+        data : eit_forward_results | None, optional
+            Input data or solver state to format.
+
+        Returns
+        -------
+        np.ndarray
+            Formatted data vector.
+        """
         pass
 
     def _get_i_to_solve(
         self, i_to_solve=None, i_t: int = 0, i_f: int = 0, i_res: int = 0
     ) -> tuple[int]:
+        """
+        Resolve explicit or queued indices for one inverse reconstruction.
+
+        Parameters
+        ----------
+        i_to_solve : int | None, optional
+            Index into ``self.to_solve`` when batch solving is enabled.
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+
+        Returns
+        -------
+        tuple[int, int, int]
+            Time, frequency, and result indices to reconstruct.
+        """
         if i_to_solve is not None and self.to_solve is not None:
             _to_solve = self.to_solve[i_to_solve]
             if len(_to_solve) == 3:
@@ -81,11 +142,39 @@ class eit_inverse:
     # Reconstruction methods #
     # ---------------------- #
     def __set_pbar_label(self, kwgs):
+        """
+        Build the progress-bar label used during batch reconstruction.
+
+        Parameters
+        ----------
+        kwgs : dict
+            Additional keyword arguments provided to :meth:`solve`.
+
+        Returns
+        -------
+        str
+            Progress-bar description.
+        """
         __label = f"Solving inverse problem"
         if self.n_proc > 1:
             __label += f" - {self.n_proc} procs"
+        return __label
 
     def _run_inverse(i_to_solve=None, i_t: int = 0, i_f: int = 0, i_res: int = 0):
+        """
+        Run one inverse reconstruction.
+
+        Parameters
+        ----------
+        i_to_solve : int | None, optional
+            Optional index into the queued reconstructions.
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+        """
         pass
 
     def solve(
@@ -95,6 +184,21 @@ class eit_inverse:
         i_res: np.ndarray | int | None = 0,
         **kwgs,
     ):
+        """
+        Solve one or several inverse problems and cache the results.
+
+        Parameters
+        ----------
+        i_t, i_f, i_res : np.ndarray | int | None, optional
+            Time, frequency, and result indices to reconstruct.
+        **kwgs : dict
+            Additional solver-specific options.
+
+        Returns
+        -------
+        list
+            List of reconstructed images or fields accumulated in ``self.results``.
+        """
         _msolve = np.iterable(i_t) or np.iterable(i_f) or np.iterable(i_res)
         if not _msolve:
             _res, _ppt = self._run_inverse(i_t=i_t, i_f=i_f, i_res=i_res)
@@ -194,8 +298,35 @@ class eit_inverse:
         self.results_ppt = []
 
     def get_results_range(self, i_t: int = 0, i_f: int = 0, i_res: int = 0) -> tuple:
+        """
+        Return the value range of one reconstructed result.
+
+        Parameters
+        ----------
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+
+        Returns
+        -------
+        tuple
+            Minimum and maximum values of the selected reconstruction.
+        """
         _dv = self.get_results(i_t=i_t, i_f=i_f, i_res=i_res)
         return np.min(_dv), np.max(_dv)
 
     def plot(ax: plt.Axes, **kwgs):
+        """
+        Plot one reconstructed inverse result.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+            Target axes.
+        **kwgs : dict
+            Plotting options defined by subclasses.
+        """
         pass

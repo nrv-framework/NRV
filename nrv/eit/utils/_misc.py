@@ -12,12 +12,38 @@ from ...utils import sci_round, get_MRG_parameters, convert
 
 # File handling
 def touch(path):
+    """
+    Create a file if needed and update its modification time.
+
+    Parameters
+    ----------
+    path : str | os.PathLike
+        Path of the file to touch.
+    """
     with open(path, "a"):
         os.utime(path, None)
 
 
 # Numpy usefull
 def gen_from_idx(idx: np.ndarray, n: int, add_0: bool = False) -> np.ndarray:
+    """
+    Map absolute indices to segment identifiers.
+
+    Parameters
+    ----------
+    idx : np.ndarray
+        Sorted index array defining segment boundaries or special positions.
+    n : int
+        Length of the target output array.
+    add_0 : bool, optional
+        If ``True``, prepend the first generated value to the output.
+
+    Returns
+    -------
+    np.ndarray
+        Array assigning each position in ``range(n)`` to its insertion index in
+        ``idx``.
+    """
     _arr = np.arange(n)
     if np.sum(idx == 0) > 0:
         _arr += np.sum(idx == 0)
@@ -27,7 +53,37 @@ def gen_from_idx(idx: np.ndarray, n: int, add_0: bool = False) -> np.ndarray:
     return _arr
 
 
-def gen_idx_arange(idx: np.ndarray, n: int, add_0: bool = False) -> np.ndarray:
+def gen_idx_arange(idx: np.ndarray|list, n: int, add_0: bool = False) -> np.ndarray:
+    """
+    Generate per-segment counters from boundary indices.
+
+    Note
+    ----
+    this function returns a ``n``-long list with a conter reset to 0 at each index in ``idx``
+
+    Parameters
+    ----------
+    idx : np.ndarray | list
+        Sorted indices marking the start of new segments.
+    n : int
+        Length of the output array.
+    add_0 : bool, optional
+        If ``True``, prepend a leading zero to the output.
+
+    Returns
+    -------
+    np.ndarray
+        Counter resetting to zero at each segment boundary.
+
+    Example
+    -------
+    >>> gen_idx_arange([1,4,6], 10)
+    array([0, 0, 1, 2, 0, 1, 0, 1, 2, 3])
+    >>> gen_idx_arange([3,6], 9)
+    array([0, 1, 2, 0, 1, 2, 0, 1, 2])
+    >>> gen_idx_arange([3,6], 9, True)
+        array([0, 0, 1, 2, 0, 1, 2, 0, 1, 2])
+    """
     idx = np.concatenate(([0], idx, [n]))
     positions = np.arange(n)
     section = np.searchsorted(idx[1:], positions, side="right")
@@ -41,28 +97,29 @@ def gen_idx_arange(idx: np.ndarray, n: int, add_0: bool = False) -> np.ndarray:
 
 def adjust_axes(arr1: np.ndarray, arr2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """
-    add missing dimension to arr2 for it to be broadastable with arr1
+    Reshape ``arr2`` so it can be broadcast against ``arr1``.
 
     Warning
     -------
-    Only reshape arr2 to match arr1's ndim, arr2.shape is must be included in arr1.shape
+    This helper only inserts singleton dimensions. It assumes every dimension of
+    ``arr2`` already appears in ``arr1.shape``.
 
     Parameters
     ----------
     arr1 : np.ndarray
-        _description_
+        Reference array whose dimensionality and axis sizes are used as target.
     arr2 : np.ndarray
-        _description_
+        Array to reshape into a broadcastable form.
 
     Returns
     -------
     tuple[np.ndarray, np.ndarray]
-        _description_
+        ``arr1`` unchanged together with a reshaped version of ``arr2``.
 
     Raises
     ------
     ValueError
-        _description_
+        If ``arr2`` has more dimensions than ``arr1``.
     """
     arr2 = arr2.squeeze()
     ndim1 = arr1.ndim
@@ -96,6 +153,23 @@ in_bbox = lambda y, z, bbox: y > bbox[1] and y < bbox[4] and z > bbox[2] and z <
 
 
 def iterable_gen(obj, include_none=True, include_unitary=True):
+    """
+    Decide whether an object should be treated as an iterable selection.
+
+    Parameters
+    ----------
+    obj : Any
+        Object to inspect.
+    include_none : bool, optional
+        If ``True``, ``None`` is treated like an iterable placeholder.
+    include_unitary : bool, optional
+        If ``True``, length-one iterables are still considered iterable.
+
+    Returns
+    -------
+    bool
+        ``True`` when the object should be handled as an iterable collection.
+    """
     it_ = np.iterable(obj) or (obj is None and include_none)
     if np.iterable(obj):
         it_ = len(obj) > 1 or include_unitary
@@ -104,21 +178,22 @@ def iterable_gen(obj, include_none=True, include_unitary=True):
 
 def split_job_from_arrays(len_arrays, n_split, stype="default"):
     """
-    Split an array for parallel independant computing, by sharing independant sub-spaces \
-    of array index
+    Split index ranges into independent chunks for parallel processing.
 
     Parameters
     ----------
-    len_arrays  : int
-        length of the array containing the full job to perform in parallel
-    stype       : str
-        method used to split the array:
-            "comb": 
+    len_arrays : int
+        Total number of indices to distribute.
+    n_split : int
+        Number of sub-jobs to create.
+    stype : str, optional
+        Splitting strategy. ``"default"`` creates contiguous chunks, whereas
+        ``"comb"`` distributes indices round-robin.
 
     Returns
     -------
-    mask    : np.array
-        subspace of the array indexes, specific to each instantiation of the programm
+    list[list[int]]
+        One list of indices per sub-job.
     """
     mask = np.arange(len_arrays)
 
@@ -133,21 +208,22 @@ def split_job_from_arrays(len_arrays, n_split, stype="default"):
 
 
 def rotate_axes(arr: np.ndarray, axis: int, target=0) -> np.ndarray:
-    """_summary_
+    """
+    Move one axis of an array to a target position by successive swaps.
 
     Parameters
     ----------
     arr : np.ndarray
-        _description_
+        Input array.
     axis : int
-        _description_
+        Axis to move.
     target : int, optional
-        _description_, by default 0
+        Destination axis index. Negative values follow NumPy indexing rules.
 
     Returns
     -------
     np.ndarray
-        _description_
+        View of ``arr`` with the requested axis repositioned.
 
     Example
     -------
@@ -176,6 +252,24 @@ def rotate_axes(arr: np.ndarray, axis: int, target=0) -> np.ndarray:
 def plot_array(
     ax: plt.Axes, x: np.ndarray, arr: np.ndarray, axis: int | None = None, **kwgs
 ):
+    """
+    Plot a one-dimensional coordinate against an array of arbitrary dimension.
+
+    Parameters
+    ----------
+    ax : matplotlib.axes.Axes
+        Target axes.
+    x : np.ndarray
+        Coordinate vector used on the x-axis.
+    arr : np.ndarray
+        Values to plot. If multidimensional, every slice orthogonal to ``axis``
+        is plotted recursively.
+    axis : int | None, optional
+        Axis of ``arr`` matching ``x``. If omitted, it is inferred from the first
+        matching dimension length.
+    **kwgs : dict
+        Additional plotting keyword arguments forwarded to ``Axes.plot``.
+    """
     if arr.ndim == 1:
         if len(x) != len(arr):
             raise ValueError(
@@ -441,6 +535,27 @@ def compute_sigma_2D(
 def compute_sigma_2D_old(
     Y_m_t: np.ndarray, x_rec: np.ndarray, sig_in: float, sig_out: float, l_elec: float
 ) -> np.ndarray:
+    """
+    Legacy approximation of the apparent 2D membrane conductivity.
+
+    Parameters
+    ----------
+    Y_m_t : np.ndarray
+        Membrane admittance sampled along the fiber.
+    x_rec : np.ndarray
+        Spatial sampling positions in micrometers.
+    sig_in : float
+        Intracellular conductivity.
+    sig_out : float
+        Extracellular conductivity.
+    l_elec : float
+        Electrode length. Present for API compatibility with newer routines.
+
+    Returns
+    -------
+    np.ndarray
+        Mean equivalent admittance obtained with the legacy approximation.
+    """
     # print("hello old")
     n_x = len(x_rec)
     I = np.arange(n_x)
@@ -713,6 +828,30 @@ def sample_nerve_results(
 def compute_v_rec_cap_idxs(
     Voltage, dt, t_stim=0, stim_duration=0.2, tol=0.05, use_filter=True
 ):
+    """
+    Detect myelinated and unmyelinated CAP landmarks on a recorder trace.
+
+    Parameters
+    ----------
+    Voltage : np.ndarray
+        Recorder voltage trace.
+    dt : float
+        Time step of the trace.
+    t_stim : float, optional
+        Stimulation onset time.
+    stim_duration : float, optional
+        Duration of the stimulation artifact to ignore.
+    tol : float, optional
+        Relative threshold used to detect the myelinated CAP deflection.
+    use_filter : bool, optional
+        If ``True``, smooth the derivative used to detect the unmyelinated CAP.
+
+    Returns
+    -------
+    tuple[tuple[int, int, int, int], tuple[int, int, int, int]]
+        Two tuples describing the myelinated and unmyelinated CAPs respectively,
+        each as ``(i_start, i_min, i_max, i_stop)``.
+    """
     i_offset_stim = int((t_stim + stim_duration) / dt) + 1
     _v_rec_nrm = Voltage[i_offset_stim:].copy()
     _v_rec_nrm /= -_v_rec_nrm.min()
