@@ -19,7 +19,7 @@ from ...utils import nrv_interp
 
 
 class eit_forward_results(dict):
-    """
+    r"""
     Stores and manages the results of an Electrical Impedance Tomography (EIT) forward simulation.
 
     This class combines outputs from both the nerve simulation and the finite element (FEM) EIT simulation,
@@ -46,29 +46,33 @@ class eit_forward_results(dict):
     In this class the eit_forward simulation results are stored in multidimensionnal tensor. This tensor contain between 2 and 5 dimensions as shown in the following table:
 
     .. list-table::
-       :widths: 10 10 10 10 10
-       :header-rows: 1
+        :widths: 10 10 10 10 10
+        :header-rows: 1
 
-       * - Dimensions
-         - Paterns
-         - Frequency
-         - Time
-         - Electrode
-        * - Status
-         - Optional
-         - Optional
-         - 
-         - 
-       * - Size
-         - n_p
-         - n_f
-         - n_t
-         - n_e
-       * Corresponding key
-         - ``"p"``
-         - ``"f"``
-         - ``"t"``
-         - ``"e"``
+        * 
+            - Dimensions
+            - Paterns
+            - Frequency
+            - Time
+            - Electrode
+        * 
+            - Status
+            - Optional
+            - Optional
+            - Always
+            - Always
+        * 
+            - Size
+            - n_p
+            - n_f
+            - n_t
+            - n_e
+        * 
+            - Corresponding key
+            - ``"p"``
+            - ``"f"``
+            - ``"t"``
+            - ``"e"``
 
     Example
     -------
@@ -1129,7 +1133,7 @@ class eit_forward_results(dict):
         store: Literal["default", "overwrite", "external"] = "default",
         **kwgs,
     ) -> pd.DataFrame:
-        """
+        r"""
         Build a dataframe describing CAP time windows for each acquisition line.
 
         Note
@@ -1137,40 +1141,40 @@ class eit_forward_results(dict):
         This methods adds the following columns to the CAP Dataframe:
         
 
-    .. list-table::
-       :widths: 10  10 50
-       :header-rows: 1
+        .. list-table::
+           :widths: 10  10 50
+           :header-rows: 1
 
-       * - Dimensions
-         - type
-         - Description
-        * - line
-         - ``int``
-         - Acquisition line index
-        * - i_res (Optional)
-         - ``int``
-         - Results index in a ``eit_results_list``
-        * - i_p (Optional)
-         - ``int``
-         - Injection patern index for multipatern simulation
-        * - i_f
-         - ``int``
-         - Frequency index
-        * - i_e
-         - ``int``
-         - Electrode index
-        * - i_cap
-         - ``int``
-         - CAP index
-        * - i_t_min
-         - ``int``
-         - min index in time vector
-        * - i_t_max
-         - ``int``
-         - max index in time vector
-        * - duration
-         - ``float``
-         - CAP duration in ms
+           * - Dimensions
+             - type
+             - Description
+           * - line
+             - ``int``
+             - Acquisition line index
+           * - i_res (Optional)
+             - ``int``
+             - Results index in a ``eit_results_list``
+           * - i_p (Optional)
+             - ``int``
+             - Injection patern index for multipatern simulation
+           * - i_f
+             - ``int``
+             - Frequency index
+           * - i_e
+             - ``int``
+             - Electrode index
+           * - i_cap
+             - ``int``
+             - CAP index
+           * - i_t_min
+             - ``int``
+             - Min index in time vector
+           * - i_t_max
+             - ``int``
+             - Max index in time vector
+           * - duration
+             - ``float``
+             - CAP duration in ms
 
         Parameters
         ----------

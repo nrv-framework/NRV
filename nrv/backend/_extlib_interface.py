@@ -10,7 +10,6 @@ from typing import Literal
 #       Numpy compatibility          #
 # ---------------------------------- #
 
-
 def is_empty_iterable(x):
     """
     check if the object x is an empty iterable
@@ -61,6 +60,16 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
         _i = _i[_i < _n]
     return _i
 
+def np_trapz(*args, **kwgs):
+    """
+    Wrap NumPy trapezoidal integration with version-compatible dispatch.
+
+    Returns the result of :func:``np.trapz`` for NumPy versions older than 2.0.0
+    and :func:``np.trapezoid`` otherwise.
+    """
+    if np.__version__<'2.0.0':
+        return np.trapz(*args, **kwgs)
+    return np.trapezoid(*args, **kwgs)
 
 # ---------------------------------- #
 #       Pandas compatibility         #

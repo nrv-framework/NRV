@@ -288,14 +288,15 @@ def get_MRG_parameters(diameter: float | NDArray, fit_all: bool = False) -> tupl
     fit_all |= isinstance(diameter, np.ndarray)
     if not fit_all and diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
-        g = MRG_g[index]
-        axonD = MRG_axonD[index]
-        nodeD = MRG_nodeD[index]
-        paraD1 = MRG_paraD1[index]
-        paraD2 = MRG_paraD2[index]
-        deltax = MRG_deltax[index]
-        paralength2 = MRG_paralength2[index]
-        nl = MRG_nl[index]
+        g = MRG_g[index].squeeze()
+        axonD = MRG_axonD[index].squeeze()
+        nodeD = MRG_nodeD[index].squeeze()
+        paraD1 = MRG_paraD1[index].squeeze()
+        paraD2 = MRG_paraD2[index].squeeze()
+        deltax = MRG_deltax[index].squeeze()
+        paralength2 = MRG_paralength2[index].squeeze()
+        nl = MRG_nl[index].squeeze()
+
     else:
         # create fiting polynomyals
         g_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_g, 3))
@@ -379,7 +380,7 @@ def get_length_from_nodes(diameter, nodes):
     MRG_deltax = MRG_data.deltax.to_numpy()
     if diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
-        deltax = MRG_deltax[index]
+        deltax = MRG_deltax[index].squeeze()
     else:
         deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
         deltax = deltax_poly(diameter)

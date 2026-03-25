@@ -12,7 +12,11 @@ All notable changes to NRV are summed up in this file.
 
 ### Fixed
 - Issues with eit_results_list for multifrequency and multipatern results
-
+- numpy 2.4 compatibility:
+    - [issue #69](https://github.com/nrv-framework/NRV/issues/69)
+    - np.trapz deprecaiton and replaced by np.trapezoid (retrocompatibility insured by ``nrv.backend._extlib_interface.np_trapz``)
+- pandas 3.0 compatibility:
+    - ``nrv.eit.eit_forward._setup_problem`` rewrite impossible on Series copy
 
 ## [1.3.0] - 2025-08-21
 

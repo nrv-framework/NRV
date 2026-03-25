@@ -1,28 +1,30 @@
 Todo before release v1.3.2
 
 
-[] Soucre Code
+- [ ] Soucre Code
 
-[] Doc
+    - [ ] Fixing [issue #69](https://github.com/nrv-framework/NRV/issues/69) numpy 2.4 compatibility TC
 
-    [] Rebuild TC
+- [ ] Doc
 
-    [] Rewiew TC
+    - [ ] Rebuild TC
 
-        [] Installation TC (mpich -> mpi4py)
+    - [ ] Review TC
 
-    [] Explore Building Viability on RtD FK - TC
+        - [ ] Installation TC (mpich -> mpi4py)
 
-[] Site web
+    - [ ] Explore Building Viability on RtD FK - TC
 
-    [] Finish FK
+- [ ] Site web
 
-    [] Review TC
+    - [ ] Finish FK
 
-    [] Deployment FK
+    - [ ] Review TC
 
-[] Pipeline 
+    - [ ] Deployment FK
 
-    [] Identify Key actions TC
+- [ ] Pipeline 
 
-    [] Sort tests and aciton FK
+    - [ ] Identify Key actions TC
+
+    - [ ] Sort tests and aciton FK

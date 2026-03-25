@@ -652,9 +652,9 @@ class eit_forward(NRV_class):
         self._axons_pop_ppts: DataFrame = self.nerve_results.axons
 
         self.n_c = self._axons_pop_ppts.shape[0]
-        i_mye = self._axons_pop_ppts["types"].to_numpy(dtype=bool)
-        self.axnod_d = (
-            self._axons_pop_ppts["diameters"].copy(deep=True).to_numpy(dtype=float)
+        i_mye = self._axons_pop_ppts["types"].astype(dtype=bool)
+        self.axnod_d = np.copy(
+            self._axons_pop_ppts["diameters"].to_numpy(dtype=float)
         )
         self.axnod_d[i_mye] = get_MRG_parameters(self.axnod_d[i_mye])[2]
         self.myelin_mat = compute_myelin_ppt(self.axnod_d)
