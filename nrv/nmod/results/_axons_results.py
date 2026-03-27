@@ -1362,8 +1362,8 @@ class axon_results(sim_results):
         if len(blocked_spike_positionlist) == 0:
             self["blocked"] = None
             return self["blocked"]
-        if "intra_stim_positions" in self:
-            if self["intra_stim_positions"] < self["extracellular_electrode_x"]:
+        if "intra_stim_position" in self:
+            if self["intra_stim_position"] < self["extracellular_electrode_x"]:
                 position_max = max_spike_position(
                     blocked_spike_positionlist, position_max, spike_begin="down"
                 )
@@ -1403,7 +1403,7 @@ class axon_results(sim_results):
                         self["blocked"] = False
                         return self["blocked"]
         else:
-            rise_error("intra_stim_positions is not in dictionnary")
+            rise_error("intra_stim_position is not in dictionnary")
 
     def check_test_AP(self):
         """

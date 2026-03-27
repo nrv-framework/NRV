@@ -666,8 +666,8 @@ class axon(NRV_simulable):
         t_vec: list[neuron.h.Vector] = []
         s_vec: list[neuron.h.Vector] = []
         for pos, stim, stype in self.intra_stim:
-            if isinstance(pos, tuple):
-                stim_sec, stim_pos = pos
+            if isinstance(pos, str):
+                stim_sec, stim_pos = eval(pos)
             else:
                 stim_sec, stim_pos = self._get_sec_from_postion(position=pos)
             # add the stimulation to the axon

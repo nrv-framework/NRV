@@ -117,4 +117,4 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     res_4.plot_x_t(ax, "V_mem")#, node_index=np.arange(0,5))
     # plt.savefig(f'{figdir}_A.png')
-    plt.show()
+    # plt.show()

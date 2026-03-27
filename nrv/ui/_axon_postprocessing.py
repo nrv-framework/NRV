@@ -406,8 +406,8 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
     ]
     if len(blocked_spike_positionlist) == 0:
         return None
-    if "intra_stim_positions" in my_dict:
-        if my_dict["intra_stim_positions"] < my_dict["extracellular_electrode_x"]:
+    if "intra_stim_position" in my_dict:
+        if my_dict["intra_stim_position"] < my_dict["extracellular_electrode_x"]:
             position_max = max_spike_position(
                 blocked_spike_positionlist, position_max, spike_begin="down"
             )
@@ -441,7 +441,7 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
                 else:
                     return False
     else:
-        pass_info("intra_stim_positions is not in dictionnary")
+        pass_info("intra_stim_position is not in dictionnary")
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
@@ -999,7 +999,7 @@ def rmv_keys(
      - `V_mem_raster_time`
      - `myelinated`
      - `intra_stim_starts`
-     - `intra_stim_positions`
+     - `intra_stim_position`
 
 
     Warning
@@ -1031,7 +1031,7 @@ def rmv_keys(
         "V_mem_raster_time",
         "myelinated",
         "intra_stim_starts",
-        "intra_stim_positions",
+        "intra_stim_position",
         "recorder",
     }
 
@@ -1060,7 +1060,7 @@ def is_recruited(results: axon_results) -> axon_results:
      - `diameter`
      - `intra_stim_starts`
      - `tstop`
-     - `intra_stim_positions`
+     - `intra_stim_position`
      - `extracellular_electrode_x`
      - `recruited`
 
@@ -1090,7 +1090,7 @@ def is_recruited(results: axon_results) -> axon_results:
         "diameter",
         "intra_stim_starts",
         "tstop",
-        "intra_stim_positions",
+        "intra_stim_position",
         "extracellular_electrode_x",
         "recruited",
     }
@@ -1122,7 +1122,7 @@ def is_blocked(
      - `diameter`
      - `intra_stim_starts`
      - `tstop`
-     - `intra_stim_positions`
+     - `intra_stim_position`
      - `extracellular_electrode_x`
      - `blocked`
      - `has_onset`
@@ -1181,7 +1181,7 @@ def is_blocked(
         "diameter",
         "intra_stim_starts",
         "tstop",
-        "intra_stim_positions",
+        "intra_stim_position",
         "extracellular_electrode_x",
         "is_blocked",
         "has_onset",
@@ -1296,7 +1296,7 @@ def sample_keys(
             "t_sim",
             "myelinated",
             "intra_stim_starts",
-            "intra_stim_positions",
+            "intra_stim_position",
             "recorder",
         }
 

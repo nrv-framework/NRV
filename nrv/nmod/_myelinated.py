@@ -892,8 +892,10 @@ class myelinated(axon):
         amplitude   : float
             amplitude of the pulse (nA)
         """
+        # The corresponding section is added as str to avoid issues by saving/loading neuron Sections. 
+        # This str is evaluated during the simulation by self.__activate_intra_stim
         self.insert_intra_stim(
-            position=(self.node[index], 0.5),
+            position=f"(self.node[{index}], 0.5)",
             stim=stim,
             stype=stype,
         )

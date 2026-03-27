@@ -72,4 +72,4 @@ if __name__ == "__main__":
     res_1.plot_x_t(axs[0], "V_mem")#, node_index=np.arange(0,5))
     res_2.plot_x_t(axs[1], "V_mem")#, node_index=np.arange(0,5))
     plt.savefig(f'{figdir}_A.png')
-    plt.show()
+    # plt.show()

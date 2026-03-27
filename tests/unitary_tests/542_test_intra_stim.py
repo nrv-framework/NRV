@@ -12,7 +12,6 @@ figdir = "unitary_tests/figures/" + test_id + "_"
 if __name__ == "__main__":
     intra_stim = nrv.intracellular_context()
 
-
     positions = []
     stimuli = []
     stypes = []
@@ -30,10 +29,7 @@ if __name__ == "__main__":
 
     intra_stim.insert_intra_stim(position=positions[-1], stim=stimuli[-1], stype=stypes[-1])
 
-    print((.1 * L, stimuli[0], "i") == intra_stim[0])
-
     for _i, (p, s, st) in enumerate(intra_stim):
-        
         print(positions[_i] == p)
         print(stimuli[_i] == s)
         print(stypes[_i] == st)

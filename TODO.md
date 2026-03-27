@@ -3,7 +3,9 @@ Todo before release v1.3.2
 
 - [ ] Soucre Code
 
-    - [ ] Fixing [issue #69](https://github.com/nrv-framework/NRV/issues/69) numpy 2.4 compatibility TC
+    - [x] Fixing [issue #69](https://github.com/nrv-framework/NRV/issues/69) numpy 2.4 compatibility TC
+
+    - [x] Checking dependencies update compatibility
 
 - [ ] Doc
 

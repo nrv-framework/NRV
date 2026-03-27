@@ -60,4 +60,6 @@ if __name__ == "__main__":
     axs[2].set_xlabel("time (ms)")
     fig.savefig(f"./unitary_tests/figures/{test_id}_A.png")
     del eit_instance
+
+    print("test ok")
     # plt.show()

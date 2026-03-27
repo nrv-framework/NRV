@@ -145,9 +145,14 @@ class PopShape(NRV_class):
             return self._pop[key]
 
     @property
-    def iloc(self):
+    def loc(self):
         if self.has_pop:
             return self._pop.loc
+        
+    @property
+    def iloc(self):
+        if self.has_pop:
+            return self._pop.iloc
 
     # -------------------- #
     # Handeling population #

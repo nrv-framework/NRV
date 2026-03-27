@@ -91,7 +91,7 @@ class intracellular_context(NRV_class):
 
     def insert_intra_stim(
         self,
-        position: float | tuple,
+        position: float | str,
         stim: stimulus,
         stype: Literal["I", "i", "V", "v"] = "i",
     ):
@@ -100,14 +100,18 @@ class intracellular_context(NRV_class):
 
         Parameters
         ----------
-        position       : float|tuple
-            relative x_posision along the axon or tuple containing the targeted section and the relative position along this section
+        position       : float|str
+            relative x_posision along the axon or tuple containing an str of the targeted section and the relative position along this section
         t_start     : float
             starting time (ms)
         duration    : float
             duration of the pulse(ms)
         amplitude   : float
             amplitude of the pulse (nA)
+
+        Note
+        ----
+        For positions specified as targeted sections, tupple must be converted to str to avoid conflict between save/load and neuron Sections. This str is evaluated during the simulation by self.__activate_intra_stim
         """
         self.stim_type.append(stype.lower())
         self.stimuli.append(stim)
@@ -151,7 +155,6 @@ class intracellular_context(NRV_class):
         >>> # Append from an iterable of (start, duration, amplitude) tuples:
         >>> self.append([(0.0, 1.0, 0.5), (2.0, 0.5, 0.2)])
         """
-
         intra_context = load_any(data)
         _ok_data = is_intracellular_context(intra_context) or (
             isinstance(intra_context, tuple) and len(isinstance == 3)

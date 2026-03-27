@@ -753,21 +753,21 @@ class fascicle(NRV_simulable):
         k : int
             _description_
         """
-        if self.axons["types"][k] == 0:
+        if self.axons["types"].iloc[k] == 0:
             axon = unmyelinated(
-                self.axons["y"][k],
-                self.axons["z"][k],
-                self.axons["diameters"][k],
+                self.axons["y"].iloc[k],
+                self.axons["z"].iloc[k],
+                self.axons["diameters"].iloc[k],
                 self.L,
                 ID=k,
                 **self.unmyelinated_param,
             )
         else:
-            self.myelinated_param["node_shift"] = self.axons["node_shift"][k]
+            self.myelinated_param["node_shift"] = self.axons["node_shift"].iloc[k]
             axon = myelinated(
-                self.axons["y"][k],
-                self.axons["z"][k],
-                self.axons["diameters"][k],
+                self.axons["y"].iloc[k],
+                self.axons["z"].iloc[k],
+                self.axons["diameters"].iloc[k],
                 self.L,
                 ID=k,
                 **self.myelinated_param,
@@ -836,7 +836,7 @@ class fascicle(NRV_simulable):
         """
         Remove all unmyelinated fibers from the fascicle
         """
-        _mask = self.axons["types"] == 1
+        _mask = self.axons["types"].iloc == 1
         _lab = "mye_only"
         self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -845,7 +845,7 @@ class fascicle(NRV_simulable):
         """
         Remove all myelinated fibers from the
         """
-        _mask = self.axons["types"] == 0
+        _mask = self.axons["types"].iloc == 0
         _lab = "unm_only"
         self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -855,11 +855,11 @@ class fascicle(NRV_simulable):
         Remove fibers with diameters below/above a threshold
         """
         if min:
-            mask = self.axons["diameters"] >= d
+            mask = self.axons["diameters"].iloc >= d
             _lab = f"d_over_{d}"
 
         else:
-            mask = self.axons["diameters"] <= d
+            mask = self.axons["diameters"].iloc <= d
             _lab = f"d_under_{d}"
         self.axons.add_mask(mask=mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -926,8 +926,8 @@ class fascicle(NRV_simulable):
                 polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
                 for s_k in range(self.n_ax):
                     k = self.sim_list[s_k]
-                    d = self.axons["diameters"][k]
-                    if self.axons["types"][k] == 0.0:
+                    d = self.axons["diameters"].iloc[k]
+                    if self.axons["types"].iloc[k] == 0.0:
                         color = unmyel_color
                         size = polysize(d)
                         axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
@@ -1254,7 +1254,7 @@ class fascicle(NRV_simulable):
         """
         ## test axon axons_type[k]
         k = self.sim_list[k_sim]
-        assert self.axons["types"][k] in [0, 1]
+        assert self.axons["types"].iloc[k] in [0, 1]
         axon = self.__generate_axon(k)
         ## add extracellular stimulation
         axon.attach_extracellular_stimulation(self.extra_stim)

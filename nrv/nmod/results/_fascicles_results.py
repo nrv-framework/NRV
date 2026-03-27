@@ -482,7 +482,7 @@ class fascicle_results(sim_results):
                     c = "orangered"
                     alpha = n_onset[k] * alpha_g
                 if is_blocked[k] is None:
-                    axes.scatter(axon_y[k], axon_z[k], marker="x", s=20, c="k")
+                    axes.scatter(axon_y.iloc[k], axon_z.iloc[k], marker="x", s=20, c="k")
 
             else:
                 if n_onset[k] == 0:
@@ -494,8 +494,8 @@ class fascicle_results(sim_results):
 
             axes.add_patch(
                 plt.Circle(
-                    (axon_y[k], axon_z[k]),
-                    axon_diam[k] / 2,
+                    (axon_y.iloc[k], axon_z.iloc[k]),
+                    axon_diam.iloc[k] / 2,
                     color=c,
                     fill=True,
                     alpha=alpha,
@@ -507,5 +507,5 @@ class fascicle_results(sim_results):
         if num:
             for k in range(self.n_ax):
                 axes.text(
-                    self.axons["y"][k], self.axons["z"][k], str(k)
+                    self.axons["y"].iloc[k], self.axons["z"].iloc[k], str(k)
                 )  # horizontalalignment='center',verticalalignment='center')
