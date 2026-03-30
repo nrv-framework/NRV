@@ -139,7 +139,7 @@ This example shows how logical and arithmetical operations on :doc:`NRV's stimul
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 7.117 seconds)
+   **Total running time of the script:** (0 minutes 6.370 seconds)
 
 
 .. _sphx_glr_download_examples_generic_11_combining_stimulus.py:

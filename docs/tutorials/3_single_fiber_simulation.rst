@@ -245,7 +245,7 @@ We can plot the stimulus to check it, using built-in plot function of the ```sti
  .. code-block:: none
 
 
-    Text(30.347222222222214, 0.5, 'amplitude (µA)')
+    Text(30.472222222222214, 0.5, 'amplitude (µA)')
 
 
 
@@ -663,12 +663,12 @@ Let's use the ``axon_AP_threshold`` function to plot threshold vs axon diameter 
  .. code-block:: none
 
     NRV WARNING: [6000.00537109    0.            0.        ] not found in mesh, value of [6000.    0.    0.] reused
-    LIFE threshold: 70.0µA (axon_d = 2µm)
-    LIFE threshold: 35.0µA (axon_d = 4µm)
+    LIFE threshold: 69.4µA (axon_d = 2µm)
+    LIFE threshold: 35.3µA (axon_d = 4µm)
     LIFE threshold: 23.8µA (axon_d = 6µm)
-    LIFE threshold: 18.8µA (axon_d = 8µm)
+    LIFE threshold: 18.7µA (axon_d = 8µm)
     LIFE threshold: 16.5µA (axon_d = 10µm)
-    LIFE threshold: 15.6µA (axon_d = 12µm)
+    LIFE threshold: 15.5µA (axon_d = 12µm)
     LIFE threshold: 14.9µA (axon_d = 14µm)
     LIFE threshold: 14.4µA (axon_d = 16µm)
     LIFE threshold: 14.0µA (axon_d = 18µm)
@@ -808,7 +808,7 @@ Now we can plot the results to compare the recruitment properties of the two tes
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (3 minutes 50.093 seconds)
+   **Total running time of the script:** (3 minutes 50.664 seconds)
 
 
 .. _sphx_glr_download_tutorials_3_single_fiber_simulation.py:

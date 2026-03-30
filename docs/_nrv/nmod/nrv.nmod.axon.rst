@@ -1,4 +1,4 @@
-﻿axon
+axon
 ====
 
 .. currentmodule:: nrv.nmod

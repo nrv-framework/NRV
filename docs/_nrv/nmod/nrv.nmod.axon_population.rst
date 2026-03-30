@@ -27,6 +27,8 @@ Attributes
 
     axon_population.iloc
 
+    axon_population.loc
+
     axon_population.n_ax
 
     axon_population.n_mask

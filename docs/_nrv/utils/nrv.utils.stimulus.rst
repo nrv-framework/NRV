@@ -1,4 +1,4 @@
-﻿stimulus
+stimulus
 ========
 
 .. currentmodule:: nrv.utils

@@ -130,7 +130,7 @@ The simplest method is to define a circular fascicle by its diameter and its (y,
  .. code-block:: none
 
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -184,7 +184,7 @@ In this example, we generate a second elliptic fascicle centered at $(y,z) = (10
  .. code-block:: none
 
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -477,7 +477,7 @@ We see that now our nerve is populated with fibers. Since the ```fascicle_1```an
  .. code-block:: none
 
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -628,7 +628,7 @@ Let's see how our nerve with electrodes now looks like:
  .. code-block:: none
 
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -673,8 +673,8 @@ Simulation duration is set with the ```t_sim``` parameter (in ms). We can also s
 
  .. code-block:: none
 
-    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
-    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+    fascicle 1/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+    fascicle 2/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
 
 
 
@@ -707,7 +707,7 @@ We can plot the nerve again and highlight axons that are recruited:
  .. code-block:: none
 
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -782,10 +782,10 @@ We can change the stimulus of ```LIFE_2``` by calling ```change_stimulus_from_el
 
  .. code-block:: none
 
-    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
-    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
+    fascicle 1/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 2/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
 
-    Text(22.972222222222214, 0.5, 'y-axis (µm)')
+    Text(23.222222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -854,8 +854,8 @@ Let's remove the stimulation in ```LIFE_2``` and apply it via ```LIFE_0``` inste
 
  .. code-block:: none
 
-    fascicle 1/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
-    fascicle 2/2 -- 3 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
+    fascicle 1/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 2/2 -- 4 CPUs: 98 / 98 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
 
 
 
@@ -906,7 +906,7 @@ Let's see how many fibers are activated now:
     Proportion of unmyelinated recruited in fascicle_2: 26.08695652173913%
     Proportion of myelinated recruited in fascicle_2: 62.06896551724138%
 
-    Text(48.472222222222214, 0.5, 'y-axis (µm)')
+    Text(48.722222222222214, 0.5, 'y-axis (µm)')
 
 
 
@@ -993,187 +993,67 @@ We use this function to get the recruitment curve of each electrode with the cat
 
     Stimulating nerve with LIFE_0
     Pulse amplitude set to -0.0µA (1/20)
-
-
     Pulse amplitude set to -5.3µA (2/20)
-
-
     Pulse amplitude set to -10.5µA (3/20)
-
-
     Pulse amplitude set to -15.8µA (4/20)
-
-
     Pulse amplitude set to -21.1µA (5/20)
-
-
     Pulse amplitude set to -26.3µA (6/20)
-
-
     Pulse amplitude set to -31.6µA (7/20)
-
-
     Pulse amplitude set to -36.8µA (8/20)
-
-
     Pulse amplitude set to -42.1µA (9/20)
-
-
     Pulse amplitude set to -47.4µA (10/20)
-
-
     Pulse amplitude set to -52.6µA (11/20)
-
-
     Pulse amplitude set to -57.9µA (12/20)
-
-
     Pulse amplitude set to -63.2µA (13/20)
-
-
     Pulse amplitude set to -68.4µA (14/20)
-
-
     Pulse amplitude set to -73.7µA (15/20)
-
-
     Pulse amplitude set to -78.9µA (16/20)
-
-
     Pulse amplitude set to -84.2µA (17/20)
-
-
     Pulse amplitude set to -89.5µA (18/20)
-
-
     Pulse amplitude set to -94.7µA (19/20)
-
-
     Pulse amplitude set to -100.0µA (20/20)
-
-
     Stimulating nerve with LIFE_1
     Pulse amplitude set to -0.0µA (1/20)
-
-
     Pulse amplitude set to -5.3µA (2/20)
-
-
     Pulse amplitude set to -10.5µA (3/20)
-
-
     Pulse amplitude set to -15.8µA (4/20)
-
-
     Pulse amplitude set to -21.1µA (5/20)
-
-
     Pulse amplitude set to -26.3µA (6/20)
-
-
     Pulse amplitude set to -31.6µA (7/20)
-
-
     Pulse amplitude set to -36.8µA (8/20)
-
-
     Pulse amplitude set to -42.1µA (9/20)
-
-
     Pulse amplitude set to -47.4µA (10/20)
-
-
     Pulse amplitude set to -52.6µA (11/20)
-
-
     Pulse amplitude set to -57.9µA (12/20)
-
-
     Pulse amplitude set to -63.2µA (13/20)
-
-
     Pulse amplitude set to -68.4µA (14/20)
-
-
     Pulse amplitude set to -73.7µA (15/20)
-
-
     Pulse amplitude set to -78.9µA (16/20)
-
-
     Pulse amplitude set to -84.2µA (17/20)
-
-
     Pulse amplitude set to -89.5µA (18/20)
-
-
     Pulse amplitude set to -94.7µA (19/20)
-
-
     Pulse amplitude set to -100.0µA (20/20)
-
-
     Stimulating nerve with LIFE_2
     Pulse amplitude set to -0.0µA (1/20)
-
-
     Pulse amplitude set to -5.3µA (2/20)
-
-
     Pulse amplitude set to -10.5µA (3/20)
-
-
     Pulse amplitude set to -15.8µA (4/20)
-
-
     Pulse amplitude set to -21.1µA (5/20)
-
-
     Pulse amplitude set to -26.3µA (6/20)
-
-
     Pulse amplitude set to -31.6µA (7/20)
-
-
     Pulse amplitude set to -36.8µA (8/20)
-
-
     Pulse amplitude set to -42.1µA (9/20)
-
-
     Pulse amplitude set to -47.4µA (10/20)
-
-
     Pulse amplitude set to -52.6µA (11/20)
-
-
     Pulse amplitude set to -57.9µA (12/20)
-
-
     Pulse amplitude set to -63.2µA (13/20)
-
-
     Pulse amplitude set to -68.4µA (14/20)
-
-
     Pulse amplitude set to -73.7µA (15/20)
-
-
     Pulse amplitude set to -78.9µA (16/20)
-
-
     Pulse amplitude set to -84.2µA (17/20)
-
-
     Pulse amplitude set to -89.5µA (18/20)
-
-
     Pulse amplitude set to -94.7µA (19/20)
-
-
     Pulse amplitude set to -100.0µA (20/20)
-
-
 
 
 
@@ -1406,65 +1286,25 @@ We can now simulate a recruitment curve with a cuff just like we did with the LI
 
     Stimulating nerve with CUFF
     Pulse amplitude set to -0.0µA (1/20)
-
-
     Pulse amplitude set to -5.3µA (2/20)
-
-
     Pulse amplitude set to -10.5µA (3/20)
-
-
     Pulse amplitude set to -15.8µA (4/20)
-
-
     Pulse amplitude set to -21.1µA (5/20)
-
-
     Pulse amplitude set to -26.3µA (6/20)
-
-
     Pulse amplitude set to -31.6µA (7/20)
-
-
     Pulse amplitude set to -36.8µA (8/20)
-
-
     Pulse amplitude set to -42.1µA (9/20)
-
-
     Pulse amplitude set to -47.4µA (10/20)
-
-
     Pulse amplitude set to -52.6µA (11/20)
-
-
     Pulse amplitude set to -57.9µA (12/20)
-
-
     Pulse amplitude set to -63.2µA (13/20)
-
-
     Pulse amplitude set to -68.4µA (14/20)
-
-
     Pulse amplitude set to -73.7µA (15/20)
-
-
     Pulse amplitude set to -78.9µA (16/20)
-
-
     Pulse amplitude set to -84.2µA (17/20)
-
-
     Pulse amplitude set to -89.5µA (18/20)
-
-
     Pulse amplitude set to -94.7µA (19/20)
-
-
     Pulse amplitude set to -100.0µA (20/20)
-
-
 
 
 
@@ -1511,7 +1351,7 @@ And plot the results:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (20 minutes 8.088 seconds)
+   **Total running time of the script:** (24 minutes 21.390 seconds)
 
 
 .. _sphx_glr_download_tutorials_4_nerve_simulation.py:

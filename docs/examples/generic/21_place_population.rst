@@ -117,92 +117,92 @@ Quick placement
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>0.442886</td>
-          <td>15.153097</td>
-          <td>-6.547833</td>
+          <td>1.657515</td>
+          <td>11.935324</td>
+          <td>-6.165825</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>1.355311</td>
-          <td>-9.694166</td>
-          <td>1.491902</td>
+          <td>0.634669</td>
+          <td>7.780804</td>
+          <td>16.766923</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0.0</td>
-          <td>1.971343</td>
-          <td>4.244391</td>
-          <td>-7.729372</td>
+          <td>1.029860</td>
+          <td>-4.419590</td>
+          <td>5.705990</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>0.0</td>
-          <td>1.878357</td>
-          <td>-4.905767</td>
-          <td>9.246669</td>
+          <td>1.0</td>
+          <td>4.274549</td>
+          <td>5.813537</td>
+          <td>12.986253</td>
           <td>True</td>
-          <td>0.000000</td>
+          <td>0.673103</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>2.058517</td>
-          <td>-8.854880</td>
-          <td>-5.449079</td>
+          <td>1.146092</td>
+          <td>-14.465987</td>
+          <td>1.254364</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>1.0</td>
-          <td>8.424850</td>
-          <td>-2.882341</td>
-          <td>14.040094</td>
-          <td>True</td>
-          <td>0.840496</td>
-        </tr>
-        <tr>
-          <th>6</th>
-          <td>1.0</td>
-          <td>8.120240</td>
-          <td>7.367780</td>
-          <td>5.825482</td>
-          <td>True</td>
-          <td>0.622564</td>
-        </tr>
-        <tr>
-          <th>7</th>
           <td>0.0</td>
-          <td>0.942685</td>
-          <td>1.283380</td>
-          <td>1.437351</td>
+          <td>1.163527</td>
+          <td>-2.472507</td>
+          <td>-1.246319</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
+          <th>6</th>
+          <td>1.0</td>
+          <td>7.701403</td>
+          <td>-10.347029</td>
+          <td>-6.035499</td>
+          <td>True</td>
+          <td>0.784416</td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td>1.0</td>
+          <td>7.625251</td>
+          <td>5.079867</td>
+          <td>6.997811</td>
+          <td>True</td>
+          <td>0.398744</td>
+        </tr>
+        <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>1.221643</td>
-          <td>3.619578</td>
-          <td>-12.311362</td>
+          <td>1.704008</td>
+          <td>7.960491</td>
+          <td>-7.655029</td>
           <td>True</td>
           <td>0.000000</td>
         </tr>
         <tr>
           <th>9</th>
-          <td>1.0</td>
-          <td>3.969940</td>
-          <td>-3.504748</td>
-          <td>-16.057810</td>
+          <td>0.0</td>
+          <td>1.372745</td>
+          <td>-11.494757</td>
+          <td>10.232813</td>
           <td>True</td>
-          <td>0.520913</td>
+          <td>0.000000</td>
         </tr>
       </tbody>
     </table>
@@ -368,7 +368,8 @@ Placement using the "packing" method
 
  .. code-block:: none
 
-    Packing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:41
+    Packing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:30
+    NRV WARNING: expansion factor must be greater than one. Factor set to 1
 
 
 
@@ -444,7 +445,7 @@ Plotting
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 47.895 seconds)
+   **Total running time of the script:** (0 minutes 36.755 seconds)
 
 
 .. _sphx_glr_download_examples_generic_21_place_population.py:

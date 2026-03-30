@@ -177,7 +177,7 @@ built-in method ``get_avg_AP_speed`` of the ``results`` dictionary.
 
  .. code-block:: none
 
-    0.405
+    0.406
 
 
 
@@ -298,7 +298,7 @@ axon than small unmyelinated one!
  .. code-block:: none
 
 
-    Text(42.597222222222214, 0.5, 'speed ($m.s^{-1}$)')
+    Text(42.847222222222214, 0.5, 'speed ($m.s^{-1}$)')
 
 
 
@@ -362,7 +362,7 @@ node-of-ranvier distance increases with diameter.
  .. code-block:: none
 
 
-    Text(38.097222222222214, 0.5, 'speed ($m.s^{-1}$)')
+    Text(38.347222222222214, 0.5, 'speed ($m.s^{-1}$)')
 
 
 
@@ -400,7 +400,7 @@ gain provided by the axon’s myelin sheath.
  .. code-block:: none
 
 
-    Text(31.529033135308154, 0.5, 'speed ($m.s^{-1}$)')
+    Text(31.538814019097217, 0.5, 'speed ($m.s^{-1}$)')
 
 
 
@@ -480,7 +480,7 @@ run.
     Simulated model: Gaines_motor
     Simulated model: Gaines_sensory
 
-    Text(38.097222222222214, 0.5, 'speed ($m.s^{-1}$)')
+    Text(38.347222222222214, 0.5, 'speed ($m.s^{-1}$)')
 
 
 
@@ -547,7 +547,7 @@ unmyelinated models:
     Simulated model: Sundt
     Simulated model: Tigerholm
 
-    Text(42.597222222222214, 0.5, 'speed ($m.s^{-1}$)')
+    Text(42.722222222222214, 0.5, 'speed ($m.s^{-1}$)')
 
 
 
@@ -563,7 +563,7 @@ al. (Pelot et al. 2021).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 38.786 seconds)
+   **Total running time of the script:** (1 minutes 50.156 seconds)
 
 
 .. _sphx_glr_download_tutorials_2_propagation_velocity.py:

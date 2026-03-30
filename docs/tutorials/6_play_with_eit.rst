@@ -132,9 +132,7 @@ First, let's define the nerve geometry for the simulation. As a case study, we c
 
  .. code-block:: none
 
-    NRV INFO: On 30 axons to generate, there are 9 Myelinated and 21 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 10 axons to generate, there are 3 Myelinated and 7 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
 
@@ -264,10 +262,8 @@ Basically, this method:
 
  .. code-block:: none
 
-    NRV INFO: Starting nerve simulation
     fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:25
     fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:13
-    NRV INFO: ...Done!
 
 
 
@@ -336,14 +332,9 @@ Although this process may seem complex, it has been fully integrated into the ``
 
  .. code-block:: none
 
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 489
-    NRV INFO: Number of nodes : 5619
-    NRV INFO: Number of elements : 11688
-    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
-    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:38
-    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
+    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
+    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
+    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
 
 
 
@@ -575,7 +566,7 @@ To find the index ``i_tmax``, a simple method consists of examining ``res.dv_eit
 
     t_max=3.6000000000003696ms, (i_tmax=7)
 
-    <matplotlib.legend.Legend object at 0x318cf7350>
+    <matplotlib.legend.Legend object at 0x178a1f800>
 
 
 
@@ -611,7 +602,7 @@ If required the data formatted for pyEIT solvers can be extracted using `fromat_
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x318e2a1e0>]
+    [<matplotlib.lines.Line2D object at 0x178f17620>]
 
 
 
@@ -742,18 +733,11 @@ Forward problem
 
  .. code-block:: none
 
-    NRV INFO: Starting nerve simulation
-    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:26
+    fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:25
     fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:13
-    NRV INFO: ...Done!
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 489
-    NRV INFO: Number of nodes : 5619
-    NRV INFO: Number of elements : 11688
-    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
-    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:36
-    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
+    process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
+    process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
+    process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:28
 
 
 
@@ -847,7 +831,7 @@ Final summary plot
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 51.386 seconds)
+   **Total running time of the script:** (2 minutes 29.744 seconds)
 
 
 .. _sphx_glr_download_tutorials_6_play_with_eit.py:

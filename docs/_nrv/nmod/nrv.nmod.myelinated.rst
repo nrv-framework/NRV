@@ -1,4 +1,4 @@
-﻿myelinated
+myelinated
 ==========
 
 .. currentmodule:: nrv.nmod

@@ -1,4 +1,4 @@
-﻿unmyelinated
+unmyelinated
 ============
 
 .. currentmodule:: nrv.nmod

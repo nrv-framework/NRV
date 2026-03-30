@@ -591,7 +591,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5&lt;../../tutorials/5_first_optimization is used:">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5 is used:">
 
 .. only:: html
 

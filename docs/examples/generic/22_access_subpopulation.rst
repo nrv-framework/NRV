@@ -132,7 +132,7 @@ From :meth:`pandas.DataFrame.eval` expression
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
 
-    ('mask_0', array([False, False, False, ..., False, False, False], shape=(2000,)))
+    ('mask_0', array([False, False, False, ..., False,  True, False], shape=(2000,)))
 
 
 
@@ -183,7 +183,7 @@ The
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.152 seconds)
+   **Total running time of the script:** (0 minutes 4.030 seconds)
 
 
 .. _sphx_glr_download_examples_generic_22_access_subpopulation.py:
