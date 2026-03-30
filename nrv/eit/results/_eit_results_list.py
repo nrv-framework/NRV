@@ -457,7 +457,7 @@ class eit_results_list(eit_forward_results):
     def get_acap_ppt(
         self,
         thr: float = 0.05,
-        verbose: bool = True,
+        verbose: bool = False,
         store: Literal["default", "overwrite", "external"] = "default",
         **kwgs,
     ):

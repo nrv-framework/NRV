@@ -1242,7 +1242,6 @@ class eit_forward_results(dict):
             print(f"_cap_mask {_cap_mask.shape}:", _cap_mask)
 
         l_ppt = self._get_line_ppt(i_l=i_l)
-        print("col", self._column_labels, self.is_multi_patern)
         labels = ["line"] + self._column_labels + ["i_cap", "i_t_min", "i_t_max"]
         if verbose:
             print(f"l_ppt {l_ppt.shape}:", l_ppt)
@@ -1301,7 +1300,6 @@ class eit_forward_results(dict):
 
         # 
         _cap_ppt = self.get_acap_t_ppt(thr=thr, store=store, **kwgs)
-        print(_cap_ppt)
         dv_masked, _v_0 = self.get_dv_from_df(
             _cap_ppt, verbose=verbose, masked_time=True, with_v_0=True
         )
@@ -1474,7 +1472,6 @@ class eit_forward_results(dict):
         _av_rec = self._v_rec.swapaxes(-1, -2)
         shape_2axes = (np.prod(_av_rec.shape[:-1]), _av_rec.shape[-1])
         _av_rec = _av_rec.reshape(shape_2axes)
-        print(_av_rec.shape)
         dt = self["t_rec"][1] - self["t_rec"][0]
         i_l = np.linspace(
             0, shape_2axes[0], 2 * shape_2axes[0], endpoint=False, dtype=int
