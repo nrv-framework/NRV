@@ -5,14 +5,14 @@ dependencies:
   - python==3.12
   - mpi4py
   - fenics-dolfinx==0.9.0
-  - libblas==blis
+  - libblas=*=*blis
   - python-gmsh
   - ipykernel
   - pip
   - pip:
     - mph
     - neuron
-    - icecream 
+    - icecream
     - numba
     - scipy
     - matplotlib
