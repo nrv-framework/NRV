@@ -59,28 +59,25 @@ jobs:
           micromamba run -n "$ENV_NAME" bash -lc '
             set -euo pipefail
 
-            # Adaptez ici si vous avez une étape spécifique
-            # pour régénérer exemples / tutoriels / notebooks
-            # ex: python scripts/build_tutorials.py
-
-            make -C docs clean
-            make -C docs html
-
-            rm -rf docs/html
+            rm -rf docs/_build docs/html docs/examples docs/tutorials docs/_nrv
             mkdir -p docs/html
+
+            python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/_build/
+
+            test -d docs/_build/html
             cp -a docs/_build/html/. docs/html/
           '
 
-      - name: Commit prebuilt HTML if changed
+      - name: Commit prebuilt documentation if changed
         id: commit_docs
         run: |
-          if git diff --quiet -- docs/html; then
+          if git diff --quiet -- docs/html docs/_nrv docs/examples docs/tutorials; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          git add docs/html
-          git commit -m "docs: update prebuilt HTML [skip ci]"
+          git add docs/html docs/_nrv docs/examples docs/tutorials
+          git commit -m "docs: update prebuilt documentation [skip ci]"
           git push origin HEAD:master
 
           echo "changed=true" >> "$GITHUB_OUTPUT"
