@@ -1,4 +1,4 @@
-name: nrv-e
+name: nrv-docs
 channels:
   - conda-forge
 dependencies:
