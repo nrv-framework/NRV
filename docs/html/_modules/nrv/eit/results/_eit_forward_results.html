@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
         <link rel="prefetch" href="../../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit.results._eit_forward_results - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2517,7 +2518,7 @@
 <div class="viewcode-block" id="eit_forward_results">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/nrv.eit.results.eit_forward_results.html#nrv.eit.results.eit_forward_results">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">eit_forward_results</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Stores and manages the results of an Electrical Impedance Tomography (EIT) forward simulation.</span>
 
 <span class="sd">    This class combines outputs from both the nerve simulation and the finite element (FEM) EIT simulation,</span>
@@ -2532,19 +2533,51 @@
 <span class="sd">    data : str or dict or None, optional</span>
 <span class="sd">        Path or dictionary containing saved results to load.</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
 <span class="sd">    - This class is designed for efficient post-processing and visualization of EIT simulation results.</span>
 <span class="sd">    - It supports multi-frequency and multi-protocol EIT simulations.</span>
 <span class="sd">    - Failed or invalid time steps are automatically detected and can be filtered out.</span>
 <span class="sd">    - Provides tools for CAP detection and analysis.</span>
 
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    In this class the eit_forward simulation results are stored in multidimensionnal tensor. This tensor contain between 2 and 5 dimensions as shown in the following table:</span>
+
+<span class="sd">    .. list-table::</span>
+<span class="sd">        :widths: 10 10 10 10 10</span>
+<span class="sd">        :header-rows: 1</span>
+
+<span class="sd">        * </span>
+<span class="sd">            - Dimensions</span>
+<span class="sd">            - Paterns</span>
+<span class="sd">            - Frequency</span>
+<span class="sd">            - Time</span>
+<span class="sd">            - Electrode</span>
+<span class="sd">        * </span>
+<span class="sd">            - Status</span>
+<span class="sd">            - Optional</span>
+<span class="sd">            - Optional</span>
+<span class="sd">            - Always</span>
+<span class="sd">            - Always</span>
+<span class="sd">        * </span>
+<span class="sd">            - Size</span>
+<span class="sd">            - n_p</span>
+<span class="sd">            - n_f</span>
+<span class="sd">            - n_t</span>
+<span class="sd">            - n_e</span>
+<span class="sd">        * </span>
+<span class="sd">            - Corresponding key</span>
+<span class="sd">            - ``&quot;p&quot;``</span>
+<span class="sd">            - ``&quot;f&quot;``</span>
+<span class="sd">            - ``&quot;t&quot;``</span>
+<span class="sd">            - ``&quot;e&quot;``</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
 <span class="sd">    &gt;&gt;&gt; res = eit_forward_results(nerve_res=nerve_sim, fem_res=fem_sim) # create results</span>
 <span class="sd">    &gt;&gt;&gt; dv = res.dv_eit(i_e=0) # Access voltage shift of the first electrode</span>
 <span class="sd">    &gt;&gt;&gt; cap_mask = res.get_cap_mask(thr=0.1)</span>
-<span class="sd">    &gt;&gt;&gt; res.plot_recruited_fibers(ax)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># ...existing code...</span>
@@ -2556,6 +2589,20 @@
         <span class="n">fem_res</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build an EIT forward-results container.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nerve_res : nerve_results | str | dict | None, optional</span>
+<span class="sd">            Nerve simulation result object, or serialized data that can be loaded</span>
+<span class="sd">            with :func:`load_any`.</span>
+<span class="sd">        fem_res : dict | None, optional</span>
+<span class="sd">            Reserved input for FEM results. The current implementation expects FEM</span>
+<span class="sd">            data to be provided through ``data``.</span>
+<span class="sd">        data : str | dict | None, optional</span>
+<span class="sd">            Path to a JSON result file or an already loaded result dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">incorporate_nerve_res</span><span class="p">(</span><span class="n">nerve_res</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filter_res</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -2572,6 +2619,15 @@
 <div class="viewcode-block" id="eit_forward_results.load">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.load.html#nrv.eit.results.eit_forward_results.load">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load serialized EIT results into the current object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : str | dict</span>
+<span class="sd">            Path to a JSON file or a dictionary containing serialized result</span>
+<span class="sd">            entries. Known array-like entries are converted to ``numpy.ndarray``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">key_dic</span> <span class="o">=</span> <span class="n">json_load</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2596,14 +2652,38 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_nerve_res</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether recording data coming from the nerve simulation is available.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            ``True`` when ``t_rec`` is present in the container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;t_rec&quot;</span> <span class="ow">in</span> <span class="bp">self</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_fem_res</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether forward EIT FEM data is available.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            ``True`` when ``v_eit`` is present in the container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;v_eit&quot;</span> <span class="ow">in</span> <span class="bp">self</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_failed_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether failed EIT samples have been identified.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            ``True`` when :attr:`fail_results` contains at least one failed index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fail_results</span><span class="p">):</span>
             <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fail_results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="kc">False</span>
@@ -2677,7 +2757,7 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">n_p</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        number of frequency point</span>
+<span class="sd">        number of drive partern point</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2707,14 +2787,38 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">e_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Index of the electrode axis in EIT arrays.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The last axis, equal to ``-1``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">t_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Index of the time axis in EIT arrays.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The penultimate axis, equal to ``-2``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">2</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">f_axis</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Index of the frequency axis in EIT arrays when it exists.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            ``-3`` for multi-frequency datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">3</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2722,6 +2826,19 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fail_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Indices of failed FEM time samples.</span>
+
+<span class="sd">        Failed samples are computed lazily from the first electrode by flagging</span>
+<span class="sd">        points equal to ``1e10`` or points whose differential response exceeds</span>
+<span class="sd">        ``1e-3``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Failed time indices for quasi-static data, or failed frequency/time</span>
+<span class="sd">            indices for multi-frequency data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_fem_res</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No FEM results in object&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
@@ -2736,24 +2853,41 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">v_eit_interp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interpolator for the EIT electrode potentials.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        callable</span>
+<span class="sd">            Callable returning interpolated ``v_eit`` values at arbitrary times.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_eit_interp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">()</span>
             <span class="n">Y_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_eit</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_v_eit_interp</span> <span class="o">=</span> <span class="n">nrv_interp</span><span class="p">(</span>
                     <span class="n">X_values</span><span class="o">=</span><span class="n">X_</span><span class="p">,</span> <span class="n">Y_values</span><span class="o">=</span><span class="n">Y_</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interp_kind</span>
                 <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">Y_</span> <span class="o">=</span> <span class="n">Y_</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_axis</span><span class="p">)</span>
+                <span class="c1"># Interpolated dimention (time) must be in np.axe = 0</span>
+                <span class="n">Y_</span> <span class="o">=</span> <span class="n">Y_</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_axis</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="n">_interp</span> <span class="o">=</span> <span class="n">nrv_interp</span><span class="p">(</span><span class="n">X_values</span><span class="o">=</span><span class="n">X_</span><span class="p">,</span> <span class="n">Y_values</span><span class="o">=</span><span class="n">Y_</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">interp_kind</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_v_eit_interp</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">X</span><span class="p">:</span> <span class="n">_interp</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">t_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f_axis</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">t_axis</span><span class="p">,</span> <span class="mi">0</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_eit_interp</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">v_rec_interp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interpolator for recorder voltages from the nerve simulation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        callable</span>
+<span class="sd">            Callable returning interpolated recorder signals at arbitrary times.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_rec_interp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">X_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t_rec&quot;</span><span class="p">]</span>
             <span class="n">Y_</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_rec&quot;</span><span class="p">]</span>
@@ -2767,6 +2901,16 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">incorporate_nerve_res</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">nerve_res</span><span class="p">:</span> <span class="n">nerve_results</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import recorder traces from a nerve simulation result.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nerve_res : nerve_results | str | dict | None</span>
+<span class="sd">            Nerve result object, or serialized data loadable with</span>
+<span class="sd">            :func:`load_any`. When a recorder is present, its time vector and all</span>
+<span class="sd">            recording-point traces are copied into ``t_rec`` and ``v_rec``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nerve_res</span> <span class="o">=</span> <span class="n">load_any</span><span class="p">(</span><span class="n">nerve_res</span><span class="p">,</span> <span class="n">rec_context</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nerve_res</span><span class="p">,</span> <span class="n">nerve_results</span><span class="p">):</span>
             <span class="k">if</span> <span class="s2">&quot;recorder&quot;</span> <span class="ow">in</span> <span class="n">nerve_res</span><span class="p">:</span>
@@ -2774,7 +2918,6 @@
                 <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_rec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t_rec&quot;</span><span class="p">]),)</span>
                 <span class="n">n_elec</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nerve_res</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">recording_points</span><span class="p">)</span>
                 <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_rec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t_rec&quot;</span><span class="p">]),</span> <span class="n">n_elec</span><span class="p">))</span>
-
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_elec</span><span class="p">):</span>
                     <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_rec&quot;</span><span class="p">][:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                         <span class="n">nerve_res</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">recording_points</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">recording</span>
@@ -2784,6 +2927,17 @@
 <div class="viewcode-block" id="eit_forward_results.update_failed_results">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.update_failed_results.html#nrv.eit.results.eit_forward_results.update_failed_results">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_failed_results</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_v_eit</span><span class="p">,</span> <span class="n">_v_eit_phase</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replace entries previously marked as failed.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        _v_eit : np.ndarray</span>
+<span class="sd">            Replacement magnitude array, either with the full ``v_eit`` shape or</span>
+<span class="sd">            restricted to the failed entries.</span>
+<span class="sd">        _v_eit_phase : np.ndarray</span>
+<span class="sd">            Replacement phase array with the same layout as ``_v_eit``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
             <span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail_results</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fail_results</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
@@ -2805,6 +2959,23 @@
 <div class="viewcode-block" id="eit_forward_results.t">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.t.html#nrv.eit.results.eit_forward_results.t">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the FEM time vector, optionally resampled.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dt : float | None, optional</span>
+<span class="sd">            If provided, generate a regular time vector from ``0`` to the end of</span>
+<span class="sd">            the simulation using this time step. Otherwise return the stored time</span>
+<span class="sd">            vector.</span>
+<span class="sd">        i_f : int | None, optional</span>
+<span class="sd">            Unused placeholder kept for API compatibility.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Time vector, optionally filtered to remove failed samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_t</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">])</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_res</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_failed_test</span><span class="p">:</span>
@@ -2829,29 +3000,32 @@
         <span class="n">include_paterns</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a tuple containing the</span>
+<span class="sd">        Build index arrays for advanced slicing of EIT results.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        i_t : np.ndarray | int | None, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            Time indices to keep. ``None`` selects all times.</span>
 <span class="sd">        i_e : np.ndarray | int | None, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            Electrode indices to keep. ``None`` selects all electrodes.</span>
 <span class="sd">        i_f : np.ndarray | int | None, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            Frequency indices to keep. Ignored for quasi-static results.</span>
 <span class="sd">        i_p : np.ndarray | int | None, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            Pattern indices to keep. Ignored when a single pattern is stored.</span>
 <span class="sd">        n_t : int | None, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            Number of time samples to use when ``i_t`` is converted by</span>
+<span class="sd">            :func:`set_idxs`. Defaults to :attr:`n_t`.</span>
 <span class="sd">        include_freqs : bool, optional</span>
-<span class="sd">            _description_, by default True</span>
+<span class="sd">            If ``True``, include the frequency axis in the returned tuple when the</span>
+<span class="sd">            dataset is multi-frequency.</span>
 <span class="sd">        include_paterns : bool, optional</span>
-<span class="sd">            _description_, by default True</span>
+<span class="sd">            If ``True``, include the pattern axis in the returned tuple when the</span>
+<span class="sd">            dataset is multi-pattern.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        tuple[np.ndarray]</span>
-<span class="sd">            _description_</span>
+<span class="sd">            Tuple of index arrays ordered to match the internal ``v_eit`` layout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i_all</span> <span class="o">=</span> <span class="p">(</span><span class="n">set_idxs</span><span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="n">n_t</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_t</span><span class="p">),</span> <span class="n">set_idxs</span><span class="p">(</span><span class="n">i_e</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span><span class="p">))</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span> <span class="ow">and</span> <span class="n">include_freqs</span><span class="p">:</span>
@@ -2872,6 +3046,23 @@
         <span class="n">n_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return broadcasting indices ready for ``numpy`` advanced indexing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices forwarded to :meth:`get_idxs`.</span>
+<span class="sd">        n_t : int | None, optional</span>
+<span class="sd">            Number of time samples used when expanding ``i_t``.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`get_idxs`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[np.ndarray]</span>
+<span class="sd">            Output of :func:`numpy.ix_` built from :meth:`get_idxs`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">i_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_idxs</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="n">n_t</span><span class="o">=</span><span class="n">n_t</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="o">*</span><span class="n">i_</span><span class="p">)</span></div>
 
@@ -2887,6 +3078,24 @@
         <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract raw stored EIT voltages using index-based selection.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices used to select times, electrodes, frequencies, and patterns.</span>
+<span class="sd">        signed : bool, optional</span>
+<span class="sd">            If ``True``, convert amplitude and phase into signed voltages through</span>
+<span class="sd">            ``v*cos(phi)``.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`ix_`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Selected EIT voltage values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">__filter_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_res</span> <span class="ow">and</span> <span class="n">i_t</span> <span class="ow">is</span> <span class="kc">None</span>
         <span class="n">_v</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_eit&quot;</span><span class="p">][</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ix_</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
@@ -2924,6 +3133,26 @@
         <span class="n">i_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return EIT voltages, either at stored or interpolated times.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : np.ndarray | float | None, optional</span>
+<span class="sd">            Evaluation times. If ``None``, values are extracted from stored</span>
+<span class="sd">            samples; otherwise interpolation is used.</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting times, electrodes, frequencies, and patterns.</span>
+<span class="sd">            ``i_t`` is ignored when ``t`` is provided.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`v_eit_idx` or</span>
+<span class="sd">            :meth:`ix_`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            EIT voltages with singleton dimensions removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_eit_idx</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -2949,13 +3178,30 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">i_e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">i_f</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">i_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the baseline EIT voltage at the first time sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting electrodes, frequencies, and patterns.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`v_eit`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Baseline voltage values at ``i_t = 0``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwgs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;i_t&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
                 <span class="s2">&quot;i_e&quot;</span><span class="p">:</span> <span class="n">i_e</span><span class="p">,</span>
                 <span class="s2">&quot;i_f&quot;</span><span class="p">:</span> <span class="n">i_f</span><span class="p">,</span>
+                <span class="s2">&quot;i_p&quot;</span><span class="p">:</span> <span class="n">i_p</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">)</span>
         <span class="n">_v_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_eit</span><span class="p">(</span><span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
@@ -2986,6 +3232,26 @@
         <span class="n">pc</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the voltage variation relative to the baseline sample.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : np.ndarray | float | None, optional</span>
+<span class="sd">            Evaluation times. If provided, the differential signal is computed on</span>
+<span class="sd">            interpolated voltages.</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting times, electrodes, frequencies, and patterns.</span>
+<span class="sd">        pc : bool, optional</span>
+<span class="sd">            If ``True``, express the variation as a percentage of the baseline.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`v_eit`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Differential EIT signal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_eit</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="n">_v_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_0</span><span class="p">(</span><span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="n">_v</span><span class="p">,</span> <span class="n">_v_0</span> <span class="o">=</span> <span class="n">adjust_axes</span><span class="p">(</span><span class="n">arr1</span><span class="o">=</span><span class="n">_v</span><span class="p">,</span> <span class="n">arr2</span><span class="o">=</span><span class="n">_v_0</span><span class="p">)</span>
@@ -3023,6 +3289,23 @@
         <span class="n">i_p</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the percentage differential EIT signal.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : np.ndarray | float | None, optional</span>
+<span class="sd">            Evaluation times.</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting times, electrodes, frequencies, and patterns.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`dv_eit`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            ``dv/v0`` expressed in percent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dv_eit</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="n">pc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span></div>
 
 
@@ -3039,6 +3322,28 @@
         <span class="n">axis</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the absolute differential EIT signal normalized by its maximum.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : np.ndarray | float | None, optional</span>
+<span class="sd">            Evaluation times.</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting times, electrodes, frequencies, and patterns.</span>
+<span class="sd">        pc : bool, optional</span>
+<span class="sd">            If ``True``, normalize the percentage variation instead of the raw</span>
+<span class="sd">            variation.</span>
+<span class="sd">        axis : np.ndarray | int | None, optional</span>
+<span class="sd">            Axis along which the maximum is computed. Defaults to the time axis.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`dv_eit`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Normalized absolute differential signal.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_dv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dv_eit</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_e</span><span class="o">=</span><span class="n">i_e</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_p</span><span class="o">=</span><span class="n">i_p</span><span class="p">,</span> <span class="n">pc</span><span class="o">=</span><span class="n">pc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="p">)</span>
@@ -3053,6 +3358,14 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_v_rec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fast access to all recorder voltages.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Copy of the stored ``v_rec`` array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;v_rec&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
 <div class="viewcode-block" id="eit_forward_results.v_rec">
@@ -3063,6 +3376,23 @@
         <span class="n">i_e</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return recorder voltages from the nerve simulation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        t : np.ndarray | float | None, optional</span>
+<span class="sd">            Evaluation times. If provided, recorder signals are interpolated.</span>
+<span class="sd">        i_e : np.ndarray | int | None, optional</span>
+<span class="sd">            Recording electrode indices to extract.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`ix_`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Selected or interpolated recorder voltages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_nerve_res</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No nerve results in object v_eit cannot be found&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -3088,12 +3418,42 @@
 <div class="viewcode-block" id="eit_forward_results.i_t_duration">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.i_t_duration.html#nrv.eit.results.eit_forward_results.i_t_duration">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">i_t_duration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_t_start</span><span class="p">,</span> <span class="n">i_t_stop</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert a pair of time indices into a duration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t_start : int</span>
+<span class="sd">            Start time index.</span>
+<span class="sd">        i_t_stop : int</span>
+<span class="sd">            Stop time index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Duration between the two FEM samples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="n">i_t_stop</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="n">i_t_start</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="eit_forward_results.get_cap_mask">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.get_cap_mask.html#nrv.eit.results.eit_forward_results.get_cap_mask">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_cap_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect the global CAP window on the most responsive electrode.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        thr : float, optional</span>
+<span class="sd">            Threshold applied to the normalized percentage differential signal.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`dv_eit_pc`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Boolean mask over time identifying samples attributed to the CAP.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Computing normailzed dv</span>
         <span class="n">dv_nrmlz</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dv_eit_pc</span><span class="p">(</span><span class="n">i_f</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">))</span>
         <span class="n">dv_nrmlz</span> <span class="o">/=</span> <span class="n">dv_nrmlz</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -3107,6 +3467,23 @@
 <div class="viewcode-block" id="eit_forward_results.get_cap_i_t">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.get_cap_i_t.html#nrv.eit.results.eit_forward_results.get_cap_i_t">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_cap_i_t</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split CAP detections into contiguous time-index groups.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        thr : float, optional</span>
+<span class="sd">            Threshold forwarded to :meth:`get_cap_mask`.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            If ``True``, print intermediate detection arrays.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`get_cap_mask`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List of arrays, one per detected CAP interval.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_cap_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cap_mask</span><span class="p">(</span><span class="n">thr</span><span class="o">=</span><span class="n">thr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="n">i_cap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_t</span><span class="p">)[</span><span class="n">_cap_mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -3138,6 +3515,27 @@
         <span class="n">res_ax</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect activity masks independently for each acquisition line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        thr : float, optional</span>
+<span class="sd">            Threshold applied after line-wise normalization.</span>
+<span class="sd">        t_new_cap : float | None, optional</span>
+<span class="sd">            Optional time separating two normalization windows, useful when two</span>
+<span class="sd">            CAPs should be normalized independently.</span>
+<span class="sd">        res_ax : Literal[&quot;default&quot;] | None | tuple, optional</span>
+<span class="sd">            Axes used to compute normalization maxima. ``&quot;default&quot;`` adapts to the</span>
+<span class="sd">            internal EIT layout.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Unused placeholder kept for API symmetry.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Boolean mask with the same shape as ``_dv_eit_pc``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Computing normailzed dv</span>
         <span class="n">dv_nrmlz</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dv_eit_pc</span><span class="p">)</span>  <span class="c1"># - abs(self.dv_eit_pc(**kwgs))</span>
         <span class="k">if</span> <span class="n">res_ax</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
@@ -3162,31 +3560,124 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_acap_i_e</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert flattened acquisition-line indices into electrode indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_l : int | np.ndarray</span>
+<span class="sd">            Flattened line indices.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int | np.ndarray</span>
+<span class="sd">            Electrode indices associated with each line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">i_l</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_acap_i_f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert flattened acquisition-line indices into frequency indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_l : int | np.ndarray</span>
+<span class="sd">            Flattened line indices.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Frequency indices associated with each line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">(</span><span class="n">i_l</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_f</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">i_l</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_acap_i_p</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert flattened acquisition-line indices into drive paterns indices.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_l : int | np.ndarray</span>
+<span class="sd">            Flattened line indices.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Frequency indices associated with each line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">:</span>
+            <span class="n">n_product</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
+                <span class="n">n_product</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_f</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">i_l</span> <span class="o">//</span> <span class="n">n_product</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_p</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">i_l</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_line_ppt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_l</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">with_f</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build line descriptors for CAP summary tables.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_l : int | np.ndarray</span>
+<span class="sd">            Flattened line indices.</span>
+<span class="sd">        with_f : bool, optional</span>
+<span class="sd">            If ``True``, include frequency indices together with electrode</span>
+<span class="sd">            indices.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Stacked index rows describing each acquisition line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">with_f</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+            <span class="n">_line_ppt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
                 <span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_get_acap_i_f</span><span class="p">(</span><span class="n">i_l</span><span class="p">),</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_get_acap_i_e</span><span class="p">(</span><span class="n">i_l</span><span class="p">),</span>
                 <span class="p">)</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">:</span>
+                <span class="n">_line_ppt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_get_acap_i_p</span><span class="p">(</span><span class="n">i_l</span><span class="p">),</span>
+                        <span class="n">_line_ppt</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">_line_ppt</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_acap_i_e</span><span class="p">(</span><span class="n">i_l</span><span class="p">),))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_axes_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">,</span> <span class="s2">&quot;elec&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Labels associated with flattened acquisition dimensions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Human-readable names for the frequency and electrode axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_a_lab</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">,</span> <span class="s2">&quot;elec&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">:</span>
+            <span class="n">_a_lab</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;drive patern&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">_a_lab</span>
+        <span class="k">return</span> <span class="n">_a_lab</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_column_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;i_f&quot;</span><span class="p">,</span> <span class="s2">&quot;i_e&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Column names used in CAP summary tables.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Column labels corresponding to frequency and electrode indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_c_lab</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;i_f&quot;</span><span class="p">,</span> <span class="s2">&quot;i_e&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_patern</span><span class="p">:</span>
+            <span class="n">_c_lab</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;i_p&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">_c_lab</span>
+        <span class="k">return</span> <span class="n">_c_lab</span>
 
 <div class="viewcode-block" id="eit_forward_results.get_acap_t_ppt">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.get_acap_t_ppt.html#nrv.eit.results.eit_forward_results.get_acap_t_ppt">[docs]</a>
@@ -3197,10 +3688,72 @@
         <span class="n">store</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;overwrite&quot;</span><span class="p">,</span> <span class="s2">&quot;external&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a dataframe describing CAP time windows for each acquisition line.</span>
 
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This methods adds the following columns to the CAP Dataframe:</span>
+<span class="sd">        </span>
+
+<span class="sd">        .. list-table::</span>
+<span class="sd">           :widths: 10  10 50</span>
+<span class="sd">           :header-rows: 1</span>
+
+<span class="sd">           * - Dimensions</span>
+<span class="sd">             - type</span>
+<span class="sd">             - Description</span>
+<span class="sd">           * - line</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Acquisition line index</span>
+<span class="sd">           * - i_res (Optional)</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Results index in a ``eit_results_list``</span>
+<span class="sd">           * - i_p (Optional)</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Injection patern index for multipatern simulation</span>
+<span class="sd">           * - i_f</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Frequency index</span>
+<span class="sd">           * - i_e</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Electrode index</span>
+<span class="sd">           * - i_cap</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - CAP index</span>
+<span class="sd">           * - i_t_min</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Min index in time vector</span>
+<span class="sd">           * - i_t_max</span>
+<span class="sd">             - ``int``</span>
+<span class="sd">             - Max index in time vector</span>
+<span class="sd">           * - duration</span>
+<span class="sd">             - ``float``</span>
+<span class="sd">             - CAP duration in ms</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        thr : float, optional</span>
+<span class="sd">            Threshold forwarded to :meth:`get_acap_mask`.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            If ``True``, print intermediate arrays used to build the table.</span>
+<span class="sd">        store : Literal[&quot;default&quot;, &quot;overwrite&quot;, &quot;external&quot;], optional</span>
+<span class="sd">            Storage policy for the resulting dataframe. ``&quot;default&quot;`` caches the</span>
+<span class="sd">            first result, ``&quot;overwrite&quot;`` refreshes the cache, and ``&quot;external&quot;``</span>
+<span class="sd">            returns the dataframe without caching it.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`get_acap_mask`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            One row per detected CAP segment and acquisition line.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">store</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cap_ppt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cap_ppt</span>
 
+        <span class="c1"># A mask tensor is built with one where activity can be mesured</span>
+        <span class="c1"># e_axis and t_axis are swapped to ease the next step</span>
         <span class="n">_cap_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_acap_mask</span><span class="p">(</span><span class="n">thr</span><span class="o">=</span><span class="n">thr</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">e_axis</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_axis</span>
         <span class="p">)</span>
@@ -3212,13 +3765,16 @@
             <span class="p">)</span>
             <span class="k">return</span> <span class="kc">None</span>
 
+        <span class="c1"># Cap detected in the results</span>
+        <span class="c1"># The multidimensionnal mask tensor (sized n_res, n_p, n_f, n_e, n_t) is flattened by acquisition-line into a 2 dimensionnal tensor (sized n_res.n_p.n_f.n_e, n_t)</span>
         <span class="n">shape_2axes</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">_cap_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_cap_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">_cap_mask</span> <span class="o">=</span> <span class="n">_cap_mask</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_2axes</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="c1"># i_cap = _i_t[_cap_mask]</span>
+
+        <span class="c1"># Detecting all CAPs for each acquisition-line</span>
         <span class="c1"># Adding a first column of 0 for line starting with a 1</span>
         <span class="n">padded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">_cap_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">shape_2axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
         <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">padded</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
         <span class="c1"># Start of a CAP (0 -&gt; 1)</span>
         <span class="n">starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diffs</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># End of a CAP (1 -&gt; 0)</span>
@@ -3254,6 +3810,8 @@
                 <span class="n">i_t_end</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Building the data frame computed data</span>
         <span class="n">_cap_ppt</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
         <span class="n">_cap_ppt</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d_acap</span>
         <span class="k">if</span> <span class="n">store</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;overwrite&quot;</span><span class="p">]:</span>
@@ -3273,20 +3831,23 @@
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a CAP summary table augmented with voltage metrics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        thr : float, optional</span>
-<span class="sd">            _description_, by default 0.05</span>
+<span class="sd">            Threshold forwarded to :meth:`get_acap_t_ppt`.</span>
 <span class="sd">        verbose : bool, optional</span>
-<span class="sd">            _description_, by default False</span>
-<span class="sd">        i_res : _type_, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            If ``True``, print intermediate arrays and the final dataframe.</span>
+<span class="sd">        store : Literal[&quot;default&quot;, &quot;overwrite&quot;, &quot;external&quot;], optional</span>
+<span class="sd">            Storage policy shared with :meth:`get_acap_t_ppt`.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`get_acap_t_ppt`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        _type_</span>
-<span class="sd">            _description_</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            CAP dataframe enriched with amplitude and percentage-based metrics.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span>
             <span class="n">store</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span>
@@ -3295,6 +3856,7 @@
         <span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cap_ppt</span>
 
+        <span class="c1"># </span>
         <span class="n">_cap_ppt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_acap_t_ppt</span><span class="p">(</span><span class="n">thr</span><span class="o">=</span><span class="n">thr</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="n">dv_masked</span><span class="p">,</span> <span class="n">_v_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dv_from_df</span><span class="p">(</span>
             <span class="n">_cap_ppt</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">masked_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_v_0</span><span class="o">=</span><span class="kc">True</span>
@@ -3334,20 +3896,23 @@
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Refresh the cached CAP dataframe with voltage-derived metrics.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        thr : float, optional</span>
-<span class="sd">            _description_, by default 0.05</span>
+<span class="sd">            Threshold forwarded to :meth:`get_acap_v_ppt`.</span>
 <span class="sd">        verbose : bool, optional</span>
-<span class="sd">            _description_, by default False</span>
-<span class="sd">        i_res : _type_, optional</span>
-<span class="sd">            _description_, by default None</span>
+<span class="sd">            If ``True``, print intermediate arrays and the final dataframe.</span>
+<span class="sd">        store : Literal[&quot;default&quot;, &quot;overwrite&quot;, &quot;external&quot;], optional</span>
+<span class="sd">            Storage policy shared with :meth:`get_acap_v_ppt`.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :meth:`get_acap_v_ppt`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        _type_</span>
-<span class="sd">            _description_</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Updated CAP dataframe.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_cap_ppt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_acap_v_ppt</span><span class="p">(</span><span class="n">thr</span><span class="o">=</span><span class="n">thr</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
 
@@ -3388,6 +3953,27 @@
         <span class="n">masked_time</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">with_v_0</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract differential EIT traces described by a CAP dataframe.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : pd.DataFrame</span>
+<span class="sd">            Table containing at least the line descriptors and CAP time bounds.</span>
+<span class="sd">        verbose : bool, optional</span>
+<span class="sd">            If ``True``, print extracted indices and array shapes.</span>
+<span class="sd">        masked_time : bool, optional</span>
+<span class="sd">            If ``True``, mask samples outside the ``(i_t_min, i_t_max)`` interval</span>
+<span class="sd">            stored in ``data``.</span>
+<span class="sd">        with_v_0 : bool, optional</span>
+<span class="sd">            If ``True``, also return the baseline voltage used for normalization.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray | np.ma.MaskedArray | tuple</span>
+<span class="sd">            Differential EIT traces, optionally masked in time and optionally</span>
+<span class="sd">            paired with the baseline voltage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">c_labs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_column_labels</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_multi_freqs</span><span class="p">:</span>
             <span class="n">c_labs</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;i_f&quot;</span><span class="p">)</span>
@@ -3430,6 +4016,22 @@
 <div class="viewcode-block" id="eit_forward_results.get_reccap_ppt">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/eit_forward_results/nrv.eit.results.eit_forward_results.get_reccap_ppt.html#nrv.eit.results.eit_forward_results.get_reccap_ppt">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_reccap_ppt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a dataframe summarizing CAPs detected on recorder traces.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        thr : float, optional</span>
+<span class="sd">            Unused placeholder kept for API compatibility.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Unused placeholder for future extensions.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame | None</span>
+<span class="sd">            Recorder CAP summary table, or ``None`` when recording data is</span>
+<span class="sd">            unavailable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Computing normailzed dv</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_fem_res</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING no recording context in the result&quot;</span><span class="p">)</span>
@@ -3437,7 +4039,6 @@
         <span class="n">_av_rec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_v_rec</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">shape_2axes</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">_av_rec</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">_av_rec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">_av_rec</span> <span class="o">=</span> <span class="n">_av_rec</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape_2axes</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">_av_rec</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t_rec&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t_rec&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">i_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
             <span class="mi">0</span><span class="p">,</span> <span class="n">shape_2axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">shape_2axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span>
@@ -3498,6 +4099,28 @@
         <span class="n">xtype</span><span class="o">=</span><span class="s2">&quot;t&quot;</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot stored or interpolated EIT-related signals.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ax : matplotlib.axes.Axes</span>
+<span class="sd">            Target axes.</span>
+<span class="sd">        which : str, optional</span>
+<span class="sd">            Signal to plot. Supported values are ``&quot;v_eit&quot;``, ``&quot;dv_eit&quot;``, and</span>
+<span class="sd">            ``&quot;v_rec&quot;``.</span>
+<span class="sd">        t : np.ndarray | None, optional</span>
+<span class="sd">            Optional time vector used for interpolation.</span>
+<span class="sd">        i_t, i_e, i_f, i_p : np.ndarray | int | None, optional</span>
+<span class="sd">            Indices selecting times, electrodes, frequencies, and patterns.</span>
+<span class="sd">        pc : bool, optional</span>
+<span class="sd">            For ``which=&quot;dv_eit&quot;``, plot the percentage differential signal.</span>
+<span class="sd">        xtype : str, optional</span>
+<span class="sd">            Use ``&quot;t&quot;`` for time on the x-axis or include ``&quot;f&quot;`` to plot against</span>
+<span class="sd">            frequency.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional plotting arguments forwarded to :func:`plot_array`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">i_t</span> <span class="o">=</span> <span class="n">set_idxs</span><span class="p">(</span><span class="n">i_t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_t</span><span class="p">)</span>
             <span class="n">_t</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="n">i_t</span><span class="p">]</span>
@@ -3535,6 +4158,21 @@
 <div class="viewcode-block" id="load_res">
 <a class="viewcode-back" href="../../../../_nrv/eit/results/nrv.eit.results.load_res.html#nrv.eit.results.load_res">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_res</span><span class="p">(</span><span class="n">res_dname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">eit_forward_results</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load an EIT result set from a result directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    res_dname : str</span>
+<span class="sd">        Directory containing serialized EIT result files.</span>
+<span class="sd">    label : str</span>
+<span class="sd">        Common file prefix used to locate ``&quot;{label}_fem.json&quot;``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eit_forward_results | None</span>
+<span class="sd">        Loaded result object, or ``None`` when the directory or file is missing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">res_dname</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;results directory not found: </span><span class="si">{</span><span class="n">res_dname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -3553,6 +4191,23 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">synchronize_times</span><span class="p">(</span>
     <span class="n">res1</span><span class="p">:</span> <span class="n">eit_forward_results</span><span class="p">,</span> <span class="n">res2</span><span class="p">:</span> <span class="n">eit_forward_results</span><span class="p">,</span> <span class="n">dt_min</span><span class="o">=</span><span class="mf">0.001</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge two time vectors while removing nearly duplicated samples.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    res1 : eit_forward_results</span>
+<span class="sd">        First result object.</span>
+<span class="sd">    res2 : eit_forward_results</span>
+<span class="sd">        Second result object.</span>
+<span class="sd">    dt_min : float, optional</span>
+<span class="sd">        Minimum separation required between consecutive retained samples.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Sorted union of the two time vectors with close duplicates removed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">t1</span> <span class="o">=</span> <span class="n">res1</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
     <span class="n">t2</span> <span class="o">=</span> <span class="n">res2</span><span class="p">[</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)))</span>
@@ -3590,8 +4245,8 @@
 </div><script src="../../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

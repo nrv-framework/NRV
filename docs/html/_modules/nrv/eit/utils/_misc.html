@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
         <link rel="prefetch" href="../../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit.utils._misc - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2508,12 +2509,38 @@
 
 <span class="c1"># File handling</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">touch</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a file if needed and update its modification time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str | os.PathLike</span>
+<span class="sd">        Path of the file to touch.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">utime</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
 
 <span class="c1"># Numpy usefull</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">gen_from_idx</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">add_0</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Map absolute indices to segment identifiers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idx : np.ndarray</span>
+<span class="sd">        Sorted index array defining segment boundaries or special positions.</span>
+<span class="sd">    n : int</span>
+<span class="sd">        Length of the target output array.</span>
+<span class="sd">    add_0 : bool, optional</span>
+<span class="sd">        If ``True``, prepend the first generated value to the output.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Array assigning each position in ``range(n)`` to its insertion index in</span>
+<span class="sd">        ``idx``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">_arr</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
@@ -2525,7 +2552,37 @@
 
 <div class="viewcode-block" id="gen_idx_arange">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/nrv.eit.utils.gen_idx_arange.html#nrv.eit.utils.gen_idx_arange">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">gen_idx_arange</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">add_0</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gen_idx_arange</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">|</span><span class="nb">list</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">add_0</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate per-segment counters from boundary indices.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    this function returns a ``n``-long list with a conter reset to 0 at each index in ``idx``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    idx : np.ndarray | list</span>
+<span class="sd">        Sorted indices marking the start of new segments.</span>
+<span class="sd">    n : int</span>
+<span class="sd">        Length of the output array.</span>
+<span class="sd">    add_0 : bool, optional</span>
+<span class="sd">        If ``True``, prepend a leading zero to the output.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Counter resetting to zero at each segment boundary.</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    &gt;&gt;&gt; gen_idx_arange([1,4,6], 10)</span>
+<span class="sd">    array([0, 0, 1, 2, 0, 1, 0, 1, 2, 3])</span>
+<span class="sd">    &gt;&gt;&gt; gen_idx_arange([3,6], 9)</span>
+<span class="sd">    array([0, 1, 2, 0, 1, 2, 0, 1, 2])</span>
+<span class="sd">    &gt;&gt;&gt; gen_idx_arange([3,6], 9, True)</span>
+<span class="sd">        array([0, 0, 1, 2, 0, 1, 2, 0, 1, 2])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(([</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">,</span> <span class="p">[</span><span class="n">n</span><span class="p">]))</span>
     <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
     <span class="n">section</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">positions</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
@@ -2540,28 +2597,29 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">adjust_axes</span><span class="p">(</span><span class="n">arr1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">arr2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    add missing dimension to arr2 for it to be broadastable with arr1</span>
+<span class="sd">    Reshape ``arr2`` so it can be broadcast against ``arr1``.</span>
 
 <span class="sd">    Warning</span>
 <span class="sd">    -------</span>
-<span class="sd">    Only reshape arr2 to match arr1&#39;s ndim, arr2.shape is must be included in arr1.shape</span>
+<span class="sd">    This helper only inserts singleton dimensions. It assumes every dimension of</span>
+<span class="sd">    ``arr2`` already appears in ``arr1.shape``.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arr1 : np.ndarray</span>
-<span class="sd">        _description_</span>
+<span class="sd">        Reference array whose dimensionality and axis sizes are used as target.</span>
 <span class="sd">    arr2 : np.ndarray</span>
-<span class="sd">        _description_</span>
+<span class="sd">        Array to reshape into a broadcastable form.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    tuple[np.ndarray, np.ndarray]</span>
-<span class="sd">        _description_</span>
+<span class="sd">        ``arr1`` unchanged together with a reshaped version of ``arr2``.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        _description_</span>
+<span class="sd">        If ``arr2`` has more dimensions than ``arr1``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">arr2</span> <span class="o">=</span> <span class="n">arr2</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="n">ndim1</span> <span class="o">=</span> <span class="n">arr1</span><span class="o">.</span><span class="n">ndim</span>
@@ -2595,6 +2653,23 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">iterable_gen</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">include_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_unitary</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decide whether an object should be treated as an iterable selection.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj : Any</span>
+<span class="sd">        Object to inspect.</span>
+<span class="sd">    include_none : bool, optional</span>
+<span class="sd">        If ``True``, ``None`` is treated like an iterable placeholder.</span>
+<span class="sd">    include_unitary : bool, optional</span>
+<span class="sd">        If ``True``, length-one iterables are still considered iterable.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        ``True`` when the object should be handled as an iterable collection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">it_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">include_none</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
         <span class="n">it_</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">include_unitary</span>
@@ -2603,21 +2678,22 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">split_job_from_arrays</span><span class="p">(</span><span class="n">len_arrays</span><span class="p">,</span> <span class="n">n_split</span><span class="p">,</span> <span class="n">stype</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Split an array for parallel independant computing, by sharing independant sub-spaces \</span>
-<span class="sd">    of array index</span>
+<span class="sd">    Split index ranges into independent chunks for parallel processing.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    len_arrays  : int</span>
-<span class="sd">        length of the array containing the full job to perform in parallel</span>
-<span class="sd">    stype       : str</span>
-<span class="sd">        method used to split the array:</span>
-<span class="sd">            &quot;comb&quot;: </span>
+<span class="sd">    len_arrays : int</span>
+<span class="sd">        Total number of indices to distribute.</span>
+<span class="sd">    n_split : int</span>
+<span class="sd">        Number of sub-jobs to create.</span>
+<span class="sd">    stype : str, optional</span>
+<span class="sd">        Splitting strategy. ``&quot;default&quot;`` creates contiguous chunks, whereas</span>
+<span class="sd">        ``&quot;comb&quot;`` distributes indices round-robin.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    mask    : np.array</span>
-<span class="sd">        subspace of the array indexes, specific to each instantiation of the programm</span>
+<span class="sd">    list[list[int]]</span>
+<span class="sd">        One list of indices per sub-job.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">len_arrays</span><span class="p">)</span>
 
@@ -2632,21 +2708,22 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">rotate_axes</span><span class="p">(</span><span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Move one axis of an array to a target position by successive swaps.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    arr : np.ndarray</span>
-<span class="sd">        _description_</span>
+<span class="sd">        Input array.</span>
 <span class="sd">    axis : int</span>
-<span class="sd">        _description_</span>
+<span class="sd">        Axis to move.</span>
 <span class="sd">    target : int, optional</span>
-<span class="sd">        _description_, by default 0</span>
+<span class="sd">        Destination axis index. Negative values follow NumPy indexing rules.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
-<span class="sd">        _description_</span>
+<span class="sd">        View of ``arr`` with the requested axis repositioned.</span>
 
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
@@ -2677,6 +2754,24 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_array</span><span class="p">(</span>
     <span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot a one-dimensional coordinate against an array of arbitrary dimension.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax : matplotlib.axes.Axes</span>
+<span class="sd">        Target axes.</span>
+<span class="sd">    x : np.ndarray</span>
+<span class="sd">        Coordinate vector used on the x-axis.</span>
+<span class="sd">    arr : np.ndarray</span>
+<span class="sd">        Values to plot. If multidimensional, every slice orthogonal to ``axis``</span>
+<span class="sd">        is plotted recursively.</span>
+<span class="sd">    axis : int | None, optional</span>
+<span class="sd">        Axis of ``arr`` matching ``x``. If omitted, it is inferred from the first</span>
+<span class="sd">        matching dimension length.</span>
+<span class="sd">    **kwgs : dict</span>
+<span class="sd">        Additional plotting keyword arguments forwarded to ``Axes.plot``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -2943,6 +3038,27 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_sigma_2D_old</span><span class="p">(</span>
     <span class="n">Y_m_t</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">x_rec</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">sig_in</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sig_out</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">l_elec</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Legacy approximation of the apparent 2D membrane conductivity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Y_m_t : np.ndarray</span>
+<span class="sd">        Membrane admittance sampled along the fiber.</span>
+<span class="sd">    x_rec : np.ndarray</span>
+<span class="sd">        Spatial sampling positions in micrometers.</span>
+<span class="sd">    sig_in : float</span>
+<span class="sd">        Intracellular conductivity.</span>
+<span class="sd">    sig_out : float</span>
+<span class="sd">        Extracellular conductivity.</span>
+<span class="sd">    l_elec : float</span>
+<span class="sd">        Electrode length. Present for API compatibility with newer routines.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        Mean equivalent admittance obtained with the legacy approximation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># print(&quot;hello old&quot;)</span>
     <span class="n">n_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_rec</span><span class="p">)</span>
     <span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_x</span><span class="p">)</span>
@@ -3221,6 +3337,30 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_v_rec_cap_idxs</span><span class="p">(</span>
     <span class="n">Voltage</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">t_stim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stim_duration</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">use_filter</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Detect myelinated and unmyelinated CAP landmarks on a recorder trace.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Voltage : np.ndarray</span>
+<span class="sd">        Recorder voltage trace.</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        Time step of the trace.</span>
+<span class="sd">    t_stim : float, optional</span>
+<span class="sd">        Stimulation onset time.</span>
+<span class="sd">    stim_duration : float, optional</span>
+<span class="sd">        Duration of the stimulation artifact to ignore.</span>
+<span class="sd">    tol : float, optional</span>
+<span class="sd">        Relative threshold used to detect the myelinated CAP deflection.</span>
+<span class="sd">    use_filter : bool, optional</span>
+<span class="sd">        If ``True``, smooth the derivative used to detect the unmyelinated CAP.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple[tuple[int, int, int, int], tuple[int, int, int, int]]</span>
+<span class="sd">        Two tuples describing the myelinated and unmyelinated CAPs respectively,</span>
+<span class="sd">        each as ``(i_start, i_min, i_max, i_stop)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">i_offset_stim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">t_stim</span> <span class="o">+</span> <span class="n">stim_duration</span><span class="p">)</span> <span class="o">/</span> <span class="n">dt</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">_v_rec_nrm</span> <span class="o">=</span> <span class="n">Voltage</span><span class="p">[</span><span class="n">i_offset_stim</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">_v_rec_nrm</span> <span class="o">/=</span> <span class="o">-</span><span class="n">_v_rec_nrm</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -3294,8 +3434,8 @@
 </div><script src="../../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

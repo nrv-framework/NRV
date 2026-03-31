@@ -6,10 +6,10 @@
 <link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html"><link rel="next" title="Figure_elec.boxplot" href="nrv.eit.utils.Figure_elec.boxplot.html"><link rel="prev" title="Figure_elec.__init__" href="nrv.eit.utils.Figure_elec.__init__.html">
         <link rel="prefetch" href="../../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Figure_elec.add_nerve_plot - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -716,6 +716,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2500,8 +2501,23 @@
 <h1>Figure_elec.add_nerve_plot<a class="headerlink" href="#figure-elec-add-nerve-plot" title="Link to this heading"></a></h1>
 <dl class="py method">
 <dt class="sig sig-object py" id="nrv.eit.utils.Figure_elec.add_nerve_plot">
-<span class="sig-prename descclassname"><span class="pre">Figure_elec.</span></span><span class="sig-name descname"><span class="pre">add_nerve_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_elec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drive_pair</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_lwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_lwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/nrv/eit/utils/_eit_plot.html#Figure_elec.add_nerve_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.eit.utils.Figure_elec.add_nerve_plot" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">Figure_elec.</span></span><span class="sig-name descname"><span class="pre">add_nerve_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_elec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drive_pair</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">2)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_lwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e_lwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha_lab</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/nrv/eit/utils/_eit_plot.html#Figure_elec.add_nerve_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nrv.eit.utils.Figure_elec.add_nerve_plot" title="Link to this definition"></a></dt>
+<dd><p>Draw the nerve cross-section and optionally the cuff electrodes in the center axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Any</em>) – Object or path loadable with <code class="xref py py-func docutils literal notranslate"><span class="pre">load_any()</span></code>.</p></li>
+<li><p><strong>add_elec</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, overlay cuff electrodes.</p></li>
+<li><p><strong>drive_pair</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – Electrode pair highlighted as the current-driving pair.</p></li>
+<li><p><strong>e_label</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, display electrode labels.</p></li>
+<li><p><strong>n_lwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Line width used for the nerve outline.</p></li>
+<li><p><strong>e_lwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Line width used for electrodes.</p></li>
+<li><p><strong>alpha_lab</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a><em>, </em><em>optional</em>) – Alpha factor used for electrode labels.</p></li>
+<li><p><strong>**kwgs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Additional keyword arguments forwarded to <a class="reference internal" href="../nrv.eit.utils.add_nerve_plot.html#nrv.eit.utils.add_nerve_plot" title="nrv.eit.utils.add_nerve_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">add_nerve_plot()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
@@ -2572,8 +2588,8 @@
 </div><script src="../../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
         <link rel="prefetch" href="../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit._eit_inverse - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2532,6 +2533,16 @@
 <a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.__init__.html#nrv.eit.eit_inverse.__init__">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">eit_forward_results</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize an inverse EIT solver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : eit_forward_results | None, optional</span>
+<span class="sd">            Forward EIT results used as reconstruction input.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional subclass-specific keyword arguments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>  <span class="c1"># TODO [NRV] load_any(data) for merge with nrv</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_proc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
@@ -2554,25 +2565,76 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">eit_forward_results</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Forward EIT data used by the inverse solver.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        eit_forward_results | None</span>
+<span class="sd">            Current input dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
     <span class="nd">@data</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">eit_forward_results</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the forward EIT dataset used by the inverse solver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : eit_forward_results | None</span>
+<span class="sd">            New input dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">data</span>
 
     <span class="nd">@data</span><span class="o">.</span><span class="n">deleter</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove the current forward EIT dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="eit_inverse.fromat_data">
 <a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.fromat_data.html#nrv.eit.eit_inverse.fromat_data">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">fromat_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="n">eit_forward_results</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert forward EIT data into the format expected by the inverse solver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : eit_forward_results | None, optional</span>
+<span class="sd">            Input data or solver state to format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            Formatted data vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_i_to_solve</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">i_to_solve</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resolve explicit or queued indices for one inverse reconstruction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_to_solve : int | None, optional</span>
+<span class="sd">            Index into ``self.to_solve`` when batch solving is enabled.</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Time index.</span>
+<span class="sd">        i_f : int, optional</span>
+<span class="sd">            Frequency index.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, int, int]</span>
+<span class="sd">            Time, frequency, and result indices to reconstruct.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">i_to_solve</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_solve</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_to_solve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_solve</span><span class="p">[</span><span class="n">i_to_solve</span><span class="p">]</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_to_solve</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
@@ -2585,11 +2647,39 @@
     <span class="c1"># Reconstruction methods #</span>
     <span class="c1"># ---------------------- #</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">__set_pbar_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the progress-bar label used during batch reconstruction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        kwgs : dict</span>
+<span class="sd">            Additional keyword arguments provided to :meth:`solve`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Progress-bar description.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">__label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Solving inverse problem&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_proc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">__label</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; - </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">n_proc</span><span class="si">}</span><span class="s2"> procs&quot;</span>
+        <span class="k">return</span> <span class="n">__label</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_inverse</span><span class="p">(</span><span class="n">i_to_solve</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run one inverse reconstruction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_to_solve : int | None, optional</span>
+<span class="sd">            Optional index into the queued reconstructions.</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Time index.</span>
+<span class="sd">        i_f : int, optional</span>
+<span class="sd">            Frequency index.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="eit_inverse.solve">
@@ -2601,6 +2691,21 @@
         <span class="n">i_res</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve one or several inverse problems and cache the results.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t, i_f, i_res : np.ndarray | int | None, optional</span>
+<span class="sd">            Time, frequency, and result indices to reconstruct.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional solver-specific options.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List of reconstructed images or fields accumulated in ``self.results``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_msolve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">i_t</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">i_f</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">i_res</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_msolve</span><span class="p">:</span>
             <span class="n">_res</span><span class="p">,</span> <span class="n">_ppt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_inverse</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
@@ -2712,6 +2817,23 @@
 <div class="viewcode-block" id="eit_inverse.get_results_range">
 <a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.get_results_range.html#nrv.eit.eit_inverse.get_results_range">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_results_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_f</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i_res</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the value range of one reconstructed result.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Time index.</span>
+<span class="sd">        i_f : int, optional</span>
+<span class="sd">            Frequency index.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            Minimum and maximum values of the selected reconstruction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_dv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">i_t</span><span class="o">=</span><span class="n">i_t</span><span class="p">,</span> <span class="n">i_f</span><span class="o">=</span><span class="n">i_f</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">_dv</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">_dv</span><span class="p">)</span></div>
 
@@ -2719,6 +2841,16 @@
 <div class="viewcode-block" id="eit_inverse.plot">
 <a class="viewcode-back" href="../../../_nrv/eit/eit_inverse/nrv.eit.eit_inverse.plot.html#nrv.eit.eit_inverse.plot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">:</span> <span class="n">plt</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot one reconstructed inverse result.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ax : matplotlib.axes.Axes</span>
+<span class="sd">            Target axes.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Plotting options defined by subclasses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 </div>
 
@@ -2753,8 +2885,8 @@
 </div><script src="../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>

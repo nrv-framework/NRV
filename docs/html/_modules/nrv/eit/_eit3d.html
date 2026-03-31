@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
         <link rel="prefetch" href="../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit._eit3d - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2531,18 +2532,51 @@
 <div class="viewcode-block" id="EIT3DProblem.__init__">
 <a class="viewcode-back" href="../../../_nrv/eit/EIT3DProblem/nrv.eit.EIT3DProblem.__init__.html#nrv.eit.EIT3DProblem.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nervefile</span><span class="p">,</span> <span class="n">res_dname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;3deit_1&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a 3D EIT forward problem from a nerve description.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        nervefile : str</span>
+<span class="sd">            Path to the serialized nerve description or results file.</span>
+<span class="sd">        res_dname : str | None, optional</span>
+<span class="sd">            Output directory for generated meshes and results.</span>
+<span class="sd">        label : str, optional</span>
+<span class="sd">            Base label used to name generated artifacts.</span>
+<span class="sd">        **parameters : dict</span>
+<span class="sd">            Additional simulation parameters forwarded to :class:`eit_forward`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nervefile</span><span class="p">,</span> <span class="n">res_dname</span><span class="o">=</span><span class="n">res_dname</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div>
 
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Spatial dimension of the FEM problem.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Always ``3`` for this subclass.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="mi">3</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">x_bounds_fem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Axial extent of the 3D FEM subdomain centered on the recorder position.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[float, float]</span>
+<span class="sd">            Lower and upper axial bounds of the FEM domain.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_rec</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_fem</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_rec</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">l_fem</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_setup_problem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize electrode objects and geometry-dependent attributes for 3D EIT.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_setup_problem</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_gnd_elec</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gnd_elec_id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">eit_elec</span> <span class="o">=</span> <span class="n">CUFF_MP_electrode</span><span class="p">(</span>
@@ -2663,6 +2697,9 @@
             <span class="c1"># print(self.s_elec)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_clear_fem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Release the 3D FEM simulation object and reset the initialization flag.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fem_initialized</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fem_initialized</span> <span class="o">=</span> <span class="kc">False</span>
@@ -2808,6 +2845,23 @@
         <span class="k">return</span> <span class="kc">True</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute_v_elec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sfile</span><span class="p">:</span> <span class="kc">None</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">i_t</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve the 3D FEM problem and extract electrode potentials.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sfile : str | None, optional</span>
+<span class="sd">            If provided, save the FEM field solution and return it together with</span>
+<span class="sd">            the electrode potentials.</span>
+<span class="sd">        i_t : int, optional</span>
+<span class="sd">            Time index associated with the current solve, used when exporting.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray | tuple</span>
+<span class="sd">            Electrode potentials, or exported FEM objects plus those potentials</span>
+<span class="sd">            when ``sfile`` is provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">__v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_elec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ScalarType</span><span class="p">)</span>
         <span class="c1"># FEM simulation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">setup_sim</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="p">)</span>
@@ -2853,8 +2907,8 @@
 </div><script src="../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>

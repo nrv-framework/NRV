@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
         <link rel="prefetch" href="../../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit.utils._eit_plot - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2507,15 +2508,105 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">...ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_nerve</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">sci_round</span><span class="p">,</span> <span class="n">get_MRG_parameters</span>
 
+<span class="n">eit_fig_ppt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">8</span><span class="p">:{</span>
+    <span class="s2">&quot;fig_dim&quot;</span><span class="p">:(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="s2">&quot;i_plots&quot;</span><span class="p">:[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span>
+    <span class="s2">&quot;i_center&quot;</span><span class="p">:(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="mi">12</span><span class="p">:{</span>
+    <span class="s2">&quot;fig_dim&quot;</span><span class="p">:(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="s2">&quot;i_plots&quot;</span><span class="p">:[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;i_center&quot;</span><span class="p">:(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
+    <span class="p">},</span>
+    <span class="mi">14</span><span class="p">:{</span>
+    <span class="s2">&quot;fig_dim&quot;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="s2">&quot;i_plots&quot;</span><span class="p">:[</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">)],</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;i_center&quot;</span><span class="p">:(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)),</span>
+    <span class="p">},</span>
+    <span class="mi">16</span><span class="p">:{</span>
+    <span class="s2">&quot;fig_dim&quot;</span><span class="p">:(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="s2">&quot;i_plots&quot;</span><span class="p">:[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;i_center&quot;</span><span class="p">:[</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)],</span>
+    <span class="p">},</span>
+<span class="p">}</span>
 
 <div class="viewcode-block" id="Figure_elec">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/nrv.eit.utils.Figure_elec.html#nrv.eit.utils.Figure_elec">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Figure_elec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper class organizing one subplot per electrode around a central nerve view.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Figure_elec.__init__">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/Figure_elec/nrv.eit.utils.Figure_elec.__init__.html#nrv.eit.utils.Figure_elec.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ij_offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">small_fig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kwgs</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an electrode-centered figure layout.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n_e : int</span>
+<span class="sd">            Number of electrodes to display.</span>
+<span class="sd">        fig : matplotlib.figure.Figure | None, optional</span>
+<span class="sd">            Existing figure to populate.</span>
+<span class="sd">        spec : matplotlib.gridspec.GridSpec | None, optional</span>
+<span class="sd">            Existing subplot specification to reuse.</span>
+<span class="sd">        ij_offset : tuple[int, int], optional</span>
+<span class="sd">            Row and column offset applied when nesting the layout inside a larger</span>
+<span class="sd">            gridspec.</span>
+<span class="sd">        small_fig : bool, optional</span>
+<span class="sd">            If ``True``, move titles on the bottom row slightly downward.</span>
+<span class="sd">        **fig_kwgs : dict</span>
+<span class="sd">            Keyword arguments used when creating a new figure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="o">=</span> <span class="n">n_e</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span> <span class="o">=</span> <span class="n">fig</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
@@ -2526,58 +2617,39 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">fig</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Underlying Matplotlib figure.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        matplotlib.figure.Figure</span>
+<span class="sd">            Figure containing the electrode subplots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">axs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Axes composing the figure layout.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[matplotlib.axes.Axes]</span>
+<span class="sd">            One axis per electrode plus the central axis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axs</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__init_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kwgs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
-            <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-            <span class="n">i_plots</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-                 <span class="p">]</span>
-            <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-            <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-            <span class="n">i_plots</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-            <span class="p">]</span>
-            <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
-            <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-            <span class="n">i_plots</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-            <span class="p">]</span>
-            <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build the subplot layout associated with the configured electrode count.</span>
 
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        **fig_kwgs : dict</span>
+<span class="sd">            Keyword arguments used when a new figure needs to be created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="ow">in</span> <span class="n">eit_fig_ppt</span>
+        <span class="n">fig_dim</span><span class="p">,</span> <span class="n">i_plots</span><span class="p">,</span> <span class="n">i_center</span> <span class="o">=</span> <span class="n">eit_fig_ppt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">n_e</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">fig_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
         <span class="n">mask</span><span class="p">[</span><span class="o">*</span><span class="n">i_center</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2603,6 +2675,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_axs</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">[</span><span class="o">*</span><span class="n">i_center</span><span class="p">])]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__setup_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;dv_eit&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalize plotting inputs into an array/time pair.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : eit_results_list | np.ndarray</span>
+<span class="sd">            Source data to plot.</span>
+<span class="sd">        t : np.ndarray | None, optional</span>
+<span class="sd">            Time vector used when ``data`` is a raw array.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index extracted from an :class:`eit_results_list`.</span>
+<span class="sd">        which : str, optional</span>
+<span class="sd">            Signal family extracted from an :class:`eit_results_list`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[np.ndarray, np.ndarray]</span>
+<span class="sd">            Signal array and associated time vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">eit_results_list</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_e</span> <span class="o">==</span> <span class="n">data</span><span class="o">.</span><span class="n">n_e</span><span class="p">:</span>
                 <span class="n">_dv</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="n">which</span><span class="p">)</span>
@@ -2624,6 +2715,27 @@
 <div class="viewcode-block" id="Figure_elec.plot_all_elec">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/Figure_elec/nrv.eit.utils.Figure_elec.plot_all_elec.html#nrv.eit.utils.Figure_elec.plot_all_elec">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_all_elec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;dv_eit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plot one signal trace per electrode on the managed figure.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : list | eit_results_list | np.ndarray</span>
+<span class="sd">            Data source to plot.</span>
+<span class="sd">        t : np.ndarray | list | None, optional</span>
+<span class="sd">            Time vector or list of time vectors used with raw arrays.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index extracted from an :class:`eit_results_list`.</span>
+<span class="sd">        which : str, optional</span>
+<span class="sd">            Signal family extracted from an :class:`eit_results_list`.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to ``Axes.plot``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[matplotlib.axes.Axes]</span>
+<span class="sd">            Managed axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">_i_d</span><span class="p">,</span> <span class="n">_d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -2663,7 +2775,25 @@
 <div class="viewcode-block" id="Figure_elec.boxplot">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/Figure_elec/nrv.eit.utils.Figure_elec.boxplot.html#nrv.eit.utils.Figure_elec.boxplot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">boxplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;i_e&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw one seaborn boxplot per electrode from a dataframe.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : pandas.DataFrame</span>
+<span class="sd">            Dataframe containing at least an ``i_e`` column.</span>
+<span class="sd">        expr : str, optional</span>
+<span class="sd">            Optional pandas-query expression used to subset the dataframe before</span>
+<span class="sd">            plotting.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to ``seaborn.boxplot``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[matplotlib.axes.Axes]</span>
+<span class="sd">            Managed axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;i_e&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no electrode colone in DataFrame&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">expr</span> <span class="o">+=</span> <span class="s2">&quot; and &quot;</span>
@@ -2671,13 +2801,16 @@
         <span class="k">for</span> <span class="n">i_e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_e</span><span class="p">):</span>
             <span class="n">_ax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="n">i_e</span><span class="p">]</span>
             <span class="n">_subdata</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">expr</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;i_e==</span><span class="si">{</span><span class="n">i_e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">_ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">_subdata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">_ax</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">_subdata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span></div>
 
 
 <div class="viewcode-block" id="Figure_elec.snsplot">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/Figure_elec/nrv.eit.utils.Figure_elec.snsplot.html#nrv.eit.utils.Figure_elec.snsplot">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">snsplot</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;lineplot&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder for seaborn-based electrode plotting from dataframe inputs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
 
@@ -2686,6 +2819,27 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">fill_between_all_elec</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">data_1</span><span class="p">,</span> <span class="n">data_2</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i_res</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;dv_eit&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fill the area between two signals for each electrode axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data_1, data_2 : eit_results_list | np.ndarray</span>
+<span class="sd">            Lower and upper data sources.</span>
+<span class="sd">        t : np.ndarray | None, optional</span>
+<span class="sd">            Time vector used with raw arrays.</span>
+<span class="sd">        i_res : int, optional</span>
+<span class="sd">            Result index extracted from an :class:`eit_results_list`.</span>
+<span class="sd">        which : str, optional</span>
+<span class="sd">            Signal family extracted from an :class:`eit_results_list`.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to ``Axes.fill_between``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[matplotlib.axes.Axes]</span>
+<span class="sd">            Managed axes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_dv_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__setup_data</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">data_1</span><span class="p">,</span>
             <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
@@ -2727,67 +2881,58 @@
         <span class="n">e_label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">n_lwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">e_lwidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">alpha_lab</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="n">nerve</span> <span class="o">=</span> <span class="n">load_any</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">nerve</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">n_lwidth</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">add_elec</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;n_e&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwgs</span><span class="p">:</span>
-                <span class="n">n_e</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">n_e</span> <span class="o">=</span> <span class="n">kwgs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;n_e&quot;</span><span class="p">)</span>
-            <span class="n">w_elec</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">nerve</span><span class="o">.</span><span class="n">D</span> <span class="o">/</span> <span class="n">n_e</span>
-            <span class="n">elec</span> <span class="o">=</span> <span class="n">CUFF_MP_electrode</span><span class="p">(</span>
-                <span class="n">N_contact</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
-                <span class="n">x_center</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                <span class="n">contact_width</span><span class="o">=</span><span class="n">w_elec</span><span class="p">,</span>
-                <span class="n">contact_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                <span class="n">insulator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
-                <span class="n">e_label</span><span class="o">=</span><span class="n">e_label</span><span class="p">,</span>
-                <span class="n">linewidth</span><span class="o">=</span><span class="n">e_lwidth</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">drive_pair</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span>
-                    <span class="n">list_e</span><span class="o">=</span><span class="n">drive_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span>
-                    <span class="n">e_label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">linewidth</span><span class="o">=</span><span class="n">e_lwidth</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span>
-                    <span class="n">list_e</span><span class="o">=</span><span class="n">drive_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;b&quot;</span><span class="p">,</span>
-                    <span class="n">e_label</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                    <span class="n">linewidth</span><span class="o">=</span><span class="n">e_lwidth</span><span class="p">,</span>
-                <span class="p">)</span>
-        <span class="k">del</span> <span class="n">nerve</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draw the nerve cross-section and optionally the cuff electrodes in the center axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : Any</span>
+<span class="sd">            Object or path loadable with :func:`load_any`.</span>
+<span class="sd">        add_elec : bool, optional</span>
+<span class="sd">            If ``True``, overlay cuff electrodes.</span>
+<span class="sd">        drive_pair : tuple[int, int], optional</span>
+<span class="sd">            Electrode pair highlighted as the current-driving pair.</span>
+<span class="sd">        e_label : bool, optional</span>
+<span class="sd">            If ``True``, display electrode labels.</span>
+<span class="sd">        n_lwidth : float, optional</span>
+<span class="sd">            Line width used for the nerve outline.</span>
+<span class="sd">        e_lwidth : float, optional</span>
+<span class="sd">            Line width used for electrodes.</span>
+<span class="sd">        alpha_lab : float, optional</span>
+<span class="sd">            Alpha factor used for electrode labels.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :func:`add_nerve_plot`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">add_nerve_plot</span><span class="p">(</span><span class="n">axs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">add_elec</span><span class="o">=</span><span class="n">add_elec</span><span class="p">,</span> <span class="n">drive_pair</span><span class="o">=</span><span class="n">drive_pair</span><span class="p">,</span> <span class="n">e_label</span><span class="o">=</span><span class="n">e_label</span><span class="p">,</span> <span class="n">n_lwidth</span><span class="o">=</span><span class="n">n_lwidth</span><span class="p">,</span> <span class="n">e_lwidth</span><span class="o">=</span><span class="n">e_lwidth</span><span class="p">,</span> <span class="n">alpha_lab</span><span class="o">=</span><span class="n">alpha_lab</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Figure_elec.color_elec">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/Figure_elec/nrv.eit.utils.Figure_elec.color_elec.html#nrv.eit.utils.Figure_elec.color_elec">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">color_elec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">list_e</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
-        <span class="n">nerve</span> <span class="o">=</span> <span class="n">load_any</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">w_elec</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">nerve</span><span class="o">.</span><span class="n">D</span> <span class="o">/</span> <span class="n">n_e</span>
-        <span class="n">elec</span> <span class="o">=</span> <span class="n">CUFF_MP_electrode</span><span class="p">(</span>
-            <span class="n">N_contact</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
-            <span class="n">x_center</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">contact_width</span><span class="o">=</span><span class="n">w_elec</span><span class="p">,</span>
-            <span class="n">contact_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-            <span class="n">insulator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">list_e</span><span class="o">=</span><span class="n">list_e</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
-        <span class="k">del</span> <span class="n">nerve</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Highlight a subset of electrodes on the central nerve axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : Any</span>
+<span class="sd">            Object or path loadable with :func:`load_any`.</span>
+<span class="sd">        n_e : int</span>
+<span class="sd">            Total number of electrodes.</span>
+<span class="sd">        list_e : int | list[int]</span>
+<span class="sd">            Electrode identifier or identifiers to highlight.</span>
+<span class="sd">        **kwgs : dict</span>
+<span class="sd">            Additional keyword arguments forwarded to :func:`color_elec`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">color_elec</span><span class="p">(</span>
+            <span class="n">axs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">n_e</span><span class="o">=</span><span class="n">n_e</span><span class="p">,</span>
+            <span class="n">list_e</span><span class="o">=</span><span class="n">list_e</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Figure_elec.scale_axs">
@@ -2802,73 +2947,37 @@
         <span class="n">zeroy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">has_nerve</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="k">if</span> <span class="n">has_nerve</span><span class="p">:</span>
-            <span class="n">__axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">__axs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span>
-        <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i_e</span><span class="p">,</span> <span class="n">ax_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">__axs</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">i_e</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">e_gnd</span><span class="p">:</span>
-                <span class="n">_min_y</span><span class="p">,</span> <span class="n">_max_y</span> <span class="o">=</span> <span class="n">ax_</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-                <span class="n">min_y</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">_min_y</span><span class="p">,</span> <span class="n">min_y</span><span class="p">)</span>
-                <span class="n">max_y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">_max_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Harmonize electrode-axis limits and draw scale bars.</span>
 
-        <span class="k">for</span> <span class="n">ax_</span> <span class="ow">in</span> <span class="n">__axs</span><span class="p">:</span>
-            <span class="n">ax_</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">zerox</span><span class="p">:</span>
-                <span class="n">_min_x</span><span class="p">,</span> <span class="n">_max_x</span> <span class="o">=</span> <span class="n">ax_</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-                <span class="n">ax_</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">_min_x</span><span class="p">,</span> <span class="n">_max_x</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;k&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">zeroy</span><span class="p">:</span>
-                <span class="n">ax_</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">_min_y</span><span class="p">,</span> <span class="n">_max_y</span><span class="p">],</span> <span class="s2">&quot;k&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iterable</span><span class="p">(</span><span class="n">i_ax</span><span class="p">):</span>
-            <span class="n">y_i_ax</span> <span class="o">=</span> <span class="n">i_ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">t_i_ax</span> <span class="o">=</span> <span class="n">i_ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">y_i_ax</span><span class="p">,</span> <span class="n">t_i_ax</span> <span class="o">=</span> <span class="n">i_ax</span><span class="p">,</span> <span class="n">i_ax</span>
-        <span class="k">if</span> <span class="n">i_ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span>
-        <span class="c1"># Adding y scale</span>
-        <span class="n">ax_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="n">y_i_ax</span><span class="p">]</span>
-        <span class="n">ax_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">[</span><span class="n">t_i_ax</span><span class="p">]</span>
-
-        <span class="n">_min_y</span><span class="p">,</span> <span class="n">_max_y</span> <span class="o">=</span> <span class="n">ax_</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-        <span class="n">Dy</span> <span class="o">=</span> <span class="n">_max_y</span> <span class="o">-</span> <span class="n">_min_y</span>
-        <span class="n">_min_t</span><span class="p">,</span> <span class="n">_max_t</span> <span class="o">=</span> <span class="n">ax_</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-        <span class="n">Dt</span> <span class="o">=</span> <span class="n">_max_t</span> <span class="o">-</span> <span class="n">_min_t</span>
-        <span class="n">scale_t</span> <span class="o">=</span> <span class="n">sci_round</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">scale_t</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">scale_t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale_t</span><span class="p">)</span>
-        <span class="n">x_st</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span><span class="p">),</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span><span class="p">)</span> <span class="o">+</span> <span class="n">scale_t</span><span class="p">]</span>
-        <span class="n">y_st</span> <span class="o">=</span> <span class="p">[</span><span class="n">_min_y</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">_min_y</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">Dy</span><span class="p">]</span>
-        <span class="n">ax_t</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_st</span><span class="p">,</span> <span class="n">y_st</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">ax_t</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-            <span class="n">x_st</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">y_st</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">Dy</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scale_t</span><span class="si">}{</span><span class="n">unit_x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="s2">&quot;italic&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Adding t(x) scale</span>
-        <span class="n">scale_y</span> <span class="o">=</span> <span class="n">sci_round</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">Dy</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">scale_y</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">scale_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale_y</span><span class="p">)</span>
-        <span class="n">x_sy</span> <span class="o">=</span> <span class="p">[</span><span class="n">_min_t</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span><span class="p">),</span> <span class="n">_min_t</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">Dt</span><span class="p">)]</span>
-        <span class="n">y_sy</span> <span class="o">=</span> <span class="p">[</span><span class="n">_min_y</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">_min_y</span> <span class="o">+</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="n">Dy</span> <span class="o">+</span> <span class="n">scale_y</span><span class="p">]</span>
-
-        <span class="n">ax_y</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_sy</span><span class="p">,</span> <span class="n">y_sy</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-        <span class="n">ax_y</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-            <span class="n">x_sy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="n">Dt</span><span class="p">,</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y_sy</span><span class="p">),</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">scale_y</span><span class="si">}{</span><span class="n">unit_y</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span>
-            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="s2">&quot;italic&quot;</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axs</span></div>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        i_ax : int | tuple[int, int], optional</span>
+<span class="sd">            Axis indices used to place the y and x scale bars.</span>
+<span class="sd">        unit_x : str, optional</span>
+<span class="sd">            Label appended to the x scale bar.</span>
+<span class="sd">        unit_y : str, optional</span>
+<span class="sd">            Label appended to the y scale bar.</span>
+<span class="sd">        e_gnd : list[int], optional</span>
+<span class="sd">            Electrodes excluded when computing common y-limits.</span>
+<span class="sd">        zerox : bool, optional</span>
+<span class="sd">            If ``True``, draw a horizontal zero line.</span>
+<span class="sd">        zeroy : bool, optional</span>
+<span class="sd">            If ``True``, draw a vertical zero line.</span>
+<span class="sd">        has_nerve : bool, optional</span>
+<span class="sd">            If ``True``, ignore the last axis when rescaling because it contains</span>
+<span class="sd">            the nerve drawing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">scale_axs</span><span class="p">(</span>
+            <span class="n">axs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axs</span><span class="p">,</span>
+            <span class="n">i_ax</span><span class="o">=</span><span class="n">i_ax</span><span class="p">,</span>
+            <span class="n">unit_x</span><span class="o">=</span><span class="n">unit_x</span><span class="p">,</span>
+            <span class="n">unit_y</span><span class="o">=</span><span class="n">unit_y</span><span class="p">,</span>
+            <span class="n">e_gnd</span><span class="o">=</span><span class="n">e_gnd</span><span class="p">,</span>
+            <span class="n">zerox</span><span class="o">=</span><span class="n">zerox</span><span class="p">,</span>
+            <span class="n">zeroy</span><span class="o">=</span><span class="n">zeroy</span><span class="p">,</span>
+            <span class="n">has_nerve</span><span class="o">=</span><span class="n">has_nerve</span><span class="p">,</span>
+    <span class="p">)</span></div>
 </div>
 
 
@@ -2878,57 +2987,31 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">gen_fig_elec</span><span class="p">(</span>
     <span class="n">n_e</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ij_offset</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">small_fig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">fig_kwgs</span>
 <span class="p">):</span>
-    <span class="k">if</span> <span class="n">n_e</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span>
-        <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">i_plots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
-        <span class="p">)</span>
-        <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">n_e</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
-        <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="n">i_plots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
-        <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="n">idxs</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">idxs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">n_e</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
-        <span class="n">fig_dim</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="n">i_plots</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
-                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-            <span class="p">]</span>
-        <span class="p">)</span>
-        <span class="c1"># idxs = np.arange(3)+1</span>
-        <span class="c1"># i_center = (idxs[:,np.newaxis],idxs)</span>
-        <span class="n">i_center</span> <span class="o">=</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a figure layout with one axis per electrode and one central axis.</span>
 
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    n_e : int</span>
+<span class="sd">        Number of electrodes.</span>
+<span class="sd">    fig : matplotlib.figure.Figure | None, optional</span>
+<span class="sd">        Existing figure to populate.</span>
+<span class="sd">    spec : matplotlib.gridspec.GridSpec | None, optional</span>
+<span class="sd">        Existing subplot specification to reuse.</span>
+<span class="sd">    ij_offset : tuple[int, int], optional</span>
+<span class="sd">        Row and column offset applied when nesting the layout.</span>
+<span class="sd">    small_fig : bool, optional</span>
+<span class="sd">        If ``True``, shift bottom titles slightly downward.</span>
+<span class="sd">    **fig_kwgs : dict</span>
+<span class="sd">        Keyword arguments used when creating a new figure.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Figure and axes list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">n_e</span> <span class="ow">in</span> <span class="n">eit_fig_ppt</span>
+    <span class="n">fig_dim</span><span class="p">,</span> <span class="n">i_plots</span><span class="p">,</span> <span class="n">i_center</span> <span class="o">=</span> <span class="n">eit_fig_ppt</span><span class="p">[</span><span class="n">n_e</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">fig_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
     <span class="n">mask</span><span class="p">[</span><span class="o">*</span><span class="n">i_center</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2967,8 +3050,38 @@
     <span class="n">which</span><span class="o">=</span><span class="s2">&quot;dv_eit&quot;</span><span class="p">,</span>
     <span class="n">same_scale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">scale_x</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot one signal trace per electrode on an existing or generated layout.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    res_list : eit_results_list | np.ndarray</span>
+<span class="sd">        Data source to plot.</span>
+<span class="sd">    t : np.ndarray | None, optional</span>
+<span class="sd">        Time vector used with raw arrays.</span>
+<span class="sd">    axs : list[matplotlib.axes.Axes] | None, optional</span>
+<span class="sd">        Existing axes. When omitted, a new figure is generated.</span>
+<span class="sd">    i_res : int, optional</span>
+<span class="sd">        Result index extracted from an :class:`eit_results_list`.</span>
+<span class="sd">    which : str, optional</span>
+<span class="sd">        Signal family extracted from an :class:`eit_results_list`.</span>
+<span class="sd">    same_scale : bool, optional</span>
+<span class="sd">        Reserved for future scaling behavior.</span>
+<span class="sd">    labels : Any, optional</span>
+<span class="sd">        Reserved for future labeling behavior.</span>
+<span class="sd">    scale_x : bool, optional</span>
+<span class="sd">        If ``True``, set x-limits from ``0`` to ``t[-1]``.</span>
+<span class="sd">    **kwgs : dict</span>
+<span class="sd">        Additional keyword arguments forwarded to ``Axes.plot``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple | list[matplotlib.axes.Axes]</span>
+<span class="sd">        Generated figure and axes, or updated axes when ``axs`` is provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res_list</span><span class="p">,</span> <span class="n">eit_results_list</span><span class="p">):</span>
         <span class="n">n_e</span> <span class="o">=</span> <span class="n">res_list</span><span class="o">.</span><span class="n">n_e</span>
         <span class="n">_dv</span> <span class="o">=</span> <span class="n">res_list</span><span class="o">.</span><span class="n">get_res</span><span class="p">(</span><span class="n">i_res</span><span class="o">=</span><span class="n">i_res</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="n">which</span><span class="p">)</span>
@@ -2986,7 +3099,8 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">dv_i</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
             <span class="n">dv_i</span> <span class="o">=</span> <span class="n">dv_i</span><span class="o">.</span><span class="n">T</span>
         <span class="n">ax_</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dv_i</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">)</span>
-        <span class="n">ax_</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">scale_x</span><span class="p">:</span>
+            <span class="n">ax_</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">is_generated</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span>
@@ -2997,6 +3111,25 @@
 <div class="viewcode-block" id="fill_between_all_elec">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/nrv.eit.utils.fill_between_all_elec.html#nrv.eit.utils.fill_between_all_elec">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fill_between_all_elec</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">res_list_1</span><span class="p">,</span> <span class="n">res_list_2</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fill the area between two electrode-wise signals.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axs : list[matplotlib.axes.Axes]</span>
+<span class="sd">        Axes to update.</span>
+<span class="sd">    res_list_1, res_list_2 : np.ndarray</span>
+<span class="sd">        Arrays containing the lower and upper traces.</span>
+<span class="sd">    t : np.ndarray | None, optional</span>
+<span class="sd">        Time vector.</span>
+<span class="sd">    **kwgs : dict</span>
+<span class="sd">        Additional keyword arguments forwarded to ``Axes.fill_between``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[matplotlib.axes.Axes]</span>
+<span class="sd">        Updated axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res_list_1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">n_e</span> <span class="o">=</span> <span class="n">res_list_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">dv_1</span> <span class="o">=</span> <span class="n">res_list_1</span>
@@ -3027,8 +3160,38 @@
     <span class="n">e_label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">n_lwidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">e_lwidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">alpha_lab</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwgs</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Draw a nerve cross-section and optionally the electrode geometry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axs : list[matplotlib.axes.Axes]</span>
+<span class="sd">        Axes list whose last axis is used for the nerve drawing.</span>
+<span class="sd">    data : Any</span>
+<span class="sd">        Object or path loadable with :func:`load_any`.</span>
+<span class="sd">    add_elec : bool, optional</span>
+<span class="sd">        If ``True``, overlay cuff electrodes.</span>
+<span class="sd">    drive_pair : tuple[int, int], optional</span>
+<span class="sd">        Electrode pair highlighted as the current-driving pair.</span>
+<span class="sd">    e_label : bool, optional</span>
+<span class="sd">        If ``True``, display electrode labels.</span>
+<span class="sd">    n_lwidth : float, optional</span>
+<span class="sd">        Line width of the nerve drawing.</span>
+<span class="sd">    e_lwidth : float, optional</span>
+<span class="sd">        Line width of the electrode drawing.</span>
+<span class="sd">    alpha_lab : float, optional</span>
+<span class="sd">        Alpha factor used for electrode labels.</span>
+<span class="sd">    **kwgs : dict</span>
+<span class="sd">        Additional keyword arguments reserved for future use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[matplotlib.axes.Axes]</span>
+<span class="sd">        Updated axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nerve</span> <span class="o">=</span> <span class="n">load_any</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">nerve</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">n_lwidth</span><span class="p">)</span>
     <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
@@ -3046,7 +3209,7 @@
             <span class="n">insulator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">e_label</span><span class="o">=</span><span class="n">e_label</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">e_lwidth</span>
+            <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nerve_d</span><span class="o">=</span><span class="n">nerve</span><span class="o">.</span><span class="n">D</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">e_label</span><span class="o">=</span><span class="n">e_label</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">e_lwidth</span><span class="p">,</span> <span class="n">alpha_lab</span><span class="o">=</span><span class="n">alpha_lab</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">elec</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
@@ -3072,6 +3235,27 @@
 <div class="viewcode-block" id="color_elec">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/nrv.eit.utils.color_elec.html#nrv.eit.utils.color_elec">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">color_elec</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">n_e</span><span class="p">,</span> <span class="n">list_e</span><span class="p">,</span> <span class="o">**</span><span class="n">kwgs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Highlight selected cuff electrodes on the nerve plot.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axs : list[matplotlib.axes.Axes]</span>
+<span class="sd">        Axes list whose last axis contains the nerve drawing.</span>
+<span class="sd">    data : Any</span>
+<span class="sd">        Object or path loadable with :func:`load_any`.</span>
+<span class="sd">    n_e : int</span>
+<span class="sd">        Total number of electrodes.</span>
+<span class="sd">    list_e : int | list[int]</span>
+<span class="sd">        Electrode identifier or identifiers to highlight.</span>
+<span class="sd">    **kwgs : dict</span>
+<span class="sd">        Additional keyword arguments forwarded to the electrode plotter.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[matplotlib.axes.Axes]</span>
+<span class="sd">        Updated axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nerve</span> <span class="o">=</span> <span class="n">load_any</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">w_elec</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">nerve</span><span class="o">.</span><span class="n">D</span> <span class="o">/</span> <span class="n">n_e</span>
     <span class="n">elec</span> <span class="o">=</span> <span class="n">CUFF_MP_electrode</span><span class="p">(</span>
@@ -3099,6 +3283,33 @@
     <span class="n">zeroy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">has_nerve</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Harmonize y-limits across electrode axes and add scale bars.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axs : list[matplotlib.axes.Axes]</span>
+<span class="sd">        Axes to update.</span>
+<span class="sd">    i_ax : int | tuple[int, int], optional</span>
+<span class="sd">        Axis indices used to draw the y and x scale bars.</span>
+<span class="sd">    unit_x : str, optional</span>
+<span class="sd">        Label appended to the x scale bar.</span>
+<span class="sd">    unit_y : str, optional</span>
+<span class="sd">        Label appended to the y scale bar.</span>
+<span class="sd">    e_gnd : list[int], optional</span>
+<span class="sd">        Electrodes excluded from the y-limit aggregation.</span>
+<span class="sd">    zerox : bool, optional</span>
+<span class="sd">        If ``True``, draw a horizontal zero line.</span>
+<span class="sd">    zeroy : bool, optional</span>
+<span class="sd">        If ``True``, draw a vertical zero line.</span>
+<span class="sd">    has_nerve : bool, optional</span>
+<span class="sd">        If ``True``, ignore the last axis when rescaling.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[matplotlib.axes.Axes]</span>
+<span class="sd">        Updated axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">has_nerve</span><span class="p">:</span>
         <span class="n">__axs</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
@@ -3173,6 +3384,25 @@
 <div class="viewcode-block" id="plot_nerve_nor">
 <a class="viewcode-back" href="../../../../_nrv/eit/utils/nrv.eit.utils.plot_nerve_nor.html#nrv.eit.utils.plot_nerve_nor">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_nerve_nor</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">l_elec</span><span class="p">,</span> <span class="n">x_rec</span><span class="p">,</span> <span class="n">fasc_ID</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot node-of-Ranvier alignment relative to one electrode window.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname : str</span>
+<span class="sd">        Path to the serialized nerve description.</span>
+<span class="sd">    l_elec : float</span>
+<span class="sd">        Electrode length.</span>
+<span class="sd">    x_rec : float</span>
+<span class="sd">        Electrode center position.</span>
+<span class="sd">    fasc_ID : str | int, optional</span>
+<span class="sd">        Fascicle identifier to inspect.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        Matplotlib figure and axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fasc_ID</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">fasc_ID</span><span class="p">)</span>
     <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">x_rec</span> <span class="o">-</span> <span class="n">l_elec</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">x_rec</span> <span class="o">+</span> <span class="n">l_elec</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="n">fasc</span> <span class="o">=</span> <span class="n">load_nerve</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span><span class="o">.</span><span class="n">fascicles</span><span class="p">[</span><span class="n">fasc_ID</span><span class="p">]</span>
@@ -3233,8 +3463,8 @@
 </div><script src="../../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

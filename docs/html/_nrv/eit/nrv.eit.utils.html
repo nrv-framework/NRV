@@ -6,10 +6,10 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Figure_elec" href="utils/nrv.eit.utils.Figure_elec.html"><link rel="prev" title="nrv.eit" href="../nrv.eit.html">
         <link rel="prefetch" href="../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.eit.utils - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
@@ -716,6 +716,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -2509,7 +2510,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.Figure_elec.html#nrv.eit.utils.Figure_elec" title="nrv.eit.utils.Figure_elec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Figure_elec</span></code></a>(n_e[, fig, spec, ij_offset, ...])</p></td>
-<td><p></p></td>
+<td><p>Helper class organizing one subplot per electrode around a central nerve view.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2527,34 +2528,34 @@
 <td><p>Samples specific keys from nerve simulation results at selected time points.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.plot_array.html#nrv.eit.utils.plot_array" title="nrv.eit.utils.plot_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_array</span></code></a>(ax, x, arr[, axis])</p></td>
-<td><p></p></td>
+<td><p>Plot a one-dimensional coordinate against an array of arbitrary dimension.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="utils/nrv.eit.utils.gen_idx_arange.html#nrv.eit.utils.gen_idx_arange" title="nrv.eit.utils.gen_idx_arange"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_idx_arange</span></code></a>(idx, n[, add_0])</p></td>
-<td><p></p></td>
+<td><p>Generate per-segment counters from boundary indices.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.thr_window.html#nrv.eit.utils.thr_window" title="nrv.eit.utils.thr_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">thr_window</span></code></a>(X[, alpha])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="utils/nrv.eit.utils.gen_fig_elec.html#nrv.eit.utils.gen_fig_elec" title="nrv.eit.utils.gen_fig_elec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gen_fig_elec</span></code></a>(n_e[, fig, spec, ij_offset, ...])</p></td>
-<td><p></p></td>
+<td><p>Create a figure layout with one axis per electrode and one central axis.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.plot_all_elec.html#nrv.eit.utils.plot_all_elec" title="nrv.eit.utils.plot_all_elec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_all_elec</span></code></a>(res_list[, t, axs, i_res, ...])</p></td>
-<td><p></p></td>
+<td><p>Plot one signal trace per electrode on an existing or generated layout.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="utils/nrv.eit.utils.add_nerve_plot.html#nrv.eit.utils.add_nerve_plot" title="nrv.eit.utils.add_nerve_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_nerve_plot</span></code></a>(axs, data[, add_elec, ...])</p></td>
-<td><p></p></td>
+<td><p>Draw a nerve cross-section and optionally the electrode geometry.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.scale_axs.html#nrv.eit.utils.scale_axs" title="nrv.eit.utils.scale_axs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_axs</span></code></a>(axs[, i_ax, unit_x, unit_y, ...])</p></td>
-<td><p></p></td>
+<td><p>Harmonize y-limits across electrode axes and add scale bars.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="utils/nrv.eit.utils.plot_nerve_nor.html#nrv.eit.utils.plot_nerve_nor" title="nrv.eit.utils.plot_nerve_nor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_nerve_nor</span></code></a>(fname, l_elec, x_rec[, fasc_ID])</p></td>
-<td><p></p></td>
+<td><p>Plot node-of-Ranvier alignment relative to one electrode window.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="utils/nrv.eit.utils.fill_between_all_elec.html#nrv.eit.utils.fill_between_all_elec" title="nrv.eit.utils.fill_between_all_elec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fill_between_all_elec</span></code></a>(axs, res_list_1, ...)</p></td>
-<td><p></p></td>
+<td><p>Fill the area between two electrode-wise signals.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="utils/nrv.eit.utils.color_elec.html#nrv.eit.utils.color_elec" title="nrv.eit.utils.color_elec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">color_elec</span></code></a>(axs, data, n_e, list_e, **kwgs)</p></td>
-<td><p></p></td>
+<td><p>Highlight selected cuff electrodes on the nerve plot.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2631,8 +2632,8 @@
 </div><script src="../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>

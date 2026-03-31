@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
         <link rel="prefetch" href="../../../_static/logo.png" as="image">
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>nrv.nmod._fascicles - NeuRon Virtualizer (NRV) 1.3.1</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d75fae25" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
@@ -715,6 +715,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_placed_pop.html">axon_population.has_placed_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.has_pop.html">axon_population.has_pop</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.iloc.html">axon_population.iloc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.loc.html">axon_population.loc</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_ax.html">axon_population.n_ax</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.n_mask.html">axon_population.n_mask</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../_nrv/nmod/axon_population/nrv.nmod.axon_population.__init__.html">axon_population.__init__</a></li>
@@ -3287,21 +3288,21 @@
 <span class="sd">        k : int</span>
 <span class="sd">            _description_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">axon</span> <span class="o">=</span> <span class="n">unmyelinated</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
                 <span class="n">ID</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">unmyelinated_param</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">myelinated_param</span><span class="p">[</span><span class="s2">&quot;node_shift&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;node_shift&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">myelinated_param</span><span class="p">[</span><span class="s2">&quot;node_shift&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;node_shift&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
             <span class="n">axon</span> <span class="o">=</span> <span class="n">myelinated</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
                 <span class="n">ID</span><span class="o">=</span><span class="n">k</span><span class="p">,</span>
                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">myelinated_param</span><span class="p">,</span>
@@ -3378,7 +3379,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove all unmyelinated fibers from the fascicle</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="n">_lab</span> <span class="o">=</span> <span class="s2">&quot;mye_only&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="o">.</span><span class="n">add_mask</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">_mask</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">_lab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_lab</span><span class="p">)</span></div>
@@ -3390,7 +3391,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Remove all myelinated fibers from the</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span> <span class="o">==</span> <span class="mi">0</span>
         <span class="n">_lab</span> <span class="o">=</span> <span class="s2">&quot;unm_only&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="o">.</span><span class="n">add_mask</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">_mask</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">_lab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_lab</span><span class="p">)</span></div>
@@ -3403,11 +3404,11 @@
 <span class="sd">        Remove fibers with diameters below/above a threshold</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">min</span><span class="p">:</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">d</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span> <span class="o">&gt;=</span> <span class="n">d</span>
             <span class="n">_lab</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;d_over_</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">d</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span> <span class="o">&lt;=</span> <span class="n">d</span>
             <span class="n">_lab</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;d_under_</span><span class="si">{</span><span class="n">d</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="o">.</span><span class="n">add_mask</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">_lab</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sim_mask</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_lab</span><span class="p">)</span></div>
@@ -3480,8 +3481,8 @@
                 <span class="n">polysize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">drange</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
                 <span class="k">for</span> <span class="n">s_k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_ax</span><span class="p">):</span>
                     <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_list</span><span class="p">[</span><span class="n">s_k</span><span class="p">]</span>
-                    <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;diameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
                         <span class="n">color</span> <span class="o">=</span> <span class="n">unmyel_color</span>
                         <span class="n">size</span> <span class="o">=</span> <span class="n">polysize</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
                         <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
@@ -3838,7 +3839,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1">## test axon axons_type[k]</span>
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_list</span><span class="p">[</span><span class="n">k_sim</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">axons</span><span class="p">[</span><span class="s2">&quot;types&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">axon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_axon</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="c1">## add extracellular stimulation</span>
         <span class="n">axon</span><span class="o">.</span><span class="n">attach_extracellular_stimulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">extra_stim</span><span class="p">)</span>
@@ -4420,8 +4421,8 @@
 </div><script src="../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
     <script src="../../../_static/documentation_options.js?v=f2aba15d"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
