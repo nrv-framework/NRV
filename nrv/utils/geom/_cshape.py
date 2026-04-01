@@ -46,14 +46,38 @@ class CShape(NRV_class):
 
     @property
     def x(self) -> float:
+        """
+        X-coordinate placeholder for 2D shapes.
+
+        Returns
+        -------
+        float
+            Always returns ``0``.
+        """
         return 0
 
     @property
     def y(self) -> float:
+        """
+        Y-coordinate of the shape center.
+
+        Returns
+        -------
+        float
+            First coordinate of ``center``.
+        """
         return self.center[0]
 
     @property
     def z(self) -> float:
+        """
+        Z-coordinate of the shape center.
+
+        Returns
+        -------
+        float
+            Second coordinate of ``center``.
+        """
         return self.center[1]
 
     @property

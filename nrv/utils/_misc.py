@@ -133,6 +133,27 @@ def rotate_2D(
     center: tuple[float, float] = (0, 0),
     as_array: bool = False,
 ):
+    """
+    Rotate 2D coordinates around a given center.
+
+    Parameters
+    ----------
+    point : tuple[np.ndarray, np.ndarray] | np.ndarray
+        Point or set of points to rotate.
+    angle : float
+        Rotation angle.
+    degree : bool, optional
+        If ``True`` the angle is provided in degrees, otherwise in radians.
+    center : tuple[float, float], optional
+        Rotation center.
+    as_array : bool, optional
+        If ``True``, return the rotated coordinates as an array.
+
+    Returns
+    -------
+    tuple[np.ndarray, np.ndarray] | np.ndarray | tuple[float, float]
+        Rotated coordinates with a shape matching the input convention.
+    """
     if degree:
         angle = to_nrv_unit(angle, "deg")
     if isinstance(point, np.ndarray):
@@ -388,6 +409,19 @@ def get_length_from_nodes(diameter, nodes):
 
 
 def membrane_capacitance_from_model(model):
+    """
+    Return the default membrane capacitance associated with a model name.
+
+    Parameters
+    ----------
+    model : str
+        Name of the axon model.
+
+    Returns
+    -------
+    float
+        Membrane capacitance in the units expected by NRV.
+    """
     if model in ["MRG", "Gaines_motor", "Gaines_sensory"]:
         return 2
     if "Schild" in model:

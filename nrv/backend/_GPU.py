@@ -7,6 +7,10 @@ import platform
 
 
 class GPU:
+    """
+    Container describing one GPU reported by ``nvidia-smi``.
+    """
+
     def __init__(
         self,
         ID,
@@ -22,6 +26,36 @@ class GPU:
         display_active,
         temp_gpu,
     ):
+        """
+        Store the hardware and usage information associated with one GPU.
+
+        Parameters
+        ----------
+        ID : int
+            GPU index reported by ``nvidia-smi``.
+        uuid : str
+            Unique identifier of the GPU.
+        load : float
+            Current compute load of the GPU.
+        memoryTotal : float
+            Total memory available on the GPU.
+        memoryUsed : float
+            Memory currently used on the GPU.
+        memoryFree : float
+            Free memory currently available on the GPU.
+        driver : str
+            Installed GPU driver version.
+        gpu_name : str
+            Human-readable GPU model name.
+        serial : str
+            GPU serial number when available.
+        display_mode : str
+            Display mode returned by ``nvidia-smi``.
+        display_active : str
+            Display activity state returned by ``nvidia-smi``.
+        temp_gpu : float
+            Current GPU temperature.
+        """
         self.id = ID
         self.uuid = uuid
         self.load = load
@@ -38,6 +72,19 @@ class GPU:
 
 
 def safeFloatCast(strNumber):
+    """
+    Convert a string to a floating-point value.
+
+    Parameters
+    ----------
+    strNumber : str
+        String representation of the number to convert.
+
+    Returns
+    -------
+    float
+        Converted value, or ``nan`` if conversion fails.
+    """
     try:
         number = float(strNumber)
     except ValueError:
@@ -46,6 +93,15 @@ def safeFloatCast(strNumber):
 
 
 def getGPUs():
+    """
+    Query the local machine for NVIDIA GPUs using ``nvidia-smi``.
+
+    Returns
+    -------
+    list[GPU]
+        List of detected GPUs. An empty list is returned when ``nvidia-smi``
+        is unavailable or the query fails.
+    """
     if platform.system() == "Windows":
         # If the platform is Windows and nvidia-smi
         # could not be found from the environment path,

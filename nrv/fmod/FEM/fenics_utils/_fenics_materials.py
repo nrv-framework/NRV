@@ -72,11 +72,27 @@ class fenics_material(NRV_class):
         return super().save(save=save, fname=fname, blacklist=bl, **kwargs)
 
     def update_mat(self, mat):
+        """
+        Replace the underlying material and refresh its FEniCS representation.
+
+        Parameters
+        ----------
+        mat : Any
+            Material specification accepted by :func:`load_f_material`.
+        """
         self.mat = load_f_material(mat)
         self.update_fenics_sigma()
 
     @property
     def sigma_fen(self):
+        """
+        FEniCS-ready conductivity object.
+
+        Returns
+        -------
+        Any
+            Constant, tensor, or function usable in variational forms.
+        """
         return self._sigma_fen
 
     @property

@@ -16,6 +16,19 @@ from ...utils._stimulus import stimulus
 
 
 def is_intracellular_context(obj):
+    """
+    Check whether an object is an intracellular-stimulation context.
+
+    Parameters
+    ----------
+    obj : Any
+        Object to test.
+
+    Returns
+    -------
+    bool
+        ``True`` when ``obj`` is an :class:`intracellular_context`.
+    """
     return isinstance(obj, intracellular_context)
 
 
@@ -164,6 +177,14 @@ class intracellular_context(NRV_class):
                 self.insert_intra_stim(*intra_stim)
 
     def generate_from_deprected_fascicle(self, key_dic: dict):
+        """
+        Rebuild intracellular stimuli from deprecated fascicle serialization fields.
+
+        Parameters
+        ----------
+        key_dic : dict
+            Raw serialized fascicle dictionary.
+        """
         if "intra_current_stim_positions" in key_dic:
             for i in range(len(key_dic["intra_current_stim_positions"])):
                 position = key_dic["intra_current_stim_positions"][i]

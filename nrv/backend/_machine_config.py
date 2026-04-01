@@ -42,6 +42,14 @@ class MachineConfig(metaclass=NRV_singleton):
     """
 
     def __init__(self, memory_unit=Mem_MBytes):
+        """
+        Probe and cache the local machine configuration.
+
+        Parameters
+        ----------
+        memory_unit : int, optional
+            Divisor used to express memory-related quantities.
+        """
         self._explore_OS()
         self._explore_Python()
         self._explore_Float()
@@ -50,6 +58,14 @@ class MachineConfig(metaclass=NRV_singleton):
         self._explore_memory(unit=memory_unit)
 
     def __str__(self):
+        """
+        Format the cached machine information as a human-readable report.
+
+        Returns
+        -------
+        str
+            Multiline summary of the detected machine configuration.
+        """
         current_str = f"""%%%%%%%%%%%%%%%%%%%%%%%%
 %% INFORMATIONS ON OS %%
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -107,10 +123,16 @@ Float representation style: {self.float_repr_style}"""
         return current_str
 
     def _explore_OS(self):
+        """
+        Collect the operating-system name and release.
+        """
         self.OS_name = sys.platform
         self.OS_version = os.uname().release
 
     def _explore_Python(self):
+        """
+        Collect the current Python interpreter version information.
+        """
         # Python version
         self.Python_version_major = sys.version_info.major
         self.Python_version_minor = sys.version_info.minor
@@ -120,6 +142,9 @@ Float representation style: {self.float_repr_style}"""
         # imported modules from sys.modules, may be track versions
 
     def _explore_Float(self):
+        """
+        Collect floating-point representation limits from Python.
+        """
         self.dig = sys.float_info.dig
         self.epsilon = sys.float_info.epsilon
         self.mant_dig = sys.float_info.mant_dig
@@ -134,6 +159,9 @@ Float representation style: {self.float_repr_style}"""
         self.float_repr_style = sys.float_repr_style
 
     def _explore_CPU(self):
+        """
+        Collect CPU core count, bitness, and architecture.
+        """
         # get number of cores
         self.CPU_ncores = psutil.cpu_count(logical=True)
         # get number of bits
@@ -147,6 +175,9 @@ Float representation style: {self.float_repr_style}"""
         self.CPU_arch = os.uname().machine
 
     def _explore_GPU(self):
+        """
+        Collect aggregate GPU count and memory information.
+        """
         GPUs = getGPUs()
         self.GPU_ncores = len(GPUs)
         self.GPU_total_memory = 0
@@ -162,6 +193,9 @@ Float representation style: {self.float_repr_style}"""
             self.GPU_memory_load = self.GPU_memory_used / self.GPU_memory_total
 
     def GPU_update(self):
+        """
+        Refresh cached GPU memory usage values.
+        """
         GPUs = getGPUs()
         self.GPU_memory_used = 0
         self.GPU_memory_free = 0
@@ -198,6 +232,15 @@ Float representation style: {self.float_repr_style}"""
             self.MEMORY_wired = None
 
     def memory_update(self):
+        """
+        Refresh memory statistics and return the variation since the last probe.
+
+        Returns
+        -------
+        tuple[float, float, float, float, float, float]
+            Variation of available, percent, used, free, active, and inactive
+            memory values.
+        """
         current_MEMORY_available = (
             psutil.virtual_memory().available / self.MEMORY_unit_value
         )
@@ -232,14 +275,33 @@ Float representation style: {self.float_repr_style}"""
         )
 
     def update(self):
+        """
+        Refresh the dynamic memory and GPU statistics.
+        """
         self.memory_update()
         if self.GPU_ncores > 0:
             self.GPU_update()
 
     def get_report(self):
+        """
+        Print the current machine report.
+        """
         print(self)
 
     def get_Available_CPU_number(self, threshold: float = 20.0):
+        """
+        Count CPU cores whose instantaneous load is below a threshold.
+
+        Parameters
+        ----------
+        threshold : float, optional
+            Maximum CPU usage percentage for a core to be considered available.
+
+        Returns
+        -------
+        int
+            Number of available CPU cores.
+        """
         assert (
             threshold >= 0 and threshold <= 100
         ), "Threshold must be between 0 and 100"
@@ -248,6 +310,9 @@ Float representation style: {self.float_repr_style}"""
 
     ### Sanity checks ###
     def sanity_check(self):
+        """
+        Print warnings when the current environment misses NRV requirements.
+        """
         # python checks
         if self.Python_version_major < NRV_PYTHON_VERSION["major"]:
             print("Warning: Python 2 not supported")

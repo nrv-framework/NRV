@@ -50,6 +50,22 @@ class Problem(NRV_class):
         problem_fname: str = "optim.json",
         n_proc: int = None,
     ):
+        """
+        Initialize an optimization problem coupling a cost function and an optimizer.
+
+        Parameters
+        ----------
+        cost_function : cost_function | None, optional
+            Cost function to minimize.
+        optimizer : Optimizer | None, optional
+            Optimization backend.
+        save_problem_results : bool, optional
+            If ``True``, save optimization results after completion.
+        problem_fname : str, optional
+            Output filename used when saving problem results.
+        n_proc : int | None, optional
+            Number of worker processes used for multiprocessing-enabled paths.
+        """
         super().__init__()
         self._CostFunction = cost_function
         self._Optimizer = optimizer
@@ -73,14 +89,38 @@ class Problem(NRV_class):
 
     @costfunction.setter
     def costfunction(self, cf: cost_function):
+        """
+        Set the cost function used by the optimization problem.
+
+        Parameters
+        ----------
+        cf : cost_function
+            Cost function to assign.
+        """
         # need to add a verification that the cost function is a scallar and so on
         self._CostFunction = cf
 
     @costfunction.deleter
     def costfunction(self):
+        """
+        Remove the current cost function.
+        """
         self._CostFunction = None
 
     def _SwarmCostFunction(self, swarm):
+        """
+        Evaluate the cost of every particle in a swarm.
+
+        Parameters
+        ----------
+        swarm : np.ndarray
+            Swarm array of shape ``(n_particles, n_dimensions)``.
+
+        Returns
+        -------
+        np.ndarray
+            Cost value for each particle.
+        """
         s_l = len(swarm)
         costs = np.zeros((s_l))
         if self.mp_type == "costfunction":
@@ -97,6 +137,19 @@ class Problem(NRV_class):
         return costs
 
     def compute_cost(self, X):
+        """
+        Evaluate the scalar cost at one position vector.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Candidate parameter vector.
+
+        Returns
+        -------
+        float
+            Cost value.
+        """
         return self._CostFunction(X)
 
     # Handling the Optimizer attribute
@@ -111,11 +164,22 @@ class Problem(NRV_class):
 
     @optimizer.setter
     def optimizer(self, optim: Optimizer):
+        """
+        Set the optimizer backend used by the problem.
+
+        Parameters
+        ----------
+        optim : Optimizer
+            Optimizer instance to assign.
+        """
         self._Optimizer = optim
         self.swarm_optimizer = self._Optimizer.swarm_optimizer
 
     @optimizer.deleter
     def optmizer(self):
+        """
+        Placeholder deleter for the optimizer property.
+        """
         # self._Optimizer = None
         pass
 
@@ -209,7 +273,22 @@ class Problem(NRV_class):
         return kwargs
 
     def context_and_cost(self, context_func, cost_func, residual):
+        """
+        Convenience helper to build and assign a :class:`cost_function`.
+
+        Parameters
+        ----------
+        context_func : callable
+            Context-modifier callable.
+        cost_func : callable
+            Cost-evaluation callable.
+        residual : Any
+            Static simulation context.
+        """
         self.cost_function = cost_function(context_func, cost_func, residual)
 
     def autoset_optimizer(self):
+        """
+        Placeholder for automatic optimizer selection.
+        """
         pass

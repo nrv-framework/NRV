@@ -78,10 +78,16 @@ class FEMParameters(NRV_class):
             self.load(data)
 
     def save_SimParameters(self, save=False, fname="FEMParameters.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_SimParameters is a deprecated method use save")
         return self.save(save=save, fname=fname)
 
     def load_SimParameters(self, data="FEMParameters.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_SimParameters is a deprecated method use load")
         self.load(data=data)
 
@@ -378,12 +384,18 @@ class FEMParameters(NRV_class):
         return in_space, out_space
 
     def print_mixedspace_domain(self):
+        """
+        Print the mixed-space domain map for debugging purposes.
+        """
         doms = self.get_mixedspace_domain()
         print("spaces:   ", [k for k in range(len(doms[0]))])
         for i, dom in enumerate(doms):
             print("domain " + str(i) + ": ", dom)
 
     def print_mixedspace_mat_pty(self):
+        """
+        Print the mixed-space material-property map for debugging purposes.
+        """
         mats = self.get_mixedspace_mat_pty()
         print("domains:   ", [k for k in range(len(mats[0]))])
         for i, mat in enumerate(mats):

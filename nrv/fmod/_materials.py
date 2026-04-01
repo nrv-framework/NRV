@@ -197,10 +197,16 @@ class material(NRV_class):
         )
 
     def save_material(self, save=False, fname="material.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_material is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_material(self, data="material.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_material is a deprecated method use load")
         self.load(data=data)
 

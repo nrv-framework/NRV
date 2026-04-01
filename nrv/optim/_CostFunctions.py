@@ -59,6 +59,30 @@ class cost_function(NRV_class):
         file_name="cost_saver.csv",
         **kawrgs,
     ):
+        """
+        Initialize a callable cost-function wrapper around context generation and simulation.
+
+        Parameters
+        ----------
+        static_context : Any, optional
+            Serialized or in-memory simulable object used as the fixed optimization context.
+        context_modifier : callable, optional
+            Callable mapping ``(X, static_context)`` to a modified simulation context.
+        cost_evaluation : callable, optional
+            Callable mapping simulation results to a scalar cost.
+        simulation : callable, optional
+            Optional custom simulation function. If omitted, the generated context is called directly.
+        kwargs_CM, kwargs_S, kwargs_CE : dict, optional
+            Keyword arguments forwarded respectively to the context modifier, simulation, and cost-evaluation callables.
+        filter : callable | None, optional
+            Optional preprocessing function applied to the optimization vector.
+        saver : callable | None, optional
+            Optional callback executed after cost evaluation.
+        file_name : str, optional
+            Default filename used by user-defined saver callbacks.
+        **kawrgs : dict
+            Extra keyword arguments merged into the three keyword-argument dictionaries.
+        """
         super().__init__()
         self.static_context = static_context
         self.context_modifier = context_modifier
@@ -102,6 +126,14 @@ class cost_function(NRV_class):
 
     @property
     def is_m_proc_func(self) -> bool:
+        """
+        Whether the underlying context is suitable for multiprocessing at the cost-function level.
+
+        Returns
+        -------
+        bool
+            ``True`` for fascicle and nerve contexts.
+        """
         if self.static_context is not None and self._m_proc_CostFunction is None:
             static_context = load_any(self.static_context)
             self.static_t_sim = static_context.t_sim
@@ -120,6 +152,9 @@ class cost_function(NRV_class):
             del static_context
 
     def __synchronise_t_sim(self):
+        """
+        Synchronize the ``t_sim`` value across context-modifier, simulation, and cost-evaluation kwargs.
+        """
         if "t_sim" in self.kwargs_S:
             self.global_t_sim = self.kwargs_S["t_sim"]
         elif "t_sim" in self.kwargs_CM:
@@ -136,6 +171,14 @@ class cost_function(NRV_class):
 
     @property
     def __cost_function_ok(self):
+        """
+        Check that the cost-function object has all mandatory components.
+
+        Returns
+        -------
+        bool
+            ``True`` when static context, context modifier, and cost evaluator are defined.
+        """
         s_status = []
         if self.static_context is None:
             s_status += ["static_context"]
@@ -198,6 +241,14 @@ class cost_function(NRV_class):
         self.__synchronise_t_sim()
 
     def simulate_context(self):
+        """
+        Run the simulation associated with the current local context.
+
+        Returns
+        -------
+        sim_results
+            Simulation results produced from the current ``simulation_context``.
+        """
         ## See what's the use of simulation
         if callable(self.simulation):
             results = self.simulation(self.simulation_context, **self.kwargs_S)

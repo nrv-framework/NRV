@@ -48,6 +48,21 @@ def create_cshape(
 
 
 def get_cshape_bbox(shape: CShape, looped_end: bool = False):
+    """
+    Return the corners of the bounding box of a closed shape.
+
+    Parameters
+    ----------
+    shape : CShape
+        Shape whose bounding box is requested.
+    looped_end : bool, optional
+        If ``True``, repeat the first point at the end of the returned array.
+
+    Returns
+    -------
+    np.ndarray
+        Bounding-box corner coordinates.
+    """
     y_bbox = (
         shape.center[0] - shape.bbox_size[0] / 2,
         shape.center[0] + shape.bbox_size[0] / 2,

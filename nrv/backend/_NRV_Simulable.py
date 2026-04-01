@@ -90,6 +90,30 @@ class NRV_simulable(NRV_class):
         loaded_footprints=None,
         **kwargs,
     ):
+        """
+        Initialize the simulation settings shared by all simulable objects.
+
+        Parameters
+        ----------
+        t_sim : float, optional
+            Simulation duration in ms.
+        dt : float, optional
+            Simulation time step in ms.
+        record_V_mem : bool, optional
+            If ``True``, record membrane voltage.
+        record_I_mem : bool, optional
+            If ``True``, record membrane current.
+        record_I_ions : bool, optional
+            If ``True``, record ionic currents.
+        record_particles : bool, optional
+            If ``True``, record particle states.
+        record_g_mem : bool, optional
+            If ``True``, record membrane conductance.
+        record_g_ions : bool, optional
+            If ``True``, record ionic conductances.
+        loaded_footprints : dict | None, optional
+            Precomputed extracellular footprints indexed by electrode ID.
+        """
         super().__init__()
         self.t_sim = t_sim
         self.record_V_mem = record_V_mem
@@ -104,6 +128,15 @@ class NRV_simulable(NRV_class):
 
     @property
     def has_FEM_extracel(self) -> bool:
+        """
+        Check whether the extracellular context is FEM-based.
+
+        Returns
+        -------
+        bool
+            ``True`` if an extracellular stimulation exists and its type is
+            ``"FEM_stimulation"``.
+        """
         # return self.extracel_status() and issubclass(self.extra_stim.nrv_type == "FEM_stimulation")
         return self.extracel_status() and self.extra_stim.nrv_type == "FEM_stimulation"
 
@@ -156,6 +189,19 @@ class NRV_simulable(NRV_class):
             return False
 
     def __call__(self, **kwds):
+        """
+        Execute :meth:`simulate` when the instance is called.
+
+        Parameters
+        ----------
+        **kwds
+            Keyword arguments forwarded to :meth:`simulate`.
+
+        Returns
+        -------
+        sim_results
+            Simulation results produced by :meth:`simulate`.
+        """
         return self.simulate(**kwds)
 
     def simulate(self, **kwargs) -> sim_results:

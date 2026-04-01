@@ -329,12 +329,18 @@ class axon(NRV_simulable):
             self.d = kwargs["diameter"]
 
     def __del__(self):
+        """
+        Release NEURON sections owned by the axon before destruction.
+        """
         # see how are destroy rec lists in axons
         for section in neuron.h.allsec():
             section = None
         super().__del__()
 
     def __clear_reclists(self):
+        """
+        Remove recorder-list attributes cached on the instance.
+        """
         keys = list(self.__dict__.keys())
         for key in keys:
             if "reclist" in key:
@@ -433,12 +439,36 @@ class axon(NRV_simulable):
         self.__check_deprecation(key_dic=key_dic, intracel_context=intracel_context)
 
     def __check_deprecation(self, key_dic: dict, intracel_context: bool):
+        """
+        Restore deprecated intracellular-stimulation fields when loading old axon files.
+
+        Parameters
+        ----------
+        key_dic : dict
+            Raw serialized axon dictionary.
+        intracel_context : bool
+            Whether intracellular context restoration is enabled.
+        """
         if intracel_context and "intra_current_stim_positions" in key_dic:
             self.intra_stim.generate_from_deprected_fascicle(key_dic)
 
     def plot(
         self, axes: plt.axes, color: str = "blue", elec_color="gold", **kwgs
     ) -> None:
+        """
+        Plot the axon cross-section and any attached extracellular context.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        color : str, optional
+            Axon color.
+        elec_color : str, optional
+            Color used for attached extracellular electrodes.
+        **kwgs : dict
+            Additional matplotlib keyword arguments.
+        """
 
         alpha = 1
         if "alpha" in kwgs:
@@ -1426,6 +1456,9 @@ class axon(NRV_simulable):
         intracel_context=False,
         rec_context=False,
     ):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_axon is a deprecated method use save")
         self.save(
             save=save,
@@ -1442,6 +1475,9 @@ class axon(NRV_simulable):
         intracel_context=False,
         rec_context=False,
     ):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_axon is a deprecated method use load")
         self.save(data, extracel_context, intracel_context, rec_context)
 
@@ -1469,6 +1505,9 @@ class axon_test(axon):
         ID=0,
         threshold=-40,
     ):
+        """
+        Instantiate a minimal concrete axon subclass for abstract-class testing.
+        """
         super().__init__(
             y,
             z,
@@ -1488,31 +1527,61 @@ class axon_test(axon):
         )
 
     def insert_I_Clamp(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def insert_V_Clamp(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def set_membrane_voltage_recorders(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def set_membrane_current_recorders(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def set_ionic_current_recorders(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def set_conductance_recorders(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def set_particules_values_recorders(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def get_membrane_voltage(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def get_membrane_current(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass
 
     def get_ionic_current(self):
+        """
+        Placeholder implementation used for tests.
+        """
         pass

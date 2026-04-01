@@ -7,6 +7,21 @@ from ._log_interface import rise_warning
 
 
 def set_attributes(my_object, attributes_dict):
+    """
+    Set existing attributes of an object from a dictionary.
+
+    Parameters
+    ----------
+    my_object : object
+        Object whose attributes should be updated.
+    attributes_dict : dict
+        Mapping from attribute names to new values.
+
+    Returns
+    -------
+    int
+        Always returns ``0``.
+    """
     for key, value in attributes_dict.items():
         if key in my_object.__dict__:
             setattr(my_object, key, value)
@@ -45,10 +60,36 @@ def check_function_kwargs(func: Callable, kwargs: dict) -> dict:
 
 
 def function_to_str(func: Callable) -> str:
+    """
+    Return the source code corresponding to a callable.
+
+    Parameters
+    ----------
+    func : Callable
+        Callable object to serialize.
+
+    Returns
+    -------
+    str
+        Source code of the callable.
+    """
     lines = inspect.getsource(func)
     return lines
 
 
 def str_to_function(lines: str) -> Callable:
+    """
+    Placeholder converting a serialized function back to a callable.
+
+    Parameters
+    ----------
+    lines : str
+        Serialized function representation.
+
+    Returns
+    -------
+    Callable
+        Currently returns ``lines`` unchanged.
+    """
     lines
     return lines

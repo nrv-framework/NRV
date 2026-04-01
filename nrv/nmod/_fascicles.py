@@ -388,6 +388,14 @@ class fascicle(NRV_simulable):
         self.__check_deprecation(key_dic=key_dic)
 
     def __check_deprecation(self, key_dic: dict):
+        """
+        Upgrade deprecated serialized fascicle fields after loading.
+
+        Parameters
+        ----------
+        key_dic : dict
+            Raw serialized fascicle dictionary.
+        """
         d_status = False
         if "unmyelinated_param" not in key_dic:
             rise_warning(
@@ -801,6 +809,18 @@ class fascicle(NRV_simulable):
         remove_from_pop: bool = True,
         keep_elec: bool = True,
     ):
+        """
+        Remove simulation masks from the fascicle and optionally from the population table.
+
+        Parameters
+        ----------
+        mask_labels : Iterable[str] | str | None, optional
+            Mask labels to remove. If ``None``, remove all simulation masks.
+        remove_from_pop : bool, optional
+            If ``True``, also delete the masks from the underlying population.
+        keep_elec : bool, optional
+            If ``True``, preserve masks associated with electrode overlap.
+        """
         if mask_labels is None:
             mask_labels = self.sim_mask  # to keep is_placed
         elif isinstance(mask_labels, str):
@@ -1118,6 +1138,9 @@ class fascicle(NRV_simulable):
 
     ## SIMULATION HANDLING
     def __update_sim_list(self):
+        """
+        Refresh the list of axon indices selected for simulation.
+        """
         self.__set_elec_mask()
         self.sim_list = (
             self.axons.get_sub_population(mask_labels=self.sim_mask)
@@ -1231,6 +1254,21 @@ class fascicle(NRV_simulable):
         )
 
     def __set_pbar_label(self, n_proc: int, **kwargs):
+        """
+        Build the progress-bar label used during fascicle simulations.
+
+        Parameters
+        ----------
+        n_proc : int
+            Number of worker processes.
+        **kwargs : dict
+            Optional overrides such as ``pbar_label``.
+
+        Returns
+        -------
+        str
+            Progress-bar label.
+        """
         if "pbar_label" in kwargs:
             __label = kwargs["pbar_label"]
         else:

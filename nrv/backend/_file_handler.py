@@ -178,6 +178,19 @@ class NRV_Encoder(json.JSONEncoder):
     """
 
     def default(self, obj):
+        """
+        Convert NRV-specific objects into JSON-serializable types.
+
+        Parameters
+        ----------
+        obj : any
+            Object to serialize.
+
+        Returns
+        -------
+        any
+            JSON-serializable representation of ``obj``.
+        """
         # If the object is a numpy array
         if isinstance(obj, np.integer):
             result = int(obj)

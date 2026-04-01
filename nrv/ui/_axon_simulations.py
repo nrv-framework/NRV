@@ -34,10 +34,41 @@ from ._axon_postprocessing import *
 
 
 def set_args_kwargs(func, args, kwargs):
+    """
+    Call a function from explicit positional and keyword arguments.
+
+    Parameters
+    ----------
+    func : Callable
+        Function to execute.
+    args : tuple | list
+        Positional arguments passed to ``func``.
+    kwargs : dict
+        Keyword arguments passed to ``func``.
+
+    Returns
+    -------
+    any
+        Return value of ``func``.
+    """
     return func(*args, **kwargs)
 
 
 def _call_wrapper(args):
+    """
+    Unpack pooled call arguments and execute the wrapped search function.
+
+    Parameters
+    ----------
+    args : tuple
+        Tuple containing the varying parameter, keyword arguments, and the
+        function to evaluate.
+
+    Returns
+    -------
+    any
+        Return value of the wrapped function.
+    """
     param, kw, func = args
     return func(param, **kw)
 

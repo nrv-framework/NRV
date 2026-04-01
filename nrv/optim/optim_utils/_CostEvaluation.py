@@ -19,6 +19,9 @@ class raster_count_CE(cost_evaluation):
     """
 
     def __init__(self):
+        """
+        Initialize a cost evaluator counting detected spikes from rasterized results.
+        """
         super().__init__()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
@@ -60,16 +63,50 @@ class recrutement_count_CE(cost_evaluation):
     """
 
     def __init__(self, reverse=False):
+        """
+        Initialize a cost evaluator counting recruited fibers.
+
+        Parameters
+        ----------
+        reverse : bool, optional
+            If ``True``, count non-recruited fibers instead of recruited ones.
+        """
         super().__init__()
         self.reverse = reverse
 
     def count_axon_activation(self, results: sim_results):
+        """
+        Count recruitment for a single-axon result.
+
+        Parameters
+        ----------
+        results : sim_results
+            Axon simulation results.
+
+        Returns
+        -------
+        int
+            Recruitment indicator cast to integer.
+        """
         cpt = results.is_recruited()
         if self.reverse:
             cpt = not cpt
         return int(cpt)
 
     def count_fascicle_activation(self, results: sim_results):
+        """
+        Count recruited axons inside a fascicle result.
+
+        Parameters
+        ----------
+        results : sim_results
+            Fascicle simulation results.
+
+        Returns
+        -------
+        int
+            Number of recruited axons.
+        """
         cpt = 0
         for i in range(len(results["axons_diameter"])):
             if self.reverse:
@@ -114,11 +151,34 @@ class charge_quantity_CE(cost_evaluation):
     """
 
     def __init__(self, id_elec=None, dt_res=0.0001):
+        """
+        Initialize a cost evaluator proportional to injected charge.
+
+        Parameters
+        ----------
+        id_elec : int | list[int] | None, optional
+            Electrode identifiers included in the charge computation.
+        dt_res : float, optional
+            Temporal resolution used for resampling before integration.
+        """
         super().__init__()
         self.id_elec = id_elec
         self.dt_res = dt_res
 
     def compute_stimulus_cost(self, stim: stimulus):
+        """
+        Compute the integrated absolute charge of one stimulus.
+
+        Parameters
+        ----------
+        stim : stimulus
+            Stimulus to integrate.
+
+        Returns
+        -------
+        float
+            Integrated absolute charge.
+        """
         stim_ = stimulus()
         t_min, t_max = stim.t[0], stim.t[-1]
         N_pts = int((t_max - t_min) // self.dt_res)
@@ -127,6 +187,9 @@ class charge_quantity_CE(cost_evaluation):
         return abs(stim).integrate()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
+        """
+        Compute the total charge-based cost from the extracellular stimuli stored in simulation results.
+        """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0
@@ -158,11 +221,34 @@ class stim_energy_CE(cost_evaluation):
     """
 
     def __init__(self, id_elec: None | int | list[int] = None, dt_res: float = 0.0001):
+        """
+        Initialize a cost evaluator proportional to stimulus energy.
+
+        Parameters
+        ----------
+        id_elec : int | list[int] | None, optional
+            Electrode identifiers included in the energy computation.
+        dt_res : float, optional
+            Temporal resolution used for resampling before integration.
+        """
         super().__init__()
         self.id_elec = id_elec
         self.dt_res = dt_res
 
     def compute_stimulus_cost(self, stim: stimulus):
+        """
+        Compute the integrated squared-amplitude cost of one stimulus.
+
+        Parameters
+        ----------
+        stim : stimulus
+            Stimulus to integrate.
+
+        Returns
+        -------
+        float
+            Integrated squared-amplitude cost.
+        """
         stim_ = stimulus()
         t_min, t_max = stim.t[0], stim.t[-1]
         N_pts = int((t_max - t_min) // self.dt_res)
@@ -172,6 +258,9 @@ class stim_energy_CE(cost_evaluation):
         return abs(stim).integrate()
 
     def call_method(self, results: sim_results, **kwargs) -> float:
+        """
+        Compute the total energy-based cost from the extracellular stimuli stored in simulation results.
+        """
         extra_stim = load_any(results["extra_stim"])
         N_elec = len(extra_stim.stimuli)
         cost = 0

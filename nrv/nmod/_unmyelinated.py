@@ -467,6 +467,19 @@ class unmyelinated(axon):
                 sec.L_caextscale = self.L / self.Nsec
 
     def _get_sec_from_postion(self, position):
+        """
+        Return the section and local coordinate corresponding to a relative axon position.
+
+        Parameters
+        ----------
+        position : float
+            Relative position along the axon.
+
+        Returns
+        -------
+        tuple
+            Section object and local position inside that section.
+        """
         portion_length = 1.0 / self.Nsec
         index = int(math.floor(position / portion_length))
         sec = self.unmyelinated_sections[index]
@@ -896,4 +909,17 @@ class unmyelinated(axon):
 
     # Simulate method, for output type
     def simulate(self, **kwargs) -> unmyelinated_results:
+        """
+        Run the unmyelinated-axon simulation.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Additional simulation options forwarded to the base implementation.
+
+        Returns
+        -------
+        unmyelinated_results
+            Simulation results object.
+        """
         return super().simulate(**kwargs)

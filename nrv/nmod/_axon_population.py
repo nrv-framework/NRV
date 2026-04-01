@@ -42,6 +42,14 @@ class axon_population(PopShape):
     """
 
     def __init__(self, **kwgs):
+        """
+        Initialize an axon-population container and optionally generate its content.
+
+        Parameters
+        ----------
+        **kwgs : dict
+            Keyword arguments filtered and forwarded to :meth:`generate`.
+        """
         super().__init__()
 
         gen_kwg = check_function_kwargs(self.generate, kwgs)
@@ -51,10 +59,26 @@ class axon_population(PopShape):
 
     @property
     def axon_pop(self):
+        """
+        Tabular representation of the stored axon population.
+
+        Returns
+        -------
+        pandas.DataFrame
+            Dataframe containing axon properties and optional placement columns.
+        """
         return self._pop
 
     @property
     def n_ax(self):
+        """
+        Number of axons stored in the population.
+
+        Returns
+        -------
+        int
+            Number of rows in the population dataframe.
+        """
         if not self.has_pop:
             return 0
         return len(self._pop)
@@ -391,6 +415,22 @@ class axon_population(PopShape):
         rot: float = None,
         discard_placement: bool = False,
     ):
+        """
+        Update the population geometry while reusing unchanged geometry parameters.
+
+        Parameters
+        ----------
+        geometry : Type[CShape] | None, optional
+            New geometry type or explicit geometry object.
+        center : tuple[float, float] | None, optional
+            New center coordinates.
+        radius : float | tuple[float, float] | None, optional
+            New radius or semi-axes.
+        rot : float | None, optional
+            New rotation angle.
+        discard_placement : bool, optional
+            If ``True``, drop the current axon placement after reshaping.
+        """
         if geometry is None and self.has_geom:
             # Reload previous geometry properties if unchange
             # ! Not ideal method see how to generalize
@@ -748,6 +788,14 @@ class axon_population(PopShape):
         self._pop["is_placed"] = _ok_in & _ok_trace
 
     def get_ppop_info(self, verbose=False):
+        """
+        Compute placement statistics for the current axon population.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            If ``True``, print the computed statistics.
+        """
         y, z, r = (
             self.axon_pop["y"].to_numpy(),
             self.axon_pop["z"].to_numpy(),
@@ -760,6 +808,14 @@ class axon_population(PopShape):
     # ---------------- #
     @property
     def has_node_shift(self):
+        """
+        Whether node-of-Ranvier shifts are available in the population table.
+
+        Returns
+        -------
+        bool
+            ``True`` when the population contains a ``node_shift`` column.
+        """
         if not self.has_pop:
             return False
         return "node_shift" in self._pop.columns
@@ -813,6 +869,28 @@ class axon_population(PopShape):
         num: bool = False,
         **kwgs,
     ):
+        """
+        Plot the population geometry and placed axons in the transverse plane.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        expr : str | None, optional
+            Optional pandas expression selecting a sub-population.
+        mask_labels : Iterable[str] | str | None, optional
+            Existing mask labels selecting a sub-population.
+        contour_color : str, optional
+            Color used for the geometry contour.
+        myel_color : str, optional
+            Color used for myelinated axons.
+        unmyel_color : str, optional
+            Color used for unmyelinated axons.
+        num : bool, optional
+            If ``True``, annotate each drawn axon with its index.
+        **kwgs : dict
+            Additional plotting keyword arguments for the geometry contour.
+        """
         if self.has_geom:
             kwgs["color"] = contour_color
             axes.plot(*self.geom.get_trace(), **kwgs)

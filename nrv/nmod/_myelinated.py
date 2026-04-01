@@ -531,6 +531,22 @@ class myelinated(axon):
         elec_color="gold",
         **kwgs,
     ) -> None:
+        """
+        Plot the axon cross-section together with its node core.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        color : str, optional
+            Outer fiber color.
+        node_color : str, optional
+            Node color.
+        elec_color : str, optional
+            Color used for attached extracellular electrodes.
+        **kwgs : dict
+            Additional matplotlib keyword arguments.
+        """
         super().plot(axes, color, elec_color, **kwgs)
         alpha = 1
         if "alpha" in kwgs:
@@ -864,6 +880,21 @@ class myelinated(axon):
             self.x_rec = self.x
 
     def _get_sec_from_postion(self, position: float, node_only: bool = True):
+        """
+        Return the NEURON section and local coordinate corresponding to a relative axon position.
+
+        Parameters
+        ----------
+        position : float
+            Relative position along the axon.
+        node_only : bool, optional
+            If ``True``, snap to the nearest node of Ranvier.
+
+        Returns
+        -------
+        tuple
+            Section object and local position inside that section.
+        """
         if node_only or self.rec == "nodes":
             index = round((position * (self.axonnodes - 1) + 0.5))
             sec = self.node[index]
@@ -1560,4 +1591,17 @@ class myelinated(axon):
 
     # Simulate method, for output type
     def simulate(self, **kwargs) -> myelinated_results:
+        """
+        Run the myelinated-axon simulation.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Additional simulation options forwarded to the base implementation.
+
+        Returns
+        -------
+        myelinated_results
+            Simulation results object.
+        """
         return super().simulate(**kwargs)

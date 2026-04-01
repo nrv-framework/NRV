@@ -445,6 +445,24 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    """
+    Extend a blocked-spike position index to the corresponding local extremum.
+
+    Parameters
+    ----------
+    blocked_spike_positionlist : list[float] | np.ndarray
+        Ordered list of blocked-spike positions.
+    position_max : int
+        Initial index of the spike position under inspection.
+    spike_begin : str, optional
+        Direction used to follow the spike front, either ``"down"`` or the
+        opposite direction.
+
+    Returns
+    -------
+    int
+        Index of the detected local extremum in ``blocked_spike_positionlist``.
+    """
     rise_warning(
         "DeprecationWarning: ",
         "max_spike_position is obsolete use method from axon_result objects instead",

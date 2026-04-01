@@ -6,7 +6,7 @@ All notable changes to NRV are summed up in this file.
 ## [1.3.2] - 2026-XXXXX
 
 ### Added
-- Docstring of all nrv.eit module
+- Missing docstring of all module subodules
 - EIT plot for 8, 12, 14, 16 array cuff electrodes
 
 
@@ -19,6 +19,14 @@ All notable changes to NRV are summed up in this file.
 - pandas 3.0 compatibility:
     - ``nrv.eit.eit_forward._setup_problem`` rewrite impossible on Series copy
     - ``.iloc`` required to access a row of a ``pandas.Dataframe`` or ``pandas.Serie``: ``nrv.nmod.fascicle``, ``nrv.nmod.results.fascicle_results``: 
+
+
+## [1.3.1] - 2026-23-2025
+
+### Fixed
+- Ugly fix for *Build Time Limit* issue on [readthedocs](https://docs.readthedocs.com/platform/latest/builds.html#build-resources): Doc is locally generated before release and is only copy-pasted by RtD.
+- Various bugs in EIT
+
 
 ## [1.3.0] - 2025-08-21
 

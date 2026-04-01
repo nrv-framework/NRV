@@ -8,5 +8,8 @@ class fascicle_group(PopShape):
     """
 
     def __init__(self):
+        """
+        Initialize the placeholder fascicle-group class.
+        """
         super().__init__()
         raise NotImplementedError("fascicle_group is not yet implemented")
