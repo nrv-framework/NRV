@@ -62,10 +62,7 @@ jobs:
             rm -rf docs/_build docs/html docs/examples docs/tutorials docs/_nrv
             mkdir -p docs/html
 
-            python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/_build/
-
-            test -d docs/_build/html
-            cp -a docs/_build/html/. docs/html/
+            python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
           '
 
       - name: Commit prebuilt documentation if changed
