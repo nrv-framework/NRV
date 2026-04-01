@@ -49,7 +49,7 @@ This script check is the logo can be found when the gallery is generated
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.002 seconds)
+   **Total running time of the script:** (0 minutes 0.003 seconds)
 
 
 .. _sphx_glr_download_examples_00_dummy_example.py:

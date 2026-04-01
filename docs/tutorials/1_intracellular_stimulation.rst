@@ -405,7 +405,7 @@ Using the ```rasterize``` function of NRV (figure below) we see that the AP is o
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.479 seconds)
+   **Total running time of the script:** (0 minutes 9.311 seconds)
 
 
 .. _sphx_glr_download_tutorials_1_intracellular_stimulation.py:

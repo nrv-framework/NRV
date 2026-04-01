@@ -34,91 +34,6 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
     </div>
 
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="The presence of the myelin sheath on large axonal fibers transforms the so-called continuous conduction of unmyelinated fibers into a saltatory conduction, largely increasing the speed of action potential propagations. In this tutorial, we will simulated several myelinated and unmyelinated fiber model using NRV and investigate how it effects the action potential propagation speed.">
-
-.. only:: html
-
-  .. image:: /tutorials/images/thumb/sphx_glr_2_propagation_velocity_thumb.png
-    :alt:
-
-  :doc:`/tutorials/2_propagation_velocity`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Tutorial 2 - Evaluation of propagation velocity with NRV</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this tutorial, we will create a monofascicular nerve, attach it to one fiber and stimulate it with intra- and extra-fascicular electrodes. As before, we start by importing the NRV package as well as numpy and matplotlib:">
-
-.. only:: html
-
-  .. image:: /tutorials/images/thumb/sphx_glr_3_single_fiber_simulation_thumb.png
-    :alt:
-
-  :doc:`/tutorials/3_single_fiber_simulation`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Tutorial 3 - Stimulating single fibers with NRV</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this tutorial, we will create a nerve with two fascicles, populate it with axons, and stimulate it using both intra- and extra-fascicular electrodes.">
-
-.. only:: html
-
-  .. image:: /tutorials/images/thumb/sphx_glr_4_nerve_simulation_thumb.png
-    :alt:
-
-  :doc:`/tutorials/4_nerve_simulation`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Tutorial 4 - Stimulating Nerves with NRV</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="In this tutorial, the optimization formalism used in NRV is illustrated through a detailed example.">
-
-.. only:: html
-
-  .. image:: /tutorials/images/thumb/sphx_glr_5_first_optimization_thumb.png
-    :alt:
-
-  :doc:`/tutorials/5_first_optimization`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Tutorial 5 - First optimization problem using NRV</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Here is a tutorial showing the basic usage of nrv.eit sub-package. ">
-
-.. only:: html
-
-  .. image:: /tutorials/images/thumb/sphx_glr_6_play_with_eit_thumb.png
-    :alt:
-
-  :doc:`/tutorials/6_play_with_eit`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Tutorial 6 - Play with EIT using NRV</div>
-    </div>
-
-
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -130,9 +45,4 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
    :hidden:
 
    /tutorials/1_intracellular_stimulation
-   /tutorials/2_propagation_velocity
-   /tutorials/3_single_fiber_simulation
-   /tutorials/4_nerve_simulation
-   /tutorials/5_first_optimization
-   /tutorials/6_play_with_eit
 

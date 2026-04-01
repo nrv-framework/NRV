@@ -22,40 +22,6 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example is an extension of the Tutorial 5, the optimization formalism used in NRV is illustrated through a detailed example.">
-
-.. only:: html
-
-  .. image:: /examples/optim/images/thumb/sphx_glr_o01_nerve_optimization_thumb.png
-    :alt:
-
-  :doc:`/examples/optim/o01_nerve_optimization`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Optimization Pulse Stimulus on Nerve</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
-
-.. only:: html
-
-  .. image:: /examples/optim/images/thumb/sphx_glr_o02_stimulus_CM_thumb.png
-    :alt:
-
-  :doc:`/examples/optim/o02_stimulus_CM`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Understanding context modifiers: stimulus_CM</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
 
 .. only:: html
@@ -71,57 +37,6 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
     </div>
 
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in harmonic_stimulus_CM.">
-
-.. only:: html
-
-  .. image:: /examples/optim/images/thumb/sphx_glr_o04_harmonic_stimulus_CM_thumb.png
-    :alt:
-
-  :doc:`/examples/optim/o04_harmonic_stimulus_CM`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Understanding context modifiers: harmonic_stimulus_CM</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This is a very small example of a way to plot the built-in context modifiers&lt;../../usersguide/optimization#context-modifier&gt;">
-
-.. only:: html
-
-  .. image:: /examples/optim/images/thumb/sphx_glr_o05_plot_CM_thumb.png
-    :alt:
-
-  :doc:`/examples/optim/o05_plot_CM`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Ploting Optimization - context modifiers</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5 is used:">
-
-.. only:: html
-
-  .. image:: /examples/optim/images/thumb/sphx_glr_o06_mproc_optimization_thumb.png
-    :alt:
-
-  :doc:`/examples/optim/o06_mproc_optimization`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Optimization change number of processes</div>
-    </div>
-
-
 .. thumbnail-parent-div-close
 
 .. raw:: html
@@ -132,10 +47,5 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 .. toctree::
    :hidden:
 
-   /examples/optim/o01_nerve_optimization
-   /examples/optim/o02_stimulus_CM
    /examples/optim/o03_biphasic_stimulus_CM
-   /examples/optim/o04_harmonic_stimulus_CM
-   /examples/optim/o05_plot_CM
-   /examples/optim/o06_mproc_optimization
 
