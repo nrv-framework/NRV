@@ -830,15 +830,11 @@ class axon(NRV_simulable):
                         self.dt = new_dt
                         neuron.h.dt = self.dt
                     else:
-                        rise_warning(
-                            "Neuron will undersample the stimulus... \
+                        rise_warning("Neuron will undersample the stimulus... \
                             this may be unfortunate, consider to undersample your stimuli yourself,\
-                            or chose a smaller dt"
-                        )
+                            or chose a smaller dt")
                         rise_warning(
-                            "... dt is "
-                            + str(Delta_T_min / self.dt)
-                            + " times bigger \
+                            "... dt is " + str(Delta_T_min / self.dt) + " times bigger \
                             than the stimulus minimum time step difference"
                         )
                 # loop on stimuli time serie

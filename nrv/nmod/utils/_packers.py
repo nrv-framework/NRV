@@ -377,6 +377,7 @@ def get_distance_in_range(
         stop_c = 1
     return np.max(np.min(dist, axis=1)) < stop_c
 
+
 def update_axon_packing(
     pos: np.ndarray,
     id_pairs: np.ndarray,

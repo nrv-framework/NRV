@@ -43,7 +43,6 @@ from ..fmod import load_material, recorder
 from ..utils import convert, get_MRG_parameters
 from ..utils.geom import CShape
 
-
 # required to prevent infinite loop bug whn compiling the doc
 try:
     static_env = np.dtype(ScalarType).kind != "c"
@@ -653,9 +652,7 @@ class eit_forward(NRV_class):
 
         self.n_c = self._axons_pop_ppts.shape[0]
         i_mye = self._axons_pop_ppts["types"].astype(dtype=bool)
-        self.axnod_d = np.copy(
-            self._axons_pop_ppts["diameters"].to_numpy(dtype=float)
-        )
+        self.axnod_d = np.copy(self._axons_pop_ppts["diameters"].to_numpy(dtype=float))
         self.axnod_d[i_mye] = get_MRG_parameters(self.axnod_d[i_mye])[2]
         self.myelin_mat = compute_myelin_ppt(self.axnod_d)
         self.alpha_in_c = self.ax_mem_th / (self.axnod_d / 2)

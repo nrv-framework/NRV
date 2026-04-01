@@ -11,7 +11,6 @@ from ..backend._log_interface import pass_info, rise_warning, rise_error
 from ..backend._NRV_Class import NRV_class
 from ..backend._extlib_interface import np_trapz
 
-
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
 

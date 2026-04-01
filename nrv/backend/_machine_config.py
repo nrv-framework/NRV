@@ -6,7 +6,6 @@ import numpy as np
 from ._GPU import getGPUs
 from ._NRV_Singleton import NRV_singleton
 
-
 # miscalleneous constants
 Mem_KBytes = 1024
 Mem_MBytes = Mem_KBytes**2

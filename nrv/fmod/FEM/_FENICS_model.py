@@ -21,7 +21,6 @@ from ._FEM import FEM_model
 from .fenics_utils._FEMResults import save_sim_res_list
 from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset
 
-
 # built in FENICS models
 dir_path = parameters.nrv_path + "/_misc"
 # material_library = os.listdir(dir_path+"/fenics_templates/")

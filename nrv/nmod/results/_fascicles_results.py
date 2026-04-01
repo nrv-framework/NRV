@@ -538,7 +538,9 @@ class fascicle_results(sim_results):
                     c = "orangered"
                     alpha = n_onset[k] * alpha_g
                 if is_blocked[k] is None:
-                    axes.scatter(axon_y.iloc[k], axon_z.iloc[k], marker="x", s=20, c="k")
+                    axes.scatter(
+                        axon_y.iloc[k], axon_z.iloc[k], marker="x", s=20, c="k"
+                    )
 
             else:
                 if n_onset[k] == 0:

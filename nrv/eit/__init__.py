@@ -35,7 +35,6 @@ from ._pyeit_inverse import pyeit_inverse
 from . import results
 from . import utils
 
-
 # from . import
 
 submodules = ["utils", "results"]

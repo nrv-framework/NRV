@@ -15,7 +15,6 @@ from ....utils.geom._misc import CShape, create_cshape
 from ....backend._file_handler import rmv_ext
 from ._MshCreator import MshCreator, pi
 
-
 ENT_DOM_offset = {
     "Volume": 0,
     "Surface": 1,
@@ -1123,7 +1122,7 @@ class NerveMshCreator(MshCreator):
     ################################################################
     def __add_mye_section(self, i_sec: int, sec: str, x, ax_pties: dict, l_sec: float):
         """
-        Add a section of myelinated axon. 
+        Add a section of myelinated axon.
 
         A cone for MYSA sections and cylinder for any ohter type
 

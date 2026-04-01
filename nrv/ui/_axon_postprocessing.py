@@ -19,7 +19,6 @@ from ..nmod._unmyelinated import unmyelinated
 from ..nmod._myelinated import myelinated
 from ..nmod.results._axons_results import axon_results
 
-
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 

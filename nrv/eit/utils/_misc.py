@@ -53,7 +53,7 @@ def gen_from_idx(idx: np.ndarray, n: int, add_0: bool = False) -> np.ndarray:
     return _arr
 
 
-def gen_idx_arange(idx: np.ndarray|list, n: int, add_0: bool = False) -> np.ndarray:
+def gen_idx_arange(idx: np.ndarray | list, n: int, add_0: bool = False) -> np.ndarray:
     """
     Generate per-segment counters from boundary indices.
 

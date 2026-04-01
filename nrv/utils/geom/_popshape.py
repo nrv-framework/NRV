@@ -191,7 +191,7 @@ class PopShape(NRV_class):
         """
         if self.has_pop:
             return self._pop.loc
-        
+
     @property
     def iloc(self):
         """

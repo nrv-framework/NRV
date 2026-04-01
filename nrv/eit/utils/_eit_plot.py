@@ -12,72 +12,73 @@ from ...ui import load_nerve
 from ...utils import sci_round, get_MRG_parameters
 
 eit_fig_ppt = {
-    8:{
-    "fig_dim":(3, 3),
-    "i_plots":[[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]],
-    "i_center":(1, 1),
+    8: {
+        "fig_dim": (3, 3),
+        "i_plots": [[0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0], [0, 0]],
+        "i_center": (1, 1),
     },
-    12:{
-    "fig_dim":(5, 5),
-    "i_plots":[
-        [0, 2],
-        [0, 3],
-        [1, 4],
-        [2, 4],
-        [3, 4],
-        [4, 3],
-        [4, 2],
-        [4, 1],
-        [3, 0],
-        [2, 0],
-        [1, 0],
-        [0, 1],
-    ],
-    "i_center":(slice(1, 4), slice(1, 4)),
+    12: {
+        "fig_dim": (5, 5),
+        "i_plots": [
+            [0, 2],
+            [0, 3],
+            [1, 4],
+            [2, 4],
+            [3, 4],
+            [4, 3],
+            [4, 2],
+            [4, 1],
+            [3, 0],
+            [2, 0],
+            [1, 0],
+            [0, 1],
+        ],
+        "i_center": (slice(1, 4), slice(1, 4)),
     },
-    14:{
-    "fig_dim":(10, 10),
-    "i_plots":[
-        [slice(0,2), slice(4,6)],
-        [slice(0,2), slice(6,8)],
-        [slice(1,3), slice(8,10)],
-        [slice(3,5), slice(8,10)],
-        [slice(5,7), slice(8,10)],
-        [slice(7,9), slice(8,10)],
-        [slice(8,10), slice(6,8)],
-        [slice(8,10), slice(4,6)],
-        [slice(8,10), slice(2,4)],
-        [slice(7,9), slice(0,2)],
-        [slice(5,7), slice(0,2)],
-        [slice(3,5), slice(0,2)],
-        [slice(1,3), slice(0,2)],
-        [slice(0,2), slice(2,4)],
-    ],
-    "i_center":(slice(2, 8), slice(2, 8)),
+    14: {
+        "fig_dim": (10, 10),
+        "i_plots": [
+            [slice(0, 2), slice(4, 6)],
+            [slice(0, 2), slice(6, 8)],
+            [slice(1, 3), slice(8, 10)],
+            [slice(3, 5), slice(8, 10)],
+            [slice(5, 7), slice(8, 10)],
+            [slice(7, 9), slice(8, 10)],
+            [slice(8, 10), slice(6, 8)],
+            [slice(8, 10), slice(4, 6)],
+            [slice(8, 10), slice(2, 4)],
+            [slice(7, 9), slice(0, 2)],
+            [slice(5, 7), slice(0, 2)],
+            [slice(3, 5), slice(0, 2)],
+            [slice(1, 3), slice(0, 2)],
+            [slice(0, 2), slice(2, 4)],
+        ],
+        "i_center": (slice(2, 8), slice(2, 8)),
     },
-    16:{
-    "fig_dim":(5, 5),
-    "i_plots":[
-        [0, 2],
-        [0, 3],
-        [0, 4],
-        [1, 4],
-        [2, 4],
-        [3, 4],
-        [4, 4],
-        [4, 3],
-        [4, 2],
-        [4, 1],
-        [4, 0],
-        [3, 0],
-        [2, 0],
-        [1, 0],
-        [0, 0],
-        [0, 1],
-    ],
-    "i_center":[slice(1, 4), slice(1, 4)],
+    16: {
+        "fig_dim": (5, 5),
+        "i_plots": [
+            [0, 2],
+            [0, 3],
+            [0, 4],
+            [1, 4],
+            [2, 4],
+            [3, 4],
+            [4, 4],
+            [4, 3],
+            [4, 2],
+            [4, 1],
+            [4, 0],
+            [3, 0],
+            [2, 0],
+            [1, 0],
+            [0, 0],
+            [0, 1],
+        ],
+        "i_center": [slice(1, 4), slice(1, 4)],
     },
 }
+
 
 class Figure_elec:
     """
@@ -390,7 +391,17 @@ class Figure_elec:
         **kwgs : dict
             Additional keyword arguments forwarded to :func:`add_nerve_plot`.
         """
-        return add_nerve_plot(axs=self.axs, data=data, add_elec=add_elec, drive_pair=drive_pair, e_label=e_label, n_lwidth=n_lwidth, e_lwidth=e_lwidth, alpha_lab=alpha_lab, **kwgs)
+        return add_nerve_plot(
+            axs=self.axs,
+            data=data,
+            add_elec=add_elec,
+            drive_pair=drive_pair,
+            e_label=e_label,
+            n_lwidth=n_lwidth,
+            e_lwidth=e_lwidth,
+            alpha_lab=alpha_lab,
+            **kwgs,
+        )
 
     def color_elec(self, data, n_e, list_e, **kwgs):
         """
@@ -455,7 +466,7 @@ class Figure_elec:
             zerox=zerox,
             zeroy=zeroy,
             has_nerve=has_nerve,
-    )
+        )
 
 
 def gen_fig_elec(
@@ -674,7 +685,12 @@ def add_nerve_plot(
             insulator=False,
         )
         elec.plot(
-            axs[-1], nerve_d=nerve.D, color="k", e_label=e_label, linewidth=e_lwidth, alpha_lab=alpha_lab,
+            axs[-1],
+            nerve_d=nerve.D,
+            color="k",
+            e_label=e_label,
+            linewidth=e_lwidth,
+            alpha_lab=alpha_lab,
         )
         elec.plot(
             axs[-1],

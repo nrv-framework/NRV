@@ -10,7 +10,6 @@ from ..fmod.FEM.fenics_utils import FEMSimulation, layered_material
 from ..fmod.FEM.mesh_creator import ENT_DOM_offset, get_mesh_domid, get_node_physical_id
 from ..ui import mesh_from_nerve, mesh_from_electrode
 
-
 ScalarType = np.float64
 
 

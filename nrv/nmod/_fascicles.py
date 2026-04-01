@@ -32,7 +32,6 @@ from ._unmyelinated import unmyelinated
 from .results._fascicles_results import fascicle_results
 from .results._axons_results import axon_results
 
-
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 

@@ -55,7 +55,6 @@ from ._stimulus import (
 
 from . import geom
 
-
 submodules = ["geom"]
 
 classes = [

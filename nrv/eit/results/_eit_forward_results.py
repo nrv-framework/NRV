@@ -49,25 +49,25 @@ class eit_forward_results(dict):
         :widths: 10 10 10 10 10
         :header-rows: 1
 
-        * 
+        *
             - Dimensions
             - Paterns
             - Frequency
             - Time
             - Electrode
-        * 
+        *
             - Status
             - Optional
             - Optional
             - Always
             - Always
-        * 
+        *
             - Size
             - n_p
             - n_f
             - n_t
             - n_e
-        * 
+        *
             - Corresponding key
             - ``"p"``
             - ``"f"``
@@ -368,9 +368,7 @@ class eit_forward_results(dict):
                 # Interpolated dimention (time) must be in np.axe = 0
                 Y_ = Y_.swapaxes(self.t_axis, 0)
                 _interp = nrv_interp(X_values=X_, Y_values=Y_, kind=self.interp_kind)
-                self._v_eit_interp = lambda X: _interp(X).swapaxes(
-                    self.t_axis, 0
-                )
+                self._v_eit_interp = lambda X: _interp(X).swapaxes(self.t_axis, 0)
         return self._v_eit_interp
 
     @property
@@ -1086,12 +1084,7 @@ class eit_forward_results(dict):
                 )
             )
             if self.is_multi_patern:
-                _line_ppt = np.vstack(
-                    (
-                        self._get_acap_i_p(i_l),
-                        _line_ppt
-                    )
-                )
+                _line_ppt = np.vstack((self._get_acap_i_p(i_l), _line_ppt))
             return _line_ppt
         else:
             return np.vstack((self._get_acap_i_e(i_l),))
@@ -1139,7 +1132,7 @@ class eit_forward_results(dict):
         Note
         ----
         This methods adds the following columns to the CAP Dataframe:
-        
+
 
         .. list-table::
            :widths: 10  10 50
@@ -1298,7 +1291,7 @@ class eit_forward_results(dict):
         ):
             return self._cap_ppt
 
-        # 
+        #
         _cap_ppt = self.get_acap_t_ppt(thr=thr, store=store, **kwgs)
         dv_masked, _v_0 = self.get_dv_from_df(
             _cap_ppt, verbose=verbose, masked_time=True, with_v_0=True
