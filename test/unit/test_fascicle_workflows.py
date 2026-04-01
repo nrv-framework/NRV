@@ -39,10 +39,11 @@ def test_fascicle_insert_iclamp_can_target_subpopulation_by_expression(nrv_modul
     )
 
     selected = fascicle.intra_stim_ON[0]
+    selected_mask = np.asarray(selected, dtype=bool)
 
     assert fascicle.N_intra == 1
-    assert len(selected) == 1
-    assert fascicle.axons.axon_pop.iloc[selected[0]]["diameters"] > 5
+    assert selected_mask.sum() == 1
+    assert (fascicle.axons.axon_pop.loc[selected_mask, "diameters"] > 5).all()
 
 
 def test_fascicle_insert_iclamp_can_use_named_masks(nrv_module) -> None:
@@ -58,6 +59,7 @@ def test_fascicle_insert_iclamp_can_use_named_masks(nrv_module) -> None:
     )
 
     selected = fascicle.intra_stim_ON[0]
+    selected_mask = np.asarray(selected, dtype=bool)
 
-    assert len(selected) == 2
-    assert (fascicle.axons.axon_pop.iloc[selected]["types"] == 0).all()
+    assert selected_mask.sum() == 2
+    assert (fascicle.axons.axon_pop.loc[selected_mask, "types"] == 0).all()

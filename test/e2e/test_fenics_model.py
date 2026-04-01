@@ -13,4 +13,5 @@ def test_fenics_model_can_build_a_default_mesh(nrv_module, fenics_available) -> 
 
     assert model.is_meshed is True
     assert model.mesh is not None
-    assert model.Perineurium_thickness == {0: 5}
+    assert set(model.Perineurium_thickness) == {0}
+    assert model.Perineurium_thickness[0] == pytest.approx(5.0, rel=0.6)

@@ -4,10 +4,10 @@ import numpy as np
 
 
 def test_axon_save_load_roundtrip_preserves_basic_identity(
-    nrv_module, temp_path
+    nrv_module, tmp_path
 ) -> None:
     axon = nrv_module.unmyelinated(0, 0, 1, 1000, model="HH", dt=0.01, Nrec=5)
-    save_path = temp_path / "axon.json"
+    save_path = tmp_path / "axon.json"
     axon.save(save=True, fname=str(save_path))
 
     loaded = nrv_module.load_axon(str(save_path))
@@ -19,7 +19,7 @@ def test_axon_save_load_roundtrip_preserves_basic_identity(
 
 
 def test_fascicle_save_load_roundtrip_preserves_population(
-    nrv_module, temp_path
+    nrv_module, tmp_path
 ) -> None:
     fascicle = nrv_module.fascicle(diameter=100, ID=3)
     fascicle.define_length(2000)
@@ -31,7 +31,7 @@ def test_fascicle_save_load_roundtrip_preserves_population(
             np.array([0.0, -5.0]),
         )
     )
-    save_path = temp_path / "fascicle.json"
+    save_path = tmp_path / "fascicle.json"
     fascicle.save(save=True, fname=str(save_path))
 
     loaded = nrv_module.load_fascicle(str(save_path))
@@ -42,7 +42,7 @@ def test_fascicle_save_load_roundtrip_preserves_population(
 
 
 def test_nerve_save_load_roundtrip_preserves_fascicle_count(
-    nrv_module, temp_path
+    nrv_module, tmp_path
 ) -> None:
     nerve = nrv_module.nerve(length=3000, diameter=300, Outer_D=3, ID=7)
     for fascicle_id, y_pos in ((1, -60), (2, 60)):
@@ -57,7 +57,7 @@ def test_nerve_save_load_roundtrip_preserves_fascicle_count(
         )
         nerve.add_fascicle(fascicle, y=y_pos, z=0)
 
-    save_path = temp_path / "nerve.json"
+    save_path = tmp_path / "nerve.json"
     nerve.save(fname=str(save_path), save=True)
 
     loaded = nrv_module.load_nerve(str(save_path))

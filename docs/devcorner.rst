@@ -130,9 +130,15 @@ If you want to rebuild the full documentation, you should first manually remove 
 NRV testing
 ===========
 
-NRV is build with its own custom system for testing and validating new functionalities. This choice as made since the early development of first version, and is kept as so to ensure scientific reproducibility of results.
+NRV currently relies on two complementary testing systems.
 
-In the sources of NRV, a *test* folder is dedicated to tests: 
+.. tip::
+
+    The legacy ``tests/`` folder remains the scientific reference suite used during model development and validation.
+    The newer ``test/`` folder contains the pytest-based suite designed for automation, selective execution, and CI/CD integration.
+    These two systems have different goals and must coexist.
+
+In the sources of NRV, both testing folders are present:
 
 .. code:: bash
 
@@ -141,14 +147,26 @@ In the sources of NRV, a *test* folder is dedicated to tests:
     ├── docs/
     ├── examples/
     ├── nrv/
+    ├── test/
+    │   ├── deployment/
+    │   ├── e2e/
+    │   └── unit/
     ├── tests/
+    │   ├── deprecated_tests/
+    │   ├── dev_tests/
     │   ├── unitary_tests/
     │   └── NRV_test
 
-The *NRV_test* file is a script that act as a test launcher. It should be called from the command line using:
+Scientific testing
+------------------
+
+NRV is build with its own custom system for testing and validating new functionalities. This choice was made during the early development of the framework and is kept to ensure scientific reproducibility of results.
+
+The ``tests/NRV_test`` file is a script that acts as a test launcher. It should be called from the command line using:
 
 .. code:: bash
 
+    cd tests
     ./NRV_test
 
 This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
@@ -165,7 +183,7 @@ This script can test the installation and dependencies, test the syntax and trig
 Note that running all scripts without errors and with all prints set to 'True' (no 'False') is a necessary condition for a PR to be accepted.
 If errors occurred, the list of failed tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
 
-All code sources for the unitary tests can be found in the *tests/unitary_tests/* folder. Tests are organized in groups and subgroups as follows:
+All code sources for the unitary tests can be found in the ``tests/unitary_tests/`` folder. Additional development scripts are stored in ``tests/dev_tests/`` and deprecated scripts are kept in ``tests/deprecated_tests/``. Tests are organized in groups and subgroups as follows:
 
 .. list-table:: Tests functionalities
     :widths: 10 10 50
@@ -229,6 +247,46 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
     *   - 900
         - 950
         - Machine and autoconfig
+
+Pytest testing for CI/CD
+------------------------
+
+In parallel with the scientific validation suite, NRV now includes a pytest-based structure in ``test/``.
+This second suite is intended for automation and continuous integration. Its role is to check that representative workflows run without error and produce results, while keeping the computational cost moderate enough for repeated execution.
+
+The pytest suite is organized into three families:
+
+  - ``unit``: short API-focused tests, object construction checks, save/load smoke tests, and lightweight helper validation
+  - ``e2e``: strategic end-to-end workflows such as axon, fascicle, nerve, stimulation, threshold, FEniCS, and EIT smoke simulations
+  - ``deployment``: runtime, import, backend, and multiprocessing sanity checks
+
+This suite intentionally excludes COMSOL and focuses on NEURON- and FEniCS-compatible workflows.
+
+Typical commands are:
+
+.. code:: bash
+
+    pytest test
+    pytest test/unit
+    pytest test/e2e
+    pytest test/deployment
+
+Tests can also be selected with markers:
+
+.. code:: bash
+
+    pytest -m unit
+    pytest -m e2e
+    pytest -m deployment
+    pytest -m fenics
+    pytest -m "not slow"
+
+The pytest markers are registered in ``test/conftest.py``. This makes it possible to select one family of tests in isolation, which is especially useful for future CI/CD workflows and local debugging.
+
+At the current stage, the pytest suite is meant to complement the legacy scientific tests rather than replace them:
+
+  - the ``tests/`` folder remains the reference for detailed scientific validation
+  - the ``test/`` folder provides a maintainable and automation-friendly entry point for quick regression checks
 
 Make a release
 ==============

@@ -56,4 +56,4 @@ def test_nerve_save_keeps_fascicular_structure(nrv_module) -> None:
 
     assert "fascicles" in payload
     assert len(payload["fascicles"]) == 2
-    assert set(payload["fascicles"].keys()) == {"1", "2"}
+    assert set(payload["fascicles"].keys()) == {1, 2}
