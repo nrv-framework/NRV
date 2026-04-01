@@ -9,21 +9,23 @@ Todo before release v1.3.2
 
 - [ ] Doc
 
-    - [ ] Rebuild TC
+    - [x] Rebuild TC
 
-    - [ ] Review TC
+    - [x] Review TC
 
-        - [ ] Installation TC (mpich -> mpi4py)
+        - [x] Installation TC (mpich -> mpi4py)
 
-    - [ ] Explore Building Viability on RtD FK - TC
+    - [x] Explore Building Viability on RtD FK - TC
 
-- [ ] Site web
+        - [ ] test 2
 
-    - [ ] Finish FK
+- [x] Site web
 
-    - [ ] Review TC
+    - [x] Finish FK
 
-    - [ ] Deployment FK
+    - [x] Review TC
+
+    - [x] Deployment FK
 
 - [ ] Pipeline 
 
