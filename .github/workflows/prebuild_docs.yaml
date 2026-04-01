@@ -63,6 +63,8 @@ jobs:
             mkdir -p docs/html
 
             python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
+
+            rm -rf docs/examples docs/tutorials docs/_nrv
           '
 
       - name: Commit prebuilt documentation if changed
