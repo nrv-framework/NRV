@@ -17,7 +17,7 @@ Todo before release v1.3.2
 
     - [x] Explore Building Viability on RtD FK - TC
 
-        - [ ] test 3
+        - [ ] test 3 and 4
 
 - [x] Site web
 
