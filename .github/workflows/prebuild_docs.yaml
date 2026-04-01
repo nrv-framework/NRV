@@ -70,12 +70,12 @@ jobs:
       - name: Commit prebuilt documentation if changed
         id: commit_docs
         run: |
-          if git diff --quiet -- docs/html docs/_nrv docs/examples docs/tutorials; then
+          if git diff --quiet -- docs/html; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          git add docs/html docs/_nrv docs/examples docs/tutorials
+          git add docs/html
           git commit -m "docs: update prebuilt documentation [skip ci]"
           git push origin HEAD:master
 
