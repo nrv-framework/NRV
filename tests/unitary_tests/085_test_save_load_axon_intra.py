@@ -88,6 +88,7 @@ if __name__ == "__main__":
     print("Axon saved")
     axon4 = nrv.load_any(m_axon_file, intracel_context=True)
     print("Axon loaded")
+
     results = axon3.simulate(t_sim=100)
 
     plt.figure()

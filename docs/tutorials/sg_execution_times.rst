@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**02:51.386** total execution time for 6 files **from tutorials**:
+**33:46.539** total execution time for 6 files **from tutorials**:
 
 .. container::
 
@@ -32,21 +32,21 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_tutorials_6_play_with_eit.py` (``6_play_with_eit.py``)
-     - 02:51.386
-     - 0.0
-   * - :ref:`sphx_glr_tutorials_1_intracellular_stimulation.py` (``1_intracellular_stimulation.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_tutorials_2_propagation_velocity.py` (``2_propagation_velocity.py``)
-     - 00:00.000
+   * - :ref:`sphx_glr_tutorials_4_nerve_simulation.py` (``4_nerve_simulation.py``)
+     - 24:21.390
      - 0.0
    * - :ref:`sphx_glr_tutorials_3_single_fiber_simulation.py` (``3_single_fiber_simulation.py``)
-     - 00:00.000
+     - 03:50.664
      - 0.0
-   * - :ref:`sphx_glr_tutorials_4_nerve_simulation.py` (``4_nerve_simulation.py``)
-     - 00:00.000
+   * - :ref:`sphx_glr_tutorials_6_play_with_eit.py` (``6_play_with_eit.py``)
+     - 02:29.744
+     - 0.0
+   * - :ref:`sphx_glr_tutorials_2_propagation_velocity.py` (``2_propagation_velocity.py``)
+     - 01:50.156
      - 0.0
    * - :ref:`sphx_glr_tutorials_5_first_optimization.py` (``5_first_optimization.py``)
-     - 00:00.000
+     - 01:11.107
+     - 0.0
+   * - :ref:`sphx_glr_tutorials_1_intracellular_stimulation.py` (``1_intracellular_stimulation.py``)
+     - 00:03.479
      - 0.0

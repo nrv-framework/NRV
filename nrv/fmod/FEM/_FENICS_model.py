@@ -21,7 +21,6 @@ from ._FEM import FEM_model
 from .fenics_utils._FEMResults import save_sim_res_list
 from .mesh_creator._NerveMshCreator import NerveMshCreator, ENT_DOM_offset
 
-
 # built in FENICS models
 dir_path = parameters.nrv_path + "/_misc"
 # material_library = os.listdir(dir_path+"/fenics_templates/")
@@ -164,10 +163,26 @@ class FENICS_model(FEM_model):
 
     @property
     def N_fascicle(self):
+        """
+        Number of fascicles currently registered in the model.
+
+        Returns
+        -------
+        int
+            Number of stored fascicles.
+        """
         return len(self.fascicles)
 
     @property
     def N_electrode(self):
+        """
+        Number of electrodes currently registered in the model.
+
+        Returns
+        -------
+        int
+            Number of stored electrodes.
+        """
         return len(self.electrodes)
 
     def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):

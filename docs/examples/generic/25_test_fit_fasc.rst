@@ -263,32 +263,14 @@ Main Execution Script
 
  .. code-block:: none
 
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 2348
-    NRV INFO: Number of nodes : 10758
-    NRV INFO: Number of elements : 64466
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 16.50598931312561 s
-    fascicle 1/4 -- 3 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:20
-    fascicle 2/4 -- 3 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:18
-    fascicle 3/4 -- 3 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:17
-    fascicle 4/4 -- 3 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:19
-    NRV INFO: ...Done!
+    fascicle 1/4 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:16
+    fascicle 2/4 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:16
+    fascicle 3/4 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:17
+    fascicle 4/4 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:16
 
 
 
@@ -296,7 +278,7 @@ Main Execution Script
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (1 minutes 44.168 seconds)
+   **Total running time of the script:** (1 minutes 28.518 seconds)
 
 
 .. _sphx_glr_download_examples_generic_25_test_fit_fasc.py:

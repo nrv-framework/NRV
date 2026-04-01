@@ -32,6 +32,8 @@ Methods
 
     axon.attach_extracellular_stimulation
 
+    axon.attach_intracell_context
+
     axon.change_stimulus_from_electrode
 
     axon.clear_I_Clamp
@@ -59,6 +61,8 @@ Methods
     axon.insert_I_Clamp
 
     axon.insert_V_Clamp
+
+    axon.insert_intra_stim
 
     axon.intracel_status
 

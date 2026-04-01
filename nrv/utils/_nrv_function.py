@@ -39,18 +39,60 @@ class nrv_function(NRV_class):
 
     @abstractmethod
     def __init__(self):
+        """
+        Initialize the common metadata shared by NRV function objects.
+        """
         super().__init__()
         self.f_type = "nrv_function"
         self.dim = 0
 
     def __call__(self, *X):
+        """
+        Evaluate the function on the provided coordinates.
+
+        Parameters
+        ----------
+        *X
+            Input coordinates.
+
+        Returns
+        -------
+        any
+            Function value.
+        """
         return self.call_method(*X)
 
     @staticmethod
     def call_method(self, X):
+        """
+        Default evaluation backend overridden by subclasses.
+
+        Parameters
+        ----------
+        X : any
+            Function input.
+
+        Returns
+        -------
+        any
+            Function output.
+        """
         return X
 
     def __compatible(self, b):
+        """
+        Check whether another operand is compatible for pointwise operations.
+
+        Parameters
+        ----------
+        b : any
+            Operand to compare with the function.
+
+        Returns
+        -------
+        bool
+            ``True`` if both operands can be combined.
+        """
         if not callable(b):
             return True
         elif "dim" in self.__dir__() and "dim" in b.__dir__():
@@ -61,16 +103,45 @@ class nrv_function(NRV_class):
             return False
 
     def __neg__(self):
+        """
+        Return the pointwise opposite of the function.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``-self``.
+        """
         c = eval(self.f_type)()
         c.call_method = lambda *X: -self(*X)
         return c
 
     def __abs__(self):
+        """
+        Return the pointwise absolute value of the function.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``abs(self)``.
+        """
         c = eval(self.f_type)()
         c.call_method = lambda *X: abs(self(*X))
         return c
 
     def __add__(self, b):
+        """
+        Return the pointwise sum with another operand.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``self + b``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -80,6 +151,19 @@ class nrv_function(NRV_class):
             return c
 
     def __radd__(self, b):
+        """
+        Return the pointwise sum with reversed operands.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``b + self``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -89,6 +173,19 @@ class nrv_function(NRV_class):
             return c
 
     def __sub__(self, b):
+        """
+        Return the pointwise difference with another operand.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``self - b``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -98,6 +195,19 @@ class nrv_function(NRV_class):
             return c
 
     def __rsub__(self, b):
+        """
+        Return the pointwise difference with reversed operands.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``b - self``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -107,6 +217,19 @@ class nrv_function(NRV_class):
             return c
 
     def __mul__(self, b):
+        """
+        Return the pointwise product with another operand.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``self * b``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -116,6 +239,19 @@ class nrv_function(NRV_class):
             return c
 
     def __rmul__(self, b):
+        """
+        Return the pointwise product with reversed operands.
+
+        Parameters
+        ----------
+        b : any
+            Scalar or callable operand.
+
+        Returns
+        -------
+        nrv_function
+            Function representing ``b * self``.
+        """
         if self.__compatible(b):
             c = eval(self.f_type)()
             if callable(b):
@@ -137,12 +273,28 @@ class function_1D(nrv_function):
     """
 
     def __init__(self):
+        """
+        Initialize a scalar function of one variable.
+        """
         super().__init__()
         self.f_type = "function_1D"
         self.dim = 1
 
     # @staticmethod
     def call_method(self, X):
+        """
+        Evaluate the function or compose it with another NRV function.
+
+        Parameters
+        ----------
+        X : any
+            Input value or nested NRV function.
+
+        Returns
+        -------
+        any
+            Function value or composed function.
+        """
         # Composition with N dim function
         if isinstance(X, nrv_function):
             c_type = "function_" + str(X.dim) + "D"
@@ -169,6 +321,19 @@ class gaussian(function_1D):
         self.sigma = sigma
 
     def call_method(self, X):
+        """
+        Evaluate the Gaussian profile.
+
+        Parameters
+        ----------
+        X : np.ndarray | float
+            Evaluation point.
+
+        Returns
+        -------
+        np.ndarray | float
+            Gaussian value.
+        """
         res = super().call_method(X)
         if res is None:
             res = np.exp(
@@ -178,6 +343,10 @@ class gaussian(function_1D):
 
 
 class gate(function_1D):
+    """
+    One-dimensional gate function with hard or smooth edges.
+    """
+
     def __init__(self, mu=0, sigma=1, kind="Rational", N=None):
         """ """
         super().__init__()
@@ -188,6 +357,19 @@ class gate(function_1D):
         self.kind = kind
 
     def call_method(self, X):
+        """
+        Evaluate the gate profile.
+
+        Parameters
+        ----------
+        X : np.ndarray | float
+            Evaluation point.
+
+        Returns
+        -------
+        np.ndarray | float
+            Gate value.
+        """
         res = super().call_method(X)
         if res is None:
             X_eff = (X - self.mu) / self.sigma
@@ -215,12 +397,28 @@ class function_2D(nrv_function):
     """
 
     def __init__(self):
+        """
+        Initialize a scalar function of two variables.
+        """
         super().__init__()
         self.f_type = "function_2D"
         self.dim = 2
 
     @staticmethod
     def call_method(self, X):
+        """
+        Default evaluation backend for two-dimensional functions.
+
+        Parameters
+        ----------
+        X : any
+            Function input.
+
+        Returns
+        -------
+        int
+            Default placeholder value.
+        """
         return 1
 
 
@@ -230,9 +428,27 @@ class ackley(function_2D):
     """
 
     def __init__(self):
+        """
+        Initialize the Ackley benchmark function.
+        """
         super().__init__()
 
     def call_method(self, x: np.array, y: np.array) -> np.array:
+        """
+        Evaluate the Ackley function.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            First coordinate.
+        y : np.ndarray
+            Second coordinate.
+
+        Returns
+        -------
+        np.ndarray
+            Function value.
+        """
         return (
             -20 * np.exp(-0.2 * np.sqrt(0.5 * (x**2 + y**2)))
             - np.exp(0.5 * (np.cos(2 * np.pi * x) + np.cos(2 * np.pi * y)))
@@ -247,9 +463,27 @@ class beale(function_2D):
     """
 
     def __init__(self):
+        """
+        Initialize the Beale benchmark function.
+        """
         super().__init__()
 
     def call_method(self, x: np.array, y: np.array) -> np.array:
+        """
+        Evaluate the Beale function.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            First coordinate.
+        y : np.ndarray
+            Second coordinate.
+
+        Returns
+        -------
+        np.ndarray
+            Function value.
+        """
         return (
             (1.5 - x + x * y) ** 2
             + (2.25 - x + x * y**2) ** 2
@@ -263,9 +497,27 @@ class goldstein_price(function_2D):
     """
 
     def __init__(self):
+        """
+        Initialize the Goldstein-Price benchmark function.
+        """
         super().__init__()
 
     def call_method(self, x: np.array, y: np.array) -> np.array:
+        """
+        Evaluate the Goldstein-Price function.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            First coordinate.
+        y : np.ndarray
+            Second coordinate.
+
+        Returns
+        -------
+        np.ndarray
+            Function value.
+        """
         return (
             1
             + (x + y + 1) ** 2
@@ -283,9 +535,27 @@ class booth(function_2D):
     """
 
     def __init__(self):
+        """
+        Initialize the Booth benchmark function.
+        """
         super().__init__()
 
     def call_method(self, x: np.array, y: np.array) -> np.array:
+        """
+        Evaluate the Booth function.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            First coordinate.
+        y : np.ndarray
+            Second coordinate.
+
+        Returns
+        -------
+        np.ndarray
+            Function value.
+        """
         return (x + 2 * y - 7) ** 2 + (2 * x + y - 5) ** 2
 
 
@@ -295,9 +565,27 @@ class bukin6(function_2D):
     """
 
     def __init__(self):
+        """
+        Initialize the Bukin N.6 benchmark function.
+        """
         super().__init__()
 
     def call_method(self, x: np.array, y: np.array) -> np.array:
+        """
+        Evaluate the Bukin N.6 function.
+
+        Parameters
+        ----------
+        x : np.ndarray
+            First coordinate.
+        y : np.ndarray
+            Second coordinate.
+
+        Returns
+        -------
+        np.ndarray
+            Function value.
+        """
         return 100 * np.sqrt(np.abs(y - 0.01 * x**2)) + 0.01 * np.abs(x + 10)
 
 
@@ -311,12 +599,28 @@ class function_ND(nrv_function):
     """
 
     def __init__(self):
+        """
+        Initialize a scalar function of arbitrary dimension.
+        """
         super().__init__()
         self.f_type = "function_ND"
         self.dim = "N"
 
     @staticmethod
     def call_method(self, *X):
+        """
+        Default evaluation backend for N-dimensional functions.
+
+        Parameters
+        ----------
+        *X
+            Function inputs.
+
+        Returns
+        -------
+        int
+            Default placeholder value.
+        """
         return 1
 
 
@@ -324,9 +628,25 @@ class Id(function_ND):
     """ """
 
     def __init__(self):
+        """
+        Initialize the identity function.
+        """
         super().__init__()
 
     def call_method(self, *x: np.array) -> np.array:
+        """
+        Return the input coordinates unchanged.
+
+        Parameters
+        ----------
+        *x : np.ndarray
+            Input coordinates.
+
+        Returns
+        -------
+        np.ndarray | tuple
+            Input coordinates.
+        """
         if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
         return x
@@ -338,9 +658,25 @@ class rosenbock(function_ND):
     """
 
     def __init__(self):
+        """
+        Initialize the Rosenbrock benchmark function.
+        """
         super().__init__()
 
     def call_method(self, *x: np.array) -> np.array:
+        """
+        Evaluate the Rosenbrock function.
+
+        Parameters
+        ----------
+        *x : np.ndarray
+            Coordinates of the evaluation point.
+
+        Returns
+        -------
+        np.ndarray | float
+            Function value.
+        """
         if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
         result = 0
@@ -355,9 +691,25 @@ class rastrigin(function_ND):
     """
 
     def __init__(self):
+        """
+        Initialize the Rastrigin benchmark function.
+        """
         super().__init__()
 
     def call_method(self, *x: np.array) -> np.array:
+        """
+        Evaluate the Rastrigin function.
+
+        Parameters
+        ----------
+        *x : np.ndarray
+            Coordinates of the evaluation point.
+
+        Returns
+        -------
+        np.ndarray | float
+            Function value.
+        """
         if len(x) == 1 and np.iterable(x[0]):
             x = x[0]
         A = 10.0
@@ -374,12 +726,33 @@ class sphere(function_ND):
     """
 
     def __init__(self, Xc=None):
+        """
+        Initialize the sphere function.
+
+        Parameters
+        ----------
+        Xc : list | None, optional
+            Center of the sphere function.
+        """
         super().__init__()
         self.Xc = Xc
         if self.Xc is None:
             self.Xc = []
 
     def call_method(self, *X):
+        """
+        Evaluate the sphere function.
+
+        Parameters
+        ----------
+        *X
+            Coordinates of the evaluation point.
+
+        Returns
+        -------
+        float
+            Distance to the configured center.
+        """
         if len(X) == 1 and np.iterable(X[0]):
             X = X[0]
         Nc = len(self.Xc)
@@ -397,15 +770,50 @@ class sphere(function_ND):
 ####################  cost_evaluation  #####################
 ###########################################################
 class cost_evaluation(nrv_function):
+    """
+    Base class for simulation-result cost evaluation functions.
+    """
+
     def __init__(self):
+        """
+        Initialize a cost evaluation object.
+        """
         super().__init__()
         self.f_type = "cost_evaluation"
 
     @staticmethod
     def call_method(self, static_sim) -> float:
+        """
+        Default cost-evaluation backend.
+
+        Parameters
+        ----------
+        static_sim : any
+            Simulation result to evaluate.
+
+        Returns
+        -------
+        float
+            Default placeholder cost.
+        """
         return 1
 
     def __call__(self, results, **kwargs) -> float:
+        """
+        Evaluate the cost associated with one result object.
+
+        Parameters
+        ----------
+        results : any
+            Simulation results.
+        **kwargs
+            Unused compatibility keyword arguments.
+
+        Returns
+        -------
+        float
+            Computed cost.
+        """
         return self.call_method(results)
 
 
@@ -458,6 +866,28 @@ class nrv_interp(nrv_function):
         scale=None,
         columns=[],
     ):
+        """
+        Initialize a one-dimensional interpolator.
+
+        Parameters
+        ----------
+        X_values : array_like
+            Sampling positions.
+        Y_values : array_like
+            Sampled values.
+        kind : str, optional
+            Interpolation kind.
+        dx : float, optional
+            Minimum spacing parameter used by the interpolator.
+        interpolator : callable | None, optional
+            Custom interpolation backend.
+        dxdy : array_like | None, optional
+            Derivative values for Hermite-like interpolation.
+        scale : float | None, optional
+            Scaling factor applied to derivatives for cardinal splines.
+        columns : list, optional
+            Selected columns when interpolating structured inputs.
+        """
         super().__init__()
         self.f_type = "nrv_interp"
         # General parameters
@@ -488,6 +918,8 @@ class nrv_interp(nrv_function):
     def __check_X_values(self, dx=None):
         """ """
         S = self.X_values.argsort()
+        # print(self.X_values.shape, self.Y_values.shape)
+        # print(self.X_values, self.Y_values)
         self.X_values = self.X_values[S]
         self.Y_values = self.Y_values[S]
         if dx is not None:
@@ -539,6 +971,19 @@ class nrv_interp(nrv_function):
 
     # Mathematical operations
     def __add__(self, b):
+        """
+        Add a scalar or another interpolator pointwise.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Right operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         if isinstance(b, nrv_interp):
             if np.allclose(b.X_values, self.X_values):
                 Y = b.Y_values + self.Y_values
@@ -561,6 +1006,19 @@ class nrv_interp(nrv_function):
         )
 
     def __mul__(self, b):
+        """
+        Multiply by a scalar or another interpolator pointwise.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Right operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         if isinstance(b, nrv_interp):
             if np.allclose(b.X_values, self.X_values):
                 Y = self.Y_values * b.Y_values
@@ -583,6 +1041,19 @@ class nrv_interp(nrv_function):
         )
 
     def __truediv__(self, b):
+        """
+        Divide by a scalar or another interpolator pointwise.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Divisor.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         if isinstance(b, nrv_interp):
             if np.allclose(b.X_values, self.X_values):
                 if np.isclose(b.Y_values, 0).any():
@@ -608,6 +1079,19 @@ class nrv_interp(nrv_function):
         )
 
     def __rtruediv__(self, b):
+        """
+        Divide a scalar or another interpolator by the current interpolator.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Numerator.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         if np.isclose(self.Y_values, 0).any():
             rise_error(ZeroDivisionError, " float division by zero in Python")
         if isinstance(b, nrv_interp):
@@ -633,18 +1117,83 @@ class nrv_interp(nrv_function):
         )
 
     def __radd__(self, b):
+        """
+        Add the current interpolator to another operand.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Left operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         return self.__add__(b)
 
     def __rmul__(self, b):
+        """
+        Multiply another operand by the current interpolator.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Left operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         return self.__mul__(b)
 
     def __sub__(self, b):
+        """
+        Subtract a scalar or another interpolator pointwise.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Right operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         return self.__add__(-b)
 
     def __rsub__(self, b):
+        """
+        Subtract the current interpolator from another operand.
+
+        Parameters
+        ----------
+        b : float | nrv_interp
+            Left operand.
+
+        Returns
+        -------
+        nrv_interp
+            Resulting interpolator.
+        """
         return self.__sub__(b)
 
     def __call__(self, X):
+        """
+        Evaluate the interpolator.
+
+        Parameters
+        ----------
+        X : array_like
+            Evaluation points.
+
+        Returns
+        -------
+        np.ndarray | float
+            Interpolated values.
+        """
         if is_empty_iterable(self.columns):
             return self.interpolator(X)
         try:
@@ -660,6 +1209,16 @@ class MeshCallBack(nrv_function):
     """ """
 
     def __init__(self, f=None, axis="x"):
+        """
+        Initialize a mesh callback from a function or expression.
+
+        Parameters
+        ----------
+        f : callable | str | None, optional
+            Scaling function applied to mesh coordinates.
+        axis : str, optional
+            Axes passed to the callback among ``"x"``, ``"y"``, and ``"z"``.
+        """
         super().__init__()
         self.f_type = "MeshCallBack"
         self.f = None
@@ -668,6 +1227,14 @@ class MeshCallBack(nrv_function):
         self.set_function(f)
 
     def set_function(self, f=None):
+        """
+        Set the callback function used for mesh sizing.
+
+        Parameters
+        ----------
+        f : callable | str | None, optional
+            Function or expression defining the scaling law.
+        """
         if f is None:
             self.f = lambda *x: 1
         elif callable(f):
@@ -678,6 +1245,29 @@ class MeshCallBack(nrv_function):
             rise_warning(type(f), "Not recognized for MeshCallBack function")
 
     def __call__(self, dim, tag, x, y, z, lc):
+        """
+        Evaluate the mesh callback.
+
+        Parameters
+        ----------
+        dim : int
+            Entity dimension.
+        tag : int
+            Entity tag.
+        x : float
+            X coordinate.
+        y : float
+            Y coordinate.
+        z : float
+            Z coordinate.
+        lc : float
+            Reference mesh size.
+
+        Returns
+        -------
+        float
+            Scaled mesh size.
+        """
         X = []
         if "x" in self.axis:
             X += [x]

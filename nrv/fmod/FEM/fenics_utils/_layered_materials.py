@@ -82,12 +82,38 @@ class layered_material(f_material):
         self.alpha_lay = alpha_lay
 
     def is_isotropic(self) -> bool:
+        """
+        Whether both constituent materials are isotropic.
+
+        Returns
+        -------
+        bool
+            ``True`` when the inner and layer materials are isotropic.
+        """
         return self.mat_in.is_isotropic() and self.mat_lay.is_isotropic()
 
     def is_function_defined(self) -> bool:
+        """
+        Whether at least one constituent conductivity is defined as a function.
+
+        Returns
+        -------
+        bool
+            ``True`` when the inner or layer material is spatially varying.
+        """
         return self.mat_in.is_func or self.mat_lay.is_func
 
     def set_frequency(self, freq: float, set_in: bool = False) -> None:
+        """
+        Set the operating frequency used by the layered material.
+
+        Parameters
+        ----------
+        freq : float
+            Frequency value.
+        set_in : bool, optional
+            If ``True``, also propagate the frequency to the inner material.
+        """
         self.mat_lay.set_frequency(freq)
         if set_in:
             self.mat_in.set_frequency(freq)

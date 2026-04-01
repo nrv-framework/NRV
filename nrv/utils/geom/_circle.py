@@ -31,12 +31,45 @@ class Circle(Ellipse):
 
     @property
     def bbox_size(self) -> tuple[float, float]:
+        """
+        Size of the circle bounding box.
+
+        Returns
+        -------
+        tuple[float, float]
+            Bounding-box width and height.
+        """
         return 2 * self.radius, 2 * self.radius
 
     def rotate(self, angle: float, degree: bool = False):
+        """
+        Rotate the circle.
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle.
+        degree : bool, optional
+            If ``True``, ``angle`` is expressed in degrees.
+        """
         pass
 
     def get_point_inside(self, n_pts: int = 1, delta: float = 0) -> np.ndarray:
+        """
+        Draw random points inside the circle.
+
+        Parameters
+        ----------
+        n_pts : int, optional
+            Number of points to generate.
+        delta : float, optional
+            Minimum distance to keep from the boundary.
+
+        Returns
+        -------
+        np.ndarray
+            Array of shape ``(n_pts, 2)`` containing generated points.
+        """
         cr = (self.radius - delta) * np.sqrt(np.random.random(n_pts))
         cphi = 2 * np.pi * np.random.random(n_pts)
 

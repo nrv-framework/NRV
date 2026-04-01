@@ -141,12 +141,48 @@ def domain_from_meshfile(mesh_file):
 
 
 def V_from_meshfile(mesh_file, elem=("Lagrange", 1)):
+    """
+    Build a function space directly from a mesh file.
+
+    Parameters
+    ----------
+    mesh_file : str
+        Mesh filename.
+    elem : tuple, optional
+        Finite-element family and order.
+
+    Returns
+    -------
+    dolfinx.fem.FunctionSpace
+        Function space defined on the loaded mesh.
+    """
     mesh = domain_from_meshfile(mesh_file)
     V = functionspace(mesh, elem)
     return V
 
 
 def closest_point_in_mesh(mesh, point, tree, tdim, midpoint_tree):
+    """
+    Find the closest point on a mesh entity when a query point lies outside the mesh.
+
+    Parameters
+    ----------
+    mesh : Any
+        Mesh object.
+    point : array-like
+        Query point coordinates.
+    tree : Any
+        Bounding-box tree for the mesh.
+    tdim : int
+        Topological dimension.
+    midpoint_tree : Any
+        Midpoint tree used by the nearest-entity search.
+
+    Returns
+    -------
+    tuple
+        Closest entity identifier and closest point coordinates.
+    """
     points = np.reshape(point, (1, 3))
     entity = compute_closest_entity(tree, midpoint_tree, mesh, points)
     mesh_geom = mesh.geometry.x
@@ -210,6 +246,9 @@ class FEMResults(NRV_class):
     def set_sim_result(
         self, mesh_file="", domain=None, V=None, elem=None, vout=None, comm=None
     ):
+        """
+        Update the FEM result metadata and underlying function objects.
+        """
         if mesh_file != "":
             self.mesh_file = mesh_file
         if domain is not None:
@@ -223,6 +262,20 @@ class FEMResults(NRV_class):
         self.comm = comm
 
     def save(self, file, ftype="vtx", overwrite=True, t=0.0):
+        """
+        Save the FEM result to disk.
+
+        Parameters
+        ----------
+        file : str
+            Output filename without mandatory extension.
+        ftype : str, optional
+            Storage format, such as ``"vtx"``, ``"xdmf"``, or the legacy ``.sres`` format.
+        overwrite : bool, optional
+            Control mesh rewriting for XDMF output.
+        t : float, optional
+            Time stamp written with transient outputs.
+        """
         fname = rmv_ext(file)
         if ftype.lower() == "vtx":  # and dfx_utd:
             fname += ".bp"
@@ -249,6 +302,14 @@ class FEMResults(NRV_class):
             return mdict
 
     def load(self, file):
+        """
+        Load a FEM result from the legacy ``.sres`` format.
+
+        Parameters
+        ----------
+        file : str
+            Input filename without mandatory extension.
+        """
         fname = rmv_ext(file) + ".sres"
         mdict = scipy.io.loadmat(fname)
         self.mesh_file = mdict["mesh_file"][0]
@@ -260,10 +321,16 @@ class FEMResults(NRV_class):
         self.vout.x.array[:] = mdict["vout"]
 
     def save_sim_result(self, file, ftype="vtx", overwrite=True):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_sim_result is a deprecated method use save")
         self.save(file=file, ftype=ftype, overwrite=overwrite)
 
     def load_sim_result(self, data="sim_result.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_sim_result is a deprecated method use load")
         # self.load(data=data)
         # FIXME: data does not exist yet in load method
@@ -274,6 +341,14 @@ class FEMResults(NRV_class):
     #############
     @property
     def vector(self):
+        """
+        Raw coefficient vector of the stored FEM function.
+
+        Returns
+        -------
+        np.ndarray
+            Underlying array of degrees of freedom.
+        """
         return self.vout.x.array
 
     def aline_V(self, res2):
@@ -299,6 +374,14 @@ class FEMResults(NRV_class):
             rise_error("Mesh function alinment must be done with FEMResults")
 
     def clone_res(self):
+        """
+        Create an empty FEMResults shell sharing the same mesh/function-space metadata.
+
+        Returns
+        -------
+        FEMResults
+            Cloned result container without copying field values.
+        """
         return FEMResults(
             mesh_file=self.mesh_file,
             V=self.V,
@@ -355,6 +438,9 @@ class FEMResults(NRV_class):
     ## special methods ##
     #####################
     def __abs__(self):
+        """
+        Return a result containing the absolute value of the field coefficients.
+        """
         res = self.clone_res()
         if self.vout is not None:
             res.vout = Function(self.V)
@@ -362,6 +448,9 @@ class FEMResults(NRV_class):
         return res
 
     def __neg__(self):
+        """
+        Return a result containing the negated field coefficients.
+        """
         res = self.clone_res()
         if self.vout is not None:
             res.vout = Function(self.V)
@@ -369,6 +458,9 @@ class FEMResults(NRV_class):
         return res
 
     def __add__(self, b):
+        """
+        Add another result or scalar to this FEM field.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -381,6 +473,9 @@ class FEMResults(NRV_class):
         return C
 
     def __sub__(self, b):
+        """
+        Subtract another result or scalar from this FEM field.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -393,6 +488,9 @@ class FEMResults(NRV_class):
         return C
 
     def __mul__(self, b):
+        """
+        Multiply this FEM field by another result or scalar.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -405,6 +503,9 @@ class FEMResults(NRV_class):
         return C
 
     def __radd__(self, b):
+        """
+        Right-handed addition with another result or scalar.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -417,6 +518,9 @@ class FEMResults(NRV_class):
         return C
 
     def __rsub__(self, b):
+        """
+        Right-handed subtraction with another result or scalar.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -429,6 +533,9 @@ class FEMResults(NRV_class):
         return C
 
     def __rmul__(self, b):
+        """
+        Right-handed multiplication with another result or scalar.
+        """
         if is_sim_res(b):
             self.aline_V(b)
             B = b.vout.x.array
@@ -441,6 +548,9 @@ class FEMResults(NRV_class):
         return C
 
     def __eq__(self, b):
+        """
+        Compare two FEM results for mesh compatibility and coefficient equality.
+        """
         if is_sim_res(b):
             if b.mesh_file == self.mesh_file:
                 if np.allclose(self.vector, b.vector):
@@ -448,4 +558,7 @@ class FEMResults(NRV_class):
         return False
 
     def __ne__(self, b):  # self != b
+        """
+        Return the logical negation of :meth:`__eq__`.
+        """
         return not self == b

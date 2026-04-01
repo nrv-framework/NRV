@@ -8,6 +8,12 @@ sub-packages.
 """
 
 from ._config import nrv_config
+from ._extlib_interface import (
+    is_empty_iterable,
+    set_idxs,
+    get_query,
+    df_to,
+)
 from ._file_handler import (
     is_iterable,
     rmv_ext,
@@ -58,6 +64,10 @@ submodules = []
 
 classes = [
     "nrv_config",
+    "is_empty_iterable",
+    "set_idxs",
+    "get_query",
+    "df_to",
     "NRV_Encoder",
     "bcolors",
     "NRV_class",

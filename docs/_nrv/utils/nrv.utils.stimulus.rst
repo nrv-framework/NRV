@@ -28,6 +28,8 @@ Methods
 
     stimulus.constant
 
+    stimulus.gaussian_noise
+
     stimulus.get_parameters
 
     stimulus.harmonic_pulse

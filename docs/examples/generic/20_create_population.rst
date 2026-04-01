@@ -117,53 +117,53 @@ When `data` are in a tupple
       <tbody>
         <tr>
           <th>0</th>
-          <td>0</td>
-          <td>0.866013</td>
+          <td>1</td>
+          <td>9.291953</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>1</td>
-          <td>4.933820</td>
+          <td>0</td>
+          <td>7.909397</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>7.836162</td>
+          <td>1</td>
+          <td>17.291623</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>1.061859</td>
+          <td>11.178241</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.423561</td>
+          <td>16.070718</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>15.522308</td>
+          <td>5.375868</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>4.659298</td>
+          <td>0.803587</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0</td>
-          <td>8.047352</td>
+          <td>15.427616</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>13.045553</td>
+          <td>0.531301</td>
         </tr>
         <tr>
           <th>9</th>
           <td>1</td>
-          <td>16.389905</td>
+          <td>7.750653</td>
         </tr>
       </tbody>
     </table>
@@ -221,53 +221,53 @@ When `data` are in a np.ndarray
       <tbody>
         <tr>
           <th>0</th>
-          <td>0.0</td>
-          <td>0.866013</td>
+          <td>1.0</td>
+          <td>9.291953</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>1.0</td>
-          <td>4.933820</td>
+          <td>0.0</td>
+          <td>7.909397</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0.0</td>
-          <td>7.836162</td>
+          <td>1.0</td>
+          <td>17.291623</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0.0</td>
-          <td>1.061859</td>
+          <td>11.178241</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>5.423561</td>
+          <td>16.070718</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0.0</td>
-          <td>15.522308</td>
+          <td>5.375868</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0.0</td>
-          <td>4.659298</td>
+          <td>0.803587</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0.0</td>
-          <td>8.047352</td>
+          <td>15.427616</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0.0</td>
-          <td>13.045553</td>
+          <td>0.531301</td>
         </tr>
         <tr>
           <th>9</th>
           <td>1.0</td>
-          <td>16.389905</td>
+          <td>7.750653</td>
         </tr>
       </tbody>
     </table>
@@ -325,53 +325,53 @@ When `data` are in a dict
       <tbody>
         <tr>
           <th>0</th>
-          <td>0</td>
-          <td>0.866013</td>
+          <td>1</td>
+          <td>9.291953</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>1</td>
-          <td>4.933820</td>
+          <td>0</td>
+          <td>7.909397</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>7.836162</td>
+          <td>1</td>
+          <td>17.291623</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>1.061859</td>
+          <td>11.178241</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.423561</td>
+          <td>16.070718</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>15.522308</td>
+          <td>5.375868</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>4.659298</td>
+          <td>0.803587</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0</td>
-          <td>8.047352</td>
+          <td>15.427616</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>13.045553</td>
+          <td>0.531301</td>
         </tr>
         <tr>
           <th>9</th>
           <td>1</td>
-          <td>16.389905</td>
+          <td>7.750653</td>
         </tr>
       </tbody>
     </table>
@@ -428,53 +428,53 @@ When `data` are in a dataframe
       <tbody>
         <tr>
           <th>0</th>
-          <td>0</td>
-          <td>0.866013</td>
+          <td>1</td>
+          <td>9.291953</td>
         </tr>
         <tr>
           <th>1</th>
-          <td>1</td>
-          <td>4.933820</td>
+          <td>0</td>
+          <td>7.909397</td>
         </tr>
         <tr>
           <th>2</th>
-          <td>0</td>
-          <td>7.836162</td>
+          <td>1</td>
+          <td>17.291623</td>
         </tr>
         <tr>
           <th>3</th>
           <td>0</td>
-          <td>1.061859</td>
+          <td>11.178241</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0</td>
-          <td>5.423561</td>
+          <td>16.070718</td>
         </tr>
         <tr>
           <th>5</th>
           <td>0</td>
-          <td>15.522308</td>
+          <td>5.375868</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0</td>
-          <td>4.659298</td>
+          <td>0.803587</td>
         </tr>
         <tr>
           <th>7</th>
           <td>0</td>
-          <td>8.047352</td>
+          <td>15.427616</td>
         </tr>
         <tr>
           <th>8</th>
           <td>0</td>
-          <td>13.045553</td>
+          <td>0.531301</td>
         </tr>
         <tr>
           <th>9</th>
           <td>1</td>
-          <td>16.389905</td>
+          <td>7.750653</td>
         </tr>
       </tbody>
     </table>
@@ -534,102 +534,102 @@ Small 20-axons population
         <tr>
           <th>0</th>
           <td>0.0</td>
-          <td>1.384369</td>
+          <td>2.163126</td>
         </tr>
         <tr>
           <th>1</th>
           <td>0.0</td>
-          <td>0.902004</td>
+          <td>1.512224</td>
         </tr>
         <tr>
           <th>2</th>
           <td>0.0</td>
-          <td>2.930261</td>
+          <td>1.058918</td>
         </tr>
         <tr>
           <th>3</th>
-          <td>1.0</td>
-          <td>3.513026</td>
+          <td>0.0</td>
+          <td>2.506012</td>
         </tr>
         <tr>
           <th>4</th>
           <td>0.0</td>
-          <td>1.570341</td>
+          <td>1.576152</td>
         </tr>
         <tr>
           <th>5</th>
-          <td>0.0</td>
-          <td>1.895792</td>
+          <td>1.0</td>
+          <td>7.434870</td>
         </tr>
         <tr>
           <th>6</th>
           <td>0.0</td>
-          <td>0.820641</td>
+          <td>1.215832</td>
         </tr>
         <tr>
           <th>7</th>
-          <td>1.0</td>
-          <td>2.637275</td>
+          <td>0.0</td>
+          <td>0.907816</td>
         </tr>
         <tr>
           <th>8</th>
-          <td>0.0</td>
-          <td>1.587776</td>
+          <td>1.0</td>
+          <td>2.865731</td>
         </tr>
         <tr>
           <th>9</th>
           <td>0.0</td>
-          <td>1.878357</td>
+          <td>1.076353</td>
         </tr>
         <tr>
           <th>10</th>
-          <td>1.0</td>
-          <td>3.741483</td>
+          <td>0.0</td>
+          <td>1.413427</td>
         </tr>
         <tr>
           <th>11</th>
-          <td>0.0</td>
-          <td>1.547094</td>
+          <td>1.0</td>
+          <td>3.170341</td>
         </tr>
         <tr>
           <th>12</th>
-          <td>1.0</td>
-          <td>3.741483</td>
+          <td>0.0</td>
+          <td>1.262325</td>
         </tr>
         <tr>
           <th>13</th>
-          <td>0.0</td>
-          <td>1.227455</td>
+          <td>1.0</td>
+          <td>7.168337</td>
         </tr>
         <tr>
           <th>14</th>
           <td>0.0</td>
-          <td>1.320441</td>
+          <td>0.872946</td>
         </tr>
         <tr>
           <th>15</th>
-          <td>0.0</td>
-          <td>0.640481</td>
+          <td>1.0</td>
+          <td>2.408818</td>
         </tr>
         <tr>
           <th>16</th>
-          <td>1.0</td>
-          <td>3.056112</td>
+          <td>0.0</td>
+          <td>0.791583</td>
         </tr>
         <tr>
           <th>17</th>
           <td>0.0</td>
-          <td>1.337876</td>
+          <td>1.239078</td>
         </tr>
         <tr>
           <th>18</th>
           <td>0.0</td>
-          <td>0.739279</td>
+          <td>1.709820</td>
         </tr>
         <tr>
           <th>19</th>
           <td>1.0</td>
-          <td>8.348697</td>
+          <td>3.589178</td>
         </tr>
       </tbody>
     </table>
@@ -674,7 +674,7 @@ Histograms
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.443 seconds)
+   **Total running time of the script:** (0 minutes 0.374 seconds)
 
 
 .. _sphx_glr_download_examples_generic_20_create_population.py:

@@ -34,6 +34,8 @@ Methods
 
     myelinated.attach_extracellular_stimulation
 
+    myelinated.attach_intracell_context
+
     myelinated.change_stimulus_from_electrode
 
     myelinated.clear_I_Clamp
@@ -75,6 +77,10 @@ Methods
     myelinated.insert_V_Clamp
 
     myelinated.insert_V_Clamp_node
+
+    myelinated.insert_intra_stim
+
+    myelinated.insert_intra_stim_node
 
     myelinated.intracel_status
 

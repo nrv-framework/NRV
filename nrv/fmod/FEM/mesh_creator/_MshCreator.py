@@ -42,6 +42,9 @@ def is_MshCreator(object):
 
 
 def clear_gmsh():
+    """
+    Finalize Gmsh if it is currently initialized.
+    """
     if gmsh.isInitialized():
         gmsh.finalize()
 
@@ -103,10 +106,26 @@ class MshCreator(NRV_class):
 
     @property
     def n_core(self):
+        """
+        Number of Gmsh threads used for mesh generation.
+
+        Returns
+        -------
+        int | None
+            Current thread count.
+        """
         return self.n_proc
 
     @n_core.setter
     def n_core(self, i: int | None = None):
+        """
+        Set the number of Gmsh threads used for mesh generation.
+
+        Parameters
+        ----------
+        i : int | None, optional
+            Thread count. If ``None``, use the global default.
+        """
         if i is None:
             self.n_proc = parameters.GMSH_Ncores
         else:
@@ -119,6 +138,9 @@ class MshCreator(NRV_class):
 
     @n_core.deleter
     def n_core(self):
+        """
+        Delete the stored Gmsh thread-count setting.
+        """
         n_core = None
 
     def set_ncore(self, i: int | None = None) -> None:
@@ -176,6 +198,19 @@ class MshCreator(NRV_class):
         return self.volumes
 
     def get_info(self, verbose=False):
+        """
+        Collect and optionally print basic mesh statistics.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            If ``True``, print the statistics.
+
+        Returns
+        -------
+        tuple[int, int, int, int]
+            Number of processes, entities, nodes, and elements.
+        """
         entities = self.model.getEntities()
         nodeTags = self.model.mesh.getNodes()[0]
         elemTags = self.model.mesh.getElements()[1]
@@ -192,6 +227,9 @@ class MshCreator(NRV_class):
         return self.n_proc, self.N_entities, self.N_nodes, self.N_elements
 
     def get_mesh_info(self, verbose=False):
+        """
+        Deprecated alias of :meth:`get_info`.
+        """
         rise_warning("DEPRECATED method use get_info instead")
         self.get_info(verbose=verbose)
 
@@ -619,20 +657,37 @@ class MshCreator(NRV_class):
 
     @property
     def n_domains(self):
+        """
+        Number of registered physical domains.
+
+        Returns
+        -------
+        int
+            Number of physical domains.
+        """
         return len(self.id_domains)
 
     @property
     def domains_1D(self):
+        """
+        Identifiers of one-dimensional physical domains.
+        """
         I = np.where(self.dim_domains == 1)
         return self.id_domains[I]
 
     @property
     def domains_2D(self):
+        """
+        Identifiers of two-dimensional physical domains.
+        """
         I = np.where(self.dim_domains == 2)
         return self.id_domains[I]
 
     @property
     def domains_3D(self):
+        """
+        Identifiers of three-dimensional physical domains.
+        """
         I = np.where(self.dim_domains == 3)
         return self.id_domains[I]
 
@@ -816,6 +871,14 @@ class MshCreator(NRV_class):
             self.file = fname
 
     def visualize(self, fname=None):
+        """
+        Open the generated mesh in the Gmsh GUI.
+
+        Parameters
+        ----------
+        fname : str | None, optional
+            Optional filename used to save the mesh before visualization.
+        """
         if fname is None:
             self.generate()
             gmsh.fltk.run()

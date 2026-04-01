@@ -18,6 +18,19 @@ from pandas import DataFrame, concat
 
 
 def number_in_str(s: str) -> bool:
+    """
+    Check whether a string contains at least one digit.
+
+    Parameters
+    ----------
+    s : str
+        Input string.
+
+    Returns
+    -------
+    bool
+        ``True`` when the string contains a digit.
+    """
     return any(i.isdigit() for i in s)
 
 
@@ -25,6 +38,14 @@ class nerve_results(sim_results):
     """ """
 
     def __init__(self, context=None):
+        """
+        Initialize a nerve-results container.
+
+        Parameters
+        ----------
+        context : Any, optional
+            Serialized context or existing results used to populate the object.
+        """
         super().__init__(context)
         self._axons: DataFrame = DataFrame()
 
@@ -158,12 +179,40 @@ class nerve_results(sim_results):
         return self._axons
 
     def get_fascicle_results(self, ID: int) -> fascicle_results:
+        """
+        Return the results object associated with one fascicle.
+
+        Parameters
+        ----------
+        ID : int
+            Fascicle identifier.
+
+        Returns
+        -------
+        fascicle_results
+            Matching fascicle results object.
+        """
         if ID not in self.fascicles_IDs:
             rise_error(("Fascicle ID does not exists."))
         else:
             return self[f"fascicle{ID}"]
 
     def get_axon_results(self, fasc_ID: int, ax_ID: int) -> axon_results:
+        """
+        Return the results object associated with one axon inside one fascicle.
+
+        Parameters
+        ----------
+        fasc_ID : int
+            Fascicle identifier.
+        ax_ID : int
+            Axon identifier inside the fascicle.
+
+        Returns
+        -------
+        axon_results
+            Matching axon results object.
+        """
         fasc_ID = int(fasc_ID)
         ax_ID = int(ax_ID)
         if fasc_ID not in self.fascicles_IDs:
@@ -175,6 +224,14 @@ class nerve_results(sim_results):
                 return self[f"fascicle{fasc_ID}"][f"axon{ax_ID}"]
 
     def get_fascicle_key(self) -> list:
+        """
+        Return the serialized-dictionary keys corresponding to stored fascicles.
+
+        Returns
+        -------
+        list
+            Fascicle keys of the form ``"fascicleX"``.
+        """
         all_keys = self.keys()
         fascicle_keys = [i for i in all_keys if ("fascicle" in i and number_in_str(i))]
         return fascicle_keys

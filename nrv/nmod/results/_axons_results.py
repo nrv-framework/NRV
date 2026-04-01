@@ -23,6 +23,18 @@ from ...utils._misc import (
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    """
+    Deprecated helper returning the extreme position reached by a blocked spike trace.
+
+    Parameters
+    ----------
+    blocked_spike_positionlist : sequence
+        Sequence of spike positions.
+    position_max : int
+        Starting index.
+    spike_begin : str, optional
+        Direction used to continue the search.
+    """
     rise_warning("DeprecationWarning: ", "max_spike_position is obsolete")
     if spike_begin == "down":
         while blocked_spike_positionlist[
@@ -301,6 +313,14 @@ class axon_results(sim_results):
     """"""
 
     def __init__(self, context=None):
+        """
+        Initialize an axon-results container.
+
+        Parameters
+        ----------
+        context : Any, optional
+            Serialized context or existing results used to populate the object.
+        """
         super().__init__(context)
 
     def generate_axon(self):
@@ -1362,8 +1382,8 @@ class axon_results(sim_results):
         if len(blocked_spike_positionlist) == 0:
             self["blocked"] = None
             return self["blocked"]
-        if "intra_stim_positions" in self:
-            if self["intra_stim_positions"] < self["extracellular_electrode_x"]:
+        if "intra_stim_position" in self:
+            if self["intra_stim_position"] < self["extracellular_electrode_x"]:
                 position_max = max_spike_position(
                     blocked_spike_positionlist, position_max, spike_begin="down"
                 )
@@ -1403,7 +1423,7 @@ class axon_results(sim_results):
                         self["blocked"] = False
                         return self["blocked"]
         else:
-            rise_error("intra_stim_positions is not in dictionnary")
+            rise_error("intra_stim_position is not in dictionnary")
 
     def check_test_AP(self):
         """
@@ -1755,6 +1775,25 @@ class axon_results(sim_results):
     def get_membrane_material(
         self, t: float = 0, unit: str = "S/m", mem_th: float = 7 * nm, **interp_kwargs
     ) -> f_material:
+        """
+        Build an interpolated material object from membrane conductivity samples.
+
+        Parameters
+        ----------
+        t : float, optional
+            Time at which conductivity is sampled.
+        unit : str, optional
+            Target conductivity unit.
+        mem_th : float, optional
+            Membrane thickness used when converting surface conductivity.
+        **interp_kwargs : dict
+            Interpolation options forwarded to :func:`mat_from_interp`.
+
+        Returns
+        -------
+        f_material
+            Interpolated material representation of the membrane conductivity.
+        """
 
         n_t = len(self["g_mem"][0])
         i_t = int(n_t * t / self["t_sim"])
@@ -1775,6 +1814,18 @@ class axon_results(sim_results):
     #####################
 
     def raster_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> None:
+        """
+        Plot rasterized action-potential detections for one recorded quantity.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        key : str, optional
+            Result key to rasterize.
+        **kwgs : dict
+            Additional scatter-plot keyword arguments.
+        """
         required_keys = {key, "tstop", "L"}
         if required_keys in self:
             self.rasterize(key)
@@ -1793,6 +1844,25 @@ class axon_results(sim_results):
     def colormap_plot(
         self, axes: plt.axes, key: str = "V_mem", switch_axes: bool = False, **kwgs
     ) -> plt.colorbar:
+        """
+        Plot a spatiotemporal colormap of one recorded axon quantity.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        key : str, optional
+            Result key to display.
+        switch_axes : bool, optional
+            If ``True``, swap time and position axes.
+        **kwgs : dict
+            Additional keyword arguments forwarded to ``Axes.pcolormesh``.
+
+        Returns
+        -------
+        matplotlib.colorbar.Colorbar | None
+            Associated colorbar when plotting succeeds.
+        """
         required_keys = {key, "tstop", "L", "t"}
         if required_keys in self:
             x_ = self["t"]

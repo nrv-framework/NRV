@@ -44,6 +44,14 @@ Functions
 .. autosummary:: 
     :toctree: backend
     
+    is_empty_iterable
+    
+    set_idxs
+    
+    get_query
+    
+    df_to
+    
     is_iterable
     
     rmv_ext
@@ -99,8 +107,6 @@ Functions
     is_NRV_dict_dict
     
     is_NRV_object_dict
-    
-    is_empty_iterable
     
     load_any
     

@@ -28,8 +28,20 @@ dir_path + "/log/NRV.log"
 
 
 class Optimizer(NRV_class, metaclass=ABCMeta):
+    """
+    Abstract base class for all NRV optimizers.
+    """
+
     @abstractmethod
     def __init__(self, method=None):
+        """
+        Initialize an optimizer backend.
+
+        Parameters
+        ----------
+        method : str | None, optional
+            Human-readable identifier of the optimization method.
+        """
         super().__init__()
         self._method = method
         self.swarm_optimizer = False
@@ -57,6 +69,9 @@ class Optimizer(NRV_class, metaclass=ABCMeta):
         return results
 
     def __call__(self, f: callable, **kwargs: Any) -> optim_results:
+        """
+        Alias of :meth:`minimize`.
+        """
         return self.minimize(f, **kwargs)
 
 
@@ -155,6 +170,9 @@ class scipy_optimizer(Optimizer):
         dimension: int = None,
         normalize: bool = False,
     ):
+        """
+        Initialize a SciPy-based optimizer wrapper.
+        """
         if method is None:
             super().__init__("scipy_default")
         else:
@@ -204,6 +222,14 @@ class scipy_optimizer(Optimizer):
             results["dimensions"] = self.dimensions
 
     def __normalize_bound(self, results):
+        """
+        Normalize optimization bounds to the unit hypercube when requested.
+
+        Parameters
+        ----------
+        results : optim_results
+            Results dictionary updated in place with scaling information.
+        """
         self.scale_translation = np.zeros(self.dimensions)
         self.scale_homothety = np.ones(self.dimensions)
         if not self.normalize:
@@ -219,6 +245,21 @@ class scipy_optimizer(Optimizer):
         results["scaled_bounds"] = self.scaled_bounds
 
     def minimize(self, f: callable, **kwargs) -> optim_results:
+        """
+        Minimize a scalar cost function using :func:`scipy.optimize.minimize`.
+
+        Parameters
+        ----------
+        f : callable
+            Objective function taking one parameter vector.
+        **kwargs : dict
+            Optimizer parameters overriding the current instance attributes.
+
+        Returns
+        -------
+        optim_results
+            Optimization results.
+        """
         results = super().minimize(f, **kwargs)
         if self.maxiter is not None:
             self.options["maxiter"] = self.maxiter
@@ -360,6 +401,9 @@ class PSO_optimizer(Optimizer):
         saving_file="pso_results.json",
         comment=None,
     ):
+        """
+        Initialize a particle-swarm optimizer wrapper.
+        """
         super().__init__("PSO")
         self.swarm_optimizer = True
         self.n_particles = n_particles
@@ -381,6 +425,14 @@ class PSO_optimizer(Optimizer):
         self.comment = comment
 
     def __nrv2pyswarms_bounds(self):
+        """
+        Convert NRV-style bounds into the format expected by PySwarms.
+
+        Returns
+        -------
+        tuple[np.ndarray, np.ndarray] | None
+            Lower and upper bounds arrays, or ``None`` when no bounds are applied.
+        """
         if np.size(self.bounds) == 2 * self.dimensions:
             if isinstance(self.bounds[0], tuple) and np.size(self.bounds[0]) == 2:
                 max_bound = np.zeros(self.dimensions)

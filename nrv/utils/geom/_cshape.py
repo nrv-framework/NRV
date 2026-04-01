@@ -46,14 +46,38 @@ class CShape(NRV_class):
 
     @property
     def x(self) -> float:
+        """
+        X-coordinate placeholder for 2D shapes.
+
+        Returns
+        -------
+        float
+            Always returns ``0``.
+        """
         return 0
 
     @property
     def y(self) -> float:
+        """
+        Y-coordinate of the shape center.
+
+        Returns
+        -------
+        float
+            First coordinate of ``center``.
+        """
         return self.center[0]
 
     @property
     def z(self) -> float:
+        """
+        Z-coordinate of the shape center.
+
+        Returns
+        -------
+        float
+            Second coordinate of ``center``.
+        """
         return self.center[1]
 
     @property
@@ -197,7 +221,7 @@ class CShape(NRV_class):
         n_tetha: int = 100,
         add_center: bool = False,
         *args,
-        **kwgs
+        **kwgs,
     ):
         """
         plot the border of the shape
@@ -224,5 +248,5 @@ class CShape(NRV_class):
             self.bbox[np.array([0, 0, 2, 2, 0])],
             self.bbox[np.array([1, 3, 3, 1, 1])],
             *args,
-            **kwgs
+            **kwgs,
         )

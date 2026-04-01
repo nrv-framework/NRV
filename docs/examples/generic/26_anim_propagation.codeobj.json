@@ -1,0 +1,913 @@
+{
+ "__name__": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "str"
+  }
+ ],
+ "ani": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "FuncAnimation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FuncAnimation"
+  }
+ ],
+ "ani.save": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "FuncAnimation.save"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FuncAnimation.save"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "TimedAnimation.save"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "TimedAnimation.save"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "Animation.save"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Animation.save"
+  }
+ ],
+ "animation.FuncAnimation": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "FuncAnimation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FuncAnimation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "TimedAnimation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "TimedAnimation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "Animation"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Animation"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "FuncAnimation"
+  }
+ ],
+ "animation.PillowWriter": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "PillowWriter"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "PillowWriter"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "AbstractMovieWriter"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "AbstractMovieWriter"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "abc",
+   "module_short": "abc",
+   "name": "ABC"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.animation",
+   "module_short": "matplotlib.animation",
+   "name": "PillowWriter"
+  }
+ ],
+ "axs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "dt": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fps": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "frame_indices": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "list"
+  }
+ ],
+ "gm": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "gu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "interval_ms": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "float"
+  }
+ ],
+ "linem": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.lines",
+   "module_short": "matplotlib.lines",
+   "name": "Line2D"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Line2D"
+  }
+ ],
+ "linem.set_ydata": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.lines",
+   "module_short": "matplotlib.lines",
+   "name": "Line2D.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Line2D.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_ydata"
+  }
+ ],
+ "lineu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.lines",
+   "module_short": "matplotlib.lines",
+   "name": "Line2D"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Line2D"
+  }
+ ],
+ "lineu.set_ydata": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.lines",
+   "module_short": "matplotlib.lines",
+   "name": "Line2D.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Line2D.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_ydata"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_ydata"
+  }
+ ],
+ "max_frames": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "maxon_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "mtime_text": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text"
+  }
+ ],
+ "mtime_text.set_text": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_text"
+  }
+ ],
+ "np.nanmax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "_ArrayFunctionDispatcher"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "nanmax"
+  }
+ ],
+ "np.nanmin": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "_ArrayFunctionDispatcher"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "nanmin"
+  }
+ ],
+ "nrv.get_length_from_nodes": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "get_length_from_nodes"
+  }
+ ],
+ "nrv.myelinated": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._myelinated",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "myelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._axons",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "myelinated"
+  }
+ ],
+ "nrv.unmyelinated": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._unmyelinated",
+   "module_short": "nrv",
+   "name": "unmyelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "unmyelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "unmyelinated"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod._axons",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "axon"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Simulable",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_simulable"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend._NRV_Class",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv.backend",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "NRV_class"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "unmyelinated"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "resultsm": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._myelinated_results",
+   "module_short": "nrv.nmod.results",
+   "name": "myelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "myelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "myelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "myelinated_results"
+  }
+ ],
+ "resultsu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results._unmyelinated_results",
+   "module_short": "nrv.nmod.results",
+   "name": "unmyelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod.results",
+   "module_short": "nrv.nmod.results",
+   "name": "unmyelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv.nmod",
+   "module_short": "nrv.nmod",
+   "name": "unmyelinated_results"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "nrv",
+   "module_short": "nrv",
+   "name": "unmyelinated_results"
+  }
+ ],
+ "save_fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "bool"
+  }
+ ],
+ "step": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "int"
+  }
+ ],
+ "titlem": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text"
+  }
+ ],
+ "titleu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text"
+  }
+ ],
+ "tm": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "tu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "uaxon_sim": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "update_frame": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  }
+ ],
+ "utime_text": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text"
+  }
+ ],
+ "utime_text.set_text": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.text",
+   "module_short": "matplotlib.text",
+   "name": "Text.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Text.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.set_text"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.set_text"
+  }
+ ],
+ "xm": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "xm.max": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "xm.min": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "xu": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "ndarray"
+  }
+ ],
+ "xu.max": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ],
+ "xu.min": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "builtin_function_or_method"
+  }
+ ]
+}

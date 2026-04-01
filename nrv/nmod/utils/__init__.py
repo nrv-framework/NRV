@@ -24,7 +24,6 @@ from ._axon_pop_generator import (
     load_axon_population,
 )
 
-
 submodules = []
 
 classes = [

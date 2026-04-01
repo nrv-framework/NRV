@@ -22,7 +22,7 @@ Here are few example scripts to highlight possibilities toward using NRV in scie
   .. image:: /examples/images/thumb/sphx_glr_00_dummy_example_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_00_dummy_example.py`
+  :doc:`/examples/00_dummy_example`
 
 .. raw:: html
 
@@ -64,7 +64,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_01_propagation_Vmem_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_01_propagation_Vmem.py`
+  :doc:`/examples/generic/01_propagation_Vmem`
 
 .. raw:: html
 
@@ -81,7 +81,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_02_activation_function_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_02_activation_function.py`
+  :doc:`/examples/generic/02_activation_function`
 
 .. raw:: html
 
@@ -98,7 +98,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_03_LIFE_activation_function_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_03_LIFE_activation_function.py`
+  :doc:`/examples/generic/03_LIFE_activation_function`
 
 .. raw:: html
 
@@ -115,7 +115,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_04_AP_particles_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_04_AP_particles.py`
+  :doc:`/examples/generic/04_AP_particles`
 
 .. raw:: html
 
@@ -132,7 +132,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_05_KES_conduction_block_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_05_KES_conduction_block.py`
+  :doc:`/examples/generic/05_KES_conduction_block`
 
 .. raw:: html
 
@@ -149,7 +149,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_06_fascicle_with_contexts_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_06_fascicle_with_contexts.py`
+  :doc:`/examples/generic/06_fascicle_with_contexts`
 
 .. raw:: html
 
@@ -166,7 +166,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_07_DC_block_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_07_DC_block.py`
+  :doc:`/examples/generic/07_DC_block`
 
 .. raw:: html
 
@@ -183,7 +183,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_08_KES_block_unmyelinated_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_08_KES_block_unmyelinated.py`
+  :doc:`/examples/generic/08_KES_block_unmyelinated`
 
 .. raw:: html
 
@@ -200,7 +200,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_09_Prepulse_waveform_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_09_Prepulse_waveform.py`
+  :doc:`/examples/generic/09_Prepulse_waveform`
 
 .. raw:: html
 
@@ -217,7 +217,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_10_Slowly_rising_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_10_Slowly_rising.py`
+  :doc:`/examples/generic/10_Slowly_rising`
 
 .. raw:: html
 
@@ -234,7 +234,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_11_combining_stimulus_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_11_combining_stimulus.py`
+  :doc:`/examples/generic/11_combining_stimulus`
 
 .. raw:: html
 
@@ -251,7 +251,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_12_MRG_structural_parameters_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_12_MRG_structural_parameters.py`
+  :doc:`/examples/generic/12_MRG_structural_parameters`
 
 .. raw:: html
 
@@ -268,7 +268,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_13_axon_distributions_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_13_axon_distributions.py`
+  :doc:`/examples/generic/13_axon_distributions`
 
 .. raw:: html
 
@@ -285,7 +285,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_14_activation_function_cuff_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_14_activation_function_cuff.py`
+  :doc:`/examples/generic/14_activation_function_cuff`
 
 .. raw:: html
 
@@ -302,7 +302,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_15_activation_thresholds_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_15_activation_thresholds.py`
+  :doc:`/examples/generic/15_activation_thresholds`
 
 .. raw:: html
 
@@ -319,7 +319,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_16_activation_thresholds_arbitrary_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_16_activation_thresholds_arbitrary.py`
+  :doc:`/examples/generic/16_activation_thresholds_arbitrary`
 
 .. raw:: html
 
@@ -336,7 +336,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_18_Action_Potential_Analysis_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_18_Action_Potential_Analysis.py`
+  :doc:`/examples/generic/18_Action_Potential_Analysis`
 
 .. raw:: html
 
@@ -353,7 +353,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_19_build_geometry_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_19_build_geometry.py`
+  :doc:`/examples/generic/19_build_geometry`
 
 .. raw:: html
 
@@ -370,7 +370,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_20_create_population_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_20_create_population.py`
+  :doc:`/examples/generic/20_create_population`
 
 .. raw:: html
 
@@ -387,7 +387,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_21_place_population_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_21_place_population.py`
+  :doc:`/examples/generic/21_place_population`
 
 .. raw:: html
 
@@ -404,7 +404,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_22_access_subpopulation_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_22_access_subpopulation.py`
+  :doc:`/examples/generic/22_access_subpopulation`
 
 .. raw:: html
 
@@ -421,7 +421,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_23_subpop_iclamp_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_23_subpop_iclamp.py`
+  :doc:`/examples/generic/23_subpop_iclamp`
 
 .. raw:: html
 
@@ -438,7 +438,7 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_24_mp_nerve_sim_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_24_mp_nerve_sim.py`
+  :doc:`/examples/generic/24_mp_nerve_sim`
 
 .. raw:: html
 
@@ -455,11 +455,28 @@ This gallery consists of introductory examples of basic usage of NRV framework.
   .. image:: /examples/generic/images/thumb/sphx_glr_25_test_fit_fasc_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_generic_25_test_fit_fasc.py`
+  :doc:`/examples/generic/25_test_fit_fasc`
 
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Simulation of Realistic Geometry</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Generate an animation of the propagation of impedance shift along axons&#x27; membrane">
+
+.. only:: html
+
+  .. image:: /examples/generic/images/thumb/sphx_glr_26_anim_propagation_thumb.gif
+    :alt:
+
+  :doc:`/examples/generic/26_anim_propagation`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Propagation animation</div>
     </div>
 
 
@@ -496,7 +513,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o01_nerve_optimization_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o01_nerve_optimization.py`
+  :doc:`/examples/optim/o01_nerve_optimization`
 
 .. raw:: html
 
@@ -506,14 +523,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o02_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o02_stimulus_CM.py`
+  :doc:`/examples/optim/o02_stimulus_CM`
 
 .. raw:: html
 
@@ -523,14 +540,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.biphasic_stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o03_biphasic_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py`
+  :doc:`/examples/optim/o03_biphasic_stimulus_CM`
 
 .. raw:: html
 
@@ -547,7 +564,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o04_harmonic_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o04_harmonic_stimulus_CM.py`
+  :doc:`/examples/optim/o04_harmonic_stimulus_CM`
 
 .. raw:: html
 
@@ -564,7 +581,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o05_plot_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o05_plot_CM.py`
+  :doc:`/examples/optim/o05_plot_CM`
 
 .. raw:: html
 
@@ -574,14 +591,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5&lt;../../tutorials/5_first_optimization is used:">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5 is used:">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o06_mproc_optimization_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o06_mproc_optimization.py`
+  :doc:`/examples/optim/o06_mproc_optimization`
 
 .. raw:: html
 

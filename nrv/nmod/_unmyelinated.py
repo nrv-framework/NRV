@@ -466,67 +466,25 @@ class unmyelinated(axon):
                 sec.L_caintscale = self.L / self.Nsec
                 sec.L_caextscale = self.L / self.Nsec
 
-    ###############################
-    ## Intracellular stimulation ##
-    ###############################
-    def insert_I_Clamp(self, position, t_start, duration, amplitude):
+    def _get_sec_from_postion(self, position):
         """
-        Insert a I clamp stimulation
+        Return the section and local coordinate corresponding to a relative axon position.
 
         Parameters
         ----------
-        position    : float
-            relative position over the axon
-        t_start     : float
-            starting time, in ms
-        duration    : float
-            duration of the pulse, in ms
-        amplitude   : float
-            amplitude of the pulse (nA)
-        """
-        # adapt position to the number of sections
-        portion_length = 1.0 / self.Nsec
-        stim_sec = int(math.floor(position / portion_length))
-        stim_pos = (position / portion_length) - math.floor(position / portion_length)
-        # add the stimulation to the axon
-        self.intra_current_stim.append(
-            neuron.h.IClamp(stim_pos, sec=self.unmyelinated_sections[stim_sec])
-        )
-        # modify the stimulation parameters
-        self.intra_current_stim[-1].delay = t_start
-        self.intra_current_stim[-1].dur = duration
-        self.intra_current_stim[-1].amp = amplitude
-        # save the stimulation parameter for results
-        self.intra_current_stim_positions.append(position * self.L)
-        self.intra_current_stim_starts.append(t_start)
-        self.intra_current_stim_durations.append(duration)
-        self.intra_current_stim_amplitudes.append(amplitude)
+        position : float
+            Relative position along the axon.
 
-    def insert_V_Clamp(self, position, stimulus):
+        Returns
+        -------
+        tuple
+            Section object and local position inside that section.
         """
-        Insert a V clamp stimulation
-
-        Parameters
-        ----------
-        position    : float
-            relative position over the axon
-        stimulus    : stimulus object
-            stimulus for the clamp, see Stimulus.py for more information
-        """
-        # adapt position to the number of sections
         portion_length = 1.0 / self.Nsec
-        stim_sec = int(math.floor(position / portion_length))
-        stim_pos = (position / portion_length) - math.floor(position / portion_length)
-        # add the stimulation to the axon
-        self.intra_voltage_stim = neuron.h.VClamp(
-            stim_pos, sec=self.unmyelinated_sections[stim_sec]
-        )
-        # save the stimulation parameter for results
-        self.intra_current_stim_position = position * self.L
-        # save the stimulus for later use
-        self.intra_voltage_stim_stimulus = stimulus
-        # set fake duration
-        self.intra_voltage_stim.dur[0] = 1e9
+        index = int(math.floor(position / portion_length))
+        sec = self.unmyelinated_sections[index]
+        pos = (position / portion_length) - math.floor(position / portion_length)
+        return sec, pos
 
     ##############################
     ## Result recording methods ##
@@ -951,4 +909,17 @@ class unmyelinated(axon):
 
     # Simulate method, for output type
     def simulate(self, **kwargs) -> unmyelinated_results:
+        """
+        Run the unmyelinated-axon simulation.
+
+        Parameters
+        ----------
+        **kwargs : dict
+            Additional simulation options forwarded to the base implementation.
+
+        Returns
+        -------
+        unmyelinated_results
+            Simulation results object.
+        """
         return super().simulate(**kwargs)

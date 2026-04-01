@@ -29,7 +29,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o01_nerve_optimization_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o01_nerve_optimization.py`
+  :doc:`/examples/optim/o01_nerve_optimization`
 
 .. raw:: html
 
@@ -39,14 +39,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in stimulus_CM.">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o02_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o02_stimulus_CM.py`
+  :doc:`/examples/optim/o02_stimulus_CM`
 
 .. raw:: html
 
@@ -56,14 +56,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in ~nrv.optim.optim_utils.biphasic_stimulus_CM.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This small example shows a way to use the built-in biphasic_stimulus_CM.">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o03_biphasic_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o03_biphasic_stimulus_CM.py`
+  :doc:`/examples/optim/o03_biphasic_stimulus_CM`
 
 .. raw:: html
 
@@ -80,7 +80,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o04_harmonic_stimulus_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o04_harmonic_stimulus_CM.py`
+  :doc:`/examples/optim/o04_harmonic_stimulus_CM`
 
 .. raw:: html
 
@@ -97,7 +97,7 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
   .. image:: /examples/optim/images/thumb/sphx_glr_o05_plot_CM_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o05_plot_CM.py`
+  :doc:`/examples/optim/o05_plot_CM`
 
 .. raw:: html
 
@@ -107,14 +107,14 @@ This gallery consists of introductory examples for the use of `nrv.optim` module
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5&lt;../../tutorials/5_first_optimization is used:">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to set the number of processes used for optimization. The exact same scenario from Tutorial 5 is used:">
 
 .. only:: html
 
   .. image:: /examples/optim/images/thumb/sphx_glr_o06_mproc_optimization_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_optim_o06_mproc_optimization.py`
+  :doc:`/examples/optim/o06_mproc_optimization`
 
 .. raw:: html
 

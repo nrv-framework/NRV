@@ -19,7 +19,6 @@ from ..nmod._unmyelinated import unmyelinated
 from ..nmod._myelinated import myelinated
 from ..nmod.results._axons_results import axon_results
 
-
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
@@ -406,8 +405,8 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
     ]
     if len(blocked_spike_positionlist) == 0:
         return None
-    if "intra_stim_positions" in my_dict:
-        if my_dict["intra_stim_positions"] < my_dict["extracellular_electrode_x"]:
+    if "intra_stim_position" in my_dict:
+        if my_dict["intra_stim_position"] < my_dict["extracellular_electrode_x"]:
             position_max = max_spike_position(
                 blocked_spike_positionlist, position_max, spike_begin="down"
             )
@@ -441,10 +440,28 @@ def block(my_dict, position_key=None, t_start=0, t_stop=0):
                 else:
                     return False
     else:
-        pass_info("intra_stim_positions is not in dictionnary")
+        pass_info("intra_stim_position is not in dictionnary")
 
 
 def max_spike_position(blocked_spike_positionlist, position_max, spike_begin="down"):
+    """
+    Extend a blocked-spike position index to the corresponding local extremum.
+
+    Parameters
+    ----------
+    blocked_spike_positionlist : list[float] | np.ndarray
+        Ordered list of blocked-spike positions.
+    position_max : int
+        Initial index of the spike position under inspection.
+    spike_begin : str, optional
+        Direction used to follow the spike front, either ``"down"`` or the
+        opposite direction.
+
+    Returns
+    -------
+    int
+        Index of the detected local extremum in ``blocked_spike_positionlist``.
+    """
     rise_warning(
         "DeprecationWarning: ",
         "max_spike_position is obsolete use method from axon_result objects instead",
@@ -999,7 +1016,7 @@ def rmv_keys(
      - `V_mem_raster_time`
      - `myelinated`
      - `intra_stim_starts`
-     - `intra_stim_positions`
+     - `intra_stim_position`
 
 
     Warning
@@ -1031,7 +1048,7 @@ def rmv_keys(
         "V_mem_raster_time",
         "myelinated",
         "intra_stim_starts",
-        "intra_stim_positions",
+        "intra_stim_position",
         "recorder",
     }
 
@@ -1060,7 +1077,7 @@ def is_recruited(results: axon_results) -> axon_results:
      - `diameter`
      - `intra_stim_starts`
      - `tstop`
-     - `intra_stim_positions`
+     - `intra_stim_position`
      - `extracellular_electrode_x`
      - `recruited`
 
@@ -1090,7 +1107,7 @@ def is_recruited(results: axon_results) -> axon_results:
         "diameter",
         "intra_stim_starts",
         "tstop",
-        "intra_stim_positions",
+        "intra_stim_position",
         "extracellular_electrode_x",
         "recruited",
     }
@@ -1122,7 +1139,7 @@ def is_blocked(
      - `diameter`
      - `intra_stim_starts`
      - `tstop`
-     - `intra_stim_positions`
+     - `intra_stim_position`
      - `extracellular_electrode_x`
      - `blocked`
      - `has_onset`
@@ -1181,7 +1198,7 @@ def is_blocked(
         "diameter",
         "intra_stim_starts",
         "tstop",
-        "intra_stim_positions",
+        "intra_stim_position",
         "extracellular_electrode_x",
         "is_blocked",
         "has_onset",
@@ -1296,7 +1313,7 @@ def sample_keys(
             "t_sim",
             "myelinated",
             "intra_stim_starts",
-            "intra_stim_positions",
+            "intra_stim_position",
             "recorder",
         }
 

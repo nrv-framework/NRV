@@ -52,7 +52,7 @@ def get_mat_file_as_dict(fname):
     d = {}
     with open(fname, "r") as f:
         for line in f:
-            (key, value) = line.split()
+            key, value = line.split()
             d[key] = value
     return d
 
@@ -87,10 +87,8 @@ def load_material(f_material):
     elif "sigma" in mat_file:
         mat_obj.set_isotropic_conductivity(mat_file["sigma"])
     else:
-        rise_warning(
-            "loading a material with 0 conductivity, \
-            this may induce further division by 0"
-        )
+        rise_warning("loading a material with 0 conductivity, \
+            this may induce further division by 0")
     if "epsilon_r" in mat_file:
         mat_obj.set_permitivity(mat_file["epsilon_r"])
     return mat_obj
@@ -197,10 +195,16 @@ class material(NRV_class):
         )
 
     def save_material(self, save=False, fname="material.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_material is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_material(self, data="material.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_material is a deprecated method use load")
         self.load(data=data)
 

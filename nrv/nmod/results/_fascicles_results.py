@@ -14,6 +14,19 @@ from typing import Literal
 
 
 def number_in_str(s: str) -> bool:
+    """
+    Check whether a string contains at least one digit.
+
+    Parameters
+    ----------
+    s : str
+        Input string.
+
+    Returns
+    -------
+    bool
+        ``True`` when the string contains a digit.
+    """
     return any(i.isdigit() for i in s)
 
 
@@ -24,6 +37,14 @@ class fascicle_results(sim_results):
     """ """
 
     def __init__(self, context=None):
+        """
+        Initialize a fascicle-results container.
+
+        Parameters
+        ----------
+        context : Any, optional
+            Serialized context or existing results used to populate the object.
+        """
         super().__init__(context)
 
     @property
@@ -223,6 +244,23 @@ class fascicle_results(sim_results):
     def get_block_summary_axons(
         self, AP_start: float, freq: float = None, t_refractory: float = 1
     ) -> list:
+        """
+        Compute block-summary descriptors for all simulated axons.
+
+        Parameters
+        ----------
+        AP_start : float
+            Start time of the test action potential.
+        freq : float | None, optional
+            Stimulation frequency, used for KES block analysis.
+        t_refractory : float, optional
+            Refractory time used during spike analysis.
+
+        Returns
+        -------
+        list
+            Axon diameters, types, coordinates, blocked status, and onset counts.
+        """
         axons_keys = self.get_axons_key()
         _m = self.axons.get_mask(mask_labels=self.sim_mask)
         axon_diam = self.axons["diameters"][_m]
@@ -387,6 +425,24 @@ class fascicle_results(sim_results):
         num: bool = False,
         vm_key: str = "V_mem",
     ) -> None:
+        """
+        Plot the fascicle while highlighting recruited fibers.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        contour_color : str, optional
+            Fascicle contour color.
+        myel_color : str, optional
+            Color used for recruited myelinated fibers.
+        unmyel_color : str, optional
+            Color used for recruited unmyelinated fibers.
+        num : bool, optional
+            If ``True``, annotate axon indices.
+        vm_key : str, optional
+            Voltage key used to determine recruitment.
+        """
         ## plot axons
         self.get_axons(vm_key=vm_key)
 
@@ -482,7 +538,9 @@ class fascicle_results(sim_results):
                     c = "orangered"
                     alpha = n_onset[k] * alpha_g
                 if is_blocked[k] is None:
-                    axes.scatter(axon_y[k], axon_z[k], marker="x", s=20, c="k")
+                    axes.scatter(
+                        axon_y.iloc[k], axon_z.iloc[k], marker="x", s=20, c="k"
+                    )
 
             else:
                 if n_onset[k] == 0:
@@ -494,8 +552,8 @@ class fascicle_results(sim_results):
 
             axes.add_patch(
                 plt.Circle(
-                    (axon_y[k], axon_z[k]),
-                    axon_diam[k] / 2,
+                    (axon_y.iloc[k], axon_z.iloc[k]),
+                    axon_diam.iloc[k] / 2,
                     color=c,
                     fill=True,
                     alpha=alpha,
@@ -507,5 +565,5 @@ class fascicle_results(sim_results):
         if num:
             for k in range(self.n_ax):
                 axes.text(
-                    self.axons["y"][k], self.axons["z"][k], str(k)
+                    self.axons["y"].iloc[k], self.axons["z"].iloc[k], str(k)
                 )  # horizontalalignment='center',verticalalignment='center')

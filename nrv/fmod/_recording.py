@@ -97,10 +97,16 @@ class recording_point(NRV_class):
         self.recording = None
 
     def save_recording_point(self, save=False, fname="recording_point.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_recording_point is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_recording_point(self, data="recording_point.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_recording_point is a deprecated method use load")
         self.load(data=data)
 
@@ -427,10 +433,16 @@ class recorder(NRV_class):
         self.recording_points: list[recording_point] = []
 
     def save_recorder(self, save=False, fname="recorder.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_recorder is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_recorder(self, data="recorder.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_recorder is a deprecated method use load")
         self.load(data=data)
 
@@ -829,6 +841,20 @@ class recorder(NRV_class):
         color: str = "k",
         **kwgs,
     ) -> None:
+        """
+        Plot one or several recorded time series.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        points : int | np.ndarray | None, optional
+            Recording-point index or indices to display. Defaults to all points.
+        color : str, optional
+            Line color.
+        **kwgs : dict
+            Additional plotting keyword arguments.
+        """
         if self.t is None:
             rise_warning("empty recorder canot be ploted")
         else:

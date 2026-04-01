@@ -14,8 +14,14 @@ class nrv_config(metaclass=NRV_singleton):
     """A unique class to handle all the configuration"""
 
     def __init__(self):
+        """
+        Initialize the global configuration wrapper.
+        """
         self.machine_config = MachineConfig()
         self.framework_parameters = nrv_parameters()
 
     def display_machine_config(self):
+        """
+        Print the current machine configuration.
+        """
         print(self.machine_config)

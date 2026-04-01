@@ -21,7 +21,9 @@
 Optimization change number of processes
 =======================================
 
-This example shows how to set the number of processes used for optimization. The exact same scenario from `Tutorial 5<../../tutorials/5_first_optimization` is used:
+This example shows how to set the number of processes used for optimization.
+The exact same scenario from `Tutorial 5 <../../tutorials/5_first_optimization>`_
+is used:
 
 The objective is to **minimize the energy required by a LIFE electrode to trigger a single myelinated fiber using a rectangular pulse stimulus**.
 
@@ -29,9 +31,10 @@ The objective is to **minimize the energy required by a LIFE electrode to trigge
     For optimization over parallelizable context (nerve or fascicle), the parallelization is done only for the context simulation
 
 .. seealso::
-    `Parallel computation<../../usersguide/parallel>` and `Optimization<../../usersguide/optimization>  users' guides.
+    See the `Parallel computation <../../usersguide/parallel>`_ and
+    `Optimization <../../usersguide/optimization>`_ user guides.
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-151
+.. GENERATED FROM PYTHON SOURCE LINES 18-154
 
 
 
@@ -58,15 +61,15 @@ The objective is to **minimize the energy required by a LIFE electrode to trigge
  .. code-block:: none
 
     best input vector: [3.8812254810415108, 0.21190886399270414] 
-    best cost: 0.03192248353367479
+    best cost: 0.031922483533674786
     best input vector: [3.8812254810415108, 0.21190886399270414] 
-    best cost: 0.03192248353367479
+    best cost: 0.031922483533674786
     best input vector: [3.8812254810415108, 0.21190886399270414] 
-    best cost: 0.03192248353367479
+    best cost: 0.031922483533674786
     best input vector: [3.8812254810415108, 0.21190886399270414] 
-    best cost: 0.03192248353367479
+    best cost: 0.031922483533674786
     best input vector: [3.8812254810415108, 0.21190886399270414] 
-    best cost: 0.03192248353367479
+    best cost: 0.031922483533674786
 
 
 
@@ -217,7 +220,7 @@ The objective is to **minimize the energy required by a LIFE electrode to trigge
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 19.430 seconds)
+   **Total running time of the script:** (0 minutes 20.178 seconds)
 
 
 .. _sphx_glr_download_examples_optim_o06_mproc_optimization.py:

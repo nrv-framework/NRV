@@ -147,10 +147,26 @@ class nrv_parameters(metaclass=NRV_singleton):
     ############################
     @property
     def is_alone(self):
+        """
+        Tell whether NRV is currently running without worker processes.
+
+        Returns
+        -------
+        bool
+            ``True`` if multiprocessing is not active.
+        """
         return _proc_is_alone
 
     @property
     def proc_label(self):
+        """
+        Return the label associated with the current process.
+
+        Returns
+        -------
+        str
+            Process label used in multiprocessing logs.
+        """
         return _proc_label
 
     def get_gmsh_ncore(self):

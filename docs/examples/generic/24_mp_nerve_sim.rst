@@ -192,27 +192,10 @@ Main Execution Script
 
  .. code-block:: none
 
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: On 100 axons to generate, there are 30 Myelinated and 70 Unmyelinated
     Placing... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00
-    NRV INFO: 45axons not placed
-    NRV INFO: Starting nerve simulation
-    NRV INFO: ...computing electrodes footprint
-    NRV INFO: Mesh properties:
-    NRV INFO: Number of processes : 3
-    NRV INFO: Number of entities : 175
-    NRV INFO: Number of nodes : 10775
-    NRV INFO: Number of elements : 75807
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: setup the bilinear form
-    NRV INFO: FEN4NRV: setup the linear form
-    NRV INFO: Static/Quasi-Static electrical current problem
-    NRV INFO: FEN4NRV: solving electrical potential
-    NRV INFO: FEN4NRV: solved in 7.648335933685303 s
-    fascicle 1/2 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:07
-    fascicle 2/2 -- 4 CPUs: 49 / 49 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
-    NRV INFO: ...Done!
+    fascicle 1/2 -- 4 CPUs: 100 / 100 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:08
+    fascicle 2/2 -- 4 CPUs: 47 / 47 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
 
 
 
@@ -220,7 +203,7 @@ Main Execution Script
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 23.277 seconds)
+   **Total running time of the script:** (0 minutes 22.180 seconds)
 
 
 .. _sphx_glr_download_examples_generic_24_mp_nerve_sim.py:

@@ -12,6 +12,21 @@ class NRV_singleton(type):
     _instances = {}
 
     def __call__(cls, *args, **kwargs):
+        """
+        Return the unique instance associated with the singleton class.
+
+        Parameters
+        ----------
+        *args
+            Positional arguments used when creating the instance for the first time.
+        **kwargs
+            Keyword arguments used when creating the instance for the first time.
+
+        Returns
+        -------
+        object
+            Singleton instance of ``cls``.
+        """
         # with cls._lock:
         if cls not in cls._instances:
             instance = super().__call__(*args, **kwargs)

@@ -25,6 +25,18 @@ class pyeit_inverse(eit_inverse):
         method: Literal["jac", "bp"] = "jac",
         **kwgs,
     ):
+        """
+        Initialize a PyEIT-based inverse solver.
+
+        Parameters
+        ----------
+        data : eit_forward_results | None, optional
+            Forward EIT results used for the reconstruction.
+        method : Literal["jac", "bp"], optional
+            PyEIT inverse method to use.
+        **kwgs : dict
+            Additional keyword arguments forwarded to :class:`eit_inverse`.
+        """
 
         # Attribute instantiated when data is set
         # NOTE Must be initialised before super().__init__
@@ -40,6 +52,15 @@ class pyeit_inverse(eit_inverse):
 
     @eit_inverse.data.setter
     def data(self, data: None | eit_forward_results):
+        """
+        Validate and configure the forward dataset used by the PyEIT solver.
+
+        Parameters
+        ----------
+        data : eit_forward_results | None
+            Forward result object. Multi-pattern data is required so a PyEIT
+            protocol can be inferred.
+        """
         if data is None:
             self._data = data
         elif isinstance(data, eit_forward_results) and data.is_multi_patern:
@@ -62,6 +83,26 @@ class pyeit_inverse(eit_inverse):
     def fromat_data(
         self, i_t: int = 0, i_f: int = 0, i_res: int = 0, verbose: bool = False
     ) -> np.ndarray:
+        """
+        Reformat NRV forward data into the flattened differential vector expected by PyEIT.
+
+        Parameters
+        ----------
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+        verbose : bool, optional
+            If ``True``, print the electrode-pair mapping used to build the
+            measurement vector.
+
+        Returns
+        -------
+        np.ndarray
+            Flattened measurement vector ordered according to the PyEIT protocol.
+        """
         if self.has_data:
 
             if self.inj_offset == 1:
@@ -88,6 +129,16 @@ class pyeit_inverse(eit_inverse):
             return v_forward
 
     def update_mesh(self, newmesh: mesh.PyEITMesh = None, h0=0.05):
+        """
+        Set or regenerate the PyEIT reconstruction mesh.
+
+        Parameters
+        ----------
+        newmesh : pyeit.mesh.PyEITMesh | None, optional
+            Explicit mesh to use. If omitted, a circular PyEIT mesh is created.
+        h0 : float, optional
+            Characteristic mesh size used when generating a new mesh.
+        """
         if newmesh is not None:
             self.mesh_obj = newmesh
         else:
@@ -97,6 +148,16 @@ class pyeit_inverse(eit_inverse):
     def set_inversor(
         self, method: None | Literal["jac", "bp"] = None, inv_params: None | dict = None
     ):
+        """
+        Instantiate and configure the PyEIT inverse solver object.
+
+        Parameters
+        ----------
+        method : Literal["jac", "bp"] | None, optional
+            Reconstruction method to use.
+        inv_params : dict | None, optional
+            Parameters passed to the underlying PyEIT solver ``setup`` method.
+        """
         if method is not None:
             self.method = method
         if inv_params is None:
@@ -111,6 +172,25 @@ class pyeit_inverse(eit_inverse):
     # Reconstruction methods #
     # ---------------------- #
     def _run_inverse(self, i_to_solve=None, i_t: int = 0, i_f: int = 0, i_res: int = 0):
+        """
+        Run one PyEIT reconstruction.
+
+        Parameters
+        ----------
+        i_to_solve : int | None, optional
+            Optional index into the queued reconstructions.
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+
+        Returns
+        -------
+        tuple[np.ndarray, tuple[int, int, int]]
+            Reconstructed image and its identifying indices.
+        """
         i_t, i_f, i_res = self._get_i_to_solve(
             i_to_solve=i_to_solve, i_t=i_t, i_f=i_f, i_res=i_res
         )
@@ -133,6 +213,25 @@ class pyeit_inverse(eit_inverse):
         filter=None,
         **kwgs,
     ):
+        """
+        Plot one reconstructed PyEIT image on a triangulated mesh.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+            Target axes.
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+        filter : callable | None, optional
+            Optional post-processing function applied to the reconstructed values
+            before plotting.
+        **kwgs : dict
+            Additional keyword arguments forwarded to ``Axes.tripcolor``.
+        """
         # extract node, element, alpha
         _ds = self.get_results(i_t, i_f, i_res)
 
@@ -155,6 +254,24 @@ class pyeit_inverse(eit_inverse):
         i_res: int = 0,
         **kwgs,
     ):
+        """
+        Add a colorbar for a reconstructed PyEIT image.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+            Axes associated with the plotted reconstruction.
+        i_to_solve : int | None, optional
+            Unused placeholder for API symmetry.
+        i_t : int, optional
+            Time index.
+        i_f : int, optional
+            Frequency index.
+        i_res : int, optional
+            Result index.
+        **kwgs : dict
+            Additional keyword arguments reserved for future extensions.
+        """
         # extract node, element, alpha
         _ds = self.get_results(i_t, i_f, i_res)
         _cbar = plt.colorbar()

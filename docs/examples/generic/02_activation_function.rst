@@ -186,7 +186,7 @@ In this script, the activation function for a point source electrode is ploted t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 12.845 seconds)
+   **Total running time of the script:** (0 minutes 11.345 seconds)
 
 
 .. _sphx_glr_download_examples_generic_02_activation_function.py:

@@ -140,10 +140,16 @@ class electrode(NRV_class):
         self.z = None
 
     def save_electrode(self, save=False, fname="electrode.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_electrode is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_electrode(self, data="electrode.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_electrode is a deprecated method use load")
         self.load(data=data)
 
@@ -258,6 +264,9 @@ class electrode(NRV_class):
 
     @abstractmethod
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        """
+        Plot the electrode geometry in the transverse plane.
+        """
         pass
 
 
@@ -332,6 +341,9 @@ class point_source_electrode(electrode):
             )
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        """
+        Plot a point-source electrode marker.
+        """
         if "nerve_d" in kwgs:
             del kwgs["nerve_d"]
         axes.plot(self.y, self.z, ".", color=color, **kwgs)
@@ -435,6 +447,9 @@ class LIFE_electrode(FEM_electrode):
             )
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        """
+        Plot a LIFE electrode cross-section.
+        """
         axes.add_patch(
             plt.Circle(
                 (self.y, self.z),
@@ -555,6 +570,9 @@ class CUFF_electrode(FEM_electrode):
             )
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        """
+        Plot a cuff electrode around a nerve cross-section.
+        """
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]
@@ -655,8 +673,32 @@ class CUFF_MP_electrode(CUFF_electrode):
             )
 
     def plot(
-        self, axes: plt.axes, color: str = "gold", list_e=None, e_label=True, **kwgs
+        self,
+        axes: plt.axes,
+        color: str = "gold",
+        list_e: list = None,
+        e_label: bool = True,
+        alpha_lab: int = 1.2,
+        **kwgs,
     ) -> None:
+        """
+        Plot the active contacts of a multipolar cuff electrode.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        color : str, optional
+            Electrode color.
+        list_e : list | None, optional
+            Contact identifiers to display. Defaults to all contacts.
+        e_label : bool, optional
+            If ``True``, annotate each displayed contact.
+        alpha_lab : int, optional
+            Label radial scaling factor.
+        **kwgs : dict
+            Additional matplotlib patch keyword arguments.
+        """
         if "nerve_d" in kwgs:
             rad = kwgs["nerve_d"] / 2
             del kwgs["nerve_d"]
@@ -681,7 +723,7 @@ class CUFF_MP_electrode(CUFF_electrode):
                     )
                 )
                 if e_label:
-                    z_ = 1.2 * rad * np.exp(1j * theta_)
+                    z_ = alpha_lab * rad * np.exp(1j * theta_)
                     axes.text(z_.real, z_.imag, f"E{i}", va="center", ha="center")
 
         else:

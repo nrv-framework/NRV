@@ -14,9 +14,25 @@ class myelinated_results(axon_results):
     """ """
 
     def __init__(self, context=None):
+        """
+        Initialize a myelinated-axon results container.
+
+        Parameters
+        ----------
+        context : Any, optional
+            Serialized context or existing results used to populate the object.
+        """
         super().__init__(context)
 
     def generate_axon(self):
+        """
+        Recreate a myelinated axon object from the stored result parameters.
+
+        Returns
+        -------
+        myelinated
+            Reconstructed axon instance.
+        """
         if "myelinated" not in globals():
             from .._myelinated import myelinated
         return myelinated(**self)
@@ -127,8 +143,26 @@ class myelinated_results(axon_results):
         color: str = "k",
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
+        """
+        Plot time traces at node locations or recorded positions.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        key : str, optional
+            Result key to display.
+        color : str, optional
+            Line color.
+        switch_axes : bool, optional
+            If ``True``, swap time and position axes.
+        norm : Any, optional
+            Optional normalization passed to the parent implementation.
+        **kwgs : dict
+            Additional plotting keyword arguments.
+        """
         x_pos = self.x[self.node_index]
         x_index = self.node_index
         if not "ALL" in self.rec.upper():
@@ -141,7 +175,7 @@ class myelinated_results(axon_results):
             color=color,
             switch_axes=switch_axes,
             norm=norm,
-            **kwgs
+            **kwgs,
         )
 
     def plot_x_t_all_seq(
@@ -152,8 +186,28 @@ class myelinated_results(axon_results):
         myelin_color: str = "gray",
         switch_axes=False,
         norm=None,
-        **kwgs
+        **kwgs,
     ) -> None:
+        """
+        Plot time traces for all section types, emphasizing nodes separately.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        key : str, optional
+            Result key to display.
+        color : str, optional
+            Color used for node traces.
+        myelin_color : str, optional
+            Color used for internode traces.
+        switch_axes : bool, optional
+            If ``True``, swap time and position axes.
+        norm : Any, optional
+            Optional normalization passed to the parent implementation.
+        **kwgs : dict
+            Additional plotting keyword arguments.
+        """
         if self.rec == "all":
             node_index = self.node_index
             other_index = np.concatenate(
@@ -172,7 +226,7 @@ class myelinated_results(axon_results):
                 color=myelin_color,
                 switch_axes=switch_axes,
                 norm=norm,
-                **kwgs
+                **kwgs,
             )
 
         self.plot_x_t(
@@ -180,6 +234,18 @@ class myelinated_results(axon_results):
         )
 
     def colormap_plot(self, axes: plt.axes, key: str = "V_mem", **kwgs) -> plt.colorbar:
+        """
+        Plot a spatiotemporal colormap when full-section recording is available.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes.Axes
+            Target axes.
+        key : str, optional
+            Result key to display.
+        **kwgs : dict
+            Additional plotting keyword arguments.
+        """
         if self.rec == "all":
             return super().colormap_plot(axes, key, **kwgs)
         else:
