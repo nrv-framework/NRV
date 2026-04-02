@@ -8,7 +8,7 @@ NRV is pip installable and the whole installation process should be quite simple
     conda create -n nrv-env -c anaconda python=3.12 
 
 .. Tip::
-    You can also use `Mamba <https://mamba.readthedocs.io/en/latest/>`_ to speed up the installation. Once Mamba is installed, the installation command line is almost identical:
+    You can also use `Mamba or Micromamba <https://mamba.readthedocs.io/en/latest/>`_ to speed up the installation. Once Mamba is installed, the installation command line is almost identical:
 
     .. code:: bash
 
@@ -37,21 +37,21 @@ are conda-installable only. We also recommend to install gmsh and ipython from c
 
 .. code:: bash
 
-    conda install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
+    conda install -c conda-forge::mpi4py fenics-dolfinx==0.9.0 python-gmsh ipykernel
 
 .. Warning::
     For Linux users, the default `blas` library used in `FenicsX` may not be compatible with the preconditioner used in NRV, which may result in necessary CPU overhead during electric field computation. To avoid this it is thus advised to force the installation as bellow
 
     .. code:: bash
 
-        conda install -c conda-forge fenics-dolfinx==0.9.0 "libblas=*=*blis" mpich python-gmsh ipykernel
+        conda install -c conda-forge mpi4py fenics-dolfinx==0.9.0 libblas=*=*blis python-gmsh ipykernel
 
 .. Tip::
     With Mamba, the command is:
 
     .. code:: bash
 
-        mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
+        mamba install -c conda-forge mpi4py fenics-dolfinx==0.9.0 python-gmsh ipykernel
 
 COMSOL Installation
 ^^^^^^^^^^^^^^^^^^^

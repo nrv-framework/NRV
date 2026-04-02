@@ -6,3 +6,5 @@ NRV is designed to be accessible to a user with a limited knowledge of python. N
 .. seealso::
 
     Further code with fewer comments is available in the :doc:`Example section</examples/index>`.
+
+    The execution times of all tutorials and examples are listed in :doc:`Computation times <../sg_execution_times>`

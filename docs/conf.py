@@ -63,7 +63,6 @@ deps = (
     "scipy.stats",
     "seaborn",
     "shapely",
-    "typing_extensions",
     "ufl",
     "ufl.finiteelement",
     "pathos",

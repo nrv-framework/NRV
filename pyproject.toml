@@ -54,21 +54,21 @@ repository = "https://github.com/nrv-framework/NRV"
 
 [project.optional-dependencies]
 dev = [
+  "black",
+  "build",
+  "flake8",
+  "furo",
+  "mypy",
+  "pre-commit",
+  "Pygments",
   "pytest >=7.0",
   "pytest-cov",
-  "flake8",
-  "black",
-  "mypy",
-  "build",
-  "pre-commit",
   "sphinx",
-  "sphinx-rtd-theme",
-  "furo",
-  "Pygments",
-  "sphinx-mdinclude",
+  "sphinx_codeautolink",
   "sphinx_copybutton",
   "sphinx_gallery",
-  "sphinx_codeautolink",
+  "sphinx-mdinclude",
+  "sphinx-rtd-theme",
 ]
 
 # ----------------------------

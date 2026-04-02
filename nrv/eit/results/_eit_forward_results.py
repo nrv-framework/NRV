@@ -4,7 +4,7 @@ import numpy as np
 import os
 import pandas as pd
 
-from typing_extensions import Literal
+from typing import Literal
 from ..utils._misc import (
     gen_idx_arange,
     plot_array,

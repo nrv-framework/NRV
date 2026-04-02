@@ -1,4 +1,4 @@
-name: Build and publish prebuilt docs
+name: Docs -- Build and publish prebuilt to RtD
 
 on:
   push:
@@ -49,9 +49,9 @@ jobs:
       - name: Create or update docs environment
         run: |
           if micromamba env list | grep -qE '(^|[[:space:]])'"$ENV_NAME"'([[:space:]]|$)'; then
-            micromamba env update -n "$ENV_NAME" -f docs-env.yaml
+            micromamba env update -n "$ENV_NAME" -f conda/docs-env.yaml
           else
-            micromamba create -y -f docs-env.yaml
+            micromamba create -y -f conda/docs-env.yaml
           fi
 
       - name: Build documentation
