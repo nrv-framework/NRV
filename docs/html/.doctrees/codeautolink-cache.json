@@ -5808,6 +5808,247 @@
   "_nrv/ui/nrv.ui.search_threshold_dispatcher": [],
   "_nrv/ui/nrv.ui.speed": [],
   "_nrv/ui/nrv.ui.update_fascicle_file": [],
+  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.__init__": [],
+  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.get_parameters": [],
+  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.load": [],
+  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.save": [],
+  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.set_parameters",
+        "ref_id": "context-modifier-set-parameters",
+        "headings": [
+          "context_modifier.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.__init__": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.get_parameters": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.interpolate": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.load": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.save": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.set_parameters",
+        "ref_id": "harmonic-stimulus-cm-set-parameters",
+        "headings": [
+          "harmonic_stimulus_CM.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.stimulus_generator": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.__init__": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.get_parameters": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.interpolate": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.load": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.save": [],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.set_parameters",
+        "ref_id": "harmonic-stimulus-with-pw-cm-set-parameters",
+        "headings": [
+          "harmonic_stimulus_with_pw_CM.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.stimulus_generator": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.biphasic_stimulus_CM": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.charge_quantity_CE": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.context_modifier": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.cost_position_saver": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.harmonic_stimulus_CM": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate_Npts": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate_amp": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.optim_results": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.raster_count_CE": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.recrutement_count_CE": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.stim_energy_CE": [],
+  "_nrv/optim/optim_utils/nrv.optim.optim_utils.stimulus_CM": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.__init__": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.add_filter": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.clear": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.compute_best_pos": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.copy": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.findbestpart": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.fromkeys": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.get": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.get_parameters": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_dummy": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_empty": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_stabilized": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.items": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.keys": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.load": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.plot_cost_history": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.pop": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.popitem": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.remove_key": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.save": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.set_parameters",
+        "ref_id": "optim-results-set-parameters",
+        "headings": [
+          "optim_results.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.setdefault": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.stabilization_it": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.to_save": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.update": [],
+  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.values": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.__init__": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.call_method": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.get_parameters": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.load": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.save": [],
+  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.set_parameters",
+        "ref_id": "raster-count-ce-set-parameters",
+        "headings": [
+          "raster_count_CE.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.__init__": [],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.call_method": [],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.count_axon_activation": [],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.count_fascicle_activation": [],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.get_parameters": [],
+  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.load": [],
   "examples/generic/11_combining_stimulus": [
     {
       "source": "import nrv\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nif __name__ == '__main__':\n    model = 'Tigerholm'\n    diam = 1\n    y = 0\n    z = 0\n    print(diam)\n\n    L = 10000\n\n    t_sim = 50\n    t_position=0.05\n    t_start=20\n    t_duration=1\n    t_amplitude=1\n\n    b_start = 3\n    b_duration = t_sim\n    block_amp = 20000\n    block_freq = 10\n    dt = 1/(20*block_freq)\n    nseg_per_l = 50\n    n_seg = np.int32(nseg_per_l*L/1000)\n    print(n_seg)\n    material = nrv.load_material('endoneurium_bhadra')\n\n    y_elec = 500\n    z_elec = 0\n    x_elec = L/2\n\n    axon1 = nrv.unmyelinated(y,z,diam,L,model=model,Nseg_per_sec=n_seg,dt=dt)\n\n\n    E1 = nrv.point_source_electrode(x_elec,y_elec,z_elec)\n    stim_1=nrv.stimulus()\n    stim_1.sinus(b_start, b_duration, block_amp, block_freq ,dt=1/(block_freq*20))\n    stim_extra = nrv.stimulation(material)\n    stim_extra.add_electrode(E1,stim_1)\n    axon1.attach_extracellular_stimulation(stim_extra)\n\n    axon1.insert_I_Clamp(t_position, t_start, t_duration, t_amplitude)\n\n\n    # simulate axon activity\n    results = axon1.simulate(t_sim=t_sim)\n    results.filter_freq('V_mem',block_freq)\n    results.rasterize('V_mem_filtered')\n\n    print(results.count_APs(\"V_mem_filtered\"))\n\n    fig, ax = plt.subplots(1)\n    cbar = results.colormap_plot(ax, \"V_mem_filtered\")\n    ax.set_xlabel('Time (ms)')\n    ax.set_ylabel('x-position (\u00b5m)')\n    ax.set_title('KES Block')\n    cbar.set_label(r'Membrane Voltage $V_m$ (mV)')\n\n    fig, axs = plt.subplots(2)\n    results.plot_x_t(axs[0],'V_mem_filtered')\n    axs[0].set_ylabel(\"Axon x-axis (\u00b5m)\")\n    axs[0].set_xlabel(\"Time (ms)\")\n    axs[0].set_xlim(0,30)\n    axs[0].set_ylim(0,np.max(results.x_rec))\n\n    results.raster_plot(axs[1],'V_mem_filtered')\n    axs[1].set_ylabel(\"Axon x-axis (\u00b5m)\")\n    axs[1].set_xlabel(\"Time (ms)\")\n    axs[1].set_xlim(0,30)\n    axs[1].set_ylim(0,np.max(results.x_rec))\n\n    plt.show()",
@@ -12238,7 +12479,7 @@
           "COMSOL Installation"
         ]
       },
-      "doc_lineno": 62
+      "doc_lineno": 71
     },
     {
       "source": "import nrv",
@@ -12263,7 +12504,49 @@
           "Using pip"
         ]
       },
-      "doc_lineno": 99
+      "doc_lineno": 108
+    },
+    {
+      "source": ".. code:: bash\n    curl -L -o env.yaml https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_linux.yaml\n    mamba env create -f env.yaml\n    rm env.yaml\n",
+      "names": [],
+      "example": {
+        "document": "installation",
+        "ref_id": "on-linux",
+        "headings": [
+          "Installation",
+          "Quick Installation",
+          "On Linux"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": ".. code:: bash\n    curl -L -o env.yaml https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_macos.yaml\n    mamba env create -f env.yaml\n    rm env.yaml\n",
+      "names": [],
+      "example": {
+        "document": "installation",
+        "ref_id": "on-macos",
+        "headings": [
+          "Installation",
+          "Quick Installation",
+          "On macOS"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": ".. code:: bash\n    mamba run -n nrv python -c \"import nrv; print(nrv.__version__)\"",
+      "names": [],
+      "example": {
+        "document": "installation",
+        "ref_id": "on-macos",
+        "headings": [
+          "Installation",
+          "Quick Installation",
+          "On macOS"
+        ]
+      },
+      "doc_lineno": null
     }
   ],
   "introduction": [],
@@ -16876,247 +17159,6 @@
       "doc_lineno": 245
     }
   ],
-  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.__init__": [],
-  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.get_parameters": [],
-  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.load": [],
-  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.save": [],
-  "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/optim/optim_utils/context_modifier/nrv.optim.optim_utils.context_modifier.set_parameters",
-        "ref_id": "context-modifier-set-parameters",
-        "headings": [
-          "context_modifier.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.__init__": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.get_parameters": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.interpolate": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.load": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.save": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.set_parameters",
-        "ref_id": "harmonic-stimulus-cm-set-parameters",
-        "headings": [
-          "harmonic_stimulus_CM.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/optim/optim_utils/harmonic_stimulus_CM/nrv.optim.optim_utils.harmonic_stimulus_CM.stimulus_generator": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.__init__": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.get_parameters": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.interpolate": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.load": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.save": [],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.set_parameters",
-        "ref_id": "harmonic-stimulus-with-pw-cm-set-parameters",
-        "headings": [
-          "harmonic_stimulus_with_pw_CM.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/optim/optim_utils/harmonic_stimulus_with_pw_CM/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM.stimulus_generator": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.biphasic_stimulus_CM": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.charge_quantity_CE": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.context_modifier": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.cost_position_saver": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.harmonic_stimulus_CM": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.harmonic_stimulus_with_pw_CM": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate_Npts": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.interpolate_amp": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.optim_results": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.raster_count_CE": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.recrutement_count_CE": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.stim_energy_CE": [],
-  "_nrv/optim/optim_utils/nrv.optim.optim_utils.stimulus_CM": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.__init__": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.add_filter": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.clear": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.compute_best_pos": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.copy": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.findbestpart": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.fromkeys": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.get": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.get_parameters": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_dummy": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_empty": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.is_stabilized": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.items": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.keys": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.load": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.plot_cost_history": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.pop": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.popitem": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.remove_key": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.save": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.set_parameters",
-        "ref_id": "optim-results-set-parameters",
-        "headings": [
-          "optim_results.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.setdefault": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.stabilization_it": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.to_save": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.update": [],
-  "_nrv/optim/optim_utils/optim_results/nrv.optim.optim_utils.optim_results.values": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.__init__": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.call_method": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.get_parameters": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.load": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.save": [],
-  "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/optim/optim_utils/raster_count_CE/nrv.optim.optim_utils.raster_count_CE.set_parameters",
-        "ref_id": "raster-count-ce-set-parameters",
-        "headings": [
-          "raster_count_CE.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.__init__": [],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.call_method": [],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.count_axon_activation": [],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.count_fascicle_activation": [],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.get_parameters": [],
-  "_nrv/optim/optim_utils/recrutement_count_CE/nrv.optim.optim_utils.recrutement_count_CE.load": [],
   "_nrv/nmod/utils/nrv.nmod.utils.fill_area_with_axons": [],
   "_nrv/nmod/utils/nrv.nmod.utils.get_circular_contour": [],
   "_nrv/nmod/utils/nrv.nmod.utils.get_ppop_info": [],
@@ -18037,111 +18079,6 @@
   "_nrv/nmod/results/myelinated_results/nrv.nmod.results.myelinated_results.APs_reached_end": [],
   "_nrv/nmod/results/myelinated_results/nrv.nmod.results.myelinated_results.__init__": [],
   "_nrv/nmod/results/myelinated_results/nrv.nmod.results.myelinated_results.block": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.attach_extracellular_recorder": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.attach_extracellular_stimulation": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.change_stimulus_from_electrode": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.clear_I_clamp": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.clear_context": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.compute_electrodes_footprints": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.define_circular_contour": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.define_ellipsoid_contour": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.define_length": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.extracel_status": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.fit_circular_contour": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.get_axons_parameters": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.get_circular_contour": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.get_fascicles": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.get_n_ax": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.get_parameters": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.has_FEM_extracel": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.import_contour": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.insert_I_Clamp": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.intracel_status": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.load": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.n_ax": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.n_fasc": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.plot": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.rec_status": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.save": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.set_ID": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.set_axons_parameters": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/nmod/nerve/nrv.nmod.nerve.set_parameters",
-        "ref_id": "nerve-set-parameters",
-        "headings": [
-          "nerve.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.shut_recorder_down": [],
-  "_nrv/nmod/nerve/nrv.nmod.nerve.simulate": [],
-  "_nrv/nmod/nrv.nmod.axon": [],
-  "_nrv/nmod/nrv.nmod.axon_population": [],
-  "_nrv/nmod/nrv.nmod.fascicle": [],
-  "_nrv/nmod/nrv.nmod.myelinated": [],
-  "_nrv/nmod/nrv.nmod.nerve": [],
-  "_nrv/nmod/nrv.nmod.results": [],
-  "_nrv/nmod/nrv.nmod.unmyelinated": [],
-  "_nrv/nmod/nrv.nmod.utils": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.APs_in_timeframe": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.APs_reached_end": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.__init__": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.block": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.block_summary": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.check_test_AP": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.clear": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.colormap_plot": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.compute_f_mem": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.copy": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.count_APs": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.detect_AP_collisions": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.detect_start_extrastim": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.extra_stim_properties": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.filter_freq": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.find_central_index": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.fromkeys": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.generate_axon": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.getAPspeed": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_1dpoly_intersec": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_AP_downward_len": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_AP_upward_len": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_avg_AP_speed": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_axon_xrec": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_collision_pts": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_interAPs_collision": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_capacitance": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_complexe_admitance": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_conductivity": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_material": [],
-  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_parameters": [],
   "_nrv/nmod/fascicle/nrv.nmod.fascicle.remove_sim_masks": [],
   "_nrv/nmod/fascicle/nrv.nmod.fascicle.remove_unmyelinated_axons": [],
   "_nrv/nmod/fascicle/nrv.nmod.fascicle.rotate": [],
@@ -18281,6 +18218,111 @@
   "_nrv/nmod/myelinated/nrv.nmod.myelinated.topology": [],
   "_nrv/nmod/nerve/nrv.nmod.nerve.__init__": [],
   "_nrv/nmod/nerve/nrv.nmod.nerve.add_fascicle": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.attach_extracellular_recorder": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.attach_extracellular_stimulation": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.change_stimulus_from_electrode": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.clear_I_clamp": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.clear_context": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.compute_electrodes_footprints": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.define_circular_contour": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.define_ellipsoid_contour": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.define_length": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.extracel_status": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.fit_circular_contour": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.get_axons_parameters": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.get_circular_contour": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.get_fascicles": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.get_n_ax": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.get_parameters": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.has_FEM_extracel": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.import_contour": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.insert_I_Clamp": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.intracel_status": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.load": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.n_ax": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.n_fasc": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.plot": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.rec_status": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.save": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.set_ID": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.set_axons_parameters": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/nmod/nerve/nrv.nmod.nerve.set_parameters",
+        "ref_id": "nerve-set-parameters",
+        "headings": [
+          "nerve.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.shut_recorder_down": [],
+  "_nrv/nmod/nerve/nrv.nmod.nerve.simulate": [],
+  "_nrv/nmod/nrv.nmod.axon": [],
+  "_nrv/nmod/nrv.nmod.axon_population": [],
+  "_nrv/nmod/nrv.nmod.fascicle": [],
+  "_nrv/nmod/nrv.nmod.myelinated": [],
+  "_nrv/nmod/nrv.nmod.nerve": [],
+  "_nrv/nmod/nrv.nmod.results": [],
+  "_nrv/nmod/nrv.nmod.unmyelinated": [],
+  "_nrv/nmod/nrv.nmod.utils": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.APs_in_timeframe": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.APs_reached_end": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.__init__": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.block": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.block_summary": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.check_test_AP": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.clear": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.colormap_plot": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.compute_f_mem": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.copy": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.count_APs": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.detect_AP_collisions": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.detect_start_extrastim": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.extra_stim_properties": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.filter_freq": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.find_central_index": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.fromkeys": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.generate_axon": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.getAPspeed": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_1dpoly_intersec": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_AP_downward_len": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_AP_upward_len": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_avg_AP_speed": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_axon_xrec": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_collision_pts": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_interAPs_collision": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_capacitance": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_complexe_admitance": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_conductivity": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_membrane_material": [],
+  "_nrv/nmod/results/axon_results/nrv.nmod.results.axon_results.get_parameters": [],
   "_nrv/nmod/axon_population/nrv.nmod.axon_population.create_population_from_data": [],
   "_nrv/nmod/axon_population/nrv.nmod.axon_population.create_population_from_stat": [],
   "_nrv/nmod/axon_population/nrv.nmod.axon_population.fill_geometry": [],

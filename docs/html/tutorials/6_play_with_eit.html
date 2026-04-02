@@ -7,7 +7,7 @@
         <link rel="prefetch" href="../_static/logo.png" as="image">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Tutorial 6 - Play with EIT using NRV - NeuRon Virtualizer (NRV) 1.3.1</title>
+        <title>Tutorial 6 - Play with EIT using NRV - NeuRon Virtualizer (NRV) 1.3.2</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -169,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">NeuRon Virtualizer (NRV) 1.3.1</div></a>
+      <a href="../index.html"><div class="brand">NeuRon Virtualizer (NRV) 1.3.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -193,7 +193,7 @@
     <img class="sidebar-logo" src="../_static/logo.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">NeuRon Virtualizer (NRV) 1.3.1</span>
+  <span class="sidebar-brand-text">NeuRon Virtualizer (NRV) 1.3.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -2677,7 +2677,7 @@ Placing... ━━━━━━━━━━━━━━━━━━━━━━━
 <span class="n">nrn_res</span> <span class="o">=</span> <span class="n">eit_instance</span><span class="o">.</span><span class="n">simulate_nerve</span><span class="p">(</span><span class="n">t_start</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">t_iclamp</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim_param</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sim_param</span></a><span class="p">,</span> <span class="n">fasc_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:01:18
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:01:15
 fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:40
 </pre></div>
 </div>
@@ -2713,9 +2713,9 @@ fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━
 <span class="n">fem_res</span> <span class="o">=</span> <span class="n">eit_instance</span><span class="o">.</span><span class="n">simulate_eit</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:57
-process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:56
-process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:55
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:41
+process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:39
+process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:38
 </pre></div>
 </div>
 <p>The object returned by the EIT simulation is an instance of <a class="reference internal" href="../_nrv/eit/results/nrv.eit.results.eit_forward_results.html#nrv.eit.results.eit_forward_results" title="nrv.eit.results.eit_forward_results"><code class="xref py py-class docutils literal notranslate"><span class="pre">nrv.eit.results.eit_forward_results</span></code></a>. The main purposes of this class are to:</p>
@@ -2843,7 +2843,7 @@ Text(0.5, 1.0, &#39;Diferentrial measurements&#39;)
 </div>
 <img src="../_images/sphx_glr_6_play_with_eit_007.png" srcset="../_images/sphx_glr_6_play_with_eit_007.png" alt="6 play with eit" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>t_max=3.6000000000003696ms, (i_tmax=7)
 
-&lt;matplotlib.legend.Legend object at 0x7c7e07838b30&gt;
+&lt;matplotlib.legend.Legend object at 0x734f395b3890&gt;
 </pre></div>
 </div>
 <p>If required the data formatted for pyEIT solvers can be extracted using <cite>fromat_data</cite> as shown bellow:</p>
@@ -2857,7 +2857,7 @@ Text(0.5, 1.0, &#39;Diferentrial measurements&#39;)
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v1</span></a><span class="o">-</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">v0</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_6_play_with_eit_008.png" srcset="../_images/sphx_glr_6_play_with_eit_008.png" alt="6 play with eit" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D object at 0x7c7e17d19790&gt;]
+<img src="../_images/sphx_glr_6_play_with_eit_008.png" srcset="../_images/sphx_glr_6_play_with_eit_008.png" alt="6 play with eit" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D object at 0x734f277bc8c0&gt;]
 </pre></div>
 </div>
 <p>Here is where the reconstruction is done.</p>
@@ -2913,10 +2913,10 @@ Text(0.5, 1.0, &#39;Diferentrial measurements&#39;)
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>fascicle 1/2 -- 3 CPUs: 30 / 30 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:01:16
-fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:41
-process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:39
-process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:39
-process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:39
+fascicle 2/2 -- 3 CPUs: 10 / 10 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:39
+process 1 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:40
+process 2 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:38
+process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:37
 </pre></div>
 </div>
 </section>
@@ -2966,7 +2966,7 @@ process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━�
 <img src="../_images/sphx_glr_6_play_with_eit_012.png" srcset="../_images/sphx_glr_6_play_with_eit_012.png" alt="Simulated nerve, Reconstructed image, Filtered reconstruction" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Filtered reconstruction&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (5 minutes 57.459 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (5 minutes 36.397 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-6-play-with-eit-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/bb2920fe762438ed86d0c6b3ba8e49c4/6_play_with_eit.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">6_play_with_eit.ipynb</span></code></a></p>
@@ -3059,7 +3059,7 @@ process 3 -- 3 : 112/112 ━━━━━━━━━━━━━━━━━━�
   </div>
 </div><script src="../_static/jquery.js?v=5d32c60e"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../_static/documentation_options.js?v=f2aba15d"></script>
+    <script src="../_static/documentation_options.js?v=5ffbd191"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

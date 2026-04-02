@@ -7,7 +7,7 @@
         <link rel="prefetch" href="_static/logo.png" as="image">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Version updates - NeuRon Virtualizer (NRV) 1.3.1</title>
+        <title>Version updates - NeuRon Virtualizer (NRV) 1.3.2</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d75fae25" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -169,7 +169,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">NeuRon Virtualizer (NRV) 1.3.1</div></a>
+      <a href="index.html"><div class="brand">NeuRon Virtualizer (NRV) 1.3.2</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -193,7 +193,7 @@
     <img class="sidebar-logo" src="_static/logo.png" alt="Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">NeuRon Virtualizer (NRV) 1.3.1</span>
+  <span class="sidebar-brand-text">NeuRon Virtualizer (NRV) 1.3.2</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -2500,49 +2500,51 @@
           <section id="version-updates">
 <h1>Version updates<a class="headerlink" href="#version-updates" title="Link to this heading"></a></h1>
 <p>All notable changes to NRV are summed up in this file.</p>
-<section id="xxxxx">
-<h2>[1.3.2] - 2026-XXXXX<a class="headerlink" href="#xxxxx" title="Link to this heading"></a></h2>
+<section id="id1">
+<h2>[1.3.2] - 2026-04-02<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Missing docstring of all module subodules</p></li>
-<li><p>EIT plot for 8, 12, 14, 16 array cuff electrodes</p></li>
+<li><p>Missing docstring of all module subodules.</p></li>
+<li><p>EIT plot for 8, 12, 14, 16 array cuff electrodes.</p></li>
+<li><p>New automated strategy to build documentation: Doc is now built and sent to Read the Doc from a self-hosted runner when a push is done on master branch.</p></li>
+<li><p>Storing <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files for new quick install on linux and macos</p></li>
 </ul>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading"></a></h3>
 <ul class="simple">
-<li><p>Issues with eit_results_list for multifrequency and multipatern results</p></li>
+<li><p>Issues with eit_results_list for multifrequency and multipatern results.</p></li>
 <li><p>Save/load issue with myelinated axon <code class="docutils literal notranslate"><span class="pre">intracellular_context</span></code>: neuron.Section-obects were added for position, storage replaced by an <code class="docutils literal notranslate"><span class="pre">str</span></code>.</p></li>
 <li><p>numpy 2.4 compatibility:</p>
 <ul>
 <li><p><a class="reference external" href="https://github.com/nrv-framework/NRV/issues/69">issue #69</a></p></li>
-<li><p>np.trapz deprecaiton and replaced by np.trapezoid (retrocompatibility insured by <code class="docutils literal notranslate"><span class="pre">nrv.backend._extlib_interface.np_trapz</span></code>)</p></li>
+<li><p>np.trapz deprecaiton and replaced by np.trapezoid.(retrocompatibility insured by <code class="docutils literal notranslate"><span class="pre">nrv.backend._extlib_interface.np_trapz</span></code>).</p></li>
 </ul>
 </li>
 <li><p>pandas 3.0 compatibility:</p>
 <ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">nrv.eit.eit_forward._setup_problem</span></code> rewrite impossible on Series copy</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">.iloc</span></code> required to access a row of a <code class="docutils literal notranslate"><span class="pre">pandas.Dataframe</span></code> or <code class="docutils literal notranslate"><span class="pre">pandas.Serie</span></code>: <code class="docutils literal notranslate"><span class="pre">nrv.nmod.fascicle</span></code>, <code class="docutils literal notranslate"><span class="pre">nrv.nmod.results.fascicle_results</span></code>:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nrv.eit.eit_forward._setup_problem</span></code> rewrite impossible on Series copy.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.iloc</span></code> required to access a row of a <code class="docutils literal notranslate"><span class="pre">pandas.Dataframe</span></code> or <code class="docutils literal notranslate"><span class="pre">pandas.Serie</span></code>: <code class="docutils literal notranslate"><span class="pre">nrv.nmod.fascicle</span></code>, <code class="docutils literal notranslate"><span class="pre">nrv.nmod.results.fascicle_results</span></code>.</p></li>
 </ul>
 </li>
 </ul>
 </section>
 </section>
-<section id="id1">
-<h2>[1.3.1] - 2026-23-2025<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <section id="id2">
-<h3>Fixed<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<h2>[1.3.1] - 2026-23-2025<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Fixed<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Ugly fix for <em>Build Time Limit</em> issue on <a class="reference external" href="https://docs.readthedocs.com/platform/latest/builds.html#build-resources">readthedocs</a>: Doc is locally generated before release and is only copy-pasted by RtD.</p></li>
 <li><p>Various bugs in EIT</p></li>
 </ul>
 </section>
 </section>
-<section id="id3">
-<h2>[1.3.0] - 2025-08-21<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
 <section id="id4">
-<h3>Added<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<h2>[1.3.0] - 2025-08-21<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3>Added<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added a first version of the <a class="reference external" href="nrv/eit/">nrv.eit</a> sub-package: to allow simulation of electrical impedance tomography of peripheral nerve activity</p></li>
 <li><p>Added Fixing <a class="reference external" href="docs/tutorials/6_play_with_eit.py">Tutorial 6</a> — Play with EIT using NRV.</p></li>
@@ -2550,18 +2552,18 @@
 <li><p>Version of deprecation of tests added as comment</p></li>
 </ul>
 </section>
-<section id="id5">
-<h3>Fixed<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<section id="id6">
+<h3>Fixed<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Import problem solved (fciotti suggestion), by adding nrv.nmod.utils in setup file</p></li>
 <li><p>Adding static doc to the git repository in docs/_nrv (to speed up compilation and avoid time out error from readthedoc). Think to regenerate locally for future updates.</p></li>
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>[1.2.2] - 2025-07-09<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
 <section id="id7">
-<h3>Added<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<h2>[1.2.2] - 2025-07-09<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>Added<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">utils.geom</span></code>-subpackage to gather geometry related functions and classes.</p></li>
 <li><p>Added elliptic and polygonal geometry for fascicles.</p></li>
@@ -2576,8 +2578,8 @@
 <li><p>New dependency: <a class="reference external" href="https://shapely.readthedocs.io/en/stable/">shapely</a>.</p></li>
 </ul>
 </section>
-<section id="id8">
-<h3>Fixed<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<section id="id9">
+<h3>Fixed<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Impose deepcopy in load_any to prevent issue when loading multiple times a same <code class="docutils literal notranslate"><span class="pre">dict</span></code>.</p></li>
 <li><p>Prevent to use more processes than axon number in <code class="docutils literal notranslate"><span class="pre">fascicle.simulate</span></code>.</p></li>
@@ -2599,10 +2601,10 @@
 </ul>
 </section>
 </section>
-<section id="id9">
-<h2>[1.2.1] - 2025-06-06<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
 <section id="id10">
-<h3>Added<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<h2>[1.2.1] - 2025-06-06<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<section id="id11">
+<h3>Added<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">backend._NRV_Mproc</span></code> to handle parallel processing in NRV.</p></li>
 <li><p>Added Github Action <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">and</span> <span class="pre">Push</span> <span class="pre">Docker</span> <span class="pre">Image</span> <span class="pre">on</span> <span class="pre">Release</span></code> to automatically push docker image to Docker Hub on release.</p></li>
@@ -2610,26 +2612,26 @@
 <li><p>Added Command “-f” in NRV_test to find specific tests</p></li>
 </ul>
 </section>
-<section id="id11">
-<h3>Fixed<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<section id="id12">
+<h3>Fixed<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Cleaned doc Makefile</p></li>
 <li><p>Fixing <a class="reference external" href="docs/tutorials/5_first_optimization.ipynb">Tutorial 5</a>.</p></li>
 <li><p>Cleaning and refreshing of the docs</p></li>
 </ul>
 </section>
-<section id="id12">
-<h3>Removed<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<section id="id13">
+<h3>Removed<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Remove <code class="docutils literal notranslate"><span class="pre">backend.Mcore_handler</span></code>.</p></li>
 <li><p>Remove <code class="docutils literal notranslate"><span class="pre">nrv2calm</span></code>.</p></li>
 </ul>
 </section>
 </section>
-<section id="id13">
-<h2>[1.2.0] - 2025-05-30<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
 <section id="id14">
-<h3>Added<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<h2>[1.2.0] - 2025-05-30<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<section id="id15">
+<h3>Added<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>improved <code class="docutils literal notranslate"><span class="pre">eval</span></code> in <code class="docutils literal notranslate"><span class="pre">_FEMResults</span></code> for serialized calls (added state variables).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">spec_loader.py</span></code> mostly for typing.</p></li>
@@ -2638,49 +2640,49 @@
 <li><p>automated parallel processing using <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>. All parallelization are handled as a blind process for the end-user, this change has been performed with taking care for the most on backward compatibility. Documentation has been changed in consequence.</p></li>
 </ul>
 </section>
-<section id="id15">
-<h3>Fixed<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<section id="id16">
+<h3>Fixed<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">axon.__init__</span></code>’s <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>: all parameters can now be set at the instantiation of the axon.</p></li>
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">search_threshold_dispatcher</span></code> for use in notebooks.</p></li>
 <li><p>Remove deprecated function in tutorials and examples.</p></li>
 </ul>
 </section>
-<section id="id16">
-<h3>Removed<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<section id="id17">
+<h3>Removed<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">myelinated_results.find_central_node_index</span></code>-method replaced by <code class="docutils literal notranslate"><span class="pre">axon_results.find_central_index</span></code> with, for <code class="docutils literal notranslate"><span class="pre">myelinated_results</span></code>, the argument <code class="docutils literal notranslate"><span class="pre">node</span></code> to obtain former results.</p></li>
 <li><p>MCore and explicit use of <code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> are removed, as parallel processing is handled by Python standard API.</p></li>
 </ul>
 </section>
 </section>
-<section id="id17">
-<h2>[1.1.2] - 2024-09-12<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
 <section id="id18">
-<h3>Added<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<h2>[1.1.2] - 2024-09-12<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<section id="id19">
+<h3>Added<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ui</span></code>, a subpackage for user interface to separate from <code class="docutils literal notranslate"><span class="pre">utils</span></code> which are ment to stay internal.</p></li>
 <li><p>Help restructuration to have an API description more user-friendly.</p></li>
 <li><p>nrv.CONFIG as a singleton object gathering configuration related data, parameters and methods.</p></li>
 </ul>
 </section>
-<section id="id19">
-<h3>Fixed<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<section id="id20">
+<h3>Fixed<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>small fix in filter_freq to avoid filtering artefact.</p></li>
 </ul>
 </section>
-<section id="id20">
-<h3>Removed<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<section id="id21">
+<h3>Removed<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>methods such as load_any_axon, load_any_electrode… (<code class="docutils literal notranslate"><span class="pre">load_any_</span></code> + something) are deprecated, though not removed for backward compatibility. Please only use <code class="docutils literal notranslate"><span class="pre">load_any</span></code> function.</p></li>
 </ul>
 </section>
 </section>
-<section id="id21">
-<h2>[1.1.1] - 2024-08-05<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
 <section id="id22">
-<h3>Added<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<h2>[1.1.1] - 2024-08-05<a class="headerlink" href="#id22" title="Link to this heading"></a></h2>
+<section id="id23">
+<h3>Added<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Updated the way axons post-processing is handled during fascicle and nerve simulation:</p>
 <ul>
@@ -2713,8 +2715,8 @@
 <li><p>Doc gallery for examples. Examples have been relocated to <code class="docutils literal notranslate"><span class="pre">docs/examples</span></code>.</p></li>
 </ul>
 </section>
-<section id="id23">
-<h3>Fixed<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<section id="id24">
+<h3>Fixed<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>issues with mcore optimization.</p></li>
 <li><p>Fix duplicate node count in node_index of myelinated axons.</p></li>
@@ -2723,10 +2725,10 @@
 </ul>
 </section>
 </section>
-<section id="id24">
-<h2>[1.1.0] - 2024-05-27<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
 <section id="id25">
-<h3>Added<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<h2>[1.1.0] - 2024-05-27<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
+<section id="id26">
+<h3>Added<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Significant improvement in the documentation.</p></li>
 <li><p>first simulations for nerve EIT direct models -&gt; not documented yet, technical tests pass, still under scientific tests and development.</p></li>
@@ -2736,8 +2738,8 @@
 <li><p>decorator for single-core function definition.</p></li>
 </ul>
 </section>
-<section id="id26">
-<h3>Fixed<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<section id="id27">
+<h3>Fixed<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>issues with type hints on documentation generation.</p></li>
 <li><p>code troubles with DOLFINx v0.8.0 now resolved, versions below are not supported anymore.</p></li>
@@ -2745,10 +2747,10 @@
 </ul>
 </section>
 </section>
-<section id="id27">
-<h2>[1.0.1] - 2024-01-26<a class="headerlink" href="#id27" title="Link to this heading"></a></h2>
 <section id="id28">
-<h3>Fixed<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
+<h2>[1.0.1] - 2024-01-26<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
+<section id="id29">
+<h3>Fixed<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>issue #38:</p>
 <ul>
@@ -2759,23 +2761,23 @@
 </ul>
 </section>
 </section>
-<section id="id29">
-<h2>[1.0.0] - 2024-01-12<a class="headerlink" href="#id29" title="Link to this heading"></a></h2>
+<section id="id30">
+<h2>[1.0.0] - 2024-01-12<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Version corresponding to preprint (<a class="reference external" href="https://doi.org/10.1101/2024.01.15.575628">https://doi.org/10.1101/2024.01.15.575628</a>).</p></li>
 </ul>
 </section>
-<section id="id30">
-<h2>[0.9.16] - 2023-12-12<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
 <section id="id31">
-<h3>Added<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<h2>[0.9.16] - 2023-12-12<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<section id="id32">
+<h3>Added<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>Automatic versioning for dev team.</p></li>
 <li><p>this tracking file.</p></li>
 </ul>
 </section>
-<section id="id32">
-<h3>Fixed<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<section id="id33">
+<h3>Fixed<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><p>automated releases,.</p></li>
 <li><p>automatic push on pypi.</p></li>
@@ -2836,63 +2838,63 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Version updates</a><ul>
-<li><a class="reference internal" href="#xxxxx">[1.3.2] - 2026-XXXXX</a><ul>
+<li><a class="reference internal" href="#id1">[1.3.2] - 2026-04-02</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id1">[1.3.1] - 2026-23-2025</a><ul>
-<li><a class="reference internal" href="#id2">Fixed</a></li>
+<li><a class="reference internal" href="#id2">[1.3.1] - 2026-23-2025</a><ul>
+<li><a class="reference internal" href="#id3">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id3">[1.3.0] - 2025-08-21</a><ul>
-<li><a class="reference internal" href="#id4">Added</a></li>
-<li><a class="reference internal" href="#id5">Fixed</a></li>
+<li><a class="reference internal" href="#id4">[1.3.0] - 2025-08-21</a><ul>
+<li><a class="reference internal" href="#id5">Added</a></li>
+<li><a class="reference internal" href="#id6">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">[1.2.2] - 2025-07-09</a><ul>
-<li><a class="reference internal" href="#id7">Added</a></li>
-<li><a class="reference internal" href="#id8">Fixed</a></li>
+<li><a class="reference internal" href="#id7">[1.2.2] - 2025-07-09</a><ul>
+<li><a class="reference internal" href="#id8">Added</a></li>
+<li><a class="reference internal" href="#id9">Fixed</a></li>
 <li><a class="reference internal" href="#removed">Removed</a></li>
 <li><a class="reference internal" href="#depreciated">Depreciated</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id9">[1.2.1] - 2025-06-06</a><ul>
-<li><a class="reference internal" href="#id10">Added</a></li>
-<li><a class="reference internal" href="#id11">Fixed</a></li>
-<li><a class="reference internal" href="#id12">Removed</a></li>
+<li><a class="reference internal" href="#id10">[1.2.1] - 2025-06-06</a><ul>
+<li><a class="reference internal" href="#id11">Added</a></li>
+<li><a class="reference internal" href="#id12">Fixed</a></li>
+<li><a class="reference internal" href="#id13">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id13">[1.2.0] - 2025-05-30</a><ul>
-<li><a class="reference internal" href="#id14">Added</a></li>
-<li><a class="reference internal" href="#id15">Fixed</a></li>
-<li><a class="reference internal" href="#id16">Removed</a></li>
+<li><a class="reference internal" href="#id14">[1.2.0] - 2025-05-30</a><ul>
+<li><a class="reference internal" href="#id15">Added</a></li>
+<li><a class="reference internal" href="#id16">Fixed</a></li>
+<li><a class="reference internal" href="#id17">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id17">[1.1.2] - 2024-09-12</a><ul>
-<li><a class="reference internal" href="#id18">Added</a></li>
-<li><a class="reference internal" href="#id19">Fixed</a></li>
-<li><a class="reference internal" href="#id20">Removed</a></li>
+<li><a class="reference internal" href="#id18">[1.1.2] - 2024-09-12</a><ul>
+<li><a class="reference internal" href="#id19">Added</a></li>
+<li><a class="reference internal" href="#id20">Fixed</a></li>
+<li><a class="reference internal" href="#id21">Removed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id21">[1.1.1] - 2024-08-05</a><ul>
-<li><a class="reference internal" href="#id22">Added</a></li>
-<li><a class="reference internal" href="#id23">Fixed</a></li>
+<li><a class="reference internal" href="#id22">[1.1.1] - 2024-08-05</a><ul>
+<li><a class="reference internal" href="#id23">Added</a></li>
+<li><a class="reference internal" href="#id24">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id24">[1.1.0] - 2024-05-27</a><ul>
-<li><a class="reference internal" href="#id25">Added</a></li>
-<li><a class="reference internal" href="#id26">Fixed</a></li>
+<li><a class="reference internal" href="#id25">[1.1.0] - 2024-05-27</a><ul>
+<li><a class="reference internal" href="#id26">Added</a></li>
+<li><a class="reference internal" href="#id27">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id27">[1.0.1] - 2024-01-26</a><ul>
-<li><a class="reference internal" href="#id28">Fixed</a></li>
+<li><a class="reference internal" href="#id28">[1.0.1] - 2024-01-26</a><ul>
+<li><a class="reference internal" href="#id29">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id29">[1.0.0] - 2024-01-12</a></li>
-<li><a class="reference internal" href="#id30">[0.9.16] - 2023-12-12</a><ul>
-<li><a class="reference internal" href="#id31">Added</a></li>
-<li><a class="reference internal" href="#id32">Fixed</a></li>
+<li><a class="reference internal" href="#id30">[1.0.0] - 2024-01-12</a></li>
+<li><a class="reference internal" href="#id31">[0.9.16] - 2023-12-12</a><ul>
+<li><a class="reference internal" href="#id32">Added</a></li>
+<li><a class="reference internal" href="#id33">Fixed</a></li>
 </ul>
 </li>
 </ul>
@@ -2908,7 +2910,7 @@
   </div>
 </div><script src="_static/jquery.js?v=5d32c60e"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="_static/documentation_options.js?v=f2aba15d"></script>
+    <script src="_static/documentation_options.js?v=5ffbd191"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/scripts/furo.js?v=46bd48cc"></script>
