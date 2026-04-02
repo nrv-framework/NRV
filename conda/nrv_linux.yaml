@@ -1,4 +1,4 @@
-name: nrv-docs
+name: nrv
 channels:
   - conda-forge
 dependencies:
@@ -10,29 +10,4 @@ dependencies:
   - ipykernel
   - pip
   - pip:
-    - mph
-    - neuron
-    - icecream
-    - numba
-    - scipy
-    - matplotlib
-    - ezdxf
-    - psutil
-    - pyswarms
-    - rich
-    - pandas
-    - pathos
-    - shapely
-    - seaborn
-    - pyeit
-    - sphinx_rtd_theme
-    - furo
-    - Pygments
-    - sphinx_mdinclude
-    - sphinx_copybutton
-    - sphinx_gallery
-    - ipython
-    - sphinx_codeautolink
-    - numpy
-    - matplotlib
-    - opencv-python
+    - nrv-py
