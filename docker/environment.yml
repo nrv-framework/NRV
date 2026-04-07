@@ -2,14 +2,10 @@ name: nrv
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
+  - python=3.13
   - pip
   - mpi4py
   - fenics-dolfinx=0.9.0
-  - libblas=*=*blis
   - python-gmsh
   - ipykernel
   - mpich
-  - sysroot_linux-64=2.17
-  - pip:
-      - nrv-py

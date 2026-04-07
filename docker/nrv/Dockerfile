@@ -1,7 +1,9 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PATH=/opt/conda/bin:$PATH
+ENV CONDA_DIR=/opt/conda
+ENV NRV_ENV=/opt/nrv-env
+ENV PATH=${NRV_ENV}/bin:${CONDA_DIR}/bin:$PATH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
@@ -39,12 +41,20 @@ RUN case "${TARGETARCH}" in \
         *) echo "Unsupported TARGETARCH=${TARGETARCH}" && exit 1 ;; \
     esac && \
     wget --quiet "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O /tmp/miniforge.sh && \
-    bash /tmp/miniforge.sh -b -p /opt/conda && \
+    bash /tmp/miniforge.sh -b -p "${CONDA_DIR}" && \
     rm -f /tmp/miniforge.sh && \
     conda config --system --set channel_priority strict && \
     conda clean --all --yes
 
-COPY docker/nrv/environment.yml /tmp/environment.yml
-RUN mamba env update -n base -f /tmp/environment.yml && \
-    mamba clean --all --yes
-RUN python -c "import nrv"
+COPY docker/environment.yml /tmp/environment.yml
+
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir --upgrade nrv-py
+
+RUN conda env create -p "${NRV_ENV}" -f /tmp/environment.yml && \
+    conda clean --all --yes
+
+RUN pip show nrv-py
+
+RUN python -V && \
+    python -c "import nrv; print('NRV import OK')"
