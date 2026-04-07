@@ -185,7 +185,7 @@ The WSL2 terminal must be rebooted before using NRV.
 Quick Installation
 ------------------
 
-A simpler installation method has been available since ``NRV-v1.2.2``. The goal is to create a new mamba or micromamba environment from recipes stored in ``.yaml`` files in the GitHub repository.
+A simpler installation method has been available since ``NRV-v1.3.2``. The goal is to create a new mamba or micromamba environment from recipes stored in ``.yaml`` files in the GitHub repository.
 
 .. warning:: 
     This method has not been extensively tested yet. If any errors occur, please report them and use the standard method detailed `above <installation.html#installation-step-by-step>`_.
@@ -194,20 +194,23 @@ On Linux
 ^^^^^^^^
 
 .. code:: bash
+
     curl -L -o env.yaml https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_linux.yaml
-    mamba env create -f env.yaml
+    mamba env create -n nrv-env -f env.yaml
     rm env.yaml
 
 On macOS
 ^^^^^^^^
 
 .. code:: bash
+
     curl -L -o env.yaml https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_macos.yaml
-    mamba env create -f env.yaml
+    mamba env create -n nrv-env -f env.yaml
     rm env.yaml
 
 .. Tip::
     In both cases you can test the installation using (note that this command could take longer to execute as ``nrv`` is imported for the first time):
 
     .. code:: bash
-        mamba run -n nrv python -c "import nrv; print(nrv.__version__)"
+
+        mamba run -n nrv-env python -c "import nrv; print(nrv.__version__)"
