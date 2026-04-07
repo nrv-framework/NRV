@@ -2609,19 +2609,32 @@ micromamba<span class="w"> </span>install<span class="w"> </span>-c<span class="
 </section>
 <section id="id1">
 <h2>Quick Installation<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
-<p>A simpler installation method has been available since <code class="docutils literal notranslate"><span class="pre">NRV-v1.2.2</span></code>. The goal is to create a new mamba or micromamba environment from recipes stored in <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files in the GitHub repository.</p>
+<p>A simpler installation method has been available since <code class="docutils literal notranslate"><span class="pre">NRV-v1.3.2</span></code>. The goal is to create a new mamba or micromamba environment from recipes stored in <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files in the GitHub repository.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This method has not been extensively tested yet. If any errors occur, please report them and use the standard method detailed <a class="reference external" href="installation.html#installation-step-by-step">above</a>.</p>
 </div>
 <section id="on-linux">
 <h3>On Linux<a class="headerlink" href="#on-linux" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>env.yaml<span class="w"> </span>https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_linux.yaml
+mamba<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>nrv-env<span class="w"> </span>-f<span class="w"> </span>env.yaml
+rm<span class="w"> </span>env.yaml
+</pre></div>
+</div>
 </section>
 <section id="on-macos">
 <h3>On macOS<a class="headerlink" href="#on-macos" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>env.yaml<span class="w"> </span>https://raw.githubusercontent.com/nrv-framework/NRV/refs/heads/master/conda/nrv_macos.yaml
+mamba<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>nrv-env<span class="w"> </span>-f<span class="w"> </span>env.yaml
+rm<span class="w"> </span>env.yaml
+</pre></div>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>In both cases you can test the installation using (note that this command could take longer to execute as <code class="docutils literal notranslate"><span class="pre">nrv</span></code> is imported for the first time):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mamba<span class="w"> </span>run<span class="w"> </span>-n<span class="w"> </span>nrv-env<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import nrv; print(nrv.__version__)"</span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>
