@@ -62,6 +62,18 @@ def set_idxs(_i: np.ndarray | int | tuple | None, _n: int | None) -> np.ndarray:
     return _i
 
 
+def np_trapz(*args, **kwgs):
+    """
+    Wrap NumPy trapezoidal integration with version-compatible dispatch.
+
+    Returns the result of :func:``np.trapz`` for NumPy versions older than 2.0.0
+    and :func:``np.trapezoid`` otherwise.
+    """
+    if np.__version__ < "2.0.0":
+        return np.trapz(*args, **kwgs)
+    return np.trapezoid(*args, **kwgs)
+
+
 # ---------------------------------- #
 #       Pandas compatibility         #
 # ---------------------------------- #

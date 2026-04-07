@@ -17,6 +17,10 @@ from pyswarms.utils import Reporter
 
 
 class bcolors:
+    """
+    ANSI escape sequences used to color terminal messages.
+    """
+
     HEADER = "\033[95m"
     OKBLUE = "\033[94m"
     OKCYAN = "\033[96m"
@@ -29,6 +33,14 @@ class bcolors:
 
 
 def init_reporter():
+    """
+    Create and configure the shared reporter used by NRV logging helpers.
+
+    Returns
+    -------
+    Reporter
+        Configured reporter instance.
+    """
     rep_nrv = Reporter(log_path=parameters.nrv_path + "/_misc/log/NRV.log")
     rep_nrv._default_config["handlers"]["default"]["level"] = "CRITICAL"
     rep_nrv._default_config["formatters"]["standard"][
@@ -44,6 +56,21 @@ def init_reporter():
 
 
 def set_log_level(level, clear_log_file=False):
+    """
+    Update the reporter log level.
+
+    Parameters
+    ----------
+    level : str | None
+        Logging level to apply to the shared reporter.
+    clear_log_file : bool, optional
+        If ``True``, remove ``report.log`` before reconfiguring the reporter.
+
+    Returns
+    -------
+    Reporter
+        Updated reporter instance.
+    """
     if clear_log_file and os.path.isfile("report.log"):
         try:
             os.remove("report.log")

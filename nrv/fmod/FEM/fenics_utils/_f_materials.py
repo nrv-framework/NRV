@@ -64,10 +64,26 @@ class f_material(material):
 
     @property
     def is_func(self):
+        """
+        Whether the material conductivity is defined by a spatial function.
+
+        Returns
+        -------
+        bool
+            ``True`` when a conductivity function is available.
+        """
         return not self._sigma_func is None
 
     @property
     def sigma(self):
+        """
+        Effective conductivity accessor.
+
+        Returns
+        -------
+        Any
+            Conductivity function when defined, otherwise the scalar/tensor conductivity.
+        """
         if self.is_func:
             return self.sigma_func
         else:
@@ -75,6 +91,14 @@ class f_material(material):
 
     @property
     def sigma_func(self):
+        """
+        Frequency-adjusted conductivity function.
+
+        Returns
+        -------
+        nrv_function
+            Conductivity function corrected for dielectric effects.
+        """
         return compute_effective_conductivity(
             sigma=self._sigma_func, epsilon=self.epsilon, freq=self.freq
         )

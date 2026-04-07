@@ -15,7 +15,7 @@ def test_oft_pp(results:nrv.axon_results, num=0):
     results.remove_key(keys_to_keep={"ID", "comment", "num"})
     return results
 
-key_to_check_default = {"L", "ID", "myelinated", "intra_stim_positions", "V_mem_raster_position"}
+key_to_check_default = {"L", "ID", "myelinated", "V_mem_raster_position"}
 key_to_check_custom = {"ID", "comment", "num"}
 
 def create_nerve(_id):

@@ -43,7 +43,6 @@ from ..fmod import load_material, recorder
 from ..utils import convert, get_MRG_parameters
 from ..utils.geom import CShape
 
-
 # required to prevent infinite loop bug whn compiling the doc
 try:
     static_env = np.dtype(ScalarType).kind != "c"
@@ -652,10 +651,8 @@ class eit_forward(NRV_class):
         self._axons_pop_ppts: DataFrame = self.nerve_results.axons
 
         self.n_c = self._axons_pop_ppts.shape[0]
-        i_mye = self._axons_pop_ppts["types"].to_numpy(dtype=bool)
-        self.axnod_d = (
-            self._axons_pop_ppts["diameters"].copy(deep=True).to_numpy(dtype=float)
-        )
+        i_mye = self._axons_pop_ppts["types"].astype(dtype=bool)
+        self.axnod_d = np.copy(self._axons_pop_ppts["diameters"].to_numpy(dtype=float))
         self.axnod_d[i_mye] = get_MRG_parameters(self.axnod_d[i_mye])[2]
         self.myelin_mat = compute_myelin_ppt(self.axnod_d)
         self.alpha_in_c = self.ax_mem_th / (self.axnod_d / 2)
@@ -685,6 +682,14 @@ class eit_forward(NRV_class):
         self.res_e = self.w_elec * self.e_elt_r
 
     def _define_problem(self):
+        """
+        Backward-compatible alias for :meth:`_setup_problem`.
+
+        Notes
+        -----
+        This method is deprecated and only forwards the call to
+        :meth:`_setup_problem`.
+        """
         rise_warning(
             "Deprecated: _define_problem is deprecated use _setup_problem method instead"
         )
@@ -780,7 +785,6 @@ class eit_forward(NRV_class):
         -------
         np.ndarray(self.n_elec,)
         """
-
         if isnan(v_elecs[0]):
             v_elecs = np.zeros(self.n_elec)
             self._clear_fem()

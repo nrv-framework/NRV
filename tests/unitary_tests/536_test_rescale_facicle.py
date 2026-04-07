@@ -33,12 +33,12 @@ if __name__ == "__main__":
     del fasc
     fasc1 = nrv.load_fascicle(sfile)
     fasc1.define_length(x_max-x_min)
-    l1 = fasc1.axons["node_shift"][i_myel]*deltaxs
+    l1 = fasc1.axons["node_shift"].iloc[i_myel]*deltaxs
     x_l = (l1 - x_min)%deltaxs
-    fasc1.axons["node_shift"][i_myel] = x_l / deltaxs
+    fasc1.axons["node_shift"].iloc[i_myel] = x_l / deltaxs
 
 
-    print(np.all(fasc1.axons["node_shift"]>0), np.all(fasc1.axons["node_shift"]<1))
+    print(np.all(fasc1.axons["node_shift"]>=0), np.all(fasc1.axons["node_shift"]<1))
     fasc1.plot_x(axs[1])
     fig.savefig(figdir+"B.png")
     # plt.show()

@@ -25,9 +25,9 @@ if __name__ == "__main__":
     t_sim=10 # ms
     t_iclamp = 0 # ms
     n_steps = 15 * n_proc_global
+    n_elec=14
 
-
-    parameters = {"x_rec":x_rec, "n_fem_step":n_steps,"n_proc_global":n_proc_global, "l_elec":l_elec, "l_fem":l_fem, "i_drive":i_drive, "freqs":freqs}
+    parameters = {"n_elec":n_elec, "x_rec":x_rec, "n_fem_step":n_steps,"n_proc_global":n_proc_global, "l_elec":l_elec, "l_fem":l_fem, "i_drive":i_drive, "freqs":freqs}
     eit_instance = eit.EIT2DProblem(nerves_fname, res_dname=res_dir, label=test_id, **parameters)
 
     ## Nerve simulation

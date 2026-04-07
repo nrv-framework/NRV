@@ -5,10 +5,11 @@ NRV-:class:`.stimulus` handling.
 import faulthandler
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..backend._log_interface import pass_info, rise_warning, rise_error
 from ..backend._NRV_Class import NRV_class
-import matplotlib.pyplot as plt
+from ..backend._extlib_interface import np_trapz
 
 # enable faulthandler to ease "segmentation faults" debug
 faulthandler.enable()
@@ -121,10 +122,28 @@ class stimulus(NRV_class):
 
     ## Save and Load mehtods
     def save_stimulus(self, save=False, fname="stimulus.json"):
+        """
+        Deprecated wrapper around :meth:`save`.
+
+        Parameters
+        ----------
+        save : bool, optional
+            If ``True``, write the stimulus to disk.
+        fname : str, optional
+            Output filename.
+        """
         rise_warning("save_stimulus is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_stimulus(self, data="stimulus.json"):
+        """
+        Deprecated wrapper around :meth:`load`.
+
+        Parameters
+        ----------
+        data : str | dict, optional
+            Serialized stimulus or filename to load.
+        """
         rise_warning("load_stimulus is a deprecated method use load")
         self.load(data=data)
 
@@ -208,6 +227,9 @@ class stimulus(NRV_class):
         self.t = new_t
 
     def snap_time(self, dt_min):
+        """
+        average stimulus values which are separated in time by less than ``dt_min``
+        """
         i_mask = [True for _ in range(len(self.t))]
         for i in range(len(self.t) - 1):
             j = 0
@@ -232,21 +254,58 @@ class stimulus(NRV_class):
     ## special methods ##
     #####################
     def __len__(self):
+        """
+        Return the number of stored samples.
+
+        Returns
+        -------
+        int
+            Number of time samples in the stimulus.
+        """
         return self.len()
 
     def __abs__(self):
+        """
+        Create a stimulus with absolute sample amplitudes.
+
+        Returns
+        -------
+        stimulus
+            Absolute-value version of the stimulus.
+        """
         stim = stimulus()
         stim.s = np.absolute(self.s)
         stim.t = self.t
         return stim
 
     def __neg__(self):
+        """
+        Create a stimulus with sign-inverted amplitudes.
+
+        Returns
+        -------
+        stimulus
+            Opposite of the stimulus.
+        """
         stim = stimulus()
         stim.s = -self.s
         stim.t = self.t
         return stim
 
     def __add__(self, b):
+        """
+        Add a scalar or another stimulus to the current stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Operand added to the stimulus.
+
+        Returns
+        -------
+        stimulus
+            Sum of the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -258,6 +317,19 @@ class stimulus(NRV_class):
         return C
 
     def __sub__(self, b):
+        """
+        Subtract a scalar or another stimulus from the current stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Operand subtracted from the stimulus.
+
+        Returns
+        -------
+        stimulus
+            Difference between the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -269,6 +341,19 @@ class stimulus(NRV_class):
         return C
 
     def __mul__(self, b):
+        """
+        Multiply the stimulus by a scalar or another stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Multiplicative operand.
+
+        Returns
+        -------
+        stimulus
+            Product of the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -280,6 +365,19 @@ class stimulus(NRV_class):
         return C
 
     def __radd__(self, b):
+        """
+        Add the stimulus to a scalar or another stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Left operand.
+
+        Returns
+        -------
+        stimulus
+            Sum of the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -291,6 +389,19 @@ class stimulus(NRV_class):
         return C
 
     def __rsub__(self, b):
+        """
+        Subtract the stimulus from a scalar or another stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Left operand.
+
+        Returns
+        -------
+        stimulus
+            Difference between the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -302,6 +413,19 @@ class stimulus(NRV_class):
         return C
 
     def __rmul__(self, b):
+        """
+        Multiply a scalar or another stimulus by the stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Left operand.
+
+        Returns
+        -------
+        stimulus
+            Product of the two operands.
+        """
         C = stimulus()
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
@@ -313,11 +437,37 @@ class stimulus(NRV_class):
         return C
 
     def __pow__(self, p):
+        """
+        Raise all stimulus amplitudes to a scalar power.
+
+        Parameters
+        ----------
+        p : float
+            Power applied to each sample value.
+
+        Returns
+        -------
+        stimulus
+            Powered stimulus.
+        """
         C = stimulus()
         C.s = self.s ** float(p)
         return C
 
     def __eq__(self, b):
+        """
+        Compare the stimulus to a scalar or another stimulus.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Object to compare with.
+
+        Returns
+        -------
+        bool
+            ``True`` if both operands are equal sample-wise.
+        """
         if is_stim(b):
             A, B = get_equal_timing_copies(self, b)
             flag = np.array_equal(A.s, B.s) and np.array_equal(A.t, B.t)
@@ -329,10 +479,31 @@ class stimulus(NRV_class):
         return flag
 
     def __ne__(self, b):  # self != b
+        """
+        Compare the stimulus for inequality.
+
+        Parameters
+        ----------
+        b : float | stimulus
+            Object to compare with.
+
+        Returns
+        -------
+        bool
+            ``True`` if the operands are not equal.
+        """
         return not self == b
 
     def integrate(self):
-        return np.trapz(self.s, x=self.t)
+        """
+        Integrate the stimulus over time.
+
+        Returns
+        -------
+        float
+            Time integral of the stimulus waveform.
+        """
+        return np_trapz(self.s, x=self.t)
 
     #######################
     ## signal generators ##
@@ -620,3 +791,25 @@ class stimulus(NRV_class):
         slope = (ampstart - ampmax) / (tstart - tstop)
         bounds = (min(ampstart, ampmax), max(ampstart, ampmax))
         self.ramp(slope, tstart, duration, dt, bounds, printslope)
+
+    def gaussian_noise(self, tstart, tstop, standard_dev, offset=0, dt=0.005):
+        """
+        Create a gaussian noise signal
+
+        Parameters
+        ----------
+        tstart       : float
+            starting time of the waveform, in ms
+        tstop        : float
+            stopping time of the waveform, in ms
+        standard_dev : float
+            standard deviation of the gaussian noise, in uA
+        offset       : float
+            offset current of the waveform, in uA, by default set to 0
+        dt           : float
+            sampling time period to generate the sinusoidal shape, by default set to 0.005ms
+        """
+        Nb_points = int((tstop - tstart) / dt) + 1
+        t = np.linspace(tstart, tstop, num=Nb_points)
+        s = np.random.normal(loc=offset, scale=standard_dev, size=Nb_points)
+        self.concatenate(s, t, t_shift=tstart)

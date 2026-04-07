@@ -31,6 +31,13 @@ else:
         i += 1
 
     def NeuronCompile():
+        """
+        Compile the bundled NEURON ``.mod`` files with ``nrnivmodl``.
+
+        Note
+        ----
+        This function is automatically run at the first importation of nrv or id you manually delete the content of ``nrv._misc.mods.arm64`` folder.
+        """
         # path2compiled_mods =  dir_path + "/mods/x86_64"
         path2_mods = dir_path
         os.system("cd " + path2_mods + "&& nrnivmodl")

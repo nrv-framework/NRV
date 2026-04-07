@@ -13,7 +13,6 @@ from ._myelinated_results import myelinated_results
 from ._fascicles_results import fascicle_results
 from ._nerve_results import nerve_results
 
-
 submodules = []
 
 classes = [

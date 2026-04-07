@@ -133,6 +133,27 @@ def rotate_2D(
     center: tuple[float, float] = (0, 0),
     as_array: bool = False,
 ):
+    """
+    Rotate 2D coordinates around a given center.
+
+    Parameters
+    ----------
+    point : tuple[np.ndarray, np.ndarray] | np.ndarray
+        Point or set of points to rotate.
+    angle : float
+        Rotation angle.
+    degree : bool, optional
+        If ``True`` the angle is provided in degrees, otherwise in radians.
+    center : tuple[float, float], optional
+        Rotation center.
+    as_array : bool, optional
+        If ``True``, return the rotated coordinates as an array.
+
+    Returns
+    -------
+    tuple[np.ndarray, np.ndarray] | np.ndarray | tuple[float, float]
+        Rotated coordinates with a shape matching the input convention.
+    """
     if degree:
         angle = to_nrv_unit(angle, "deg")
     if isinstance(point, np.ndarray):
@@ -288,14 +309,15 @@ def get_MRG_parameters(diameter: float | NDArray, fit_all: bool = False) -> tupl
     fit_all |= isinstance(diameter, np.ndarray)
     if not fit_all and diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
-        g = MRG_g[index]
-        axonD = MRG_axonD[index]
-        nodeD = MRG_nodeD[index]
-        paraD1 = MRG_paraD1[index]
-        paraD2 = MRG_paraD2[index]
-        deltax = MRG_deltax[index]
-        paralength2 = MRG_paralength2[index]
-        nl = MRG_nl[index]
+        g = MRG_g[index].squeeze()
+        axonD = MRG_axonD[index].squeeze()
+        nodeD = MRG_nodeD[index].squeeze()
+        paraD1 = MRG_paraD1[index].squeeze()
+        paraD2 = MRG_paraD2[index].squeeze()
+        deltax = MRG_deltax[index].squeeze()
+        paralength2 = MRG_paralength2[index].squeeze()
+        nl = MRG_nl[index].squeeze()
+
     else:
         # create fiting polynomyals
         g_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_g, 3))
@@ -379,7 +401,7 @@ def get_length_from_nodes(diameter, nodes):
     MRG_deltax = MRG_data.deltax.to_numpy()
     if diameter in MRG_fiberD:
         index = np.where(MRG_fiberD == diameter)[0]
-        deltax = MRG_deltax[index]
+        deltax = MRG_deltax[index].squeeze()
     else:
         deltax_poly = np.poly1d(np.polyfit(MRG_fiberD, MRG_deltax, 4))
         deltax = deltax_poly(diameter)
@@ -387,6 +409,19 @@ def get_length_from_nodes(diameter, nodes):
 
 
 def membrane_capacitance_from_model(model):
+    """
+    Return the default membrane capacitance associated with a model name.
+
+    Parameters
+    ----------
+    model : str
+        Name of the axon model.
+
+    Returns
+    -------
+    float
+        Membrane capacitance in the units expected by NRV.
+    """
     if model in ["MRG", "Gaines_motor", "Gaines_sensory"]:
         return 2
     if "Schild" in model:

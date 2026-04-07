@@ -46,7 +46,7 @@ U. of Bordeaux.
 
 __copyright__ = "2023, nrv-framework.org"
 __license__ = "CeCILL"
-__version__ = "1.3.1"
+__version__ = "1.3.2"
 __title__ = "NeuRon Virtualizer"
 __authors__ = "Florian Kolbl, Roland Giraud, Louis Regnacq, Thomas Couppey"
 __contributors__ = __authors__
@@ -76,6 +76,7 @@ CONFIG = nrv_config()
 ######################
 from .backend import _compileMods
 from .backend._NRV_Class import load_any
+from .backend._extlib_interface import *
 
 from .fmod._materials import *
 from .fmod._electrodes import *

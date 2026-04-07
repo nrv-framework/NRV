@@ -636,6 +636,14 @@ class nerve(NRV_simulable):
         return any(cshape_overlap_checker(s=fasc.geom, s_comp=fasc_geom))
 
     def __merge_fascicular_context(self, fasc: fascicle):
+        """
+        Merge a fascicle-local stimulation/recording context into the nerve context.
+
+        Parameters
+        ----------
+        fasc : fascicle
+            Fascicle whose local context must be incorporated.
+        """
         if self.is_extra_stim:
             self.extra_stim.reshape_fascicle(fasc.geom, fasc.ID)
         if fasc.extra_stim is not None:
@@ -970,6 +978,9 @@ class nerve(NRV_simulable):
                 fasc.attach_extracellular_recorder(self.recorder)
 
     def __set_fascicles_simulation_parameters(self):
+        """
+        Propagate global nerve simulation settings to each fascicle.
+        """
         self.__set_fascicles_context()
         for fasc in self.fascicles.values():
             fasc.t_sim = self.t_sim

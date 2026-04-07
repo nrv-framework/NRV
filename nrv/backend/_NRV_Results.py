@@ -35,6 +35,16 @@ class NRV_results(NRV_class, dict):
 
     @abstractmethod
     def __init__(self, context=None):
+        """
+        Initialize a results container from a saved context.
+
+        Parameters
+        ----------
+        context : dict | NRV_class | None, optional
+            Initial context used to populate the results object. If an
+            :class:`~nrv.backend._NRV_Class.NRV_class` instance is provided,
+            its serialized state is used.
+        """
         super().__init__()
         # Not ideal but require to load method
         self.np_keys = {}
@@ -52,19 +62,62 @@ class NRV_results(NRV_class, dict):
 
     @property
     def to_save(self):
+        """
+        Indicate whether the results object should be serialized.
+
+        Returns
+        -------
+        bool
+            ``True`` if the results are not marked as dummy data.
+        """
         return "dummy_res" not in self
 
     @property
     def is_dummy(self):
+        """
+        Indicate whether the results object is a dummy placeholder.
+
+        Returns
+        -------
+        bool
+            ``True`` if the ``dummy_res`` marker is present.
+        """
         return "dummy_res" in self
 
     def save(self, save=False, fname="nrv_save.json", blacklist=[], **kwargs):
+        """
+        Save the results object after synchronizing its internal state.
+
+        Parameters
+        ----------
+        save : bool, optional
+            If ``True``, write the serialized content to disk.
+        fname : str, optional
+            Output filename used when ``save`` is ``True``.
+        blacklist : list, optional
+            Keys excluded from serialization.
+
+        Returns
+        -------
+        dict
+            Serialized representation returned by :meth:`NRV_class.save`.
+        """
         save = save and self.to_save
         self.__update_np_keys()
         self.__sync()
         return super().save(save, fname, blacklist, **kwargs)
 
     def load(self, data, blacklist=[], **kwargs):
+        """
+        Load the results object from serialized data.
+
+        Parameters
+        ----------
+        data : str | dict
+            JSON filename or serialized dictionary.
+        blacklist : list, optional
+            Keys excluded from loading.
+        """
         if isinstance(data, str):
             key_dic = json_load(data)
         else:
@@ -81,11 +134,29 @@ class NRV_results(NRV_class, dict):
         self.__sync()
 
     def __setitem__(self, key, value):
+        """
+        Set a result value in both the mapping and the attribute namespace.
+
+        Parameters
+        ----------
+        key : str
+            Result key to set.
+        value : any
+            Value associated with the key.
+        """
         if not key == "nrv_type":
             self.__dict__[key] = value
         super().__setitem__(key, value)
 
     def __delitem__(self, key):
+        """
+        Delete a result value from both the mapping and the attribute namespace.
+
+        Parameters
+        ----------
+        key : str
+            Result key to delete.
+        """
         if key not in self.__dict__:
             rise_warning(key, "not found cannot be deleted from results")
         else:
@@ -145,13 +216,37 @@ class NRV_results(NRV_class, dict):
 
     @property
     def is_empty(self):
+        """
+        Indicate whether the results contain a declared result type.
+
+        Returns
+        -------
+        bool
+            Internal emptiness flag derived from ``result_type``.
+        """
         return "result_type" in self and not self["result_type"] is None
 
     def __sync(self):
+        """
+        Synchronize the dictionary content with the instance attributes.
+        """
         self.update(self.__dict__)
         self.pop("__NRVObject__")
 
     def __contains__(self, key: object) -> bool:
+        """
+        Check whether one key or a set of keys is present in the results.
+
+        Parameters
+        ----------
+        key : object
+            Key to test, or iterable of keys.
+
+        Returns
+        -------
+        bool
+            ``True`` if the requested key or keys are present.
+        """
         if isinstance(key, list) or isinstance(key, set):
             missing_keys = set(key) - set(self.keys())
             return len(missing_keys) == 0
@@ -159,7 +254,19 @@ class NRV_results(NRV_class, dict):
 
 
 class sim_results(NRV_results):
+    """
+    Results container specialized for simulation outputs.
+    """
+
     def __init__(self, context=None):
+        """
+        Initialize simulation results from a serialized context.
+
+        Parameters
+        ----------
+        context : dict | NRV_class | None, optional
+            Initial simulation context used to populate the results object.
+        """
         super().__init__(context)
 
     def filter_freq(self, my_key, freq, Q=10):

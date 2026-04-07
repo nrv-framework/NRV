@@ -15,7 +15,7 @@ def test_oft_pp(results:nrv.axon_results, num=0):
     results.remove_key(keys_to_keep={"ID", "comment", "num"})
     return results
 
-key_to_check_default = {"L", "ID", "myelinated", "intra_stim_positions", "V_mem_raster_position"}
+key_to_check_default = {"L", "ID", "myelinated", "V_mem_raster_position"}
 key_to_check_custom = {"ID", "comment", "num"}
 
 def create_fascicle(_id):
@@ -29,8 +29,8 @@ def create_fascicle(_id):
 def test_default_OFT_PP():
     fasc = create_fascicle(_id=0)
     res = fasc.simulate(save_path='./unitary_tests/figures/')
-
     assert len(key_to_check_default - set(res["axon0"].keys())) == 0,  "Wrong keys removed from default OFT PP"
+    assert "V_mem" not in res["axon0"].keys(),  "V_mem should be deleted by default postprocessing"
 
 
 def test_rmv_keys_OFT_PP():
@@ -42,7 +42,6 @@ def test_rmv_keys_OFT_PP():
 def test_custom_OFT_PP():
     fasc = create_fascicle(_id=2)
     res = fasc.simulate(save_path='./unitary_tests/figures/', postproc_script=test_oft_pp)
-    print(key_to_check_custom, set(res["axon0"].keys()))
 
     assert len(key_to_check_custom - set(res["axon0"].keys())) == 0,  "Wrong keys removed from custom OFT PP"
 

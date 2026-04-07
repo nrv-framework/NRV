@@ -17,6 +17,7 @@ all_tests [:] = (value for value in all_tests if value[0] in digits)
 all_tests.reverse()
 
 run_all = True  # Without any arg run all tests
+_report = True # If all test are lauched report is printed/saved by default
 unit_test_figures = "./unitary_tests/figures/"
 unit_test_results = "./unitary_tests/results/"
 out_file = "log_NRV_test.txt"
@@ -31,6 +32,7 @@ parser.add_argument("-u", "--unitary_tests", action="store_true", dest="UNIT_TES
 parser.add_argument("-s", "--syntax", action="store_true", dest="SYNTAX_TEST",help="Lint nvr syntax source code")
 parser.add_argument("-a", "--all", action="store_true", dest="ALL_TESTS",help="launches even potentially failing tests due to third party softwares such as COMSOL")
 parser.add_argument("-t", "--target", dest="TARGET", type=str, nargs="+" ,default='0', help="ID of the tests to simulate, if a digit is replaced by '_' all the tests")
+parser.add_argument("-r", "--report", action="store_true", dest="REPORT",help="Print and save the list of failing tests (done by default when all tests are lauched)")
 parser.add_argument("-F", "--fenics", action="store_true", dest="FENICS_TESTS",help="Launch all and only FEniCS related tests")
 parser.add_argument("-C", "--comsol", action="store_true", dest="COMSOL_TESTS",help="Launch all and only COMSOL related tests")
 
@@ -49,6 +51,7 @@ if __name__ == "__main__":
 
     # keep only targeted tests
     if len(args.FIND_TEST):
+        _report = args.REPORT
         sel_tests = []
         if isinstance(args.FIND_TEST, str):
             args.FIND_TEST = [args.FIND_TEST]
@@ -121,7 +124,8 @@ if __name__ == "__main__":
         args.LIST_TEST = False
 
     if args.TARGET != '0':
-        run_all = False
+        # run_all = False
+        _report = args.REPORT
         N = len(args.TARGET)
         offset = 0
         ########################################
@@ -153,6 +157,8 @@ if __name__ == "__main__":
                 offset += arg_offset
         args.TARGET.sort()
         print("TARGETED:", *args.TARGET)
+        targets = []
+
         for argt in args.TARGET:
             target_script_key = f"{int(argt):03}"
             ###################################
@@ -182,23 +188,13 @@ if __name__ == "__main__":
             if not os.path.exists(unit_test_results+"outputs/"):
                 os.makedirs(unit_test_results+"outputs/")
 
-            ###############################
-            ## launch the targated tests ##
-            ###############################
-            if sys.platform == "darwin":
-                python_cmd = "python "
-            else:
-                python_cmd = "python3 "
-
             for test in sel_tests:
                 if str(target_script_key) in test:
-                    print(test)
-                    test_out = os.system(launcher+unit_test_folder+test)
-                    print("test exited with value ", test_out)
-                    break
+                    targets += [test]
+        sel_tests = targets
     else:
         args.TARGET = False
-    
+
     # Pylint test
     if args.SYNTAX_TEST:
         run_all = False
@@ -252,19 +248,19 @@ if __name__ == "__main__":
                 if test_out != 0:
                     success_flag = False
                     failed_test.append(test)
+        if _report:
+            if success_flag == True:
+                line = "--- All tests passed without errors, check that all tests are true"
 
-        if success_flag == True:
-            line = "--- All tests passed without errors, check that all tests are true"
-
-        else:
-            line = "--- Bugs in NRV, please consider reported errors before simulations\n"
-            line += "--- list of failed tests : ["
-            for t in failed_test:
-                line += t + ", "
-            line = line[:-2] +"]\n"
-        
-        print(line)
-        file_object = open(out_file, "a")
-        file_object.write(line)
-        file_object.close()
+            else:
+                line = "--- Bugs in NRV, please consider reported errors before simulations\n"
+                line += "--- list of failed tests : ["
+                for t in failed_test:
+                    line += t + ", "
+                line = line[:-2] +"]\n"
+            
+            print(line)
+            file_object = open(out_file, "a")
+            file_object.write(line)
+            file_object.close()
 

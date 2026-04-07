@@ -36,11 +36,8 @@ if __name__ == "__main__":
     nerve.add_fascicle(fascicle=fascicle_2, y=fasc2_y, z=fasc2_z)
 
     n_ax = 100      #size of the axon population
-    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
-    
     fascicle_1.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=2, delta_trace=10)
 
-    axons_diameters, axons_type, M_diam_list, U_diam_list = nrv.create_axon_population(n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U",)
     fascicle_2.fill(n_ax=n_ax, percent_unmyel=0.7, M_stat="Ochoa_M", U_stat="Ochoa_U", delta=2)
     # fascicle_1.fit_population_to_size(delta=2)
 

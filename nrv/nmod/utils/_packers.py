@@ -44,6 +44,25 @@ def dist_matrix(X: tuple[np.ndarray, np.ndarray, np.ndarray]) -> np.ndarray:
 
 
 def get_ppop_info(y, z, r, verbose=False, with_all_dist=False):
+    """
+    Compute basic geometric statistics for a placed circle population.
+
+    Parameters
+    ----------
+    y, z : np.ndarray
+        Circle-center coordinates.
+    r : np.ndarray
+        Circle radii.
+    verbose : bool, optional
+        If ``True``, print the computed statistics.
+    with_all_dist : bool, optional
+        Reserved flag for optionally exposing the full distance matrix.
+
+    Returns
+    -------
+    dict
+        Dictionary containing population size, spacing statistics, and the outer box.
+    """
     _info = {}
     all_dist = dist_matrix((y, z, r))
     if with_all_dist:
@@ -106,6 +125,21 @@ class Placer:
         self.n_iter = n_iter
 
     def _place_circle(self, r, first=False):
+        """
+        Attempt to place one circle inside the geometry without overlap.
+
+        Parameters
+        ----------
+        r : float
+            Circle radius.
+        first : bool, optional
+            If ``True``, skip collision checks and return the first valid interior point.
+
+        Returns
+        -------
+        tuple
+            Candidate position and a success flag.
+        """
         # The guard number: if we don't place a circle within this number
         # of trials, we give up.
         for _ in range(self.n_iter):
@@ -309,6 +343,25 @@ def get_colliding_ids(
 def get_distance_in_range(
     pos: np.ndarray, id_others: np.ndarray, diam: np.ndarray, delta: np.float32
 ) -> np.array:
+    """
+    Check whether all axons remain within a target inter-axon distance range.
+
+    Parameters
+    ----------
+    pos : np.ndarray
+        Axon-center coordinates.
+    id_others : np.ndarray
+        Indices of neighboring axons considered for each axon.
+    diam : np.ndarray
+        Axon diameters.
+    delta : np.float32
+        Target clearance distance.
+
+    Returns
+    -------
+    np.ndarray
+        Boolean criterion indicating whether the population has reached the target range.
+    """
 
     id = np.arange(len(pos[0]))
     id = np.flip(id)
@@ -322,20 +375,7 @@ def get_distance_in_range(
     stop_c = 1.2 * delta
     if stop_c < 1:
         stop_c = 1
-    # low_bound = np.min(dist,axis = 1)>0.95*delta
-    # up_bound = np.min(dist,axis = 1)<2*delta
-    # pass_info(np.min(dist,axis = 1))
-    # exit()
     return np.max(np.min(dist, axis=1)) < stop_c
-
-    # pass_info(len(id_others[up_bound]))
-    # exit()
-
-    # if len(id_others[low_bound & up_bound]) == len(id):
-    # if len(id_others[up_bound]) == len(id):
-    #    return True
-    # else:
-    #    return False
 
 
 def update_axon_packing(

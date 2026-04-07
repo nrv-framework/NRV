@@ -41,14 +41,38 @@ class Ellipse(CShape):
 
     @property
     def c(self) -> np.ndarray:
+        """
+        Center of the ellipse as an array.
+
+        Returns
+        -------
+        np.ndarray
+            Ellipse center coordinates.
+        """
         return np.array(self.center, dtype=float)
 
     @property
     def r(self) -> np.ndarray:
+        """
+        Semi-axis lengths of the ellipse.
+
+        Returns
+        -------
+        np.ndarray
+            Array containing ``r1`` and ``r2``.
+        """
         return np.array(self.radius, dtype=float)
 
     @property
     def area(self) -> float:
+        """
+        Area of the ellipse.
+
+        Returns
+        -------
+        float
+            Ellipse area.
+        """
         return np.pi * self.r1 * self.r2
 
     @property
@@ -64,6 +88,14 @@ class Ellipse(CShape):
 
     @property
     def bbox_size(self) -> tuple[float, float]:
+        """
+        Size of the axis-aligned bounding box.
+
+        Returns
+        -------
+        tuple[float, float]
+            Bounding-box width and height.
+        """
         return (
             np.hypot(2 * self.r1 * np.cos(-self.rot), 2 * self.r2 * np.sin(-self.rot)),
             np.hypot(2 * self.r1 * np.sin(-self.rot), 2 * self.r2 * np.cos(-self.rot)),
@@ -71,6 +103,14 @@ class Ellipse(CShape):
 
     @property
     def bbox(self):
+        """
+        Coordinates of the axis-aligned bounding box.
+
+        Returns
+        -------
+        np.ndarray
+            Bounding box as ``[ymin, zmin, ymax, zmax]``.
+        """
         b_s = self.bbox_size
         return np.array(
             [
@@ -115,6 +155,14 @@ class Ellipse(CShape):
 
     @property
     def is_rot(self) -> bool:
+        """
+        Indicate whether the ellipse is rotated.
+
+        Returns
+        -------
+        bool
+            ``True`` if the rotation angle is non-zero.
+        """
         return bool(self.rot)
 
     def is_inside(
@@ -123,6 +171,23 @@ class Ellipse(CShape):
         delta: float = 0,
         for_all: bool = True,
     ) -> bool:
+        """
+        Check whether one or several points lie inside the ellipse.
+
+        Parameters
+        ----------
+        point : tuple[np.ndarray, np.ndarray] | np.ndarray
+            Point or set of points to test.
+        delta : float, optional
+            Additional margin added to the semi-axis lengths.
+        for_all : bool, optional
+            If ``True``, return a single boolean for all points.
+
+        Returns
+        -------
+        bool | np.ndarray
+            Inclusion test result.
+        """
         if isinstance(point, np.ndarray):
             X = deepcopy(point)
         else:
@@ -143,11 +208,34 @@ class Ellipse(CShape):
         return X_norm <= 1
 
     def rotate(self, angle: float, degree: bool = False):
+        """
+        Rotate the ellipse around its center.
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle.
+        degree : bool, optional
+            If ``True``, ``angle`` is given in degrees.
+        """
         if degree:
             angle = to_nrv_unit(angle, "deg")
         self.rot = (self.rot + angle) % (2 * np.pi)
 
     def get_trace(self, n_theta=100) -> tuple[list[float], list[float]]:
+        """
+        Sample the ellipse boundary.
+
+        Parameters
+        ----------
+        n_theta : int, optional
+            Number of boundary points to generate.
+
+        Returns
+        -------
+        tuple[np.ndarray, np.ndarray]
+            Y and Z coordinates of the sampled boundary.
+        """
         _theta = np.linspace(0, 2 * np.pi, n_theta, endpoint=True)
 
         y_trace = self.r1 * np.cos(_theta)
@@ -167,6 +255,21 @@ class Ellipse(CShape):
         return X[:, 0], X[:, 1]
 
     def get_point_inside(self, n_pts: int = 1, delta: float = 0) -> np.ndarray:
+        """
+        Draw random points inside the ellipse.
+
+        Parameters
+        ----------
+        n_pts : int, optional
+            Number of points to generate.
+        delta : float, optional
+            Minimum distance to keep from the boundary.
+
+        Returns
+        -------
+        np.ndarray
+            Array of sampled points of shape ``(n_pts, 2)``.
+        """
         _theta = np.random.random(n_pts) * 2 * np.pi
         _rf = np.sqrt(np.random.random(n_pts))
 

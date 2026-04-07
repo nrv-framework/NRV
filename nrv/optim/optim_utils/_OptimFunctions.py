@@ -6,7 +6,6 @@ from ...backend._file_handler import rmv_ext
 from ...backend._log_interface import rise_warning
 from ...utils._nrv_function import nrv_interp
 
-
 ####################################################################
 ################# generate waveform functions ######################
 ####################################################################
@@ -178,7 +177,7 @@ def interpolate_Npts(
     generatefigure: bool = True,
     strict_bounds: bool = True,
     kwargs_interp: dict = {},
-    **kwargs
+    **kwargs,
 ):
     r"""
     genarte a waveform from a particle position using interpolate where the position
@@ -284,7 +283,7 @@ def interpolate_Npts(
         bounds=bds,
         save=False,
         save_scale=save_scale,
-        **kwargs_interp
+        **kwargs_interp,
     )
 
     if t_shift is not None:

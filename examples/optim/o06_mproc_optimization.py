@@ -2,7 +2,9 @@ r"""
 Optimization change number of processes
 =======================================
 
-This example shows how to set the number of processes used for optimization. The exact same scenario from `Tutorial 5<../../tutorials/5_first_optimization` is used:
+This example shows how to set the number of processes used for optimization.
+The exact same scenario from `Tutorial 5 <../../tutorials/5_first_optimization>`_
+is used:
 
 The objective is to **minimize the energy required by a LIFE electrode to trigger a single myelinated fiber using a rectangular pulse stimulus**.
 
@@ -10,7 +12,8 @@ The objective is to **minimize the energy required by a LIFE electrode to trigge
     For optimization over parallelizable context (nerve or fascicle), the parallelization is done only for the context simulation
 
 .. seealso::
-    `Parallel computation<../../usersguide/parallel>` and `Optimization<../../usersguide/optimization>  users' guides.
+    See the `Parallel computation <../../usersguide/parallel>`_ and
+    `Optimization <../../usersguide/optimization>`_ user guides.
 """
 import nrv
 

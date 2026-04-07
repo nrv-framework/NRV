@@ -25,6 +25,18 @@ class context_modifier(NRV_class):
     def __init__(
         self, extracel_context=True, intracel_context=False, rec_context=False
     ):
+        """
+        Initialize a generic context modifier.
+
+        Parameters
+        ----------
+        extracel_context : bool, optional
+            Whether extracellular context should be loaded with the static context.
+        intracel_context : bool, optional
+            Whether intracellular context should be loaded with the static context.
+        rec_context : bool, optional
+            Whether recording context should be loaded with the static context.
+        """
         super().__init__()
         self.extracel_context = extracel_context
         self.intracel_context = intracel_context
@@ -101,6 +113,9 @@ class stimulus_CM(context_modifier):
         rec_context: bool = False,
         **kwargs,
     ):
+        """
+        Initialize a stimulus-oriented context modifier.
+        """
         super().__init__(
             extracel_context=extracel_context,
             intracel_context=intracel_context,
@@ -159,6 +174,14 @@ class stimulus_CM(context_modifier):
         return stim
 
     def __update_t_sim(self, local_sim):
+        """
+        Ensure the stimulus-generation kwargs contain a valid ``t_sim`` value.
+
+        Parameters
+        ----------
+        local_sim : NRV_simulable
+            Local simulation context used as fallback source for ``t_sim``.
+        """
         if "t_sim" not in self.stim_gen_kwargs:
             if "t_sim" in self.intrep_kwargs:
                 self.stim_gen_kwargs["t_sim"] = self.intrep_kwargs["t_sim"]
@@ -255,6 +278,9 @@ class biphasic_stimulus_CM(stimulus_CM):
         intracel_context: bool = False,
         rec_context: bool = False,
     ):
+        """
+        Initialize a biphasic-stimulus context modifier.
+        """
         super().__init__(
             stim_ID=stim_ID,
             stim_gen=stim_gen,
@@ -271,6 +297,19 @@ class biphasic_stimulus_CM(stimulus_CM):
         self.s_ratio = s_ratio
 
     def __set_values(self, X: np.ndarray):
+        """
+        Decode optimization variables into biphasic-pulse parameters.
+
+        Parameters
+        ----------
+        X : np.ndarray
+            Optimization vector.
+
+        Returns
+        -------
+        tuple
+            Start time, cathodic amplitude, cathodic duration, interpulse delay, and anodic amplitude.
+        """
         start = self.start
         s_cathod = self.s_cathod
         t_cathod = self.t_cathod
@@ -295,6 +334,9 @@ class biphasic_stimulus_CM(stimulus_CM):
         return start, s_cathod, t_cathod, t_inter, s_anod
 
     def stimulus_generator(self, X_interp) -> stimulus:
+        """
+        Generate a biphasic stimulus from interpolated optimization variables.
+        """
         if self.stim_gen is not None:
             stim = self.stim_gen(X_interp, **self.stim_gen_kwargs)
         else:
@@ -345,6 +387,9 @@ class harmonic_stimulus_CM(stimulus_CM):
         intracel_context: bool = False,
         rec_context: bool = False,
     ):
+        """
+        Initialize a harmonic-stimulus context modifier.
+        """
         super().__init__(
             stim_ID=stim_ID,
             stim_gen=stim_gen,
@@ -359,6 +404,9 @@ class harmonic_stimulus_CM(stimulus_CM):
         self.dt = dt
 
     def stimulus_generator(self, X_interp) -> stimulus:
+        """
+        Generate a harmonic stimulus from interpolated optimization variables.
+        """
         self.amplitude = X_interp[0]
         N = (len(X_interp) - 1) // 2
         self.amp_list = []
@@ -380,6 +428,10 @@ class harmonic_stimulus_CM(stimulus_CM):
 
 
 class harmonic_stimulus_with_pw_CM(stimulus_CM):
+    """
+    Context modifier generating a harmonic stimulus whose pulse width is also optimized.
+    """
+
     def __init__(
         self,
         stim_ID: int = 0,
@@ -393,6 +445,9 @@ class harmonic_stimulus_with_pw_CM(stimulus_CM):
         intracel_context: bool = False,
         rec_context: bool = False,
     ):
+        """
+        Initialize a harmonic-stimulus-with-pulse-width context modifier.
+        """
         super().__init__(
             stim_ID=stim_ID,
             stim_gen=stim_gen,
@@ -407,6 +462,9 @@ class harmonic_stimulus_with_pw_CM(stimulus_CM):
         self.dt = dt
 
     def stimulus_generator(self, X_interp) -> stimulus:
+        """
+        Generate a harmonic stimulus with optimized pulse width.
+        """
         self.amplitude = X_interp[0]
         self.t_pulse = X_interp[1]
         N = (len(X_interp) - 2) // 2

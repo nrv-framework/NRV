@@ -116,6 +116,9 @@ class COMSOL_model(FEM_model):
             self.__has_server = False
 
     def __del__(self):
+        """
+        Ensure the COMSOL client/server resources are closed on destruction.
+        """
         self.close()
         super().__del__()
 

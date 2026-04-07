@@ -63,7 +63,6 @@ deps = (
     "scipy.stats",
     "seaborn",
     "shapely",
-    "typing_extensions",
     "ufl",
     "ufl.finiteelement",
     "pathos",
@@ -155,7 +154,6 @@ autosummary_ignore_module_all = False
 
 # -- Sphinx Gallery configuration ---------------------------------------------
 sphinx_gallery_conf = {
-   
     'examples_dirs': ['../examples','../tutorials'], # Example scripts path
     'gallery_dirs': ['examples','tutorials'], # Path where to save gallery output
     'filename_pattern': r'.py$',  # exclude files with __nodoc in name

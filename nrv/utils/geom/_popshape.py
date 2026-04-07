@@ -70,6 +70,14 @@ class PopShape(NRV_class):
         return False
 
     def __len__(self) -> int:
+        """
+        Return the number of members in the current population.
+
+        Returns
+        -------
+        int
+            Population size.
+        """
         if not self.has_pop:
             return 0
         return len(self._pop)
@@ -81,6 +89,9 @@ class PopShape(NRV_class):
         pass
 
     def clear_geometry(self):
+        """
+        Remove the geometry currently attached to the population.
+        """
         self.geom = None
 
     def create_population(self, **kwgs):
@@ -112,6 +123,9 @@ class PopShape(NRV_class):
             self._pop["is_placed"] = False
 
     def placed_id(self):
+        """
+        Assign consecutive placement identifiers to placed members.
+        """
         if self.has_placed_pop:
             self._pop["placed_id"] = np.zeros(len(self)) - 1
             _placed_id = np.sum(self._pop["is_placed"])
@@ -120,6 +134,14 @@ class PopShape(NRV_class):
 
     @property
     def check_placement(self) -> np.ndarray:
+        """
+        Check whether placed members are still inside the geometry.
+
+        Returns
+        -------
+        np.ndarray
+            Boolean mask indicating valid placements.
+        """
         if not self.has_pop:
             return np.zeros(1, dtype=bool)
         if not ("y" in self._pop and "z" in self._pop):
@@ -141,13 +163,47 @@ class PopShape(NRV_class):
         return self._pop["is_placed"].to_numpy(dtype=bool)
 
     def __getitem__(self, key) -> DataFrame:
+        """
+        Access a population column by key.
+
+        Parameters
+        ----------
+        key : str
+            Column name.
+
+        Returns
+        -------
+        pandas.Series | pandas.DataFrame
+            Requested column or columns.
+        """
         if self.has_pop:
             return self._pop[key]
 
     @property
-    def iloc(self):
+    def loc(self):
+        """
+        Label-based indexer of the population table.
+
+        Returns
+        -------
+        pandas.core.indexing._LocIndexer
+            ``.loc`` accessor of the underlying dataframe.
+        """
         if self.has_pop:
             return self._pop.loc
+
+    @property
+    def iloc(self):
+        """
+        Position-based indexer of the population table.
+
+        Returns
+        -------
+        pandas.core.indexing._iLocIndexer
+            ``.iloc`` accessor of the underlying dataframe.
+        """
+        if self.has_pop:
+            return self._pop.iloc
 
     # -------------------- #
     # Handeling population #
@@ -279,6 +335,19 @@ class PopShape(NRV_class):
     def valid_mask_labels(
         self, mask_labels: None | Iterable[str] | str = None
     ) -> list[str]:
+        """
+        Keep only mask labels that exist in the population.
+
+        Parameters
+        ----------
+        mask_labels : None | Iterable[str] | str, optional
+            Mask label specification to validate.
+
+        Returns
+        -------
+        list[str]
+            Existing mask labels extracted from ``mask_labels``.
+        """
         if mask_labels is None:
             _labels = self.mask_labels
         elif isinstance(mask_labels, str):

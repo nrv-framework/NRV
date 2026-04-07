@@ -32,7 +32,6 @@ from ._unmyelinated import unmyelinated
 from .results._fascicles_results import fascicle_results
 from .results._axons_results import axon_results
 
-
 # enable faulthandler to ease 'segmentation faults' debug
 faulthandler.enable()
 
@@ -388,6 +387,14 @@ class fascicle(NRV_simulable):
         self.__check_deprecation(key_dic=key_dic)
 
     def __check_deprecation(self, key_dic: dict):
+        """
+        Upgrade deprecated serialized fascicle fields after loading.
+
+        Parameters
+        ----------
+        key_dic : dict
+            Raw serialized fascicle dictionary.
+        """
         d_status = False
         if "unmyelinated_param" not in key_dic:
             rise_warning(
@@ -753,21 +760,21 @@ class fascicle(NRV_simulable):
         k : int
             _description_
         """
-        if self.axons["types"][k] == 0:
+        if self.axons["types"].iloc[k] == 0:
             axon = unmyelinated(
-                self.axons["y"][k],
-                self.axons["z"][k],
-                self.axons["diameters"][k],
+                self.axons["y"].iloc[k],
+                self.axons["z"].iloc[k],
+                self.axons["diameters"].iloc[k],
                 self.L,
                 ID=k,
                 **self.unmyelinated_param,
             )
         else:
-            self.myelinated_param["node_shift"] = self.axons["node_shift"][k]
+            self.myelinated_param["node_shift"] = self.axons["node_shift"].iloc[k]
             axon = myelinated(
-                self.axons["y"][k],
-                self.axons["z"][k],
-                self.axons["diameters"][k],
+                self.axons["y"].iloc[k],
+                self.axons["z"].iloc[k],
+                self.axons["diameters"].iloc[k],
                 self.L,
                 ID=k,
                 **self.myelinated_param,
@@ -801,6 +808,18 @@ class fascicle(NRV_simulable):
         remove_from_pop: bool = True,
         keep_elec: bool = True,
     ):
+        """
+        Remove simulation masks from the fascicle and optionally from the population table.
+
+        Parameters
+        ----------
+        mask_labels : Iterable[str] | str | None, optional
+            Mask labels to remove. If ``None``, remove all simulation masks.
+        remove_from_pop : bool, optional
+            If ``True``, also delete the masks from the underlying population.
+        keep_elec : bool, optional
+            If ``True``, preserve masks associated with electrode overlap.
+        """
         if mask_labels is None:
             mask_labels = self.sim_mask  # to keep is_placed
         elif isinstance(mask_labels, str):
@@ -836,7 +855,7 @@ class fascicle(NRV_simulable):
         """
         Remove all unmyelinated fibers from the fascicle
         """
-        _mask = self.axons["types"] == 1
+        _mask = self.axons["types"].iloc == 1
         _lab = "mye_only"
         self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -845,7 +864,7 @@ class fascicle(NRV_simulable):
         """
         Remove all myelinated fibers from the
         """
-        _mask = self.axons["types"] == 0
+        _mask = self.axons["types"].iloc == 0
         _lab = "unm_only"
         self.axons.add_mask(mask=_mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -855,11 +874,11 @@ class fascicle(NRV_simulable):
         Remove fibers with diameters below/above a threshold
         """
         if min:
-            mask = self.axons["diameters"] >= d
+            mask = self.axons["diameters"].iloc >= d
             _lab = f"d_over_{d}"
 
         else:
-            mask = self.axons["diameters"] <= d
+            mask = self.axons["diameters"].iloc <= d
             _lab = f"d_under_{d}"
         self.axons.add_mask(mask=mask, label=_lab)
         self.sim_mask.append(_lab)
@@ -926,8 +945,8 @@ class fascicle(NRV_simulable):
                 polysize = np.poly1d(np.polyfit(drange, [0.5, 5], 1))
                 for s_k in range(self.n_ax):
                     k = self.sim_list[s_k]
-                    d = self.axons["diameters"][k]
-                    if self.axons["types"][k] == 0.0:
+                    d = self.axons["diameters"].iloc[k]
+                    if self.axons["types"].iloc[k] == 0.0:
                         color = unmyel_color
                         size = polysize(d)
                         axes.plot([0, self.L], np.ones(2) + k - 1, color=color, lw=size)
@@ -1118,6 +1137,9 @@ class fascicle(NRV_simulable):
 
     ## SIMULATION HANDLING
     def __update_sim_list(self):
+        """
+        Refresh the list of axon indices selected for simulation.
+        """
         self.__set_elec_mask()
         self.sim_list = (
             self.axons.get_sub_population(mask_labels=self.sim_mask)
@@ -1231,6 +1253,21 @@ class fascicle(NRV_simulable):
         )
 
     def __set_pbar_label(self, n_proc: int, **kwargs):
+        """
+        Build the progress-bar label used during fascicle simulations.
+
+        Parameters
+        ----------
+        n_proc : int
+            Number of worker processes.
+        **kwargs : dict
+            Optional overrides such as ``pbar_label``.
+
+        Returns
+        -------
+        str
+            Progress-bar label.
+        """
         if "pbar_label" in kwargs:
             __label = kwargs["pbar_label"]
         else:
@@ -1254,7 +1291,7 @@ class fascicle(NRV_simulable):
         """
         ## test axon axons_type[k]
         k = self.sim_list[k_sim]
-        assert self.axons["types"][k] in [0, 1]
+        assert self.axons["types"].iloc[k] in [0, 1]
         axon = self.__generate_axon(k)
         ## add extracellular stimulation
         axon.attach_extracellular_stimulation(self.extra_stim)

@@ -33,18 +33,50 @@ class Polygon(CShape):
 
     @property
     def n_gon(self) -> int:
+        """
+        Number of polygon vertices.
+
+        Returns
+        -------
+        int
+            Vertex count.
+        """
         return self.vertices.shape[0]
 
     @property
     def shp_poly(self) -> shp.Polygon:
+        """
+        Polygon representation as a :mod:`shapely` object.
+
+        Returns
+        -------
+        shapely.Polygon
+            Shapely polygon built from ``vertices``.
+        """
         return shp.Polygon(self.vertices)
 
     @property
     def c(self) -> np.ndarray:
+        """
+        Center of the polygon as an array.
+
+        Returns
+        -------
+        np.ndarray
+            Polygon center coordinates.
+        """
         return np.array(self.center, dtype=float)
 
     @property
     def area(self) -> float:
+        """
+        Area of the polygon.
+
+        Returns
+        -------
+        float
+            Polygon area.
+        """
         # Shoelace formula
         _i = np.arange(self.n_gon)
         return np.abs(
@@ -56,10 +88,26 @@ class Polygon(CShape):
 
     @property
     def perimeter(self) -> float:
+        """
+        Perimeter of the polygon.
+
+        Returns
+        -------
+        float
+            Polygon perimeter.
+        """
         return np.sum(np.hypot(*self.vertices.T))
 
     @property
     def bbox_size(self) -> tuple[float, float]:
+        """
+        Size of the polygon bounding box.
+
+        Returns
+        -------
+        tuple[float, float]
+            Bounding-box width and height.
+        """
         _bbox = self.bbox
         return (
             _bbox[2] - _bbox[0],
@@ -68,6 +116,14 @@ class Polygon(CShape):
 
     @property
     def bbox(self) -> np.ndarray:
+        """
+        Coordinates of the polygon bounding box.
+
+        Returns
+        -------
+        np.ndarray
+            Bounding box as ``[ymin, zmin, ymax, zmax]``.
+        """
         return np.array(
             [
                 np.min(self.vertices[:, 0]),
@@ -81,6 +137,21 @@ class Polygon(CShape):
     def is_inside(
         self, point: tuple[np.ndarray, np.ndarray], for_all: bool = True
     ) -> bool:
+        """
+        Check whether one or several points lie inside the polygon.
+
+        Parameters
+        ----------
+        point : tuple[np.ndarray, np.ndarray]
+            Point or set of points to test.
+        for_all : bool, optional
+            If ``True``, return a single boolean for all points.
+
+        Returns
+        -------
+        bool | np.ndarray
+            Inclusion test result.
+        """
         if not np.iterable(point[0]):
             return self.shp_poly.contains(shp.Point(*point))
 
@@ -90,6 +161,16 @@ class Polygon(CShape):
         return self.shp_poly.contains(shp.points(np.array(point).T))
 
     def rotate(self, angle: float, degree: bool = False):
+        """
+        Rotate the polygon around its center.
+
+        Parameters
+        ----------
+        angle : float
+            Rotation angle.
+        degree : bool, optional
+            If ``True``, ``angle`` is provided in degrees.
+        """
         self.vertices = rotate_2D(
             point=self.vertices,
             center=self.center,
@@ -99,6 +180,16 @@ class Polygon(CShape):
         ).T
 
     def translate(self, y: float = 0, z: float = 0):
+        """
+        Translate the polygon.
+
+        Parameters
+        ----------
+        y : float, optional
+            Translation along the y axis.
+        z : float, optional
+            Translation along the z axis.
+        """
         self.vertices += np.array([y, z])
         self.center = np.mean(self.vertices, axis=0)
 
@@ -120,6 +211,23 @@ class Polygon(CShape):
     def get_point_inside(
         self, n_pts: int = 1, delta: float = 0, max_iter=1e5
     ) -> np.ndarray:
+        """
+        Draw random points inside the polygon by rejection sampling.
+
+        Parameters
+        ----------
+        n_pts : int, optional
+            Number of points to generate.
+        delta : float, optional
+            Minimum distance kept from the boundary.
+        max_iter : int, optional
+            Maximum number of rejection-sampling iterations.
+
+        Returns
+        -------
+        np.ndarray
+            Generated points of shape ``(n_pts, 2)``.
+        """
         points = np.zeros((n_pts, 2))
         _poly = self.shp_poly
         minx, miny, maxx, maxy = _poly.bounds

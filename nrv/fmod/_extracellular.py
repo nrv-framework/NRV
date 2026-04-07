@@ -103,10 +103,16 @@ class extracellular_context(NRV_class):
         self.type = None
 
     def save_extracel_context(self, save=False, fname="extracel_context.json"):
+        """
+        Deprecated alias of :meth:`save`.
+        """
         rise_warning("save_extracel_context is a deprecated method use save")
         self.save(save=save, fname=fname)
 
     def load_extracel_context(self, data="extracel_context.json"):
+        """
+        Deprecated alias of :meth:`load`.
+        """
         rise_warning("load_extracel_context is a deprecated method use load")
         self.load(data=data)
 
@@ -178,12 +184,18 @@ class extracellular_context(NRV_class):
         self.synchronised = False
 
     def reset_stimuli(self):
+        """
+        Remove all stored stimuli and synchronization caches.
+        """
         self.stimuli = []
         self.synchronised_stimuli = []
         self.synchronised = False
         self.global_time_serie = []
 
     def reset_electrodes(self):
+        """
+        Remove all electrodes and reset the associated stimuli.
+        """
         self.electrodes = []
         self.reset_stimuli()
 
@@ -304,6 +316,9 @@ class extracellular_context(NRV_class):
             )
 
     def plot(self, axes: plt.axes, color: str = "gold", **kwgs) -> None:
+        """
+        Plot all electrodes registered in the extracellular context.
+        """
         for electrode in self.electrodes:
             electrode.plot(axes, color, **kwgs)
 
@@ -409,6 +424,21 @@ class FEM_stimulation(extracellular_context):
         comsol=True,
         n_proc=None,
     ):
+        """
+        Initialize a FEM-based extracellular stimulation context.
+
+        Parameters
+        ----------
+        model_fname : str | None, optional
+            Existing COMSOL model filename. When omitted, a FEniCS model is created.
+        endo_mat, peri_mat, epi_mat, ext_mat : str | material, optional
+            Material specifications for the endoneurium, perineurium, epineurium,
+            and external medium.
+        comsol : bool, optional
+            If ``True`` and a model filename is provided, use the COMSOL backend.
+        n_proc : int | None, optional
+            Number of processes or threads requested by the backend.
+        """
 
         super().__init__()
         self.electrodes_label = []

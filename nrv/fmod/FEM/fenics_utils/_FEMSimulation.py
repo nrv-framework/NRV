@@ -256,6 +256,9 @@ class FEMSimulation(FEMParameters):
         mat_perm=None,
         ID=None,
     ):
+        """
+        Add or update one internal boundary layer in the simulation definition.
+        """
         super().add_inboundary(
             mesh_domain,
             in_domains,
@@ -277,6 +280,9 @@ class FEMSimulation(FEMParameters):
     def add_domain(
         self, mesh_domain, mat_pty=None, mat_file=None, mat_perm=None, ID=None
     ):
+        """
+        Add or update one material domain in the simulation definition.
+        """
         super().add_domain(mesh_domain, mat_pty, mat_file, mat_perm, ID)
         if self.setup_status:
             if mesh_domain in self.mat_map:
@@ -585,6 +591,14 @@ class FEMSimulation(FEMParameters):
                 rise_warning(key + " is not a valid solver option not set")
 
     def set_result_merging(self, to_merge=None):
+        """
+        Enable, disable, or toggle the merging of mixed-space solutions.
+
+        Parameters
+        ----------
+        to_merge : bool | None, optional
+            Explicit merge state. If ``None``, toggle the current behavior.
+        """
         if isinstance(to_merge, bool):
             self.to_merge = to_merge
         else:
@@ -639,6 +653,14 @@ class FEMSimulation(FEMParameters):
         return self.result
 
     def __merge_mixed_solutions(self):
+        """
+        Merge mixed-space solutions into a discontinuous scalar field.
+
+        Returns
+        -------
+        Any
+            Function space associated with the merged solution.
+        """
         if self.dg_problem is None:
             self.mixedvouts = self.mixedvout.split()
             self.V_DG = functionspace(
@@ -661,6 +683,19 @@ class FEMSimulation(FEMParameters):
         return self.V_DG
 
     def compute_conductance(self, order=None):
+        """
+        Export the conductivity distribution as FEM result objects.
+
+        Parameters
+        ----------
+        order : int | None, optional
+            DG interpolation order. Defaults to the simulation element order.
+
+        Returns
+        -------
+        list[FEMResults]
+            Conductivity fields, one per mixed space when relevant.
+        """
         self.__init_domain()
         self.__set_material_map()
         V_sigma = self.V
@@ -704,6 +739,14 @@ class FEMSimulation(FEMParameters):
     #####################################################
 
     def solver_info(self, txt_fname="solver.txt"):
+        """
+        Dump the PETSc solver information to a text file and echo it to the log.
+
+        Parameters
+        ----------
+        txt_fname : str, optional
+            Output text filename.
+        """
         solver = self.cg_problem.solver
         viewer = Viewer().createASCII(txt_fname)
         solver.view(viewer)
@@ -712,6 +755,21 @@ class FEMSimulation(FEMParameters):
             pass_info(line)
 
     def solve_and_save_sim(self, filename, save=True):
+        """
+        Solve the simulation if needed and save the resulting field.
+
+        Parameters
+        ----------
+        filename : str
+            Output filename.
+        save : bool, optional
+            Reserved flag for API compatibility.
+
+        Returns
+        -------
+        FEMResults
+            Stored simulation result.
+        """
         if not self.solve_status:
             self.solve()
         fname = rmv_ext(filename)
@@ -719,12 +777,36 @@ class FEMSimulation(FEMParameters):
         return self.result
 
     def get_timers(self):
+        """
+        Return the accumulated solving time.
+
+        Returns
+        -------
+        float
+            Solving timer in seconds.
+        """
         return self.solving_timer
 
     def visualize_mesh(self):
+        """
+        Open the mesh file in Gmsh.
+        """
         os.system("gmsh " + self.mesh_file + ".msh")
 
     def get_surface(self, dom_id):
+        """
+        Compute the measure of a boundary surface.
+
+        Parameters
+        ----------
+        dom_id : int
+            Boundary domain identifier.
+
+        Returns
+        -------
+        float
+            Surface measure.
+        """
         S = assemble_scalar(form(1 * self.ds(dom_id)))
         if self.comm == COMM_WORLD:
             S = self.comm.reduce(S, op=SUM, root=0)
@@ -732,6 +814,25 @@ class FEMSimulation(FEMParameters):
         return S
 
     def get_domain_potential(self, dom_id, dim=2, space=0, surf=None):
+        """
+        Compute the average potential over a boundary or volume domain.
+
+        Parameters
+        ----------
+        dom_id : int
+            Domain identifier.
+        dim : int, optional
+            Integration dimension: ``2`` for surfaces, ``3`` for volumes.
+        space : int, optional
+            Mixed-space index used when results are not merged.
+        surf : float | None, optional
+            Precomputed domain measure. If omitted, it is evaluated internally.
+
+        Returns
+        -------
+        float
+            Average potential over the selected domain.
+        """
         if dim == 2:
             do = self.ds
         elif dim == 3:

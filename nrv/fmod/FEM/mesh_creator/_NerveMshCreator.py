@@ -15,7 +15,6 @@ from ....utils.geom._misc import CShape, create_cshape
 from ....backend._file_handler import rmv_ext
 from ._MshCreator import MshCreator, pi
 
-
 ENT_DOM_offset = {
     "Volume": 0,
     "Surface": 1,
@@ -81,6 +80,23 @@ def is_NerveMshCreator(object):
 
 
 def get_node_physical_id(id_ax: int, i_node: int, volume: bool = False) -> int:
+    """
+    Compute the physical-domain identifier associated with one myelinated node.
+
+    Parameters
+    ----------
+    id_ax : int
+        Base physical identifier of the parent axon.
+    i_node : int
+        Node index along the axon.
+    volume : bool, optional
+        Reserved flag for API compatibility.
+
+    Returns
+    -------
+    int
+        Physical identifier assigned to that node.
+    """
     id_ax_volume = id_ax - id_ax % 2
     i_node_str = str(2 * i_node)
     while len(i_node_str) < 3:
@@ -173,6 +189,14 @@ class NerveMshCreator(MshCreator):
         self.is_refined = False
 
     def get_parameters(self):
+        """
+        Export the current mesh-creator configuration as a dictionary.
+
+        Returns
+        -------
+        dict
+            Mesh-creator parameters and stored geometry descriptors.
+        """
         param = {}
         param["res"] = self.res
         param["L"] = self.L
@@ -532,6 +556,16 @@ class NerveMshCreator(MshCreator):
         self.electrodes[ID] = {"type": elec_type, "res": res, "kwargs": kwargs}
 
     def __collect_geom_ppt(self, d_store: dict, shape_ids: tuple[tuple[int]]):
+        """
+        Collect bounding-box properties for a created geometry entity.
+
+        Parameters
+        ----------
+        d_store : dict
+            Dictionary updated in place.
+        shape_ids : tuple
+            Gmsh entity identifiers associated with the geometry.
+        """
         for c in shape_ids:
             bbox = np.round(self.model.occ.getBoundingBox(*c), 4)
             if np.isclose(abs(bbox[0] - bbox[3]), self.L):
@@ -546,6 +580,9 @@ class NerveMshCreator(MshCreator):
     ####################################################################################################
 
     def compute_domains(self):
+        """
+        Associate geometric entities with physical domains.
+        """
         if not self.is_geo:
             rise_error("compute geometry before domain")
         elif not self.is_dom:
@@ -964,6 +1001,9 @@ class NerveMshCreator(MshCreator):
     ####################################################################################################
 
     def compute_res(self):
+        """
+        Build the mesh-refinement fields associated with the nerve geometry.
+        """
         if not self.is_dom and self.is_geo:
             rise_error("compute geometry and domain before resolution")
         elif not self.is_refined:
@@ -1081,7 +1121,10 @@ class NerveMshCreator(MshCreator):
     ############## complex volumes adding methods ##################
     ################################################################
     def __add_mye_section(self, i_sec: int, sec: str, x, ax_pties: dict, l_sec: float):
-        """_summary_
+        """
+        Add a section of myelinated axon.
+
+        A cone for MYSA sections and cylinder for any ohter type
 
         Parameters
         ----------
