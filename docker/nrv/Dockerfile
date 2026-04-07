@@ -1,35 +1,50 @@
 FROM ubuntu:22.04
 
-RUN apt-get update && apt-get install -y wget bash bzip2 && rm -rf /var/lib/apt/lists/*
-
-#install mamba
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    sh /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh
-
-RUN apt-get update && apt-get install -y \
-    build-essential libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev libxrender1 libxcursor1 libxft2 libxinerama1 make libx11-dev git bison flex automake libtool libxext-dev libncurses-dev xfonts-100dpi cython3 libopenmpi-dev zlib1g-dev && \
-    rm -rf /var/lib/apt/lists/*
-    
+ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/opt/conda/bin:$PATH
 
-#install mamba
-RUN conda install -y -n base -c conda-forge mamba
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    bash \
+    bzip2 \
+    ca-certificates \
+    build-essential \
+    libglu1-mesa \
+    libxi-dev \
+    libxmu-dev \
+    libglu1-mesa-dev \
+    libxrender1 \
+    libxcursor1 \
+    libxft2 \
+    libxinerama1 \
+    make \
+    libx11-dev \
+    git \
+    bison \
+    flex \
+    automake \
+    libtool \
+    libxext-dev \
+    libncurses-dev \
+    xfonts-100dpi \
+    cython3 \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-#install external dependencies #todo: create a yml file 
-RUN mamba install -y -c conda-forge \
-    python=3.12 \
-    fenics-dolfinx=0.9.0 \
-    mpich \
-    python-gmsh \
-    ipykernel \
-    python=3.12  \
-    #mpg \
-    sysroot_linux-64=2.17  && \ 
+ARG TARGETARCH
+
+RUN case "${TARGETARCH}" in \
+        "amd64")  MINIFORGE_ARCH="x86_64" ;; \
+        "arm64")  MINIFORGE_ARCH="aarch64" ;; \
+        *) echo "Unsupported TARGETARCH=${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget --quiet "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O /tmp/miniforge.sh && \
+    bash /tmp/miniforge.sh -b -p /opt/conda && \
+    rm -f /tmp/miniforge.sh && \
+    conda config --system --set channel_priority strict && \
+    conda clean --all --yes
+
+COPY docker/nrv/environment.yml /tmp/environment.yml
+RUN mamba env update -n base -f /tmp/environment.yml && \
     mamba clean --all --yes
-
-#install nrv-py through pip
-RUN pip install nrv-py
-
-#run it to compile neuron's mod files
-RUN python3 -c "import nrv"
+RUN python -c "import nrv"
