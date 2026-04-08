@@ -1,14 +1,14 @@
 name: Docker -- Build and Push Images on Release
 
-#on:
-#  release:
-#    types: [published]
+on:
+  release:
+    types: [published]
 
 # Debug option
-on:
-  push: 
-    branches:
-      - testability
+# on:
+#   push: 
+#     branches:
+#       - testability
 
 jobs:
   docker:
