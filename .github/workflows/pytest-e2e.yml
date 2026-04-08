@@ -63,4 +63,4 @@ jobs:
       - name: Run end-to-end tests
         shell: bash -el {0}
         run: |
-          conda run -n nrv-tests python -m pytest test/e2e -q
+          micromamba run -n nrv-tests python -m pytest test/e2e -q
