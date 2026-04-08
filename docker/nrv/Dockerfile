@@ -48,13 +48,11 @@ RUN case "${TARGETARCH}" in \
 
 COPY docker/environment.yml /tmp/environment.yml
 
-RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir --upgrade nrv-py
-
 RUN conda env create -p "${NRV_ENV}" -f /tmp/environment.yml && \
     conda clean --all --yes
 
-RUN pip show nrv-py
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir --upgrade nrv-py
 
 RUN python -V && \
     python -c "import nrv; print('NRV import OK')"
