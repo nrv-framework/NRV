@@ -1,0 +1,43 @@
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump-type:
+        description: 'Version bump type'
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  print-username:
+    runs-on: ubuntu-latest
+    permissions:                # Job-level permissions configuration starts here
+      contents: write  
+
+    steps:
+      - name: Version bump type
+        run: echo Performing ${{ inputs.bump-type }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+            fetch-depth: 0          # get all history for tags
+            ref: master       # change branch if needed
+      - name: Setup git user
+        run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Bump version
+        run: |
+            pip install bump2version
+            bump2version ${{ inputs.bump-type }}
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
+        run: |
+          git push origin master
+          git push origin master --tags
