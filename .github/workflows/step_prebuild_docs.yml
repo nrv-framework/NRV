@@ -1,15 +1,18 @@
 name: Docs -- Build and publish prebuilt to RtD
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - 'docs/html/**'
-      - 'docs/_build/**'
-      - 'docs/_nrv/**'
-      - 'docs/examples/**'
-      - 'docs/tutorials/**'
+  workflow_call:
+
+# on:
+#  push:
+#    branches:
+#      - master
+#    paths-ignore:
+#      - 'docs/html/**'
+#      - 'docs/_build/**'
+#      - 'docs/_nrv/**'
+#      - 'docs/examples/**'
+#      - 'docs/tutorials/**'
 
 permissions:
   contents: write

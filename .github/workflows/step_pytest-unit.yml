@@ -1,30 +1,19 @@
-name: Pytest E2E
+name: Pytest Unit
 
 on:
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - master
-      - dev
-    paths:
-      - ".github/workflows/pytest-e2e.yml"
-      - "docs-env.yaml"
-      - "pyproject.toml"
-      - "nrv/**"
-      - "test/**"
-      - "tests/unitary_tests/sources/**"
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: pytest-e2e-${{ github.ref }}
+  group: pytest-unit-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  e2e:
+  unit:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -55,7 +44,7 @@ jobs:
           conda run -n nrv-docs python -m pip install --upgrade pip
           conda run -n nrv-docs python -m pip install -e . pytest
 
-      - name: Run end-to-end tests
+      - name: Run unit tests
         shell: bash -el {0}
         run: |
-          conda run -n nrv-docs python -m pytest test/e2e -q
+          conda run -n nrv-docs python -m pytest test/unit -q

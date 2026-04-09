@@ -1,8 +1,8 @@
 name: Docs -- Publish prebuilt docs to RtD stable and release tag
 
 on:
-  release:
-    types: [published]
+  workflow_call:
+
 
 permissions:
   contents: read

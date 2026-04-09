@@ -1,18 +1,7 @@
 name: Pytest Deployment
 
 on:
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - master
-      - dev
-    paths:
-      - ".github/workflows/pytest-deployment.yml"
-      - "docs-env.yaml"
-      - "pyproject.toml"
-      - "nrv/**"
-      - "test/**"
-      - "tests/unitary_tests/sources/**"
+  workflow_call:
 
 permissions:
   contents: read
