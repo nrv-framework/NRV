@@ -1,0 +1,30 @@
+name: nrvd
+channels:
+  - conda-forge
+dependencies:
+  - python==3.12
+  - mpi4py
+  - fenics-dolfinx==0.9.0
+  - libblas=*=*blis
+  - python-gmsh
+  - ipykernel
+  - pip
+  - pip:
+    - mph
+    - neuron
+    - icecream
+    - numba
+    - scipy
+    - matplotlib
+    - ezdxf
+    - psutil
+    - pyswarms
+    - rich
+    - pandas
+    - pathos
+    - shapely
+    - seaborn
+    - pyeit
+    - ipython
+    - numpy
+    - pytest

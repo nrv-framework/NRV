@@ -52,9 +52,9 @@ jobs:
       - name: Create or update docs environment
         run: |
           if micromamba env list | grep -qE '(^|[[:space:]])'"$ENV_NAME"'([[:space:]]|$)'; then
-            micromamba env update -n "$ENV_NAME" -f conda/docs-env.yaml
+            micromamba env update -n "$ENV_NAME" -f conda/nrvdoc_linux.yaml
           else
-            micromamba create -y -f conda/docs-env.yaml
+            micromamba create -n "$ENV_NAME" -y -f conda/nrvdoc_linux.yaml
           fi
 
       - name: Build documentation

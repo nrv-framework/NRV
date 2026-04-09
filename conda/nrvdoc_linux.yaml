@@ -1,4 +1,4 @@
-name: nrv-docs
+name: nrvdoc
 channels:
   - conda-forge
 dependencies:
@@ -25,6 +25,9 @@ dependencies:
     - shapely
     - seaborn
     - pyeit
+    - ipython
+    - numpy
+    - pytest
     - sphinx_rtd_theme
     - furo
     - Pygments
