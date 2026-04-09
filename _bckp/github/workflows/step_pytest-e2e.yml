@@ -7,18 +7,16 @@ permissions:
   contents: read
 
 concurrency:
-  group: pytest-e2e-${{ github.workflow }}-${{ github.ref }}
+  group: pytest-e2e-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   e2e:
-    name: e2e
     runs-on: self-hosted
-    timeout-minutes: 90
 
     env:
       MAMBA_ROOT_PREFIX: /home/runner/micromamba
-      ENV_NAME: nrv-tests
+      ENV_NAME: nrv-test
 
     steps:
       - name: Checkout repository
@@ -32,22 +30,21 @@ jobs:
           mamba-version: "*"
           auto-activate-base: false
 
+
       - name: Check micromamba
         run: |
           echo "MAMBA_ROOT_PREFIX=$MAMBA_ROOT_PREFIX"
           micromamba info
 
-      - name: Create or update tests environment
-        shell: bash
+      - name: Create or update docs environment
         run: |
-          set -euo pipefail
-          if micromamba env list | grep -qE "(^|[[:space:]])${ENV_NAME}([[:space:]]|$)"; then
-            micromamba env update -n "${ENV_NAME}" -f conda/nrvdev_linux.yaml
+          if micromamba env list | grep -qE '(^|[[:space:]])'"$ENV_NAME"'([[:space:]]|$)'; then
+            micromamba env update -n "$ENV_NAME" -f conda/nrvdev_linux.yaml
           else
-            micromamba create -n "${ENV_NAME}" -y -f conda/nrvdev_linux.yaml
+            micromamba create -n "$ENV_NAME" -y -f conda/nrvdev_linux.yaml
           fi
 
       - name: Run end-to-end tests
-        shell: bash
+        shell: bash -el {0}
         run: |
-          micromamba run -n "${ENV_NAME}" python -m pytest test/e2e -q
+          micromamba run -n nrv-tests python -m pytest test/e2e -q

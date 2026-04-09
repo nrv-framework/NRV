@@ -1,45 +1,52 @@
-# https://docs.github.com/en/actions
+name: Release -- Create release
 
-name: "Release"
-
-# on: # yamllint disable-line rule:truthy
-#  push:
-#    branches:
-#      - master
-#    tags:
-#      - "v*"
 on:
   workflow_call:
+    inputs:
+      release_tag:
+        description: "Release tag, e.g. v1.3.3"
+        required: true
+        type: string
 
+permissions:
+  contents: write
 
 jobs:
   release:
-    name: "Release"
-
-    runs-on: "ubuntu-latest"
+    name: create_release
+    runs-on: ubuntu-latest
 
     steps:
-      - name: "Determine tag"
-        run: "echo \"RELEASE_TAG=${GITHUB_REF#refs/tags/}\" >> $GITHUB_ENV"
-
-      - name: "Create release"
-        uses: "actions/github-script@v6"
+      - name: Create GitHub release if missing
+        uses: actions/github-script@v7
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const tag = '${{ inputs.release_tag }}';
+
             try {
+              await github.rest.repos.getReleaseByTag({
+                owner,
+                repo,
+                tag
+              });
+              core.info(`Release ${tag} already exists`);
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+
               const response = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: tag,
+                name: tag,
                 draft: false,
-                generate_release_notes: true,
-                name: process.env.RELEASE_TAG,
-                owner: context.repo.owner,
                 prerelease: false,
-                repo: context.repo.repo,
-                tag_name: process.env.RELEASE_TAG,
+                generate_release_notes: true
               });
 
-              core.exportVariable('RELEASE_ID', response.data.id);
-              core.exportVariable('RELEASE_UPLOAD_URL', response.data.upload_url);
-            } catch (error) {
-              core.setFailed(error.message);
+              core.info(`Created release id=${response.data.id}`);
             }

@@ -15,6 +15,7 @@ jobs:
   docker:
     name: docker
     runs-on: ubuntu-latest
+    environment: dockerhub
 
     strategy:
       fail-fast: false

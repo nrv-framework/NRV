@@ -1,4 +1,4 @@
-name: Pytest -- Run deployment tests
+name: Pytest Deployment
 
 on:
   workflow_call:
@@ -7,12 +7,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: pytest-deployment-${{ github.workflow }}-${{ github.ref }}
+  group: pytest-deployment-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   deployment:
-    name: deployment_test
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
@@ -31,7 +30,7 @@ jobs:
       - name: Prepare Linux test environment file
         shell: bash -el {0}
         run: |
-          cp conda/docs-env.yaml /tmp/docs-env-ci.yaml
+          cp docs-env.yaml /tmp/docs-env-ci.yaml
           sed -i '/libblas=\*=.*blis/d' /tmp/docs-env-ci.yaml
 
       - name: Create conda environment
@@ -39,7 +38,7 @@ jobs:
         run: |
           mamba env create -f /tmp/docs-env-ci.yaml
 
-      - name: Extract package metadata
+      - name: Extract package name from pyproject.toml
         id: pkg
         shell: bash -el {0}
         run: |
@@ -50,6 +49,12 @@ jobs:
           print(data["project"]["name"])
           PY
           )
+          echo "name=$PKG_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Extract package version from pyproject.toml
+        id: ver
+        shell: bash -el {0}
+        run: |
           PKG_VERSION=$(python - <<'PY'
           import tomllib
           with open("pyproject.toml", "rb") as f:
@@ -57,8 +62,7 @@ jobs:
           print(data["project"]["version"])
           PY
           )
-          echo "name=${PKG_NAME}" >> "$GITHUB_OUTPUT"
-          echo "version=${PKG_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "version=$PKG_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install pytest
         shell: bash -el {0}
@@ -68,13 +72,12 @@ jobs:
       - name: Install package from TestPyPI
         shell: bash -el {0}
         run: |
-          for i in 1 2 3 4 5 6; do
+          for i in 1 2 3 4 5; do
             conda run -n nrv-docs python -m pip install \
               --index-url https://test.pypi.org/simple/ \
-              --extra-index-url https://pypi.org/simple \
-              --no-cache-dir \
-              "${{ steps.pkg.outputs.name }}==${{ steps.pkg.outputs.version }}" && break
-            echo "Package not available yet on TestPyPI, retry $i/6..."
+              --no-deps \
+              "${{ steps.pkg.outputs.name }}" && break
+            echo "Package not available yet on TestPyPI, retry $i/5..."
             sleep 20
           done
 
@@ -86,4 +89,4 @@ jobs:
       - name: Run deployment tests
         shell: bash -el {0}
         run: |
-          conda run -n nrv-docs python -m pytest tests/deployment -q
+          conda run -n nrv-docs python -m pytest test/deployment -q

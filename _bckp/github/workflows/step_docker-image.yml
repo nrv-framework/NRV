@@ -2,19 +2,19 @@ name: Docker -- Build and Push Images on Release
 
 on:
   workflow_call:
-    inputs:
-      release_tag:
-        description: "Release tag, e.g. v1.3.3"
-        required: true
-        type: string
 
-permissions:
-  contents: read
+# Debug option
+# on:
+#   push: 
+#     branches:
+#       - testability
 
 jobs:
   docker:
-    name: docker
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
 
     strategy:
       fail-fast: false
@@ -30,8 +30,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          ref: ${{ inputs.release_tag }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4
@@ -52,7 +50,7 @@ jobs:
           images: ${{ matrix.repository }}
           tags: |
             type=raw,value=latest
-            type=raw,value=${{ inputs.release_tag }}
+            type=raw,value=${{ github.event.release.tag_name }}
 
       - name: Build and push multi-arch image
         uses: docker/build-push-action@v7
