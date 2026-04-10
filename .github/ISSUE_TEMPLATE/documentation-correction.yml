@@ -1,0 +1,36 @@
+name: Documentation Correction
+description: Suggest or request some correction in the documentation.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the sections below to identify the page(s) of documentation linked with the corrections.
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the error and/or correction needed
+      placeholder: A clear and concise description of what needs to be corrected.
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: It should be corrected because
+      placeholder: It misleads users to wrong assumptions, it is outdated, etc.
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      placeholder: |
+        Add any other context or screenshots about the feature request here.
+  - type: dropdown
+    id: assign
+    attributes:
+      label: "Would you like to work on this issue?"
+      options:
+        - "Yes"
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your suggestion! Let's see together if it can be corrected.

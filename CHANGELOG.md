@@ -2,6 +2,14 @@
 
 All notable changes to NRV are summed up in this file.
 
+## [1.3.3] - 2026-04-XX
+
+### Warning 
+
+- **Yanked**: Reason this release was yanked: test with new github actions workflow
+
+### Added
+- New github actions workflow (detail in documentation's [dev corner section]https://nrv.readthedocs.io/en/latest/devcorner.html#contribution-forking-and-pull-requests)
 
 ## [1.3.2] - 2026-04-02
 

@@ -1,0 +1,43 @@
+name: Release -- Publish Python 🐍 distributions 📦 to PyPI
+
+on:
+  workflow_call:
+    inputs:
+      git_ref:
+        description: "Git ref to publish from"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish_pypi:
+    name: publish_pypi
+    runs-on: ubuntu-latest
+    environment: pypi
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.git_ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

@@ -1,9 +1,12 @@
-name: Publish Python 🐍 distributions 📦 to PyPI
+name: Release -- Publish Python 🐍 distributions 📦 to PyPI
 
 on:
-  workflow_run:
-    workflows: ["Release"]
-    types: [completed]
+  workflow_call:
+    inputs:
+      git_ref:
+        description: "Git ref to publish from"
+        required: true
+        type: string
 
 jobs:
   deploy:
