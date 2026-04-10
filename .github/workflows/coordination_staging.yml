@@ -97,6 +97,7 @@ jobs:
                 '',
                 '- unit tests passed',
                 '- end-to-end tests passed',
+                '- Docs latest with tutos and example generated',
                 '- TestPyPI publication passed',
                 '- deployment tests passed'
               ].join('\n')
