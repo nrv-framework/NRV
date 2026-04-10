@@ -3,10 +3,6 @@ name: Release -- Bump Version
 on:
   workflow_call:
     inputs:
-      target_branch:
-        description: "Branch to update"
-        required: true
-        type: string
       bump_type:
         description: "patch | minor | major"
         required: true
@@ -27,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
             fetch-depth: 0          # get all history for tags
-            ref: master       # change branch if needed
+            ref: dev       # change branch if needed
       - name: Setup git user
         run: |
             git config --global user.name "github-actions[bot]"
