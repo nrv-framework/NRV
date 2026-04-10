@@ -1,9 +1,9 @@
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CONDA_DIR=/opt/conda
+ENV MAMBA_ROOT_PREFIX=/opt/micromamba
 ENV NRV_ENV=/opt/nrv-env
-ENV PATH=${NRV_ENV}/bin:${CONDA_DIR}/bin:$PATH
+ENV PATH=${NRV_ENV}/bin:${MAMBA_ROOT_PREFIX}/bin:$PATH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
@@ -36,23 +36,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG TARGETARCH
 
 RUN case "${TARGETARCH}" in \
-        "amd64")  MINIFORGE_ARCH="x86_64" ;; \
-        "arm64")  MINIFORGE_ARCH="aarch64" ;; \
+        "amd64")  MICROMAMBA_ARCH="64" ;; \
+        "arm64")  MICROMAMBA_ARCH="aarch64" ;; \
         *) echo "Unsupported TARGETARCH=${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget --quiet "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O /tmp/miniforge.sh && \
-    bash /tmp/miniforge.sh -b -p "${CONDA_DIR}" && \
-    rm -f /tmp/miniforge.sh && \
-    conda config --system --set channel_priority strict && \
-    conda clean --all --yes
+    wget --quiet -O /tmp/micromamba.tar.bz2 "https://micro.mamba.pm/api/micromamba/linux-${MICROMAMBA_ARCH}/latest" && \
+    mkdir -p "${MAMBA_ROOT_PREFIX}/bin" && \
+    tar -xjf /tmp/micromamba.tar.bz2 -C "${MAMBA_ROOT_PREFIX}/bin" --strip-components=1 bin/micromamba && \
+    rm -f /tmp/micromamba.tar.bz2 && \
+    micromamba clean --all --yes
 
 COPY docker/environment.yml /tmp/environment.yml
 
-RUN conda env create -p "${NRV_ENV}" -f /tmp/environment.yml && \
-    conda clean --all --yes
-
-RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir --upgrade nrv-py
+RUN micromamba create --yes --prefix "${NRV_ENV}" --file /tmp/environment.yml && \
+    micromamba clean --all --yes
 
 RUN python -V && \
-    python -c "import nrv; print('NRV import OK')"
+    python -c "import nrv; print(f'NRV-v{nrv.__version__} import OK')"

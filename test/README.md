@@ -58,9 +58,8 @@ The project already defines pytest in the `dev` extra from `pyproject.toml`.
 Typical setup:
 
 ```bash
-mamba env create -f docs-env.yaml
-mamba activate nrv-docs
-pip install -e ".[dev]"
+mamba env create -n nrv-env -f conda/nrvdev.yaml
+mamba activate nrv-env
 ```
 
 On an existing NRV environment, only the editable install with dev extras should
