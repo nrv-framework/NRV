@@ -32,19 +32,14 @@ concurrency:
 jobs:
   lint:
     name: lint
-    uses: ./.github/workflows/step_linter.yml
-
-  unit:
-    name: unit
-    needs: lint
-    uses: ./.github/workflows/step_pytest-unit.yml
+    uses: ./.github/workflows/step_dev_linter.yml
 
   bump_version:
     name: bump_version
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
     permissions:
       contents: write
-    uses: ./.github/workflows/step_bump_version.yml
+    uses: ./.github/workflows/step_dev_bump_version.yml
     with:
       target_branch: dev
       bump_type: ${{ inputs.bump_type }}

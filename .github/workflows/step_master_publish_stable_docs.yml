@@ -61,7 +61,7 @@ jobs:
           echo "Release version '${RELEASE_TAG}' was not created on Read the Docs after sync." >&2
           exit 1
 
-      - name: Activate release version and staging
+      - name: Activate release version and stable
         run: |
           set -euo pipefail
           for version in "${RELEASE_TAG_SLUG}" staging; do

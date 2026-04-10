@@ -25,7 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Compute release tag from pyproject.toml
+      - name: Access release tag from pyproject.toml
         id: meta
         shell: bash
         run: |
@@ -56,19 +56,9 @@ jobs:
   publish_pypi:
     name: publish_pypi
     needs: prepare_release
-    uses: ./.github/workflows/step_pypi_release.yml
+    uses: ./.github/workflows/step_master_pypi_release.yml
     with:
       git_ref: ${{ needs.prepare_release.outputs.release_tag }}
-    secrets: inherit
-
-  docs_latest:
-    name: docs_latest
-    needs: prepare_release
-    uses: ./.github/workflows/step_prebuild_docs.yml
-    with:
-      target_ref: master
-      rtd_project: nrv
-      rtd_version: latest
     secrets: inherit
 
   create_release:
@@ -76,7 +66,7 @@ jobs:
     needs:
       - prepare_release
       - publish_pypi
-    uses: ./.github/workflows/step_create_release.yml
+    uses: ./.github/workflows/step_master_create_release.yml
     with:
       release_tag: ${{ needs.prepare_release.outputs.release_tag }}
     secrets: inherit
@@ -86,7 +76,7 @@ jobs:
     needs:
       - prepare_release
       - create_release
-    uses: ./.github/workflows/step_publish_stable_docs.yml
+    uses: ./.github/workflows/step_master_publish_stable_docs.yml
     with:
       release_tag: ${{ needs.prepare_release.outputs.release_tag }}
       rtd_project: nrv
@@ -97,7 +87,7 @@ jobs:
     needs:
       - prepare_release
       - create_release
-    uses: ./.github/workflows/step_docker-image.yml
+    uses: ./.github/workflows/step_master_docker-image.yml
     with:
       release_tag: ${{ needs.prepare_release.outputs.release_tag }}
     secrets: inherit
