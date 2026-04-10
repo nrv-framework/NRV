@@ -1,15 +1,6 @@
 name: Coordination -- dev branch
 
 on:
-  pull_request:
-    branches:
-      - dev
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-  merge_group:
   workflow_dispatch:
     inputs:
       bump_type:
@@ -20,6 +11,15 @@ on:
           - patch
           - minor
           - major
+  pull_request:
+    branches:
+      - dev
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  merge_group:
 
 permissions:
   contents: read
