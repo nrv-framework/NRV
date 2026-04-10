@@ -10,3 +10,6 @@
     - [ ] master
         - [ ] remove ./tests (unitary_tests)
 - [ ] Set dev-branch as default
+- [ ] Complementary actions
+    - [ ] clean tags (in case of issues)
+    - [ ] Build/publish dev doc
