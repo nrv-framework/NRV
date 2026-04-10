@@ -1,0 +1,91 @@
+name: Docs -- Build and publish prebuilt to RtD
+
+on:
+  workflow_call:
+    inputs:
+      target_ref:
+        description: "Git ref to build documentation from"
+        required: true
+        type: string
+      rtd_project:
+        description: "Read the Docs project slug"
+        required: true
+        type: string
+      rtd_version:
+        description: "Read the Docs version to trigger"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-${{ inputs.target_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_docs:
+    name: build_docs
+    runs-on: self-hosted
+
+    env:
+      MAMBA_ROOT_PREFIX: /home/runner/micromamba
+      ENV_NAME: nrv-docs
+      RTD_PROJECT: ${{ inputs.rtd_project }}
+      RTD_VERSION: ${{ inputs.rtd_version }}
+
+    steps:
+      - name: Checkout target ref
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.target_ref }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Check micromamba
+        run: |
+          echo "MAMBA_ROOT_PREFIX=$MAMBA_ROOT_PREFIX"
+          micromamba info
+
+      - name: Create or update docs environment
+        run: |
+          if micromamba env list | grep -qE "(^|[[:space:]])${ENV_NAME}([[:space:]]|$)"; then
+            micromamba env update -n "${ENV_NAME}" -f conda/docs-env.yaml
+          else
+            micromamba create -y -f conda/docs-env.yaml
+          fi
+
+      - name: Build documentation
+        run: |
+          micromamba run -n "${ENV_NAME}" bash -lc '
+            set -euo pipefail
+            rm -rf docs/_build docs/html docs/examples docs/tutorials docs/_nrv
+            mkdir -p docs/html
+            python -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
+            rm -rf docs/examples docs/tutorials docs/_nrv
+          '
+
+      - name: Commit prebuilt documentation if changed
+        id: commit_docs
+        run: |
+          if git diff --quiet -- docs/html; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git add docs/html
+          git commit -m "docs: update prebuilt documentation [skip ci]"
+          git push origin HEAD:${{ inputs.target_ref }}
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger Read the Docs build
+        if: steps.commit_docs.outputs.changed == 'true'
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
+            "https://app.readthedocs.org/api/v3/projects/${RTD_PROJECT}/versions/${RTD_VERSION}/builds/"

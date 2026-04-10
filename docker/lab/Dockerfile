@@ -1,12 +1,67 @@
-FROM dolfinx/lab:stable
+FROM ubuntu:24.04
 
-# Install basic packages
-RUN pip install nrv-py
+ENV DEBIAN_FRONTEND=noninteractive
+ENV CONDA_DIR=/opt/conda
+ENV NRV_ENV=/opt/nrv-env
+ENV WORKDIR=/workspace
+ENV PATH=${NRV_ENV}/bin:${CONDA_DIR}/bin:$PATH
 
-# add environnement variable
-ENV NRVPATH="/usr/local/lib/python3.10/dist-packages/nrv"
-ENV PYTHONPATH="$NRVPATH:$PYTHONPATH"
-ENV PATH="$NRVPATH:$PATH"
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    bash \
+    bzip2 \
+    ca-certificates \
+    build-essential \
+    libglu1-mesa \
+    libxi-dev \
+    libxmu-dev \
+    libglu1-mesa-dev \
+    libxrender1 \
+    libxcursor1 \
+    libxft2 \
+    libxinerama1 \
+    make \
+    libx11-dev \
+    git \
+    bison \
+    flex \
+    automake \
+    libtool \
+    libxext-dev \
+    libncurses-dev \
+    xfonts-100dpi \
+    cython3 \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Import a first time nrv to compile mod files
-RUN python3 -c "import nrv"
+ARG TARGETARCH
+
+RUN case "${TARGETARCH}" in \
+        "amd64")  MINIFORGE_ARCH="x86_64" ;; \
+        "arm64")  MINIFORGE_ARCH="aarch64" ;; \
+        *) echo "Unsupported TARGETARCH=${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget --quiet "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-${MINIFORGE_ARCH}.sh" -O /tmp/miniforge.sh && \
+    bash /tmp/miniforge.sh -b -p "${CONDA_DIR}" && \
+    rm -f /tmp/miniforge.sh && \
+    conda config --system --set channel_priority strict && \
+    conda clean --all --yes
+
+COPY docker/environment.yml /tmp/environment.yml
+
+RUN conda env create -p "${NRV_ENV}" -f /tmp/environment.yml && \
+    conda clean --all --yes
+
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir --upgrade nrv-py jupyterlab
+
+RUN python -c "import nrv; print(nrv.__version__)" && \
+    python -m ipykernel install --sys-prefix --name nrv-lab --display-name "Python (NRV)" && \
+    python -c "import jupyterlab; print(jupyterlab.__version__)"
+
+RUN mkdir -p "${WORKDIR}"
+WORKDIR ${WORKDIR}
+
+EXPOSE 8888
+
+CMD ["python", "-m", "jupyterlab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--ServerApp.root_dir=/workspace", "--IdentityProvider.token=", "--ServerApp.password="]

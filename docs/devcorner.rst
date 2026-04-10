@@ -44,7 +44,9 @@ Here is how to setup NRV for local development:
 
 You should be able to make changes locally
 
-5. Once changes are made, you should use the test interface (see bellow for details) to lint and test you code:
+5. Once changes are made, you should use the test interface (see bellow for details) to lint and test your code.
+
+The historical scientific test launcher remains available:
 
 .. code:: bash
 
@@ -52,11 +54,20 @@ You should be able to make changes locally
     ./NRV_test --syntax
     ./NRV_test --all
 
+In parallel, the automation-friendly pytest suite can be used from the repository root:
+
+.. code:: bash
+
+    pytest test
+    pytest test/unit
+    pytest test/e2e
+    pytest test/deployment
+
 If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
-1. Please do not forget to update the documentation if your changes imply knowledge from the end user. The requirements for doc compilation are listed in the `following section <devcorner.html#nrv-documentation>`_.
+6. Please do not forget to update the documentation if your changes imply knowledge from the end user. The requirements for documentation compilation are listed in the `following section <devcorner.html#nrv-documentation>`_.
 
-2. Commit your changes and push you branch to GitHub:
+7. Commit your changes and push your branch to GitHub:
 
 .. code:: bash
 
@@ -70,6 +81,7 @@ In brief, commit messages should follow these conventions:
     - The commit body should contain context about the change - how the code worked before, how it works now and why you decided to solve the issue in the way you did.
 
 8. Submit a pull request through the GitHub website.
+
 
 NRV documentation
 =================
@@ -88,7 +100,7 @@ NRV documentation is built using `Sphinx <https://www.sphinx-doc.org/fr/master/>
 To compile the full documentation (1, 2, and 3), use a conda/mamba environment where you can `import nrv`.
 
 .. seealso::
-    Two method can be used to install such environment: 
+    Two method can be used to install such environment:
        - :doc:`Standard installation <./installation>`.
        - `Developer installation <devcorner.html#contribution-forking-and-pull-requests>`_.
 
@@ -130,9 +142,15 @@ If you want to rebuild the full documentation, you should first manually remove 
 NRV testing
 ===========
 
-NRV is build with its own custom system for testing and validating new functionalities. This choice as made since the early development of first version, and is kept as so to ensure scientific reproducibility of results.
+NRV currently relies on two complementary testing systems.
 
-In the sources of NRV, a *test* folder is dedicated to tests: 
+.. tip::
+
+    The legacy ``tests/`` folder remains the scientific reference suite used during model development and validation.
+    The newer ``test/`` folder contains the pytest-based suite designed for automation, selective execution, and CI/CD integration.
+    These two systems have different goals and must coexist.
+
+In the sources of NRV, both testing folders are present:
 
 .. code:: bash
 
@@ -141,14 +159,26 @@ In the sources of NRV, a *test* folder is dedicated to tests:
     ├── docs/
     ├── examples/
     ├── nrv/
+    ├── test/
+    │   ├── deployment/
+    │   ├── e2e/
+    │   └── unit/
     ├── tests/
+    │   ├── deprecated_tests/
+    │   ├── dev_tests/
     │   ├── unitary_tests/
     │   └── NRV_test
 
-The *NRV_test* file is a script that act as a test launcher. It should be called from the command line using:
+Scientific testing
+------------------
+
+NRV is build with its own custom system for testing and validating new functionalities. This choice was made during the early development of the framework and is kept to ensure scientific reproducibility of results.
+
+The ``tests/NRV_test`` file is a script that acts as a test launcher. It should be called from the command line using:
 
 .. code:: bash
 
+    cd tests
     ./NRV_test
 
 This script can test the installation and dependencies, test the syntax and trigger linters or launch unitary tests. The following options are possible:
@@ -165,7 +195,7 @@ This script can test the installation and dependencies, test the syntax and trig
 Note that running all scripts without errors and with all prints set to 'True' (no 'False') is a necessary condition for a PR to be accepted.
 If errors occurred, the list of failed tests will be saved in the file *tests/unitary_tests/log_NRV_test.txt*.
 
-All code sources for the unitary tests can be found in the *tests/unitary_tests/* folder. Tests are organized in groups and subgroups as follows:
+All code sources for the unitary tests can be found in the ``tests/unitary_tests/`` folder. Additional development scripts are stored in ``tests/dev_tests/`` and deprecated scripts are kept in ``tests/deprecated_tests/``. Tests are organized in groups and subgroups as follows:
 
 .. list-table:: Tests functionalities
     :widths: 10 10 50
@@ -230,53 +260,339 @@ All code sources for the unitary tests can be found in the *tests/unitary_tests/
         - 950
         - Machine and autoconfig
 
+Pytest testing for CI/CD
+------------------------
+
+In parallel with the scientific validation suite, NRV now includes a pytest-based structure in ``test/``.
+This second suite is intended for automation and continuous integration. Its role is to check that representative workflows run without error and produce results, while keeping the computational cost moderate enough for repeated execution.
+
+The pytest suite is organized into three families:
+
+  - ``unit``: short API-focused tests, object construction checks, save/load smoke tests, and lightweight helper validation
+  - ``e2e``: strategic end-to-end workflows such as axon, fascicle, nerve, stimulation, threshold, FEniCS, and EIT smoke simulations
+  - ``deployment``: runtime, import, backend, and multiprocessing sanity checks
+
+This suite intentionally excludes COMSOL and focuses on NEURON- and FEniCS-compatible workflows.
+
+Typical commands are:
+
+.. code:: bash
+
+    pytest test
+    pytest test/unit
+    pytest test/e2e
+    pytest test/deployment
+
+Tests can also be selected with markers:
+
+.. code:: bash
+
+    pytest -m unit
+    pytest -m e2e
+    pytest -m deployment
+    pytest -m fenics
+    pytest -m "not slow"
+
+The pytest markers are registered in ``test/conftest.py``. This makes it possible to select one family of tests in isolation, which is especially useful for future CI/CD workflows and local debugging.
+
+At the current stage, the pytest suite is meant to complement the legacy scientific tests rather than replace them:
+
+  - the ``tests/`` folder remains the reference for detailed scientific validation
+  - the ``test/`` folder provides a maintainable and automation-friendly entry point for quick regression checks
+
+
+CI/CD delivery pipeline
+=======================
+
+The NRV repository now uses a branch-driven delivery model designed to keep day-to-day development simple while making releases repeatable and auditable.
+
+The target flow is the following:
+
+.. code:: text
+
+    feature branch
+         |
+         v
+        dev  --PR-->  staging  --auto promotion PR-->  master
+                                     |
+                                     v
+                           TestPyPI + deployment test
+
+The three long-lived branches have distinct roles:
+
+- ``dev``: integration branch used by developers and feature pull requests
+- ``staging``: release-candidate branch used to validate a build before public publication
+- ``master``: publication branch used only for official releases and deployment artefacts
+
+This organization reflects the intended process previously summarized in the internal workflow diagrams:
+
+- on ``dev``: version bump, linting, and routine development validation
+- on ``staging``: unit tests, end-to-end tests, TestPyPI publication, and deployment validation
+- on ``master``: PyPI publication, documentation publication, Docker image build, and GitHub release creation
+
+Workflow architecture
+---------------------
+
+The pipeline is split into two categories of GitHub Actions workflows.
+
+Reusable step workflows
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Reusable workflows perform one technical operation and are called through ``workflow_call``. They are meant to stay small and focused.
+
+Current reusable steps are:
+
+- ``step_linter.yml``
+- ``step_bump_version.yml``
+- ``step_pytest-unit.yml``
+- ``step_pytest-e2e.yml``
+- ``step_testpypi_release.yml``
+- ``step_pytest-deployment.yml``
+- ``step_pypi_release.yml``
+- ``step_prebuild_docs.yml``
+- ``step_publish_staging_docs.yml``
+- ``step_docker-image.yml``
+- ``step_create_release.yml``
+
+Branch orchestration workflows
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Coordination workflows are the only workflows directly triggered by GitHub events at branch level. They call the reusable steps in the correct order.
+
+The coordination workflows are:
+
+- ``coordination_dev.yml``
+- ``coordination_staging.yml``
+- ``coordination_master.yml``
+
+This split has two benefits:
+
+- the delivery logic stays readable
+- each technical step can be reused or tested independently
+
+Pipeline behavior by branch
+---------------------------
+
+``dev``
+^^^^^^^
+
+The ``dev`` branch is the integration branch for everyday development.
+
+Expected usage:
+
+1. each developer works on a short-lived feature branch
+2. a pull request is opened toward ``dev``
+3. the ``coordination_dev`` workflow runs
+4. linting and unit tests must pass before merge
+
+A manual version bump can also be triggered on ``dev`` through ``workflow_dispatch`` when the team decides that the next integration cycle should target a new semantic version.
+
+Typical checks on ``dev``:
+
+- black formatting check
+- pytest unit suite
+- optional manual semantic version bump
+
+``staging``
+^^^^^^^^^^^
+
+The ``staging`` branch is the release-candidate qualification branch.
+
+Expected usage:
+
+1. once the team considers ``dev`` ready, open a PR from ``dev`` to ``staging``
+2. the PR to ``staging`` runs the qualification checks
+3. after merge to ``staging``, the full release-candidate pipeline is triggered automatically
+
+The post-merge pipeline on ``staging`` is:
+
+1. run the pytest unit suite
+2. run the pytest e2e suite
+3. build and publish the package to TestPyPI
+4. install that candidate package from TestPyPI
+5. run deployment tests against the published candidate
+6. create or update a promotion PR from ``staging`` to ``master``
+7. enable auto-merge on that promotion PR if repository policy allows it
+
+This branch is intentionally protected but still allows intervention from a core maintainer if the pipeline stops after publication to TestPyPI and a fix is needed.
+
+``master``
+^^^^^^^^^^
+
+The ``master`` branch is the publication branch. Humans should not work there directly.
+
+Expected usage:
+
+1. ``staging`` is promoted into ``master``
+2. the ``coordination_master`` workflow computes the release tag from ``pyproject.toml``
+3. the release tag is created if missing
+4. the package is published to PyPI
+5. the documentation for ``latest`` is rebuilt and published
+6. a GitHub release is created
+7. the Read the Docs ``staging`` and tagged versions are activated and built
+8. Docker images are built and pushed
+
+This means that all public artefacts originate from the same validated code state.
+
+How to use the pipeline as a developer
+--------------------------------------
+
+For most contributors, the expected process is straightforward:
+
+1. create a branch from ``dev``
+2. implement the change
+3. add or update tests in ``test/`` and, when relevant, in ``tests/``
+4. update the documentation
+5. open a PR to ``dev``
+6. fix lint or unit failures if the workflow reports any problem
+
+Only release managers or core maintainers usually need to interact with ``staging`` and ``master``.
+
+For a release cycle, the team should:
+
+1. decide that ``dev`` is ready
+2. open a PR from ``dev`` to ``staging``
+3. let the ``staging`` pipeline publish and validate the candidate
+4. review the automatically created promotion PR to ``master``
+5. allow the publication pipeline to complete
+
+Local reproduction of CI steps
+------------------------------
+
+The CI workflows mirror commands that can also be run locally.
+
+Linting:
+
+.. code:: bash
+
+    black --check --verbose ./nrv
+
+Unit tests:
+
+.. code:: bash
+
+    pytest test/unit -q
+
+End-to-end tests:
+
+.. code:: bash
+
+    pytest test/e2e -q
+
+Deployment tests:
+
+.. code:: bash
+
+    pytest test/deployment -q
+
+Documentation build:
+
+.. code:: bash
+
+    python -m sphinx.cmd.build -b html docs/ docs/html/
+
+A release manager may also inspect the package locally before publication:
+
+.. code:: bash
+
+    python -m pip install --upgrade build
+    python -m build
+
+Rulesets and protections
+------------------------
+
+The repository should define GitHub rulesets consistent with the branch model.
+
+Recommended protections are:
+
+- ``dev``:
+    - pull request required
+    - at least one approval
+    - required checks: ``lint`` and ``unit``
+    - no force push
+    - no direct human push
+
+- ``staging``:
+    - pull request required
+    - one or two approvals depending on team policy
+    - required checks on PR: ``unit`` and ``e2e``
+    - restricted direct push for release managers only
+    - no force push
+    - no branch deletion
+
+- ``master``:
+    - pull request required
+    - no direct human push
+    - linear history
+    - no force push
+    - release and deployment only
+
+- tags ``v*``:
+    - protected creation
+    - no deletion
+    - no retagging
+
+Secrets, environments, and runners
+----------------------------------
+
+The pipeline depends on a small set of external credentials:
+
+- ``TEST_PYPI_API_TOKEN``
+- ``PYPI_API_TOKEN``
+- ``RTD_TOKEN``
+- ``DOCKER_USERNAME``
+- ``DOCKER_PASSWORD``
+
+Recommended GitHub environments are:
+
+- ``testpypi``
+- ``pypi``
+- ``dockerhub``
+
+The e2e and documentation steps rely on a self-hosted runner because they are heavier and depend on the NRV scientific stack.
+
+That runner must remain healthy, updated, and able to provision the conda environments used by the workflows.
+
+Operational notes
+-----------------
+
+A few practical points are important for maintainers:
+
+- ``staging`` must exist as a long-lived branch before enabling the pipeline
+- all ``step_*`` workflows are reusable and should remain event-agnostic
+- branch logic belongs in ``coordination_*`` workflows only
+- the package version in ``pyproject.toml`` is the source of truth for release tags
+- a failed promotion from ``staging`` to ``master`` should be fixed on ``staging`` and rerun, not patched on ``master``
+
+This architecture is intentionally conservative: it favors reproducibility, explicit promotion steps, and clean traceability of release artefacts.
+
+
 Make a release
 ==============
-The following steps must be completed in the correct order to properly launch a release:
- 1. **Set the master branch**: by merging the dev branch into it. *Authorization from a major contributor is required for this step*.
 
- 2. **Test the compilation**: by running from the ``NRV/`` directory the following command:
+The release process is now branch-driven and largely automated.
 
-    .. code:: bash
+For maintainers, the practical sequence is:
 
-        python3 -m pip install --upgrade build
-        python3 -m build
+1. Make sure ``dev`` contains the intended changes.
+2. Trigger a version bump on ``dev`` if a new semantic version is required.
+3. Open and merge a PR from ``dev`` to ``staging``.
+4. Let the ``staging`` pipeline qualify the candidate through unit tests, e2e tests, TestPyPI publication, and deployment checks.
+5. Review the automatically created promotion PR from ``staging`` to ``master``.
+6. Let the ``master`` pipeline publish the final artefacts.
 
- 3. **bump2version**: to automatically update the version value in the source code (``setup.py`` and ``NRV/nrv/__init__.py``)
+The public artefacts generated from ``master`` are:
 
-    .. code:: bash
-
-        bump2version type_of_release
-        git push
-
-    .. note::
-        There are three types of release:
-
-        .. code:: bash
-
-            bump2version patch : X.Y.Z ---> X.Y.Z+1
-            bump2version minor : X.Y.Z ---> X.Y+1.0
-            bump2version major : X.Y.Z ---> X+1.0.0
-
-    .. tip::
-        `bump2version <https://pypi.org/project/bump2version/>`_ is pip-installable:
-
-        .. code:: bash
-
-            pip install bump2version
-
- 4. **Update the release number**: using the following git command:
-
-    .. code:: bash
-
-        git push --tags
-
-    .. warning::
-        Don't forget to run the ``git push`` command between the ``bump2version`` and the ``git push --tags``; otherwise, the publication on PyPI will fail.
+- a release tag ``vX.Y.Z``
+- a package on PyPI
+- a GitHub release
+- updated Read the Docs versions
+- Docker images tagged with ``latest`` and ``vX.Y.Z``
 
 
 Public roadmap
 ==============
+
 NRV is developed for the research and education community. We hope to provide a tool for biomedical engineering, and provide a framework that is as open as possible, to ensure scientific communication and reproducibility.
 
 NRV is certainly not perfect, and we hope that the open-science approach can contribute to improve the framework, however ensuring retrocompatilibty. There is a continuous effort from the Bioelectronics group of the IMS Laboratory (U. Bordeaux, Bordeaux INP, CNRS UMR 5218) to continue to develop NRV, and some purely scientific objectives are linked to this project. Here is a list of non-scientific and mostly technical objectives, that we intend to develop and on which we are also extremely happy to get help or guiding if you want to contribute:

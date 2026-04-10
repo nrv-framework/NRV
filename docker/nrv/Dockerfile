@@ -1,35 +1,55 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
-RUN apt-get update && apt-get install -y wget bash bzip2 && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
+ENV MAMBA_ROOT_PREFIX=/opt/micromamba
+ENV NRV_ENV=/opt/nrv-env
+ENV PATH=${NRV_ENV}/bin:${MAMBA_ROOT_PREFIX}/bin:$PATH
 
-#install mamba
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    sh /tmp/miniconda.sh -b -p /opt/conda && \
-    rm /tmp/miniconda.sh
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    bash \
+    bzip2 \
+    ca-certificates \
+    build-essential \
+    libglu1-mesa \
+    libxi-dev \
+    libxmu-dev \
+    libglu1-mesa-dev \
+    libxrender1 \
+    libxcursor1 \
+    libxft2 \
+    libxinerama1 \
+    make \
+    libx11-dev \
+    git \
+    bison \
+    flex \
+    automake \
+    libtool \
+    libxext-dev \
+    libncurses-dev \
+    xfonts-100dpi \
+    cython3 \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y \
-    build-essential libglu1-mesa libxi-dev libxmu-dev libglu1-mesa-dev libxrender1 libxcursor1 libxft2 libxinerama1 make libx11-dev git bison flex automake libtool libxext-dev libncurses-dev xfonts-100dpi cython3 libopenmpi-dev zlib1g-dev && \
-    rm -rf /var/lib/apt/lists/*
-    
-ENV PATH=/opt/conda/bin:$PATH
+ARG TARGETARCH
 
-#install mamba
-RUN conda install -y -n base -c conda-forge mamba
+RUN case "${TARGETARCH}" in \
+        "amd64")  MICROMAMBA_ARCH="64" ;; \
+        "arm64")  MICROMAMBA_ARCH="aarch64" ;; \
+        *) echo "Unsupported TARGETARCH=${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget --quiet -O /tmp/micromamba.tar.bz2 "https://micro.mamba.pm/api/micromamba/linux-${MICROMAMBA_ARCH}/latest" && \
+    mkdir -p "${MAMBA_ROOT_PREFIX}/bin" && \
+    tar -xjf /tmp/micromamba.tar.bz2 -C "${MAMBA_ROOT_PREFIX}/bin" --strip-components=1 bin/micromamba && \
+    rm -f /tmp/micromamba.tar.bz2 && \
+    micromamba clean --all --yes
 
-#install external dependencies #todo: create a yml file 
-RUN mamba install -y -c conda-forge \
-    python=3.12 \
-    fenics-dolfinx=0.9.0 \
-    mpich \
-    python-gmsh \
-    ipykernel \
-    python=3.12  \
-    #mpg \
-    sysroot_linux-64=2.17  && \ 
-    mamba clean --all --yes
+COPY docker/environment.yml /tmp/environment.yml
 
-#install nrv-py through pip
-RUN pip install nrv-py
+RUN micromamba create --yes --prefix "${NRV_ENV}" --file /tmp/environment.yml && \
+    micromamba clean --all --yes
 
-#run it to compile neuron's mod files
-RUN python3 -c "import nrv"
+RUN python -V && \
+    python -c "import nrv; print(f'NRV-v{nrv.__version__} import OK')"

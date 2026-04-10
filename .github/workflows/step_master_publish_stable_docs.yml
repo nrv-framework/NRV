@@ -1,0 +1,84 @@
+name: Docs -- Publish prebuilt docs to RtD staging and release tag
+
+on:
+  workflow_call:
+    inputs:
+      release_tag:
+        description: "Release tag, e.g. v1.3.3"
+        required: true
+        type: string
+      rtd_project:
+        description: "Read the Docs project slug"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-release-${{ inputs.release_tag }}
+  cancel-in-progress: true
+
+jobs:
+  publish_rtd_versions:
+    name: publish_rtd_versions
+    runs-on: ubuntu-latest
+
+    env:
+      RTD_PROJECT: ${{ inputs.rtd_project }}
+      RTD_API: https://app.readthedocs.org/api/v3
+      RELEASE_TAG: ${{ inputs.release_tag }}
+
+    steps:
+      - name: Encode release tag for API URLs
+        run: |
+          set -euo pipefail
+          release_tag_slug="$(python3 -c 'import os, urllib.parse; print(urllib.parse.quote(os.environ["RELEASE_TAG"], safe=""))')"
+          echo "RELEASE_TAG_SLUG=${release_tag_slug}" >> "${GITHUB_ENV}"
+
+      - name: Sync versions from GitHub on Read the Docs
+        run: |
+          curl --fail --silent --show-error \
+            -X POST \
+            -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
+            "${RTD_API}/projects/${RTD_PROJECT}/sync-versions/"
+
+      - name: Wait for release version to exist on Read the Docs
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 24); do
+            status_code="$(curl --silent --show-error --output /dev/null --write-out "%{http_code}" \
+              -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
+              "${RTD_API}/projects/${RTD_PROJECT}/versions/${RELEASE_TAG_SLUG}/")"
+
+            if [ "${status_code}" = "200" ]; then
+              exit 0
+            fi
+
+            sleep 5
+          done
+
+          echo "Release version '${RELEASE_TAG}' was not created on Read the Docs after sync." >&2
+          exit 1
+
+      - name: Activate release version and stable
+        run: |
+          set -euo pipefail
+          for version in "${RELEASE_TAG_SLUG}" staging; do
+            curl --fail --silent --show-error \
+              -X PATCH \
+              -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              --data '{"active": true, "hidden": false}' \
+              "${RTD_API}/projects/${RTD_PROJECT}/versions/${version}/"
+          done
+
+      - name: Trigger Read the Docs builds for release and staging
+        run: |
+          set -euo pipefail
+          for version in "${RELEASE_TAG_SLUG}" staging; do
+            curl --fail --silent --show-error \
+              -X POST \
+              -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
+              "${RTD_API}/projects/${RTD_PROJECT}/versions/${version}/builds/"
+          done

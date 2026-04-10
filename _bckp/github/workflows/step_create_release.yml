@@ -2,12 +2,15 @@
 
 name: "Release"
 
-on: # yamllint disable-line rule:truthy
-  push:
-    branches:
-      - master
-    tags:
-      - "v*"
+# on: # yamllint disable-line rule:truthy
+#  push:
+#    branches:
+#      - master
+#    tags:
+#      - "v*"
+on:
+  workflow_call:
+
 
 jobs:
   release:
