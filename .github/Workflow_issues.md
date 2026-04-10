@@ -12,9 +12,9 @@ Issues Pipeline:
     - [ ] step_pypi_release.yml: pypi
 - [X] Create Git secret 
     - [X] TEST_PYPI_API_TOKEN -> created on testpypi, an organization request has been made on testpypi as well.
-- [ ] Modify the pipeline:
-    - [ ] **On master**: replace Make doc by step_publish_stable_docs
-    - [ ] **On Staging**: add step_prebuild_docs before pip testpypi version
+- [x] Modify the pipeline:
+    - [x] **On master**: replace Make doc by step_publish_stable_docs
+    - [x] **On Staging**: add step_prebuild_docs before pip testpypi version
 - [x] unit test run twice
     - [x] **On Dev**: to remove
     - [x] **On Staging**: to keep
