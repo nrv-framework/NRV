@@ -10,8 +10,8 @@ Issues Pipeline:
     - [ ] step_docker-image.yml: dockerhub
     - [ ] step_testpypi_release.yml: testpypi
     - [ ] step_pypi_release.yml: pypi
-- [ ] Create Git secret 
-    - [ ] TEST_PYPI_API_TOKEN 
+- [X] Create Git secret 
+    - [X] TEST_PYPI_API_TOKEN -> created on testpypi, an organization request has been made on testpypi as well.
 - [ ] Modify the pipeline:
     - [ ] On master: replace Make doc by step_publish_stable_docs
     - [ ] On Staging: add step_prebuild_docs before pip testpypi version
