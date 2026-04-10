@@ -23,7 +23,7 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
 
 concurrency:
   group: coordination-dev-${{ github.event.pull_request.number || github.ref }}
@@ -37,6 +37,7 @@ jobs:
   bump_version:
     name: bump_version
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
+    needs: lint
     permissions:
       contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
