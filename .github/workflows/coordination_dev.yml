@@ -41,7 +41,6 @@ jobs:
       contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
     with:
-      target_branch: dev
       bump_type: ${{ inputs.bump_type }}
 
 
