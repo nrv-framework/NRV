@@ -61,13 +61,11 @@ jobs:
 
       - name: Build documentation
         run: |
-          micromamba run -n "${ENV_NAME}" bash -lc '
-            set -euo pipefail
-            rm -rf docs/_build docs/html docs/examples docs/tutorials docs/_nrv
-            mkdir -p docs/html
-            python -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
-            rm -rf docs/examples docs/tutorials docs/_nrv
-          '
+          set -euo pipefail
+          rm -rf docs/html docs/examples docs/tutorials docs/_nrv
+          mkdir -p docs/html
+          micromamba run -n "${ENV_NAME}" python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
+          rm -rf docs/examples docs/tutorials docs/_nrv
 
       - name: Commit prebuilt documentation if changed
         id: commit_docs
