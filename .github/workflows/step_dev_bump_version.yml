@@ -37,4 +37,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
         run: |
           git push origin dev
-          git push origin dev --tags
+        #   git push origin dev --tags
