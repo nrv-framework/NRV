@@ -13,6 +13,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0          # get all history for tags
+            ref: staging       # change branch if needed
 
       - name: Set up Python
         uses: actions/setup-python@v4

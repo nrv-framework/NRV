@@ -31,13 +31,13 @@ jobs:
       - name: Prepare Linux test environment file
         shell: bash -el {0}
         run: |
-          cp conda/docs-env.yaml /tmp/docs-env-ci.yaml
-          sed -i '/libblas=\*=.*blis/d' /tmp/docs-env-ci.yaml
+          cp conda/nrvdev_linux.yaml /tmp/env-ci.yaml
+          sed -i '/libblas=\*=.*blis/d' /tmp/env-ci.yaml
 
       - name: Create conda environment
         shell: bash -el {0}
         run: |
-          mamba env create -f /tmp/docs-env-ci.yaml
+          mamba env create -f /tmp/env-ci.yaml
 
       - name: Extract package metadata
         id: pkg
