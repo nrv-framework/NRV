@@ -33,19 +33,20 @@ jobs:
     needs: unit
     uses: ./.github/workflows/step_staging_pytest-e2e.yml
 
-  docs_latest:
-    name: docs_latest
-    needs: e2e
-    uses: ./.github/workflows/step_staging_prebuild_docs.yml
-    with:
-      target_ref: staging
-      rtd_project: nrv
-      rtd_version: latest
-    secrets: inherit
+#   docs_latest:
+#     name: docs_latest
+#     needs: e2e
+#     uses: ./.github/workflows/step_staging_prebuild_docs.yml
+#     with:
+#       target_ref: staging
+#       rtd_project: nrv
+#       rtd_version: latest
+#     secrets: inherit
 
   publish_testpypi:
     name: publish_testpypi
-    needs: docs_latest
+    needs: e2e
+    # needs: docs_latest
     uses: ./.github/workflows/step_staging_testpypi_release.yml
     secrets: inherit
 

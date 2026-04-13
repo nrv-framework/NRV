@@ -23,6 +23,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+            fetch-depth: 0          # get all history for tags
+            ref: staging       # change branch if needed
 
       - name: Setup Miniconda with mamba
         uses: conda-incubator/setup-miniconda@v3

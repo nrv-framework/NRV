@@ -16,9 +16,15 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
 
+    env:
+      ENV_NAME: nrv-tests
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+            fetch-depth: 0          # get all history for tags
+            ref: staging     
 
       - name: Setup Miniconda with mamba
         uses: conda-incubator/setup-miniconda@v3
@@ -37,7 +43,7 @@ jobs:
       - name: Create conda environment
         shell: bash -el {0}
         run: |
-          mamba env create -f /tmp/env-ci.yaml
+          mamba env create -n "${ENV_NAME}" -f /tmp/env-ci.yaml
 
       - name: Extract package metadata
         id: pkg
@@ -63,13 +69,13 @@ jobs:
       - name: Install pytest
         shell: bash -el {0}
         run: |
-          conda run -n nrv-docs python -m pip install --upgrade pip pytest
+          mamba run -n "${ENV_NAME}" python -m pip install --upgrade pip pytest
 
       - name: Install package from TestPyPI
         shell: bash -el {0}
         run: |
           for i in 1 2 3 4 5 6; do
-            conda run -n nrv-docs python -m pip install \
+            mamba run -n "${ENV_NAME}" python -m pip install \
               --index-url https://test.pypi.org/simple/ \
               --extra-index-url https://pypi.org/simple \
               --no-cache-dir \
@@ -81,9 +87,9 @@ jobs:
       - name: Show installed package
         shell: bash -el {0}
         run: |
-          conda run -n nrv-docs python -m pip show "${{ steps.pkg.outputs.name }}"
+          mamba run -n "${ENV_NAME}" python -m pip show "${{ steps.pkg.outputs.name }}"
 
       - name: Run deployment tests
         shell: bash -el {0}
         run: |
-          conda run -n nrv-docs python -m pytest tests/deployment -q
+          mamba run -n "${ENV_NAME}" python -m pytest test/deployment -q
