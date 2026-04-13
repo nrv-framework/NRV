@@ -17,6 +17,7 @@ on:
         required: false
         type: choice
         options:
+          - test
           - patch
           - minor
           - major

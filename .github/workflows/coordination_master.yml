@@ -87,6 +87,7 @@ jobs:
     needs:
       - prepare_release
       - create_release
+      - publish_stable_docs
     uses: ./.github/workflows/step_master_docker-image.yml
     with:
       release_tag: ${{ needs.prepare_release.outputs.release_tag }}
