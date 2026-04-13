@@ -69,13 +69,13 @@ jobs:
       - name: Install pytest
         shell: bash -el {0}
         run: |
-          mamba run -n nrv-docs python -m pip install --upgrade pip pytest
+          mamba run -n "${ENV_NAME}" python -m pip install --upgrade pip pytest
 
       - name: Install package from TestPyPI
         shell: bash -el {0}
         run: |
           for i in 1 2 3 4 5 6; do
-            mamba run -n nrv-docs python -m pip install \
+            mamba run -n "${ENV_NAME}" python -m pip install \
               --index-url https://test.pypi.org/simple/ \
               --extra-index-url https://pypi.org/simple \
               --no-cache-dir \
@@ -87,9 +87,9 @@ jobs:
       - name: Show installed package
         shell: bash -el {0}
         run: |
-          mamba run -n nrv-docs python -m pip show "${{ steps.pkg.outputs.name }}"
+          mamba run -n "${ENV_NAME}" python -m pip show "${{ steps.pkg.outputs.name }}"
 
       - name: Run deployment tests
         shell: bash -el {0}
         run: |
-          mamba run -n nrv-docs python -m pytest tests/deployment -q
+          mamba run -n "${ENV_NAME}" python -m pytest tests/deployment -q
