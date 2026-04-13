@@ -915,6 +915,202 @@
   "_nrv/utils/stimulus/nrv.utils.stimulus.get_parameters": [],
   "_nrv/utils/stimulus/nrv.utils.stimulus.harmonic_pulse": [],
   "_nrv/utils/stimulus/nrv.utils.stimulus.insert_samples": [],
+  "_nrv/utils/geom/Circle/nrv.utils.geom.Circle.z": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.__init__": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.area": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.bbox": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.bbox_size": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.c": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_parameters": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_point_inside": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_trace": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.is_inside": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.is_rot": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.load": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.perimeter": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.plot": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.plot_bbox": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.r": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rot_mat": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rot_mat_inverse": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rotate": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.save": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.set_parameters",
+        "ref_id": "ellipse-set-parameters",
+        "headings": [
+          "Ellipse.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.translate": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.x": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.y": [],
+  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.z": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.__init__": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.area": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.bbox": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.bbox_size": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.c": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_parameters": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_point_inside": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_trace": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.is_inside": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.load": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.n_gon": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.perimeter": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.plot": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.plot_bbox": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.rotate": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.save": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.set_parameters",
+        "ref_id": "polygon-set-parameters",
+        "headings": [
+          "Polygon.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.shp_poly": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.translate": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.x": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.y": [],
+  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.z": [],
+  "_nrv/utils/geom/nrv.utils.geom.CShape": [],
+  "_nrv/utils/geom/nrv.utils.geom.Circle": [],
+  "_nrv/utils/geom/nrv.utils.geom.Ellipse": [],
+  "_nrv/utils/geom/nrv.utils.geom.Polygon": [],
+  "_nrv/utils/geom/nrv.utils.geom.circle_overlap_checker": [],
+  "_nrv/utils/geom/nrv.utils.geom.create_cshape": [],
+  "_nrv/utils/geom/nrv.utils.geom.cshape_overlap_checker": [],
+  "_nrv/utils/geom/nrv.utils.geom.get_cshape_bbox": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.__init__": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.call_method": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.get_parameters": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.load": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.save": [],
+  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.set_parameters": [
+    {
+      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
+      "names": [
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 2,
+          "end_lineno": 2,
+          "context": "none",
+          "resolved_location": "print"
+        },
+        {
+          "import_components": [
+            "print"
+          ],
+          "code_str": "print",
+          "lineno": 5,
+          "end_lineno": 5,
+          "context": "none",
+          "resolved_location": "print"
+        }
+      ],
+      "example": {
+        "document": "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.set_parameters",
+        "ref_id": "goldstein-price-set-parameters",
+        "headings": [
+          "goldstein_price.set_parameters"
+        ]
+      },
+      "doc_lineno": 9
+    }
+  ],
+  "_nrv/utils/nrv.utils.Id": [],
+  "_nrv/utils/nrv.utils.MeshCallBack": [],
+  "_nrv/utils/nrv.utils.ackley": [],
+  "_nrv/utils/nrv.utils.beale": [],
+  "_nrv/utils/nrv.utils.booth": [],
+  "_nrv/utils/nrv.utils.bukin6": [],
+  "_nrv/utils/nrv.utils.compute_complex_admitance": [],
+  "_nrv/utils/nrv.utils.convert": [
+    {
+      "source": ">>> import nrv\n>>> val_S_m = 0.2 # S/m**2\n>>> nrv.convert(val_S_m, nrv.S/nrv.m**2, nrv.S/nrv.cm**2)\n2e-05\n>>> nrv.convert(val_S_m, \"S/m**2\", \"S/cm**2\")\n2e-05",
+      "names": [
+        {
+          "import_components": [
+            "nrv"
+          ],
+          "code_str": "nrv",
+          "lineno": 1,
+          "end_lineno": 1,
+          "context": "import_target",
+          "resolved_location": "nrv"
+        }
+      ],
+      "example": {
+        "document": "_nrv/utils/nrv.utils.convert",
+        "ref_id": "convert",
+        "headings": [
+          "convert"
+        ]
+      },
+      "doc_lineno": 15
+    }
+  ],
+  "_nrv/utils/nrv.utils.cost_evaluation": [],
   "_nrv/utils/function_1D/nrv.utils.function_1D.get_parameters": [],
   "_nrv/utils/function_1D/nrv.utils.function_1D.load": [],
   "_nrv/utils/function_1D/nrv.utils.function_1D.save": [],
@@ -1223,202 +1419,6 @@
   "_nrv/utils/geom/Circle/nrv.utils.geom.Circle.translate": [],
   "_nrv/utils/geom/Circle/nrv.utils.geom.Circle.x": [],
   "_nrv/utils/geom/Circle/nrv.utils.geom.Circle.y": [],
-  "_nrv/utils/geom/Circle/nrv.utils.geom.Circle.z": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.__init__": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.area": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.bbox": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.bbox_size": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.c": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_parameters": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_point_inside": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.get_trace": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.is_inside": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.is_rot": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.load": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.perimeter": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.plot": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.plot_bbox": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.r": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rot_mat": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rot_mat_inverse": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.rotate": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.save": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.set_parameters",
-        "ref_id": "ellipse-set-parameters",
-        "headings": [
-          "Ellipse.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.translate": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.x": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.y": [],
-  "_nrv/utils/geom/Ellipse/nrv.utils.geom.Ellipse.z": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.__init__": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.area": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.bbox": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.bbox_size": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.c": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_parameters": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_point_inside": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.get_trace": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.is_inside": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.load": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.n_gon": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.perimeter": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.plot": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.plot_bbox": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.rotate": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.save": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.set_parameters",
-        "ref_id": "polygon-set-parameters",
-        "headings": [
-          "Polygon.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.shp_poly": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.translate": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.x": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.y": [],
-  "_nrv/utils/geom/Polygon/nrv.utils.geom.Polygon.z": [],
-  "_nrv/utils/geom/nrv.utils.geom.CShape": [],
-  "_nrv/utils/geom/nrv.utils.geom.Circle": [],
-  "_nrv/utils/geom/nrv.utils.geom.Ellipse": [],
-  "_nrv/utils/geom/nrv.utils.geom.Polygon": [],
-  "_nrv/utils/geom/nrv.utils.geom.circle_overlap_checker": [],
-  "_nrv/utils/geom/nrv.utils.geom.create_cshape": [],
-  "_nrv/utils/geom/nrv.utils.geom.cshape_overlap_checker": [],
-  "_nrv/utils/geom/nrv.utils.geom.get_cshape_bbox": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.__init__": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.call_method": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.get_parameters": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.load": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.save": [],
-  "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.set_parameters": [
-    {
-      "source": ">>> ax = nrv.myelinated()\n>>> print(ax.d, ax.L)\n10, 10000\n>>> ax.set_parameters(d=6, L=1000)\n>>> print(ax.d, ax.L)\n6, 1000",
-      "names": [
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 2,
-          "end_lineno": 2,
-          "context": "none",
-          "resolved_location": "print"
-        },
-        {
-          "import_components": [
-            "print"
-          ],
-          "code_str": "print",
-          "lineno": 5,
-          "end_lineno": 5,
-          "context": "none",
-          "resolved_location": "print"
-        }
-      ],
-      "example": {
-        "document": "_nrv/utils/goldstein_price/nrv.utils.goldstein_price.set_parameters",
-        "ref_id": "goldstein-price-set-parameters",
-        "headings": [
-          "goldstein_price.set_parameters"
-        ]
-      },
-      "doc_lineno": 9
-    }
-  ],
-  "_nrv/utils/nrv.utils.Id": [],
-  "_nrv/utils/nrv.utils.MeshCallBack": [],
-  "_nrv/utils/nrv.utils.ackley": [],
-  "_nrv/utils/nrv.utils.beale": [],
-  "_nrv/utils/nrv.utils.booth": [],
-  "_nrv/utils/nrv.utils.bukin6": [],
-  "_nrv/utils/nrv.utils.compute_complex_admitance": [],
-  "_nrv/utils/nrv.utils.convert": [
-    {
-      "source": ">>> import nrv\n>>> val_S_m = 0.2 # S/m**2\n>>> nrv.convert(val_S_m, nrv.S/nrv.m**2, nrv.S/nrv.cm**2)\n2e-05\n>>> nrv.convert(val_S_m, \"S/m**2\", \"S/cm**2\")\n2e-05",
-      "names": [
-        {
-          "import_components": [
-            "nrv"
-          ],
-          "code_str": "nrv",
-          "lineno": 1,
-          "end_lineno": 1,
-          "context": "import_target",
-          "resolved_location": "nrv"
-        }
-      ],
-      "example": {
-        "document": "_nrv/utils/nrv.utils.convert",
-        "ref_id": "convert",
-        "headings": [
-          "convert"
-        ]
-      },
-      "doc_lineno": 15
-    }
-  ],
-  "_nrv/utils/nrv.utils.cost_evaluation": [],
   "_nrv/utils/stimulus/nrv.utils.stimulus.integrate": [],
   "_nrv/utils/stimulus/nrv.utils.stimulus.len": [],
   "_nrv/utils/stimulus/nrv.utils.stimulus.load": [],
