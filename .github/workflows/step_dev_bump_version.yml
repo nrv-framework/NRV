@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       bump_type:
-        description: "patch | minor | major"
+        description: "test | patch | minor | major"
         required: true
         type: string
 

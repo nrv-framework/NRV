@@ -1,15 +1,23 @@
 # Before minor release v 1.4.0.
 
 - [ ] Validate full pipeline
+- [ ] Delete _bckp/*
 - [ ] Clean branches
-    - [ ] dev:
+    - [ ] ``dev``:
         - [ ] Generated tuto/examples in doc
-        - [ ]
-    - [ ] staging:
+        - [ ] recreated bash_nrv file
+    - [ ] ``staging``:
         - [ ] remove ./tests (unitary_tests)
-    - [ ] master
+    - [ ] ``master``
         - [ ] remove ./tests (unitary_tests)
-- [ ] Set dev-branch as default
+- [ ] Set ``dev``-branch as default
 - [ ] Complementary actions
     - [ ] clean tags (in case of issues)
-    - [ ] Build/publish dev doc
+    - [ ] Build/publish ``dev`` doc
+- [ ] GitHub rule set
+    - [ ] automatization of merge requests
+        - [ ] ``dev`` -> ``staging``
+        - [ ] ``staging`` -> ``master``
+    - [ ] writing authorisations:
+        - [ ] Forbid for user and NRV-team on ``staging`` and ``master``
+        - [ ] Forbid for user on ``dev``

@@ -38,27 +38,24 @@ jobs:
     needs: e2e
     uses: ./.github/workflows/step_staging_prebuild_docs.yml
     with:
-      target_ref: master
+      target_ref: staging
       rtd_project: nrv
       rtd_version: latest
     secrets: inherit
 
   publish_testpypi:
     name: publish_testpypi
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: docs_latest
     uses: ./.github/workflows/step_staging_testpypi_release.yml
     secrets: inherit
 
   deployment_test:
     name: deployment_test
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: publish_testpypi
     uses: ./.github/workflows/step_staging_pytest-deployment.yml
 
   promote_to_master_pr:
     name: promote_to_master_pr
-    if: github.event_name == 'push'
     needs: deployment_test
     runs-on: ubuntu-latest
     steps:
@@ -107,7 +104,6 @@ jobs:
 
   enable_auto_merge:
     name: enable_auto_merge
-    if: github.event_name == 'push'
     needs: promote_to_master_pr
     runs-on: ubuntu-latest
     steps:
