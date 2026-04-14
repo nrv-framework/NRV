@@ -17,32 +17,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-        # - These steps allows action to push on dev branch -
+      - name: Version bump type
+        run: echo Performing ${{ inputs.bump_type }}
+
       - name: Generate GitHub App token
-        uses: actions/create-github-app-token@v1
         id: app-token
+        uses: actions/create-github-app-token@v1
         with:
-          # required
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Checkout with app token
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: dev       # change branch if needed
-      - name: Get GitHub App User ID
-        id: get-user-id
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+          ref: dev
+
+      - name: Who am I
+        run: gh api /user
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      - run: |
-          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
-          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
-        # ----------------------------------------------------
 
-      - name: Version bump type
-        run: echo Performing ${{ inputs.bump_type }}
-
+      - name: Setup git user
+        run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Bump version
         run: |
             git branch
