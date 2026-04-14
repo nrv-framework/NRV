@@ -18,17 +18,25 @@ jobs:
 
     steps:
       - name: Version bump type
-        run: echo Performing ${{ inputs.bump_type }}}
-        #   - name: Checkout repository
-        #     uses: actions/checkout@v4
-        #     with:
-        #         fetch-depth: 0          # get all history for tags
-        #         ref: dev       # change branch if needed
+        run: echo Performing ${{ inputs.bump_type }}
 
-      - name: Checkout repository and authentify
-        uses: ./.github/actions/workflows/authentication
-        with: 
-          branch: dev
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout with app token
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: dev
+
+      - name: Who am I
+        run: gh api /user
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Setup git user
         run: |
