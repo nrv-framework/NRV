@@ -8,8 +8,8 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write # Job-level permissions configuration starts here
+# permissions:
+#   contents: write # Job-level permissions configuration starts here
 
 jobs:
   print-username:
