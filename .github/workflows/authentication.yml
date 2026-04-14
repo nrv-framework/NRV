@@ -2,9 +2,11 @@ name: Use GitHub App token
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev
+#  !!!!!!!!!! WANING 
+# ! following lines generate infinte push loop
+#   push:
+#     branches:
+#       - dev
 
 jobs:
   auto-format:
