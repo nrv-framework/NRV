@@ -2,12 +2,9 @@ name: Use GitHub App token
 
 on:
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      branch:
-        description: "master | staging | dev"
-        required: true
-        type: string
+  push:
+    branches:
+      - dev
 
 jobs:
   run-with-app:
@@ -15,7 +12,6 @@ jobs:
 
     permissions:
       contents: read
-
     steps:
       - name: Generate GitHub App token
         id: app-token
@@ -23,14 +19,15 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
       - name: Checkout with app token
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: ${{inputs.branch}}       # change branch if needed
-
+          ref: dev       # change branch if needed
       - name: Who am I
         run: gh api /user
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - name: Show branch
+        run: |
+            git branch
