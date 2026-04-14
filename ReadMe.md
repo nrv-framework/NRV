@@ -19,7 +19,8 @@ NRV has been optimized for large population of axons, from generating correct po
 
 NRV has been developped by contributors from the CELL research group at the Laboratory ETIS (UMR CNRS 8051), ENSEA - CY Cergy Paris University, until June 2023 and is now developped and maintained by the Bioelectronics group of laboratory IMS (UMR CNRS 5218), INP Bordeaux, U. Bordeaux.
 
-📚 **Full Documentation available here**: [https://nrv.readthedocs.io/en/latest/](https://nrv.readthedocs.io/en/latest/)
+> [!Important]
+> **Full Documentation available here**: [https://nrv.readthedocs.io/en/latest/](https://nrv.readthedocs.io/en/latest/)
 
 ## 📄 Citation
 
@@ -54,25 +55,21 @@ NRV is pip installable and the whole installation process should be quite simple
 conda create -n nrv-env -c anaconda python=3.12
 ```
 
-💡 **Tip:**
-You can also use [Mamba](https://mamba.readthedocs.io/en/latest/) to speed up the installation. Once Mamba is installed, the installation command line is almost identical:  
-
-
-``` bash
-
-mamba create -n nrv-env -c anaconda python=3.12
-
-```
+>[!Tip]
+> You can also use [Mamba](https://mamba.readthedocs.io/en/latest/) to speed up the installation. Once Mamba is installed, the installation command line is almost identical:  
+> ``` bash
+> mamba create -n nrv-env -c anaconda python=3.12
+> ```
 
  And activate it before any installation with the command:  
 
 ``` bash
 conda activate nrv-env
 ```
-
-⚠️ **Warning for macOS users (June 2025):**  
-There are known compatibility issues between Xcode versions higher than 16.2 and the FEM solver used in this project.  
-If you encounter problems running simulations involving FEM, please downgrade Xcode to version 16.2 to ensure stability and correct functionality.
+> [!Warning]
+> **For macOS users (June 2025):**  
+> There are known compatibility issues between Xcode versions higher than 16.2 and the FEM solver used in this project.  
+> If you encounter problems running simulations involving FEM, please downgrade Xcode to version 16.2 to ensure stability and correct functionality.
 
 ### Open-source Dependencies
 
@@ -86,19 +83,20 @@ are conda-installable only. We also recommend installing gmsh and ipython from c
 conda install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
 ```
 
-⚠️ **Warning for Linux users:**  The default blas library used in FenicsX may not be compatible with the preconditioner used in NRV, which may result in additional CPU overhead during electric field computation.
-To avoid this, it is advised to force the installation as below:
+> [!Warning]
+> **For Linux users:**  The default blas library used in FenicsX may not be compatible with the preconditioner used in NRV, which may result in additional CPU overhead during electric field computation.
+> To avoid this, it is advised to force the installation as below:
 
 ```bash
 conda install -c conda-forge fenics-dolfinx "libblas=*=*blis"
 ```
 
-💡 **Tip:**
-With Mamba, the command is:
-
-```bash
-mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
-```
+> [!Tip]
+> With Mamba, the command is:
+>
+> ```bash
+> mamba install -c conda-forge fenics-dolfinx==0.9.0 mpich python-gmsh ipykernel
+> ```
 
 ## COMSOL Installation
 NRV can perform FEM computations with COMSOL. However, the end user must provide a valid commercial installed license by themselves. COMSOL installation can be performed before or after NRV's installation.
@@ -129,13 +127,13 @@ pip install nrv-py
 If you want the very last development version under development, please consider:
 
 ```bash
-pip install git+https://github.com/fkolbl/NRV.git
+pip install git+https://github.com/nrv-framework/NRV.git
 ```
 
 If you already installed a previous version and want to upgrade to the very last development version, please use:
 
 ```bash
-pip install --upgrade --force-reinstall --ignore-installed git+https://github.com/fkolbl/NRV.git
+pip install --upgrade --force-reinstall --ignore-installed git+https://github.com/nrv-framework/NRV.git
 ```
 
 You should now be able to import nrv in your Python shell:
@@ -179,7 +177,8 @@ Where the -p 8888:8888 maps the port to the localhost. This should give you a li
 NRV is not directly installable on Windows due to some FenicsX dependencies not available on Windows.
 However, one can easily overcome this problem by using WSL2.
 
-💡 **Tip:** A full support of FenicsX on windows is planned! 
+> [!Tip]
+> A full support of FenicsX on windows is planned! 
 
 Assuming a blank installation of WSL2 (Ubuntu 22.xx), the following instructions are required to install and use NRV.
 
