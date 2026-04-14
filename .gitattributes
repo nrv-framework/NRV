@@ -1,0 +1,3 @@
+*.hoc linguist-language=NEURON
+*.mod linguist-language=NMODL
+*.ipynb linguist-language=Python

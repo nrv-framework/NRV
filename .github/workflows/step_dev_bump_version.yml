@@ -19,17 +19,41 @@ jobs:
     steps:
       - name: Version bump type
         run: echo Performing ${{ inputs.bump_type }}
-      - name: Checkout repository
+
+
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Checkout with app token
         uses: actions/checkout@v4
         with:
-            fetch-depth: 0          # get all history for tags
-            ref: dev       # change branch if needed
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Who am I
+        run: gh api /user
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        #   - name: Checkout repository
+        #     uses: actions/checkout@v4
+        #     with:
+        #         fetch-depth: 0          # get all history for tags
+        #         ref: dev       # change branch if needed
+    #   - name: Checkout repository and authentify
+    #     uses: ./.github/actions/workflows/authentication
+    #     with: 
+    #         branch: dev
+
       - name: Setup git user
         run: |
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Bump version
         run: |
+            git branch
             pip install bump2version
             bump2version ${{ inputs.bump_type }}
       - name: Push changes
