@@ -19,11 +19,17 @@ jobs:
     steps:
       - name: Version bump type
         run: echo Performing ${{ inputs.bump_type }}
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-            fetch-depth: 0          # get all history for tags
-            ref: dev       # change branch if needed
+
+        #   - name: Checkout repository
+        #     uses: actions/checkout@v4
+        #     with:
+        #         fetch-depth: 0          # get all history for tags
+        #         ref: dev       # change branch if needed
+      - name: Checkout repository and authentify
+        uses: ./.github/actions/workflows/authentication
+        with: 
+            branch: dev
+
       - name: Setup git user
         run: |
             git config --global user.name "github-actions[bot]"
