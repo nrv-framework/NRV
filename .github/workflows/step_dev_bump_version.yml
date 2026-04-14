@@ -8,8 +8,8 @@ on:
         required: true
         type: string
 
-# permissions:
-#   contents: write # Job-level permissions configuration starts here
+permissions:
+  contents: write # Job-level permissions configuration starts here
 
 jobs:
   print-username:
@@ -18,7 +18,8 @@ jobs:
 
     steps:
         # - These steps allows action to push on dev branch -
-      - uses: actions/create-github-app-token@v1
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@v1
         id: app-token
         with:
           # required
