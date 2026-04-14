@@ -18,8 +18,7 @@ jobs:
 
     steps:
         # - These steps allows action to push on dev branch -
-      - name: Generate GitHub App token
-        uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v1
         id: app-token
         with:
           # required
