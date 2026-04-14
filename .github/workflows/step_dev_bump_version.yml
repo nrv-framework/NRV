@@ -24,7 +24,7 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          client-id: ${{ vars.APP_CLIENT_ID }}
+          app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Checkout with app token
@@ -42,7 +42,6 @@ jobs:
         run: |
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
       - name: Bump version
         run: |
             git branch
