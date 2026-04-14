@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
+          ref: ${{inputs.branch}}       # change branch if needed
 
       - name: Who am I
         run: gh api /user
