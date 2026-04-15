@@ -31,12 +31,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  auth:
-    name: authentication
-    uses: ./.github/workflows/authentication.yml
-    secrets: 
-        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
+#   auth:
+#     name: authentication
+#     uses: ./.github/workflows/authentication.yml
+#     secrets: 
+#         APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+#         NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
 
 
   lint:
@@ -50,7 +50,9 @@ jobs:
     permissions:
       contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
-    secrets: inherit
+    secrets: 
+        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
     with:
       bump_type: ${{ inputs.bump_type }}
 
