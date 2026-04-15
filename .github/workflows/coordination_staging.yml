@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pull-requests: write
 
 concurrency:
@@ -36,6 +36,8 @@ jobs:
   docs_latest:
     name: docs_latest
     needs: e2e
+    permissions:
+      contents: write
     uses: ./.github/workflows/step_staging_prebuild_docs.yml
     with:
       target_ref: staging
