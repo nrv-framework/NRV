@@ -7,6 +7,10 @@ on:
         description: "test | patch | minor | major"
         required: true
         type: string
+    secrets:
+      APP_PRIVATE_KEY:
+        description: "GitHub App private key used to bypass protected branch rulesets"
+        required: true
 
 permissions:
   contents: write # Job-level permissions configuration starts here
@@ -28,6 +32,7 @@ jobs:
       - name: Checkout with app token
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
           ref: dev       # change branch if needed
       - name: Get GitHub App User ID
@@ -49,8 +54,6 @@ jobs:
             pip install bump2version
             bump2version ${{ inputs.bump_type }}
       - name: Push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
         run: |
-          git push origin dev
+          git push origin HEAD:dev
           git push origin dev --tags

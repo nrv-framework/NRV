@@ -44,6 +44,7 @@ jobs:
     uses: ./.github/workflows/step_dev_bump_version.yml
     with:
       bump_type: ${{ inputs.bump_type }}
+    secrets: inherit
 
 
   promote_to_staging_pr:
@@ -51,11 +52,20 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
     needs: bump_version
     runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.create_pr.outputs.pr_number }}
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Create or update PR dev -> staging
+        id: create_pr
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
@@ -98,9 +108,15 @@ jobs:
     needs: promote_to_staging_pr
     runs-on: ubuntu-latest
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Enable auto-merge on promotion PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ needs.promote_to_staging_pr.outputs.pr_number }}
           REPO: ${{ github.repository }}
         run: |
