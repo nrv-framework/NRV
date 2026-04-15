@@ -31,6 +31,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  auth:
+    name: authentication
+    uses: ./.github/workflows/authentication.yml
+
   lint:
     name: lint
     uses: ./.github/workflows/step_dev_linter.yml
@@ -39,12 +43,11 @@ jobs:
     name: bump_version
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
     needs: lint
-    # permissions:
-    #   contents: write
+    permissions:
+      contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
     with:
       bump_type: ${{ inputs.bump_type }}
-
 
   promote_to_staging_pr:
     name: promote_to_staging_pr

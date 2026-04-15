@@ -2,6 +2,7 @@ name: Use GitHub App token
 
 on:
   workflow_dispatch:
+  workflow_call:
 # !!!!!!!!!! WANING !!!!!!!!!!!
 # ! following lines generate infinte push loop
 #   push:
