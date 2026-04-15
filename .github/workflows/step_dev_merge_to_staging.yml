@@ -22,8 +22,9 @@ jobs:
       - name: Create or update PR dev -> staging
         id: promote
         uses: actions/github-script@v7
+        env: 
+            GITHUB_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
         with:
-          github-token: ${{ secrets.NRV_TOKEN_GITHUB }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
@@ -88,7 +89,7 @@ jobs:
         # ----------------------------------------------------
       - name: Enable auto-merge on promotion PR
         env:
-          GH_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           PR_NUMBER: ${{ needs.promote_to_staging_pr.outputs.pr_number }}
           REPO: ${{ github.repository }}
         run: |
