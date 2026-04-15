@@ -2,6 +2,11 @@ name: Staging -- Merge to master
 
 on:
   workflow_call:
+    secrets:
+      APP_PRIVATE_KEY:
+        required: true
+      NRV_TOKEN_GITHUB:
+        required: true
 
 permissions:
   contents: write
@@ -14,11 +19,32 @@ jobs:
     outputs:
       pr_number: ${{ steps.promote.outputs.pr_number }}
     steps:
+        # - These steps allows action to push on dev branch -
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          # required
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+      - name: Checkout with app token
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+        # ----------------------------------------------------
       - name: Create or update PR staging -> master
         id: promote
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.NRV_TOKEN_GITHUB }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
@@ -65,7 +91,7 @@ jobs:
     steps:
       - name: Enable auto-merge on promotion PR
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.NRV_TOKEN_GITHUB }}
           PR_NUMBER: ${{ needs.promote_to_master_pr.outputs.pr_number }}
           REPO: ${{ github.repository }}
         run: |
