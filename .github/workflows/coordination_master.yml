@@ -16,7 +16,7 @@ concurrency:
 jobs:
   prepare_release:
     name: prepare_release
-    uses: ./.github/workflows/prepare_releasem.yml
+    uses: ./.github/workflows/step_master_prepare_release.yml
     secrets: 
         APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
         NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
