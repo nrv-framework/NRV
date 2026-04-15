@@ -34,6 +34,7 @@ jobs:
   auth:
     name: authentication
     uses: ./.github/workflows/authentication.yml
+    secrets: inherit
 
   lint:
     name: lint
@@ -46,6 +47,7 @@ jobs:
     permissions:
       contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
+    secrets: inherit
     with:
       bump_type: ${{ inputs.bump_type }}
 

@@ -7,6 +7,11 @@ on:
         description: "test | patch | minor | major"
         required: true
         type: string
+    secrets:
+      APP_PRIVATE_KEY:
+        required: true
+      NRV_TOKEN_GITHUB:
+        required: true
 
 permissions:
   contents: write # Job-level permissions configuration starts here
