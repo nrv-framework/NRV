@@ -59,5 +59,10 @@ jobs:
   merge_to_master:
     name: merge_to_master
     needs: deployment_test
+    permissions:
+      contents: read
+      pull-requests: write
     uses: ./.github/workflows/step_staging_merge_to_master.yml
-    secrets: inherit
+    secrets: 
+        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}

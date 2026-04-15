@@ -52,5 +52,10 @@ jobs:
     name: merge_to_staging
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
     needs: bump_version
+    permissions:
+      contents: read
+      pull-requests: write
     uses: ./.github/workflows/step_dev_merge_to_staging.yml
-    secrets: inherit
+    secrets: 
+        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
