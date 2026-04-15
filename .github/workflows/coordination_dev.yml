@@ -31,14 +31,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-#   auth:
-#     name: authentication
-#     uses: ./.github/workflows/authentication.yml
-#     secrets: 
-#         APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
-#         NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
-
-
   lint:
     name: lint
     uses: ./.github/workflows/step_dev_linter.yml
@@ -56,64 +48,9 @@ jobs:
     with:
       bump_type: ${{ inputs.bump_type }}
 
-  promote_to_staging_pr:
-    name: promote_to_staging_pr
+  merge_to_staging:
+    name: merge_to_staging
     if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
     needs: bump_version
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create or update PR dev -> staging
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const head = 'dev';
-            const base = 'staging';
-
-            const prs = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'open',
-              head: `${owner}:${head}`,
-              base
-            });
-
-            if (prs.data.length > 0) {
-              core.info(`PR already exists: #${prs.data[0].number}`);
-              core.setOutput('pr_number', prs.data[0].number.toString());
-              return;
-            }
-
-            const created = await github.rest.pulls.create({
-              owner,
-              repo,
-              head,
-              base,
-              title: 'Promote dev to staging',
-              body: [
-                'Automated promotion after successful dev qualification pipeline.',
-                '',
-                '- lint tests passed',
-                '- Bump version done',
-              ].join('\n')
-            });
-
-            core.setOutput('pr_number', created.data.number.toString());
-
-  enable_auto_merge:
-    name: enable_auto_merge
-    if: github.event_name == 'workflow_dispatch' && inputs.bump_type != ''
-    needs: promote_to_staging_pr
-    runs-on: ubuntu-latest
-    steps:
-      - name: Enable auto-merge on promotion PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ needs.promote_to_staging_pr.outputs.pr_number }}
-          REPO: ${{ github.repository }}
-        run: |
-          if [ -n "${PR_NUMBER}" ]; then
-            gh pr merge "${PR_NUMBER}" --repo "${REPO}" --auto --merge
-          fi
+    uses: ./.github/workflows/step_dev_merge_to_staging.yml
+    secrets: inherit

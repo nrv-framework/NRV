@@ -15,6 +15,11 @@ on:
         description: "Read the Docs version to trigger"
         required: true
         type: string
+    secrets:
+      APP_PRIVATE_KEY:
+        required: true
+      NRV_TOKEN_GITHUB:
+        required: true
 
 permissions:
   contents: write
