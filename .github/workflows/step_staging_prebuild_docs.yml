@@ -20,6 +20,8 @@ on:
         required: true
       NRV_TOKEN_GITHUB:
         required: true
+      RTD_TOKEN:
+        required: true
 
 permissions:
   contents: write
@@ -110,6 +112,7 @@ jobs:
       - name: Trigger Read the Docs build
         if: steps.commit_docs.outputs.changed == 'true'
         run: |
+          echo "Copying docs on https://app.readthedocs.org/api/v3/projects/${RTD_PROJECT}/versions/${RTD_VERSION}/builds/"
           curl --fail --silent --show-error \
             -X POST \
             -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \

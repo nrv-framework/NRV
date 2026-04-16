@@ -46,6 +46,7 @@ jobs:
     secrets: 
         APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
         NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
+        RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
 
   publish_testpypi:
     name: publish_testpypi
