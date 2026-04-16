@@ -16,42 +16,10 @@ concurrency:
 jobs:
   prepare_release:
     name: prepare_release
-    runs-on: ubuntu-latest
-    outputs:
-      release_tag: ${{ steps.meta.outputs.release_tag }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Access release tag from pyproject.toml
-        id: meta
-        shell: bash
-        run: |
-          RELEASE_TAG=$(python - <<'PY'
-          import tomllib
-          with open("pyproject.toml", "rb") as f:
-              data = tomllib.load(f)
-          print("v" + data["project"]["version"])
-          PY
-          )
-          echo "release_tag=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
-
-      - name: Create and push tag if missing
-        shell: bash
-        run: |
-          set -euo pipefail
-          TAG="${{ steps.meta.outputs.release_tag }}"
-          git fetch --tags
-          if git rev-parse "${TAG}" >/dev/null 2>&1; then
-            echo "Tag ${TAG} already exists"
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag -a "${TAG}" -m "Release ${TAG}"
-            git push origin "${TAG}"
-          fi
+    uses: ./.github/workflows/step_master_prepare_release.yml
+    secrets: 
+        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
 
   publish_pypi:
     name: publish_pypi

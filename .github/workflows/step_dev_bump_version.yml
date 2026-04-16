@@ -7,6 +7,11 @@ on:
         description: "test | patch | minor | major"
         required: true
         type: string
+    secrets:
+      APP_PRIVATE_KEY:
+        required: true
+      NRV_TOKEN_GITHUB:
+        required: true
 
 permissions:
   contents: write # Job-level permissions configuration starts here
@@ -17,40 +22,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Version bump type
-        run: echo Performing ${{ inputs.bump_type }}
-
-
+        # - These steps allows action to push on dev branch -
       - name: Generate GitHub App token
-        id: app-token
         uses: actions/create-github-app-token@v1
+        id: app-token
         with:
+          # required
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
       - name: Checkout with app token
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-
-      - name: Who am I
-        run: gh api /user
+          ref: dev       # change branch if needed
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        #   - name: Checkout repository
-        #     uses: actions/checkout@v4
-        #     with:
-        #         fetch-depth: 0          # get all history for tags
-        #         ref: dev       # change branch if needed
-      - name: Checkout repository and authentify
-        uses: ./.github/actions/workflows/authentication
-        with: 
-          branch: dev
+      - run: |
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+        # ----------------------------------------------------
 
-      - name: Setup git user
-        run: |
-            git config --global user.name "github-actions[bot]"
-            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Version bump type
+        run: echo Performing ${{ inputs.bump_type }}
+
       - name: Bump version
         run: |
             git branch

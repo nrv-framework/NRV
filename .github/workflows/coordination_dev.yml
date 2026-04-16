@@ -42,9 +42,11 @@ jobs:
     permissions:
       contents: write
     uses: ./.github/workflows/step_dev_bump_version.yml
+    secrets: 
+        APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+        NRV_TOKEN_GITHUB: ${{ secrets.NRV_TOKEN_GITHUB }}
     with:
       bump_type: ${{ inputs.bump_type }}
-
 
   promote_to_staging_pr:
     name: promote_to_staging_pr
