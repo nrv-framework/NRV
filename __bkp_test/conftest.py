@@ -66,4 +66,4 @@ def project_root() -> Path:
 
 @pytest.fixture(scope="session")
 def legacy_sources_dir(project_root: Path) -> Path:
-    return project_root / "tests" / "unitary_tests" / "sources"
+    return project_root / "tests" / "science" / "unitary_tests" / "sources"

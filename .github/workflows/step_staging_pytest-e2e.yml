@@ -53,4 +53,4 @@ jobs:
       - name: Run end-to-end tests
         shell: bash
         run: |
-          micromamba run -n "${ENV_NAME}" python -m pytest test/e2e -q
+          micromamba run -n "${ENV_NAME}" python -m pytest tests/e2e -q
