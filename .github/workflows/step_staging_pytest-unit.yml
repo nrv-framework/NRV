@@ -53,4 +53,4 @@ jobs:
       - name: Run unit tests
         shell: bash
         run: |
-          micromamba run -n "${ENV_NAME}" python -m pytest test/unit -q
+          micromamba run -n "${ENV_NAME}" python -m pytest tests/unit -q
