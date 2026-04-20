@@ -45,8 +45,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-            fetch-depth: 0          # get all history for tags
-            ref: staging
+          fetch-depth: 0
+          ref: ${{ inputs.target_ref }}
+          persist-credentials: false
 
       - name: Check micromamba
         run: |
@@ -69,27 +70,29 @@ jobs:
           micromamba run -n "${ENV_NAME}" python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
           rm -rf docs/examples docs/tutorials docs/_nrv
 
-        # - These steps allows action to push on dev branch -
-      - name: Generate GitHub App token
+      - name: Generate fresh GitHub App token for publish
         uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          # required
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Get GitHub App User ID
         id: get-user-id
         run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      - run: |
+
+      - name: Configure git identity for app push
+        run: |
           git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
           git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
-        # ----------------------------------------------------
+          git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
 
       - name: Commit prebuilt documentation if changed
         id: commit_docs
         run: |
+          set -euo pipefail
           if git diff --quiet -- docs/html; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
