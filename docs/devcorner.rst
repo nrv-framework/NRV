@@ -59,9 +59,9 @@ In parallel, the automation-friendly pytest suite can be used from the repositor
 .. code:: bash
 
     pytest test
-    pytest test/unit
-    pytest test/e2e
-    pytest test/deployment
+    pytest tests/unit
+    pytest tests/e2e
+    pytest tests/deployment
 
 If you add a new functionality, you should add one or several tests, showing that your method works. The test should not raise any exception and should verify known, recognized or easily understable values to demonstrate the scientific reasoning. If it refers to a scientific publication, the citation should be included in the test file as python comment.
 
@@ -143,13 +143,6 @@ NRV testing
 ===========
 
 NRV currently relies on two complementary testing systems.
-
-.. tip::
-
-    The legacy ``tests/`` folder remains the scientific reference suite used during model development and validation.
-    The newer ``test/`` folder contains the pytest-based suite designed for automation, selective execution, and CI/CD integration.
-    These two systems have different goals and must coexist.
-
 In the sources of NRV, both testing folders are present:
 
 .. code:: bash
@@ -159,13 +152,10 @@ In the sources of NRV, both testing folders are present:
     ├── docs/
     ├── examples/
     ├── nrv/
-    ├── test/
+    ├── tests/
     │   ├── deployment/
     │   ├── e2e/
-    │   └── unit/
-    ├── tests/
-    │   ├── deprecated_tests/
-    │   ├── dev_tests/
+    │   ├── unit/
     │   ├── unitary_tests/
     │   └── NRV_test
 
@@ -278,10 +268,9 @@ Typical commands are:
 
 .. code:: bash
 
-    pytest test
-    pytest test/unit
-    pytest test/e2e
-    pytest test/deployment
+    pytest tests/unit
+    pytest tests/e2e
+    pytest tests/deployment
 
 Tests can also be selected with markers:
 
@@ -293,13 +282,7 @@ Tests can also be selected with markers:
     pytest -m fenics
     pytest -m "not slow"
 
-The pytest markers are registered in ``test/conftest.py``. This makes it possible to select one family of tests in isolation, which is especially useful for future CI/CD workflows and local debugging.
-
-At the current stage, the pytest suite is meant to complement the legacy scientific tests rather than replace them:
-
-  - the ``tests/`` folder remains the reference for detailed scientific validation
-  - the ``test/`` folder provides a maintainable and automation-friendly entry point for quick regression checks
-
+The pytest markers are registered in ``tests/conftest.py``. This makes it possible to select one family of tests in isolation, which is especially useful for future CI/CD workflows and local debugging.
 
 CI/CD delivery pipeline
 =======================
@@ -441,7 +424,7 @@ For most contributors, the expected process is straightforward:
 
 1. create a branch from ``dev``
 2. implement the change
-3. add or update tests in ``test/`` and, when relevant, in ``tests/``
+3. add or update tests in ``tests/e2e``, ``tests/unit`` and, when relevant, in ``tests/science``
 4. update the documentation
 5. open a PR to ``dev``
 6. fix lint or unit failures if the workflow reports any problem

@@ -92,4 +92,4 @@ jobs:
       - name: Run deployment tests
         shell: bash -el {0}
         run: |
-          mamba run -n "${ENV_NAME}" python -m pytest test/deployment -q
+          mamba run -n "${ENV_NAME}" python -m pytest tests/deployment -q

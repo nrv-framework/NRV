@@ -1,20 +1,14 @@
-# Before minor release v 1.4.0.
+# 
 
-- [ ] Validate full pipeline
-- [ ] Delete _bckp/* !!! Bring back tuto and exemple before
-- [ ] Clean branches
-    - [ ] ``dev``:
-        - [ ] Generated tuto/examples in doc
-        - [ ] recreated bash_nrv file
-    - [ ] ``staging``:
-        - [ ] remove ./tests (unitary_tests)
-    - [ ] ``master``
-        - [ ] remove ./tests (unitary_tests)
-- [ ] clean test folders hierarchy
+
+## Before minor release v 1.4.0.
+
+- [ ] Validate full pipeline - Github
+- [x] Delete _bckp/* !!! Bring back tuto and exemple before
+- [ ] clean test folders hierarchy - TC
     - [ ] tests
             |
              - unit 
-                | nrv ...
             |
             - e2e
             |
@@ -25,19 +19,35 @@
                 - untary_tests
                 |
                 NRV_tests
-- [ ] Set ``dev``-branch as default
+    - [ ] update corresponding actions .yaml
+- [ ] Set ``dev``-branch as default - FK
+- [ ] GitHub rule set - TC
+    - [ ] writing authorisations:
+        - [ ] Forbid for user and NRV-team on ``staging`` and ``master``
+        - [ ] Forbid for user on ``dev``
+
+## After minor release v 1.4.0. (patches)
+
+- [ ] clean test folders hierarchy
+             - unit 
+                | nrv ...
 - [ ] Complementary actions
     - [ ] clean tags (in case of issues)
     - [ ] Build/publish ``dev`` doc
     - [ ] Zenodo link in Readme.md
-- [ ] GitHub rule set
-    - [ ] automatization of merge requests
-        - [ ] ``dev`` -> ``staging``
-        - [ ] ``staging`` -> ``master``
-    - [ ] writing authorisations:
-        - [ ] Forbid for user and NRV-team on ``staging`` and ``master``
-        - [ ] Forbid for user on ``dev``
 - [ ] Code
     - [ ] add get/print machine config and sim parameters
         - [ ] implement
         - [ ] add to all exemples/tuto
+- [ ] Clean branches
+    - [ ] ``dev``:
+        - [ ] Generated tuto/examples in doc
+        - [ ] recreated bash_nrv file
+    - [ ] ``staging``:
+        - [ ] remove ./tests/science (unitary_tests)
+    - [ ] ``master``
+        - [ ] remove ./tests/science (unitary_tests)
+- [ ] GitHub rule set
+    - [ ] automatization of merge requests
+        - [ ] ``dev`` -> ``staging``
+        - [ ] ``staging`` -> ``master``
