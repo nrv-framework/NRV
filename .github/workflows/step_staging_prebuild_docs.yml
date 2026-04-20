@@ -63,11 +63,6 @@ jobs:
         run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-
-      - name: Configure git identity
-        run: |
-          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
-          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
         # ----------------------------------------------------
 
 
@@ -92,46 +87,35 @@ jobs:
           micromamba run -n "${ENV_NAME}" python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
           rm -rf docs/examples docs/tutorials docs/_nrv
 
-      - name: Commit prebuilt documentation
-        id: commit_docs
-        run: |
-          set -euo pipefail
-
-          git add docs/html
-          git status --short
-
-          git commit -m "docs: update prebuilt documentation [skip ci]"
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
         # - New authentification on app required as build doc is long -
       - name: Generate fresh GitHub App token for push
-        if: steps.commit_docs.outputs.changed == 'true'
         uses: actions/create-github-app-token@v1
         id: app-token-push
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: Push committed documentation
-        if: steps.commit_docs.outputs.changed == 'true'
+      - name: Get GitHub App User ID for push
+        id: get-user-id-push
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token-push.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
-          TARGET_REF: ${{ inputs.target_ref }}
+          GH_TOKEN: ${{ steps.app-token-push.outputs.token }}
+
+      - name: Configure git identity for push
+        run: |
+          git config --global user.name '${{ steps.app-token-push.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id-push.outputs.user-id }}+${{ steps.app-token-push.outputs.app-slug }}[bot]@users.noreply.github.com'
+
+      - name: Commit prebuilt documentation
+        id: commit_docs
         run: |
           set -euo pipefail
-
-          echo "Current remotes:"
-          git remote -v
-
-          git remote set-url origin "https://x-access-token:${{ steps.app-token-push.outputs.token }}@github.com/${{ github.repository }}.git"
-
-          echo "Remote after rewrite:"
-          git remote -v | sed 's/x-access-token:.*/x-access-token:***@github.com\/'"${GITHUB_REPOSITORY}"'.git/'
-
-          git push origin "HEAD:${TARGET_REF}"
+          git add docs/html
+          git commit -m "docs: update prebuilt documentation [skip ci]"
+          git push origin HEAD:${{ inputs.target_ref }}
         # ----------------------------------------------------
 
       - name: Trigger Read the Docs build
-        if: steps.commit_docs.outputs.changed == 'true'
         run: |
           echo "Copying docs on https://app.readthedocs.org/api/v3/projects/${RTD_PROJECT}/versions/${RTD_VERSION}/builds/"
           curl --fail --silent --show-error \
