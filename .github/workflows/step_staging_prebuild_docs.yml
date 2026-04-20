@@ -42,29 +42,12 @@ jobs:
       RTD_VERSION: ${{ inputs.rtd_version }}
 
     steps:
-        # - These steps allows action to push on dev branch -
-      - name: Generate GitHub App token
-        uses: actions/create-github-app-token@v1
-        id: app-token
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Checkout with app token
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          ref: ${{ inputs.target_ref }}
           fetch-depth: 0
+          ref: ${{ inputs.target_ref }}
           persist-credentials: false
-
-      - name: Get GitHub App User ID
-        id: get-user-id
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        # ----------------------------------------------------
-
 
       - name: Check micromamba
         run: |
@@ -87,35 +70,41 @@ jobs:
           micromamba run -n "${ENV_NAME}" python3 -m sphinx.cmd.build -b html -j 4 docs/ docs/html/
           rm -rf docs/examples docs/tutorials docs/_nrv
 
-        # - New authentification on app required as build doc is long -
-      - name: Generate fresh GitHub App token for push
+      - name: Generate fresh GitHub App token for publish
         uses: actions/create-github-app-token@v1
-        id: app-token-push
+        id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: Get GitHub App User ID for push
-        id: get-user-id-push
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token-push.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
         env:
-          GH_TOKEN: ${{ steps.app-token-push.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
-      - name: Configure git identity for push
+      - name: Configure git identity for app push
         run: |
-          git config --global user.name '${{ steps.app-token-push.outputs.app-slug }}[bot]'
-          git config --global user.email '${{ steps.get-user-id-push.outputs.user-id }}+${{ steps.app-token-push.outputs.app-slug }}[bot]@users.noreply.github.com'
+          git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+          git remote set-url origin "https://x-access-token:${{ steps.app-token.outputs.token }}@github.com/${{ github.repository }}.git"
 
-      - name: Commit prebuilt documentation
+      - name: Commit prebuilt documentation if changed
         id: commit_docs
         run: |
           set -euo pipefail
+          if git diff --quiet -- docs/html; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           git add docs/html
           git commit -m "docs: update prebuilt documentation [skip ci]"
           git push origin HEAD:${{ inputs.target_ref }}
-        # ----------------------------------------------------
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Trigger Read the Docs build
+        if: steps.commit_docs.outputs.changed == 'true'
         run: |
           echo "Copying docs on https://app.readthedocs.org/api/v3/projects/${RTD_PROJECT}/versions/${RTD_VERSION}/builds/"
           curl --fail --silent --show-error \
