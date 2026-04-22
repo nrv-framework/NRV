@@ -5,8 +5,8 @@
 
 - [ ] Validate full pipeline - Github
 - [x] Delete _bckp/* !!! Bring back tuto and exemple before
-- [ ] clean test folders hierarchy - TC
-    - [ ] tests
+- [x] clean test folders hierarchy - TC
+    - [x] tests
             |
              - unit 
             |
@@ -19,12 +19,12 @@
                 - untary_tests
                 |
                 NRV_tests
-    - [ ] update corresponding actions .yaml
-- [ ] Set ``dev``-branch as default - FK
-- [ ] GitHub rule set - TC
-    - [ ] writing authorisations:
-        - [ ] Forbid for user and NRV-team on ``staging`` and ``master``
-        - [ ] Forbid for user on ``dev``
+    - [x] update corresponding actions .yaml
+- [x] Set ``dev``-branch as default - FK
+- [x] GitHub rule set - TC
+    - [x] writing authorisations:
+        - [x] Forbid for user and NRV-team on ``staging`` and ``master``
+        - [x] Forbid for user on ``dev``
 
 ## After minor release v 1.4.0. (patches)
 

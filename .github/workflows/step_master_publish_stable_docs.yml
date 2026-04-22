@@ -1,4 +1,4 @@
-name: Docs -- Publish prebuilt docs to RtD staging and release tag
+name: Docs -- Publish prebuilt docs to RtD stable and release tag
 
 on:
   workflow_call:
@@ -30,6 +30,12 @@ jobs:
       RELEASE_TAG: ${{ inputs.release_tag }}
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+            fetch-depth: 0          # get all history for tags
+            ref: master       # change branch if needed
+
       - name: Encode release tag for API URLs
         run: |
           set -euo pipefail
@@ -64,7 +70,7 @@ jobs:
       - name: Activate release version and stable
         run: |
           set -euo pipefail
-          for version in "${RELEASE_TAG_SLUG}" staging; do
+          for version in "${RELEASE_TAG_SLUG}" stable; do
             curl --fail --silent --show-error \
               -X PATCH \
               -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
@@ -73,10 +79,10 @@ jobs:
               "${RTD_API}/projects/${RTD_PROJECT}/versions/${version}/"
           done
 
-      - name: Trigger Read the Docs builds for release and staging
+      - name: Trigger Read the Docs builds for release and stable
         run: |
           set -euo pipefail
-          for version in "${RELEASE_TAG_SLUG}" staging; do
+          for version in "${RELEASE_TAG_SLUG}" stable; do
             curl --fail --silent --show-error \
               -X POST \
               -H "Authorization: Token ${{ secrets.RTD_TOKEN }}" \
