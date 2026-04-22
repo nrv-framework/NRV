@@ -2,14 +2,21 @@
 
 All notable changes to NRV are summed up in this file.
 
+## [1.4.0] - 2026-04-22
+
+> [!Note]
+> From the user's point of view, this update brings no changes. It introduces major changes to GitHub action workflows to simplify and secure adding updates to NRV.
+
+- New **functional** GitHub Actions workflow ! (Details in the [dev corner section](https://nrv.readthedocs.io/en/latest/devcorner.html#ci-cd-delivery-pipeline) of the documentation.)
+
 ## [1.3.3] [1.3.4] - 2026-04-15/20
 
-### Warning 
-
-- **Yanked**: Reason this release was yanked: test with new github actions workflow
+> [!Warning]
+> **Yanked**: *Reason these releases were yanked*: tests with new GitHub actions workflow.
 
 ### Added
-- New github actions workflow (detail in documentation's [dev corner section]https://nrv.readthedocs.io/en/latest/devcorner.html#contribution-forking-and-pull-requests)
+- Unstable GitHub Actions workflow (Details in the [dev corner section](https://nrv.readthedocs.io/en/latest/devcorner.html#ci-cd-delivery-pipeline) of the documentation.)
+
 
 ## [1.3.2] - 2026-04-02
 
