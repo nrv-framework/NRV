@@ -127,17 +127,17 @@ jobs:
               throw error;
             }
 
-  enable_auto_merge:
-    name: enable_auto_merge
-    needs: promote_to_master_pr
-    runs-on: ubuntu-latest
-    steps:
-      - name: Enable auto-merge on promotion PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ needs.promote_to_master_pr.outputs.pr_number }}
-          REPO: ${{ github.repository }}
-        run: |
-          if [ -n "${PR_NUMBER}" ]; then
-            gh pr merge "${PR_NUMBER}" --repo "${REPO}" --auto --merge
-          fi
+#   enable_auto_merge:
+#     name: enable_auto_merge
+#     needs: promote_to_master_pr
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Enable auto-merge on promotion PR
+#         env:
+#           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           PR_NUMBER: ${{ needs.promote_to_master_pr.outputs.pr_number }}
+#           REPO: ${{ github.repository }}
+#         run: |
+#           if [ -n "${PR_NUMBER}" ]; then
+#             gh pr merge "${PR_NUMBER}" --repo "${REPO}" --auto --merge
+#           fi
