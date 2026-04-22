@@ -63,49 +63,69 @@ jobs:
     name: promote_to_master_pr
     needs: deployment_test
     runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.promote.outputs.pr_number }}
     steps:
       - name: Create or update PR staging -> master
+        id: promote
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          retries: 3
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const head = 'staging';
             const base = 'master';
+            const findExistingPr = async () => {
+              const prs = await github.rest.pulls.list({
+                owner,
+                repo,
+                state: 'open',
+                head: `${owner}:${head}`,
+                base
+              });
+              return prs.data[0];
+            };
 
-            const prs = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'open',
-              head: `${owner}:${head}`,
-              base
-            });
-
-            if (prs.data.length > 0) {
-              core.info(`PR already exists: #${prs.data[0].number}`);
-              core.setOutput('pr_number', prs.data[0].number.toString());
+            const existing = await findExistingPr();
+            if (existing) {
+              core.info(`PR already exists: #${existing.number}`);
+              core.setOutput('pr_number', existing.number.toString());
               return;
             }
 
-            const created = await github.rest.pulls.create({
-              owner,
-              repo,
-              head,
-              base,
-              title: 'Promote staging to master',
-              body: [
-                'Automated promotion after successful staging qualification pipeline.',
-                '',
-                '- unit tests passed',
-                '- end-to-end tests passed',
-                '- Docs latest with tutos and example generated',
-                '- TestPyPI publication passed',
-                '- deployment tests passed'
-              ].join('\n')
-            });
+            try {
+              const created = await github.rest.pulls.create({
+                owner,
+                repo,
+                head,
+                base,
+                title: 'Promote staging to master',
+                body: [
+                  'Automated promotion after successful staging qualification pipeline.',
+                  '',
+                  '- unit tests passed',
+                  '- end-to-end tests passed',
+                  '- Docs latest with tutos and example generated',
+                  '- TestPyPI publication passed',
+                  '- deployment tests passed'
+                ].join('\n')
+              });
 
-            core.setOutput('pr_number', created.data.number.toString());
+              core.setOutput('pr_number', created.data.number.toString());
+            } catch (error) {
+              if (error.status >= 500) {
+                core.warning(`PR creation returned ${error.status}; checking whether the PR was created anyway.`);
+                const createdAfterError = await findExistingPr();
+                if (createdAfterError) {
+                  core.info(`PR found after server error: #${createdAfterError.number}`);
+                  core.setOutput('pr_number', createdAfterError.number.toString());
+                  return;
+                }
+              }
+              throw error;
+            }
 
   enable_auto_merge:
     name: enable_auto_merge
