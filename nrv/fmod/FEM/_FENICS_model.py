@@ -109,7 +109,7 @@ class FENICS_model(FEM_model):
         self.jstims = []
         self.j_electrode = {}
         self.geometries: dict[str, CShape] = {}
-        self._gnd_elec: None|list = None
+        self._gnd_elec: None | list = None
 
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
@@ -186,7 +186,6 @@ class FENICS_model(FEM_model):
         """
         return len(self.electrodes)
 
-
     # Handeling Ground electrodes
     @property
     def gnd_elec(self):
@@ -201,7 +200,7 @@ class FENICS_model(FEM_model):
         return self._gnd_elec
 
     @gnd_elec.setter
-    def gnd_elec(self, elec_id:int|list[int]):
+    def gnd_elec(self, elec_id: int | list[int]):
         """
         Set one or several electrodes as Dirichlet ground boundaries.
 
@@ -211,7 +210,7 @@ class FENICS_model(FEM_model):
             Electrode ID or list of electrode IDs to connect to ground.
         """
         if np.iterable(elec_id):
-            self._gnd_elec = [e for e in elec_id if e<self.n_elec]
+            self._gnd_elec = [e for e in elec_id if e < self.n_elec]
         else:
             if elec_id < self.n_elec:
                 self._gnd_elec = [elec_id]
@@ -219,7 +218,9 @@ class FENICS_model(FEM_model):
                 self.is_sim_ready = False
                 self.is_computed = False
             else:
-                rise_warning(f"{elec_id} is not a valid id, only {self.n_elec} electrodes in the context")
+                rise_warning(
+                    f"{elec_id} is not a valid id, only {self.n_elec} electrodes in the context"
+                )
 
     @gnd_elec.deleter
     def gnd_elec(self):
@@ -650,8 +651,8 @@ class FENICS_model(FEM_model):
         if self.has_gnd_elec:
             for e in self.gnd_elec:
                 e_dom = (
-                        ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * e)
-                    )
+                    ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * e)
+                )
                 self.sim.add_boundary(mesh_domain=e_dom, btype="Dirichlet", value=0)
         else:
             # Ground (to the external ring of Outerbox)

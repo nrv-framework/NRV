@@ -545,7 +545,7 @@ class FEM_stimulation(extracellular_context):
         return self.model.gnd_elec
 
     @gnd_elec.setter
-    def gnd_elec(self, elec_id:int|list[int]):
+    def gnd_elec(self, elec_id: int | list[int]):
         """
         Connect one or several electrodes to ground in the underlying FEM model.
 
