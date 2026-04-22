@@ -494,7 +494,6 @@ class FEM_stimulation(extracellular_context):
         self.model.set_n_proc(N=N)
 
     ## Save and Load mehtods
-
     def save(self, save=False, fname="extracel_context.json", blacklist=[], **kwargs):
         """
         Return extracellular context as dictionary and eventually save it as json file
@@ -531,6 +530,50 @@ class FEM_stimulation(extracellular_context):
             self.set_n_proc(self.n_proc)
         if C_model:
             self.model = COMSOL_model(self.model_fname)
+
+    # Handeling Ground electrodes
+    @property
+    def gnd_elec(self):
+        """
+        Get the electrode IDs connected to ground in the underlying FEM model.
+
+        Returns
+        -------
+        list[int] | None
+            Electrode IDs used as ground, or ``None`` if no electrode is configured.
+        """
+        return self.model.gnd_elec
+
+    @gnd_elec.setter
+    def gnd_elec(self, elec_id:int|list[int]):
+        """
+        Connect one or several electrodes to ground in the underlying FEM model.
+
+        Parameters
+        ----------
+        elec_id : int | list[int]
+            Electrode ID or list of electrode IDs to connect to ground.
+        """
+        self.model.gnd_elec = elec_id
+
+    @gnd_elec.deleter
+    def gnd_elec(self):
+        """
+        Remove the electrode-based ground configuration from the underlying FEM model.
+        """
+        del self.model.gnd_elec
+
+    @property
+    def has_gnd_elec(self):
+        """
+        Return the grounded-electrode information stored by the underlying FEM model.
+
+        Returns
+        -------
+        list[int] | None
+            Electrode IDs used as ground, or ``None`` if no electrode is configured.
+        """
+        return self.model.gnd_elec
 
     def reshape_outerBox(self, Outer_D, res="default"):
         """

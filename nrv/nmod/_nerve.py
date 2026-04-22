@@ -529,7 +529,6 @@ class nerve(NRV_simulable):
                 ).max()
                 _r = np.max((_r, _r_fasc))
             self.D = 2 * (_r + delta)
-            print(self.D)
 
     def define_ellipsoid_contour(self, a, b, y_c=0, z_c=0, rotate=0):
         """

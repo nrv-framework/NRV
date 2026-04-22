@@ -13,7 +13,7 @@ from ...backend._file_handler import rmv_ext
 from ...utils._units import V, mm
 from ...utils._misc import get_perineurial_thickness
 from ...utils.geom._misc import CShape, create_cshape
-from ...backend._log_interface import rise_warning
+from ...backend._log_interface import rise_warning, rise_error
 from ...backend._parameters import parameters
 from .fenics_utils._FEMSimulation import FEMSimulation
 
@@ -109,6 +109,7 @@ class FENICS_model(FEM_model):
         self.jstims = []
         self.j_electrode = {}
         self.geometries: dict[str, CShape] = {}
+        self._gnd_elec: None|list = None
 
         self.Outer_mat = "saline"
         self.Epineurium_mat = "epineurium"
@@ -162,7 +163,7 @@ class FENICS_model(FEM_model):
             )
 
     @property
-    def N_fascicle(self):
+    def n_fasc(self):
         """
         Number of fascicles currently registered in the model.
 
@@ -174,7 +175,7 @@ class FENICS_model(FEM_model):
         return len(self.fascicles)
 
     @property
-    def N_electrode(self):
+    def n_elec(self):
         """
         Number of electrodes currently registered in the model.
 
@@ -184,6 +185,60 @@ class FENICS_model(FEM_model):
             Number of stored electrodes.
         """
         return len(self.electrodes)
+
+
+    # Handeling Ground electrodes
+    @property
+    def gnd_elec(self):
+        """
+        Get the list of electrodes used as Dirichlet ground boundaries.
+
+        Returns
+        -------
+        list[int] | None
+            Electrode IDs used as ground, or ``None`` if the outer box is used instead.
+        """
+        return self._gnd_elec
+
+    @gnd_elec.setter
+    def gnd_elec(self, elec_id:int|list[int]):
+        """
+        Set one or several electrodes as Dirichlet ground boundaries.
+
+        Parameters
+        ----------
+        elec_id : int | list[int]
+            Electrode ID or list of electrode IDs to connect to ground.
+        """
+        if np.iterable(elec_id):
+            self._gnd_elec = [e for e in elec_id if e<self.n_elec]
+        else:
+            if elec_id < self.n_elec:
+                self._gnd_elec = [elec_id]
+                #! Might be necessary to add clear_simulation
+                self.is_sim_ready = False
+                self.is_computed = False
+            else:
+                rise_warning(f"{elec_id} is not a valid id, only {self.n_elec} electrodes in the context")
+
+    @gnd_elec.deleter
+    def gnd_elec(self):
+        """
+        Remove the electrode-based ground configuration.
+        """
+        self._gnd_elec = None
+
+    @property
+    def has_gnd_elec(self):
+        """
+        Check whether a dedicated ground electrode is configured.
+
+        Returns
+        -------
+        bool
+            ``True`` if at least one electrode is connected to ground, ``False`` otherwise.
+        """
+        return self.gnd_elec is not None
 
     def save(self, save=False, fname="Fenics_model.json", blacklist=[], **kwargs):
         """
@@ -306,7 +361,7 @@ class FENICS_model(FEM_model):
         param["fascicles"] = self.fascicles
         param["geometries"] = self.geometries
         param["Perineurium_thickness"] = self.Perineurium_thickness
-        param["N_electrode"] = self.N_electrode
+        param["N_electrode"] = self.n_elec
         param["electrodes"] = self.electrodes
         param["Outer_mat"] = self.Outer_mat
         param["Epineurium_mat"] = self.Epineurium_mat
@@ -498,8 +553,7 @@ class FENICS_model(FEM_model):
             # SETTING INTERNAL BOUNDARY CONDITION (for perineuriums)
             self.__set_iboundaries()
             # SETTING BOUNDARY CONDITION
-            # Ground (to the external ring of Outerbox)
-            self.sim.add_boundary(mesh_domain=1, btype="Dirichlet", value=0)
+            self.__set_gnd()
             # Injected current from active electrode
             # For EIT change in for E in elec_patren:
             for _, (E, active_elec) in enumerate(self.electrodes.items()):
@@ -589,6 +643,20 @@ class FENICS_model(FEM_model):
                 in_domains=[f_dom],
             )
 
+    def __set_gnd(self):
+        """
+        Set the Dirichlet ground boundary condition for the FEM simulation.
+        """
+        if self.has_gnd_elec:
+            for e in self.gnd_elec:
+                e_dom = (
+                        ENT_DOM_offset["Surface"] + ENT_DOM_offset["Electrode"] + (2 * e)
+                    )
+                self.sim.add_boundary(mesh_domain=e_dom, btype="Dirichlet", value=0)
+        else:
+            # Ground (to the external ring of Outerbox)
+            self.sim.add_boundary(mesh_domain=1, btype="Dirichlet", value=0)
+
     def __find_elec_subdomain(self, elec) -> int:
         """
         Internal use only:
@@ -641,11 +709,11 @@ class FENICS_model(FEM_model):
         if not self.mesh_file_status and not self.is_meshed:
             t0 = time.time()
             self.__update_parameters()
-            if self.N_fascicle == 0:
+            if self.n_fasc == 0:
                 self.reshape_fascicle(
                     geometry=create_cshape(diameter=250),
                 )
-            if self.N_electrode == 0:
+            if self.n_elec == 0:
                 self.add_electrode(
                     elec_type=self.default_electrode["elec_type"],
                     x_c=self.default_electrode["x_c"],
@@ -671,7 +739,7 @@ class FENICS_model(FEM_model):
         if not self.is_computed:
             t0 = time.time()
             # For EIT change in for E in elec_patren:
-            for E in range(self.N_electrode):
+            for E in range(self.n_elec):
                 for i_elec in self.j_electrode:
                     if i_elec == "E" + str(E):
                         e_dom = (
@@ -718,12 +786,56 @@ class FENICS_model(FEM_model):
         if self.is_computed:
             t0 = time.time()
             line = [[x_, y, z] for x_ in x]
-            if self.N_electrode == 1 or (E < self.N_electrode and E >= 0):
+            if self.n_elec == 1 or (E < self.n_elec and E >= 0):
                 potentials = self.sim_res[E].eval(line, self.is_multi_proc) * V
             else:
                 potentials = []
-                for E in range(self.N_electrode):
+                for E in range(self.n_elec):
                     potentials += [self.sim_res[E].eval(line, self.is_multi_proc)]
                 potentials = np.transpose(np.array(potentials) * V)
             self.access_res_timer += time.time() - t0
             return potentials
+
+    # ---------------------------------------------- #
+    #               DEPRECATED Methods               #
+    # ---------------------------------------------- #
+
+    @property
+    def N_electrode(self):
+        """
+        Number of electrodes currently registered in the model.
+
+        Warning
+        -------
+        Deprecated since 1.4.0 use :meth:`FENICS_model.n_elec`
+
+        Returns
+        -------
+        int
+            Number of stored electrodes.
+        """
+        rise_warning(
+            DeprecationWarning,
+            "FENICS_model.N_electrode instead property is obsolete use FENICS_model.n_elec instead",
+        )
+        return self.n_elec
+
+    @property
+    def N_fascicle(self):
+        """
+        Number of fascicles currently registered in the model.
+
+        Warning
+        -------
+        Deprecated since 1.4.0 use :meth:`FENICS_model.n_elec`
+
+        Returns
+        -------
+        int
+            Number of stored fascicles.
+        """
+        rise_warning(
+            DeprecationWarning,
+            "FENICS_model.N_fascicle instead property is obsolete use FENICS_model.n_fasc instead",
+        )
+        return self.n_fasc
