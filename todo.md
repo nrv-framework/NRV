@@ -3,7 +3,7 @@
 
 ## Before minor release v 1.4.0.
 
-- [ ] Validate full pipeline - Github
+- [X] Validate full pipeline - Github
 - [x] Delete _bckp/* !!! Bring back tuto and exemple before
 - [x] clean test folders hierarchy - TC
     - [x] tests
