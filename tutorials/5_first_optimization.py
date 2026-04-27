@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import nrv
 
 np.random.seed(444)
+nrv.info()
 
 # %%
 # First optimization: Pulse Stimulus on Single axon

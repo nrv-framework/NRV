@@ -9,6 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nrv
 
+nrv.info()
+
 # %%
 # Axon definition
 # Let's start by creating a 10µm myelinated axon, similarly to previous tutorials:

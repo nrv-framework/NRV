@@ -87,9 +87,9 @@ def info(logo=False, machine=False, dep=False):
 
     """
     line = "NRV version "+str(CONFIG.this_nrv["version"])+", running on "+str(CONFIG.machine_config.OS_name)
-    print("*"*len(line))
-    print(line)
-    print("*"*len(line))
+    print("*" * (len(line) + 4))
+    print("* " + line + " *")
+    print("*" * (len(line) + 4))
     if logo:
         print(LOGO)
     if machine:

@@ -17,6 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nrv
 
+nrv.info()
+
 # %%
 # Measuring Propagation Velocity of an unmyelinated fibers
 # --------------------------------------------------------

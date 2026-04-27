@@ -22,6 +22,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nrv
 
+nrv.info()
+
 # if __name__ == "__main__":
 # %%
 # Nerve creation

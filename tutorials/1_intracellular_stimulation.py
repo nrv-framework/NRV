@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+nrv.info()
+
 # %%
 # Generate a dummy static context
 #

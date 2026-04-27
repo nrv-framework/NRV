@@ -20,6 +20,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+nrv.info()
 
 test_id = "6"
 res_dir  = f"./{test_id}/"
