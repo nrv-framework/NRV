@@ -8,22 +8,23 @@ dependencies:
   - python-gmsh
   - ipykernel
   - pip
+  - jpype1
+  - scipy
+  - matplotlib
+  - pandas
+  - ipython
+  - numpy
+  - seaborn
   - pip:
     - mph
     - neuron
     - icecream
-    - numba
-    - scipy
-    - matplotlib
+    - numba  
     - ezdxf
     - psutil
     - pyswarms
     - rich
-    - pandas
     - pathos
     - shapely
-    - seaborn
     - pyeit
-    - ipython
-    - numpy
     - pytest

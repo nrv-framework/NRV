@@ -66,10 +66,11 @@ import neuron
 from .backend._parameters import parameters
 
 # load configuration module
-from .backend._config import nrv_config
+#from .backend._config import nrv_config, info
+from .backend._config import info, CONFIG
 
 # instanciate configuration
-CONFIG = nrv_config()
+
 
 ######################
 #  Public interface  #
