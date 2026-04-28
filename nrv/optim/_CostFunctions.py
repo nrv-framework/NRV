@@ -57,7 +57,7 @@ class cost_function(NRV_class):
         filter=None,
         saver=None,
         file_name="cost_saver.csv",
-        **kawrgs,
+        **kwargs,
     ):
         """
         Initialize a callable cost-function wrapper around context generation and simulation.
@@ -80,7 +80,7 @@ class cost_function(NRV_class):
             Optional callback executed after cost evaluation.
         file_name : str, optional
             Default filename used by user-defined saver callbacks.
-        **kawrgs : dict
+        **kwargs : dict
             Extra keyword arguments merged into the three keyword-argument dictionaries.
         """
         super().__init__()
@@ -95,9 +95,9 @@ class cost_function(NRV_class):
         self.saver = saver
         self.file_name = file_name
 
-        self.kwargs_CM.update(kawrgs)
-        self.kwargs_S.update(kawrgs)
-        self.kwargs_CE.update(kawrgs)
+        self.kwargs_CM.update(kwargs)
+        self.kwargs_S.update(kwargs)
+        self.kwargs_CE.update(kwargs)
 
         self.simulation_context = None
         self.results = None

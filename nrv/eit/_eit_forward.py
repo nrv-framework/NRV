@@ -101,9 +101,9 @@ class eit_forward(NRV_class):
             Additional simulation parameters.
         """
         super().__init__()
-        self.label = label
-        self.nervedata = nervedata
-        self.parameters = parameters
+        self.label:str = label
+        self.nervedata:str|nerve = nervedata
+        self.parameters:dict = parameters
         if res_dname is None:
             self.res_dir = f"./{self.label}"
         else:
@@ -223,6 +223,21 @@ class eit_forward(NRV_class):
                 "ksp_atol": 1e-18,
                 "ksp_max_it": int(1e7),
             }
+
+    def set_parameters(self, **kwargs):
+        """
+        Overwrite of :meth:`NRV_class.set_parameters` to store changed parameters in simulation results
+
+        Generic method to set any attribute of ``NRV_class`` instance
+
+        Parameters
+        ----------
+        ***kwargs
+            Key arguments containing one or multiple parameters to set.
+        """
+        super().set_parameters(**kwargs)
+        self.parameters.update(kwargs)
+
 
     @property
     def timers_dict(self) -> dict:

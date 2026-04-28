@@ -277,7 +277,7 @@ class NRV_class(metaclass=ABCMeta):
                 else:
                     self.__dict__[key] = key_dic[key]
 
-    def set_parameters(self, **kawrgs) -> None:
+    def set_parameters(self, **kwargs) -> None:
         """
         Generic method to set any attribute of ``NRV_class`` instance
 
@@ -297,9 +297,9 @@ class NRV_class(metaclass=ABCMeta):
         >>> print(ax.d, ax.L)
         6, 1000
         """
-        for key in kawrgs:
+        for key in kwargs:
             if key in self.__dict__:
-                self.__dict__[key] = kawrgs[key]
+                self.__dict__[key] = kwargs[key]
 
     def get_parameters(self):
         """

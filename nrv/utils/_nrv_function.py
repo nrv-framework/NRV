@@ -314,11 +314,12 @@ class gaussian(function_1D):
         f(x) = e^{-\frac{(x-\mu)^2}{2*\sigma^2}}
     """
 
-    def __init__(self, mu=0, sigma=1):
+    def __init__(self, mu=0, sigma=1, normalized=False):
         """ """
         super().__init__()
         self.mu = mu
         self.sigma = sigma
+        self.normalized = normalized
 
     def call_method(self, X):
         """
@@ -338,7 +339,9 @@ class gaussian(function_1D):
         if res is None:
             res = np.exp(
                 -(((X - self.mu) / self.sigma) ** 2) / 2
-            )  # /(self.sigma*(2*np.pi)**0.5)
+            )  
+            if self.normalized:
+                res  /= (self.sigma*(2*np.pi)**0.5)
         return res
 
 
