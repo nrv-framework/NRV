@@ -52,6 +52,7 @@ classifiers = [
 homepage = "https://nrv-framework.org"
 documentation = "https://nrv.readthedocs.io"
 repository = "https://github.com/nrv-framework/NRV"
+Issues = "https://github.com/nrv-framework/NRV/issues"
 
 [project.optional-dependencies]
 dev = [

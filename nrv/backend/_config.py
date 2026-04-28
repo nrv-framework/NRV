@@ -50,7 +50,7 @@ class nrv_config(metaclass=NRV_singleton):
         self.framework_parameters = nrv_parameters()
         self.this_nrv = {
             "version": version("nrv-py"),
-            "available_lib": []
+            "available_lib": [] # rajouter les version, changer en dictionaire
         }
         distr = packages_distributions()
         for key in distr:
