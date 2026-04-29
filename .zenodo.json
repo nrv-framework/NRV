@@ -1,0 +1,56 @@
+{
+  "title": "NRV",
+  "version": "1.4.0",
+  "upload_type": "software",
+  "publication_type": "softwaredocumentation",
+  "description": "NRV (NeuRon Virtualizer) is a Python framework for fast, user-friendly simulations of the Peripheral Nervous System, including peripheral nerve electrical stimulation modeling, extracellular field computation, axon population simulation, and nerve impedance/impedance tomography tools.",
+  "access_right": "open",
+  "license": "cecill-c",
+  "creators": [
+    {
+      "name": "Kolbl, Florian",
+      "affiliation": "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218",
+      "orcid": "0000-0003-0286-7620"
+    },
+    {
+      "name": "Giraud, Roland",
+      "affiliation": "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218",
+      "orcid": "0000-0002-5998-2905"
+    },
+    {
+      "name": "Regnacq, Louis",
+      "affiliation": "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218",
+      "orcid": "0000-0003-4255-985X"
+    },
+    {
+      "name": "Couppey, Thomas",
+      "affiliation": "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051"
+    },
+    {
+      "name": "Kolbl Hammami, Maroua"
+    },
+    {
+      "name": "Polli, Jaderson",
+      "affiliation": "Universidade Federal do Parana (UFPR), Department of Physics",
+      "orcid": "0000-0002-4062-7591"
+    }
+  ],
+  "keywords": [
+    "neuroscience",
+    "peripheral nervous system",
+    "nerve stimulation",
+    "electrical stimulation",
+    "axon modeling",
+    "finite element method",
+    "impedance tomography",
+    "NEURON",
+    "Python"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.1371/journal.pcbi.1011826",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    }
+  ]
+}

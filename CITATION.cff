@@ -1,0 +1,65 @@
+cff-version: 1.2.0
+message: "If you use NRV, please cite it using the metadata below."
+title: "NRV"
+version: "1.4.0"
+type: software
+license: "CECILL-C"
+abstract: "NRV (NeuRon Virtualizer) is a Python framework for fast, user-friendly simulations of the Peripheral Nervous System, including peripheral nerve electrical stimulation modeling, extracellular field computation, axon population simulation, and nerve impedance/impedance tomography tools."
+authors:
+  - family-names: "Kolbl"
+    given-names: "Florian"
+    affiliation: "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218"
+    orcid: "https://orcid.org/0000-0003-0286-7620"
+  - family-names: "Giraud"
+    given-names: "Roland"
+    affiliation: "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218"
+    orcid: "https://orcid.org/0000-0002-5998-2905"
+  - family-names: "Regnacq"
+    given-names: "Louis"
+    affiliation: "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051; Univ. Bordeaux, CNRS, Bordeaux INP, IMS, UMR 5218"
+    orcid: "https://orcid.org/0000-0003-4255-985X"
+  - family-names: "Couppey"
+    given-names: "Thomas"
+    affiliation: "Laboratoire ETIS, CY Cergy Paris Université, ENSEA, CNRS UMR 8051"
+  - family-names: "Kolbl Hammami"
+    given-names: "Maroua"
+  - family-names: "Polli"
+    given-names: "Jaderson"
+    affiliation: "Universidade Federal do Parana (UFPR), Department of Physics"
+    orcid: "https://orcid.org/0000-0002-4062-7591"
+keywords:
+  - neuroscience
+  - peripheral nervous system
+  - nerve stimulation
+  - electrical stimulation
+  - axon modeling
+  - finite element method
+  - impedance tomography
+  - NEURON
+  - Python
+repository-code: "https://github.com/nrv-framework/NRV"
+url: "https://nrv-framework.org"
+preferred-citation:
+  type: article
+  title: "NRV: An open framework for in silico evaluation of peripheral nerve electrical stimulation strategies"
+  authors:
+    - family-names: "Couppey"
+      given-names: "Thomas"
+    - family-names: "Regnacq"
+      given-names: "Louis"
+      orcid: "https://orcid.org/0000-0003-4255-985X"
+    - family-names: "Giraud"
+      given-names: "Roland"
+    - family-names: "Romain"
+      given-names: "Olivier"
+    - family-names: "Bornat"
+      given-names: "Yannick"
+      orcid: "https://orcid.org/0000-0003-4758-7227"
+    - family-names: "Kolbl"
+      given-names: "Florian"
+      orcid: "https://orcid.org/0000-0003-0286-7620"
+  journal: "PLOS Computational Biology"
+  year: 2024
+  volume: 20
+  issue: 7
+  doi: "10.1371/journal.pcbi.1011826"
