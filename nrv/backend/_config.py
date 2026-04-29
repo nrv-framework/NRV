@@ -50,11 +50,16 @@ class nrv_config(metaclass=NRV_singleton):
         self.framework_parameters = nrv_parameters()
         self.this_nrv = {
             "version": version("nrv-py"),
-            "available_lib": [] # rajouter les version, changer en dictionaire
+            "available_lib": {},  # rajouter les version, changer en dictionaire
         }
         distr = packages_distributions()
         for key in distr:
-            self.this_nrv["available_lib"].append(key)
+            if key != "nrv":
+                try:
+                    dep_version = version(key)
+                except:
+                    dep_version = "unknown"
+                self.this_nrv["available_lib"][key] = dep_version
 
     def display_machine_config(self):
         """
@@ -86,7 +91,12 @@ def info(logo=False, machine=False, dep=False):
         prints the list of available python packages.
 
     """
-    line = "NRV version "+str(CONFIG.this_nrv["version"])+", running on "+str(CONFIG.machine_config.OS_name)
+    line = (
+        "NRV version "
+        + str(CONFIG.this_nrv["version"])
+        + ", running on "
+        + str(CONFIG.machine_config.OS_name)
+    )
     print("*" * (len(line) + 4))
     print("* " + line + " *")
     print("*" * (len(line) + 4))
@@ -95,7 +105,7 @@ def info(logo=False, machine=False, dep=False):
     if machine:
         CONFIG.display_machine_config()
     if dep:
-        print('\n This is the list of reachable librairies:')
+        print("\n This is the list of reachable librairies:")
         for lib in CONFIG.this_nrv["available_lib"]:
-            print('\t - '+lib)
+            print("\t - " + lib + "\t" + str(CONFIG.this_nrv["available_lib"][lib]))
     return True

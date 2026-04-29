@@ -1,7 +1,7 @@
 [![PyPI version](https://badge.fury.io/py/nrv-py.svg)](https://badge.fury.io/py/nrv-py)
 [![Documentation Status](https://readthedocs.org/projects/nrv/badge/?version=latest)](https://nrv.readthedocs.io/en/latest/?badge=latest)
 [![License: CeCill](https://img.shields.io/badge/Licence-CeCill-blue )](https://github.com/fkolbl/NRV/blob/master/Licence.txt)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10497741.svg)](https://doi.org/10.5281/zenodo.15849132)
+[![DOI](https://zenodo.org/badge/383814230.svg)](https://doi.org/10.5281/zenodo.10497476)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/nrv-framework/NRV-demo/main)
 
 <!---![PyPI - Downloads](https://img.shields.io/pypi/dm/nrv-py)-->

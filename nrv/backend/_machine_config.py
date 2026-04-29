@@ -81,7 +81,8 @@ CPU architecture: {self.CPU_arch}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %% INFORMATIONS ON GPU %%
 %%%%%%%%%%%%%%%%%%%%%%%%%
-Number of available Cores: {self.GPU_ncores}
+Number of available GPUs: {self.GPU_count}
+Number of available GPU cores: {self.GPU_ncores}
 GPU total memory: {self.GPU_memory_total}
 GPU used memory: {self.GPU_memory_used}
 GPU free memory: {self.GPU_memory_free}
@@ -178,7 +179,9 @@ Float representation style: {self.float_repr_style}"""
         Collect aggregate GPU count and memory information.
         """
         GPUs = getGPUs()
-        self.GPU_ncores = len(GPUs)
+        self.GPU_count = len(GPUs)
+        gpu_cores = [g.cores for g in GPUs if getattr(g, "cores", None) is not None]
+        self.GPU_ncores = int(np.sum(gpu_cores)) if len(gpu_cores) > 0 else len(GPUs)
         self.GPU_total_memory = 0
         self.GPU_memory_total = 0
         self.GPU_memory_used = 0
