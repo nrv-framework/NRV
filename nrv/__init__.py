@@ -78,6 +78,8 @@ from .backend._config import info, CONFIG
 from .backend import _compileMods
 from .backend._NRV_Class import load_any
 from .backend._extlib_interface import *
+from .backend._snippets import Snippet
+from .backend._benchmark import Benchmark
 
 from .fmod._materials import *
 from .fmod._electrodes import *

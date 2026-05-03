@@ -34,10 +34,10 @@
 - [ ] Complementary actions
     - [ ] clean tags (in case of issues)
     - [ ] Build/publish ``dev`` doc
-    - [ ] Zenodo link in Readme.md
+    - [x] Zenodo link in Readme.md
 - [ ] Code
-    - [ ] add get/print machine config and sim parameters
-        - [ ] implement
+    - [x] add get/print machine config and sim parameters
+        - [x] implement
         - [ ] add to all exemples/tuto
 - [ ] Clean branches
     - [ ] ``dev``:

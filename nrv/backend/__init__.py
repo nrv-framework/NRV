@@ -59,6 +59,8 @@ from ._NRV_Results import generate_results, NRV_results, sim_results
 from ._NRV_Simulable import is_NRV_simulable, simulable, NRV_simulable
 from ._NRV_Singleton import NRV_singleton
 from ._parameters import nrv_parameters, ncore_autoset, parameters
+from ._snippets import Snippet
+from ._benchmark import Benchmark
 
 submodules = []
 
@@ -76,6 +78,8 @@ classes = [
     "NRV_simulable",
     "NRV_singleton",
     "nrv_parameters",
+    "Snippet",
+    "Benchmark"
 ]
 
 functions = [
