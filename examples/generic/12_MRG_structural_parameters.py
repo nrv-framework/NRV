@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     fiberD  = np.asarray([5.7, 7.3, 8.7, 10.0, 11.5, 12.8, 14.0, 15.0, 16.0])
     fiberP  = np.asarray([1, 2])
 

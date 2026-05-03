@@ -26,6 +26,9 @@ def derivate(A, n_order, N=99):
     return A
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     #dummy stimulus def
     start = 1
     I_cathod = 500

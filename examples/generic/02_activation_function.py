@@ -25,6 +25,8 @@ def get_second_derivative(ftp):
     return(ftp)
 
 if __name__ == '__main__':
+
+    nrv.info()
     
     nseg = 1500
     tsim = 4

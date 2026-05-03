@@ -27,6 +27,9 @@ unmyelinated_stats = [
 ]
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     N = 10000
     fig_idxs= [(0,0),(0,1),(1,0),(1,1),(2,0),(2,1)]
     xspace1 = np.linspace(1,20,num=500)

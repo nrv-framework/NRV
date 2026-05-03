@@ -19,6 +19,9 @@ import nrv
 np.random.seed(4444)
 
 if __name__ == '__main__':
+
+    nrv.info()
+
     # test_name = "Example_"
     # dir_res = f"./{test_name}/"
     # if not os.path.isdir(dir_res):

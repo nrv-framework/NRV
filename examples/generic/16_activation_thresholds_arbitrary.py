@@ -27,6 +27,9 @@ def cath_sine_pulse_update(axon,amp, pw, start_p = 1, elec_id = 0):
     axon.change_stimulus_from_electrode(elec_id, stim_1)
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     # axon def
     y = 0       # axon y position, in [um]
     z = 0       # axon z position, in [um]

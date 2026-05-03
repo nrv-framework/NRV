@@ -8,6 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nrv 
 
+nrv.info()
+
 fname = "figures/stimuli_v2"
 small_linewidth = 1
 big_linewidth = 5

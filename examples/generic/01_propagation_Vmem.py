@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
+    nrv.info()
+
     # axon def
     y = 0						# axon y position, in [um]
     z = 0						# axon z position, in [um]

@@ -12,6 +12,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import nrv
 
+nrv.info()
+
 # Generate a dummy static context
 t_sim=10
 l_ax = 10000

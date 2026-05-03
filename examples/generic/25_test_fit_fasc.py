@@ -155,6 +155,9 @@ def simulate_and_plot_res(ax:plt.Axes, ner:nrv.nerve):
 # Main Execution Script
 # ^^^^^^^^^^^^^^^^^^^^^
 if __name__ == "__main__":
+
+    nrv.info()
+
     plt.ion()
     fig, axs = plt.subplots(2, 2, figsize=(10, 6), layout="constrained")
 

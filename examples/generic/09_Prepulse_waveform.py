@@ -27,6 +27,9 @@ pw = 100e-3
 amp = 48
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     nseg = 1
     material = nrv.load_material('endoneurium_bhadra')
     L=nrv.get_length_from_nodes(diam,n_node)

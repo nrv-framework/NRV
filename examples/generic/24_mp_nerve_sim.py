@@ -102,6 +102,8 @@ def prostprocessing(results):
 
 if __name__ == "__main__":
 
+    nrv.info()
+
     sim_nerve = create_nerve()
     results = simulate_nerve(sim_nerve, nproc=4)
     prostprocessing(results)

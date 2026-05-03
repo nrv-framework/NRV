@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
+    nrv.info()
+
     # nrvon def
     y = 0									# nrvon y position, in [um]
     z = 0									# nrvon z position, in [um]

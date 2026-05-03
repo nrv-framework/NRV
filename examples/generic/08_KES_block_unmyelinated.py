@@ -9,6 +9,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     model = 'Tigerholm'
     diam = 1
     y = 0

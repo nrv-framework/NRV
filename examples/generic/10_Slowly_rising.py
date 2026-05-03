@@ -25,6 +25,9 @@ pw = 100e-3
 amp = 48
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     prepulse = nrv.stimulus()
 
     slope = prep_a/prep_d

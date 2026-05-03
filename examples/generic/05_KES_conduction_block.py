@@ -9,6 +9,9 @@ import nrv
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+
+    nrv.info()
+
     ########################
     ## PROBLEM DESCRITION ##
     ########################

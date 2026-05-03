@@ -8,6 +8,9 @@ import nrv
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     y = 0
     z = 0
     d = 10

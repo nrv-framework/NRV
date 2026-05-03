@@ -21,6 +21,9 @@ def derivate(A, n_order, N=99):
     return A
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     my_model = "Nerve_1_Fascicle_1_CUFF" #Optional, only if comsol is used
 
     ##### extracellular context

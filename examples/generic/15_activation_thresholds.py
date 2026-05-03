@@ -23,6 +23,8 @@ def cathodic_pulse_update(axon,amp, pw, elec_id = 0, start_p = 1):
 
 if __name__ == '__main__':
 
+    nrv.info()
+
     #Stimulus definition 
     t_inter = 0
     cath_an_ratio = 0

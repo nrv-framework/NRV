@@ -22,6 +22,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     # --- Nerve and Fascicle Setup ---
     ner = nrv.nerve(length=5000, diameter=500, Outer_D=5)
 

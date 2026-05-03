@@ -88,6 +88,8 @@ save_fig = False
 
 if __name__ == "__main__":
 
+    nrv.info()
+
     resultsm = maxon_sim()
     resultsu = uaxon_sim()
     xu = resultsu["x_rec"]

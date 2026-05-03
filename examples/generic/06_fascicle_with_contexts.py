@@ -34,6 +34,9 @@ import os
 # but with different locations.*
 
 if __name__ == '__main__':
+
+    nrv.info()
+    
     n_ax = 60
     L = 10000 			# length, in um
     d_f = 45
